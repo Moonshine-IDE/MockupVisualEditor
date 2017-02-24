@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<s:states>
+		<s:State name="uninitialized" />
+		<s:State name="loading"/>
+		<s:State name="ready" />
+		<s:State name="invalid" />
+		<s:State name="disabled" />
+	</s:states>
+
+	<fx:Metadata>
+		[HostComponent("spark.components.Image")]
+    </fx:Metadata>
+
+	<s:Group id="background" visible="{imageDisplay.source == null}">
+		<s:Rect left="0" right="0" top="0" bottom="0">
+			<s:stroke>
+				<s:SolidColorStroke color="#A9A9A9" weight="2"/>
+			</s:stroke>
+			<s:fill>
+				<s:SolidColor color="#EEEEEE" />
+			</s:fill>
+		</s:Rect>
+		<s:Line xFrom="1" yFrom="1" xTo="{width - 2}" yTo="{height - 2}">
+			<s:stroke>
+				<s:SolidColorStroke color="#A9A9A9" weight="2" caps="none"/>
+			</s:stroke>
+		</s:Line>
+		<s:Line xFrom="1" yFrom="{height - 2}" xTo="{width - 2}" yTo="1">
+			<s:stroke>
+				<s:SolidColorStroke color="#A9A9A9" weight="2" caps="none"/>
+			</s:stroke>
+		</s:Line>
+	</s:Group>
+
+	<!--- Primary image display skin part. -->
+	<s:BitmapImage id="imageDisplay" left="0" top="0" right="0" bottom="0"/>
+
+</s:Skin>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:view="view.*"
+	title="Visual Editor" showStatusBar="false">
+
+	<view:VisualEditor top="0" right="0" bottom="0" left="0"/>
+
+	<fx:Style source="visualeditor.css"/>
+</s:WindowedApplication>

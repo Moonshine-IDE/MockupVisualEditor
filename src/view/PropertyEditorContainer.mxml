@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	currentState="empty" minWidth="100">
+
+	<fx:Metadata>
+		[Event(name="change",type="flash.events.Event")]
+	</fx:Metadata>
+
+	<s:states>
+		<s:State name="empty"/>
+		<s:State name="selection"/>
+	</s:states>
+
+	<s:Group id="noSelectionMessage" excludeFrom="selection"
+		top="0" right="0" bottom="0" left="0">
+		<s:layout>
+			<s:VerticalLayout padding="10" horizontalAlign="center" verticalAlign="middle"/>
+		</s:layout>
+		<s:Label text="No component selected"/>
+	</s:Group>
+
+	<fx:Script><![CDATA[
+		import spark.components.Button;
+
+		import view.propertyEditors.ButtonPropertyEditor;
+		import view.propertyEditors.GenericPropertyEditor;
+
+		private var _editor:IPropertyEditor;
+
+		private var _selectedItem:ISurfaceComponent = null;
+
+		[Bindable("change")]
+		public function get selectedItem():ISurfaceComponent
+		{
+			return this._selectedItem;
+		}
+
+		public function set selectedItem(value:ISurfaceComponent):void
+		{
+			if(this._selectedItem === value)
+			{
+				return;
+			}
+			this._selectedItem = value;
+			if(this._editor)
+			{
+				this.removeElement(this._editor);
+				this._editor = null;
+			}
+			if(this._selectedItem !== null)
+			{
+				this.currentState = "selection";
+				var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;
+				if(PropertyEditorType === null)
+				{
+					PropertyEditorType = GenericPropertyEditor;
+				}
+				this._editor = new PropertyEditorType();
+				this._editor.top = 0;
+				this._editor.right = 0;
+				this._editor.bottom = 0;
+				this._editor.left = 0;
+				this._editor.selectedItem = value;
+				this.addElement(this._editor);
+			}
+			else
+			{
+				this.currentState = "empty";
+			}
+			this.dispatchEvent(new Event(Event.CHANGE));
+		}
+		]]></fx:Script>
+</s:BorderContainer>

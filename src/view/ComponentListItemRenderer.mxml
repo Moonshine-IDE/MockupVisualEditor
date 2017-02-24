@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	minHeight="120"
+	mouseDown="mouseDownHandler(event)">
+	
+	<fx:Metadata>
+		[Style(name="dragImageAlpha",inherit="true",type="Number")]
+	</fx:Metadata>
+	
+	<!-- background -->
+	<s:Rect top="0" right="0" bottom="0" left="0">
+		<s:stroke>
+			<s:SolidColorStroke color="#6A6A6A" weight="0.5"/>
+		</s:stroke>
+	</s:Rect>
+
+	<!-- content -->
+	<s:Group top="0" right="0" bottom="0" left="0">
+		
+		<s:layout>
+			<s:VerticalLayout padding="10" horizontalAlign="center"/>
+		</s:layout>
+		
+		<s:Group id="thumbnailContainer" height="100%">
+			<s:layout>
+				<s:VerticalLayout verticalAlign="middle"/>
+			</s:layout>
+			<s:filters>
+				<s:DropShadowFilter color="#6A6A6A" alpha="0.25" distance="0" blurX="4" blurY="4"/>
+			</s:filters>
+		</s:Group>
+
+		<s:Label text="{this.componentData.name}"/>
+	</s:Group>
+	
+	<fx:Script><![CDATA[
+		import data.ComponentListItem;
+
+		import mx.core.DragSource;
+		import mx.core.IUIComponent;
+		import mx.core.IVisualElement;
+		import mx.core.IVisualElement;
+		import mx.core.IVisualElement;
+		import mx.core.UIComponent;
+		import mx.managers.DragManager;
+
+		public static const OFFSET_DRAG_FORMAT:String = "drag-offset";
+		public static const COMPONENT_DRAG_FORMAT:String = "new-component";
+		
+		[Bindable("dataChange")]
+		protected var componentData:ComponentListItem;
+
+		protected var thumbnail:IVisualElement;
+		
+		override public function set data(value:Object):void
+		{
+			if(this.data === value)
+			{
+				return;
+			}
+			if(this.thumbnail)
+			{
+				this.thumbnailContainer.removeElement(this.thumbnail);
+				this.thumbnail = null;
+			}
+			this.componentData = ComponentListItem(value);
+			if(this.componentData)
+			{
+				var ComponentType:Class = this.componentData.type;
+				var newThumbnail:ISurfaceComponent = new ComponentType();
+				newThumbnail.validateNow();
+				var scale:Number = Math.min(120 / newThumbnail.width, 120 / newThumbnail.height);
+				if(scale > 1)
+				{
+					scale = 1;
+				}
+				newThumbnail.scaleX = scale;
+				newThumbnail.scaleY = scale;
+				newThumbnail.enabled = false;
+				this.thumbnail = IVisualElement(newThumbnail);
+				this.thumbnailContainer.addElement(this.thumbnail);
+			}
+			super.data = value;
+		}
+
+		private function mouseDownHandler(event:MouseEvent):void
+		{
+			var ComponentType:Class = this.componentData.type;
+			var object:ISurfaceComponent = new ComponentType();
+			var dragSource:DragSource = new DragSource();
+			dragSource.addData(object, COMPONENT_DRAG_FORMAT);
+			var offsetX:Number = object.width / 2;
+			var offsetY:Number = object.height / 2;
+			//the first offsets are for Flash Player
+			var dragOffsetX:Number = -this.mouseX + offsetX;
+			var dragOffsetY:Number = -this.mouseY + offsetY;
+			if(Capabilities.playerType === "Desktop")
+			{
+				//the offset in AIR should be different
+				dragOffsetX = this.mouseX - offsetX;
+				dragOffsetY = this.mouseY - offsetY;
+			}
+			dragSource.addData(new Point(offsetX, offsetY), OFFSET_DRAG_FORMAT);
+			DragManager.doDrag(this, dragSource, event, object,
+				dragOffsetX, dragOffsetY, this.getStyle("dragImageAlpha"));
+		}
+		]]></fx:Script>
+</s:ItemRenderer>

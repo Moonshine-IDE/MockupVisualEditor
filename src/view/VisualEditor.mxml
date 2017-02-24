@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:view="view.*">
+
+	<s:BorderContainer id="toolbar" top="0" left="0" right="0">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"/>
+		</s:layout>
+		<s:Button styleName="newButton" toolTip="New Mockup" click="newButton_clickHandler(event)"/>
+		<s:Button styleName="openButton" toolTip="Open Mockup" click="loadButton_clickHandler(event)"/>
+		<s:Button styleName="saveButton" toolTip="Save Mockup" click="saveButton_clickHandler(event)"/>
+	</s:BorderContainer>
+	<view:ComponentList id="componentList" top="{toolbar.height}" bottom="0" left="0"/>
+	<s:Scroller top="{toolbar.height}" right="{propertyEditor.width}" bottom="0" left="{componentList.width}">
+		<view:EditingSurface id="editingSurface"/>
+	</s:Scroller>
+	<view:PropertyEditorContainer id="propertyEditor" top="{toolbar.height}" right="0" bottom="0"
+		selectedItem="{editingSurface.selectedItem}"/>
+
+	<fx:Script><![CDATA[
+		import spark.components.Alert;
+
+		private var _file:FileReference;
+
+		private function newButton_clickHandler(event:MouseEvent):void
+		{
+			this.editingSurface.deleteAll();
+		}
+
+		private function loadButton_clickHandler(event:MouseEvent):void
+		{
+			this._file = new FileReference();
+			this._file.addEventListener(Event.SELECT, loadFile_selectHandler);
+			this._file.addEventListener(Event.CANCEL, loadFile_cancelHandler);
+			this._file.browse();
+		}
+
+		private function loadFile_selectHandler(event:Event):void
+		{
+			this._file.removeEventListener(Event.SELECT, loadFile_selectHandler);
+			this._file.removeEventListener(Event.CANCEL, loadFile_cancelHandler);
+			this._file.addEventListener(Event.COMPLETE, loadFile_completeHandler);
+			this._file.addEventListener(IOErrorEvent.IO_ERROR, loadFile_errorHandler);
+			this._file.load();
+		}
+
+		private function loadFile_cancelHandler(event:Event):void
+		{
+			this._file = null;
+		}
+
+		private function loadFile_completeHandler(event:Event):void
+		{
+			var data:String = this._file.data.readUTFBytes(this._file.data.length);
+			this._file.removeEventListener(Event.COMPLETE, loadFile_completeHandler);
+			this._file.removeEventListener(IOErrorEvent.IO_ERROR, loadFile_errorHandler);
+			this._file = null;
+			var xml:XML = new XML(data);
+			this.editingSurface.fromXML(xml);
+		}
+
+		private function loadFile_errorHandler(event:Event):void
+		{
+			this._file.removeEventListener(Event.COMPLETE, loadFile_completeHandler);
+			this._file.removeEventListener(IOErrorEvent.IO_ERROR, loadFile_errorHandler);
+			this._file = null;
+			Alert.show("The file could not be loaded.", "Load Error");
+		}
+
+		private function saveButton_clickHandler(event:MouseEvent):void
+		{
+			this._file = new FileReference();
+			var xml:XML = this.editingSurface.toXML();
+			this._file.save(xml, "mockup.xml");
+		}
+
+	]]></fx:Script>
+</s:Group>

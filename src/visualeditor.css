@@ -1,0 +1,196 @@
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace view "view.*";
+@namespace surfaceComponents "view.surfaceComponents.*";
+
+*
+{
+	dragImageAlpha: 0.8
+}
+
+view|EditingSurface
+{
+	dropOverlayAlpha: 0.1
+}
+
+surfaceComponents|Button
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.ButtonSkin");
+}
+
+surfaceComponents|CheckBox
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.CheckBoxSkin");
+}
+
+surfaceComponents|Image
+{
+	skinClass: ClassReference("skins.surfaceComponents.ImageSkin");
+}
+
+surfaceComponents|Hyperlink
+{
+	color: #0000ff;
+	fontSize: 12;
+	textDecoration: underline;
+}
+
+surfaceComponents|Input
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.InputSkin");
+}
+
+surfaceComponents|List
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.ListSkin");
+}
+
+surfaceComponents|RadioButton
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.RadioButtonSkin");
+}
+
+surfaceComponents|Table
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.TableSkin");
+}
+
+surfaceComponents|Tabs mx|ViewStack
+{
+	borderColor: #A9A9A9;
+	borderStyle: solid;
+}
+
+surfaceComponents|Tabs s|NavigatorContent
+{
+	skinClass: ClassReference("skins.surfaceComponents.NavigatorContentSkin");
+}
+
+surfaceComponents|Text
+{
+	color: #6A6A6A;
+	fontSize: 12;
+}
+
+surfaceComponents|Window
+{
+	color: #6A6A6A;
+	fontSize: 12;
+	skinClass: ClassReference("skins.surfaceComponents.WindowSkin");
+}
+
+view|ComponentList
+{
+	skinClass: ClassReference("skins.ComponentListSkin");
+	contentBackgroundColor: #FCFCFC;
+}
+
+view|ComponentListItemRenderer
+{
+	downColor: #ffffff;
+	selectionColor: #ffffff;
+	rollOverColor: #ffffff;
+}
+
+view|PropertyEditorContainer
+{
+	skinClass: ClassReference("skins.PropertyEditorContainerSkin");
+	contentBackgroundColor: #FCFCFC;
+}
+
+.resizeHandle
+{
+	skinClass: ClassReference("skins.ResizerHandleSkin");
+}
+
+s|Button.bringToFrontButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/shape_move_front.png");
+}
+
+s|Button.bringForwardButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/shape_move_forwards.png");
+}
+
+s|Button.sendBackwardButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/shape_move_backwards.png");
+}
+
+s|Button.sendToBackButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/shape_move_back.png");
+}
+
+s|Button.addDataProviderItemButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/add.png");
+}
+
+s|Button.deleteDataProviderItemButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/delete.png");
+}
+
+s|Button.editDataProviderItemButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/pencil.png");
+}
+
+s|Button.newButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/page_white_star.png");
+}
+
+s|Button.openButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/folder_page.png");
+}
+
+s|Button.saveButton
+{
+	skinClass: ClassReference("skins.IconButtonSkin");
+	icon: Embed("/../assets/images/disk.png");
+}
+
+s|Form
+{
+	skinClass: ClassReference("skins.FormSkin");
+}
+
+s|FormItem
+{
+	skinClass: ClassReference("skins.FormItemSkin");
+}
+
+s|FormItem.stackedFormItem
+{
+	skinClass: ClassReference("skins.StackedFormItemSkin");
+}
+
+s|FormHeading
+{
+	skinClass: ClassReference("skins.FormHeadingSkin");
+}

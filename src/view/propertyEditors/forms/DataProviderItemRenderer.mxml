@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark">
+
+	<s:layout>
+		<s:VerticalLayout
+			horizontalAlign="contentJustify" verticalAlign="middle"/>
+	</s:layout>
+
+	<s:Label text="{DataProviderListItem(data).label}"
+		visible="{!editing}" includeInLayout="{!editing}"
+		paddingTop="4" paddingRight="5" paddingBottom="4" paddingLeft="5"
+		doubleClickEnabled="true" doubleClick="startEditing()"/>
+	<s:TextInput id="input" text="{DataProviderListItem(data).label}"
+		visible="{editing}" includeInLayout="{editing}"
+		enter="commitChanges()" focusOut="commitChanges()"/>
+
+	<fx:Script><![CDATA[
+		import data.DataProviderListItem;
+
+		[Bindable]
+		private var editing:Boolean = false;
+
+		public function startEditing():void
+		{
+			if(this.editing)
+			{
+				//already editing!
+				return;
+			}
+			this.editing = true;
+			this.input.setFocus();
+		}
+
+		private function commitChanges():void
+		{
+			if(!this.editing)
+			{
+				//not editing, so nothing to commit!
+				return;
+			}
+			DataProviderListItem(this.data).label = this.input.text;
+			this.editing = false;
+		}
+
+	]]></fx:Script>
+</s:ItemRenderer>

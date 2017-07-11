@@ -1,0 +1,43 @@
+<project name="VisualEditor" basedir=".">
+	<property name="version" value="0.2.0"/>
+	<property environment="env"/>
+	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
+
+	<target name="main" depends="clean-up-bin, exclude-files, build, clean-up-after-compilation"/>
+
+	<target name="clean-up-bin">
+		<delete>
+			<fileset dir="${basedir}/bin">
+				<include name="*"/>
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="exclude-files" description="Temporary move files to temp folder which should not be part of swc">
+		<echo>Start excluding files</echo>
+		<mkdir dir="${basedir}/temp"/>
+		<move file="${basedir}/src/VisualEditorApplication-app.xml" todir="${basedir}/temp"/>
+		<move file="${basedir}/src/VisualEditorApplication.mxml" todir="${basedir}/temp"/>
+		<move file="${basedir}/src/VisualEditorWeb.mxml" todir="${basedir}/temp"/>
+	</target>
+
+	<target name="clean-up-after-compilation">
+		<echo>Clean up after compilation</echo>
+		<move file="${basedir}/temp/VisualEditorApplication-app.xml" todir="${basedir}/src"/>
+		<move file="${basedir}/temp/VisualEditorApplication.mxml" todir="${basedir}/src"/>
+		<move file="${basedir}/temp/VisualEditorWeb.mxml" todir="${basedir}/src"/>
+		<delete dir="${basedir}/temp"/>
+	</target>
+	
+	<!-- Compile library project to SWC -->
+	<target name="build">
+		<echo>Start compilation of Visual Editor to swc</echo>
+		<compc debug="false" output="${basedir}/bin/VisualEditor-${version}.swc"
+			   maxmemory="2048m">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+			<source-path path-element="${basedir}/src" />
+			<include-sources dir="${basedir}/src" includes="*"/>
+		</compc>
+	</target>
+</project>

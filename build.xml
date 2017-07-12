@@ -1,7 +1,7 @@
 <project name="VisualEditor" basedir=".">
 	<property name="version" value="0.2.0"/>
 	<property environment="env"/>
-	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
+	<property name="FLEX_HOME" value="{env.FLEX_HOME}" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
 	<target name="main" depends="clean-up-bin, exclude-files, build, clean-up-after-compilation"/>
@@ -34,10 +34,17 @@
 	<target name="build">
 		<echo>Start compilation of Visual Editor to swc</echo>
 		<compc debug="false" output="${basedir}/bin/VisualEditor-${version}.swc"
-			   maxmemory="2048m">
+			   maxmemory="2048m" defaults-css-url="${basedir}/src/visualeditor.css">
 			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
 			<source-path path-element="${basedir}/src" />
+			<!--<source-path path-element="${basedir}/assets/" />  -->
+
+			<external-library-path file="${FLEX_HOME}/frameworks/libs/experimental.swc" append="true"/>
+			<external-library-path file="${FLEX_HOME}/frameworks/libs/spark.swc" append="true"/>
+			<external-library-path file="${FLEX_HOME}/frameworks/libs/framework.swc" append="true"/>
+			<external-library-path file="${FLEX_HOME}/frameworks/libs/mx/mx.swc" append="true"/>
 			<include-sources dir="${basedir}/src" includes="*"/>
+			<include-file name="visualeditor.css" path="${basedir}/src/visualeditor.css" />
 		</compc>
 	</target>
 </project>

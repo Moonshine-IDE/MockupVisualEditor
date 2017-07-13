@@ -6,5 +6,5 @@
 
 	<view:VisualEditor top="0" right="0" bottom="0" left="0"/>
 
-	<fx:Style source="visualeditor.css"/>
+	<fx:Style source="defaults.css"/>
 </s:Application>

@@ -1,4 +1,12 @@
 <flex-config>
+    
+    <compiler>
+        <define>
+            <name>CONFIG::MOONSHINE</name>
+            <value>true</value>
+        </define>
+    </compiler>
+
     <include-file>
         <name>defaults.css</name>
         <path>src/defaults.css</path>

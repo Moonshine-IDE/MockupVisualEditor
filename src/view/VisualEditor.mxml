@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:view="view.*">
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:view="view.*" creationComplete="onVisualEditorCreationComplete(event)">
 	<!--This style import is only for SWC ant compilation - remove it in case of app compilation -->
 	<fx:Style source="defaults.css"/>
 	<s:BorderContainer id="toolbar" top="0" left="0" right="0">
@@ -20,6 +20,8 @@
 		selectedItem="{editingSurface.selectedItem}"/>
 
 	<fx:Script><![CDATA[
+		import mx.events.FlexEvent;
+
 		import spark.components.Alert;
 
 		private var _file:FileReference;
@@ -74,6 +76,15 @@
 			this._file = new FileReference();
 			var xml:XML = this.editingSurface.toXML();
 			this._file.save(xml, "mockup.xml");
+		}
+
+		private function onVisualEditorCreationComplete(event:FlexEvent):void
+		{
+			CONFIG::MOONSHINE
+			{
+				toolbar.visible = toolbar.includeInLayout = false;
+				toolbar.height = 1;
+			}
 		}
 
 	]]></fx:Script>

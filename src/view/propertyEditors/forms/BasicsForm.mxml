@@ -23,13 +23,13 @@
 	<s:FormHeading label="Size"/>
 	<s:FormItem label="Width">
 		<s:TextInput id="widthInput" width="100%"
-			text="{selectedComponent.width}"
+			text="{selectedComponentComputedWidth}"
 			keyDown="widthInput_keyDownHandler(event)"
 			focusOut="commitWidth()" enter="commitWidth()"/>
 	</s:FormItem>
 	<s:FormItem label="Height">
 		<s:TextInput id="heightInput" width="100%"
-			text="{selectedComponent.height}"
+			text="{selectedComponentComputedHeight}"
 			keyDown="heightInput_keyDownHandler(event)"
 			focusOut="commitHeight()" enter="commitHeight()"/>
 	</s:FormItem>
@@ -57,6 +57,18 @@
 			return UIComponent(this.selectedItem);
 		}
 		
+		public function get selectedComponentComputedWidth():String
+		{
+			if (!isNaN(selectedComponent.percentWidth)) return selectedComponent.percentWidth +"%";
+			return selectedComponent.width.toString();
+		}
+		
+		public function get selectedComponentComputedHeight():String
+		{
+			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight +"%";
+			return selectedComponent.height.toString();
+		}
+		
 		private function commitX():void
 		{
 			this.selectedItem.x = parseFloat(this.xInput.text);
@@ -71,15 +83,23 @@
 
 		private function commitWidth():void
 		{
-			var newWidth:Number = parseFloat(this.widthInput.text);
-			this.applyMinAndMaxWidth(newWidth);
+			if (this.widthInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(true);
+			else
+			{
+				var newWidth:Number = parseFloat(this.widthInput.text);
+				this.applyMinAndMaxWidth(newWidth);
+			}
 			this.widthInput.selectAll();
 		}
 
 		private function commitHeight():void
 		{
-			var newHeight:Number = parseFloat(this.heightInput.text);
-			this.applyMinAndMaxHeight(newHeight);
+			if (this.widthInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(false);
+			else
+			{
+				var newHeight:Number = parseFloat(this.heightInput.text);
+				this.applyMinAndMaxHeight(newHeight);
+			}
 			this.heightInput.selectAll();
 		}
 
@@ -221,10 +241,28 @@
 			{
 				newWidth = maxWidth;
 			}
+			this.selectedItem.percentWidth = NaN;
 			this.selectedItem.width = newWidth;
 			//the text might not have updated if the width property is the same
 			//but the old text value is different
 			this.widthInput.text = this.selectedItem.width.toString();
+		}
+		
+		private function applyPercentageWidthHeight(isWidth:Boolean):void
+		{
+			var pattern:RegExp = new RegExp(/(%)/g);
+			var newValue:String = isWidth ? this.widthInput.text.replace(pattern, "") : this.heightInput.text.replace(pattern, "");
+			
+			if (isWidth)
+			{
+				this.selectedItem.width = 0;
+				this.selectedItem.percentWidth = Number(newValue);
+			}
+			else
+			{
+				this.selectedItem.height = 0;
+				this.selectedItem.percentHeight = Number(newValue);
+			}
 		}
 
 		private function applyMinAndMaxHeight(newHeight:Number):void

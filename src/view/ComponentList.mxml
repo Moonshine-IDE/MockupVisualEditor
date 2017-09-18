@@ -46,5 +46,8 @@
 		<data:ComponentListItem name="Window">
 			<data:type>view.surfaceComponents.Window</data:type>
 		</data:ComponentListItem>
+		<data:ComponentListItem name="Container">
+			<data:type>view.surfaceComponents.Container</data:type>
+		</data:ComponentListItem>
 	</s:ArrayList>
 </s:List>

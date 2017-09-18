@@ -95,8 +95,8 @@ package view
 		{
 			if(this._target !== null)
 			{
-				this.measuredWidth = this._target.getExplicitOrMeasuredWidth();
-				this.measuredHeight = this._target.getExplicitOrMeasuredHeight();
+				this.measuredWidth = this._target.width;
+				this.measuredHeight = this._target.height;
 			}
 		}
 

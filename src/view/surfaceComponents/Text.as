@@ -13,7 +13,7 @@ package view.surfaceComponents
 		{
 			this.text = "This is some text";
 			this.toolTip = "";
-			this.width = 100;
+			this.percentWidth = 100;
 			this.height = 15;
 			this.minWidth = 10;
 			this.minHeight = 10;

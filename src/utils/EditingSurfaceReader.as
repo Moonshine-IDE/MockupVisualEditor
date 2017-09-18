@@ -1,14 +1,14 @@
 package utils
 {
 	import mx.core.IVisualElement;
-	import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-
+	
 	import view.EditingSurface;
 	import view.ISurfaceComponent;
 	import view.surfaceComponents.Button;
 	import view.surfaceComponents.Calendar;
 	import view.surfaceComponents.CheckBox;
+	import view.surfaceComponents.Container;
 	import view.surfaceComponents.DropDownList;
 	import view.surfaceComponents.Hyperlink;
 	import view.surfaceComponents.Image;
@@ -25,6 +25,7 @@ package utils
 	{
 		private static const CLASS_LOOKUP:Object = {};
 		CLASS_LOOKUP[Button.ELEMENT_NAME] = Button;
+		CLASS_LOOKUP[Container.ELEMENT_NAME] = Container;
 		CLASS_LOOKUP[Calendar.ELEMENT_NAME] = Calendar;
 		CLASS_LOOKUP[CheckBox.ELEMENT_NAME] = CheckBox;
 		CLASS_LOOKUP[DropDownList.ELEMENT_NAME] = DropDownList;

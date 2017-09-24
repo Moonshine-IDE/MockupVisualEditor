@@ -1,7 +1,5 @@
 package view.surfaceComponents
 {
-	import flash.events.Event;
-
 	import spark.components.CheckBox;
 
 	import view.ISurfaceComponent;
@@ -9,6 +7,7 @@ package view.surfaceComponents
 
 	public class CheckBox extends spark.components.CheckBox implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "CheckBox";
 		public static const ELEMENT_NAME:String = "checkbox";
 
 		public function CheckBox()
@@ -29,12 +28,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+			setCommonXMLAttributes(xml);
+
 			xml.@text = this.label;
-			xml.@selected = this.selected;
 			return xml;
 		}
 
@@ -52,5 +48,26 @@ package view.surfaceComponents
 		{
 			//we don't want the selection to change on the editing surface
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+            setCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+            xml.@selected = this.selected;
+		}
+    }
 }

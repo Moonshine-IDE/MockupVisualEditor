@@ -9,5 +9,9 @@ package view
 		function get propertyEditorClass():Class;
 		function toXML():XML;
 		function fromXML(value:XML, childFromXMLCallback:Function):void;
+		CONFIG::MOONSHINE
+		{
+            function toMXML():XML;
+        }
 	}
 }

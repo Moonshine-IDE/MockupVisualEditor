@@ -6,6 +6,7 @@ package view.surfaceComponents
 
 	public class Image extends spark.components.Image implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "Image";
 		public static const ELEMENT_NAME:String = "image";
 
 		public function Image()
@@ -24,10 +25,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+			
+			setCommonXMLAttributes(xml);
+			
 			return xml;
 		}
 
@@ -38,5 +38,25 @@ package view.surfaceComponents
 			this.width = xml.@width;
 			this.height = xml.@height;
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+            setCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+		}
+    }
 }

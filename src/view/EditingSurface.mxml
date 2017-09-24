@@ -54,16 +54,16 @@
 
 		public function set selectedItem(value:ISurfaceComponent):void
 		{
-			if(this._selectedItem === value)
+			if (this._selectedItem === value)
 			{
 				return;
 			}
 			this._selectedItem = value;
-			if(this._selectedItem && !this.resizer.parent)
+			if (this._selectedItem && !this.resizer.parent)
 			{
 				PopUpManager.addPopUp(this.resizer, this, false);
 			}
-			else if(!this._selectedItem && this.resizer.parent)
+			else if (!this._selectedItem && this.resizer.parent)
 			{
 				PopUpManager.removePopUp(this.resizer);
 			}
@@ -76,6 +76,14 @@
 			return EditingSurfaceWriter.toXML(this);
 		}
 
+		CONFIG::MOONSHINE
+		{
+			public function toMXML():XML
+			{
+				return EditingSurfaceWriter.toMXML(this);
+			}
+		}
+
 		public function fromXML(xml:XML):void
 		{
 			this.deleteAll();
@@ -85,10 +93,10 @@
 		public function deleteAll():void
 		{
 			var elementCount:int = this.numElements;
-			for(var i:int = elementCount - 1; i >= 0; i--)
+			for (var i:int = elementCount - 1; i >= 0; i--)
 			{
 				var element:ISurfaceComponent = this.getElementAt(i) as ISurfaceComponent;
-				if(element === null)
+				if (element === null)
 				{
 					continue;
 				}
@@ -98,23 +106,22 @@
 
 		public function addItem(item:ISurfaceComponent):void
 		{
-			if(item is IFocusManagerComponent)
+			if (item is IFocusManagerComponent)
 			{
 				IFocusManagerComponent(item).focusEnabled = false;
 			}
 			item.addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
-			item.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void
-			{
+			item.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void {
 				event.preventDefault();
 			});
 			var itemContainer:SkinnableContainer = null;
-			if(item is IMultiViewContainer)
+			if (item is IMultiViewContainer)
 			{
 				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
 				multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
 				itemContainer = multiViewContainer.selectedView;
 			}
-			else if(item is SkinnableContainer)
+			else if (item is SkinnableContainer)
 			{
 				itemContainer = SkinnableContainer(item);
 			}
@@ -131,13 +138,13 @@
 			container.removeElement(IVisualElement(item));
 
 			var itemContainer:SkinnableContainer = null;
-			if(item is IMultiViewContainer)
+			if (item is IMultiViewContainer)
 			{
 				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
 				multiViewContainer.removeEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
 				itemContainer = multiViewContainer.selectedView;
 			}
-			else if(item is SkinnableContainer)
+			else if (item is SkinnableContainer)
 			{
 				itemContainer = SkinnableContainer(item);
 			}
@@ -148,7 +155,7 @@
 
 		private function prepareContainer(container:SkinnableContainer):void
 		{
-			if(container === null)
+			if (container === null)
 			{
 				return;
 			}
@@ -159,7 +166,7 @@
 
 		private function cleanupContainer(container:SkinnableContainer):void
 		{
-			if(container === null)
+			if (container === null)
 			{
 				return;
 			}
@@ -176,9 +183,9 @@
 			var origin:Point = new Point(0, 0);
 			var globalPosition:Point = dropTarget.localToGlobal(origin);
 			var rect:Rectangle = new Rectangle(globalPosition.x, globalPosition.y, dropTarget.width, dropTarget.height);
-			while(currentTarget !== this)
+			while (currentTarget !== this)
 			{
-				if(currentTarget is SkinnableContainer)
+				if (currentTarget is SkinnableContainer)
 				{
 					var otherGroup:Group = SkinnableContainer(currentTarget).contentGroup;
 					globalPosition = otherGroup.localToGlobal(origin);
@@ -200,21 +207,21 @@
 
 		private function editingSurface_keyDownHandler(event:KeyboardEvent):void
 		{
-			if(DragManager.isDragging)
+			if (DragManager.isDragging)
 			{
 				return;
 			}
-			if(this._selectedItem === null)
+			if (this._selectedItem === null)
 			{
 				return;
 			}
-			if(event.keyCode === Keyboard.BACKSPACE || event.keyCode === Keyboard.DELETE)
+			if (event.keyCode === Keyboard.BACKSPACE || event.keyCode === Keyboard.DELETE)
 			{
 				this.deleteItem(this._selectedItem);
 			}
-			if(event.keyCode === Keyboard.LEFT)
+			if (event.keyCode === Keyboard.LEFT)
 			{
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this._selectedItem.x -= LARGE_NUDGE;
 				}
@@ -223,9 +230,9 @@
 					this._selectedItem.x -= SMALL_NUDGE;
 				}
 			}
-			if(event.keyCode === Keyboard.RIGHT)
+			if (event.keyCode === Keyboard.RIGHT)
 			{
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this._selectedItem.x += LARGE_NUDGE;
 				}
@@ -234,9 +241,9 @@
 					this._selectedItem.x += SMALL_NUDGE;
 				}
 			}
-			if(event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.UP)
 			{
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this._selectedItem.y -= LARGE_NUDGE;
 				}
@@ -245,9 +252,9 @@
 					this._selectedItem.y -= SMALL_NUDGE;
 				}
 			}
-			if(event.keyCode === Keyboard.DOWN)
+			if (event.keyCode === Keyboard.DOWN)
 			{
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this._selectedItem.y += LARGE_NUDGE;
 				}
@@ -260,7 +267,7 @@
 
 		private function editingSurface_mouseDownHandler(event:MouseEvent):void
 		{
-			if(event.isDefaultPrevented())
+			if (event.isDefaultPrevented())
 			{
 				return;
 			}
@@ -269,7 +276,7 @@
 
 		private function editingSurface_dragExitHandler(event:DragEvent):void
 		{
-			if(this._dropOverlay.isPopUp)
+			if (this._dropOverlay.isPopUp)
 			{
 				PopUpManager.removePopUp(this._dropOverlay);
 			}
@@ -277,19 +284,19 @@
 
 		private function editingSurface_dragEnterOrOverHandler(event:DragEvent):void
 		{
-			if(event.isDefaultPrevented())
+			if (event.isDefaultPrevented())
 			{
 				return;
 			}
 			var dragSource:DragSource = event.dragSource;
-			if(!dragSource.hasFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT))
+			if (!dragSource.hasFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT))
 			{
 				return;
 			}
 			this.showDropOverlay(this);
 			DragManager.acceptDragDrop(this);
 			DragManager.showFeedback(DragManager.MOVE);
-			if(event.dragInitiator !== this)
+			if (event.dragInitiator !== this)
 			{
 				this.selectedItem = null;
 			}
@@ -299,7 +306,7 @@
 		{
 			this.resizer.mouseEnabled = true;
 			this.resizer.mouseChildren = true;
-			if(this._dropOverlay.isPopUp)
+			if (this._dropOverlay.isPopUp)
 			{
 				PopUpManager.removePopUp(this._dropOverlay);
 			}
@@ -307,13 +314,13 @@
 
 		private function dragDropHandler(event:DragEvent):void
 		{
-			if(this._dropOverlay.isPopUp)
+			if (this._dropOverlay.isPopUp)
 			{
 				PopUpManager.removePopUp(this._dropOverlay);
 			}
 			var dropTarget:IVisualElementContainer = IVisualElementContainer(event.currentTarget);
 			var coorinateSystem:DisplayObject = DisplayObject(dropTarget);
-			if(dropTarget is SkinnableContainer)
+			if (dropTarget is SkinnableContainer)
 			{
 				coorinateSystem = SkinnableContainer(dropTarget).contentGroup;
 			}
@@ -327,7 +334,7 @@
 			this.addItem(object);
 
 			//this will either add a new object or move an existing object to the top
-			if(object.parent !== dropTarget)
+			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
 			}
@@ -337,7 +344,7 @@
 
 		private function editingSurface_dragDropHandler(event:DragEvent):void
 		{
-			if(event.isDefaultPrevented())
+			if (event.isDefaultPrevented())
 			{
 				return;
 			}
@@ -347,18 +354,18 @@
 
 		private function skinnableContainer_dragEnterOrOverHandler(event:DragEvent):void
 		{
-			if(event.isDefaultPrevented())
+			if (event.isDefaultPrevented())
 			{
 				return;
 			}
 			var dragSource:DragSource = event.dragSource;
-			if(!dragSource.hasFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT))
+			if (!dragSource.hasFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT))
 			{
 				return;
 			}
 			var object:ISurfaceComponent = ISurfaceComponent(dragSource.dataForFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT));
 			var container:SkinnableContainer = SkinnableContainer(event.currentTarget);
-			if(object.contains(container))
+			if (object.contains(container))
 			{
 				//don't allow a container to be dropped on itself or one of its
 				//children!
@@ -367,9 +374,9 @@
 			var contentGroup:Group = container.contentGroup;
 			var position:Point = new Point(event.stageX, event.stageY);
 			position = contentGroup.globalToLocal(position);
-			if(position.x >= 0 && position.y >= 0 &&
-				position.x < contentGroup.width &&
-				position.y < contentGroup.height)
+			if (position.x >= 0 && position.y >= 0 &&
+					position.x < contentGroup.width &&
+					position.y < contentGroup.height)
 			{
 				this.showDropOverlay(contentGroup);
 				DragManager.acceptDragDrop(container);
@@ -379,7 +386,7 @@
 
 		private function skinnableContainer_dragDropHandler(event:DragEvent):void
 		{
-			if(event.isDefaultPrevented())
+			if (event.isDefaultPrevented())
 			{
 				return;
 			}
@@ -389,7 +396,7 @@
 
 		private function object_mouseDownHandler(event:MouseEvent):void
 		{
-			if(event.isDefaultPrevented())
+			if (event.isDefaultPrevented())
 			{
 				//if this object is a container, one of its children might
 				//prevent the container from being dragged
@@ -397,9 +404,9 @@
 			}
 
 			var target:DisplayObject = DisplayObject(event.target);
-			while(target !== event.currentTarget)
+			while (target !== event.currentTarget)
 			{
-				if(target is ScrollBarBase || target is ScrollBar)
+				if (target is ScrollBarBase || target is ScrollBar)
 				{
 					//allow scroll bars to be dragged
 					return;
@@ -435,15 +442,15 @@
 			//the first offsets are for Flash Player
 			var dragOffsetX:Number = -this.mouseX + offset.x;
 			var dragOffsetY:Number = -this.mouseY + offset.y;
-			if(Capabilities.playerType === "Desktop")
+			if (Capabilities.playerType === "Desktop")
 			{
 				//the offset in AIR should be different
 				dragOffsetX = this.mouseX - offset.x;
 				dragOffsetY = this.mouseY - offset.y;
 			}
 			DragManager.doDrag(this, dragSource, event, dragImage,
-				dragOffsetX, dragOffsetY,
-				this.getStyle("dragImageAlpha"));
+					dragOffsetX, dragOffsetY,
+					this.getStyle("dragImageAlpha"));
 		}
 
 		private function stage_mouseUpHandler(event:MouseEvent):void

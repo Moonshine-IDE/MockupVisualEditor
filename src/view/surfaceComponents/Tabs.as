@@ -12,8 +12,6 @@ package view.surfaceComponents
 
 	import spark.components.Group;
 	import spark.components.NavigatorContent;
-	import spark.components.NavigatorContent;
-	import spark.components.NavigatorContent;
 	import spark.components.SkinnableContainer;
 	import spark.components.TabBar;
 	import spark.events.IndexChangeEvent;
@@ -21,12 +19,11 @@ package view.surfaceComponents
 
 	import view.IMultiViewContainer;
 	import view.ISurfaceComponent;
-	import view.ISurfaceComponent;
 	import view.propertyEditors.TabsPropertyEditor;
 
-	public class Tabs extends Group
-		implements ISurfaceComponent, IMultiViewContainer, IDataProviderComponent
+	public class Tabs extends Group implements ISurfaceComponent, IMultiViewContainer, IDataProviderComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "Group";
 		public static const ELEMENT_NAME:String = "tabs";
 
 		public function Tabs()
@@ -125,10 +122,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+
+			setCommonXMLAttributes(xml);
+			
 			xml.@selectedIndex = this.selectedIndex;
 			var tabCount:int = this._dataProvider.length;
 			for(var i:int = 0; i < tabCount; i++)
@@ -187,7 +183,64 @@ package view.surfaceComponents
 			}
 		}
 
-		override protected function commitProperties():void
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+			var tabBar:XML = new XML("<TabBar></TabBar>");
+            tabBar.addNamespace(sparkNamespace);
+            tabBar.setNamespace(sparkNamespace);
+
+			tabBar.@mouseEnabled = false;
+			tabBar.@mouseChildren = false;
+			tabBar.@percentWidth = 100;
+
+            var viewStack:XML = new XML("<ViewStack></ViewStack>");
+            var mxNamespace:Namespace = new Namespace("mx", "library://ns.adobe.com/flex/mx");
+            viewStack.addNamespace(mxNamespace);
+            viewStack.setNamespace(mxNamespace);
+
+			viewStack.@selectedIndex = selectedIndex;
+
+            var tabCount:int = this._dataProvider.length;
+            for(var i:int = 0; i < tabCount; i++)
+            {
+                viewStack.appendChild(this.tabToMXML(i));
+            }
+
+			xml.appendChild(tabBar);
+			xml.appendChild(viewStack);
+
+            return xml;
+        }
+
+        private function tabToMXML(index:int):XML
+        {
+            var viewStack:XML = new XML("<NavigatorContent></NavigatorContent>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            viewStack.addNamespace(sparkNamespace);
+            viewStack.setNamespace(sparkNamespace);
+
+            var tab:NavigatorContent = this._stack.getItemAt(index) as NavigatorContent;
+            viewStack.@label = tab.label;
+
+            var elementCount:int = tab.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:ISurfaceComponent = tab.getElementAt(i) as ISurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+                viewStack.appendChild(element.toMXML());
+            }
+            return viewStack;
+        }
+
+        override protected function commitProperties():void
 		{
 			this._stack.selectedIndex = this._selectedIndex;
 			super.commitProperties();
@@ -233,5 +286,13 @@ package view.surfaceComponents
 				}
 			}
 		}
-	}
+
+        private function setCommonXMLAttributes(xml:XML):void
+        {
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+        }
+    }
 }

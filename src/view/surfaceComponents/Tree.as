@@ -1,7 +1,5 @@
 package view.surfaceComponents
 {
-	import mx.collections.ArrayList;
-	import mx.collections.HierarchicalData;
 	import mx.collections.IList;
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
@@ -10,6 +8,7 @@ package view.surfaceComponents
 
 	public class Tree extends mx.controls.Tree implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "Tree";
 		public static const ELEMENT_NAME:String = "tree";
 
 		public function Tree()
@@ -22,14 +21,14 @@ package view.surfaceComponents
 					children:
 					[
 						{ label: "A-1" },
-						{ label: "A-2" },
+						{ label: "A-2" }
 					]
 				},
 				{
 					label: "B",
 					children:
 					[
-						{ label: "B-1" },
+						{ label: "B-1" }
 					]
 				}
 			];
@@ -49,10 +48,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+
+			setCommonXMLAttributes(xml);
+
 			return xml;
 		}
 
@@ -74,5 +72,25 @@ package view.surfaceComponents
 				this.expandItem(item, true);
 			}
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var mxNamespace:Namespace = new Namespace("mx", "library://ns.adobe.com/flex/mx");
+            xml.addNamespace(mxNamespace);
+            xml.setNamespace(mxNamespace);
+
+            setCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+		}
+    }
 }

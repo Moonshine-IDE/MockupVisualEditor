@@ -7,8 +7,9 @@ package view.surfaceComponents
 
 	public class Button extends spark.components.Button implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "Button";
 		public static const ELEMENT_NAME:String = "button";
-
+		
 		public function Button()
 		{
 			this.label = "Button";
@@ -27,10 +28,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+
+            setCommonXMLAttributes(xml);
+
 			xml.@text = this.label;
 			return xml;
 		}
@@ -42,6 +42,28 @@ package view.surfaceComponents
 			this.width = xml.@width;
 			this.height = xml.@height;
 			this.label = xml.@text;
+		}
+
+		public function toMXML():XML
+		{
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+			setCommonXMLAttributes(xml);
+
+            xml.@label = this.label;
+
+			return xml;
+		}
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
 		}
 	}
 }

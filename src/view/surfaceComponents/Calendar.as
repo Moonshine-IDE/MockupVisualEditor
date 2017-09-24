@@ -7,6 +7,7 @@ package view.surfaceComponents
 
 	public class Calendar extends DateChooser implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "DateChooser";
 		public static const ELEMENT_NAME:String = "calendar";
 
 		public function Calendar()
@@ -26,14 +27,8 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
-			if(this.selectedDate !== null)
-			{
-				xml.@date = this.selectedDate.toUTCString();
-			}
+            setCommonXMLAttributes(xml);
+
 			return xml;
 		}
 
@@ -48,5 +43,29 @@ package view.surfaceComponents
 				this.selectedDate = new Date(xml.@date);
 			}
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var mxNamespace:Namespace = new Namespace("mx", "library://ns.adobe.com/flex/mx");
+            xml.addNamespace(mxNamespace);
+            xml.setNamespace(mxNamespace);
+
+            setCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+		private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+            if(this.selectedDate !== null)
+            {
+                xml.@date = this.selectedDate.toUTCString();
+            }
+		}
+    }
 }

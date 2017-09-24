@@ -7,6 +7,7 @@ package view.surfaceComponents
 
 	public class Window extends Panel implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "Panel";
 		public static const ELEMENT_NAME:String = "window";
 
 		public function Window()
@@ -26,11 +27,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
-			xml.@title = this.title;
+
+			setCommonXMLAttributes(xml);
+
 			var elementCount:int = this.numElements;
 			for(var i:int = 0; i < elementCount; i++)
 			{
@@ -59,5 +58,37 @@ package view.surfaceComponents
 				callback(this, childXML);
 			}
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+            setCommonXMLAttributes(xml);
+
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:ISurfaceComponent = this.getElementAt(i) as ISurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+                xml.appendChild(element.toMXML());
+            }
+
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+            xml.@title = this.title;
+		}
+    }
 }

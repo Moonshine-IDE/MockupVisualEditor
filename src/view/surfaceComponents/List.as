@@ -12,6 +12,7 @@ package view.surfaceComponents
 	public class List extends spark.components.List
 		implements ISurfaceComponent, IDataProviderComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "List";
 		public static const ELEMENT_NAME:String = "list";
 
 		public function List()
@@ -23,7 +24,7 @@ package view.surfaceComponents
 				new DataProviderListItem("Two"),
 				new DataProviderListItem("Three"),
 				new DataProviderListItem("Four"),
-				new DataProviderListItem("Five"),
+				new DataProviderListItem("Five")
 			]);
 			this.width = 120;
 			this.height = 120;
@@ -39,10 +40,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+
+			setCommonXMLAttributes(xml);
+			
 			return xml;
 		}
 
@@ -53,5 +53,25 @@ package view.surfaceComponents
 			this.width = xml.@width;
 			this.height = xml.@height;
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+			setCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+		}
+    }
 }

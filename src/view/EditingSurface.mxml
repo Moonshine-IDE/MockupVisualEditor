@@ -45,6 +45,13 @@
 
 		private var _dropOverlay:UIComponent = new UIComponent();
 		private var _selectedItem:ISurfaceComponent = null;
+		private var _wasLoaded:Boolean = false;
+		private var _hasChanged:Boolean = false;
+
+		public function get hasChanged():Boolean
+		{
+			return _hasChanged;
+		}
 
 		[Bindable("change")]
 		public function get selectedItem():ISurfaceComponent
@@ -73,6 +80,9 @@
 
 		public function toXML():XML
 		{
+			_hasChanged = false;
+			_wasLoaded = this.numElements > 0;
+
 			return EditingSurfaceWriter.toXML(this);
 		}
 
@@ -88,6 +98,8 @@
 		{
 			this.deleteAll();
 			EditingSurfaceReader.fromXML(this, xml);
+
+			_wasLoaded = true;
 		}
 
 		public function deleteAll():void
@@ -102,6 +114,7 @@
 				}
 				this.deleteItem(element);
 			}
+			_hasChanged = false;
 		}
 
 		public function addItem(item:ISurfaceComponent):void
@@ -126,6 +139,8 @@
 				itemContainer = SkinnableContainer(item);
 			}
 			this.prepareContainer(itemContainer);
+
+			_hasChanged = true;
 		}
 
 		/**
@@ -151,6 +166,8 @@
 			this.cleanupContainer(itemContainer);
 
 			this.selectedItem = null;
+			
+			_hasChanged = this.numElements > 0 && _wasLoaded;
 		}
 
 		private function prepareContainer(container:SkinnableContainer):void
@@ -451,6 +468,8 @@
 			DragManager.doDrag(this, dragSource, event, dragImage,
 					dragOffsetX, dragOffsetY,
 					this.getStyle("dragImageAlpha"));
+
+			_hasChanged = true;
 		}
 
 		private function stage_mouseUpHandler(event:MouseEvent):void

@@ -235,7 +235,10 @@ package view.surfaceComponents
                 {
                     continue;
                 }
-                viewStack.appendChild(element.toMXML());
+                CONFIG::MOONSHINE
+                {
+                    viewStack.appendChild(element.toMXML());
+                }
             }
             return viewStack;
         }

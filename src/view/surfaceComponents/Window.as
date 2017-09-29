@@ -76,7 +76,10 @@ package view.surfaceComponents
                 {
                     continue;
                 }
-                xml.appendChild(element.toMXML());
+                CONFIG::MOONSHINE
+                {
+                    xml.appendChild(element.toMXML());
+                }
             }
 
             return xml;

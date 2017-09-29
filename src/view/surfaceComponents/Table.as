@@ -9,6 +9,7 @@ package view.surfaceComponents
 
 	public class Table extends DataGrid implements ISurfaceComponent
 	{
+        private static const MXML_ELEMENT_NAME:String = "DataGrid";
 		public static const ELEMENT_NAME:String = "table";
 
 		public function Table()
@@ -20,12 +21,12 @@ package view.surfaceComponents
 				{ label: "Two", value: 2 },
 				{ label: "Three", value: 3 },
 				{ label: "Four", value: 4 },
-				{ label: "Five", value: 5 },
+				{ label: "Five", value: 5 }
 			]);
 			this.columns = new ArrayList(
 			[
 				new GridColumn("label"),
-				new GridColumn("value"),
+				new GridColumn("value")
 			]);
 			this.width = 200;
 			this.height = 160;
@@ -36,10 +37,9 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = this.width;
-			xml.@height = this.height;
+
+			setCommonXMLAttributes(xml);
+
 			return xml;
 		}
 
@@ -55,5 +55,48 @@ package view.surfaceComponents
 		{
 			return null;
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+            setCommonXMLAttributes(xml);
+
+			var columnsXML:XML = new XML("<columns></columns>");
+            columnsXML.addNamespace(sparkNamespace);
+            columnsXML.setNamespace(sparkNamespace);
+
+			var arrayListXML:XML = new XML("<ArrayList></ArrayList>");
+            arrayListXML.addNamespace(sparkNamespace);
+            arrayListXML.setNamespace(sparkNamespace);
+
+            columnsXML.appendChild(arrayListXML);
+            for(var i:int = 0; i < columnsLength; i++)
+			{
+				var gridColumn:XML = new XML("<GridColumn></GridColumn>");
+                gridColumn.addNamespace(sparkNamespace);
+                gridColumn.setNamespace(sparkNamespace);
+
+				var clmn:GridColumn = columns.getItemAt(i) as GridColumn;
+				gridColumn.@headerText = clmn.headerText;
+
+                arrayListXML.appendChild(gridColumn);
+			}
+
+            xml.appendChild(columnsXML);
+			
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = this.width;
+            xml.@height = this.height;
+		}
+    }
 }

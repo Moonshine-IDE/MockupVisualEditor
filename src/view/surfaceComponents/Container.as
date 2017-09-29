@@ -20,6 +20,7 @@ package view.surfaceComponents
 
 	public class Container extends BorderContainer implements ILayoutContainer, ISurfaceComponent
 	{
+		public static const MXML_ELEMENT_NAME:String = "BorderContainer";
 		public static const ELEMENT_NAME:String = "container";
 		public static const LAYOUT_HORIZONTAL:String = "Horizontal";
 		public static const LAYOUT_VERTICAL:String = "Vertical";
@@ -29,9 +30,6 @@ package view.surfaceComponents
 		public static const CONTAINER_HGROUP:String = "HGroup";
 		public static const CONTAINER_DIV:String = "Div";
 		public static const CONTAINER_GRID:String = "Grid";
-		
-		[SkinPart] public var bgFill:SolidColor;
-		[SkinPart] public var contentLayout:LayoutBase;
 
 		public function Container()
 		{
@@ -50,13 +48,7 @@ package view.surfaceComponents
 		{
 			return ContainerPropertyEditor;
 		}
-		
-		override protected function partAdded(partName:String, instance:Object):void
-		{
-			super.partAdded(partName, instance);
-			if (instance == this.bgFill) this.bgFill.color = _backgroundColor;
-		}
-		
+
 		private function onCreationCompletes(event:FlexEvent):void
 		{
 			this.removeEventListener(FlexEvent.CREATION_COMPLETE, onCreationCompletes);
@@ -68,12 +60,15 @@ package view.surfaceComponents
 		[Bindable("change")]
 		public function get backgroundColor():uint
 		{
-			return bgFill.color;
+			return _backgroundColor;
 		}
 		public function set backgroundColor(value:uint):void
 		{
-			_backgroundColor = value;
-			if (bgFill)	bgFill.color = value;
+			if (_backgroundColor != value)
+            {
+                _backgroundColor = value;
+				setStyle("backgroundColor", value);
+            }
 		}
 		
 		private var _layoutTypes:ArrayList;
@@ -124,8 +119,14 @@ package view.surfaceComponents
 			
 			if (_containerType == CONTAINER_DIV)
 			{
-				if (_layoutType == LAYOUT_HORIZONTAL) setStyleProperty("display", "flex");
-				else if (_layoutType == LAYOUT_VERTICAL) setStyleProperty("display", "");
+				if (_layoutType == LAYOUT_HORIZONTAL)
+				{
+					setStyleProperty("display", "flex");
+                }
+				else if (_layoutType == LAYOUT_VERTICAL)
+				{
+					setStyleProperty("display", "");
+                }
 			}
 		}
 		
@@ -185,14 +186,14 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-			xml.@x = this.x;
-			xml.@y = this.y;
-			xml.@width = GenericUtils.getWidth(this);
-			xml.@height = this.height;
-			xml.@bgColor = this.backgroundColor.toString();
-			xml.@containerType = this.containerType;
-			xml.@layoutType = this.layoutType;
+
+			setCommonXMLAttributes(xml);
+
+            xml.@bgColor = this.backgroundColor;
 			xml.@containerStyles = getContainerStylesString();
+            xml.@containerType = this.containerType;
+            xml.@layoutType = this.layoutType;
+			
 			var elementCount:int = this.numElements;
 			for(var i:int = 0; i < elementCount; i++)
 			{
@@ -212,7 +213,7 @@ package view.surfaceComponents
 			this.y = xml.@y;
 			this.width = xml.@width;
 			this.height = xml.@height;
-			this.backgroundColor = uint(xml.@bgColor);
+			this.backgroundColor = xml.@bgColor;
 			this.containerType = xml.@containerType;
 			this.layoutType = xml.@layoutType;
 			this.setContainerStylesFromString(xml.@containerStyles);
@@ -224,5 +225,42 @@ package view.surfaceComponents
 				callback(this, childXML);
 			}
 		}
-	}
+
+        public function toMXML():XML
+        {
+            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+            xml.@backgroundColor = this.backgroundColor;
+			setCommonXMLAttributes(xml);
+
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:ISurfaceComponent = this.getElementAt(i) as ISurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+
+                CONFIG::MOONSHINE
+                {
+                    xml.appendChild(element.toMXML());
+                }
+            }
+
+            return xml;
+        }
+
+        private function setCommonXMLAttributes(xml:XML):void
+		{
+            xml.@x = this.x;
+            xml.@y = this.y;
+            xml.@width = GenericUtils.getWidth(this);
+            xml.@height = this.height;
+		}
+    }
 }

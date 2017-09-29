@@ -4,13 +4,11 @@ package view.surfaceComponents
 	
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-	import mx.graphics.SolidColor;
-	
+
 	import spark.components.BorderContainer;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
-	import spark.layouts.supportClasses.LayoutBase;
 	
 	import utils.GenericUtils;
 	
@@ -22,14 +20,12 @@ package view.surfaceComponents
 	{
 		public static const MXML_ELEMENT_NAME:String = "BorderContainer";
 		public static const ELEMENT_NAME:String = "container";
-		public static const LAYOUT_HORIZONTAL:String = "Horizontal";
-		public static const LAYOUT_VERTICAL:String = "Vertical";
-		public static const LAYOUT_CANVAS:String = "Canvas";
+		public static const LAYOUT_HORIZONTAL:String = "HorizontalLayout";
+		public static const LAYOUT_VERTICAL:String = "VerticalLayout";
+		public static const LAYOUT_BASIC:String = "BasicLayout";
 		public static const CONTAINER_GROUP:String = "Group";
 		public static const CONTAINER_VGROUP:String = "VGroup";
 		public static const CONTAINER_HGROUP:String = "HGroup";
-		public static const CONTAINER_DIV:String = "Div";
-		public static const CONTAINER_GRID:String = "Grid";
 
 		public function Container()
 		{
@@ -38,8 +34,8 @@ package view.surfaceComponents
 			this.minWidth = 20;
 			this.minHeight = 20;
 			
-			this._layoutTypes = new ArrayList([LAYOUT_HORIZONTAL, LAYOUT_VERTICAL, LAYOUT_CANVAS]);
-			this._containerTypes = new ArrayList([CONTAINER_GROUP, CONTAINER_VGROUP, CONTAINER_HGROUP, CONTAINER_DIV, CONTAINER_GRID]);
+			this._layoutTypes = new ArrayList([LAYOUT_BASIC, LAYOUT_HORIZONTAL, LAYOUT_VERTICAL]);
+			this._containerTypes = new ArrayList([CONTAINER_GROUP, CONTAINER_VGROUP, CONTAINER_HGROUP]);
 			
 			this.addEventListener(FlexEvent.CREATION_COMPLETE, onCreationCompletes, false, 0, true);
 		}
@@ -115,18 +111,6 @@ package view.surfaceComponents
 						break;
 					}
 				}
-			}
-			
-			if (_containerType == CONTAINER_DIV)
-			{
-				if (_layoutType == LAYOUT_HORIZONTAL)
-				{
-					setStyleProperty("display", "flex");
-                }
-				else if (_layoutType == LAYOUT_VERTICAL)
-				{
-					setStyleProperty("display", "");
-                }
 			}
 		}
 		
@@ -237,6 +221,8 @@ package view.surfaceComponents
             xml.@backgroundColor = this.backgroundColor;
 			setCommonXMLAttributes(xml);
 
+            xml.appendChild(layoutToMXML());
+
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
@@ -261,6 +247,23 @@ package view.surfaceComponents
             xml.@y = this.y;
             xml.@width = GenericUtils.getWidth(this);
             xml.@height = this.height;
+		}
+
+		private function layoutToMXML():XML
+		{
+            var xml:XML = new XML("<layout></layout>");
+
+            var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
+            xml.addNamespace(sparkNamespace);
+            xml.setNamespace(sparkNamespace);
+
+            var mxmlLayout:XML = new XML("<" + layoutType + "/>");
+            mxmlLayout.addNamespace(sparkNamespace);
+            mxmlLayout.setNamespace(sparkNamespace);
+
+            xml.appendChild(mxmlLayout);
+
+			return xml;
 		}
     }
 }

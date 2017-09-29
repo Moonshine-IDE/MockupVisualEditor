@@ -2,7 +2,8 @@
 <forms:BasePropertyEditorForm
 	xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:forms="view.propertyEditors.forms.*" xmlns:ns="http://flex.apache.org/experimental/ns" xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:forms="view.propertyEditors.forms.*"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
 	creationComplete="onCreationCompletes(event)">
 
 	<forms:layout>
@@ -11,7 +12,8 @@
 
 	<s:FormItem label="Select Color">
 		<s:HGroup width="100%" verticalAlign="middle">
-			<mx:ColorPicker id="picker" change="onPickerChanged(event)" selectedColor="0xcccccc"/>
+			<mx:ColorPicker id="picker" change="onPickerChanged(event)"
+							selectedColor="{ILayoutContainer(selectedItem).backgroundColor}"/>
 			<s:Label text="Editor only"/>
 		</s:HGroup>
 	</s:FormItem>
@@ -31,7 +33,6 @@
 	</s:FormItem>
 
 	<fx:Script><![CDATA[
-		import mx.controls.Alert;
 		import mx.events.ColorPickerEvent;
 		import mx.events.FlexEvent;
 		
@@ -47,12 +48,6 @@
 		
 		protected function onTypesChanged(event:IndexChangeEvent):void
 		{
-			if (ddlCTypes.selectedItem == Container.CONTAINER_DIV && ddlTypes.selectedItem == Container.LAYOUT_CANVAS)
-			{
-				ddlTypes.selectedItem = Container.LAYOUT_HORIZONTAL;
-				Alert.show("Please choose horizontal or vertical layout for Div.");
-			}
-			
 			ILayoutContainer(selectedItem).layoutType = ddlTypes.selectedItem.toString();
 		}
 		
@@ -66,13 +61,13 @@
 		{
 			ddlCTypes.selectedItem = ILayoutContainer(selectedItem).containerType;
 			ddlTypes.selectedItem = ILayoutContainer(selectedItem).layoutType;
-			
+
 			setLayoutOnContainer();
 		}
 		
 		private function setLayoutOnContainer():void
 		{
-			if (ddlCTypes.selectedItem == Container.CONTAINER_DIV) 
+			if (ddlCTypes.selectedItem == Container.CONTAINER_GROUP)
 			{
 				ddlTypes.enabled = true;
 				ddlTypes.selectedItem = ILayoutContainer(selectedItem).layoutType;
@@ -82,12 +77,11 @@
 				ddlTypes.enabled = false;
 				switch (ddlCTypes.selectedItem)
 				{
-					case Container.CONTAINER_GRID:
 					case Container.CONTAINER_VGROUP:
 						ddlTypes.selectedItem = Container.LAYOUT_VERTICAL;
 						break;
 					case Container.CONTAINER_GROUP:
-						ddlTypes.selectedItem = Container.LAYOUT_CANVAS;
+						ddlTypes.selectedItem = Container.LAYOUT_BASIC;
 						break;
 					case Container.CONTAINER_HGROUP:
 						ddlTypes.selectedItem = Container.LAYOUT_HORIZONTAL;

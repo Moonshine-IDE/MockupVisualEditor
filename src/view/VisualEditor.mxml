@@ -26,6 +26,35 @@
 
 		private var _file:FileReference;
 
+		CONFIG::MOONSHINE
+		{
+			private var _fileMoonshine:File;
+			private var _fileStreamMoonshine:FileStream;
+
+			public function saveEditedFile():void
+			{
+				if (!_fileStreamMoonshine) return;
+				
+				var xml:XML = this.editingSurface.toXML();
+				_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+				_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+				_fileStreamMoonshine.close();
+			}
+
+			public function loadFile(filePath:String):void
+			{
+				_fileMoonshine = new File(filePath);
+				_fileStreamMoonshine = new FileStream();
+				_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
+
+				var data:String = _fileStreamMoonshine.readUTFBytes(_fileMoonshine.size);
+				var xml:XML = new XML(data);
+				this.editingSurface.fromXML(xml);
+
+				_fileStreamMoonshine.close();
+			}
+		}
+
 		private function newButton_clickHandler(event:MouseEvent):void
 		{
 			this.editingSurface.deleteAll();
@@ -86,6 +115,5 @@
 				toolbar.height = 1;
 			}
 		}
-
-	]]></fx:Script>
+		]]></fx:Script>
 </s:Group>

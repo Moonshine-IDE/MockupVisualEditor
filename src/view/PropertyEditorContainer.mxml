@@ -21,9 +21,6 @@
 	</s:Group>
 
 	<fx:Script><![CDATA[
-		import spark.components.Button;
-
-		import view.propertyEditors.ButtonPropertyEditor;
 		import view.propertyEditors.GenericPropertyEditor;
 
 		private var _editor:IPropertyEditor;

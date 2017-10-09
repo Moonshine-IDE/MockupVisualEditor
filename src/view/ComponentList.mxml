@@ -16,9 +16,6 @@
 		<data:ComponentListItem name="Drop Down List">
 			<data:type>view.surfaceComponents.DropDownList</data:type>
 		</data:ComponentListItem>
-		<data:ComponentListItem name="Hyperlink">
-			<data:type>view.surfaceComponents.Hyperlink</data:type>
-		</data:ComponentListItem>
 		<data:ComponentListItem name="Image">
 			<data:type>view.surfaceComponents.Image</data:type>
 		</data:ComponentListItem>

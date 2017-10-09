@@ -64,5 +64,10 @@ package view.surfaceComponents
 			this.text = xml.@text;
 			this.url = xml.@url;
 		}
-	}
+
+        public function toMXML():XML
+        {
+            return null;
+        }
+    }
 }

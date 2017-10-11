@@ -34,7 +34,7 @@
 			public function saveEditedFile():void
 			{
 				if (!_fileStreamMoonshine) return;
-				
+
 				var xml:XML = this.editingSurface.toXML();
 				_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
 				_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
@@ -43,7 +43,7 @@
 
 			public function loadFile(filePath:String):void
 			{
-				_fileMoonshine = new File(filePath);
+				_fileMoonshine = createNewFileIfNotExists(filePath);
 				_fileStreamMoonshine = new FileStream();
 				_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
 
@@ -52,6 +52,22 @@
 				this.editingSurface.fromXML(xml);
 
 				_fileStreamMoonshine.close();
+			}
+
+			private function createNewFileIfNotExists(filePath:String):File
+			{
+				var tempFileMoonshine:File = new File(filePath);
+
+				if (!tempFileMoonshine.exists)
+				{
+					var xml:XML = this.editingSurface.toXML();
+					var tempFileStreamMoonshine = new FileStream();
+					tempFileStreamMoonshine.open(tempFileMoonshine, FileMode.WRITE);
+					tempFileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+					tempFileStreamMoonshine.close();
+				}
+
+				return tempFileMoonshine;
 			}
 		}
 

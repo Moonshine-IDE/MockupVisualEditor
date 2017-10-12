@@ -28,6 +28,7 @@ package view.surfaceComponents
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+            xml.@text = this.label;
             setCommonXMLAttributes(xml);
 
 			return xml;
@@ -56,6 +57,7 @@ package view.surfaceComponents
             xml.addNamespace(sparkNamespace);
             xml.setNamespace(sparkNamespace);
 
+            xml.@label = this.label;
             setCommonXMLAttributes(xml);
 
             return xml;
@@ -67,7 +69,6 @@ package view.surfaceComponents
             xml.@y = this.y;
             xml.@width = this.width;
             xml.@height = this.height;
-            xml.@text = this.label;
             xml.@selected = this.selected;
             xml.@groupName = this.groupName;
 		}

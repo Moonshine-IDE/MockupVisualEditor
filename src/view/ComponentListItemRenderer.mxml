@@ -39,11 +39,7 @@
 		import data.ComponentListItem;
 
 		import mx.core.DragSource;
-		import mx.core.IUIComponent;
 		import mx.core.IVisualElement;
-		import mx.core.IVisualElement;
-		import mx.core.IVisualElement;
-		import mx.core.UIComponent;
 		import mx.managers.DragManager;
 
 		public static const OFFSET_DRAG_FORMAT:String = "drag-offset";

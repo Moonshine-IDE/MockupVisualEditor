@@ -99,7 +99,6 @@ view|ComponentList
 
 view|ComponentListItemRenderer
 {
-	downColor: #ffffff;
 	selectionColor: #ffffff;
 	rollOverColor: #ffffff;
 }

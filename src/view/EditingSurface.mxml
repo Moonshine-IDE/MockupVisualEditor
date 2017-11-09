@@ -139,8 +139,6 @@
 				itemContainer = SkinnableContainer(item);
 			}
 			this.prepareContainer(itemContainer);
-
-			_hasChanged = true;
 		}
 
 		/**
@@ -357,6 +355,8 @@
 			}
 			this.selectedItem = object;
 			this.setFocus();
+
+			_hasChanged = true;
 		}
 
 		private function editingSurface_dragDropHandler(event:DragEvent):void

@@ -61,7 +61,7 @@
 				if (!tempFileMoonshine.exists)
 				{
 					var xml:XML = this.editingSurface.toXML();
-					var tempFileStreamMoonshine = new FileStream();
+					var tempFileStreamMoonshine:FileStream = new FileStream();
 					tempFileStreamMoonshine.open(tempFileMoonshine, FileMode.WRITE);
 					tempFileStreamMoonshine.writeUTFBytes(xml.toXMLString());
 					tempFileStreamMoonshine.close();

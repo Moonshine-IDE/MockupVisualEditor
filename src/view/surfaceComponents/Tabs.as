@@ -297,5 +297,10 @@ package view.surfaceComponents
             xml.@width = this.width;
             xml.@height = this.height;
         }
+
+        public function get propertiesChangedEvents():Array
+        {
+            return null;
+        }
     }
 }

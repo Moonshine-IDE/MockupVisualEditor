@@ -12,7 +12,7 @@ package view.propertyEditors
 	import view.ISurfaceComponent;
 
 	[Event(name="change",type="flash.events.Event")]
-
+    [Event(name="propertyEditorChanged",type="flash.events.Event")]
 	public class BasePropertyEditor extends Group implements IPropertyEditor
 	{
 		public function BasePropertyEditor()
@@ -36,7 +36,9 @@ package view.propertyEditors
 			{
 				return;
 			}
+
 			this._surface = value;
+
 			var editorCount:int = this._propertyEditors.length;
 			for(var i:int = 0; i < editorCount; i++)
 			{
@@ -59,15 +61,27 @@ package view.propertyEditors
 			{
 				return;
 			}
-			this._selectedItem = value;
-			var editorCount:int = this._propertyEditors.length;
-			for(var i:int = 0; i < editorCount; i++)
+
+			if (value)
 			{
-				var editor:IPropertyEditor = this._propertyEditors[i];
+				registerPropertyChangedEvents(value);
+			}
+
+			_selectedItem = value;
+
+			var editorCount:int = this._propertyEditors.length;
+			for(var j:int = 0; j < editorCount; j++)
+			{
+				var editor:IPropertyEditor = this._propertyEditors[j];
 				editor.selectedItem = this._selectedItem;
 			}
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
+
+        private function onSelectedItemPropertyChanged(event:Event):void
+        {
+		    dispatchEvent(new Event("propertyEditorChanged", true));
+        }
 
 		private function populatePropertyEditors(target:IVisualElement):void
 		{
@@ -115,7 +129,30 @@ package view.propertyEditors
 			}
 		}
 
-		private function propertyEditor_addedHandler(event:Event):void
+        private function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
+        {
+            if (!surfaceComponent.propertiesChangedEvents) return;
+
+            var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
+            for(var i:int = 0; i < propertiesChangedEventsCount; i++)
+            {
+                surfaceComponent.addEventListener(surfaceComponent.propertiesChangedEvents[i], onSelectedItemPropertyChanged);
+            }
+        }
+
+        private function unregisterPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
+        {
+            if (!surfaceComponent) return;
+            if (!surfaceComponent.propertiesChangedEvents) return;
+
+            var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
+            for(var i:int = 0; i < propertiesChangedEventsCount; i++)
+            {
+                surfaceComponent.removeEventListener(surfaceComponent.propertiesChangedEvents[i], onSelectedItemPropertyChanged);
+            }
+        }
+
+        private function propertyEditor_addedHandler(event:Event):void
 		{
 			var object:IVisualElement = event.target as IVisualElement;
 			if(object === null || object === this)
@@ -128,6 +165,11 @@ package view.propertyEditors
 		private function propertyEditor_removedHandler(event:Event):void
 		{
 			var object:IVisualElement = event.target as IVisualElement;
+			if (object === this)
+			{
+				unregisterPropertyChangedEvents(_selectedItem);
+			}
+
 			if(object === null || object === this)
 			{
 				return;

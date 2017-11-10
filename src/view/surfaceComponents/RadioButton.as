@@ -1,6 +1,8 @@
 package view.surfaceComponents
 {
-	import spark.components.RadioButton;
+    import flash.events.Event;
+
+    import spark.components.RadioButton;
 
 	import view.ISurfaceComponent;
 	import view.propertyEditors.RadioButtonPropertyEditor;
@@ -18,6 +20,18 @@ package view.surfaceComponents
 			this.height = 30;
 			this.minWidth = 20;
 			this.minHeight = 20;
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged",
+                "contentChange",
+                "selectedChanged",
+                "groupNameChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
@@ -25,30 +39,56 @@ package view.surfaceComponents
 			return RadioButtonPropertyEditor;
 		}
 
-		public function toXML():XML
-		{
-			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-            xml.@text = this.label;
-            setCommonXMLAttributes(xml);
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
 
-			return xml;
-		}
+        override public function set selected(value:Boolean):void
+        {
+            if (super.selected != value)
+            {
+                dispatchEvent(new Event("selectedChanged"));
+            }
 
-		public function fromXML(xml:XML, callback:Function):void
-		{
-			this.x = xml.@x;
-			this.y = xml.@y;
-			this.width = xml.@width;
-			this.height = xml.@height;
-			this.label = xml.@text;
-			this.selected = xml.@selected === "true";
-			this.groupName = xml.@groupName;
-		}
+            super.selected = value;
+        }
 
-		override protected function buttonReleased():void
+        override public function set groupName(value:String):void
+        {
+            if (super.groupName != value)
+            {
+                dispatchEvent(new Event("groupNameChanged"));
+            }
+
+            super.groupName = value;
+        }
+
+        override protected function buttonReleased():void
 		{
 			//we don't want the selection to change on the editing surface
 		}
+
+        public function toXML():XML
+        {
+            var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+            xml.@text = this.label;
+            setCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+        public function fromXML(xml:XML, callback:Function):void
+        {
+            this.x = xml.@x;
+            this.y = xml.@y;
+            this.width = xml.@width;
+            this.height = xml.@height;
+            this.label = xml.@text;
+            this.selected = xml.@selected === "true";
+            this.groupName = xml.@groupName;
+        }
 
         public function toMXML():XML
         {

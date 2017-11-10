@@ -18,6 +18,15 @@ package view.surfaceComponents
 			this.height = 30;
 			this.minWidth = 20;
 			this.minHeight = 20;
+			
+			_propertiesChangedEvents = [
+					"xChanged",
+					"yChanged",
+					"widthChanged",
+					"heightChanged",
+					"explicitMinWidthChanged",
+					"explicitMinHeightChanged"
+			];
 		}
 
 		public function get propertyEditorClass():Class
@@ -25,6 +34,12 @@ package view.surfaceComponents
 			return ButtonPropertyEditor;
 		}
 
+		private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+		
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -65,5 +80,5 @@ package view.surfaceComponents
             xml.@width = this.width;
             xml.@height = this.height;
 		}
-	}
+    }
 }

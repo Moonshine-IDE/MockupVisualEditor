@@ -69,5 +69,10 @@ package view.surfaceComponents
         {
             return null;
         }
+
+        public function get propertiesChangedEvents():Array
+        {
+            return null;
+        }
     }
 }

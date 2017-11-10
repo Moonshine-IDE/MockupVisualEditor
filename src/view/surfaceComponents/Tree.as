@@ -38,12 +38,27 @@ package view.surfaceComponents
 			this.minWidth = 20;
 			this.minHeight = 20;
 			this.addEventListener(FlexEvent.CREATION_COMPLETE, tree_creationCompleteHandler);
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
 		{
 			return null;
 		}
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
 
 		public function toXML():XML
 		{

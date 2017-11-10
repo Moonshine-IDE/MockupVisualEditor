@@ -32,9 +32,29 @@ package view.surfaceComponents
 			this.height = 160;
 			this.minWidth = 20;
 			this.minHeight = 20;
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged"
+            ];
 		}
 
-		public function toXML():XML
+        public function get propertyEditorClass():Class
+        {
+            return null;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
@@ -49,11 +69,6 @@ package view.surfaceComponents
 			this.y = xml.@y;
 			this.width = xml.@width;
 			this.height = xml.@height;
-		}
-
-		public function get propertyEditorClass():Class
-		{
-			return null;
 		}
 
         public function toMXML():XML

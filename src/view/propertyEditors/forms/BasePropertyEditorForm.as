@@ -11,7 +11,7 @@ package view.propertyEditors.forms
 	import view.ISurfaceComponent;
 
 	[Event(name="change",type="flash.events.Event")]
-
+	[Event(name="propertyEditorChanged",type="flash.events.Event")]
 	public class BasePropertyEditorForm extends Form implements IPropertyEditor
 	{
 		public function BasePropertyEditorForm()

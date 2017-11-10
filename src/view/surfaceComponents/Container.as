@@ -265,5 +265,10 @@ package view.surfaceComponents
 
 			return xml;
 		}
+
+        public function get propertiesChangedEvents():Array
+        {
+            return null;
+        }
     }
 }

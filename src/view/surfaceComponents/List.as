@@ -30,6 +30,15 @@ package view.surfaceComponents
 			this.height = 120;
 			this.minWidth = 20;
 			this.minHeight = 20;
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
@@ -37,6 +46,12 @@ package view.surfaceComponents
 			return ListPropertyEditor;
 		}
 
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+		
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");

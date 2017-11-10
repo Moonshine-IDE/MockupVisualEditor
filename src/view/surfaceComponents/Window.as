@@ -1,6 +1,8 @@
 package view.surfaceComponents
 {
-	import spark.components.Panel;
+    import flash.events.Event;
+
+    import spark.components.Panel;
 
 	import view.ISurfaceComponent;
 	import view.propertyEditors.WindowPropertyEditor;
@@ -17,6 +19,16 @@ package view.surfaceComponents
 			this.height = 200;
 			this.minWidth = 20;
 			this.minHeight = 20;
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged",
+				"titleChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
@@ -24,7 +36,22 @@ package view.surfaceComponents
 			return WindowPropertyEditor;
 		}
 
-		public function toXML():XML
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        override public function set title(value:String):void
+        {
+			if (super.title != value)
+			{
+				 dispatchEvent(new Event("titleChanged"));
+			}
+            super.title = value;
+        }
+
+        public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 

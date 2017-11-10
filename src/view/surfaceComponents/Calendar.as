@@ -1,8 +1,11 @@
 package view.surfaceComponents
 {
-	import mx.controls.DateChooser;
+    import flash.events.Event;
 
-	import view.ISurfaceComponent;
+    import mx.controls.DateChooser;
+    import mx.utils.ObjectUtil;
+
+    import view.ISurfaceComponent;
 	import view.propertyEditors.CalendarPropertyEditor;
 
 	public class Calendar extends DateChooser implements ISurfaceComponent
@@ -17,6 +20,16 @@ package view.surfaceComponents
 			this.height = 200;
 			this.minWidth = 150;
 			this.minHeight = 150;
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged",
+				"selectedDateChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
@@ -24,7 +37,23 @@ package view.surfaceComponents
 			return CalendarPropertyEditor;
 		}
 
-		public function toXML():XML
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        override public function set selectedDate(value:Date):void
+        {
+			if (ObjectUtil.dateCompare(super.selectedDate, value) != 0)
+			{
+				dispatchEvent(new Event("selectedDateChanged"));
+			}
+
+            super.selectedDate = value;
+        }
+
+        public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
             setCommonXMLAttributes(xml);

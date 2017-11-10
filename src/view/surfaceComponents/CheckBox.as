@@ -1,6 +1,8 @@
 package view.surfaceComponents
 {
-	import spark.components.CheckBox;
+    import flash.events.Event;
+
+    import spark.components.CheckBox;
 
 	import view.ISurfaceComponent;
 	import view.propertyEditors.CheckBoxPropertyEditor;
@@ -18,12 +20,29 @@ package view.surfaceComponents
 			this.height = 30;
 			this.minWidth = 20;
 			this.minHeight = 20;
+
+            _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged",
+                "contentChange",
+				"selectedChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
 		{
 			return CheckBoxPropertyEditor;
 		}
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
 
 		public function toXML():XML
 		{
@@ -44,11 +63,6 @@ package view.surfaceComponents
 			this.selected = xml.@selected === "true";
 		}
 
-		override protected function buttonReleased():void
-		{
-			//we don't want the selection to change on the editing surface
-		}
-
         public function toMXML():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
@@ -59,6 +73,21 @@ package view.surfaceComponents
             setCommonXMLAttributes(xml);
 
             return xml;
+        }
+
+        override public function set selected(value:Boolean):void
+        {
+			if (super.selected != value)
+			{
+				dispatchEvent(new Event("selectedChanged"));
+			}
+
+            super.selected = value;
+        }
+
+        override protected function buttonReleased():void
+        {
+            //we don't want the selection to change on the editing surface
         }
 
         private function setCommonXMLAttributes(xml:XML):void

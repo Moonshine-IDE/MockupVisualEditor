@@ -9,7 +9,9 @@ package view.surfaceComponents
     import mx.events.CollectionEventKind;
     import spark.components.DropDownList;
 
-	import view.ISurfaceComponent;
+    import utils.MxmlCodeUtils;
+
+    import view.ISurfaceComponent;
 	import view.propertyEditors.DropDownListPropertyEditor;
 
 	public class DropDownList extends spark.components.DropDownList
@@ -22,7 +24,15 @@ package view.surfaceComponents
 		{
 			this.mouseChildren = false;
 			this.prompt = "Drop Down List";
-            this.dataProvider = new ArrayList([new DataProviderListItem("One")]);
+            this.dataProvider = new ArrayList(
+                    [
+                        new DataProviderListItem("One"),
+                        new DataProviderListItem("Two"),
+                        new DataProviderListItem("Three"),
+                        new DataProviderListItem("Four"),
+                        new DataProviderListItem("Five")
+                    ]);
+
 			this.width = 120;
 			this.height = 30;
 			this.minWidth = 20;
@@ -100,42 +110,9 @@ package view.surfaceComponents
 
 			setCommonXMLAttributes(xml);
 
-            var dpCount:int = 0;
-            if (this.dataProvider)
+            var dpMxml:XML = MxmlCodeUtils.getDataProviderMxml(this.dataProvider as ArrayList);
+            if (dpMxml)
             {
-                dpCount = this.dataProvider.length;
-            }
-
-            if (dpCount > 0)
-            {
-                var dpMxml:XML = new XML("<dataProvider/>");
-                dpMxml.addNamespace(sparkNamespace);
-                dpMxml.setNamespace(sparkNamespace);
-
-                var arrayListMxml:XML = new XML("<ArrayList/>");
-                arrayListMxml.addNamespace(sparkNamespace);
-                arrayListMxml.setNamespace(sparkNamespace);
-
-                var fxNamespace:Namespace = new Namespace("fx", "http://ns.adobe.com/mxml/2009");
-                var arrayMxml:XML = new XML("<Array/>");
-                arrayMxml.addNamespace(fxNamespace);
-                arrayMxml.setNamespace(fxNamespace);
-
-                var dp:ArrayList = this.dataProvider as ArrayList;
-                for(var i:int = 0; i < dpCount; i++)
-                {
-                    var itemMxml:XML = new XML("<Object/>");
-                    itemMxml.addNamespace(fxNamespace);
-                    itemMxml.setNamespace(fxNamespace);
-
-                    var dropDownListItem:DataProviderListItem = dp.getItemAt(i) as DataProviderListItem;
-                    itemMxml.@label = dropDownListItem.label;
-
-                    arrayMxml.appendChild(itemMxml);
-                }
-
-                arrayListMxml.appendChild(arrayMxml);
-                dpMxml.appendChild(arrayListMxml);
                 xml.appendChild(dpMxml);
             }
 

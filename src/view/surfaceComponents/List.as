@@ -2,11 +2,17 @@ package view.surfaceComponents
 {
 	import data.DataProviderListItem;
 
-	import mx.collections.ArrayList;
+    import flash.events.Event;
 
-	import spark.components.List;
+    import mx.collections.ArrayList;
+    import mx.events.CollectionEvent;
+    import mx.events.CollectionEventKind;
 
-	import view.ISurfaceComponent;
+    import spark.components.List;
+
+    import utils.MxmlCodeUtils;
+
+    import view.ISurfaceComponent;
 	import view.propertyEditors.ListPropertyEditor;
 
 	public class List extends spark.components.List
@@ -37,7 +43,8 @@ package view.surfaceComponents
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
-                "explicitMinHeightChanged"
+                "explicitMinHeightChanged",
+				"dropDownListChanged"
             ];
 		}
 
@@ -56,6 +63,19 @@ package view.surfaceComponents
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
+            if (dataProvider)
+            {
+                var dpCount:int = this.dataProvider.length;
+                var dp:ArrayList = this.dataProvider as ArrayList;
+                for(var i:int = 0; i < dpCount; i++)
+                {
+                    var item:XML = new XML("<item />");
+                    var dropDownListItem:DataProviderListItem = dp.getItemAt(i) as DataProviderListItem;
+                    item.@label = dropDownListItem.label;
+                    xml.appendChild(item);
+                }
+            }
+
 			setCommonXMLAttributes(xml);
 			
 			return xml;
@@ -67,6 +87,18 @@ package view.surfaceComponents
 			this.y = xml.@y;
 			this.width = xml.@width;
 			this.height = xml.@height;
+
+            var normalizedXml:XML = xml.normalize();
+            var items:XMLList = normalizedXml.children();
+            if (items.length() > 0)
+            {
+                this.dataProvider.removeAll();
+            }
+
+            for each (var item:XML in items)
+            {
+                dataProvider.addItem(new DataProviderListItem(item.@label));
+            }
 		}
 
         public function toMXML():XML
@@ -78,7 +110,29 @@ package view.surfaceComponents
 
 			setCommonXMLAttributes(xml);
 
+            var dpMxml:XML = MxmlCodeUtils.getDataProviderMxml(this.dataProvider as ArrayList);
+            if (dpMxml)
+            {
+                xml.appendChild(dpMxml);
+            }
+
             return xml;
+        }
+
+
+        override protected function dataProvider_collectionChangeHandler(event:Event):void
+        {
+            super.dataProvider_collectionChangeHandler(event);
+
+            if (event is CollectionEvent)
+            {
+                var ce:CollectionEvent = CollectionEvent(event);
+
+                if (ce.kind == CollectionEventKind.ADD || ce.kind == CollectionEventKind.REMOVE)
+                {
+                    dispatchEvent(new Event("dropDownListChanged"));
+                }
+            }
         }
 
         private function setCommonXMLAttributes(xml:XML):void

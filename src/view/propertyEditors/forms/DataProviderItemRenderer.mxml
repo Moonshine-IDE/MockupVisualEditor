@@ -35,7 +35,7 @@
 
 		private function commitChanges():void
 		{
-			if(!this.editing)
+			if(!this.editing || !this.data)
 			{
 				//not editing, so nothing to commit!
 				return;

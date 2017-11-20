@@ -3,6 +3,7 @@ package view.surfaceComponents
     import flash.events.Event;
 
     import mx.controls.DateChooser;
+    import mx.formatters.DateFormatter;
     import mx.utils.ObjectUtil;
 
     import view.ISurfaceComponent;
@@ -69,7 +70,7 @@ package view.surfaceComponents
 			this.height = xml.@height;
 			if("@date" in xml)
 			{
-				this.selectedDate = new Date(xml.@date);
+				this.selectedDate = DateFormatter.parseDateString(xml.@date);
 			}
 		}
 
@@ -93,7 +94,7 @@ package view.surfaceComponents
             xml.@height = this.height;
             if(this.selectedDate !== null)
             {
-                xml.@date = this.selectedDate.toUTCString();
+                xml.@date = this.selectedDate.toDateString();
             }
 		}
     }

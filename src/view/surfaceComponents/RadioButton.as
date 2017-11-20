@@ -86,7 +86,7 @@ package view.surfaceComponents
             this.width = xml.@width;
             this.height = xml.@height;
             this.label = xml.@text;
-            this.selected = xml.@selected === "true";
+            this.selected = xml.@selected == "true";
             this.groupName = xml.@groupName;
         }
 

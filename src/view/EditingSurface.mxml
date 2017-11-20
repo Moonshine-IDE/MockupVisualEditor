@@ -53,6 +53,15 @@
 			return _hasChanged;
 		}
 
+		public function set hasChanged(value:Boolean):void
+		{
+			if (_hasChanged != value)
+			{
+				_hasChanged = value;
+				dispatchEvent(new Event(Event.CHANGE));
+			}
+		}
+
 		[Bindable("change")]
 		public function get selectedItem():ISurfaceComponent
 		{
@@ -80,7 +89,7 @@
 
 		public function toXML():XML
 		{
-			_hasChanged = false;
+			hasChanged = false;
 			_wasLoaded = this.numElements > 0;
 
 			return EditingSurfaceWriter.toXML(this);
@@ -114,7 +123,7 @@
 				}
 				this.deleteItem(element);
 			}
-			_hasChanged = false;
+			hasChanged = false;
 		}
 
 		public function addItem(item:ISurfaceComponent):void
@@ -164,8 +173,8 @@
 			this.cleanupContainer(itemContainer);
 
 			this.selectedItem = null;
-			
-			_hasChanged = this.numElements > 0 && _wasLoaded;
+
+			hasChanged = this.numElements > 0 && _wasLoaded;
 		}
 
 		private function prepareContainer(container:SkinnableContainer):void
@@ -356,7 +365,7 @@
 			this.selectedItem = object;
 			this.setFocus();
 
-			_hasChanged = true;
+			hasChanged = true;
 		}
 
 		private function editingSurface_dragDropHandler(event:DragEvent):void

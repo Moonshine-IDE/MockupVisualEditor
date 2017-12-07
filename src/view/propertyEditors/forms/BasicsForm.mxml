@@ -48,7 +48,7 @@
 		import mx.core.IVisualElement;
 		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
-		
+
 		[Bindable("change")]
 		private function get selectedComponent():UIComponent
 		{
@@ -94,7 +94,7 @@
 
 		private function commitHeight():void
 		{
-			if (this.widthInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(false);
+			if (this.heightInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(false);
 			else
 			{
 				var newHeight:Number = parseFloat(this.heightInput.text);

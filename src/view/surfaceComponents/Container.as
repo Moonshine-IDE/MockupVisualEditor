@@ -40,6 +40,8 @@ package view.surfaceComponents
 			this.addEventListener(FlexEvent.CREATION_COMPLETE, onCreationCompletes, false, 0, true);
 
             _propertiesChangedEvents = [
+                "xChanged",
+                "yChanged",
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",

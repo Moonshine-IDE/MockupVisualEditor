@@ -38,6 +38,13 @@ package view.surfaceComponents
 			this._containerTypes = new ArrayList([CONTAINER_GROUP, CONTAINER_VGROUP, CONTAINER_HGROUP]);
 			
 			this.addEventListener(FlexEvent.CREATION_COMPLETE, onCreationCompletes, false, 0, true);
+
+            _propertiesChangedEvents = [
+                "widthChanged",
+                "heightChanged",
+                "explicitMinWidthChanged",
+                "explicitMinHeightChanged"
+            ];
 		}
 
 		public function get propertyEditorClass():Class
@@ -266,9 +273,10 @@ package view.surfaceComponents
 			return xml;
 		}
 
+        private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array
         {
-            return null;
+            return _propertiesChangedEvents;
         }
     }
 }

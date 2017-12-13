@@ -56,13 +56,15 @@
 			//UIComponent, so we need to give the compiler a little hint here
 			return UIComponent(this.selectedItem);
 		}
-		
+
+		[Bindable("propertyEditorChanged")]
 		public function get selectedComponentComputedWidth():String
 		{
 			if (!isNaN(selectedComponent.percentWidth)) return selectedComponent.percentWidth +"%";
 			return selectedComponent.width.toString();
 		}
-		
+
+		[Bindable("propertyEditorChanged")]
 		public function get selectedComponentComputedHeight():String
 		{
 			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight +"%";

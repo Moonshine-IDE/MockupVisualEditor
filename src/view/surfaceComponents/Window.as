@@ -14,7 +14,7 @@ package view.surfaceComponents
 
 		public function Window()
 		{
-			this.title = "Window";
+			this.title = "Panel";
 			this.width = 200;
 			this.height = 200;
 			this.minWidth = 20;

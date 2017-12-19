@@ -40,7 +40,7 @@
 		<data:ComponentListItem name="Tree">
 			<data:type>view.surfaceComponents.Tree</data:type>
 		</data:ComponentListItem>
-		<data:ComponentListItem name="Window">
+		<data:ComponentListItem name="Panel">
 			<data:type>view.surfaceComponents.Window</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Container">

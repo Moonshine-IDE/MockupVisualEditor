@@ -36,7 +36,10 @@ package utils
                         continue;
                     }
                     var elementXML:XML = element.toMXML();
-                    xml.appendChild(elementXML);
+					if (elementXML)
+                    {
+                        xml.appendChild(elementXML);
+                    }
                 }
                 return xml;
             }

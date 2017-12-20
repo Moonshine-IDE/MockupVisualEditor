@@ -89,29 +89,13 @@ package view.surfaceComponents
 
         public function toMXML():XML
         {
-            var xml:XML = null;
-
-			if (this.id == "mainApplicationWindow" && this.numElements == 0)
-			{
-				return null;
-            }
-			else if (this.id == "mainApplicationWindow")
-			{
-                xml = new XML("<Group/>");
-                xml.@x = 0;
-                xml.@y = 0;
-				xml.@percentWidth = 100;
-				xml.@percentHeight = 100;
-			}
-			else
-			{
-                xml = new XML("<" + MXML_ELEMENT_NAME + "/>");
-                setCommonXMLAttributes(xml);
-			}
+			var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
 
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
             xml.addNamespace(sparkNamespace);
             xml.setNamespace(sparkNamespace);
+			
+            setCommonXMLAttributes(xml);
 
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)

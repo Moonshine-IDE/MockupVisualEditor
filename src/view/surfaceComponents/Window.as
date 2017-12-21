@@ -9,7 +9,7 @@ package view.surfaceComponents
 
 	public class Window extends Panel implements ISurfaceComponent
 	{
-        private static const MXML_ELEMENT_NAME:String = "Panel";
+        public static const MXML_ELEMENT_NAME:String = "Panel";
 		public static const ELEMENT_NAME:String = "window";
 
 		public function Window()
@@ -72,7 +72,6 @@ package view.surfaceComponents
 
 		public function fromXML(xml:XML, callback:Function):void
 		{
-			this.id = xml.@id;
 			this.x = xml.@x;
 			this.y = xml.@y;
 			this.width = xml.@width;

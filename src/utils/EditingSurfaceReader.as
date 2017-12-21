@@ -14,7 +14,8 @@ package utils
 	import view.surfaceComponents.Image;
 	import view.surfaceComponents.Input;
 	import view.surfaceComponents.List;
-	import view.surfaceComponents.RadioButton;
+    import view.surfaceComponents.MainApplication;
+    import view.surfaceComponents.RadioButton;
 	import view.surfaceComponents.Table;
 	import view.surfaceComponents.Tabs;
 	import view.surfaceComponents.Text;
@@ -24,6 +25,7 @@ package utils
 	public class EditingSurfaceReader
 	{
 		private static const CLASS_LOOKUP:Object = {};
+        CLASS_LOOKUP[MainApplication.ELEMENT_NAME] = MainApplication;
 		CLASS_LOOKUP[Button.ELEMENT_NAME] = Button;
 		CLASS_LOOKUP[Container.ELEMENT_NAME] = Container;
 		CLASS_LOOKUP[Calendar.ELEMENT_NAME] = Calendar;
@@ -39,7 +41,7 @@ package utils
 		CLASS_LOOKUP[Text.ELEMENT_NAME] = Text;
 		CLASS_LOOKUP[Tree.ELEMENT_NAME] = Tree;
 		CLASS_LOOKUP[Window.ELEMENT_NAME] = Window;
-
+		
 		public static function fromXML(surface:EditingSurface, xml:XML):void
 		{
 			function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent

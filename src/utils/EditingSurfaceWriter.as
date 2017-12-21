@@ -1,13 +1,13 @@
 package utils
 {
-    import mx.core.IUIComponent;
-    import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
 
     import view.EditingSurface;
-	import view.ISurfaceComponent;
+    import view.IMainApplication;
+    import view.ISurfaceComponent;
+    import view.surfaceComponents.MainApplication;
 
-	public class EditingSurfaceWriter
+    public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface):XML
 		{
@@ -31,27 +31,46 @@ package utils
             public static function toMXML(surface:EditingSurface):XML
             {
                 var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+                var elementCount:int = 0;
+				var i:int = 0;
                 var xml:XML = new XML("<WindowedApplication></WindowedApplication>");
                 var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
                 xml.addNamespace(sparkNamespace);
                 xml.setNamespace(sparkNamespace);
 
-				var fxNamespace:Namespace = new Namespace("fx", "http://ns.adobe.com/mxml/2009");
-				xml.addNamespace(fxNamespace);
+                var fxNamespace:Namespace = new Namespace("fx", "http://ns.adobe.com/mxml/2009");
+                xml.addNamespace(fxNamespace);
 
-                xml.@width = element.width;
-                xml.@height = element.height;
-                xml.@title = element["title"];
+                if (element is IMainApplication)
+                {
+                    xml.@width = element.width;
+                    xml.@height = element.height;
+                    xml.@title = element["title"];
 
-                var elementCount:int = (element as IVisualElementContainer).numElements;
-				for (var i:int = 0; i < elementCount; i++)
+                    elementCount = (element as IVisualElementContainer).numElements;
+                    for (i = 0; i < elementCount; i++)
+                    {
+                        var mainWindowChild:ISurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as ISurfaceComponent;
+                        if (mainWindowChild === null)
+                        {
+                            continue;
+                        }
+                        xml.appendChild(mainWindowChild.toMXML());
+                    }
+                }
+				else
 				{
-					var mainWindowChild:ISurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as ISurfaceComponent;
-					if (mainWindowChild === null)
-					{
-						continue;
-					}
-					xml.appendChild(mainWindowChild.toMXML());
+                    elementCount = surface.numElements;
+                    for (i = 0; i < elementCount; i++)
+                    {
+                        element = surface.getElementAt(i) as ISurfaceComponent;
+                        if (element === null)
+                        {
+                            continue;
+                        }
+                        var elementXML:XML = element.toMXML();
+                        xml.appendChild(elementXML);
+                    }
 				}
 
 				return xml;

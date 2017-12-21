@@ -156,6 +156,8 @@
 		 */
 		public function deleteItem(item:ISurfaceComponent):void
 		{
+			if (item is INonDeletableSurfaceComponent) return;
+			
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			container.removeElement(IVisualElement(item));
 

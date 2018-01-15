@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:view="view.*" creationComplete="onVisualEditorCreationComplete(event)">
+		 xmlns:view="view.*" xmlns:containers="spark.containers.*"
+		 creationComplete="onVisualEditorCreationComplete(event)">
 	<!--This style import is only for SWC ant compilation - remove it in case of app compilation -->
 	<fx:Style source="defaults.css"/>
 	<s:BorderContainer id="toolbar" top="0" left="0" right="0">
@@ -13,12 +14,16 @@
 		<s:Button styleName="saveButton" toolTip="Save Mockup" click="saveButton_clickHandler(event)"/>
 	</s:BorderContainer>
 	<view:ComponentList id="componentList" top="{toolbar.height}" bottom="0" left="0"/>
-	<s:Scroller top="{toolbar.height}" right="{propertyEditor.width}" bottom="0" left="{componentList.width}">
-		<view:EditingSurface id="editingSurface"/>
-	</s:Scroller>
-	<view:PropertyEditorContainer id="propertyEditor" top="{toolbar.height}" right="0" bottom="0"
-		selectedItem="{editingSurface.selectedItem}"/>
 
+	<containers:HDividerGroup left="{componentList.width}" right="0" bottom="0" top="{toolbar.height}"
+							  gap="0" minElementWidth="210">
+		<s:Scroller percentWidth="80" percentHeight="100">
+			<view:EditingSurface id="editingSurface"/>
+		</s:Scroller>
+		<view:PropertyEditorContainer id="propertyEditor"
+									  percentHeight="100" percentWidth="20" minWidth="210"
+									  selectedItem="{editingSurface.selectedItem}" />
+	</containers:HDividerGroup>
 	<fx:Script><![CDATA[
 		import mx.events.FlexEvent;
 

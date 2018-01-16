@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <forms:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:forms="view.propertyEditors.forms.*">
+	xmlns:forms="view.propertyEditors.forms.*"
+	creationComplete="onBasicFormCreationComplete(event)">
 
 	<forms:layout>
 		<s:FormLayout horizontalAlign="contentJustify"/>
@@ -12,26 +13,26 @@
 		<s:TextInput id="xInput" width="100%"
 			text="{selectedComponent.x}"
 			keyDown="xInput_keyDownHandler(event)"
-			focusOut="commitX()" enter="commitX()" tabIndex="0"/>
+			focusOut="commitX()" enter="commitX()" tabIndex="1" />
 	</s:FormItem>
 	<s:FormItem label="Y">
 		<s:TextInput id="yInput" width="100%"
 			text="{selectedComponent.y}"
 			keyDown="yInput_keyDownHandler(event)"
-			focusOut="commitY()" enter="commitY()" tabIndex="1"/>
+			focusOut="commitY()" enter="commitY()" tabIndex="2"/>
 	</s:FormItem>
 	<s:FormHeading label="Size"/>
 	<s:FormItem label="Width">
 		<s:TextInput id="widthInput" width="100%"
 			text="{selectedComponentComputedWidth}"
 			keyDown="widthInput_keyDownHandler(event)"
-			focusOut="commitWidth()" enter="commitWidth()" tabIndex="2"/>
+			focusOut="commitWidth()" enter="commitWidth()" tabIndex="3"/>
 	</s:FormItem>
 	<s:FormItem label="Height">
 		<s:TextInput id="heightInput" width="100%"
 			text="{selectedComponentComputedHeight}"
 			keyDown="heightInput_keyDownHandler(event)"
-			focusOut="commitHeight()" enter="commitHeight()" tabIndex="3"/>
+			focusOut="commitHeight()" enter="commitHeight()" tabIndex="4"/>
 	</s:FormItem>
 	<s:FormHeading label="Layering"/>
 	<s:Group>
@@ -45,9 +46,16 @@
 	</s:Group>
 	
 	<fx:Script><![CDATA[
+		import mx.core.EventPriority;
 		import mx.core.IVisualElement;
 		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
+		import mx.events.FlexEvent;
+
+		CONFIG::MOONSHINE
+		{
+			private var tabDictionary:Array = [];
+		}
 
 		[Bindable("change")]
 		private function get selectedComponent():UIComponent
@@ -60,17 +68,17 @@
 		[Bindable("propertyEditorChanged")]
 		public function get selectedComponentComputedWidth():String
 		{
-			if (!isNaN(selectedComponent.percentWidth)) return selectedComponent.percentWidth +"%";
+			if (!isNaN(selectedComponent.percentWidth)) return selectedComponent.percentWidth + "%";
 			return selectedComponent.width.toString();
 		}
 
 		[Bindable("propertyEditorChanged")]
 		public function get selectedComponentComputedHeight():String
 		{
-			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight +"%";
+			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight + "%";
 			return selectedComponent.height.toString();
 		}
-		
+
 		private function commitX():void
 		{
 			this.selectedItem.x = parseFloat(this.xInput.text);
@@ -107,11 +115,11 @@
 
 		private function xInput_keyDownHandler(event:KeyboardEvent):void
 		{
-			if(event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.UP)
 			{
 				event.preventDefault();
 				//this behavior matches how Animate CC increases x or y
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this.selectedItem.x = Math.floor(parseFloat(this.xInput.text) / 10) * 10 + 10;
 				}
@@ -121,11 +129,11 @@
 				}
 				this.xInput.selectAll();
 			}
-			else if(event.keyCode === Keyboard.DOWN)
+			else if (event.keyCode === Keyboard.DOWN)
 			{
 				event.preventDefault();
 				//this behavior matches how Animate CC decreases x or y
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this.selectedItem.x = Math.ceil(parseFloat(this.xInput.text) / 10) * 10 - 10;
 				}
@@ -139,10 +147,10 @@
 
 		private function yInput_keyDownHandler(event:KeyboardEvent):void
 		{
-			if(event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.UP)
 			{
 				event.preventDefault();
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this.selectedItem.y = Math.floor(parseFloat(this.yInput.text) / 10) * 10 + 10;
 				}
@@ -152,10 +160,10 @@
 				}
 				this.yInput.selectAll();
 			}
-			else if(event.keyCode === Keyboard.DOWN)
+			else if (event.keyCode === Keyboard.DOWN)
 			{
 				event.preventDefault();
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					this.selectedItem.y = Math.ceil(parseFloat(this.yInput.text) / 10) * 10 - 10;
 				}
@@ -169,10 +177,10 @@
 
 		private function widthInput_keyDownHandler(event:KeyboardEvent):void
 		{
-			if(event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.UP)
 			{
 				event.preventDefault();
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					var newWidth:Number = Math.floor(parseFloat(this.widthInput.text) / 10) * 10 + 10;
 				}
@@ -183,10 +191,10 @@
 				this.applyMinAndMaxWidth(newWidth);
 				this.widthInput.selectAll();
 			}
-			else if(event.keyCode === Keyboard.DOWN)
+			else if (event.keyCode === Keyboard.DOWN)
 			{
 				event.preventDefault();
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					newWidth = Math.ceil(parseFloat(this.widthInput.text) / 10) * 10 - 10;
 				}
@@ -201,10 +209,10 @@
 
 		private function heightInput_keyDownHandler(event:KeyboardEvent):void
 		{
-			if(event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.UP)
 			{
 				event.preventDefault();
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					var newHeight:Number = Math.floor(parseFloat(this.heightInput.text) / 10) * 10 + 10;
 				}
@@ -215,10 +223,10 @@
 				this.applyMinAndMaxHeight(newHeight);
 				this.heightInput.selectAll();
 			}
-			else if(event.keyCode === Keyboard.DOWN)
+			else if (event.keyCode === Keyboard.DOWN)
 			{
 				event.preventDefault();
-				if(event.shiftKey)
+				if (event.shiftKey)
 				{
 					newHeight = Math.ceil(parseFloat(this.heightInput.text) / 10) * 10 - 10;
 				}
@@ -235,11 +243,11 @@
 		{
 			var minWidth:Number = this.selectedItem.minWidth;
 			var maxWidth:Number = this.selectedItem.maxWidth;
-			if(newWidth < minWidth)
+			if (newWidth < minWidth)
 			{
 				newWidth = minWidth;
 			}
-			else if(newWidth > maxWidth)
+			else if (newWidth > maxWidth)
 			{
 				newWidth = maxWidth;
 			}
@@ -249,12 +257,12 @@
 			//but the old text value is different
 			this.widthInput.text = this.selectedItem.width.toString();
 		}
-		
+
 		private function applyPercentageWidthHeight(isWidth:Boolean):void
 		{
 			var pattern:RegExp = new RegExp(/(%)/g);
 			var newValue:String = isWidth ? this.widthInput.text.replace(pattern, "") : this.heightInput.text.replace(pattern, "");
-			
+
 			if (isWidth)
 			{
 				this.selectedItem.width = 0;
@@ -271,11 +279,11 @@
 		{
 			var minHeight:Number = this.selectedItem.minHeight;
 			var maxHeight:Number = this.selectedItem.maxHeight;
-			if(newHeight < minHeight)
+			if (newHeight < minHeight)
 			{
 				newHeight = minHeight;
 			}
-			else if(newHeight > maxHeight)
+			else if (newHeight > maxHeight)
 			{
 				newHeight = maxHeight;
 			}
@@ -296,7 +304,7 @@
 			var parent:IVisualElementContainer = IVisualElementContainer(this.selectedItem.parent);
 			var oldIndex:int = parent.getElementIndex(IVisualElement(this.selectedItem));
 			var maxIndex:int = parent.numElements - 1;
-			if(oldIndex === maxIndex)
+			if (oldIndex === maxIndex)
 			{
 				//we're already completely forward
 				return;
@@ -308,7 +316,7 @@
 		{
 			var parent:IVisualElementContainer = IVisualElementContainer(this.selectedItem.parent);
 			var oldIndex:int = parent.getElementIndex(IVisualElement(this.selectedItem));
-			if(oldIndex === 0)
+			if (oldIndex === 0)
 			{
 				//we're already completely backward
 				return;
@@ -320,6 +328,55 @@
 		{
 			var parent:IVisualElementContainer = IVisualElementContainer(this.selectedItem.parent);
 			parent.setElementIndex(IVisualElement(this.selectedItem), 0);
+		}
+
+		private function onBasicFormCreationComplete(event:FlexEvent):void
+		{
+			removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
+			CONFIG::MOONSHINE
+			{
+				tabDictionary.push(xInput);
+				tabDictionary.push(yInput);
+				tabDictionary.push(widthInput);
+				tabDictionary.push(heightInput);
+
+				addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onBasicFormKeyFocusChange, false, EventPriority.DEFAULT_HANDLER);
+			}
+		}
+
+		CONFIG::MOONSHINE
+		{
+			override protected function isOurFocus(target:DisplayObject):Boolean
+			{
+				return target == xInput.textDisplay ||
+						target == yInput.textDisplay ||
+						target == widthInput.textDisplay ||
+						target == heightInput.textDisplay || super.isOurFocus(target);
+			}
+
+			private function onBasicFormKeyFocusChange(event:FocusEvent):void
+			{
+				if (event.isDefaultPrevented())
+					return;
+
+				if (!event.shiftKey && isOurFocus(DisplayObject(event.target)))
+				{
+					event.preventDefault();
+
+					var currentTabIndex:int = event.target.tabIndex;
+
+					if (currentTabIndex > -1)
+					{
+						currentTabIndex += 1;
+						if (tabDictionary.length < currentTabIndex)
+						{
+							currentTabIndex = 1;
+						}
+
+						tabDictionary[currentTabIndex - 1].setFocus();
+					}
+				}
+			}
 		}
 		]]></fx:Script>
 </forms:BasePropertyEditorForm>

@@ -16,27 +16,12 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package view.surfaceComponents
+package view
 {
-    import view.IMainApplication;
-    import view.INonDeletableSurfaceComponent;
-    import view.INonResizibleSurfaceComponent;
-
-    public class MainApplication extends Window
-            implements INonDeletableSurfaceComponent, INonResizibleSurfaceComponent, IMainApplication
+    /**
+     * Interface marker when some of the ISurfaceComponent component is non resizible by        * drag/drop
+     */
+    public interface INonResizibleSurfaceComponent
     {
-        public static const ELEMENT_NAME:String = "MainApplication";
-        
-        public function MainApplication():void
-        {
-            super();
-            this.title = "Main Window";
-        }
-
-        override public function fromXML(xml:XML, callback:Function):void
-        {
-            this.id = xml.@id;
-            super.fromXML(xml, callback);
-        }
     }
 }

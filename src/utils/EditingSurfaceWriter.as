@@ -5,7 +5,6 @@ package utils
     import view.EditingSurface;
     import view.IMainApplication;
     import view.ISurfaceComponent;
-    import view.surfaceComponents.MainApplication;
 
     public class EditingSurfaceWriter
 	{

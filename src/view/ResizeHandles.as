@@ -66,6 +66,11 @@ package view
 		private var _resizingWidth:Boolean;
 		private var _resizingHeight:Boolean;
 
+		private function  get isTargetResizible():Boolean
+		{
+			return _target && !(_target is INonResizibleSurfaceComponent);
+		}
+
 		override protected function createChildren():void
 		{
 			super.createChildren();
@@ -107,23 +112,40 @@ package view
 			{
 				position = this._target.localToGlobal(position);
 			}
+
 			this.move(position.x, position.y);
-			this._topLeft.setActualSize(this._topLeft.getExplicitOrMeasuredWidth(), this._topLeft.getExplicitOrMeasuredHeight());
-			this._topLeft.x = -this._topLeft.getExplicitOrMeasuredWidth() / 2;
-			this._topLeft.y = -this._topLeft.getExplicitOrMeasuredHeight() / 2;
 
-			this._topRight.setActualSize(this._topRight.getExplicitOrMeasuredWidth(), this._topRight.getExplicitOrMeasuredHeight());
-			this._topRight.x = unscaledWidth - this._topRight.getExplicitOrMeasuredWidth() / 2;
-			this._topRight.y = -this._topRight.getExplicitOrMeasuredHeight() / 2;
+            hideResizeButtonsIfNonResizibleComponent();
 
-			this._bottomLeft.setActualSize(this._bottomLeft.getExplicitOrMeasuredWidth(), this._bottomLeft.getExplicitOrMeasuredHeight());
-			this._bottomLeft.x = -this._bottomLeft.getExplicitOrMeasuredWidth() / 2;
-			this._bottomLeft.y = unscaledHeight - this._bottomLeft.getExplicitOrMeasuredHeight() / 2;
+			if (isTargetResizible)
+            {
+                this._topLeft.setActualSize(this._topLeft.getExplicitOrMeasuredWidth(), this._topLeft.getExplicitOrMeasuredHeight());
+                this._topLeft.x = -this._topLeft.getExplicitOrMeasuredWidth() / 2;
+                this._topLeft.y = -this._topLeft.getExplicitOrMeasuredHeight() / 2;
 
-			this._bottomRight.setActualSize(this._bottomRight.getExplicitOrMeasuredWidth(), this._bottomRight.getExplicitOrMeasuredHeight());
-			this._bottomRight.x = unscaledWidth - this._bottomRight.getExplicitOrMeasuredWidth() / 2;
-			this._bottomRight.y = unscaledHeight - this._bottomRight.getExplicitOrMeasuredHeight() / 2;
+                this._topRight.setActualSize(this._topRight.getExplicitOrMeasuredWidth(), this._topRight.getExplicitOrMeasuredHeight());
+                this._topRight.x = unscaledWidth - this._topRight.getExplicitOrMeasuredWidth() / 2;
+                this._topRight.y = -this._topRight.getExplicitOrMeasuredHeight() / 2;
+
+                this._bottomLeft.setActualSize(this._bottomLeft.getExplicitOrMeasuredWidth(), this._bottomLeft.getExplicitOrMeasuredHeight());
+                this._bottomLeft.x = -this._bottomLeft.getExplicitOrMeasuredWidth() / 2;
+                this._bottomLeft.y = unscaledHeight - this._bottomLeft.getExplicitOrMeasuredHeight() / 2;
+
+                this._bottomRight.setActualSize(this._bottomRight.getExplicitOrMeasuredWidth(), this._bottomRight.getExplicitOrMeasuredHeight());
+                this._bottomRight.x = unscaledWidth - this._bottomRight.getExplicitOrMeasuredWidth() / 2;
+                this._bottomRight.y = unscaledHeight - this._bottomRight.getExplicitOrMeasuredHeight() / 2;
+            }
 		}
+
+        private function hideResizeButtonsIfNonResizibleComponent():void
+        {
+			var isResizible:Boolean = isTargetResizible;
+
+            this._topLeft.visible = this._topLeft.includeInLayout = isResizible;
+            this._topRight.visible = this._topRight.includeInLayout = isResizible;
+            this._bottomLeft.visible = this._bottomLeft.includeInLayout = isResizible;
+            this._bottomRight.visible = this._bottomRight.includeInLayout = isResizible;
+        }
 
 		private function topLeft_mouseDownHandler(event:MouseEvent):void
 		{

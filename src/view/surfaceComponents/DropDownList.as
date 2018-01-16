@@ -15,7 +15,7 @@ package view.surfaceComponents
 	import view.propertyEditors.DropDownListPropertyEditor;
 
 	public class DropDownList extends spark.components.DropDownList
-		implements ISurfaceComponent, IDataProviderComponent
+		implements ISurfaceComponent, IDataProviderComponent, ISelectableItemsComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "DropDownList";
 		public static const ELEMENT_NAME:String = "dropdownlist";

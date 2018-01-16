@@ -12,7 +12,8 @@
 		<s:List id="itemsList" width="100%" height="100%"
 			dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
 			dataProvider="{IDataProviderComponent(selectedItem).dataProvider}"
-			itemRenderer="view.propertyEditors.forms.DataProviderItemRenderer">
+			itemRenderer="view.propertyEditors.forms.DataProviderItemRenderer"
+		    change="itemsList_changeHanlder(event)">
 			<s:layout>
 				<s:VerticalLayout gap="0" horizontalAlign="contentJustify"
 					requestedRowCount="5" requestedMaxRowCount="5"/>
@@ -39,10 +40,12 @@
 		import mx.collections.IList;
 
 		import spark.components.DataGroup;
+		import spark.events.IndexChangeEvent;
 
 		import view.propertyEditors.forms.DataProviderItemRenderer;
 
 		import view.surfaceComponents.IDataProviderComponent;
+		import view.surfaceComponents.ISelectableItemsComponent;
 
 		private var _label:String = "Items";
 
@@ -89,6 +92,11 @@
 		{
 			var dataProvider:IList = IDataProviderComponent(selectedItem).dataProvider;
 			dataProvider.addItem(new DataProviderListItem("New Item"));
+			if (selectedItem is ISelectableItemsComponent)
+			{
+				ISelectableItemsComponent(selectedItem).selectedIndex = dataProvider.length - 1;
+			}
+
 			this.itemsList.selectedIndex = dataProvider.length - 1;
 			this.itemsList.validateNow();
 			this.editSelectedItem();
@@ -105,5 +113,12 @@
 			dataProvider.removeItemAt(this.itemsList.selectedIndex);
 		}
 
+		private function itemsList_changeHanlder(event:IndexChangeEvent):void
+		{
+			if (selectedItem is ISelectableItemsComponent)
+			{
+				ISelectableItemsComponent(selectedItem).selectedIndex = event.newIndex;
+			}
+		}
 	]]></fx:Script>
 </forms:BasePropertyEditorForm>

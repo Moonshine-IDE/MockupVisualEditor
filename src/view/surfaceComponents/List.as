@@ -16,7 +16,7 @@ package view.surfaceComponents
 	import view.propertyEditors.ListPropertyEditor;
 
 	public class List extends spark.components.List
-		implements ISurfaceComponent, IDataProviderComponent
+		implements ISurfaceComponent, IDataProviderComponent, ISelectableItemsComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "List";
 		public static const ELEMENT_NAME:String = "list";

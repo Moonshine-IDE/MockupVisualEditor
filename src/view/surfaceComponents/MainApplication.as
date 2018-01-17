@@ -23,7 +23,7 @@ package view.surfaceComponents
     import view.INonResizibleSurfaceComponent;
 
     public class MainApplication extends Window
-            implements INonDeletableSurfaceComponent, INonResizibleSurfaceComponent, IMainApplication
+            implements INonDeletableSurfaceComponent, IMainApplication
     {
         public static const ELEMENT_NAME:String = "MainApplication";
         

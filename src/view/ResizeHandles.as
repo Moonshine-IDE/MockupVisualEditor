@@ -2,13 +2,9 @@ package view
 {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	import flash.ui.Mouse;
-	import flash.ui.MouseCursor;
-
 	import mx.core.IUIComponent;
 
 	import mx.core.UIComponent;
-	import mx.events.DragEvent;
 	import mx.events.MoveEvent;
 	import mx.events.ResizeEvent;
 	import mx.managers.IFocusManagerComponent;

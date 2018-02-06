@@ -1,10 +1,15 @@
 <project name="VisualEditor" basedir=".">
 	<property name="version" value="0.2.0"/>
 	<property environment="env"/>
-	<property name="FLEX_HOME" value="{env.FLEX_HOME}" />
+	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
+	<!--Path to Moonshine IDE libs folder where built swc will be copied. If not exists target
+		copy-bin-to-moonshine won't be fired.-->
+	<property name="MOONSHINE_LIBS_PATH" />
+	<property name="SWC_NAME" value="VisualEditor-${version}.swc"/>
+	<property name="IsDebug" value="false" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
-	<target name="main" depends="clean-up-bin, exclude-files, build, clean-up-after-compilation"/>
+	<target name="main" depends="clean-up-bin, exclude-files, build, clean-up-after-compilation, copy-bin-to-moonshine"/>
 
 	<target name="clean-up-bin">
 		<delete>
@@ -17,13 +22,13 @@
 	<target name="exclude-files" description="Temporary move files to temp folder which should not be part of swc">
 		<echo>Start excluding files</echo>
 		<mkdir dir="${basedir}/temp"/>
-		<move file="${basedir}/src/VisualEditorApplication-app.xml" todir="${basedir}/temp"/>
-		<move file="${basedir}/src/VisualEditorApplication.mxml" todir="${basedir}/temp"/>
-		<move file="${basedir}/src/VisualEditorWeb.mxml" todir="${basedir}/temp"/>
+		<move file="${basedir}/src/VisualEditorApplication-app.xml" todir="${basedir}/temp" failonerror="false"/>
+		<move file="${basedir}/src/VisualEditorApplication.mxml" todir="${basedir}/temp" failonerror="false"/>
+		<move file="${basedir}/src/VisualEditorWeb.mxml" todir="${basedir}/temp" failonerror="false"/>
 	</target>
 
 	<target name="clean-up-after-compilation">
-		<echo>Clean up after compilation</echo>
+		<echo>Clean up after build</echo>
 		<move file="temp/VisualEditorApplication-app.xml" todir="${basedir}/src"/>
 		<move file="temp/VisualEditorApplication.mxml" todir="${basedir}/src"/>
 		<move file="temp/VisualEditorWeb.mxml" todir="${basedir}/src"/>
@@ -32,8 +37,8 @@
 
 	<!-- Compile library project to SWC -->
 	<target name="build">
-		<echo>Start compilation of Visual Editor to swc</echo>
-		<compc debug="true" output="${basedir}/bin/VisualEditor-${version}.swc" fork="true"
+		<echo>Building Visual Editor swc</echo>
+		<compc debug="${IsDebug}" output="${basedir}/bin/${SWC_NAME}" fork="true"
 			   incremental="true">
 			<arg value="-load-config=${FLEX_HOME}/frameworks/air-config.xml"/>
 			<arg value="-load-config+=${basedir}/compile-config.xml"/>
@@ -44,5 +49,10 @@
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/mx/mx.swc" append="true"/>
 			<include-sources dir="${basedir}/src" includes="*"/>
 		</compc>
+	</target>
+
+	<target name="copy-bin-to-moonshine" if="MOONSHINE_LIBS_PATH">
+		<echo>Copying ${SWC_NAME} to ${MOONSHINE_LIBS_PATH}</echo>
+		<copy file="${basedir}/bin/${SWC_NAME}" todir="${MOONSHINE_LIBS_PATH}" force="true"/>
 	</target>
 </project>

@@ -20,16 +20,17 @@ package view.surfaceComponents
 {
     import view.IMainApplication;
     import view.INonDeletableSurfaceComponent;
-    import view.INonResizibleSurfaceComponent;
 
     public class MainApplication extends Window
             implements INonDeletableSurfaceComponent, IMainApplication
     {
-        public static const ELEMENT_NAME:String = "MainApplication";
-        
+        public static var ELEMENT_NAME:String = "MainApplication";
+
         public function MainApplication():void
         {
             super();
+
+            Window.ELEMENT_NAME = "MainApplication";
             this.title = "Main Window";
         }
 

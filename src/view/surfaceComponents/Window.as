@@ -10,7 +10,7 @@ package view.surfaceComponents
 	public class Window extends Panel implements ISurfaceComponent
 	{
         public static const MXML_ELEMENT_NAME:String = "Panel";
-		public static const ELEMENT_NAME:String = "window";
+		public static var ELEMENT_NAME:String = "window";
 
 		public function Window()
 		{

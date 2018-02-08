@@ -1,3 +1,5 @@
 MockupVisualEditor.iml
 bin/VisualEditor-0.2.0.swc
 bin/VisualEditor-0.2.0.swc.cache
+bin-debug/
+obj/MockupVisualEditorConfig.xml

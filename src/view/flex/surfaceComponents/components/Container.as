@@ -1,3 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Licensed to the Apache Software Foundation (ASF) under one or more
+//  contributor license agreements.  See the NOTICE file distributed with
+//  this work for additional information regarding copyright ownership.
+//  The ASF licenses this file to You under the Apache License, Version 2.0
+//  (the "License"); you may not use this file except in compliance with
+//  the License.  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////////
 package view.flex.surfaceComponents.components
 {
 	import flash.utils.Dictionary;
@@ -11,12 +29,14 @@ package view.flex.surfaceComponents.components
 	import spark.layouts.VerticalLayout;
 	
 	import utils.GenericUtils;
-	
-	import view.interfaces.ILayoutContainer;
+
+    import view.interfaces.IFlexSurfaceComponent;
+
+    import view.interfaces.ILayoutContainer;
 	import view.interfaces.ISurfaceComponent;
 	import view.flex.propertyEditors.ContainerPropertyEditor;
 
-	public class Container extends BorderContainer implements ILayoutContainer, ISurfaceComponent
+	public class Container extends BorderContainer implements ILayoutContainer, IFlexSurfaceComponent
 	{
 		public static const MXML_ELEMENT_NAME:String = "BorderContainer";
 		public static const ELEMENT_NAME:String = "container";
@@ -235,7 +255,7 @@ package view.flex.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:ISurfaceComponent = this.getElementAt(i) as ISurfaceComponent;
+                var element:IFlexSurfaceComponent = this.getElementAt(i) as IFlexSurfaceComponent;
                 if(element === null)
                 {
                     continue;

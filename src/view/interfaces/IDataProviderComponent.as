@@ -16,10 +16,12 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package view.flex.surfaceComponents.components
+package view.interfaces
 {
-    public interface ISelectableItemsComponent
-    {
-        function set selectedIndex(value:int):void
-    }
+	import mx.collections.IList;
+
+	public interface IDataProviderComponent
+	{
+		function get dataProvider():IList;
+	}
 }

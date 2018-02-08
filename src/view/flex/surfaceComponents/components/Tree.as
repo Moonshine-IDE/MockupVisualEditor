@@ -4,9 +4,9 @@ package view.flex.surfaceComponents.components
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
 
-	import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IFlexSurfaceComponent;
 
-	public class Tree extends mx.controls.Tree implements ISurfaceComponent
+	public class Tree extends mx.controls.Tree implements IFlexSurfaceComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "Tree";
 		public static const ELEMENT_NAME:String = "tree";

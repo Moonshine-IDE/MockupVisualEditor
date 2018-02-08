@@ -4,10 +4,11 @@ package view.flex.surfaceComponents.components
 
     import spark.components.RadioButton;
 
-	import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IFlexSurfaceComponent;
+
 	import view.flex.propertyEditors.RadioButtonPropertyEditor;
 
-	public class RadioButton extends spark.components.RadioButton implements ISurfaceComponent
+	public class RadioButton extends spark.components.RadioButton implements IFlexSurfaceComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "RadioButton";
 		public static const ELEMENT_NAME:String = "radiobutton";

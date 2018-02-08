@@ -12,11 +12,15 @@ package view.flex.surfaceComponents.components
 
     import utils.MxmlCodeUtils;
 
-    import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IDataProviderComponent;
+    import view.interfaces.IFlexSurfaceComponent;
+
+    import view.interfaces.ISelectableItemsComponent;
+
 	import view.flex.propertyEditors.ListPropertyEditor;
 
 	public class List extends spark.components.List
-		implements ISurfaceComponent, IDataProviderComponent, ISelectableItemsComponent
+		implements IFlexSurfaceComponent, IDataProviderComponent, ISelectableItemsComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "List";
 		public static const ELEMENT_NAME:String = "list";

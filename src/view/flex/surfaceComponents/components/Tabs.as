@@ -17,11 +17,14 @@ package view.flex.surfaceComponents.components
 	import spark.events.IndexChangeEvent;
 	import spark.layouts.VerticalLayout;
 
-	import view.interfaces.IMultiViewContainer;
+    import view.interfaces.IDataProviderComponent;
+    import view.interfaces.IFlexSurfaceComponent;
+
+    import view.interfaces.IMultiViewContainer;
 	import view.interfaces.ISurfaceComponent;
 	import view.flex.propertyEditors.TabsPropertyEditor;
 
-	public class Tabs extends Group implements ISurfaceComponent, IMultiViewContainer, IDataProviderComponent
+	public class Tabs extends Group implements IFlexSurfaceComponent, IMultiViewContainer, IDataProviderComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "Group";
 		public static const ELEMENT_NAME:String = "tabs";
@@ -230,7 +233,7 @@ package view.flex.surfaceComponents.components
             var elementCount:int = tab.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:ISurfaceComponent = tab.getElementAt(i) as ISurfaceComponent;
+                var element:IFlexSurfaceComponent = tab.getElementAt(i) as IFlexSurfaceComponent;
                 if(element === null)
                 {
                     continue;

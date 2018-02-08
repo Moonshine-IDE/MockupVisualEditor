@@ -16,28 +16,10 @@
 //  limitations under the License.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package view.flex.surfaceComponents.components
+package view.interfaces
 {
-    import view.interfaces.IMainApplication;
-    import view.interfaces.INonDeletableSurfaceComponent;
-
-    public class MainApplication extends Window
-            implements INonDeletableSurfaceComponent, IMainApplication
+    public interface ISelectableItemsComponent
     {
-        public static var ELEMENT_NAME:String = "MainApplication";
-
-        public function MainApplication():void
-        {
-            super();
-
-            Window.ELEMENT_NAME = "MainApplication";
-            this.title = "Main Window";
-        }
-
-        override public function fromXML(xml:XML, callback:Function):void
-        {
-            this.id = xml.@id;
-            super.fromXML(xml, callback);
-        }
+        function set selectedIndex(value:int):void
     }
 }

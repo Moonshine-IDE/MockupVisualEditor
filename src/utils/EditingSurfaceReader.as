@@ -4,23 +4,23 @@ package utils
 	import mx.core.IVisualElementContainer;
 	
 	import view.EditingSurface;
-	import view.ISurfaceComponent;
-	import view.surfaceComponents.Button;
-	import view.surfaceComponents.Calendar;
-	import view.surfaceComponents.CheckBox;
-	import view.surfaceComponents.Container;
-	import view.surfaceComponents.DropDownList;
-	import view.surfaceComponents.Hyperlink;
-	import view.surfaceComponents.Image;
-	import view.surfaceComponents.Input;
-	import view.surfaceComponents.List;
-    import view.surfaceComponents.MainApplication;
-    import view.surfaceComponents.RadioButton;
-	import view.surfaceComponents.Table;
-	import view.surfaceComponents.Tabs;
-	import view.surfaceComponents.Text;
-	import view.surfaceComponents.Tree;
-	import view.surfaceComponents.Window;
+	import view.interfaces.ISurfaceComponent;
+	import view.flex.surfaceComponents.components.Button;
+	import view.flex.surfaceComponents.components.Calendar;
+	import view.flex.surfaceComponents.components.CheckBox;
+	import view.flex.surfaceComponents.components.Container;
+	import view.flex.surfaceComponents.components.DropDownList;
+	import view.flex.surfaceComponents.components.Hyperlink;
+	import view.flex.surfaceComponents.components.Image;
+	import view.flex.surfaceComponents.components.Input;
+	import view.flex.surfaceComponents.components.List;
+    import view.flex.surfaceComponents.components.MainApplication;
+    import view.flex.surfaceComponents.components.RadioButton;
+	import view.flex.surfaceComponents.components.Table;
+	import view.flex.surfaceComponents.components.Tabs;
+	import view.flex.surfaceComponents.components.Text;
+	import view.flex.surfaceComponents.components.Tree;
+	import view.flex.surfaceComponents.components.Window;
 
 	public class EditingSurfaceReader
 	{

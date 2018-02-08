@@ -22,51 +22,53 @@
 	</s:Group>
 
 	<fx:Script><![CDATA[
-		import view.propertyEditors.GenericPropertyEditor;
+        import view.flex.propertyEditors.GenericPropertyEditor;
+        import view.interfaces.IPropertyEditor;
+        import view.interfaces.ISurfaceComponent;
 
-		private var _editor:IPropertyEditor;
+        private var _editor:IPropertyEditor;
 
-		private var _selectedItem:ISurfaceComponent = null;
+        private var _selectedItem:ISurfaceComponent = null;
 
-		[Bindable("change")]
-		public function get selectedItem():ISurfaceComponent
-		{
-			return this._selectedItem;
-		}
+        [Bindable("change")]
+        public function get selectedItem():ISurfaceComponent
+        {
+            return this._selectedItem;
+        }
 
-		public function set selectedItem(value:ISurfaceComponent):void
-		{
-			if(this._selectedItem === value)
-			{
-				return;
-			}
-			this._selectedItem = value;
-			if(this._editor)
-			{
-				this.removeElement(this._editor);
-				this._editor = null;
-			}
-			if(this._selectedItem !== null)
-			{
-				this.currentState = "selection";
-				var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;
-				if(PropertyEditorType === null)
-				{
-					PropertyEditorType = GenericPropertyEditor;
-				}
-				this._editor = new PropertyEditorType();
-				this._editor.top = 0;
-				this._editor.right = 0;
-				this._editor.bottom = 0;
-				this._editor.left = 0;
-				this._editor.selectedItem = value;
-				this.addElement(this._editor);
-			}
-			else
-			{
-				this.currentState = "empty";
-			}
-			this.dispatchEvent(new Event(Event.CHANGE));
-		}
-		]]></fx:Script>
+        public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (this._selectedItem === value)
+            {
+                return;
+            }
+            this._selectedItem = value;
+            if (this._editor)
+            {
+                this.removeElement(this._editor);
+                this._editor = null;
+            }
+            if (this._selectedItem !== null)
+            {
+                this.currentState = "selection";
+                var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;
+                if (PropertyEditorType === null)
+                {
+                    PropertyEditorType = GenericPropertyEditor;
+                }
+                this._editor = new PropertyEditorType();
+                this._editor.top = 0;
+                this._editor.right = 0;
+                this._editor.bottom = 0;
+                this._editor.left = 0;
+                this._editor.selectedItem = value;
+                this.addElement(this._editor);
+            }
+            else
+            {
+                this.currentState = "empty";
+            }
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+        ]]></fx:Script>
 </s:BorderContainer>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<propertyeditors:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:propertyeditors="view.flex.propertyEditors.*"
+	xmlns:forms="view.flex.propertyEditors.forms.*">
+
+	<propertyeditors:layout>
+		<s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+	</propertyeditors:layout>
+
+	<forms:BasicsForm/>
+
+	<s:FormHeading label="Data"/>
+
+	<forms:TextForm label="Text" textProperty="label"/>
+
+	<forms:TextForm label="Group Name" textProperty="groupName"/>
+
+	<forms:ToggleButtonSelectedForm/>
+
+</propertyeditors:BasePropertyEditor>

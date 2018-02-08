@@ -29,9 +29,9 @@
 
 	<target name="clean-up-after-compilation">
 		<echo>Clean up after build</echo>
-		<move file="temp/VisualEditorApplication-app.xml" todir="${basedir}/src"/>
-		<move file="temp/VisualEditorApplication.mxml" todir="${basedir}/src"/>
-		<move file="temp/VisualEditorWeb.mxml" todir="${basedir}/src"/>
+		<move file="${basedir}/temp/VisualEditorApplication-app.xml" todir="${basedir}/src"/>
+		<move file="${basedir}/temp/VisualEditorApplication.mxml" todir="${basedir}/src"/>
+		<move file="${basedir}/temp/VisualEditorWeb.mxml" todir="${basedir}/src"/>
 		<delete dir="${basedir}/temp"/>
 	</target>
 

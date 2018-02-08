@@ -11,7 +11,9 @@ package view
 
 	import spark.components.Button;
 
-	public class ResizeHandles extends UIComponent
+    import view.interfaces.INonResizibleSurfaceComponent;
+
+    public class ResizeHandles extends UIComponent
 	{
 		public function ResizeHandles(target:UIComponent = null)
 		{

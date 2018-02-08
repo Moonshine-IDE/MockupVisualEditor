@@ -42,6 +42,8 @@
 		import mx.core.IVisualElement;
 		import mx.managers.DragManager;
 
+		import view.interfaces.ISurfaceComponent;
+
 		public static const OFFSET_DRAG_FORMAT:String = "drag-offset";
 		public static const COMPONENT_DRAG_FORMAT:String = "new-component";
 		

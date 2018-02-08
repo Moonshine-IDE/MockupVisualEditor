@@ -40,6 +40,10 @@
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
 
+		import view.interfaces.IMultiViewContainer;
+		import view.interfaces.INonDeletableSurfaceComponent;
+		import view.interfaces.ISurfaceComponent;
+
 		private static const SMALL_NUDGE:int = 1;
 		private static const LARGE_NUDGE:int = 10;
 

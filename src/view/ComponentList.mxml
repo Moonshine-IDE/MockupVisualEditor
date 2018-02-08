@@ -5,46 +5,46 @@
 
 	<s:ArrayList>
 		<data:ComponentListItem name="Button">
-			<data:type>view.surfaceComponents.Button</data:type>
+			<data:type>view.flex.surfaceComponents.components.Button</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Calendar">
-			<data:type>view.surfaceComponents.Calendar</data:type>
+			<data:type>view.flex.surfaceComponents.components.Calendar</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Check Box">
-			<data:type>view.surfaceComponents.CheckBox</data:type>
+			<data:type>view.flex.surfaceComponents.components.CheckBox</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Drop Down List">
-			<data:type>view.surfaceComponents.DropDownList</data:type>
+			<data:type>view.flex.surfaceComponents.components.DropDownList</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Image">
-			<data:type>view.surfaceComponents.Image</data:type>
+			<data:type>view.flex.surfaceComponents.components.Image</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="List">
-			<data:type>view.surfaceComponents.List</data:type>
+			<data:type>view.flex.surfaceComponents.components.List</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Radio Button">
-			<data:type>view.surfaceComponents.RadioButton</data:type>
+			<data:type>view.flex.surfaceComponents.components.RadioButton</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Table">
-			<data:type>view.surfaceComponents.Table</data:type>
+			<data:type>view.flex.surfaceComponents.components.Table</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Tabs">
-			<data:type>view.surfaceComponents.Tabs</data:type>
+			<data:type>view.flex.surfaceComponents.components.Tabs</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Text">
-			<data:type>view.surfaceComponents.Text</data:type>
+			<data:type>view.flex.surfaceComponents.components.Text</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Input">
-			<data:type>view.surfaceComponents.Input</data:type>
+			<data:type>view.flex.surfaceComponents.components.Input</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Tree">
-			<data:type>view.surfaceComponents.Tree</data:type>
+			<data:type>view.flex.surfaceComponents.components.Tree</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Panel">
-			<data:type>view.surfaceComponents.Window</data:type>
+			<data:type>view.flex.surfaceComponents.components.Window</data:type>
 		</data:ComponentListItem>
 		<data:ComponentListItem name="Container">
-			<data:type>view.surfaceComponents.Container</data:type>
+			<data:type>view.flex.surfaceComponents.components.Container</data:type>
 		</data:ComponentListItem>
 	</s:ArrayList>
 </s:List>

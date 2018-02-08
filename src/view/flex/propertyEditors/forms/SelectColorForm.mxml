@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<forms:BasePropertyEditorForm
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:forms="view.flex.propertyEditors.forms.*"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	creationComplete="onCreationCompletes(event)">
+
+	<forms:layout>
+		<s:FormLayout horizontalAlign="contentJustify"/>
+	</forms:layout>
+
+	<s:FormItem label="Select Color">
+		<s:HGroup width="100%" verticalAlign="middle">
+			<mx:ColorPicker id="picker" change="onPickerChanged(event)"
+							selectedColor="{ILayoutContainer(selectedItem).backgroundColor}"/>
+			<s:Label text="Editor only"/>
+		</s:HGroup>
+	</s:FormItem>
+	
+	<s:FormItem label="Select Container Type">
+		<s:DropDownList id="ddlCTypes"
+						dataProvider="{ILayoutContainer(selectedItem).containerTypes}"
+						requireSelection="true"
+						change="onCTypesChanged(event)"/>
+	</s:FormItem>
+	
+	<s:FormItem label="Select Layout">
+		<s:DropDownList id="ddlTypes"
+						dataProvider="{ILayoutContainer(selectedItem).layoutTypes}"
+						requireSelection="true"
+						change="onTypesChanged(event)"/>
+	</s:FormItem>
+
+	<fx:Script><![CDATA[
+		import mx.events.ColorPickerEvent;
+		import mx.events.FlexEvent;
+
+		import spark.events.IndexChangeEvent;
+
+		import view.interfaces.ILayoutContainer;
+		import view.flex.surfaceComponents.components.Container;
+
+		protected function onPickerChanged(event:ColorPickerEvent):void
+		{
+			ILayoutContainer(selectedItem).backgroundColor = picker.selectedColor;
+		}
+
+		protected function onTypesChanged(event:IndexChangeEvent):void
+		{
+			ILayoutContainer(selectedItem).layoutType = ddlTypes.selectedItem.toString();
+		}
+
+		protected function onCTypesChanged(event:IndexChangeEvent):void
+		{
+			ILayoutContainer(selectedItem).containerType = ddlCTypes.selectedItem.toString();
+			setLayoutOnContainer();
+		}
+
+		protected function onCreationCompletes(event:FlexEvent):void
+		{
+			ddlCTypes.selectedItem = ILayoutContainer(selectedItem).containerType;
+			ddlTypes.selectedItem = ILayoutContainer(selectedItem).layoutType;
+
+			setLayoutOnContainer();
+		}
+
+		private function setLayoutOnContainer():void
+		{
+			if (ddlCTypes.selectedItem == Container.CONTAINER_GROUP)
+			{
+				ddlTypes.enabled = true;
+				ddlTypes.selectedItem = ILayoutContainer(selectedItem).layoutType;
+			}
+			else
+			{
+				ddlTypes.enabled = false;
+				switch (ddlCTypes.selectedItem)
+				{
+					case Container.CONTAINER_VGROUP:
+						ddlTypes.selectedItem = Container.LAYOUT_VERTICAL;
+						break;
+					case Container.CONTAINER_GROUP:
+						ddlTypes.selectedItem = Container.LAYOUT_BASIC;
+						break;
+					case Container.CONTAINER_HGROUP:
+						ddlTypes.selectedItem = Container.LAYOUT_HORIZONTAL;
+						break;
+				}
+			}
+
+			ddlTypes.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE));
+		}
+		]]></fx:Script>
+</forms:BasePropertyEditorForm>

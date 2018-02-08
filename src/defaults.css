@@ -17,19 +17,19 @@ surfaceComponents|Button
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.ButtonSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.ButtonSkin");
 }
 
 surfaceComponents|CheckBox
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.CheckBoxSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.CheckBoxSkin");
 }
 
 surfaceComponents|Image
 {
-	skinClass: ClassReference("skins.surfaceComponents.ImageSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.ImageSkin");
 }
 
 surfaceComponents|Hyperlink
@@ -43,28 +43,28 @@ surfaceComponents|Input
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.InputSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.InputSkin");
 }
 
 surfaceComponents|List
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.ListSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.ListSkin");
 }
 
 surfaceComponents|RadioButton
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.RadioButtonSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.RadioButtonSkin");
 }
 
 surfaceComponents|Table
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.TableSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.TableSkin");
 }
 
 surfaceComponents|Tabs mx|ViewStack
@@ -75,7 +75,7 @@ surfaceComponents|Tabs mx|ViewStack
 
 surfaceComponents|Tabs s|NavigatorContent
 {
-	skinClass: ClassReference("skins.surfaceComponents.NavigatorContentSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.NavigatorContentSkin");
 }
 
 surfaceComponents|Text
@@ -88,7 +88,7 @@ surfaceComponents|Window
 {
 	color: #6A6A6A;
 	fontSize: 12;
-	skinClass: ClassReference("skins.surfaceComponents.WindowSkin");
+	skinClass: ClassReference("view.flex.surfaceComponents.skins.WindowSkin");
 }
 
 view|ComponentList

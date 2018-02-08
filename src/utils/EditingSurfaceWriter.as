@@ -3,8 +3,8 @@ package utils
     import mx.core.IVisualElementContainer;
 
     import view.EditingSurface;
-    import view.IMainApplication;
-    import view.ISurfaceComponent;
+    import view.interfaces.IMainApplication;
+    import view.interfaces.ISurfaceComponent;
 
     public class EditingSurfaceWriter
 	{

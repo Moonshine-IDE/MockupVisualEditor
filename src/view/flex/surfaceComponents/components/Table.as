@@ -5,9 +5,9 @@ package view.flex.surfaceComponents.components
 	import spark.components.DataGrid;
 	import spark.components.gridClasses.GridColumn;
 
-	import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IFlexSurfaceComponent;
 
-	public class Table extends DataGrid implements ISurfaceComponent
+	public class Table extends DataGrid implements IFlexSurfaceComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "DataGrid";
 		public static const ELEMENT_NAME:String = "table";

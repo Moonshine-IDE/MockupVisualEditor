@@ -4,10 +4,11 @@ package view.flex.surfaceComponents.components
 
     import spark.components.Label;
 
-	import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IFlexSurfaceComponent;
+
 	import view.flex.propertyEditors.TextPropertyEditor;
 
-	public class Text extends Label implements ISurfaceComponent
+	public class Text extends Label implements IFlexSurfaceComponent
 	{
         private static const MXML_ELEMENT_NAME:String = "Label";
 		public static const ELEMENT_NAME:String = "text";

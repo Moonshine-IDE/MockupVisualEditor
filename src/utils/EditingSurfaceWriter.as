@@ -3,6 +3,7 @@ package utils
     import mx.core.IVisualElementContainer;
 
     import view.EditingSurface;
+    import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.IMainApplication;
     import view.interfaces.ISurfaceComponent;
 
@@ -29,7 +30,7 @@ package utils
         {
             public static function toMXML(surface:EditingSurface):XML
             {
-                var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+                var element:IFlexSurfaceComponent = surface.getElementAt(0) as IFlexSurfaceComponent;
                 var elementCount:int = 0;
 				var i:int = 0;
                 var xml:XML = new XML("<WindowedApplication></WindowedApplication>");
@@ -49,7 +50,7 @@ package utils
                     elementCount = (element as IVisualElementContainer).numElements;
                     for (i = 0; i < elementCount; i++)
                     {
-                        var mainWindowChild:ISurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as ISurfaceComponent;
+                        var mainWindowChild:IFlexSurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as IFlexSurfaceComponent;
                         if (mainWindowChild === null)
                         {
                             continue;
@@ -62,7 +63,7 @@ package utils
                     elementCount = surface.numElements;
                     for (i = 0; i < elementCount; i++)
                     {
-                        element = surface.getElementAt(i) as ISurfaceComponent;
+                        element = surface.getElementAt(i) as IFlexSurfaceComponent;
                         if (element === null)
                         {
                             continue;

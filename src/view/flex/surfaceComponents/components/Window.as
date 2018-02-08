@@ -4,10 +4,12 @@ package view.flex.surfaceComponents.components
 
     import spark.components.Panel;
 
-	import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IFlexSurfaceComponent;
+
+    import view.interfaces.ISurfaceComponent;
 	import view.flex.propertyEditors.WindowPropertyEditor;
 
-	public class Window extends Panel implements ISurfaceComponent
+	public class Window extends Panel implements IFlexSurfaceComponent
 	{
         public static const MXML_ELEMENT_NAME:String = "Panel";
 		public static var ELEMENT_NAME:String = "window";
@@ -99,7 +101,7 @@ package view.flex.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:ISurfaceComponent = this.getElementAt(i) as ISurfaceComponent;
+                var element:IFlexSurfaceComponent = this.getElementAt(i) as IFlexSurfaceComponent;
                 if(element === null)
                 {
                     continue;

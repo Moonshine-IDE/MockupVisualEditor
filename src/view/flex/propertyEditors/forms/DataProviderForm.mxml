@@ -44,8 +44,8 @@
 
 		import view.flex.propertyEditors.forms.DataProviderItemRenderer;
 
-		import view.flex.surfaceComponents.components.IDataProviderComponent;
-		import view.flex.surfaceComponents.components.ISelectableItemsComponent;
+		import view.interfaces.IDataProviderComponent;
+		import view.interfaces.ISelectableItemsComponent;
 
 		private var _label:String = "Items";
 

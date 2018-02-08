@@ -11,9 +11,5 @@ package view.interfaces
 		
 		function toXML():XML;
 		function fromXML(value:XML, childFromXMLCallback:Function):void;
-		CONFIG::MOONSHINE
-		{
-            function toMXML():XML;
-        }
 	}
 }

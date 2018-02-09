@@ -1,4 +1,4 @@
-package view.flex.propertyEditors.forms
+package view.suportClasses
 {
 	import flash.events.Event;
 

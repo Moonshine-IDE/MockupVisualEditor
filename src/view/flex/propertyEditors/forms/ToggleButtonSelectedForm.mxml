@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<forms:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:forms="view.flex.propertyEditors.forms.*">
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*">
 
-	<forms:layout>
-		<s:FormLayout horizontalAlign="contentJustify"/>
-	</forms:layout>
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
 
-	<s:FormItem label="Selected">
-		<s:CheckBox id="check"
-			selected="{ToggleButtonBase(selectedItem).selected}"
-			change="check_changeHandler(event)"/>
-	</s:FormItem>
+    <s:FormItem label="Selected">
+        <s:CheckBox id="check"
+                    selected="{ToggleButtonBase(selectedItem).selected}"
+                    change="check_changeHandler(event)"/>
+    </s:FormItem>
 
-	<fx:Script><![CDATA[
-		import spark.components.supportClasses.ToggleButtonBase;
+    <fx:Script><![CDATA[
+        import spark.components.supportClasses.ToggleButtonBase;
 
-		private function check_changeHandler(event:Event):void
-		{
-			ToggleButtonBase(this.selectedItem).selected = this.check.selected;
-		}
-
-	]]></fx:Script>
-</forms:BasePropertyEditorForm>
+        private function check_changeHandler(event:Event):void
+        {
+            ToggleButtonBase(this.selectedItem).selected = this.check.selected;
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

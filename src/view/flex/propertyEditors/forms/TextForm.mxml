@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<forms:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:forms="view.flex.propertyEditors.forms.*">
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*">
 
-	<forms:layout>
-		<s:FormLayout horizontalAlign="contentJustify"/>
-	</forms:layout>
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
 
-	<s:FormItem label="{label}">
-		<s:TextInput id="textInput" width="100%"
-			text="{bindableText}"
-			change="textInput_changeHandler(event)"/>
-	</s:FormItem>
+    <s:FormItem label="{label}">
+        <s:TextInput id="textInput" width="100%"
+                     text="{bindableText}"
+                     change="textInput_changeHandler(event)"/>
+    </s:FormItem>
 
-	<fx:Script><![CDATA[
+    <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
 
@@ -92,4 +92,4 @@
             this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, true);
         }
         ]]></fx:Script>
-</forms:BasePropertyEditorForm>
+</suportclasses:BasePropertyEditorForm>

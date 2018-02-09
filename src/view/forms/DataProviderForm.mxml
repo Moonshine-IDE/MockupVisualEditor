@@ -12,7 +12,7 @@
         <s:List id="itemsList" width="100%" height="100%"
                 dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
                 dataProvider="{IDataProviderComponent(selectedItem).dataProvider}"
-                itemRenderer="view.flex.propertyEditors.forms.DataProviderItemRenderer"
+                itemRenderer="view.forms.DataProviderItemRenderer"
                 change="itemsList_changeHanlder(event)">
             <s:layout>
                 <s:VerticalLayout gap="0" horizontalAlign="contentJustify"
@@ -42,7 +42,7 @@
         import spark.components.DataGroup;
         import spark.events.IndexChangeEvent;
 
-        import view.flex.propertyEditors.forms.DataProviderItemRenderer;
+        import view.forms.DataProviderItemRenderer;
 
         import view.interfaces.IDataProviderComponent;
         import view.interfaces.ISelectableItemsComponent;

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<forms:BasePropertyEditorForm
-	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:forms="view.flex.propertyEditors.forms.*">
+<suportclasses:BasePropertyEditorForm
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:suportclasses="view.suportClasses.*">
 
-	<forms:layout>
-		<s:FormLayout horizontalAlign="contentJustify"/>
-	</forms:layout>
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
 
-	<s:FormItem label="Selected Tab">
-		<s:NumericStepper id="stepper"
-			minimum="1"
-			maximum="{IMultiViewContainer(selectedItem).numViews}"
-			stepSize="1"
-			value="{IMultiViewContainer(selectedItem).selectedIndex + 1}"
-			change="stepper_changeHandler(event)"/>
-	</s:FormItem>
+    <s:FormItem label="Selected Tab">
+        <s:NumericStepper id="stepper"
+                          minimum="1"
+                          maximum="{IMultiViewContainer(selectedItem).numViews}"
+                          stepSize="1"
+                          value="{IMultiViewContainer(selectedItem).selectedIndex + 1}"
+                          change="stepper_changeHandler(event)"/>
+    </s:FormItem>
 
-	<fx:Script><![CDATA[
+    <fx:Script><![CDATA[
         import view.interfaces.IMultiViewContainer;
         import view.interfaces.IMultiViewContainer;
 
@@ -26,4 +26,4 @@
             IMultiViewContainer(selectedItem).selectedIndex = this.stepper.value - 1;
         }
         ]]></fx:Script>
-</forms:BasePropertyEditorForm>
+</suportclasses:BasePropertyEditorForm>

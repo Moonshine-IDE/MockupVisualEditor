@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<propertyeditors:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:propertyeditors="view.flex.propertyEditors.*"
-	xmlns:forms="view.flex.propertyEditors.forms.*">
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:forms="view.flex.propertyEditors.forms.*"
+                                  xmlns:suportclasses="view.suportClasses.*">
 
-	<propertyeditors:layout>
-		<s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
-	</propertyeditors:layout>
+    <suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
 
-	<forms:BasicsForm/>
+    <forms:BasicsForm/>
 
-	<s:FormHeading label="Data"/>
+    <s:FormHeading label="Data"/>
 
-	<forms:DateForm/>
+    <forms:DateForm/>
 
-</propertyeditors:BasePropertyEditor>
+</suportclasses:BasePropertyEditor>

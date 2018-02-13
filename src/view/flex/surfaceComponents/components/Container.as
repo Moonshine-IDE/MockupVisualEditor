@@ -239,7 +239,7 @@ package view.flex.surfaceComponents.components
 			}
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
 
@@ -263,7 +263,7 @@ package view.flex.surfaceComponents.components
 
                 CONFIG::MOONSHINE
                 {
-                    xml.appendChild(element.toMXML());
+                    xml.appendChild(element.toCode());
                 }
             }
 

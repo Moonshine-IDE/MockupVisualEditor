@@ -78,7 +78,7 @@ package view.flex.surfaceComponents.components
 			this.label = xml.@text;
 		}
 
-		public function toMXML():XML
+		public function toCode():XML
 		{
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");

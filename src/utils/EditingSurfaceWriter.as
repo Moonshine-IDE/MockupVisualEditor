@@ -28,7 +28,7 @@ package utils
 
 		CONFIG::MOONSHINE
         {
-            public static function toMXML(surface:EditingSurface):XML
+            public static function toCode(surface:EditingSurface):XML
             {
                 var element:IFlexSurfaceComponent = surface.getElementAt(0) as IFlexSurfaceComponent;
                 var elementCount:int = 0;
@@ -55,7 +55,7 @@ package utils
                         {
                             continue;
                         }
-                        xml.appendChild(mainWindowChild.toMXML());
+                        xml.appendChild(mainWindowChild.toCode());
                     }
                 }
 				else
@@ -68,7 +68,7 @@ package utils
                         {
                             continue;
                         }
-                        var elementXML:XML = element.toMXML();
+                        var elementXML:XML = element.toCode();
                         xml.appendChild(elementXML);
                     }
 				}

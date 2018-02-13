@@ -186,7 +186,7 @@ package view.flex.surfaceComponents.components
 			}
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
@@ -240,7 +240,7 @@ package view.flex.surfaceComponents.components
                 }
                 CONFIG::MOONSHINE
                 {
-                    viewStack.appendChild(element.toMXML());
+                    viewStack.appendChild(element.toCode());
                 }
             }
             return viewStack;

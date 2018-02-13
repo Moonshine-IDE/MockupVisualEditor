@@ -28,14 +28,17 @@
 		import mx.events.FlexEvent;
 
 		import spark.components.Alert;
+		import utils.VisualEditorType;
 
+		public var visualEditorType:VisualEditorType;
+		
 		private var _file:FileReference;
 
 		CONFIG::MOONSHINE
 		{
 			private var _fileMoonshine:File;
 			private var _fileStreamMoonshine:FileStream;
-
+			
 			public function saveEditedFile():void
 			{
 				if (!_fileStreamMoonshine) return;

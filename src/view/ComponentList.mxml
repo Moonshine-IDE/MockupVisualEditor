@@ -1,50 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:List xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark" xmlns:data="data.*"
-	itemRenderer="view.ComponentListItemRenderer">
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	itemRenderer="view.ComponentListItemRenderer" creationComplete="onComponentListCreationComplete(event)">
+	<fx:Script>
+	<![CDATA[
+		import mx.events.FlexEvent;
+		import utils.VisualEditorType;
+		import org.apache.flex.collections.ArrayList;
+		import data.ComponentListItem;
+		import view.flex.surfaceComponents.components.CheckBox;
+		import view.flex.surfaceComponents.components.Calendar;
+		import view.flex.surfaceComponents.components.Button;
+		import view.flex.surfaceComponents.components.DropDownList;
+		import view.flex.surfaceComponents.components.Image;
+		import view.flex.surfaceComponents.components.List;
+		import view.flex.surfaceComponents.components.RadioButton;
+		import view.flex.surfaceComponents.components.Table;
+		import view.flex.surfaceComponents.components.Tabs;
+		import view.flex.surfaceComponents.components.Text;
+		import view.flex.surfaceComponents.components.Input;
+		import view.flex.surfaceComponents.components.Tree;
+		import view.flex.surfaceComponents.components.Window;
+		import view.flex.surfaceComponents.components.Container;
+		import view.primeFaces.surfaceComponents.components.Button;
 
-	<s:ArrayList>
-		<data:ComponentListItem name="Button">
-			<data:type>view.flex.surfaceComponents.components.Button</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Calendar">
-			<data:type>view.flex.surfaceComponents.components.Calendar</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Check Box">
-			<data:type>view.flex.surfaceComponents.components.CheckBox</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Drop Down List">
-			<data:type>view.flex.surfaceComponents.components.DropDownList</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Image">
-			<data:type>view.flex.surfaceComponents.components.Image</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="List">
-			<data:type>view.flex.surfaceComponents.components.List</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Radio Button">
-			<data:type>view.flex.surfaceComponents.components.RadioButton</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Table">
-			<data:type>view.flex.surfaceComponents.components.Table</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Tabs">
-			<data:type>view.flex.surfaceComponents.components.Tabs</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Text">
-			<data:type>view.flex.surfaceComponents.components.Text</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Input">
-			<data:type>view.flex.surfaceComponents.components.Input</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Tree">
-			<data:type>view.flex.surfaceComponents.components.Tree</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Panel">
-			<data:type>view.flex.surfaceComponents.components.Window</data:type>
-		</data:ComponentListItem>
-		<data:ComponentListItem name="Container">
-			<data:type>view.flex.surfaceComponents.components.Container</data:type>
-		</data:ComponentListItem>
-	</s:ArrayList>
+		private function onComponentListCreationComplete(event:FlexEvent):void
+		{
+			var dp:ArrayList;
+			if (VisualEditorType.FLEX == VisualEditorType.instance)
+			{
+				dp = new ArrayList([
+					new ComponentListItem("Button", view.flex.surfaceComponents.components.Button),
+					new ComponentListItem("Calendar", view.flex.surfaceComponents.components.Calendar),
+					new ComponentListItem("Check Box", view.flex.surfaceComponents.components.CheckBox),
+					new ComponentListItem("Drop Down List", view.flex.surfaceComponents.components.DropDownList),
+					new ComponentListItem("Image", view.flex.surfaceComponents.components.Image),
+					new ComponentListItem("List", view.flex.surfaceComponents.components.List),
+					new ComponentListItem("Radio Button", view.flex.surfaceComponents.components.RadioButton),
+					new ComponentListItem("Table", view.flex.surfaceComponents.components.Table),
+					new ComponentListItem("Tabs", view.flex.surfaceComponents.components.Tabs),
+					new ComponentListItem("Text", view.flex.surfaceComponents.components.Text),
+					new ComponentListItem("Input", view.flex.surfaceComponents.components.Input),
+					new ComponentListItem("Tree", view.flex.surfaceComponents.components.Tree),
+					new ComponentListItem("Panel", view.flex.surfaceComponents.components.Window),
+					new ComponentListItem("Tree", view.flex.surfaceComponents.components.Tree),
+					new ComponentListItem("Container", view.flex.surfaceComponents.components.Container)
+				]);
+			}
+			else
+			{
+				dp = new ArrayList([
+					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button)
+				]);
+			}
+			
+			this.dataProvider = dp;
+		}
+	]]>
+	</fx:Script>
 </s:List>

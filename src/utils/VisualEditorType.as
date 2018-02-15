@@ -14,13 +14,9 @@ package utils
 	
 		public var value:String;
 		
-	    public static function getInstance(type:VisualEditorType = null):VisualEditorType
+	    public static function setInstance(type:VisualEditorType = null):void
 		{
-	        if(!_instance)
-	        {
-	            _instance = type;
-	        } 
-	        return _instance;
+            _instance = type;
 	    }
 
 		public static function get instance():VisualEditorType 

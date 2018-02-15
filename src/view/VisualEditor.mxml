@@ -30,8 +30,6 @@
 		import spark.components.Alert;
 		import utils.VisualEditorType;
 
-		public var visualEditorType:VisualEditorType;
-		
 		private var _file:FileReference;
 
 		CONFIG::MOONSHINE

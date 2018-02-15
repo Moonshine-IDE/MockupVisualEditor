@@ -13,6 +13,13 @@ package view.primeFaces.surfaceComponents.components
 		{
 			super();
 			
+			this.label = "Button";
+			this.toolTip = "";
+			this.width = 100;
+			this.height = 30;
+			this.minWidth = 20;
+			this.minHeight = 20;
+			
 			_propertiesChangedEvents = [
 					"widthChanged",
 					"heightChanged",
@@ -33,6 +40,16 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		public function toXML():XML
+		{
+			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			setCommonXMLAttributes(xml);
+
+            xml.@value = this.label;
+
+			return xml;
+		}		
+		
+		public function toCode():XML
 		{
 			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");

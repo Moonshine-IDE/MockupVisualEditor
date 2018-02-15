@@ -6,6 +6,7 @@ package utils
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.IMainApplication;
     import view.interfaces.ISurfaceComponent;
+    import view.interfaces.IPrimeFacesSurfaceComponent;
 
     public class EditingSurfaceWriter
 	{
@@ -30,32 +31,50 @@ package utils
         {
             public static function toCode(surface:EditingSurface):XML
             {
-                var element:IFlexSurfaceComponent = surface.getElementAt(0) as IFlexSurfaceComponent;
+                var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
                 var elementCount:int = 0;
 				var i:int = 0;
-                var xml:XML = new XML("<WindowedApplication></WindowedApplication>");
-                var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
-                xml.addNamespace(sparkNamespace);
-                xml.setNamespace(sparkNamespace);
+				var isMainApplication:Boolean = element is IMainApplication;
+                var xml:XML = MainApplicationCodeUtils.getMainApplicationTag(element["title"], element.width, element.height);
 
-                var fxNamespace:Namespace = new Namespace("fx", "http://ns.adobe.com/mxml/2009");
-                xml.addNamespace(fxNamespace);
-
-                if (element is IMainApplication)
+                if (isMainApplication)
                 {
-                    xml.@width = element.width;
-                    xml.@height = element.height;
-                    xml.@title = element["title"];
-
                     elementCount = (element as IVisualElementContainer).numElements;
                     for (i = 0; i < elementCount; i++)
                     {
-                        var mainWindowChild:IFlexSurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as IFlexSurfaceComponent;
-                        if (mainWindowChild === null)
+                        var mainWindowChild:ISurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as ISurfaceComponent;
+                        
+						if (mainWindowChild === null)
+						{
+							continue;				
+						}			
+						
+						var code:XML = mainWindowChild.toCode();
+						if (mainWindowChild is IFlexSurfaceComponent)
                         {
-                            continue;
+                            xml.appendChild(code);
                         }
-                        xml.appendChild(mainWindowChild.toCode());
+						else if (mainWindowChild is IPrimeFacesSurfaceComponent)
+						{
+							var body:XMLList = xml.children();
+                        	var mainDiv:XML = null;
+
+							for each (var item:XML in body)
+                            {
+                                var itemName:String = item.name();
+                                if (itemName.lastIndexOf("body") > -1)
+                                {
+                                    mainDiv = item.div.(@id == 'mainDiv')[0];
+                                    break;
+                                }
+                            }
+							if (!mainDiv)
+							{
+								mainDiv = xml[0];
+							}
+
+                            mainDiv.appendChild(code);
+						}
                     }
                 }
 				else

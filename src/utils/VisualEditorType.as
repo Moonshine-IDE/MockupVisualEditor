@@ -10,7 +10,6 @@ package utils
 		public function VisualEditorType(value:String)
 		{
 			this.value = value;
-			_instance = this;
 	    }
 	
 		public var value:String;

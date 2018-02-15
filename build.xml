@@ -48,9 +48,6 @@
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/framework.swc" append="true"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/mx/mx.swc" append="true"/>
 			<include-sources dir="${basedir}/src" includes="*"/>
-			<compiler.library-path dir="${basedir}/libs" append="true">
-				<include name="**/*.swc" />
-			</compiler.library-path>
 		</compc>
 	</target>
 

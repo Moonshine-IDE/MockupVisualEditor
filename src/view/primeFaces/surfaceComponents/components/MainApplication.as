@@ -1,27 +1,38 @@
 package view.primeFaces.surfaceComponents.components
 {
-	import flexlib.containers.FlowBox;
 	import view.interfaces.IPrimeFacesSurfaceComponent;	
 	import view.interfaces.IMainApplication;
 	import view.interfaces.INonDeletableSurfaceComponent;
 	import view.primeFaces.propertyEditors.WindowPropertyEditor;
+	import mx.core.IVisualElementContainer;
+	import spark.components.HGroup;
+	import spark.components.BorderContainer;
+	import spark.layouts.HorizontalLayout;
 
-	public class MainApplication extends FlowBox implements IPrimeFacesSurfaceComponent, 
-															INonDeletableSurfaceComponent, IMainApplication
+	public class MainApplication extends BorderContainer implements IPrimeFacesSurfaceComponent, 
+															INonDeletableSurfaceComponent, IMainApplication, IVisualElementContainer
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
 		public static const ELEMENT_NAME:String = "MainApplication";
 		
 		public function MainApplication()
 		{
+			super();
+			
 			_propertiesChangedEvents = [
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged"
             ];
+
+			var hLayout:HorizontalLayout = new HorizontalLayout();
+			hLayout.gap = 0;
+			
+			layout = hLayout;
+			setStyle("borderColor", "#FF0004");
 		}
-		
+
 		public function get propertyEditorClass():Class
 		{
 			return WindowPropertyEditor;
@@ -46,7 +57,7 @@ package view.primeFaces.surfaceComponents.components
 
 		public function toXML():XML
 		{
-			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + ELEMENT_NAME+ "/>");
 			
 			setCommonXMLAttributes(xml);
 			
@@ -62,7 +73,28 @@ package view.primeFaces.surfaceComponents.components
 			}
 			return xml;
 		}
+		
+		public function toCode():XML
+		{
+			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			
+            setCommonXMLAttributes(xml);
 
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+
+                xml.appendChild(element.toCode());
+            }
+
+            return xml;
+		}
+		
 		public function fromXML(xml:XML, callback:Function):void
 		{
 			this.width = xml.@width;

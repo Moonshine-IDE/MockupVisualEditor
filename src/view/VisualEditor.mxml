@@ -28,7 +28,6 @@
 		import mx.events.FlexEvent;
 
 		import spark.components.Alert;
-		import utils.VisualEditorType;
 
 		private var _file:FileReference;
 

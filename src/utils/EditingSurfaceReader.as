@@ -87,7 +87,9 @@ package utils
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
 							 view.primeFaces.surfaceComponents.components.MainApplication;
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Button.ELEMENT_NAME] =
-							 view.primeFaces.surfaceComponents.components.Button;						
+							 view.primeFaces.surfaceComponents.components.Button;
+				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Container.ELEMENT_NAME] =
+                             view.primeFaces.surfaceComponents.components.Container;
 			}
 		}
 	}

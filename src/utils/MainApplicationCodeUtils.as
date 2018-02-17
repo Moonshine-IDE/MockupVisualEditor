@@ -2,18 +2,50 @@ package utils
 {
 	public class MainApplicationCodeUtils  
 	{
-		
-		public static function getMainApplicationTag(title:String, width:Number, height:Number):XML
+
+		public static function appendXMLMainTag(xml:XML):XML
+		{
+            if (VisualEditorType.PRIME_FACES == VisualEditorType.instance)
+			{
+				var container:XML = new XML("<Container />");
+                container.@percentWidth = 100;
+				container.@percentHeight = 100;
+
+				xml.appendChild(container);
+
+				return container;
+			}
+
+			return null;
+		}
+
+		public static function getMainContainerTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+            for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+                if (itemName.lastIndexOf("body") > -1)
+                {
+                    return item.div[0];
+                }
+            }
+
+			return null;
+		}
+
+		public static function getParentContent(title:String, width:Number, height:Number,
+                                                percentWidth:Number, percentHeight:Number):XML
 		{
 			if (VisualEditorType.FLEX == VisualEditorType.instance)
 			{
-				return getFlexMainApplicationTag(title, width, height);
+				return getFlexMainContainer(title, width, height);
 			}
 			
-			return getPrimeFacesMainApplicationTag(title, width, height);
+			return getPrimeFacesMainContainer(title, width, height, percentWidth, percentHeight);
 		}
 		
-		private static function getFlexMainApplicationTag(title:String, width:Number, height:Number):XML
+		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
 		{
 			var xml:XML = new XML("<WindowedApplication></WindowedApplication>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
@@ -29,7 +61,8 @@ package utils
 			return xml;
 		}
 		
-		private static function getPrimeFacesMainApplicationTag(title:String, width:Number, height:Number):XML
+		private static function getPrimeFacesMainContainer(title:String, width:Number, height:Number,
+                                                           percentWidth:Number, percentHeight:Number):XML
 		{
 			var xml:XML = new XML("<html/>");
             var htmlNamespace:Namespace = new Namespace(null, "http://www.w3.org/1999/xhtml");
@@ -61,18 +94,25 @@ package utils
 			bodyXML.setNamespace(hNamespace);
 
 			var mainDiv:XML = new XML("<div/>");
-			mainDiv.@id = "mainDiv";
 			var styleDiv:String = "";
-			if (!isNaN(width))
+			if (!isNaN(percentWidth))
 			{
-				styleDiv += "width = " + String(width) + "px;";
+				styleDiv += "width = " + String(percentWidth) + "%;";
 			}
-			
-			if (!isNaN(height))
+			else
 			{
-				styleDiv += "height = " + String(height) + "px;";
+                styleDiv += "width = " + String(width) + "px;";
 			}
-			
+
+			if (!isNaN(percentHeight))
+			{
+				styleDiv += "height = " + String(percentHeight) + "%;";
+			}
+			else
+			{
+                styleDiv += "height = " + String(height) + "px;";
+			}
+
 			mainDiv.@style = styleDiv;
 			
 			bodyXML.appendChild(mainDiv);

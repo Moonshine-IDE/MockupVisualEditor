@@ -1,6 +1,9 @@
 package utils
 {
     import mx.core.IVisualElementContainer;
+    import mx.core.UIComponent;
+
+    import utils.MainApplicationCodeUtils;
 
     import view.EditingSurface;
     import view.interfaces.IFlexSurfaceComponent;
@@ -13,6 +16,7 @@ package utils
 		public static function toXML(surface:EditingSurface):XML
 		{
 			var xml:XML = <mockup/>;
+            var primeFacesContainer:XML = MainApplicationCodeUtils.appendXMLMainTag(xml);
 			var elementCount:int = surface.numElements;
 			for(var i:int = 0; i < elementCount; i++)
 			{
@@ -22,7 +26,14 @@ package utils
 					continue;
 				}
 				var elementXML:XML = element.toXML();
-				xml.appendChild(elementXML);
+                if (primeFacesContainer)
+                {
+                    primeFacesContainer.appendChild(elementXML);
+                }
+                else
+                {
+                    xml.appendChild(elementXML);
+                }
 			}
 			return xml;
 		}
@@ -35,7 +46,10 @@ package utils
                 var elementCount:int = 0;
 				var i:int = 0;
 				var isMainApplication:Boolean = element is IMainApplication;
-                var xml:XML = MainApplicationCodeUtils.getMainApplicationTag(element["title"], element.width, element.height);
+                var title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
+                var xml:XML = MainApplicationCodeUtils.getParentContent(title, element.width, element.height,
+                        element.percentWidth, element.percentHeight);
+                var mainContainer:XML = MainApplicationCodeUtils.getMainContainerTag(xml);
 
                 if (isMainApplication)
                 {
@@ -50,45 +64,41 @@ package utils
 						}			
 						
 						var code:XML = mainWindowChild.toCode();
-						if (mainWindowChild is IFlexSurfaceComponent)
+						if (mainContainer)
+                        {
+                            mainContainer.appendChild(code);
+                        }
+                        else
                         {
                             xml.appendChild(code);
                         }
-						else if (mainWindowChild is IPrimeFacesSurfaceComponent)
-						{
-							var body:XMLList = xml.children();
-                        	var mainDiv:XML = null;
-
-							for each (var item:XML in body)
-                            {
-                                var itemName:String = item.name();
-                                if (itemName.lastIndexOf("body") > -1)
-                                {
-                                    mainDiv = item.div.(@id == 'mainDiv')[0];
-                                    break;
-                                }
-                            }
-							if (!mainDiv)
-							{
-								mainDiv = xml[0];
-							}
-
-                            mainDiv.appendChild(code);
-						}
                     }
                 }
 				else
 				{
-                    elementCount = surface.numElements;
+                    var container:IVisualElementContainer = surface;
+                    if (element is IPrimeFacesSurfaceComponent)
+                    {
+                        container = element as IVisualElementContainer;
+                    }
+
+                    elementCount = container.numElements;
                     for (i = 0; i < elementCount; i++)
                     {
-                        element = surface.getElementAt(i) as IFlexSurfaceComponent;
+                        element = container.getElementAt(i) as ISurfaceComponent;
                         if (element === null)
                         {
                             continue;
                         }
                         var elementXML:XML = element.toCode();
-                        xml.appendChild(elementXML);
+                        if (mainContainer)
+                        {
+                            mainContainer.appendChild(elementXML);
+                        }
+                        else
+                        {
+                            xml.appendChild(elementXML);
+                        }
                     }
 				}
 

@@ -2,21 +2,15 @@ package utils
 {
     import mx.core.IVisualElementContainer;
     import mx.core.UIComponent;
-
-    import utils.MainApplicationCodeUtils;
-
     import view.EditingSurface;
-    import view.interfaces.IFlexSurfaceComponent;
-    import view.interfaces.IMainApplication;
     import view.interfaces.ISurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
 
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface):XML
 		{
 			var xml:XML = <mockup/>;
-            var primeFacesContainer:XML = MainApplicationCodeUtils.appendXMLMainTag(surface, xml);
+            var primeFacesContainer:XML = surface.numElements == 0 ? MainApplicationCodeUtils.appendXMLMainTag(surface) : null;
 			var elementCount:int = surface.numElements;
 			for(var i:int = 0; i < elementCount; i++)
 			{
@@ -26,15 +20,13 @@ package utils
 					continue;
 				}
 				var elementXML:XML = element.toXML();
-                if (primeFacesContainer)
-                {
-                    primeFacesContainer.appendChild(elementXML);
-                }
-                else
-                {
                     xml.appendChild(elementXML);
-                }
 			}
+
+            if (primeFacesContainer)
+            {
+                xml.appendChild(primeFacesContainer);
+            }
 			return xml;
 		}
 

@@ -7,7 +7,7 @@ package view.primeFaces.surfaceComponents.components
 	public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
-		public static const ELEMENT_NAME:String = "PrimeFacesButton";
+		public static const ELEMENT_NAME:String = "button";
 		
 		public function Button()
 		{

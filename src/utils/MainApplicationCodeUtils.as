@@ -1,27 +1,23 @@
 package utils
 {
     import view.EditingSurface;
-    import view.EditingSurface;
     import view.interfaces.IFlexSurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.surfaceComponents.components.MainApplication;
 
     public class MainApplicationCodeUtils
 	{
 
-		public static function appendXMLMainTag(surface:EditingSurface, xml:XML):XML
+		public static function appendXMLMainTag(surface:EditingSurface):XML
 		{
-			var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+			var element:ISurfaceComponent = surface.numElements > 0 ? surface.getElementAt(0) as ISurfaceComponent : null;
 			var isPrimeFacesMainApp:MainApplication = element as MainApplication;
 
-            if (element is IPrimeFacesSurfaceComponent || isPrimeFacesMainApp)
+            if (!isPrimeFacesMainApp && element === null)
 			{
-				var container:XML = new XML("<PrimeFacesContainer />");
-                container.@percentWidth = 100;
-				container.@percentHeight = 100;
-
-				xml.appendChild(container);
+				var container:XML = new XML("<Container />");
+                container.@percentWidth = "100";
+				container.@percentHeight = "100";
 
 				return container;
 			}
@@ -50,7 +46,7 @@ package utils
             var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
             var isPrimeFacesMainApp:MainApplication = element as MainApplication;
 
-			if (!isPrimeFacesMainApp || element is IFlexSurfaceComponent)
+			if (!isPrimeFacesMainApp && element is IFlexSurfaceComponent)
 			{
 				return getFlexMainContainer(title, width, height);
 			}

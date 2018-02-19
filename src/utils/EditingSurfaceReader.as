@@ -26,7 +26,7 @@ package utils
 
 	public class EditingSurfaceReader
 	{
-		private static const CLASS_LOOKUP:Object = {};
+		private static var CLASS_LOOKUP:Object;
 		
 		public static function fromXML(surface:EditingSurface, xml:XML, visualEditorType:String):void
 		{
@@ -61,6 +61,8 @@ package utils
 		
 		private static function initReader(visualEditorType:String):void
 		{
+            CLASS_LOOKUP = {};
+
 			if (visualEditorType == VisualEditorType.FLEX)
             {
                 CLASS_LOOKUP[view.flex.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
@@ -89,7 +91,7 @@ package utils
                         view.primeFaces.surfaceComponents.components.MainApplication;
                 CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Button.ELEMENT_NAME] =
                         view.primeFaces.surfaceComponents.components.Button;
-                CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Container.ELEMENT_NAME] =
+                CLASS_LOOKUP["Container"] =
                         view.primeFaces.surfaceComponents.components.Container;
             }
 		}

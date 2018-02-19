@@ -43,64 +43,37 @@ package utils
             public static function toCode(surface:EditingSurface):XML
             {
                 var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
-                var elementCount:int = 0;
-				var i:int = 0;
-				var isMainApplication:Boolean = element is IMainApplication;
                 var title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
                 var xml:XML = MainApplicationCodeUtils.getParentContent(title, element.width, element.height,
                         element.percentWidth, element.percentHeight);
                 var mainContainer:XML = MainApplicationCodeUtils.getMainContainerTag(xml);
 
-                if (isMainApplication)
+                var container:IVisualElementContainer = surface;
+                if (element is ISurfaceComponent)
                 {
-                    elementCount = (element as IVisualElementContainer).numElements;
-                    for (i = 0; i < elementCount; i++)
-                    {
-                        var mainWindowChild:ISurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as ISurfaceComponent;
-                        
-						if (mainWindowChild === null)
-						{
-							continue;				
-						}			
-						
-						var code:XML = mainWindowChild.toCode();
-						if (mainContainer)
-                        {
-                            mainContainer.appendChild(code);
-                        }
-                        else
-                        {
-                            xml.appendChild(code);
-                        }
-                    }
+                    container = element as IVisualElementContainer;
                 }
-				else
-				{
-                    var container:IVisualElementContainer = surface;
-                    if (element is IPrimeFacesSurfaceComponent)
+
+                var elementCount:int = container.numElements;
+                for (var i:int = 0; i < elementCount; i++)
+                {
+                    element = container.getElementAt(i) as ISurfaceComponent;
+
+                    if (element === null)
                     {
-                        container = element as IVisualElementContainer;
+                        continue;
                     }
 
-                    elementCount = container.numElements;
-                    for (i = 0; i < elementCount; i++)
+                    var code:XML = element.toCode();
+                    if (mainContainer)
                     {
-                        element = container.getElementAt(i) as ISurfaceComponent;
-                        if (element === null)
-                        {
-                            continue;
-                        }
-                        var elementXML:XML = element.toCode();
-                        if (mainContainer)
-                        {
-                            mainContainer.appendChild(elementXML);
-                        }
-                        else
-                        {
-                            xml.appendChild(elementXML);
-                        }
+                        mainContainer.appendChild(code);
                     }
-				}
+                    else
+                    {
+                        xml.appendChild(code);
+                    }
+                }
 
 				return xml;
             }

@@ -51,6 +51,12 @@
 		private var _selectedItem:ISurfaceComponent = null;
 		private var _wasLoaded:Boolean = false;
 		private var _hasChanged:Boolean = false;
+		private var _visualEditorType:String;
+
+		public function set visualEditorType(value:String):void
+		{
+			_visualEditorType = value;
+		}
 
 		public function get hasChanged():Boolean
 		{
@@ -110,7 +116,7 @@
 		public function fromXML(xml:XML):void
 		{
 			this.deleteAll();
-			EditingSurfaceReader.fromXML(this, xml);
+			EditingSurfaceReader.fromXML(this, xml, _visualEditorType);
 
 			_wasLoaded = true;
 		}

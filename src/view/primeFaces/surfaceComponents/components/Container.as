@@ -10,7 +10,7 @@ package view.primeFaces.surfaceComponents.components
     public class Container extends BorderContainer implements INonDeletableSurfaceComponent, IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
-        public static var ELEMENT_NAME:String = "Container";
+        public static var ELEMENT_NAME:String = "PrimeFacesContainer";
 
         public function Container()
         {

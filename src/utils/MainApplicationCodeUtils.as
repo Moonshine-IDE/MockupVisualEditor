@@ -1,13 +1,23 @@
 package utils
 {
-	public class MainApplicationCodeUtils  
+    import view.EditingSurface;
+    import view.EditingSurface;
+    import view.interfaces.IFlexSurfaceComponent;
+    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.ISurfaceComponent;
+    import view.primeFaces.surfaceComponents.components.MainApplication;
+
+    public class MainApplicationCodeUtils
 	{
 
-		public static function appendXMLMainTag(xml:XML):XML
+		public static function appendXMLMainTag(surface:EditingSurface, xml:XML):XML
 		{
-            if (VisualEditorType.PRIME_FACES == VisualEditorType.instance)
+			var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+			var isPrimeFacesMainApp:MainApplication = element as MainApplication;
+
+            if (element is IPrimeFacesSurfaceComponent || isPrimeFacesMainApp)
 			{
-				var container:XML = new XML("<Container />");
+				var container:XML = new XML("<PrimeFacesContainer />");
                 container.@percentWidth = 100;
 				container.@percentHeight = 100;
 
@@ -34,10 +44,13 @@ package utils
 			return null;
 		}
 
-		public static function getParentContent(title:String, width:Number, height:Number,
+		public static function getParentContent(surface:EditingSurface, title:String, width:Number, height:Number,
                                                 percentWidth:Number, percentHeight:Number):XML
 		{
-			if (VisualEditorType.FLEX == VisualEditorType.instance)
+            var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+            var isPrimeFacesMainApp:MainApplication = element as MainApplication;
+
+			if (!isPrimeFacesMainApp || element is IFlexSurfaceComponent)
 			{
 				return getFlexMainContainer(title, width, height);
 			}

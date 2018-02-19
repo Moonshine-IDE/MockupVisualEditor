@@ -28,9 +28,9 @@ package utils
 	{
 		private static const CLASS_LOOKUP:Object = {};
 		
-		public static function fromXML(surface:EditingSurface, xml:XML):void
+		public static function fromXML(surface:EditingSurface, xml:XML, visualEditorType:String):void
 		{
-			initReader();
+			initReader(visualEditorType);
 			
 			function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
 			{
@@ -59,38 +59,39 @@ package utils
 			}
 		}
 		
-		private static function initReader():void
+		private static function initReader(visualEditorType:String):void
 		{
-			if (VisualEditorType.instance == VisualEditorType.FLEX)
-			{
-		        CLASS_LOOKUP[view.flex.surfaceComponents.components.MainApplication.ELEMENT_NAME] = 
-							 view.flex.surfaceComponents.components.MainApplication;
-				CLASS_LOOKUP[view.flex.surfaceComponents.components.Button.ELEMENT_NAME] = 
-							 view.flex.surfaceComponents.components.Button;
-				CLASS_LOOKUP[Container.ELEMENT_NAME] = Container;
-				CLASS_LOOKUP[Calendar.ELEMENT_NAME] = Calendar;
-				CLASS_LOOKUP[CheckBox.ELEMENT_NAME] = CheckBox;
-				CLASS_LOOKUP[DropDownList.ELEMENT_NAME] = DropDownList;
-				CLASS_LOOKUP[Hyperlink.ELEMENT_NAME] = Hyperlink;
-				CLASS_LOOKUP[Image.ELEMENT_NAME] = Image;
-				CLASS_LOOKUP[Input.ELEMENT_NAME] = Input;
-				CLASS_LOOKUP[List.ELEMENT_NAME] = List;
-				CLASS_LOOKUP[RadioButton.ELEMENT_NAME] = RadioButton;
-				CLASS_LOOKUP[Table.ELEMENT_NAME] = Table;
-				CLASS_LOOKUP[Tabs.ELEMENT_NAME] = Tabs;
-				CLASS_LOOKUP[Text.ELEMENT_NAME] = Text;
-				CLASS_LOOKUP[Tree.ELEMENT_NAME] = Tree;
-				CLASS_LOOKUP[Window.ELEMENT_NAME] = Window;
-			}
+			if (visualEditorType == VisualEditorType.FLEX)
+            {
+                CLASS_LOOKUP[view.flex.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
+                        view.flex.surfaceComponents.components.MainApplication;
+
+                CLASS_LOOKUP[view.flex.surfaceComponents.components.Button.ELEMENT_NAME] =
+                        view.flex.surfaceComponents.components.Button;
+                CLASS_LOOKUP[Container.ELEMENT_NAME] = Container;
+                CLASS_LOOKUP[Calendar.ELEMENT_NAME] = Calendar;
+                CLASS_LOOKUP[CheckBox.ELEMENT_NAME] = CheckBox;
+                CLASS_LOOKUP[DropDownList.ELEMENT_NAME] = DropDownList;
+                CLASS_LOOKUP[Hyperlink.ELEMENT_NAME] = Hyperlink;
+                CLASS_LOOKUP[Image.ELEMENT_NAME] = Image;
+                CLASS_LOOKUP[Input.ELEMENT_NAME] = Input;
+                CLASS_LOOKUP[List.ELEMENT_NAME] = List;
+                CLASS_LOOKUP[RadioButton.ELEMENT_NAME] = RadioButton;
+                CLASS_LOOKUP[Table.ELEMENT_NAME] = Table;
+                CLASS_LOOKUP[Tabs.ELEMENT_NAME] = Tabs;
+                CLASS_LOOKUP[Text.ELEMENT_NAME] = Text;
+                CLASS_LOOKUP[Tree.ELEMENT_NAME] = Tree;
+                CLASS_LOOKUP[Window.ELEMENT_NAME] = Window;
+            }
 			else
-			{
-				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
-							 view.primeFaces.surfaceComponents.components.MainApplication;
-				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Button.ELEMENT_NAME] =
-							 view.primeFaces.surfaceComponents.components.Button;
-				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Container.ELEMENT_NAME] =
-                             view.primeFaces.surfaceComponents.components.Container;
-			}
+            {
+                CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
+                        view.primeFaces.surfaceComponents.components.MainApplication;
+                CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Button.ELEMENT_NAME] =
+                        view.primeFaces.surfaceComponents.components.Button;
+                CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Container.ELEMENT_NAME] =
+                        view.primeFaces.surfaceComponents.components.Container;
+            }
 		}
 	}
 }

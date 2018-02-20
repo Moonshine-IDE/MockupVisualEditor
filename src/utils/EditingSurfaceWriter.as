@@ -7,10 +7,15 @@ package utils
 
     public class EditingSurfaceWriter
 	{
-		public static function toXML(surface:EditingSurface):XML
+		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
 		{
 			var xml:XML = <mockup/>;
-            var primeFacesContainer:XML = surface.numElements == 0 ? MainApplicationCodeUtils.appendXMLMainTag(surface) : null;
+            var primeFacesContainer:XML = null;
+            if (visualEditorType == VisualEditorType.PRIME_FACES)
+            {
+                primeFacesContainer = surface.numElements == 0 ? MainApplicationCodeUtils.appendXMLMainTag(surface) : null;
+            }
+
 			var elementCount:int = surface.numElements;
 			for(var i:int = 0; i < elementCount; i++)
 			{

@@ -102,7 +102,7 @@
 			hasChanged = false;
 			_wasLoaded = this.numElements > 0;
 
-			return EditingSurfaceWriter.toXML(this);
+			return EditingSurfaceWriter.toXML(this, _visualEditorType);
 		}
 
 		CONFIG::MOONSHINE

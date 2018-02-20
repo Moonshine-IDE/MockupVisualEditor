@@ -46,7 +46,17 @@ package utils
                     container = element as IVisualElementContainer;
                 }
 
-                var elementCount:int = container.numElements;
+                var elementCount:int = 0;
+                if (!container)
+                {
+                    elementCount = surface.numElements;
+                    container = surface;
+                }
+                else
+                {
+                    elementCount = container.numElements;
+                }
+
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;

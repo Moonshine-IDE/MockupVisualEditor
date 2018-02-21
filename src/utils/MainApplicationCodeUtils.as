@@ -74,17 +74,16 @@ package utils
                                                            percentWidth:Number, percentHeight:Number):XML
 		{
 			var xml:XML = new XML("<html/>");
-            var htmlNamespace:Namespace = new Namespace(null, "http://www.w3.org/1999/xhtml");
+
+            var htmlNamespace:Namespace = new Namespace("", "http://www.w3.org/1999/xhtml");
             xml.addNamespace(htmlNamespace);
             xml.setNamespace(htmlNamespace);
-			
+
 			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
 			xml.addNamespace(hNamespace);
-            xml.setNamespace(hNamespace);
 
 			var pNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
 			xml.addNamespace(pNamespace);
-            xml.setNamespace(pNamespace);
 
 			var headXml:XML = new XML("<head/>");
 			headXml.addNamespace(hNamespace);
@@ -103,26 +102,8 @@ package utils
 			bodyXML.setNamespace(hNamespace);
 
 			var mainDiv:XML = new XML("<div/>");
-			var styleDiv:String = "";
-			if (!isNaN(percentWidth))
-			{
-				styleDiv += "width = " + String(percentWidth) + "%;";
-			}
-			else
-			{
-                styleDiv += "width = " + String(width) + "px;";
-			}
 
-			if (!isNaN(percentHeight))
-			{
-				styleDiv += "height = " + String(percentHeight) + "%;";
-			}
-			else
-			{
-                styleDiv += "height = " + String(height) + "px;";
-			}
-
-			mainDiv.@style = styleDiv;
+            XMLCodeUtils.addSizeHtmlStyleToXML(mainDiv, width, height, percentWidth, percentHeight);
 			
 			bodyXML.appendChild(mainDiv);
 			

@@ -13,6 +13,6 @@
 
     <s:FormHeading label="Data"/>
 
-    <forms:TextForm textProperty="title"/>
+    <forms:TextForm label="Title" textProperty="title"/>
 
 </suportclasses:BasePropertyEditor>

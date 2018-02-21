@@ -1,7 +1,10 @@
 package view.primeFaces.surfaceComponents.components
 {
 	import spark.components.Button;
-	import view.interfaces.IPrimeFacesSurfaceComponent;
+
+    import utils.XMLCodeUtils;
+
+    import view.interfaces.IPrimeFacesSurfaceComponent;
 	import view.primeFaces.propertyEditors.ButtonPropertyEditor;
 
 	public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent
@@ -45,6 +48,7 @@ package view.primeFaces.surfaceComponents.components
 			setCommonXMLAttributes(xml);
 
             xml.@value = this.label;
+			xml.@title = this.toolTip;
 
 			return xml;
 		}		
@@ -56,24 +60,56 @@ package view.primeFaces.surfaceComponents.components
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
-			setCommonXMLAttributes(xml);
-
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
             xml.@value = this.label;
+			xml.@title = this.toolTip;
 
 			return xml;
 		}		
 		
 		public function fromXML(xml:XML, childFromXMLCallback:Function):void
 		{
-			this.width = xml.@width;
-			this.height = xml.@height;
+			if ("@width" in xml)
+			{
+                this.width = xml.@width;
+			}
+			else if ("@percentWidth" in xml)
+			{
+				this.percentWidth = xml.@percentWidth;
+			}
+
+			if ("@height" in xml)
+			{
+				this.height = xml.@height;
+			}
+            else if ("@percentHeight" in xml)
+            {
+                this.percentHeight = xml.@percentHeight;
+            }
+
 			this.label = xml.@value;
+			this.toolTip = xml.@title;
 		}
 		
 		private function setCommonXMLAttributes(xml:XML):void
 		{
-            xml.@width = this.width;
-            xml.@height = this.height;
+			if (!isNaN(this.percentWidth))
+			{
+				xml.@percentWidth = this.percentWidth;
+			}
+			else if (!isNaN(this.width))
+            {
+                xml.@width = this.width;
+            }
+
+			if (!isNaN(this.percentHeight))
+			{
+                xml.@percentHeight = this.percentHeight;
+			}
+			else if (!isNaN(this.height))
+            {
+                xml.@height = this.height;
+            }
 		}
 	}
 }

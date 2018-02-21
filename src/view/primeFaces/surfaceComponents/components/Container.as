@@ -2,6 +2,7 @@ package view.primeFaces.surfaceComponents.components
 {
     import spark.components.BorderContainer;
     import spark.layouts.HorizontalLayout;
+    import spark.layouts.TileLayout;
 
     import view.interfaces.INonDeletableSurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -23,8 +24,9 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinHeightChanged"
             ];
 
-            var hLayout:HorizontalLayout = new HorizontalLayout();
-            hLayout.gap = 0;
+            var hLayout:TileLayout = new TileLayout();
+            hLayout.horizontalGap = 0;
+            hLayout.verticalGap = 0;
 
             layout = hLayout;
         }

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
                                       xmlns:s="library://ns.adobe.com/flex/spark"
-                                      xmlns:suportclasses="view.suportClasses.*">
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      skinClass="skins.FormSkin">
 
     <suportclasses:layout>
-        <s:FormLayout horizontalAlign="contentJustify"/>
+        <s:FormLayout />
     </suportclasses:layout>
 
-    <s:FormItem label="Selected">
+    <s:FormItem label="Selected" skinClass="skins.FormItemSkin">
         <s:CheckBox id="check"
                     selected="{ToggleButtonBase(selectedItem).selected}"
                     change="check_changeHandler(event)"/>

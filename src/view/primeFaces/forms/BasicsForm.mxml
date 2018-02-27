@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
 									  xmlns:s="library://ns.adobe.com/flex/spark"
-									  xmlns:suportclasses="view.suportClasses.*">
+									  xmlns:suportclasses="view.suportClasses.*"
+									  skinClass="skins.FormSkin">
 	<suportclasses:layout>
-		<s:FormLayout horizontalAlign="contentJustify"/>
+		<s:FormLayout />
 	</suportclasses:layout>
-	<s:FormHeading label="Size"/>
-	<s:FormItem label="Width">
+	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
+	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
 		<s:TextInput id="widthInput" width="100%"
 					 text="{selectedComponentComputedWidth}"
 					 keyDown="widthInput_keyDownHandler(event)"
 					 focusOut="commitWidth()" enter="commitWidth()" tabIndex="3"/>
 	</s:FormItem>
-	<s:FormItem label="Height">
+	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
 		<s:TextInput id="heightInput" width="100%"
 					 text="{selectedComponentComputedHeight}"
 					 keyDown="heightInput_keyDownHandler(event)"

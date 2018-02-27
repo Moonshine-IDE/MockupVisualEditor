@@ -89,10 +89,14 @@
 	<s:layout>
 		<s:FormItemLayout>
 			<s:constraintColumns>
+				<!--- The column containing the sequence label. -->
+				<s:ConstraintColumn id="sequenceCol" width="0"/>
 				<!--- The column containing the FormItem's label. -->
 				<s:ConstraintColumn id="labelCol" />
 				<!--- The column containing the FormItem's content. -->
 				<s:ConstraintColumn id="contentCol" width="100%"/>
+				<!--- The column containing the FormItem's help content. -->
+				<s:ConstraintColumn id="helpCol" maxWidth="200" width="0"/>
 			</s:constraintColumns>
 			<s:constraintRows>
 				<!--- @private -->

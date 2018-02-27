@@ -20,6 +20,8 @@ package view.flex.surfaceComponents.components
 {
 	import spark.components.Button;
 
+    import view.flex.surfaceComponents.skins.ButtonSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	import view.flex.propertyEditors.ButtonPropertyEditor;
@@ -31,6 +33,12 @@ package view.flex.surfaceComponents.components
 		
 		public function Button()
 		{
+			super();
+
+			this.setStyle("skinClass", ButtonSkin);
+			this.setStyle("color", "#6A6A6A");
+			this.setStyle("fontSize", 12);
+
 			this.label = "Button";
 			this.toolTip = "";
 			this.width = 100;

@@ -20,6 +20,8 @@ package view.flex.surfaceComponents.components
 {
 	import spark.components.TextInput;
 
+    import view.flex.surfaceComponents.skins.InputSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	import view.flex.propertyEditors.InputPropertyEditor;
@@ -31,6 +33,12 @@ package view.flex.surfaceComponents.components
 
 		public function Input()
 		{
+			super();
+
+            this.setStyle("skinClass", InputSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.editable = false;
 			this.selectable = false;
 			this.text = "Text Input|";

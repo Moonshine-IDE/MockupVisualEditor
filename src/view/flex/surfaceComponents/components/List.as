@@ -12,6 +12,8 @@ package view.flex.surfaceComponents.components
 
     import utils.MxmlCodeUtils;
 
+    import view.flex.surfaceComponents.skins.ListSkin;
+
     import view.interfaces.IDataProviderComponent;
     import view.interfaces.IFlexSurfaceComponent;
 
@@ -27,6 +29,12 @@ package view.flex.surfaceComponents.components
 
 		public function List()
 		{
+            super();
+
+            this.setStyle("skinClass", ListSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.mouseChildren = false;
 			this.dataProvider = new ArrayList(
 			[

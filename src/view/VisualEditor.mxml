@@ -16,12 +16,12 @@
 	<view:ComponentList id="componentList" top="{toolbar.height}" bottom="0" left="0" visualEditorType="{_visualEditorType}"/>
 
 	<containers:HDividerGroup left="{componentList.width}" right="0" bottom="0" top="{toolbar.height}"
-							  gap="0" minElementWidth="210">
+							  gap="0" minElementWidth="250">
 		<s:Scroller percentWidth="80" percentHeight="100">
 			<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"/>
 		</s:Scroller>
 		<view:PropertyEditorContainer id="propertyEditor"
-									  percentHeight="100" percentWidth="20" minWidth="210"
+									  percentHeight="100" percentWidth="20" minWidth="250"
 									  selectedItem="{editingSurface.selectedItem}" />
 	</containers:HDividerGroup>
 	<fx:Script><![CDATA[

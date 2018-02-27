@@ -41,10 +41,14 @@
 	<s:layout>
 		<s:FormItemLayout>
 			<s:constraintColumns>
+				<!--- The column containing the sequence label. -->
+				<s:ConstraintColumn id="sequenceCol" />
 				<!--- The column containing the form item's label. -->
 				<s:ConstraintColumn id="labelCol" />
 				<!--- The column containing the form item's content. -->
 				<s:ConstraintColumn id="contentCol" width="100%"/>
+				<!--- The column containing the form item's help content. -->
+				<s:ConstraintColumn id="helpCol"/>
 			</s:constraintColumns>
 			<s:constraintRows>
 				<!--- @private -->

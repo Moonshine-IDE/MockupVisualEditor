@@ -52,17 +52,6 @@
 				bgFill.alpha = getStyle("backgroundAlpha");
 			}
 
-			var indicatorSource:Object;
-			if (currentState == "error" || currentState == "requiredAndError")
-				indicatorSource = getStyle("errorIndicatorSource");
-			else if (currentState == "required" || "requiredAndDisabled")
-				indicatorSource = getStyle("requiredIndicatorSource");
-
-			if (indicatorSource && indicatorDisplay)
-			{
-				indicatorDisplay.source = indicatorSource;
-			}
-
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 		}
 
@@ -89,10 +78,14 @@
 	<s:layout>
 		<s:FormItemLayout>
 			<s:constraintColumns>
+				<!--- The column containing the sequence label. -->
+				<s:ConstraintColumn id="sequenceCol" width="0"/>
 				<!--- The column containing the FormItem's label. -->
 				<s:ConstraintColumn id="labelCol" />
 				<!--- The column containing the FormItem's content. -->
-				<s:ConstraintColumn id="contentCol" width="100%"/>
+				<s:ConstraintColumn id="contentCol" />
+				<!--- The column containing the FormItem's help content. -->
+				<s:ConstraintColumn id="helpCol" maxWidth="200" width="0"/>
 			</s:constraintColumns>
 			<s:constraintRows>
 				<!--- @private -->
@@ -112,22 +105,14 @@
 	<!--- @copy spark.components.FormItem#labelDisplay -->
 	<s:Label id="labelDisplay"
 		fontWeight="bold"
-		left="labelCol:0" right="labelCol:5"
+		left="labelCol:3" right="labelCol:5"
 		bottom="row1:2" baseline="row1:0"/>
 	<!--- @copy spark.components.SkinnableContainer#contentGroup -->
 	<s:Group id="contentGroup" showErrorTip="false" showErrorSkin="true"
-		left="contentCol:0" right="contentCol:1"
+		left="contentCol:0" right="contentCol:0"
 		baseline="row1:0" bottom="row1:2">
 		<s:layout>
 			<s:VerticalLayout/>
 		</s:layout>
-	</s:Group>
-	<!-- Don't include the indicator in layout since we position it ourselves -->
-	<s:Group x="{contentGroup.x + contentGroup.contentWidth + 4}" y="{contentGroup.y}"
-		height="{Math.max(indicatorDisplay.height, contentGroup.contentHeight)}" includeInLayout="false">
-		<!--- @private -->
-		<s:Image id="indicatorDisplay" verticalCenter="0"
-			toolTip="{requiredToolTip}" toolTip.errorStates=""
-			includeIn="requiredStates,errorStates"/>
 	</s:Group>
 </s:Skin>

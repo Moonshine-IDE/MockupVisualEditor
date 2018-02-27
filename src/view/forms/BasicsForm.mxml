@@ -2,39 +2,40 @@
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
 									  xmlns:s="library://ns.adobe.com/flex/spark"
 									  xmlns:suportclasses="view.suportClasses.*"
+									  skinClass="skins.FormSkin"
 									  creationComplete="onBasicFormCreationComplete(event)">
 
 	<suportclasses:layout>
-		<s:FormLayout horizontalAlign="contentJustify"/>
+		<s:FormLayout />
 	</suportclasses:layout>
 
-	<s:FormHeading label="Position"/>
-	<s:FormItem label="X">
-		<s:TextInput id="xInput" width="100%"
+	<s:FormHeading label="Position" skinClass="skins.FormHeadingSkin"/>
+	<s:FormItem label="X" skinClass="skins.FormItemSkin">
+		<s:TextInput id="xInput"
 					 text="{selectedComponent.x}"
-					 keyDown="xInput_keyDownHandler(event)"
+					 keyDown="xInput_keyDownHandler(event)" width="100%"
 					 focusOut="commitX()" enter="commitX()" tabIndex="1"/>
 	</s:FormItem>
-	<s:FormItem label="Y">
-		<s:TextInput id="yInput" width="100%"
+	<s:FormItem label="Y" skinClass="skins.FormItemSkin" >
+		<s:TextInput id="yInput"
 					 text="{selectedComponent.y}"
-					 keyDown="yInput_keyDownHandler(event)"
+					 keyDown="yInput_keyDownHandler(event)" width="100%"
 					 focusOut="commitY()" enter="commitY()" tabIndex="2"/>
 	</s:FormItem>
-	<s:FormHeading label="Size"/>
-	<s:FormItem label="Width">
-		<s:TextInput id="widthInput" width="100%"
+	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
+	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
+		<s:TextInput id="widthInput"
 					 text="{selectedComponentComputedWidth}"
-					 keyDown="widthInput_keyDownHandler(event)"
+					 keyDown="widthInput_keyDownHandler(event)" width="100%"
 					 focusOut="commitWidth()" enter="commitWidth()" tabIndex="3"/>
 	</s:FormItem>
-	<s:FormItem label="Height">
-		<s:TextInput id="heightInput" width="100%"
+	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
+		<s:TextInput id="heightInput"
 					 text="{selectedComponentComputedHeight}"
-					 keyDown="heightInput_keyDownHandler(event)"
+					 keyDown="heightInput_keyDownHandler(event)" width="100%"
 					 focusOut="commitHeight()" enter="commitHeight()" tabIndex="4"/>
 	</s:FormItem>
-	<s:FormHeading label="Layering"/>
+	<s:FormHeading label="Layering" skinClass="skins.FormHeadingSkin"/>
 	<s:Group>
 		<s:layout>
 			<s:HorizontalLayout/>

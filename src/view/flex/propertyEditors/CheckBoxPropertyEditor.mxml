@@ -12,7 +12,7 @@
 
     <forms:TextForm textProperty="label"/>
 
-    <s:FormHeading label="Data"/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <forms:ToggleButtonSelectedForm/>
 

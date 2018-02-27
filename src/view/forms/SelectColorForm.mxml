@@ -3,13 +3,13 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:suportclasses="view.suportClasses.*"
-        creationComplete="onCreationCompletes(event)">
+        creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin">
 
     <suportclasses:layout>
-        <s:FormLayout horizontalAlign="contentJustify"/>
+        <s:FormLayout />
     </suportclasses:layout>
 
-    <s:FormItem label="Select Color">
+    <s:FormItem label="Select Color" skinClass="skins.StackedFormItemSkin">
         <s:HGroup width="100%" verticalAlign="middle">
             <mx:ColorPicker id="picker" change="onPickerChanged(event)"
                             selectedColor="{ILayoutContainer(selectedItem).backgroundColor}"/>
@@ -17,17 +17,17 @@
         </s:HGroup>
     </s:FormItem>
 
-    <s:FormItem label="Select Container Type">
+    <s:FormItem label="Select Container Type" skinClass="skins.StackedFormItemSkin">
         <s:DropDownList id="ddlCTypes"
                         dataProvider="{ILayoutContainer(selectedItem).containerTypes}"
-                        requireSelection="true"
+                        requireSelection="true" width="100%"
                         change="onCTypesChanged(event)"/>
     </s:FormItem>
 
-    <s:FormItem label="Select Layout">
+    <s:FormItem label="Select Layout" skinClass="skins.StackedFormItemSkin">
         <s:DropDownList id="ddlTypes"
                         dataProvider="{ILayoutContainer(selectedItem).layoutTypes}"
-                        requireSelection="true"
+                        requireSelection="true" width="100%"
                         change="onTypesChanged(event)"/>
     </s:FormItem>
 

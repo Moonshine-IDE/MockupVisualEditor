@@ -11,7 +11,7 @@
 
     <primeFaces:BasicsForm/>
 
-    <s:FormHeading label="Data"/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <forms:TextForm label="Title" textProperty="title"/>
 

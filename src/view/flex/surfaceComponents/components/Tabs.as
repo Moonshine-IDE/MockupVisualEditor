@@ -17,6 +17,8 @@ package view.flex.surfaceComponents.components
 	import spark.events.IndexChangeEvent;
 	import spark.layouts.VerticalLayout;
 
+    import view.flex.surfaceComponents.skins.NavigatorContentSkin;
+
     import view.interfaces.IDataProviderComponent;
     import view.interfaces.IFlexSurfaceComponent;
 
@@ -31,6 +33,8 @@ package view.flex.surfaceComponents.components
 
 		public function Tabs()
 		{
+			super();
+
 			this.width = 200;
 			this.height = 200;
 			this.minWidth = 150;
@@ -47,6 +51,8 @@ package view.flex.surfaceComponents.components
 			this.addElement(this._tabs);
 
 			this._stack = new ViewStack();
+			this._stack.setStyle("borderColor", "#A9A9A9");
+			this._stack.setStyle("borderStyle", "solid");
 			this._stack.minWidth = 0;
 			this._stack.minHeight = 0;
 			this._stack.percentWidth = 100;
@@ -265,6 +271,8 @@ package view.flex.surfaceComponents.components
 				case CollectionEventKind.ADD:
 				{
 					var newContent:NavigatorContent = new NavigatorContent();
+                    newContent.setStyle("skinClass", NavigatorContentSkin);
+
 					newContent.label = event.items[0].label;
 					this._stack.addElementAt(newContent, event.location);
 					this._numViews++;

@@ -5,6 +5,8 @@ package view.flex.surfaceComponents.components
 	import spark.components.DataGrid;
 	import spark.components.gridClasses.GridColumn;
 
+    import view.flex.surfaceComponents.skins.TableSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	public class Table extends DataGrid implements IFlexSurfaceComponent
@@ -14,6 +16,12 @@ package view.flex.surfaceComponents.components
 
 		public function Table()
 		{
+			super();
+
+            this.setStyle("skinClass", TableSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.mouseChildren = false;
 			this.dataProvider = new ArrayList(
 			[

@@ -16,6 +16,6 @@
 
     <forms:TextForm label="Group Name" textProperty="groupName"/>
 
-    <forms:ToggleButtonSelectedForm/>
+    <forms:ToggleButtonSelectedForm label="Selected" textProperty="selected"/>
 
 </suportclasses:BasePropertyEditor>

@@ -45,8 +45,10 @@ package view.primeFaces.surfaceComponents.components
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
-			setCommonXMLAttributes(xml);
 
+			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+			xml.@disabled = this.enabled;
             xml.@value = this.label;
 			xml.@title = this.toolTip;
 
@@ -61,6 +63,8 @@ package view.primeFaces.surfaceComponents.components
             xml.setNamespace(primeFacesNamespace);
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+
+			xml.@disabled = !this.enabled;
             xml.@value = this.label;
 			xml.@title = this.toolTip;
 
@@ -69,47 +73,11 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function fromXML(xml:XML, childFromXMLCallback:Function):void
 		{
-			if ("@width" in xml)
-			{
-                this.width = xml.@width;
-			}
-			else if ("@percentWidth" in xml)
-			{
-				this.percentWidth = xml.@percentWidth;
-			}
+			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-			if ("@height" in xml)
-			{
-				this.height = xml.@height;
-			}
-            else if ("@percentHeight" in xml)
-            {
-                this.percentHeight = xml.@percentHeight;
-            }
-
+			this.enabled = Boolean(xml.@disabled);
 			this.label = xml.@value;
 			this.toolTip = xml.@title;
-		}
-		
-		private function setCommonXMLAttributes(xml:XML):void
-		{
-			if (!isNaN(this.percentWidth))
-			{
-				xml.@percentWidth = this.percentWidth;
-			}
-			else if (!isNaN(this.width))
-            {
-                xml.@width = this.width;
-            }
-
-			if (!isNaN(this.percentHeight))
-			{
-                xml.@percentHeight = this.percentHeight;
-			}
-			else if (!isNaN(this.height))
-            {
-                xml.@height = this.height;
-            }
 		}
 	}
 }

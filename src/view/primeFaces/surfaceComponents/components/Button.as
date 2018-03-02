@@ -20,8 +20,6 @@ package view.primeFaces.surfaceComponents.components
 			super();
 
             this.setStyle("skinClass", ButtonSkin);
-            this.setStyle("color", "#6A6A6A");
-            this.setStyle("fontSize", 12);
 
 			this.label = "Button";
 			this.toolTip = "";

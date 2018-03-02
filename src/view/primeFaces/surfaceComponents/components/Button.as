@@ -1,13 +1,16 @@
 package view.primeFaces.surfaceComponents.components
 {
-	import spark.components.Button;
+    import flash.events.Event;
+
+    import spark.components.Button;
 
     import utils.XMLCodeUtils;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
 	import view.primeFaces.propertyEditors.ButtonPropertyEditor;
+    import view.primeFaces.surfaceComponents.skins.ButtonSkin;
 
-	public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent
+    public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
 		public static const ELEMENT_NAME:String = "button";
@@ -15,7 +18,11 @@ package view.primeFaces.surfaceComponents.components
 		public function Button()
 		{
 			super();
-			
+
+            this.setStyle("skinClass", ButtonSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.label = "Button";
 			this.toolTip = "";
 			this.width = 100;
@@ -27,11 +34,35 @@ package view.primeFaces.surfaceComponents.components
 					"widthChanged",
 					"heightChanged",
 					"explicitMinWidthChanged",
-					"explicitMinHeightChanged"
+					"explicitMinHeightChanged",
+					"enabledChanged"
 			];
 		}
-		
-		public function get propertyEditorClass():Class
+
+        private var _enabled:Boolean = true;
+
+        [Bindable("enabledChanged")]
+        [Inspectable(category="General", enumeration="true,false", defaultValue="true")]
+        override public function get enabled():Boolean
+        {
+            return _enabled;
+        }
+
+
+        [Inspectable(category="General", enumeration="true,false", defaultValue="true")]
+        override public function set enabled(value:Boolean):void
+        {
+			if (_enabled != value)
+            {
+                _enabled = value;
+
+                invalidateSkinState();
+
+				dispatchEvent(new Event("enabledChanged"));
+            }
+        }
+
+        public function get propertyEditorClass():Class
 		{
 			return ButtonPropertyEditor;
 		}		
@@ -75,7 +106,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-			this.enabled = Boolean(xml.@disabled);
+			this.enabled = xml.@disabled == "false" ? true : false;
 			this.label = xml.@value;
 			this.toolTip = xml.@title;
 		}

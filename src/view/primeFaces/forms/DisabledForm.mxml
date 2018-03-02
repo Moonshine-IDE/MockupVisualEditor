@@ -10,18 +10,15 @@
 
     <s:FormItem label="{label}" skinClass="skins.FormItemSkin">
         <s:CheckBox id="check"
-                    selected="{bindableText}"
                     change="check_changeHandler(event)"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
-        import mx.binding.utils.BindingUtils;
-        import mx.binding.utils.ChangeWatcher;
+        import view.interfaces.ISurfaceComponent;
 
-        private var _binding:ChangeWatcher;
+        private var _textProperty:String = "enabled";
+        private var _selectedDirty:Boolean;
 
-        [Bindable]
-        public var bindableText:Boolean;
         private var _label:String = "Text";
 
         [Bindable("labelChange")]
@@ -40,49 +37,40 @@
             this.dispatchEvent(new Event("labelChange"));
         }
 
-        private var _textProperty:String = "text";
-
-        [Bindable("change")]
-        public function get textProperty():String
+        override public function set selectedItem(value:ISurfaceComponent):void
         {
-            return this._textProperty;
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+
+                if (value)
+                {
+                    _selectedDirty = true;
+                }
+            }
         }
 
-        public function set textProperty(value:String):void
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
         {
-            if (this._textProperty === value)
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (this.check && _selectedDirty)
             {
-                return;
+                this.check.selected = !this.selectedItem[_textProperty];
+                _selectedDirty = false;
             }
-            this._textProperty = value;
-            this.updateBinding();
-            this.dispatchEvent(new Event(Event.CHANGE));
         }
 
         private function check_changeHandler(event:Event):void
         {
-            if (!(this.textProperty in this.selectedItem))
+            if (!(_textProperty in this.selectedItem))
             {
                 this.check.errorString = "Field " + this._textProperty + " does not exist";
                 return;
             }
             this.check.errorString = "";
 
-            this.selectedItem[this._textProperty] = this.check.selected;
-        }
-
-        private function updateBinding():void
-        {
-            if (this._binding)
-            {
-                this._binding.unwatch();
-                this._binding = null;
-            }
-            if (this.selectedItem === null)
-            {
-                return;
-            }
-            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, true);
+            this.selectedItem[this._textProperty] = !this.check.selected;
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

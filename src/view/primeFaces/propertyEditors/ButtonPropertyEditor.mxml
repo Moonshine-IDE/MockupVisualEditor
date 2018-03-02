@@ -13,5 +13,5 @@
 	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
 	<forms:TextForm label="Value" textProperty="label"/>
 	<forms:TextForm label="Title" textProperty="toolTip"/>
-	<forms:ToggleButtonSelectedForm label="Disabled" textProperty="enabled"/>
+	<primeFaces:DisabledForm label="Disabled"/>
 </suportclasses:BasePropertyEditor>

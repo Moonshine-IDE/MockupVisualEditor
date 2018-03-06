@@ -82,8 +82,17 @@ package view.primeFaces.surfaceComponents.components
 			xml.@title = this.toolTip;
 
 			return xml;
-		}		
-		
+		}
+
+        public function fromXML(xml:XML, childFromXMLCallback:Function):void
+        {
+            XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            this.enabled = xml.@disabled == "false" ? true : false;
+            this.label = xml.@value;
+            this.toolTip = xml.@title;
+        }
+
 		public function toCode():XML
 		{
 			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
@@ -98,15 +107,6 @@ package view.primeFaces.surfaceComponents.components
 			xml.@title = this.toolTip;
 
 			return xml;
-		}		
-		
-		public function fromXML(xml:XML, childFromXMLCallback:Function):void
-		{
-			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-
-			this.enabled = xml.@disabled == "false" ? true : false;
-			this.label = xml.@value;
-			this.toolTip = xml.@title;
 		}
 	}
 }

@@ -21,7 +21,8 @@ package utils
 	import view.flex.surfaceComponents.components.Text;
 	import view.flex.surfaceComponents.components.Tree;
 	import view.flex.surfaceComponents.components.Window;
-	import view.primeFaces.surfaceComponents.components.MainApplication;
+    import view.primeFaces.surfaceComponents.components.InputMask;
+    import view.primeFaces.surfaceComponents.components.MainApplication;
 	import view.primeFaces.surfaceComponents.components.Button;	
 
 	public class EditingSurfaceReader
@@ -91,8 +92,8 @@ package utils
                         view.primeFaces.surfaceComponents.components.MainApplication;
                 CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Button.ELEMENT_NAME] =
                         view.primeFaces.surfaceComponents.components.Button;
-                CLASS_LOOKUP["Container"] =
-                        view.primeFaces.surfaceComponents.components.Container;
+				CLASS_LOOKUP[InputMask.ELEMENT_NAME] = InputMask;
+                CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
             }
 		}
 	}

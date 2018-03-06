@@ -26,6 +26,7 @@
         import view.flex.surfaceComponents.components.Window;
         import view.flex.surfaceComponents.components.Container;
         import view.primeFaces.surfaceComponents.components.Button;
+		import view.primeFaces.surfaceComponents.components.InputMask;
 
 		private var _visualEditorType:String;
 
@@ -64,7 +65,8 @@
 			else
 			{
 				dp = new ArrayList([
-					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button)
+					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
+					new ComponentListItem("InputMask", InputMask)
 				]);
 			}
 

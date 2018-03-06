@@ -12,7 +12,7 @@
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:TextInput id="textInput"
                      text="{bindableText}" width="100%" minWidth="156"
-                     change="textInput_changeHandler(event)"/>
+                     change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[

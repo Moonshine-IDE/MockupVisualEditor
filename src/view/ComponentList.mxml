@@ -25,7 +25,8 @@
         import view.flex.surfaceComponents.components.Tree;
         import view.flex.surfaceComponents.components.Window;
         import view.flex.surfaceComponents.components.Container;
-        import view.primeFaces.surfaceComponents.components.Button;
+		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
+		import view.primeFaces.surfaceComponents.components.Button;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 
 		private var _visualEditorType:String;
@@ -66,7 +67,8 @@
 			{
 				dp = new ArrayList([
 					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
-					new ComponentListItem("InputMask", InputMask)
+					new ComponentListItem("InputMask", InputMask),
+				    new ComponentListItem("AutoComplete", AutoCompleteDropDownList)
 				]);
 			}
 

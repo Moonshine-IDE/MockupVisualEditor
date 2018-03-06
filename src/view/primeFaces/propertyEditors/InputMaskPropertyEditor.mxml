@@ -9,6 +9,6 @@
 
 	<primeFaces:BasicsForm/>
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
-    <forms:TextForm label="mask: '9'(0-9), '*'(a-z, A-Z)" textProperty="maskText"/>
-    <primeFaces:MaskedTextInputForm label="value" textProperty="text" bindableMaskText="{selectedItem['maskText']}"/>
+    <forms:TextForm label="Mask: '9'(0-9), '*'(a-z, A-Z)" textProperty="maskText"/>
+    <primeFaces:MaskedTextInputForm label="Value" textProperty="text" bindableMaskText="{selectedItem['maskText']}"/>
 </suportclasses:BasePropertyEditor>

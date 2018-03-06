@@ -16,9 +16,8 @@
     <fx:Script><![CDATA[
         import view.interfaces.ISurfaceComponent;
 
+        private var selectedDirty:Boolean;
         private var _textProperty:String = "enabled";
-        private var _selectedDirty:Boolean;
-
         private var _label:String = "Text";
 
         [Bindable("labelChange")]
@@ -45,7 +44,7 @@
 
                 if (value)
                 {
-                    _selectedDirty = true;
+                    selectedDirty = true;
                 }
             }
         }
@@ -54,10 +53,10 @@
         {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-            if (this.check && _selectedDirty)
+            if (this.check && selectedDirty)
             {
                 this.check.selected = !this.selectedItem[_textProperty];
-                _selectedDirty = false;
+                selectedDirty = false;
             }
         }
 

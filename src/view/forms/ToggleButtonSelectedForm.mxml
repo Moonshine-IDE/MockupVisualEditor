@@ -18,6 +18,9 @@
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
 
+        import view.interfaces.ISurfaceComponent;
+
+        private var selectedDirty:Boolean;
         private var _binding:ChangeWatcher;
 
         [Bindable]
@@ -57,6 +60,30 @@
             this._textProperty = value;
             this.updateBinding();
             this.dispatchEvent(new Event(Event.CHANGE));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+
+                if (value)
+                {
+                    this.selectedDirty = true;
+                }
+            }
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (this.check && this.selectedDirty)
+            {
+                this.check.selected = this.selectedItem[_textProperty];
+                this.selectedDirty = false;
+            }
         }
 
         private function check_changeHandler(event:Event):void

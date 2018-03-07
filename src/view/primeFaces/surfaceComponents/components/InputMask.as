@@ -17,7 +17,8 @@ package view.primeFaces.surfaceComponents.components
             super();
 
             this.maskText = "(999) 999-9999";
-            showMaskWhileWrite = false;
+            this.mouseChildren = false;
+            this.showMaskWhileWrite = false;
 
             this.toolTip = "";
             this.width = 100;
@@ -26,8 +27,6 @@ package view.primeFaces.surfaceComponents.components
             this.minHeight = 20;
 
             _propertiesChangedEvents = [
-                "xChanged",
-                "yChanged",
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",

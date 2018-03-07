@@ -11,7 +11,7 @@
     <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:TextInput id="textInput"
-                     text="{bindableText}" width="100%" minWidth="156"
+                     text="{bindableText}" width="100%" minWidth="156" maxChars="{_maxChar}"
                      change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin"/>
     </s:FormItem>
 
@@ -42,6 +42,14 @@
             }
             this._label = value;
             this.dispatchEvent(new Event("labelChange"));
+        }
+
+        [Bindable]
+        private var _maxChar:int;
+
+        public function set maxChar(value:int):void
+        {
+            _maxChar = value;
         }
 
         private var _textProperty:String = "text";

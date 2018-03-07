@@ -28,6 +28,7 @@
 		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 		import view.primeFaces.surfaceComponents.components.Button;
 		import view.primeFaces.surfaceComponents.components.InputMask;
+		import view.primeFaces.surfaceComponents.components.InputNumber;
 
 		private var _visualEditorType:String;
 
@@ -68,7 +69,8 @@
 				dp = new ArrayList([
 					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
 					new ComponentListItem("InputMask", InputMask),
-				    new ComponentListItem("AutoComplete", AutoCompleteDropDownList)
+					new ComponentListItem("InputNumber", InputNumber),
+					new ComponentListItem("AutoComplete", AutoCompleteDropDownList)
 				]);
 			}
 

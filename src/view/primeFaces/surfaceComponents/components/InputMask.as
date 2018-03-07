@@ -16,6 +16,7 @@ package view.primeFaces.surfaceComponents.components
         {
             super();
 
+            this.maskText = "(999) 999-9999";
             showMaskWhileWrite = false;
 
             this.toolTip = "";

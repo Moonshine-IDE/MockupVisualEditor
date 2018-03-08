@@ -255,7 +255,7 @@
 			{
 				newWidth = maxWidth;
 			}
-			this.selectedItem.percentWidth = NaN;
+			this.selectedItem.percentWidth = Number.NaN;
 			this.selectedItem.width = newWidth;
 			//the text might not have updated if the width property is the same
 			//but the old text value is different
@@ -269,12 +269,12 @@
 
 			if (isWidth)
 			{
-				this.selectedItem.width = 0;
+				this.selectedItem.width = Number.NaN;
 				this.selectedItem.percentWidth = Number(newValue);
 			}
 			else
 			{
-				this.selectedItem.height = 0;
+				this.selectedItem.height = Number.NaN;
 				this.selectedItem.percentHeight = Number(newValue);
 			}
 		}
@@ -291,6 +291,7 @@
 			{
 				newHeight = maxHeight;
 			}
+			this.selectedItem.percentHeight = Number.NaN;
 			this.selectedItem.height = newHeight;
 			//the text might not have updated if the height property is the same
 			//but the old text value is different

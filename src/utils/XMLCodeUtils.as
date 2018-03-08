@@ -56,19 +56,23 @@ package utils
         {
             if ("@width" in xml)
             {
+                component.percentWidth = Number.NaN;
                 component.width = xml.@width;
             }
             else if ("@percentWidth" in xml)
             {
+                component.width = Number.NaN;
                 component.percentWidth = xml.@percentWidth;
             }
 
             if ("@height" in xml)
             {
+                component.percentHeight = Number.NaN;
                 component.height = xml.@height;
             }
             else if ("@percentHeight" in xml)
             {
+                component.height = Number.NaN;
                 component.percentHeight = xml.@percentHeight;
             }
         }

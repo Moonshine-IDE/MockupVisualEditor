@@ -25,9 +25,10 @@ package utils
     import view.primeFaces.surfaceComponents.components.InputMask;
     import view.primeFaces.surfaceComponents.components.InputNumber;
     import view.primeFaces.surfaceComponents.components.MainApplication;
-	import view.primeFaces.surfaceComponents.components.Button;	
+	import view.primeFaces.surfaceComponents.components.Button;
+    import view.primeFaces.surfaceComponents.components.OutputLabel;
 
-	public class EditingSurfaceReader
+    public class EditingSurfaceReader
 	{
 		private static var CLASS_LOOKUP:Object;
 		
@@ -97,6 +98,7 @@ package utils
 				CLASS_LOOKUP[InputMask.ELEMENT_NAME] = InputMask;
 				CLASS_LOOKUP[InputNumber.ELEMENT_NAME] = InputNumber;
 				CLASS_LOOKUP[AutoCompleteDropDownList.ELEMENT_NAME] = AutoCompleteDropDownList;
+				CLASS_LOOKUP[OutputLabel.ELEMENT_NAME] = OutputLabel;
                 CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
             }
 		}

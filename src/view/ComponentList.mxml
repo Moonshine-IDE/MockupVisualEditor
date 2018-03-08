@@ -29,6 +29,7 @@
 		import view.primeFaces.surfaceComponents.components.Button;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 		import view.primeFaces.surfaceComponents.components.InputNumber;
+		import view.primeFaces.surfaceComponents.components.OutputLabel;
 
 		private var _visualEditorType:String;
 
@@ -70,6 +71,7 @@
 					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
 					new ComponentListItem("InputMask", InputMask),
 					new ComponentListItem("InputNumber", InputNumber),
+					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList)
 				]);
 			}

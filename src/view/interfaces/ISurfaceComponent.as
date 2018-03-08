@@ -29,7 +29,7 @@ package view.interfaces
          * @param value Visual Editor XML
          * @param childFromXMLCallback Notification function
          */
-		function fromXML(value:XML, childFromXMLCallback:Function):void;
+		function fromXML(xml:XML, childFromXMLCallback:Function):void;
 
         /**
 		 * Translates component to technology specific XML (Flex MXML, PrimeFaces XML)

@@ -13,7 +13,6 @@
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
-    <forms:DataProviderForm/>
     <forms:ToggleButtonSelectedForm label="Multiple Selection" textProperty="multiple"/>
 
 </suportclasses:BasePropertyEditor>

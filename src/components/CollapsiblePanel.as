@@ -11,8 +11,6 @@ package components
 
     /**
      * This is a Panel that can be collapsed and expanded by clicking on the header.
-     *
-     * @author Ali Rantakari
      */
     public class CollapsiblePanel extends Panel
     {
@@ -58,21 +56,6 @@ package components
         }
 
         /**
-         * sets the correct title icon
-         */
-        private function setTitleIcon():void
-        {
-            /*if (!_open)
-            {
-                this.titleIcon = getStyle("closedIcon");
-            }
-            else
-            {
-                this.titleIcon = getStyle("openIcon");
-            }*/
-        }
-
-        /**
          * Collapses / expands this block (with animation)
          */
         public function toggleOpen():void
@@ -94,7 +77,6 @@ package components
                     _open = false;
                     dispatchEvent(new Event(Event.CLOSE));
                 }
-                setTitleIcon();
                 _openAnim.play();
             }
         }

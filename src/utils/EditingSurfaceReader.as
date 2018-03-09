@@ -22,6 +22,7 @@ package utils
 	import view.flex.surfaceComponents.components.Tree;
 	import view.flex.surfaceComponents.components.Window;
     import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
+    import view.primeFaces.surfaceComponents.components.Fieldset;
     import view.primeFaces.surfaceComponents.components.InputMask;
     import view.primeFaces.surfaceComponents.components.InputNumber;
     import view.primeFaces.surfaceComponents.components.MainApplication;
@@ -99,6 +100,7 @@ package utils
 				CLASS_LOOKUP[InputNumber.ELEMENT_NAME] = InputNumber;
 				CLASS_LOOKUP[AutoCompleteDropDownList.ELEMENT_NAME] = AutoCompleteDropDownList;
 				CLASS_LOOKUP[OutputLabel.ELEMENT_NAME] = OutputLabel;
+				CLASS_LOOKUP[Fieldset.ELEMENT_NAME] = Fieldset;
                 CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
             }
 		}

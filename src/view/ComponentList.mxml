@@ -27,6 +27,7 @@
         import view.flex.surfaceComponents.components.Container;
 		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 		import view.primeFaces.surfaceComponents.components.Button;
+		import view.primeFaces.surfaceComponents.components.Fieldset;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 		import view.primeFaces.surfaceComponents.components.InputNumber;
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
@@ -72,7 +73,8 @@
 					new ComponentListItem("InputMask", InputMask),
 					new ComponentListItem("InputNumber", InputNumber),
 					new ComponentListItem("OutputLabel", OutputLabel),
-					new ComponentListItem("AutoComplete", AutoCompleteDropDownList)
+					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
+					new ComponentListItem("Fieldset", Fieldset)
 				]);
 			}
 

@@ -1,6 +1,5 @@
 package components
 {
-
     import flash.events.*;
 
     import mx.effects.AnimateProperty;
@@ -9,17 +8,6 @@ package components
 
     import spark.components.Label;
     import spark.components.Panel;
-
-
-    /**
-     * The icon designating a "closed" state
-     */
-    [Style(name="closedIcon", type="Object")]
-
-    /**
-     * The icon designating an "open" state
-     */
-    [Style(name="openIcon", type="Object")]
 
     /**
      * This is a Panel that can be collapsed and expanded by clicking on the header.
@@ -37,25 +25,11 @@ package components
         {
             super();
 
-            this.setStyle("dropShadowVisible", false);
             open = isOpen;
-            this.addEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
+            this.addEventListener(FlexEvent.CREATION_COMPLETE, onCollapsiblePanelCreationComplete);
         }
 
-        private function creationCompleteHandler(event:FlexEvent):void
-        {
-            this.removeEventListener(FlexEvent.CREATION_COMPLETE, creationCompleteHandler);
-
-            _openAnim = new AnimateProperty(this);
-            _openAnim.addEventListener(EffectEvent.EFFECT_END, onOpenAnimEffectEnd);
-            _openAnim.duration = 100;
-            _openAnim.property = "height";
-
-
-            titleDisplay.addEventListener(MouseEvent.CLICK, onTitleDisplayClick);
-        }
-
-        private function onTitleDisplayClick(event:MouseEvent):void
+        protected function onTitleDisplayClick(event:MouseEvent):void
         {
             toggleOpen();
         }
@@ -80,7 +54,7 @@ package components
         {
             if (!titleDisplay) return Number.NaN;
 
-            return (titleDisplay as Label).height;
+            return (titleDisplay as Label).height + 5;
         }
 
         /**
@@ -110,7 +84,7 @@ package components
                 _openAnim.fromValue = _openAnim.target.height;
                 if (!_open)
                 {
-                    _openAnim.toValue = openHeight;
+                    _openAnim.toValue = this.openHeight;
                     _open = true;
                     dispatchEvent(new Event(Event.OPEN));
                 }
@@ -166,6 +140,18 @@ package components
             {
                 this.height = openHeight;
             }
+        }
+
+        protected function onCollapsiblePanelCreationComplete(event:FlexEvent):void
+        {
+            this.removeEventListener(FlexEvent.CREATION_COMPLETE, onCollapsiblePanelCreationComplete);
+
+            _openAnim = new AnimateProperty(this);
+            _openAnim.addEventListener(EffectEvent.EFFECT_END, onOpenAnimEffectEnd);
+            _openAnim.duration = 100;
+            _openAnim.property = "height";
+
+            titleDisplay.addEventListener(MouseEvent.CLICK, onTitleDisplayClick);
         }
     }
 }

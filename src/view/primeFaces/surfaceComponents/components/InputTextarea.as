@@ -2,7 +2,6 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     
-    import mx.formatters.NumberFormatter;
     import mx.utils.StringUtil;
     
     import spark.components.TextArea;
@@ -17,17 +16,11 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputTextarea";
         public static const ELEMENT_NAME:String = "inputTextarea";
 
-        private var _formatter:NumberFormatter;
-
         public function InputTextarea()
         {
             super();
 
-            _formatter = new NumberFormatter();
-            _formatter.useThousandsSeparator = true;
-
             this.mouseChildren = false;
-
             this.toolTip = "";
             this.width = 100;
 			this.height = 60;

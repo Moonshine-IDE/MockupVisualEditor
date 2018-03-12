@@ -46,32 +46,41 @@ package view.primeFaces.surfaceComponents.components
         }
         public function set isAutoResize(value:Boolean):void
         {
-			_isAutoResize = value;
-			dispatchEvent(new Event("change"));
+			if (_isAutoResize != value)
+			{
+				dispatchEvent(new Event("change"));
+				_isAutoResize = value;
+			}
         }
 
 		private var _isQueryDisplay:Boolean;
-		[Bindable]
+		[Bindable(event="change")]
 		public function get isQueryDisplay():Boolean
 		{
 			return _isQueryDisplay;
 		}
 		public function set isQueryDisplay(value:Boolean):void
 		{
-			_isQueryDisplay = value;
-			dispatchEvent(new Event("change"));
+			if (_isQueryDisplay != value)
+			{
+				_isQueryDisplay = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _isCounterDisplay:Boolean;
-		[Bindable]
+		[Bindable(event="change")]
 		public function get isCounterDisplay():Boolean
 		{
 			return _isCounterDisplay;
 		}
 		public function set isCounterDisplay(value:Boolean):void
 		{
-			_isCounterDisplay = value;
-			dispatchEvent(new Event("change"));
+			if (_isCounterDisplay != value)
+			{
+				_isCounterDisplay = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _queryFileName:String = "";
@@ -81,8 +90,11 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set queryFileName(value:String):void
 		{
-			_queryFileName = value;
-			dispatchEvent(new Event("change"));
+			if (_queryFileName != value)
+			{
+				_queryFileName = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _queryFieldName:String = "";
@@ -92,8 +104,11 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set queryFieldName(value:String):void
 		{
-			_queryFieldName = value;
-			dispatchEvent(new Event("change"));
+			if (_queryFieldName != value)
+			{
+				_queryFieldName = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _queryDelay:int = 750;
@@ -103,8 +118,11 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set queryDelay(value:int):void
 		{
-			_queryDelay = value;
-			dispatchEvent(new Event("change"));
+			if (_queryDelay != value)
+			{
+				_queryDelay = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _minQueryLength:int = 4;
@@ -114,8 +132,11 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set minQueryLength(value:int):void
 		{
-			_minQueryLength = value;
-			dispatchEvent(new Event("change"));
+			if (_minQueryLength != value)
+			{
+				_minQueryLength = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _counter:String;
@@ -125,8 +146,11 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set counter(value:String):void
 		{
-			_counter = value;
-			dispatchEvent(new Event("change"));
+			if (_counter != value)
+			{
+				_counter = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _counterTemplate:String = "{0} characters remaining.";
@@ -136,19 +160,25 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set counterTemplate(value:String):void
 		{
-			_counterTemplate = value;
-			dispatchEvent(new Event("change"));
+			if (_counterTemplate != value)
+			{
+				_counterTemplate = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 		
 		private var _maxLength:int = 100;
-		[Bindable] public function get maxLength():int
+		[Bindable(event="change")] public function get maxLength():int
 		{
 			return _maxLength;
 		}
 		public function set maxLength(value:int):void
 		{
-			_maxLength = value;
-			dispatchEvent(new Event("change"));
+			if (_maxLength != value)
+			{
+				_maxLength = value;
+				dispatchEvent(new Event("change"));
+			}
 		}
 
         public function get propertyEditorClass():Class

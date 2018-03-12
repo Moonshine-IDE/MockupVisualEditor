@@ -32,7 +32,8 @@
                    xmlns:s="library://ns.adobe.com/flex/spark"
                    xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
                    minWidth="21" minHeight="21"
-                   alpha.disabledStates="0.5">
+                   alpha.disabledStates="0.5"
+                   stateChangeComplete="onToggleImageButtonSkinStateChangeComplete(event)">
 
     <!-- host component -->
     <fx:Metadata>
@@ -65,6 +66,18 @@
             super.initializationComplete();
         }
 
+        private function onToggleImageButtonSkinStateChangeComplete(event:FlexEvent):void
+        {
+            if (currentState == "upAndSelected" || currentState == "overAndSelected" || currentState == "overAndSelected")
+            {
+                toggleImage.source = hostComponent.getStyle('selectedIcon');
+            }
+            else
+            {
+                toggleImage.source = hostComponent.getStyle('unselectedIcon');
+            }
+        }
+
     </fx:Script>
 
     <!-- states -->
@@ -82,9 +95,7 @@
     <!-- layer 8: text -->
     <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
     <s:Image id="toggleImage"
-             verticalAlign="middle"
-             horizontalCenter="0" verticalCenter="1"
-             left="10" right="10" top="2" bottom="2">
-    </s:Image>
+             verticalAlign="middle" width="16" height="16"
+             horizontalCenter="0" verticalCenter="1"/>
 
 </s:SparkButtonSkin>

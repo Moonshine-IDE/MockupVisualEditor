@@ -37,6 +37,19 @@ package components
             contentGroup.visible = contentGroup.includeInLayout = this.open;
         }
 
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        override public function get height():Number
+        {
+            if (!open && _openAnim && !_openAnim.isPlaying)
+            {
+                return _openAnim.toValue;
+            }
+
+            return super.height;
+        }
+
         /**
          * the height that the component should be when open
          */
@@ -69,12 +82,14 @@ package components
                 {
                     _openAnim.toValue = this.openHeight;
                     _open = true;
+                    dispatchEvent(new Event("openChanged"));
                     dispatchEvent(new Event(Event.OPEN));
                 }
                 else
                 {
                     _openAnim.toValue = _openAnim.target.closedHeight;
                     _open = false;
+                    dispatchEvent(new Event("openChanged"));
                     dispatchEvent(new Event(Event.CLOSE));
                 }
                 _openAnim.play();
@@ -84,6 +99,7 @@ package components
         /**
          * Whether the block is in a expanded (open) state or not
          */
+        [Bindable(event="openChanged")]
         public function get open():Boolean
         {
             return _open;
@@ -98,6 +114,7 @@ package components
             {
                 _open = value;
                 openChanged = true;
+                dispatchEvent(new Event("openChanged"));
                 invalidateProperties();
             }
         }
@@ -118,10 +135,14 @@ package components
         override public function invalidateSize():void
         {
             super.invalidateSize();
-            if (_open && _openAnim && !_openAnim.isPlaying)
+            if (_openAnim && !_openAnim.isPlaying)
             {
-                this.height = openHeight;
+                if (_open)
+                {
+                    this.height = openHeight;
+                }
             }
+
         }
 
         protected function onCollapsiblePanelCreationComplete(event:FlexEvent):void

@@ -20,21 +20,14 @@ package components
         [SkinPart(required=true)]
         public var toggleImage:Image;
 
-        override protected function partAdded(partName:String, instance:Object):void
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
         {
-            super.partAdded(partName, instance);
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-            if (instance == toggleImage)
+            if (toggleImage)
             {
                 toggleImage.source = selected ? this.getStyle("selectedIcon") : this.getStyle("unselectedIcon");
             }
-        }
-
-        override protected function buttonReleased():void
-        {
-            super.buttonReleased();
-
-            toggleImage.source = selected ? this.getStyle("selectedIcon") : this.getStyle("unselectedIcon");
         }
     }
 }

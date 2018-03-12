@@ -29,10 +29,18 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
         public static const ELEMENT_NAME:String = "fieldset";
 
+        [Embed(source='/assets/minus_close.png')]
+        public var closeIcon:Class;
+
+        [Embed(source='/assets/plus_open.png')]
+        public var openIcon:Class;
+
         public function Fieldset(isOpen:Boolean = true)
         {
             super(isOpen);
 
+            this.setStyle("closedIcon", closeIcon);
+            this.setStyle("openIcon", openIcon);
             this.setStyle("skinClass", FieldsetSkin);
             this.setStyle("dropShadowVisible", false);
             this.setStyle("borderColor", "#a8a8a8");
@@ -137,6 +145,7 @@ package view.primeFaces.surfaceComponents.components
                 {
                     titleGroup.removeEventListener(MouseEvent.CLICK, onTitleDisplayClick);
                 }
+                toggleableChanged = false;
             }
         }
     }

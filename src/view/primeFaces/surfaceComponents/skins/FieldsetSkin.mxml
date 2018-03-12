@@ -129,6 +129,7 @@
             {
                 toggleableIcon.setStyle("selectedIcon", hostComponent.getStyle("openIcon"));
                 toggleableIcon.setStyle("unselectedIcon", hostComponent.getStyle("closedIcon"));
+                toggleableIcon.invalidateSkinState();
             }
 
             super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -236,7 +237,8 @@
 
                 <s:HGroup id="titleGroup" left="9" top="1" bottom="0" buttonMode="true"
                           horizontalAlign="left" verticalAlign="middle">
-                    <components:ToggleImageButton id="toggleableIcon"
+                    <components:ToggleImageButton id="toggleableIcon" width="16" height="16"
+                                                  selected="{hostComponent.open}"
                                                   visible="{hostComponent.toggleable}"
                                                   includeInLayout="{hostComponent.toggleable}"/>
                     <s:Label id="titleDisplay" maxDisplayedLines="1" minHeight="30"

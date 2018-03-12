@@ -18,6 +18,8 @@ package components
         private var openChanged:Boolean;
 
         private var _openAnim:AnimateProperty;
+        private var _duration:Number = 200;
+        private var durationChanged:Boolean;
 
         public function CollapsiblePanel(isOpen:Boolean = true):void
         {
@@ -96,6 +98,22 @@ package components
             }
         }
 
+        [Inspectable(defaultValue="200")]
+        public function get duration():Number
+        {
+            return _duration;
+        }
+
+        public function set duration(value:Number):void
+        {
+            if (_duration != value)
+            {
+                _duration = value;
+                durationChanged = true;
+                invalidateProperties();
+            }
+        }
+
         /**
          * Whether the block is in a expanded (open) state or not
          */
@@ -128,6 +146,15 @@ package components
                 toggleOpen();
                 this.openChanged = false;
             }
+
+            if (this.durationChanged)
+            {
+                if (_openAnim && !_openAnim.isPlaying)
+                {
+                    _openAnim.duration = this.duration;
+                }
+                this.durationChanged = false;
+            }
         }
         /**
          * @private
@@ -151,7 +178,7 @@ package components
 
             _openAnim = new AnimateProperty(this);
             _openAnim.addEventListener(EffectEvent.EFFECT_END, onOpenAnimEffectEnd);
-            _openAnim.duration = 100;
+            _openAnim.duration = this.duration;
             _openAnim.property = "height";
 
             titleDisplay.addEventListener(MouseEvent.CLICK, onTitleDisplayClick);

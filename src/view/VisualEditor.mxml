@@ -13,7 +13,8 @@
 		<s:Button styleName="openButton" toolTip="Open Mockup" click="loadButton_clickHandler(event)"/>
 		<s:Button styleName="saveButton" toolTip="Save Mockup" click="saveButton_clickHandler(event)"/>
 	</s:BorderContainer>
-	<view:ComponentList id="componentList" top="{toolbar.height}" bottom="0" left="0" visualEditorType="{_visualEditorType}"/>
+	<view:ComponentList id="componentList" minWidth="160" top="{toolbar.height}" bottom="0" left="0"
+						visualEditorType="{_visualEditorType}"/>
 
 	<containers:HDividerGroup left="{componentList.width}" right="0" bottom="0" top="{toolbar.height}"
 							  gap="0" minElementWidth="250">

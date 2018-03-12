@@ -13,4 +13,6 @@
 	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
 	<forms:TextForm label="Legend" textProperty="title"/>
 	<forms:ToggleButtonSelectedForm label="Toggleable" textProperty="toggleable"/>
+	<forms:TextForm label="Toggle Duration" textProperty="duration"
+					enabled="{Object(selectedItem).toggleable}" restrict="0-9"/>
 </suportclasses:BasePropertyEditor>

@@ -2,6 +2,8 @@ package view.primeFaces.surfaceComponents.components
 {
     import components.CollapsiblePanel;
 
+    import flash.events.Event;
+
     import flash.events.MouseEvent;
 
     import mx.events.FlexEvent;
@@ -39,6 +41,7 @@ package view.primeFaces.surfaceComponents.components
         {
             super(isOpen);
 
+            this.width = 110;
             this.setStyle("closedIcon", closeIcon);
             this.setStyle("openIcon", openIcon);
             this.setStyle("skinClass", FieldsetSkin);
@@ -51,7 +54,8 @@ package view.primeFaces.surfaceComponents.components
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
-                "explicitMinHeightChanged"
+                "explicitMinHeightChanged",
+                "change"
             ];
         }
 
@@ -61,7 +65,7 @@ package view.primeFaces.surfaceComponents.components
         private var _toggleable:Boolean;
         private var toggleableChanged:Boolean;
 
-        [Bindable]
+        [Bindable(event="change")]
         public function get toggleable():Boolean
         {
             return _toggleable;
@@ -73,6 +77,8 @@ package view.primeFaces.surfaceComponents.components
             {
                 _toggleable = value;
                 toggleableChanged = true;
+                dispatchEvent(new Event("change"));
+
                 invalidateSkinState();
             }
         }
@@ -97,6 +103,7 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;
+            xml.@toggleSpeed = this.duration;
 
             return xml;
         }
@@ -107,6 +114,9 @@ package view.primeFaces.surfaceComponents.components
 
             this.title = xml.@legend;
             this.toggleable = xml.@toggleable == "true" ? true : false;
+
+            var toggleDuration:Number = Number(xml.@toggleSpeed);
+            this.duration = isNaN(toggleDuration) ? 200 : toggleDuration;
         }
 
         public function toCode():XML
@@ -120,6 +130,7 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;
+            xml.@toggleSpeed = this.duration;
 
             return xml;
         }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*"
+                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+	<suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+	<primeFaces:BasicsForm/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
+    <forms:TextForm label="Value" textProperty="text" maxChar="{Object(selectedItem).isCounterDisplay &amp;&amp; Object(selectedItem).maxLength}"/>
+	<forms:ToggleButtonSelectedForm label="Auto Resize" textProperty="isAutoResize"/>
+	<forms:ToggleButtonSelectedForm label="Display As Query" textProperty="isQueryDisplay"/>
+	<forms:TextForm label="Script File Reference" textProperty="queryFileName"
+					enabled="{Object(selectedItem).isQueryDisplay}"/>
+	<forms:TextForm label="Script Field Reference" textProperty="queryFieldName"
+					enabled="{Object(selectedItem).isQueryDisplay}"/>
+	<forms:TextForm label="Query Delay" textProperty="queryDelay"
+					enabled="{Object(selectedItem).isQueryDisplay}" restrict="0-9"/>
+	<forms:TextForm label="Min. Query Length" textProperty="minQueryLength"
+					enabled="{Object(selectedItem).isQueryDisplay}" restrict="0-9"/>
+	<forms:ToggleButtonSelectedForm label="Display As Counter" textProperty="isCounterDisplay"/>
+	<forms:TextForm label="Displaying Component's Id" textProperty="counter"
+					enabled="{Object(selectedItem).isCounterDisplay}"/>
+	<forms:TextForm label="Counter Template" textProperty="counterTemplate"
+					enabled="{Object(selectedItem).isCounterDisplay}"/>
+	<forms:TextForm label="Maximum Length" textProperty="maxLength"
+					enabled="{Object(selectedItem).isCounterDisplay}" restrict="0-9"/>
+</suportclasses:BasePropertyEditor>

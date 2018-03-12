@@ -4,7 +4,6 @@ package utils
 	import mx.core.IVisualElementContainer;
 	
 	import view.EditingSurface;
-	import view.interfaces.ISurfaceComponent;
 	import view.flex.surfaceComponents.components.Button;
 	import view.flex.surfaceComponents.components.Calendar;
 	import view.flex.surfaceComponents.components.CheckBox;
@@ -14,20 +13,22 @@ package utils
 	import view.flex.surfaceComponents.components.Image;
 	import view.flex.surfaceComponents.components.Input;
 	import view.flex.surfaceComponents.components.List;
-    import view.flex.surfaceComponents.components.MainApplication;
-    import view.flex.surfaceComponents.components.RadioButton;
+	import view.flex.surfaceComponents.components.MainApplication;
+	import view.flex.surfaceComponents.components.RadioButton;
 	import view.flex.surfaceComponents.components.Table;
 	import view.flex.surfaceComponents.components.Tabs;
 	import view.flex.surfaceComponents.components.Text;
 	import view.flex.surfaceComponents.components.Tree;
 	import view.flex.surfaceComponents.components.Window;
-    import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
-    import view.primeFaces.surfaceComponents.components.Fieldset;
-    import view.primeFaces.surfaceComponents.components.InputMask;
-    import view.primeFaces.surfaceComponents.components.InputNumber;
-    import view.primeFaces.surfaceComponents.components.MainApplication;
+	import view.interfaces.ISurfaceComponent;
+	import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 	import view.primeFaces.surfaceComponents.components.Button;
-    import view.primeFaces.surfaceComponents.components.OutputLabel;
+	import view.primeFaces.surfaceComponents.components.Fieldset;
+	import view.primeFaces.surfaceComponents.components.InputMask;
+	import view.primeFaces.surfaceComponents.components.InputNumber;
+	import view.primeFaces.surfaceComponents.components.InputTextarea;
+	import view.primeFaces.surfaceComponents.components.MainApplication;
+	import view.primeFaces.surfaceComponents.components.OutputLabel;
 
     public class EditingSurfaceReader
 	{
@@ -102,6 +103,7 @@ package utils
 				CLASS_LOOKUP[OutputLabel.ELEMENT_NAME] = OutputLabel;
 				CLASS_LOOKUP[Fieldset.ELEMENT_NAME] = Fieldset;
                 CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
+				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
             }
 		}
 	}

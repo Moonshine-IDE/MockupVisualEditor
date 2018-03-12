@@ -41,6 +41,9 @@
 
 		CONFIG::MOONSHINE
 		{
+			import flash.filesystem.File;
+			import flash.filesystem.FileStream;
+			
 			private var _fileMoonshine:File;
 			private var _fileStreamMoonshine:FileStream;
 

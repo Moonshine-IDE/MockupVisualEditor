@@ -11,17 +11,19 @@
     <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:TextInput id="textInput"
-                     text="{bindableText}" width="100%" minWidth="156" maxChars="{_maxChar}"
+                     text="{bindableText}" width="100%" minWidth="156" maxChars="{_maxChar}" restrict="{restrict}"
                      change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
-
+        
         import view.interfaces.ISurfaceComponent;
 
         private var _binding:ChangeWatcher;
+		
+		[Bindable] public var restrict:String;
 
         [Bindable]
         public var bindableText:String;

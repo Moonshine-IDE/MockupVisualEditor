@@ -5,31 +5,32 @@
     skinClass="skins.ComponentListSkin" contentBackgroundColor="#FCFCFC">
 	<fx:Script>
 	<![CDATA[
-        import utils.VisualEditorType;
-
-        import org.apache.flex.collections.ArrayList;
-
-        import data.ComponentListItem;
-
-        import view.flex.surfaceComponents.components.CheckBox;
-        import view.flex.surfaceComponents.components.Calendar;
-        import view.flex.surfaceComponents.components.Button;
-        import view.flex.surfaceComponents.components.DropDownList;
-        import view.flex.surfaceComponents.components.Image;
-        import view.flex.surfaceComponents.components.List;
-        import view.flex.surfaceComponents.components.RadioButton;
-        import view.flex.surfaceComponents.components.Table;
-        import view.flex.surfaceComponents.components.Tabs;
-        import view.flex.surfaceComponents.components.Text;
-        import view.flex.surfaceComponents.components.Input;
-        import view.flex.surfaceComponents.components.Tree;
-        import view.flex.surfaceComponents.components.Window;
-        import view.flex.surfaceComponents.components.Container;
+		import data.ComponentListItem;
+		
+		import org.apache.flex.collections.ArrayList;
+		
+		import utils.VisualEditorType;
+		
+		import view.flex.surfaceComponents.components.Button;
+		import view.flex.surfaceComponents.components.Calendar;
+		import view.flex.surfaceComponents.components.CheckBox;
+		import view.flex.surfaceComponents.components.Container;
+		import view.flex.surfaceComponents.components.DropDownList;
+		import view.flex.surfaceComponents.components.Image;
+		import view.flex.surfaceComponents.components.Input;
+		import view.flex.surfaceComponents.components.List;
+		import view.flex.surfaceComponents.components.RadioButton;
+		import view.flex.surfaceComponents.components.Table;
+		import view.flex.surfaceComponents.components.Tabs;
+		import view.flex.surfaceComponents.components.Text;
+		import view.flex.surfaceComponents.components.Tree;
+		import view.flex.surfaceComponents.components.Window;
 		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 		import view.primeFaces.surfaceComponents.components.Button;
 		import view.primeFaces.surfaceComponents.components.Fieldset;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 		import view.primeFaces.surfaceComponents.components.InputNumber;
+		import view.primeFaces.surfaceComponents.components.InputTextarea;
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
 
 		private var _visualEditorType:String;
@@ -72,6 +73,7 @@
 					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
 					new ComponentListItem("InputMask", InputMask),
 					new ComponentListItem("InputNumber", InputNumber),
+					new ComponentListItem("InputTextarea", InputTextarea),
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("Fieldset", Fieldset)

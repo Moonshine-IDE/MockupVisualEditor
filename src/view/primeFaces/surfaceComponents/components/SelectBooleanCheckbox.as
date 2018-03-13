@@ -2,19 +2,16 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     
-    import spark.components.ToggleButton;
+    import spark.components.CheckBox;
     
     import utils.XMLCodeUtils;
     
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.CheckboxPropertyEditor;
-    import view.primeFaces.surfaceComponents.skins.ToggleButtonSkin;
+    import view.primeFaces.surfaceComponents.skins.CheckboxSkin;
 
-    public class SelectBooleanCheckbox extends ToggleButton implements IPrimeFacesSurfaceComponent
+    public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent
 	{
-		[Embed(source='/assets/ico_primefaces_check.png')]
-		private static var checkIcon: Class;
-		
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
 		public static const ELEMENT_NAME:String = "selectBooleanCheckbox";
 		
@@ -22,14 +19,15 @@ package view.primeFaces.surfaceComponents.components
 		{
 			super();
 
-            this.setStyle("skinClass", ToggleButtonSkin);
+            this.setStyle("skinClass", CheckboxSkin);
 
 			this.selected = true;
+			this.label = "Checkbox";
 			this.toolTip = "";
-			this.width = 20;
+			this.width = 94;
 			this.height = 20;
-			this.maxWidth = 20;
-			this.maxHeight = 20;
+			this.minWidth = 20;
+			this.minHeight = 20;
 			this.mouseChildren = false;
 			
 			_propertiesChangedEvents = [
@@ -37,6 +35,7 @@ package view.primeFaces.surfaceComponents.components
 					"heightChanged",
 					"explicitMinWidthChanged",
 					"explicitMinHeightChanged",
+					"contentChange",
 					"selectedChanged"
 			];
 		}
@@ -46,10 +45,6 @@ package view.primeFaces.surfaceComponents.components
 			if (super.selected != value)
 			{
 				super.selected = value;
-				
-				if (value) this.setStyle("icon", (new checkIcon));
-				else this.setStyle('icon', null);
-				
 				dispatchEvent(new Event("selectedChanged"));
 			}
 		}
@@ -76,7 +71,7 @@ package view.primeFaces.surfaceComponents.components
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
-            xml.@value = this.label;
+			xml.@label = this.label;
 			xml.@selected = this.selected;
 
 			return xml;
@@ -86,7 +81,7 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            this.label = xml.@value;
+            this.label = xml.@label;
             this.selected = xml.@selected == "true" ? true : false;
         }
 
@@ -100,6 +95,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
 			xml.@value = this.selected;
+			if (this.label && this.label != "") xml.@itemLabel = this.label;
 
 			return xml;
 		}

@@ -11,5 +11,6 @@
 	<primeFaces:BasicsForm/>
 
 	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
+	<forms:TextForm label="Value" textProperty="label"/>
 	<forms:ToggleButtonSelectedForm label="Selected" textProperty="selected"/>
 </suportclasses:BasePropertyEditor>

@@ -32,6 +32,7 @@
 		import view.primeFaces.surfaceComponents.components.InputNumber;
 		import view.primeFaces.surfaceComponents.components.InputTextarea;
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
+		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 
 		private var _visualEditorType:String;
 
@@ -74,6 +75,7 @@
 					new ComponentListItem("InputMask", InputMask),
 					new ComponentListItem("InputNumber", InputNumber),
 					new ComponentListItem("InputTextarea", InputTextarea),
+					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("Fieldset", Fieldset)

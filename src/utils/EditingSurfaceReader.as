@@ -29,6 +29,7 @@ package utils
 	import view.primeFaces.surfaceComponents.components.InputTextarea;
 	import view.primeFaces.surfaceComponents.components.MainApplication;
 	import view.primeFaces.surfaceComponents.components.OutputLabel;
+	import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 
     public class EditingSurfaceReader
 	{
@@ -104,6 +105,7 @@ package utils
 				CLASS_LOOKUP[Fieldset.ELEMENT_NAME] = Fieldset;
                 CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
 				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
+				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
             }
 		}
 	}

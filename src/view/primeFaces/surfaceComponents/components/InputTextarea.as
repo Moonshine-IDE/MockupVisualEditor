@@ -53,21 +53,6 @@ package view.primeFaces.surfaceComponents.components
 			}
         }
 
-		private var _isQueryDisplay:Boolean;
-		[Bindable(event="change")]
-		public function get isQueryDisplay():Boolean
-		{
-			return _isQueryDisplay;
-		}
-		public function set isQueryDisplay(value:Boolean):void
-		{
-			if (_isQueryDisplay != value)
-			{
-				_isQueryDisplay = value;
-				dispatchEvent(new Event("change"));
-			}
-		}
-		
 		private var _isCounterDisplay:Boolean;
 		[Bindable(event="change")]
 		public function get isCounterDisplay():Boolean
@@ -79,62 +64,6 @@ package view.primeFaces.surfaceComponents.components
 			if (_isCounterDisplay != value)
 			{
 				_isCounterDisplay = value;
-				dispatchEvent(new Event("change"));
-			}
-		}
-		
-		private var _queryFileName:String = "";
-		public function get queryFileName():String
-		{
-			return _queryFileName;
-		}
-		public function set queryFileName(value:String):void
-		{
-			if (_queryFileName != value)
-			{
-				_queryFileName = value;
-				dispatchEvent(new Event("change"));
-			}
-		}
-		
-		private var _queryFieldName:String = "";
-		public function get queryFieldName():String
-		{
-			return _queryFieldName;
-		}
-		public function set queryFieldName(value:String):void
-		{
-			if (_queryFieldName != value)
-			{
-				_queryFieldName = value;
-				dispatchEvent(new Event("change"));
-			}
-		}
-		
-		private var _queryDelay:int = 750;
-		public function get queryDelay():int
-		{
-			return _queryDelay;
-		}
-		public function set queryDelay(value:int):void
-		{
-			if (_queryDelay != value)
-			{
-				_queryDelay = value;
-				dispatchEvent(new Event("change"));
-			}
-		}
-		
-		private var _minQueryLength:int = 4;
-		public function get minQueryLength():int
-		{
-			return _minQueryLength;
-		}
-		public function set minQueryLength(value:int):void
-		{
-			if (_minQueryLength != value)
-			{
-				_minQueryLength = value;
 				dispatchEvent(new Event("change"));
 			}
 		}
@@ -200,14 +129,7 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@value = this.text;
             xml.@isAutoResize = this.isAutoResize;
-			xml.@isQueryDisplay = this.isQueryDisplay;
 			xml.@isCounterDisplay = this.isCounterDisplay;
-			if (isQueryDisplay)
-			{
-				xml.@queryDelay = this.queryDelay.toString();
-				xml.@minQueryLength = this.minQueryLength.toString();
-				xml.@completeMethod = "#{"+ this.queryFileName +"."+ this.queryFieldName +"}";
-			}
 			if (isCounterDisplay)
 			{
 				xml.@maxlength = this.maxLength.toString();
@@ -224,18 +146,6 @@ package view.primeFaces.surfaceComponents.components
 
             this.text = xml.@value;
             this.isAutoResize = xml.@isAutoResize;
-            if (String(xml.@isQueryDisplay) == "true")
-			{
-				this.isQueryDisplay = true;
-				this.queryDelay = int(xml.@queryDelay);
-				this.minQueryLength = int(xml.@minQueryLength);
-				
-				var tmpSubstr:String = String(xml.@completeMethod);
-				tmpSubstr = tmpSubstr.substring(2, tmpSubstr.length-1);
-				var tmpSplit:Array = tmpSubstr.split(".");
-				this.queryFileName = tmpSplit[0];
-				this.queryFieldName = tmpSplit[1];
-			}
 			if (String(xml.@isCounterDisplay) == "true")
 			{
 				this.isCounterDisplay = true;
@@ -256,12 +166,6 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@value = this.text;
             if (isAutoResize) xml.@autoResize = this.isAutoResize.toString();
-			if (isQueryDisplay)
-			{
-	            xml.@queryDelay = this.queryDelay.toString();
-				xml.@minQueryLength = this.minQueryLength.toString();
-				xml.@completeMethod = "#{"+ this.queryFileName +"."+ this.queryFieldName +"}";
-			}
 			if (isCounterDisplay)
 			{
 				xml.@maxlength = this.maxLength.toString();

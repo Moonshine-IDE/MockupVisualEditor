@@ -26,6 +26,7 @@ package utils
 	import view.primeFaces.surfaceComponents.components.Fieldset;
 	import view.primeFaces.surfaceComponents.components.InputMask;
 	import view.primeFaces.surfaceComponents.components.InputNumber;
+	import view.primeFaces.surfaceComponents.components.InputText;
 	import view.primeFaces.surfaceComponents.components.InputTextarea;
 	import view.primeFaces.surfaceComponents.components.MainApplication;
 	import view.primeFaces.surfaceComponents.components.OutputLabel;
@@ -105,6 +106,7 @@ package utils
 				CLASS_LOOKUP[Fieldset.ELEMENT_NAME] = Fieldset;
                 CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
 				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
+				CLASS_LOOKUP[InputText.ELEMENT_NAME] = InputText;
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
             }
 		}

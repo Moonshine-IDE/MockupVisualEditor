@@ -30,6 +30,7 @@
 		import view.primeFaces.surfaceComponents.components.Fieldset;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 		import view.primeFaces.surfaceComponents.components.InputNumber;
+		import view.primeFaces.surfaceComponents.components.InputText;
 		import view.primeFaces.surfaceComponents.components.InputTextarea;
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
 		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
@@ -74,6 +75,7 @@
 					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
 					new ComponentListItem("InputMask", InputMask),
 					new ComponentListItem("InputNumber", InputNumber),
+					new ComponentListItem("InputText", InputText),
 					new ComponentListItem("InputTextarea", InputTextarea),
 					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
 					new ComponentListItem("OutputLabel", OutputLabel),

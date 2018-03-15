@@ -53,6 +53,10 @@
         {
             _maxChar = value;
         }
+		public function get maxChar():int
+		{
+			return _maxChar;
+		}
 
         private var _textProperty:String = "text";
 
@@ -88,6 +92,7 @@
             }
             this.textInput.errorString = "";
             this.selectedItem[this._textProperty] = this.textInput.text;
+			this.dispatchEvent(new Event(Event.CHANGE));
         }
 
         private function updateBinding():void

@@ -96,12 +96,12 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 		
-		private var _maxLength:int = 100;
-		[Bindable(event="change")] public function get maxLength():int
+		private var _maxLength:String = "";
+		[Bindable(event="change")] public function get maxLength():String
 		{
 			return _maxLength;
 		}
-		public function set maxLength(value:int):void
+		public function set maxLength(value:String):void
 		{
 			if (_maxLength != value)
 			{
@@ -130,9 +130,12 @@ package view.primeFaces.surfaceComponents.components
             xml.@value = this.text;
             xml.@isAutoResize = this.isAutoResize;
 			xml.@isCounterDisplay = this.isCounterDisplay;
+			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
+			{
+				xml.@maxlength = this.maxLength;
+			}
 			if (isCounterDisplay)
 			{
-				xml.@maxlength = this.maxLength.toString();
 				xml.@counterTemplate = this.counterTemplate;
 				if (StringUtil.trim(counter).length != 0) xml.@counter = this.counter;
 			}
@@ -145,11 +148,11 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             this.text = xml.@value;
-            this.isAutoResize = xml.@isAutoResize;
+            this.isAutoResize = (xml.@isAutoResize == "true") ? true : false;
+			this.maxLength = xml.@maxlength;
 			if (String(xml.@isCounterDisplay) == "true")
 			{
 				this.isCounterDisplay = true;
-				this.maxLength = int(xml.@maxlength);
 				this.counterTemplate = String(xml.@counterTemplate);
 				if (xml.@counter != undefined) this.counter = String(xml.@counter);
 			}
@@ -166,9 +169,12 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@value = this.text;
             if (isAutoResize) xml.@autoResize = this.isAutoResize.toString();
+			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
+			{
+				xml.@maxlength = this.maxLength;
+			}
 			if (isCounterDisplay)
 			{
-				xml.@maxlength = this.maxLength.toString();
 				xml.@counterTemplate = this.counterTemplate;
 				if (StringUtil.trim(counter).length != 0) xml.@counter = this.counter;
 			}

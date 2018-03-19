@@ -34,6 +34,7 @@
 		import view.primeFaces.surfaceComponents.components.InputTextarea;
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
 		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+		import view.primeFaces.surfaceComponents.components.TabView;
 
 		private var _visualEditorType:String;
 
@@ -63,7 +64,6 @@
 					new ComponentListItem("Tabs", view.flex.surfaceComponents.components.Tabs),
 					new ComponentListItem("Text", view.flex.surfaceComponents.components.Text),
 					new ComponentListItem("Input", view.flex.surfaceComponents.components.Input),
-					new ComponentListItem("Tree", view.flex.surfaceComponents.components.Tree),
 					new ComponentListItem("Panel", view.flex.surfaceComponents.components.Window),
 					new ComponentListItem("Tree", view.flex.surfaceComponents.components.Tree),
 					new ComponentListItem("Container", view.flex.surfaceComponents.components.Container)
@@ -80,6 +80,7 @@
 					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
+					new ComponentListItem("TabView", TabView),
 					new ComponentListItem("Fieldset", Fieldset)
 				]);
 			}

@@ -1,7 +1,5 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import mx.utils.StringUtil;
-
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
 

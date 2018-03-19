@@ -8,11 +8,12 @@
         <s:FormLayout />
     </suportclasses:layout>
 
+    <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="Selected Tab" skinClass="skins.StackedFormItemSkin">
         <s:NumericStepper id="stepper"
                           minimum="1"
                           maximum="{IMultiViewContainer(selectedItem).numViews}"
-                          stepSize="1"
+                          stepSize="1" width="100%" minWidth="156"
                           value="{IMultiViewContainer(selectedItem).selectedIndex + 1}"
                           change="stepper_changeHandler(event)"/>
     </s:FormItem>

@@ -85,7 +85,7 @@ package view.suportClasses
             dispatchEvent(new Event("propertyEditorChanged", true));
         }
 
-        private function propertyEditor_removedHandler(event:Event):void
+        protected function propertyEditor_removedHandler(event:Event):void
         {
             var object:IVisualElement = event.target as IVisualElement;
             if (object === this)

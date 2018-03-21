@@ -8,9 +8,10 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.TabViewPropertyEditor;
 
-    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent
+    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "tabView";

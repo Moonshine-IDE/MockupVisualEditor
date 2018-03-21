@@ -2,18 +2,25 @@ package components.tabNavigator
 {
     import skins.tabNavigator.TabNavigatorWithOrientationSkin;
 
+    import spark.components.ButtonBarButton;
+
+    import spark.components.NavigatorContent;
+
     import spark.containers.Navigator;
 	import flash.events.Event;
 
-	public class TabNavigatorWithOrientation extends Navigator 
+    public class TabNavigatorWithOrientation extends Navigator
 	{
 		public function TabNavigatorWithOrientation()
 		{
 			super();
-			
+
 			this.setStyle("skinClass", TabNavigatorWithOrientationSkin);
 		}
-		
+
+		[SkinPart(required=true)]
+		public var tabBar:TabBarWithScroller;
+
 		private var _orientation:String = "top";
 		
 		[Inspectable(enumeration="top,left,bottom,right", defaultValue="top")]
@@ -54,7 +61,7 @@ package components.tabNavigator
 		override protected function getCurrentSkinState():String
 		{
 			var state:String = super.getCurrentSkinState();
-			
+
 			if (state != "disabled")
 			{
 				switch (this.orientation)
@@ -76,6 +83,15 @@ package components.tabNavigator
 			
 			
 			return state;
+		}
+
+		public function setSelectedTabLabel(label:String):void
+		{
+			var selectedTab:NavigatorContent = (this.selectedItem as NavigatorContent);
+			selectedTab.label = label;
+
+			var item:ButtonBarButton = tabBar.dataGroup.getElementAt(this.selectedIndex) as ButtonBarButton;
+			item.label = label;
 		}
 	}
 }

@@ -36,6 +36,8 @@
     </s:FormItem>
 
     <fx:Script><![CDATA[
+        import components.tabNavigator.TabNavigatorWithOrientation;
+
         import data.DataProviderListItem;
 
         import mx.collections.ArrayList;
@@ -46,8 +48,6 @@
         import spark.components.NavigatorContent;
         import spark.containers.Navigator;
         import spark.events.IndexChangeEvent;
-
-        import view.forms.DataProviderItemRenderer;
 
         import view.interfaces.ISelectableItemsComponent;
 
@@ -161,12 +161,9 @@
         private function onItemsListEditingFinished(event:Event):void
         {
             var listItem:DataProviderListItem = itemsList.selectedItem as DataProviderListItem;
-            var navigator:Navigator = (selectedItem as Navigator);
+            var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
 
-            var tabSelectedItem:NavigatorContent = navigator.selectedItem as NavigatorContent;
-            tabSelectedItem.label = listItem.label;
-
-            navigator.invalidateDisplayList();
+            navigator.setSelectedTabLabel(listItem.label);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

@@ -54,6 +54,7 @@ package components.tabNavigator
             {
                 _scrollable = value;
                 dispatchEvent(new Event("scrollableChanged"));
+                this.refreshMaxElementCountWithoutScroller();
                 this.invalidateSkinState();
             }
         }
@@ -82,6 +83,10 @@ package components.tabNavigator
                     state = "normal";
                 }
             }
+            else if (this.orientation == "left" || this.orientation == "right")
+            {
+                state = "normalWithLeftRightNoScroller";
+            }
 
             return state;
         }
@@ -90,16 +95,7 @@ package components.tabNavigator
         {
             super.measure();
 
-            var skinState:String = super.getCurrentSkinState();
-            if (this.dataGroup && this.scrollable)
-            {
-                var typicalItem:ButtonBarButton = this.dataGroup.getElementAt(0) as ButtonBarButton;
-                if (typicalItem && _maxElementCountWithoutScroller == 0)
-                {
-                    _maxElementCountWithoutScroller = this.measuredWidth / typicalItem.measuredWidth;
-                    this.invalidateSkinState();
-                }
-            }
+            this.refreshMaxElementCountWithoutScroller();
         }
 
         override protected function dataProvider_collectionChangeHandler(event:Event):void
@@ -112,5 +108,18 @@ package components.tabNavigator
                 this.invalidateSkinState();
             }
         }
-	}
+
+        private function refreshMaxElementCountWithoutScroller():void
+        {
+            if (this.dataGroup && this.scrollable)
+            {
+                var typicalItem:ButtonBarButton = this.dataGroup.getElementAt(0) as ButtonBarButton;
+                if (typicalItem && _maxElementCountWithoutScroller == 0)
+                {
+                    _maxElementCountWithoutScroller = this.measuredWidth / typicalItem.measuredWidth;
+                    this.invalidateSkinState();
+                }
+            }
+        }
+    }
 }

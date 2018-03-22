@@ -37,7 +37,7 @@ created by the TabBarSkin use the TabBarButtonSkin class.
 
 <s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
     	xmlns:s="library://ns.adobe.com/flex/spark"
-    	alpha.disabled="0.5">
+    	alpha.disabled="0.5" currentStateChanging="onTabNavigatorCurrentStateChanging(event)">
     
     <fx:Metadata>
         <![CDATA[ 
@@ -49,35 +49,109 @@ created by the TabBarSkin use the TabBarButtonSkin class.
     </fx:Metadata> 
     
     <fx:Script>
-        <![CDATA[ 
+        <![CDATA[
+		import mx.core.UIComponent;
+		import mx.core.ScrollPolicy;
+		import mx.events.StateChangeEvent;
 
-        import mx.core.UIComponent;
-        import mx.core.ScrollPolicy;
-  
-        /**
-         *  @private
-         *  Push the cornerRadius style to the item renderers.
-         */
-        override protected function updateDisplayList(unscaledWidth:Number, unscaleHeight:Number):void
-        {
-            const numElements:int = dataGroup.numElements;
-            const cornerRadius:int = hostComponent.getStyle("cornerRadius");
-            for (var i:int = 0; i < numElements; i++)
-            {
-                var elt:UIComponent = dataGroup.getElementAt(i) as UIComponent;
-                if (elt)
-                    elt.setStyle("cornerRadius", cornerRadius);
-            }
+		import spark.layouts.ColumnAlign;
+		import spark.layouts.HorizontalLayout;
 
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
-        }
-            
-        ]]>            
+		import spark.layouts.TileLayout;
+		import spark.layouts.TileOrientation;
+		import spark.layouts.VerticalLayout;
+
+		/**
+		 *  @private
+		 *  Push the cornerRadius style to the item renderers.
+		 */
+		override protected function updateDisplayList(unscaledWidth:Number, unscaleHeight:Number):void
+		{
+			const numElements:int = dataGroup.numElements;
+			const cornerRadius:int = hostComponent.getStyle("cornerRadius");
+			for (var i:int = 0; i < numElements; i++)
+			{
+				var elt:UIComponent = dataGroup.getElementAt(i) as UIComponent;
+				if (elt)
+					elt.setStyle("cornerRadius", cornerRadius);
+			}
+
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+		}
+
+		private function onTabNavigatorCurrentStateChanging(event:StateChangeEvent):void
+		{
+			this.setTabBarLayout(event.newState);
+		}
+
+		private function getVerticalLayoutWithoutGap():VerticalLayout
+		{
+			var vertLayout:VerticalLayout = new VerticalLayout();
+			vertLayout.gap = 0;
+
+			return vertLayout;
+		}
+
+		private function getHorizontalLayoutWithoutGap():HorizontalLayout
+		{
+			var horizontalLayout:HorizontalLayout = new HorizontalLayout();
+			horizontalLayout.gap = 0;
+
+			return horizontalLayout;
+		}
+
+		private function getVerticalTileLayoutWithoutGap():TileLayout
+		{
+			var vertLayout:TileLayout = new TileLayout();
+			vertLayout.verticalGap = vertLayout.horizontalGap = 0;
+			vertLayout.orientation = TileOrientation.COLUMNS;
+			vertLayout.columnAlign = ColumnAlign.JUSTIFY_USING_WIDTH;
+
+			return vertLayout;
+		}
+
+		private function getHorizontalTileLayoutWithoutGap():TileLayout
+		{
+			var horLayout:TileLayout = new TileLayout();
+			horLayout.verticalGap = horLayout.horizontalGap = 0;
+			horLayout.orientation = TileOrientation.ROWS;
+			horLayout.columnAlign = ColumnAlign.JUSTIFY_USING_WIDTH;
+
+			return horLayout;
+		}
+
+		private function setTabBarLayout(state:String):void
+		{
+			if (hostComponent.scrollable)
+			{
+				if (state == "normalWithTopScroller" || state == "normalWithBottomScroller")
+				{
+					this.dataGroup.layout = this.getHorizontalLayoutWithoutGap();
+				}
+				else
+				{
+					this.dataGroup.layout = this.getVerticalLayoutWithoutGap();
+				}
+			}
+			else
+			{
+				if (hostComponent.orientation == "top" || hostComponent.orientation == "bottom")
+				{
+					this.dataGroup.layout = this.getHorizontalTileLayoutWithoutGap();
+				}
+				else
+				{
+					this.dataGroup.layout = this.getVerticalTileLayoutWithoutGap();
+				}
+			}
+		}
+		]]>
     </fx:Script>
 
 	<s:states>
 		<s:State name="normal" />
 		<s:State name="disabled" />
+		<s:State name="normalWithLeftRightNoScroller" />
 		<s:State name="normalWithTopScroller" stateGroups="withScroller"/>
 		<s:State name="normalWithBottomScroller" stateGroups="withScroller"/>
 	</s:states>
@@ -87,9 +161,10 @@ created by the TabBarSkin use the TabBarButtonSkin class.
 				horizontalScrollPolicy.withScroller="{ScrollPolicy.AUTO}"
 				minViewportInset.withScroller="16" minViewportInset.normal="0"
 				bottom.normal="0" top.normal="0" bottom.withScroller="-16" top.withScroller="-16"
-				width.withScroller="{hostComponent.width}" width.normal="100%"
+				width.withScroller="{hostComponent.width}" width="100%"
 				skinClass="skins.tabNavigator.TabBarScrollerSkin" >
-		<s:DataGroup id="dataGroup">
+		<s:DataGroup id="dataGroup" width.normal="{hostComponent.width}"
+					 			    width.withScroller="{Number.NaN}" width.normalWithLeftRightNoScroller="{Number.NaN}">
 			<s:layout>
 				<s:ButtonBarHorizontalLayout gap="-1"/>
 			</s:layout>

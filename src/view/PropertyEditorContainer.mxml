@@ -22,9 +22,13 @@
 	</s:Group>
 
 	<fx:Script><![CDATA[
-        import view.flex.propertyEditors.GenericPropertyEditor;
-        import view.interfaces.IPropertyEditor;
-        import view.interfaces.ISurfaceComponent;
+		import mx.collections.ArrayCollection;
+		
+		import view.flex.propertyEditors.GenericPropertyEditor;
+		import view.interfaces.IPropertyEditor;
+		import view.interfaces.ISurfaceComponent;
+		
+		[Bindable] public var filesList:ArrayCollection;
 
         private var _editor:IPropertyEditor;
 

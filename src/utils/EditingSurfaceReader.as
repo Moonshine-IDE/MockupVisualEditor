@@ -24,6 +24,7 @@ package utils
 	import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 	import view.primeFaces.surfaceComponents.components.Button;
 	import view.primeFaces.surfaceComponents.components.Fieldset;
+	import view.primeFaces.surfaceComponents.components.Include;
 	import view.primeFaces.surfaceComponents.components.InputMask;
 	import view.primeFaces.surfaceComponents.components.InputNumber;
 	import view.primeFaces.surfaceComponents.components.InputText;
@@ -31,7 +32,7 @@ package utils
 	import view.primeFaces.surfaceComponents.components.MainApplication;
 	import view.primeFaces.surfaceComponents.components.OutputLabel;
 	import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
-    import view.primeFaces.surfaceComponents.components.TabView;
+	import view.primeFaces.surfaceComponents.components.TabView;
 
     public class EditingSurfaceReader
 	{
@@ -109,6 +110,7 @@ package utils
 				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
 				CLASS_LOOKUP[InputText.ELEMENT_NAME] = InputText;
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+				CLASS_LOOKUP[Include.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Include;
 				CLASS_LOOKUP[TabView.ELEMENT_NAME] = TabView;
             }
 		}

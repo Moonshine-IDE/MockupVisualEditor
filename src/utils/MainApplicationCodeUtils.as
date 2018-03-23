@@ -81,6 +81,9 @@ package utils
 
 			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
 			xml.addNamespace(hNamespace);
+			
+			var uiNamespace:Namespace = new Namespace("ui", "http://xmlns.jcp.org/jsf/facelets");
+			xml.addNamespace(uiNamespace);
 
 			var pNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
 			xml.addNamespace(pNamespace);
@@ -88,6 +91,7 @@ package utils
 			var headXml:XML = new XML("<head/>");
 			headXml.addNamespace(hNamespace);
 			headXml.setNamespace(hNamespace);
+			headXml.setNamespace(uiNamespace);
 	
 			if (!title)
 			{
@@ -100,6 +104,7 @@ package utils
 			var bodyXML:XML = new XML("<body/>");
 			bodyXML.addNamespace(hNamespace);
 			bodyXML.setNamespace(hNamespace);
+			bodyXML.setNamespace(uiNamespace);
 
 			var mainDiv:XML = new XML("<div/>");
 

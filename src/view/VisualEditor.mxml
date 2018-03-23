@@ -23,11 +23,12 @@
 		</s:Scroller>
 		<view:PropertyEditorContainer id="propertyEditor"
 									  percentHeight="100" percentWidth="20" minWidth="250"
-									  selectedItem="{editingSurface.selectedItem}" />
+									  selectedItem="{editingSurface.selectedItem}"/>
 	</containers:HDividerGroup>
 	<fx:Script><![CDATA[
+		import mx.collections.ArrayCollection;
 		import mx.events.FlexEvent;
-
+		
 		import spark.components.Alert;
 
 		private var _file:FileReference;
@@ -47,6 +48,8 @@
 			
 			private var _fileMoonshine:File;
 			private var _fileStreamMoonshine:FileStream;
+			
+			[Bindable] public var filesList:ArrayCollection;
 
 			public function saveEditedFile():void
 			{
@@ -146,6 +149,7 @@
 			{
 				toolbar.visible = toolbar.includeInLayout = false;
 				toolbar.height = 1;
+				propertyEditor.filesList = filesList;
 			}
 		}
 		]]></fx:Script>

@@ -28,6 +28,7 @@
 		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 		import view.primeFaces.surfaceComponents.components.Button;
 		import view.primeFaces.surfaceComponents.components.Fieldset;
+		import view.primeFaces.surfaceComponents.components.Include;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 		import view.primeFaces.surfaceComponents.components.InputNumber;
 		import view.primeFaces.surfaceComponents.components.InputText;
@@ -81,7 +82,8 @@
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("TabView", TabView),
-					new ComponentListItem("Fieldset", Fieldset)
+					new ComponentListItem("Fieldset", Fieldset),
+					new ComponentListItem("Include", Include)
 				]);
 			}
 

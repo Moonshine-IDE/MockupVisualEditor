@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*" 
+							      xmlns:primeFaces="view.primeFaces.forms.*" 
+							      xmlns:forms="view.forms.*" creationComplete="onCreationCompletes()">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			
+			import view.PropertyEditorContainer;
+			private function onCreationCompletes():void
+			{
+				BindingUtils.bindProperty(ddl, "includeCollection", PropertyEditorContainer(owner), "filesList");
+			}
+		]]>
+	</fx:Script>
+
+    <suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+    <primeFaces:BasicsForm/>
+
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
+
+    <forms:DropdownListForm id="ddl" 
+							label="File Name" textProperty="title" labelField="name"/>
+
+</suportclasses:BasePropertyEditor>

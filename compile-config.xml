@@ -51,12 +51,4 @@
         <name>assets/images/shape_move_front.png</name>
         <path>assets/images/shape_move_front.png</path>
     </include-file>
-    <include-file>
-        <name>assets/images/plus_open.png</name>
-        <path>assets/images/plus_open.png</path>
-    </include-file>
-    <include-file>
-        <name>assets/images/minus_close.png</name>
-        <path>assets/images/minus_close.png</path>
-    </include-file>
 </flex-config>

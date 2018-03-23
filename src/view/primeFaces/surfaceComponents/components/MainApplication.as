@@ -10,6 +10,8 @@ package view.primeFaces.surfaceComponents.components
 		{
 			super();
 
+			this.setStyle("backgroundColor", "#FCFCFC");
+
 			Container.ELEMENT_NAME = "MainApplication";
 		}
 	}

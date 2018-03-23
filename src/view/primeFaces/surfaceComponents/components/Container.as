@@ -1,14 +1,12 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import spark.components.BorderContainer;
-    import spark.layouts.HorizontalLayout;
-    import spark.layouts.TileLayout;
+    import flexlib.containers.FlowBox;
 
     import view.interfaces.INonDeletableSurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
-    public class Container extends BorderContainer implements INonDeletableSurfaceComponent, IPrimeFacesSurfaceComponent
+    public class Container extends FlowBox implements INonDeletableSurfaceComponent, IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Container";
@@ -23,12 +21,6 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged"
             ];
-
-            var hLayout:TileLayout = new TileLayout();
-            hLayout.horizontalGap = 0;
-            hLayout.verticalGap = 0;
-
-            layout = hLayout;
         }
 
         public function get propertyEditorClass():Class

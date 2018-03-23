@@ -32,9 +32,7 @@
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
 
-		import spark.components.Group;
 		import spark.components.SkinnableContainer;
-		import spark.components.supportClasses.GroupBase;
 		import spark.components.supportClasses.ScrollBarBase;
 		import spark.components.supportClasses.SkinnableContainerBase;
 		import spark.containers.Navigator;

@@ -77,7 +77,7 @@ package view.primeFaces.surfaceComponents.components
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
-			xml.@disabled = this.enabled;
+			xml.@disabled = !this.enabled;
             xml.@value = this.label;
 			xml.@title = this.toolTip;
 

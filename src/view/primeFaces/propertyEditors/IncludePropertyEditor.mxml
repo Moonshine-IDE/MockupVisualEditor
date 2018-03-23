@@ -3,19 +3,7 @@
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
-							      xmlns:forms="view.forms.*" creationComplete="onCreationCompletes()">
-	
-	<fx:Script>
-		<![CDATA[
-			import mx.binding.utils.BindingUtils;
-			
-			import view.PropertyEditorContainer;
-			private function onCreationCompletes():void
-			{
-				BindingUtils.bindProperty(ddl, "includeCollection", PropertyEditorContainer(owner), "filesList");
-			}
-		]]>
-	</fx:Script>
+							      xmlns:forms="view.forms.*">
 
     <suportclasses:layout>
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
@@ -26,6 +14,8 @@
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <forms:DropdownListForm id="ddl" 
-							label="File Name" textProperty="title" labelField="name"/>
+							label="File Name" textProperty="title" 
+							collectionProperty="filesList" labelField="name"
+							creationComplete="ddl.collectionHost=this.owner"/> <!-- owner not constructed to use in binding will throw compiler warning -->
 
 </suportclasses:BasePropertyEditor>

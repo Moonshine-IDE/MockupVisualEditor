@@ -33,7 +33,7 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinHeightChanged"
             ];
 			
-			backgroundFill = new SolidColor(0xf4f4f4);
+			backgroundFill = new SolidColor(0xFCFCFC);
 			
             var vLayout:VerticalLayout = new VerticalLayout();
 			vLayout.horizontalAlign = "center";

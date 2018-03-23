@@ -13,10 +13,12 @@
 		<s:DropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
 						dataProvider="{includeCollection}"
-						change="onSelectionChange(event)" selectedIndex="0"/>
+						change="onSelectionChange(event)"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
+		import mx.binding.utils.BindingUtils;
+		import mx.binding.utils.ChangeWatcher;
 		import mx.collections.IList;
 		import mx.events.FlexEvent;
 		
@@ -24,6 +26,7 @@
 		
 		[Bindable] public var includeCollection:IList;
 		
+		private var _binding:ChangeWatcher;
 		private var _labelField:String;
 		public function set labelField(value:String):void
 		{
@@ -62,11 +65,26 @@
 			}
 			this._textProperty = value;
 		}
+		
+		private var _collectionHost:*;
+		public function set collectionHost(value:*):void
+		{
+			_collectionHost = value;
+			updateBinding();
+		}
+		
+		private var _collectionProperty:String;
+		public function set collectionProperty(value:String):void
+		{
+			_collectionProperty = value;
+		}
 
         protected function onCreationCompletes(event:FlexEvent):void
         {
 			if (_labelField) ddlSelection.labelField = _labelField;
 			//ddlSelection.callLater(selectCurrentItem);
+			
+			updateBinding();
         }
 		
 		private function selectCurrentItem():void
@@ -78,6 +96,23 @@
 		protected function onSelectionChange(event:IndexChangeEvent):void
 		{
 			this.selectedItem[this._textProperty] = this.ddlSelection.selectedItem.toString();
+		}
+		
+		private function updateBinding():void
+		{
+			_collectionHost ||= selectedItem;
+			if (!_collectionProperty || !(_collectionProperty in _collectionHost)) return;
+			
+			if (this._binding)
+			{
+				this._binding.unwatch();
+				this._binding = null;
+			}
+			if (this.selectedItem === null)
+			{
+				return;
+			}
+			this._binding = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
 		}
 		
 	]]></fx:Script>

@@ -43,6 +43,8 @@
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
 
+		import view.interfaces.IMainApplication;
+
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
 		import view.interfaces.ISurfaceComponent;
@@ -166,7 +168,11 @@
 				this.prepareContainer(item as SkinnableContainerBase);
 				return;
 			}
-
+			else if (item is IMainApplication)
+			{
+				this.prepareContainer(item as UIComponent);
+				return;
+			}
 			this.prepareContainer(itemContainer);
 		}
 
@@ -207,7 +213,7 @@
 			hasChanged = this.numElements > 0 && _wasLoaded;
 		}
 
-		private function prepareContainer(container:SkinnableContainerBase):void
+		private function prepareContainer(container:UIComponent):void
 		{
 			if (container === null)
 			{
@@ -229,7 +235,7 @@
 			container.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 		}
 
-		private function showDropOverlay(dropTarget:GroupBase):void
+		private function showDropOverlay(dropTarget:UIComponent):void
 		{
 			var currentTarget:DisplayObjectContainer = dropTarget;
 			//we need to calculated the visible rectangular region where we can
@@ -239,9 +245,10 @@
 			var rect:Rectangle = new Rectangle(globalPosition.x, globalPosition.y, dropTarget.width, dropTarget.height);
 			while (currentTarget !== this)
 			{
-				if (currentTarget is SkinnableContainer)
+				var isSkinnableContainer:Boolean = currentTarget is SkinnableContainer;
+				if (isSkinnableContainer || currentTarget is IMainApplication)
 				{
-					var otherGroup:Group = SkinnableContainer(currentTarget).contentGroup;
+					var otherGroup:UIComponent = isSkinnableContainer ? SkinnableContainer(currentTarget).contentGroup : currentTarget as UIComponent;
 					globalPosition = otherGroup.localToGlobal(origin);
 					var newRect:Rectangle = new Rectangle(globalPosition.x, globalPosition.y, otherGroup.width, otherGroup.height);
 					rect = rect.intersection(newRect);
@@ -420,15 +427,22 @@
 				return;
 			}
 			var object:ISurfaceComponent = ISurfaceComponent(dragSource.dataForFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT));
-			var container:SkinnableContainerBase = SkinnableContainerBase(event.currentTarget);
+			var container:UIComponent = event.currentTarget as UIComponent;
 			if (object.contains(container))
 			{
 				//don't allow a container to be dropped on itself or one of its
 				//children!
 				return;
 			}
-			var contentGroup:GroupBase = container is Navigator ?
-					(container as Navigator).contentGroup : (container as SkinnableContainer).contentGroup;
+			var contentGroup:UIComponent = null;
+			if (container is SkinnableContainer || container is Navigator)
+			{
+				contentGroup = container["contentGroup"];
+			}
+			else if (container is IMainApplication)
+			{
+				contentGroup = container;
+			}
 			var position:Point = new Point(event.stageX, event.stageY);
 			position = contentGroup.globalToLocal(position);
 			if (position.x >= 0 && position.y >= 0 &&

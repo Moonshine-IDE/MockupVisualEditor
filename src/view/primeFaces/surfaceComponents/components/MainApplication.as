@@ -1,8 +1,9 @@
 package view.primeFaces.surfaceComponents.components
 {
 	import view.interfaces.IMainApplication;
+    import view.interfaces.INonDeletableSurfaceComponent;
 
-	public class MainApplication extends Container implements IMainApplication
+    public class MainApplication extends Container implements INonDeletableSurfaceComponent, IMainApplication
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";
 		

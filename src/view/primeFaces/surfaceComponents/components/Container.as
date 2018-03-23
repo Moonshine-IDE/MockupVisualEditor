@@ -1,12 +1,11 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flexlib.containers.FlowBox;
-
-    import view.interfaces.INonDeletableSurfaceComponent;
+    
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
-    public class Container extends FlowBox implements INonDeletableSurfaceComponent, IPrimeFacesSurfaceComponent
+    public class Container extends FlowBox implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Container";

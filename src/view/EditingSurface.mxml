@@ -145,11 +145,10 @@
 			{
 				IFocusManagerComponent(item).focusEnabled = false;
 			}
+
 			item.addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
-			item.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void
-			{
-				event.preventDefault();
-			});
+			item.addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
+
 			var itemContainer:SkinnableContainer = null;
 			if (item is IMultiViewContainer)
 			{
@@ -400,6 +399,11 @@
 			this.selectedItem = object;
 			this.setFocus();
 
+			if (dropTarget is IMainApplication)
+			{
+				(dropTarget as UIComponent).invalidateDisplayList();
+			}
+
 			hasChanged = true;
 		}
 
@@ -461,6 +465,11 @@
 			}
 			event.preventDefault();
 			this.dragDropHandler(event);
+		}
+
+		private function object_focusInHandler(event:FocusEvent):void
+		{
+			event.preventDefault();
 		}
 
 		private function object_mouseDownHandler(event:MouseEvent):void

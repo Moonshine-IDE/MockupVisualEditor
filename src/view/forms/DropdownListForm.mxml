@@ -82,20 +82,36 @@
         protected function onCreationCompletes(event:FlexEvent):void
         {
 			if (_labelField) ddlSelection.labelField = _labelField;
-			//ddlSelection.callLater(selectCurrentItem);
+			ddlSelection.callLater(selectCurrentItem);
 			
 			updateBinding();
         }
 		
 		private function selectCurrentItem():void
 		{
-			if (this.selectedItem[this._textProperty]) ddlSelection.selectedItem = this.selectedItem[this._textProperty];
-			onSelectionChange(null);
+			if (this.selectedItem[this._textProperty] && _labelField) 
+			{
+				for each (var i:Object in ddlSelection.dataProvider)
+				{
+					if (i[_labelField] == this.selectedItem[this._textProperty])
+					{
+						ddlSelection.selectedItem = i;
+						break;
+					}
+				}
+			}
+			else if (this.selectedItem[this._textProperty])
+			{
+				ddlSelection.selectedItem = this.selectedItem[this._textProperty];
+			}
+				
+			ddlSelection.callLater(onSelectionChange, [null]);
 		}
 		
 		protected function onSelectionChange(event:IndexChangeEvent):void
 		{
-			this.selectedItem[this._textProperty] = this.ddlSelection.selectedItem.toString();
+			if (_labelField) this.selectedItem[this._textProperty] = this.ddlSelection.selectedItem[_labelField].toString();
+			else this.selectedItem[this._textProperty] = this.ddlSelection.selectedItem.toString();
 		}
 		
 		private function updateBinding():void

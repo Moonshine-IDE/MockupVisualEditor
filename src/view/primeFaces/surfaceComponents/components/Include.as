@@ -1,6 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
+    import flash.events.MouseEvent;
     
     import mx.graphics.SolidColor;
     
@@ -9,6 +10,7 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.Label;
     import spark.layouts.VerticalLayout;
     
+    import utils.MoonshineBridgeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -133,11 +135,18 @@ package view.primeFaces.surfaceComponents.components
 			includeLabel.percentWidth = 90;
 			includeLabel.text = "File Name";
 			includeLabel.setStyle("textAlign", "center");
+			includeLabel.setStyle("textDecoration", "underline");
 			addElement(includeLabel);
 			
 			includeButton = new spark.components.Button();
 			includeButton.label = "Open in editor";
+			includeButton.addEventListener(MouseEvent.CLICK, onIncludeButtonClicked, false, 0, true);
 			addElement(includeButton);
+		}
+		
+		private function onIncludeButtonClicked(event:MouseEvent):void
+		{
+			MoonshineBridgeUtils.moonshineBridge.openXhtmlFile(title);
 		}
     }
 }

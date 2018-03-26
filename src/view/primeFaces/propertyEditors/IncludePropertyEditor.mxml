@@ -3,7 +3,22 @@
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
-							      xmlns:forms="view.forms.*">
+							      xmlns:forms="view.forms.*"
+								  preinitialize="onPreinit()">
+	<fx:Script>
+		<![CDATA[
+			
+			import utils.MoonshineBridgeUtils;
+			
+			private function onPreinit():void
+			{
+				// central repository to use in different Include property editor components
+				// at same time 
+				MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
+			}
+			
+		]]>
+	</fx:Script>
 
     <suportclasses:layout>
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
@@ -15,7 +30,7 @@
 
     <forms:DropdownListForm id="ddl" 
 							label="File Name" textProperty="title" 
-							collectionProperty="filesList" labelField="name"
-							creationComplete="ddl.collectionHost=this.owner"/> <!-- owner not constructed to use in binding will throw compiler warning -->
+							collectionProperty="filesList" labelField="resourcePath"
+							creationComplete="ddl.collectionHost=MoonshineBridgeUtils"/> <!-- _this_ not constructed to use in binding will throw compiler warning -->
 
 </suportclasses:BasePropertyEditor>

@@ -30,6 +30,10 @@
 		import mx.events.FlexEvent;
 		
 		import spark.components.Alert;
+		
+		import utils.MoonshineBridgeUtils;
+		
+		import view.interfaces.IVisualEditorLibraryBridge;
 
 		private var _file:FileReference;
 
@@ -49,7 +53,10 @@
 			private var _fileMoonshine:File;
 			private var _fileStreamMoonshine:FileStream;
 			
-			[Bindable] public var filesList:ArrayCollection;
+			public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
+			{
+				MoonshineBridgeUtils.moonshineBridge = value;
+			}
 
 			public function saveEditedFile():void
 			{
@@ -149,7 +156,6 @@
 			{
 				toolbar.visible = toolbar.includeInLayout = false;
 				toolbar.height = 1;
-				propertyEditor.filesList = filesList;
 			}
 		}
 		]]></fx:Script>

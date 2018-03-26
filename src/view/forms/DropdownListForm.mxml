@@ -91,11 +91,11 @@
 		{
 			if (this.selectedItem[this._textProperty] && _labelField) 
 			{
-				for each (var i:Object in ddlSelection.dataProvider)
+				for each (var file:Object in ddlSelection.dataProvider)
 				{
-					if (i[_labelField] == this.selectedItem[this._textProperty])
+					if (file[_labelField] == this.selectedItem[this._textProperty])
 					{
-						ddlSelection.selectedItem = i;
+						ddlSelection.selectedItem = file;
 						break;
 					}
 				}

@@ -1,11 +1,13 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import flexlib.containers.FlowBox;
-    
+    import components.FlowLayout;
+
+    import spark.components.BorderContainer;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
-    public class Container extends FlowBox implements IPrimeFacesSurfaceComponent
+    public class Container extends BorderContainer implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Container";
@@ -13,6 +15,11 @@ package view.primeFaces.surfaceComponents.components
         public function Container()
         {
             super();
+
+            var flowLayout:FlowLayout = new FlowLayout();
+            flowLayout.horizontalGap = 0;
+
+            layout = flowLayout;
 
             _propertiesChangedEvents = [
                 "widthChanged",

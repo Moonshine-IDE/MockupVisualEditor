@@ -47,7 +47,6 @@
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/spark.swc" append="true"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/framework.swc" append="true"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/mx/mx.swc" append="true"/>
-			<library-path file="${basedir}/libs/FlexLib.swc" append="true" />
 			<include-sources dir="${basedir}/src" includes="*"/>
 		</compc>
 	</target>

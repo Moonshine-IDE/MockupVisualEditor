@@ -14,7 +14,7 @@ package view.primeFaces.surfaceComponents.components
     public class InputTextarea extends TextArea implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputTextarea";
-        public static const ELEMENT_NAME:String = "inputTextarea";
+        public static const ELEMENT_NAME:String = "InputTextarea";
 
         public function InputTextarea()
         {

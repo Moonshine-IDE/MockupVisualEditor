@@ -14,7 +14,7 @@ package view.primeFaces.surfaceComponents.components
     public class InputText extends TextInput implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputText";
-        public static const ELEMENT_NAME:String = "inputText";
+        public static const ELEMENT_NAME:String = "InputText";
 
         public function InputText()
         {

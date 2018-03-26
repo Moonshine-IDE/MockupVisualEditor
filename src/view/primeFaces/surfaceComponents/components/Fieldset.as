@@ -29,7 +29,7 @@ package view.primeFaces.surfaceComponents.components
     public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
-        public static const ELEMENT_NAME:String = "fieldset";
+        public static const ELEMENT_NAME:String = "Fieldset";
 
         [Embed(source='/assets/minus_close.png')]
         public var closeIcon:Class;
@@ -97,7 +97,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function toXML():XML
         {
-            var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 

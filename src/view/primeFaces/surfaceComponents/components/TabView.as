@@ -5,6 +5,8 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
 
     import spark.components.NavigatorContent;
+    import spark.events.IndexChangeEvent;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -14,7 +16,7 @@ package view.primeFaces.surfaceComponents.components
     public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
-        public static const ELEMENT_NAME:String = "tabView";
+        public static const ELEMENT_NAME:String = "TabView";
 
         public function TabView()
         {
@@ -31,7 +33,8 @@ package view.primeFaces.surfaceComponents.components
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
-                "explicitMinHeightChanged"
+                "explicitMinHeightChanged",
+                IndexChangeEvent.CHANGE
             ];
 
             var navigatorContent:NavigatorContent = new NavigatorContent();
@@ -164,7 +167,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function):void
+        private function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function):void
         {
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();

@@ -13,7 +13,7 @@ package view.primeFaces.surfaceComponents.components
     public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
-		public static const ELEMENT_NAME:String = "selectBooleanCheckbox";
+		public static const ELEMENT_NAME:String = "CheckBox";
 		
 		public function SelectBooleanCheckbox()
 		{
@@ -67,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function toXML():XML
 		{
-			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 

@@ -10,7 +10,7 @@ package view.primeFaces.surfaceComponents.components
     public class InputMask extends MaskedTextInput implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputMask";
-        public static const ELEMENT_NAME:String = "inputMask";
+        public static const ELEMENT_NAME:String = "InputMask";
 
         public function InputMask()
         {

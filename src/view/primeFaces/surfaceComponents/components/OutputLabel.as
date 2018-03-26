@@ -11,7 +11,7 @@ package view.primeFaces.surfaceComponents.components
     public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
-        public static const ELEMENT_NAME:String = "outputLabel";
+        public static const ELEMENT_NAME:String = "OutputLabel";
 
         public function OutputLabel()
         {

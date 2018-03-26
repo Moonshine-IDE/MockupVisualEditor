@@ -13,7 +13,7 @@ package view.primeFaces.surfaceComponents.components
     public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
-		public static const ELEMENT_NAME:String = "button";
+		public static const ELEMENT_NAME:String = "Button";
 		
 		public function Button()
 		{
@@ -73,7 +73,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function toXML():XML
 		{
-			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 

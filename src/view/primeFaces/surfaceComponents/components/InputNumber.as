@@ -14,7 +14,7 @@ package view.primeFaces.surfaceComponents.components
     public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
-        public static const ELEMENT_NAME:String = "inputNumber";
+        public static const ELEMENT_NAME:String = "InputNumber";
 
         private var _formatter:NumberFormatter;
 

@@ -112,6 +112,7 @@ package utils
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 				CLASS_LOOKUP[Include.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Include;
 				CLASS_LOOKUP[TabView.ELEMENT_NAME] = TabView;
+				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Tree.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Tree;
             }
 		}
 	}

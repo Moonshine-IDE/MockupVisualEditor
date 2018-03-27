@@ -91,7 +91,6 @@ package utils
 			var headXml:XML = new XML("<head/>");
 			headXml.addNamespace(hNamespace);
 			headXml.setNamespace(hNamespace);
-			headXml.setNamespace(uiNamespace);
 	
 			if (!title)
 			{
@@ -104,7 +103,6 @@ package utils
 			var bodyXML:XML = new XML("<body/>");
 			bodyXML.addNamespace(hNamespace);
 			bodyXML.setNamespace(hNamespace);
-			bodyXML.setNamespace(uiNamespace);
 
 			var mainDiv:XML = new XML("<div/>");
 

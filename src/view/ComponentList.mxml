@@ -6,11 +6,11 @@
 	<fx:Script>
 	<![CDATA[
 		import data.ComponentListItem;
-		
+
 		import org.apache.flex.collections.ArrayList;
-		
+
 		import utils.VisualEditorType;
-		
+
 		import view.flex.surfaceComponents.components.Button;
 		import view.flex.surfaceComponents.components.Calendar;
 		import view.flex.surfaceComponents.components.CheckBox;
@@ -82,6 +82,7 @@
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("TabView", TabView),
+					new ComponentListItem("Tree", view.primeFaces.surfaceComponents.components.Tree),
 					new ComponentListItem("Fieldset", Fieldset),
 					new ComponentListItem("Include", Include)
 				]);
@@ -89,6 +90,6 @@
 
 			this.dataProvider = dp;
 		}
-        ]]>
+		]]>
 	</fx:Script>
 </s:List>

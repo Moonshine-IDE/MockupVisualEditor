@@ -135,6 +135,8 @@ package view.primeFaces.surfaceComponents.components
 			includeLabel.percentWidth = 90;
 			includeLabel.text = "File Name";
 			includeLabel.setStyle("textAlign", "center");
+			includeLabel.setStyle("fontSize", 12);
+			includeLabel.setStyle("fontWeight", "bold");
 			includeLabel.setStyle("textDecoration", "underline");
 			addElement(includeLabel);
 			

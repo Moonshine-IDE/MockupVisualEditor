@@ -106,36 +106,13 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
-            createPrimeFacesTreeChildren(this.dataProvider, xml);
+            var node:XML = new XML("<treeNode/>");
+            node.addNamespace(primeFacesNamespace);
+            node.setNamespace(primeFacesNamespace);
+
+            xml.appendChild(node);
 
             return xml;
-        }
-
-        private function createPrimeFacesTreeChildren(data:Object, xml:XML):void
-        {
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
-
-            for each (var item:Object in data)
-            {
-                var node:XML = new XML("<treeNode/>");
-                node.addNamespace(primeFacesNamespace);
-                node.setNamespace(primeFacesNamespace);
-
-                var outputText:XML = new XML("<outputText/>");
-                outputText.addNamespace(hNamespace);
-                outputText.setNamespace(hNamespace);
-
-                outputText.@value = item.label;
-
-                node.appendChild(outputText);
-                xml.appendChild(node);
-
-                if (item.children)
-                {
-                    createPrimeFacesTreeChildren(item.children, node);
-                }
-            }
         }
     }
 }

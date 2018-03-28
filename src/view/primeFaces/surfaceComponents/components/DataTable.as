@@ -23,6 +23,7 @@ package view.primeFaces.surfaceComponents.components
         {
             super();
 
+            this.mouseChildren = false;
             this.width = 120;
             this.height = 120;
             this.minWidth = 20;

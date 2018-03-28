@@ -55,7 +55,8 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "dropDownListChanged"
+                "dropDownListChanged",
+                "multipleChanged"
             ];
         }
 
@@ -68,7 +69,11 @@ package view.primeFaces.surfaceComponents.components
 
         public function set multiple(value:Boolean):void
         {
-            _multiple = value;
+            if (_multiple != value)
+            {
+                _multiple = value;
+                dispatchEvent(new Event("multipleChanged"));
+            }
         }
 
         public function get propertyEditorClass():Class

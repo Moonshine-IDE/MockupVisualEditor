@@ -55,7 +55,7 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "change"
+                "toggleableChanged"
             ];
         }
 
@@ -65,7 +65,7 @@ package view.primeFaces.surfaceComponents.components
         private var _toggleable:Boolean;
         private var toggleableChanged:Boolean;
 
-        [Bindable(event="change")]
+        [Bindable(event="toggleableChanged")]
         public function get toggleable():Boolean
         {
             return _toggleable;
@@ -77,7 +77,7 @@ package view.primeFaces.surfaceComponents.components
             {
                 _toggleable = value;
                 toggleableChanged = true;
-                dispatchEvent(new Event("change"));
+                dispatchEvent(new Event("toggleableChanged"));
 
                 invalidateSkinState();
             }

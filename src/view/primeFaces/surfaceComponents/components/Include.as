@@ -32,7 +32,8 @@ package view.primeFaces.surfaceComponents.components
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
-                "explicitMinHeightChanged"
+                "explicitMinHeightChanged",
+                "titleChanged"
             ];
 			
 			backgroundFill = new SolidColor(0xFCFCFC);
@@ -55,7 +56,7 @@ package view.primeFaces.surfaceComponents.components
 
         private var _title:String;
 		
-		[Bindable("change")]
+		[Bindable("titleChanged")]
         public function get title():String
         {
             return _title;
@@ -66,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
 			if (_title == value) return;
 			
 			includeLabel.text = _title = value;
-			dispatchEvent(new Event("change"));
+			dispatchEvent(new Event("titleChanged"));
         }
 
         private var _propertiesChangedEvents:Array;

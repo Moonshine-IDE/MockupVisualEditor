@@ -33,7 +33,11 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-				"change"
+				"isAutoResizeChanged",
+				"isCounterDisplayChanged",
+				"counterChanged",
+				"counterTemplateChanged",
+				"maxLengthChanged"
             ];
 			
 			this.prompt = "Input Text Area";
@@ -48,23 +52,24 @@ package view.primeFaces.surfaceComponents.components
         {
 			if (_isAutoResize != value)
 			{
-				dispatchEvent(new Event("change"));
+				dispatchEvent(new Event("isAutoResizeChanged"));
 				_isAutoResize = value;
 			}
         }
 
 		private var _isCounterDisplay:Boolean;
-		[Bindable(event="change")]
+		[Bindable(event="isCounterDisplayChanged")]
 		public function get isCounterDisplay():Boolean
 		{
 			return _isCounterDisplay;
 		}
+
 		public function set isCounterDisplay(value:Boolean):void
 		{
 			if (_isCounterDisplay != value)
 			{
 				_isCounterDisplay = value;
-				dispatchEvent(new Event("change"));
+				dispatchEvent(new Event("isCounterDisplayChanged"));
 			}
 		}
 		
@@ -73,12 +78,13 @@ package view.primeFaces.surfaceComponents.components
 		{
 			return _counter;
 		}
+
 		public function set counter(value:String):void
 		{
 			if (_counter != value)
 			{
 				_counter = value;
-				dispatchEvent(new Event("change"));
+				dispatchEvent(new Event("counterChanged"));
 			}
 		}
 		
@@ -87,26 +93,30 @@ package view.primeFaces.surfaceComponents.components
 		{
 			return _counterTemplate;
 		}
+
 		public function set counterTemplate(value:String):void
 		{
 			if (_counterTemplate != value)
 			{
 				_counterTemplate = value;
-				dispatchEvent(new Event("change"));
+				dispatchEvent(new Event("counterTemplateChanged"));
 			}
 		}
 		
 		private var _maxLength:String = "";
-		[Bindable(event="change")] public function get maxLength():String
+
+		[Bindable(event="maxLengthChanged")]
+		public function get maxLength():String
 		{
 			return _maxLength;
 		}
+
 		public function set maxLength(value:String):void
 		{
 			if (_maxLength != value)
 			{
 				_maxLength = value;
-				dispatchEvent(new Event("change"));
+				dispatchEvent(new Event("maxLengthChanged"));
 			}
 		}
 

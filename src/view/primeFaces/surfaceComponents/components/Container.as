@@ -2,6 +2,8 @@ package view.primeFaces.surfaceComponents.components
 {
     import components.FlowLayout;
 
+    import flash.events.Event;
+
     import spark.components.BorderContainer;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -25,7 +27,8 @@ package view.primeFaces.surfaceComponents.components
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
-                "explicitMinHeightChanged"
+                "explicitMinHeightChanged",
+                "titleChanged"
             ];
         }
 
@@ -42,7 +45,11 @@ package view.primeFaces.surfaceComponents.components
 
         public function set title(value:String):void
         {
-            _title = value;
+            if (_title != value)
+            {
+                _title = value;
+                dispatchEvent(new Event("titleChanged"));
+            }
         }
 
         private var _propertiesChangedEvents:Array;

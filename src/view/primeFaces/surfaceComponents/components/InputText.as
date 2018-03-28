@@ -34,23 +34,26 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-				"change"
+				"maxLengthChanged"
             ];
 			
 			this.prompt = "Input Text";
         }
 
 		private var _maxLength:String = "";
-		[Bindable(event="change")] public function get maxLength():String
+
+		[Bindable(event="maxLengthChanged")]
+        public function get maxLength():String
 		{
 			return _maxLength;
 		}
+
 		public function set maxLength(value:String):void
 		{
 			if (_maxLength != value)
 			{
 				_maxLength = value;
-				dispatchEvent(new Event("change"));
+				dispatchEvent(new Event("maxLengthChanged"));
 			}
 		}
 

@@ -23,7 +23,8 @@ package utils
 	import view.interfaces.ISurfaceComponent;
 	import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 	import view.primeFaces.surfaceComponents.components.Button;
-	import view.primeFaces.surfaceComponents.components.Fieldset;
+    import view.primeFaces.surfaceComponents.components.DataTable;
+    import view.primeFaces.surfaceComponents.components.Fieldset;
 	import view.primeFaces.surfaceComponents.components.Include;
 	import view.primeFaces.surfaceComponents.components.InputMask;
 	import view.primeFaces.surfaceComponents.components.InputNumber;
@@ -113,6 +114,7 @@ package utils
 				CLASS_LOOKUP[Include.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Include;
 				CLASS_LOOKUP[TabView.ELEMENT_NAME] = TabView;
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Tree.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Tree;
+                CLASS_LOOKUP[DataTable.ELEMENT_NAME] = DataTable;
             }
 		}
 	}

@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import components.tabNavigator.TabNavigatorWithOrientation;
 
     import mx.core.IVisualElement;
+    import mx.events.CollectionEvent;
 
     import spark.components.NavigatorContent;
     import spark.events.IndexChangeEvent;
@@ -25,7 +26,7 @@ package view.primeFaces.surfaceComponents.components
             this.selectedIndex = 0;
 
             this.width = 120;
-            this.height = 30;
+            this.height = 120;
             this.minWidth = 20;
             this.minHeight = 20;
 
@@ -34,7 +35,8 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                IndexChangeEvent.CHANGE
+                IndexChangeEvent.CHANGE,
+                CollectionEvent.COLLECTION_CHANGE
             ];
 
             var navigatorContent:NavigatorContent = new NavigatorContent();
@@ -102,7 +104,7 @@ package view.primeFaces.surfaceComponents.components
             {
                 var tabXML:XML = tabsXML[i];
                 var tab:NavigatorContent = new NavigatorContent();
-                tab.label = tabXML.@label;
+                tab.label = tabXML.@title;
 
                 this.addElement(tab);
 
@@ -126,12 +128,14 @@ package view.primeFaces.surfaceComponents.components
             var tabCount:int = this.numElements;
             for (var i:int = 0; i < tabCount; i++)
             {
+                var navContent:NavigatorContent = this.getElementAt(i) as NavigatorContent;
+                var navContentCount:int = navContent.numElements;
+
                 var tab:XML = new XML("<tab />");
                 tab.addNamespace(primeFacesNamespace);
                 tab.setNamespace(primeFacesNamespace);
+                tab.@title = navContent.label;
 
-                var navContent:NavigatorContent = this.getElementAt(i) as NavigatorContent;
-                var navContentCount:int = navContent.numElements;
                 for (var j:int = 0; j < navContentCount; j++)
                 {
                     var surfaceElement:IPrimeFacesSurfaceComponent = navContent.getElementAt(j) as IPrimeFacesSurfaceComponent;
@@ -151,9 +155,9 @@ package view.primeFaces.surfaceComponents.components
 
         private function tabToXML(index:int):XML
         {
-            var xml:XML = <tab/>;
+            var xml:XML = new XML(<tab/>);
             var tab:NavigatorContent = this.getItemAt(index) as NavigatorContent;
-            xml.@label = tab.label;
+            xml.@title = tab.label;
             var elementCount:int = tab.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {

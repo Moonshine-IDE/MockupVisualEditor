@@ -145,6 +145,8 @@ package view.primeFaces.surfaceComponents.components
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+
             xml.@paginator = this.paginator;
             xml.@resizableColumns = this.resizableColumns;
             xml.@emptyMessage = this.emptyMessage;

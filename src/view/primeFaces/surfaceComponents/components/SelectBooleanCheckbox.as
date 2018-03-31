@@ -24,7 +24,7 @@ package view.primeFaces.surfaceComponents.components
 			this.selected = true;
 			this.label = "Checkbox";
 			this.toolTip = "";
-			this.width = 94;
+			this.width = 121;
 			this.height = 20;
 			this.minWidth = 20;
 			this.minHeight = 20;

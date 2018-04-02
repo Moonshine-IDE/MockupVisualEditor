@@ -91,7 +91,14 @@ package utils
 			var headXml:XML = new XML("<head/>");
 			headXml.addNamespace(hNamespace);
 			headXml.setNamespace(hNamespace);
-	
+
+			var cssStyleSheetXml:XML = new XML("<link></link>");
+            cssStyleSheetXml.@rel = "stylesheet";
+			cssStyleSheetXml.@type = "text/css";
+			cssStyleSheetXml.@href = "resources/layout-styles.css";
+
+			headXml.appendChild(cssStyleSheetXml);
+
 			if (!title)
 			{
 				title = "";

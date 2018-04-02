@@ -1,7 +1,10 @@
 package view.primeFaces.surfaceComponents.components
 {
-	import view.interfaces.IMainApplication;
+    import flash.events.Event;
+
+    import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
+    import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     public class MainApplication extends Container implements INonDeletableSurfaceComponent, IMainApplication
 	{
@@ -15,5 +18,25 @@ package view.primeFaces.surfaceComponents.components
 
 			Container.ELEMENT_NAME = "MainApplication";
 		}
-	}
+
+        override public function get propertyEditorClass():Class
+        {
+            return WindowPropertyEditor;
+        }
+
+        private var _title:String;
+        public function get title():String
+        {
+            return _title;
+        }
+
+        public function set title(value:String):void
+        {
+            if (_title != value)
+            {
+                _title = value;
+                dispatchEvent(new Event("titleChanged"));
+            }
+        }
+    }
 }

@@ -3,7 +3,8 @@
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
-							      xmlns:forms="view.forms.*" >
+							      xmlns:forms="view.forms.*"
+                                  creationComplete="onWindowPropertyEditorCreationComplete(event)">
 
     <suportclasses:layout>
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
@@ -15,4 +16,44 @@
 
     <forms:TextForm label="Title" textProperty="title"/>
 
+    <forms:DropdownListForm id="containerDirection" label="Direction"
+                            labelField="direction" textProperty="direction"/>
+    <forms:DropdownListForm id="horizontalDirection" label="Horizontal align"
+                            labelField="horiztonalAlign" textProperty="horizontalAlign"/>
+    <forms:DropdownListForm id="verticalDirection" label="Vertical align"
+                            labelField="verticalAlign" textProperty="verticalAlign"/>
+
+    <fx:Script><![CDATA[
+        import mx.collections.ArrayList;
+        import mx.events.FlexEvent;
+
+        import spark.layouts.HorizontalAlign;
+        import spark.layouts.VerticalAlign;
+
+        import view.primeFaces.supportClasses.ContainerHorizontalAlignItem;
+        import view.primeFaces.supportClasses.ContainerDirection;
+
+        import view.primeFaces.supportClasses.ContainerDirectionItem;
+        import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
+
+        private function onWindowPropertyEditorCreationComplete(event:FlexEvent):void
+        {
+            this.containerDirection.includeCollection = new ArrayList([
+                new ContainerDirectionItem(ContainerDirection.HORIZONTAL_LAYOUT),
+                new ContainerDirectionItem(ContainerDirection.VERTICAL_LAYOUT)
+            ]);
+
+            this.horizontalDirection.includeCollection = new ArrayList([
+                new ContainerHorizontalAlignItem(HorizontalAlign.LEFT),
+                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT),
+                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER)
+            ]);
+
+            this.verticalDirection.includeCollection = new ArrayList([
+                new ContainerVerticalAlignItem(VerticalAlign.TOP),
+                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM),
+                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE)
+            ])
+        }
+        ]]></fx:Script>
 </suportclasses:BasePropertyEditor>

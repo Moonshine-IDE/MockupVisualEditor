@@ -107,7 +107,6 @@ package utils
 				CLASS_LOOKUP[AutoCompleteDropDownList.ELEMENT_NAME] = AutoCompleteDropDownList;
 				CLASS_LOOKUP[OutputLabel.ELEMENT_NAME] = OutputLabel;
 				CLASS_LOOKUP[Fieldset.ELEMENT_NAME] = Fieldset;
-                CLASS_LOOKUP["Container"] = view.primeFaces.surfaceComponents.components.Container;
 				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
 				CLASS_LOOKUP[InputText.ELEMENT_NAME] = InputText;
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;

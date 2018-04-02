@@ -8,33 +8,15 @@ package view.primeFaces.surfaceComponents.components
     import spark.layouts.HorizontalLayout;
     import spark.layouts.VerticalLayout;
 
-    import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.WindowPropertyEditor;
     import view.primeFaces.supportClasses.ContainerDirection;
 
-    public class Container extends BorderContainer implements IPrimeFacesSurfaceComponent
+    public class Container extends BorderContainer
     {
-        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
-        public static var ELEMENT_NAME:String = "Div";
-
         public function Container()
         {
             super();
 
             this.setHoriztonalLayout();
-
-            _propertiesChangedEvents = [
-                "widthChanged",
-                "heightChanged",
-                "explicitMinWidthChanged",
-                "explicitMinHeightChanged",
-                "titleChanged",
-                "directionChanged",
-                "wrapChanged",
-                "gapChanged",
-                "verticalAlignChanged",
-                "horizontalAlignChanged"
-            ];
         }
 
         private var _direction:String;
@@ -178,107 +160,6 @@ package view.primeFaces.surfaceComponents.components
                 this.setLayoutAlign();
 
                 this.alignChanged = false;
-            }
-        }
-
-        public function get propertyEditorClass():Class
-        {
-            return WindowPropertyEditor;
-        }
-
-        private var _propertiesChangedEvents:Array;
-        public function get propertiesChangedEvents():Array
-        {
-            return _propertiesChangedEvents;
-        }
-
-        public function toXML():XML
-        {
-            var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-
-            setCommonXMLAttributes(xml);
-
-            var elementCount:int = this.numElements;
-            for(var i:int = 0; i < elementCount; i++)
-            {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                if(element === null)
-                {
-                    continue;
-                }
-                xml.appendChild(element.toXML());
-            }
-            return xml;
-        }
-
-        public function toCode():XML
-        {
-            var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
-
-            setCommonXMLAttributes(xml);
-
-            var elementCount:int = this.numElements;
-            for(var i:int = 0; i < elementCount; i++)
-            {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                if(element === null)
-                {
-                    continue;
-                }
-
-                xml.appendChild(element.toCode());
-            }
-
-            return xml;
-        }
-
-        public function fromXML(xml:XML, callback:Function):void
-        {
-            if ('@percentWidth' in xml)
-            {
-                this.percentWidth = xml.@percentWidth;
-            }
-            else
-            {
-                this.width = xml.@width;
-            }
-
-            if ('@percentHeight' in xml)
-            {
-                this.percentHeight = xml.@percentHeight;
-            }
-            else
-            {
-                this.height = xml.@height;
-            }
-
-            var elementsXML:XMLList = xml.elements();
-            var childCount:int = elementsXML.length();
-            for(var i:int = 0; i < childCount; i++)
-            {
-                var childXML:XML = elementsXML[i];
-                callback(this, childXML);
-            }
-        }
-
-        protected function setCommonXMLAttributes(xml:XML):void
-        {
-            if (!isNaN(this.percentWidth))
-            {
-                xml.@percentWidth = this.percentWidth;
-            }
-            else
-            {
-                xml.@width = this.width;
-            }
-
-            if (!isNaN(this.percentHeight))
-            {
-                xml.@percentHeight = this.percentHeight;
-            }
-            else
-            {
-                xml.@height = this.height;
             }
         }
 

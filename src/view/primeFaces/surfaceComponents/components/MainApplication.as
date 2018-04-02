@@ -6,7 +6,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.INonDeletableSurfaceComponent;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
-    public class MainApplication extends Container implements INonDeletableSurfaceComponent, IMainApplication
+    public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";
 		
@@ -16,7 +16,7 @@ package view.primeFaces.surfaceComponents.components
 
 			this.setStyle("backgroundColor", "#FCFCFC");
 
-			Container.ELEMENT_NAME = "MainApplication";
+			Div.ELEMENT_NAME = "MainApplication";
 		}
 
         override public function get propertyEditorClass():Class

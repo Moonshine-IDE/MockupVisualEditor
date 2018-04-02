@@ -1,8 +1,10 @@
 package utils
 {
     import view.EditingSurface;
+    import view.flex.surfaceComponents.components.Container;
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
+    import view.primeFaces.surfaceComponents.components.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
 
     public class MainApplicationCodeUtils
@@ -51,7 +53,8 @@ package utils
 				return getFlexMainContainer(title, width, height);
 			}
 			
-			return getPrimeFacesMainContainer(title, width, height, percentWidth, percentHeight);
+			return getPrimeFacesMainContainer(title, width, height, percentWidth, percentHeight,
+                    element as view.primeFaces.surfaceComponents.components.Container);
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
@@ -71,7 +74,8 @@ package utils
 		}
 		
 		private static function getPrimeFacesMainContainer(title:String, width:Number, height:Number,
-                                                           percentWidth:Number, percentHeight:Number):XML
+                                                           percentWidth:Number, percentHeight:Number,
+														   container:view.primeFaces.surfaceComponents.components.Container):XML
 		{
 			var xml:XML = new XML("<html/>");
 
@@ -113,6 +117,7 @@ package utils
 
 			var mainDiv:XML = new XML("<div/>");
 
+            XMLCodeUtils.applyChildrenPositionToXML(container, mainDiv);
             XMLCodeUtils.addSizeHtmlStyleToXML(mainDiv, width, height, percentWidth, percentHeight);
 			
 			bodyXML.appendChild(mainDiv);

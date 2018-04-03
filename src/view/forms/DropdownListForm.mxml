@@ -89,13 +89,15 @@
 		
 		private function selectCurrentItem():void
 		{
-			if (this.selectedItem[this._textProperty] && _labelField) 
+			if (includeCollection && this.selectedItem[this._textProperty] && _labelField)
 			{
-				for each (var file:Object in ddlSelection.dataProvider)
+                var dpCount:int = ddlSelection.dataProvider.length;
+				for (var i:int = 0; i < dpCount; i++)
 				{
-					if (file[_labelField] == this.selectedItem[this._textProperty])
+                    var item:Object = ddlSelection.dataProvider.getItemAt(i);
+					if (item[_labelField] == this.selectedItem[this._textProperty])
 					{
-						ddlSelection.selectedItem = file;
+						ddlSelection.selectedItem = item;
 						break;
 					}
 				}

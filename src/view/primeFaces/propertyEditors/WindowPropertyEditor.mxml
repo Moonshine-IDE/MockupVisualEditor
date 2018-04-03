@@ -45,14 +45,14 @@
 
             this.horizontalDirection.includeCollection = new ArrayList([
                 new ContainerHorizontalAlignItem(HorizontalAlign.LEFT),
-                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT),
-                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER)
+                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER),
+                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT)
             ]);
 
             this.verticalDirection.includeCollection = new ArrayList([
                 new ContainerVerticalAlignItem(VerticalAlign.TOP),
-                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM),
-                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE)
+                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE),
+                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
             ])
         }
         ]]></fx:Script>

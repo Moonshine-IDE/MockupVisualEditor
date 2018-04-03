@@ -110,27 +110,45 @@ package utils
 
                     switch (className)
                     {
+                        case "flexVerticalLayoutLeft":
                         case "flexHorizontalLayoutLeft":
                             container.horizontalAlign = HorizontalAlign.LEFT;
                             break;
+                        case "flexVerticalLayoutRight":
                         case "flexHorizontalLayoutRight":
                             container.horizontalAlign = HorizontalAlign.RIGHT;
                             break;
                         case "flexCenter":
-                            container.horizontalAlign = HorizontalAlign.CENTER;
+                            if (container.direction == ContainerDirection.VERTICAL_LAYOUT)
+                            {
+                                container.verticalAlign = VerticalAlign.MIDDLE;
+                            }
+                            else
+                            {
+                                container.horizontalAlign = HorizontalAlign.CENTER;
+                            }
                             break;
                     }
 
                     switch (className)
                     {
+                        case "flexVerticalLayoutTop":
                         case "flexHorizontalLayoutTop":
                             container.verticalAlign = VerticalAlign.TOP;
                             break;
+                        case "flexVerticalLayoutBottom":
                         case "flexHorizontalLayoutBottom":
                             container.verticalAlign = VerticalAlign.BOTTOM;
                             break;
                         case "flexMiddle":
-                            container.verticalAlign = VerticalAlign.MIDDLE;
+                            if (container.direction == ContainerDirection.VERTICAL_LAYOUT)
+                            {
+                                container.horizontalAlign = HorizontalAlign.CENTER;
+                            }
+                            else
+                            {
+                                container.verticalAlign = VerticalAlign.MIDDLE;
+                            }
                             break;
 
                     }
@@ -183,7 +201,8 @@ package utils
                         xml["@class"] += " " + "flexVerticalLayoutRight";
                         break;
                     case HorizontalAlign.CENTER:
-                        xml["@class"] += " " + "flexCenter";
+
+                        xml["@class"] += " " + "flexMiddle";
                         break;
                 }
 
@@ -196,7 +215,7 @@ package utils
                         xml["@class"] += " " + "flexVerticalLayoutBottom";
                         break;
                     case VerticalAlign.MIDDLE:
-                        xml["@class"] += " " + "flexMiddle";
+                        xml["@class"] += " " + "flexCenter";
                         break;
                 }
             }

@@ -40,7 +40,7 @@ package view.primeFaces.surfaceComponents.components
             ];
 
             var navigatorContent:NavigatorContent = new NavigatorContent();
-            navigatorContent.label = "Title";
+            navigatorContent.label = "Tab";
 
             addElement(navigatorContent);
         }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:suportclasses="view.suportClasses.*"
+        creationComplete="onDivLayoutFormCreationComplete(event)" skinClass="skins.FormSkin">
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+
+    <s:FormItem label="Direction" skinClass="skins.StackedFormItemSkin">
+        <s:HGroup gap="3" verticalAlign="middle" width="100%">
+            <s:DropDownList id="directionDropDownList" width="100%"
+                            requireSelection="true" labelField="direction"
+                            change="onDrectionChange(event)" enabled="{wrapContent.selected == false}"/>
+            <s:CheckBox id="wrapContent" label="wrap" change="onWrapContentChange(event)"/>
+        </s:HGroup>
+    </s:FormItem>
+    <s:FormItem label="Horizontal align" skinClass="skins.StackedFormItemSkin">
+        <s:DropDownList id="horizontalDirection" width="100%" requireSelection="true"
+                        labelField="horizontalAlign"
+                        change="onDrectionChange(event)"/>
+    </s:FormItem>
+    <s:FormItem label="Vertical align" skinClass="skins.StackedFormItemSkin">
+        <s:DropDownList id="verticalDirection" width="100%" requireSelection="true"
+                        labelField="verticalAlign"
+                        change="onDrectionChange(event)"/>
+    </s:FormItem>
+    <fx:Script><![CDATA[
+        import mx.collections.ArrayList;
+        import mx.events.FlexEvent;
+
+        import spark.events.IndexChangeEvent;
+        import spark.layouts.HorizontalAlign;
+        import spark.layouts.VerticalAlign;
+
+        import view.primeFaces.supportClasses.ContainerDirection;
+
+        import view.primeFaces.supportClasses.ContainerDirectionItem;
+        import view.primeFaces.supportClasses.ContainerHorizontalAlignItem;
+        import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
+
+        protected function onDivLayoutFormCreationComplete(event:FlexEvent):void
+        {
+            this.directionDropDownList.dataProvider = new ArrayList([
+                new ContainerDirectionItem(ContainerDirection.HORIZONTAL_LAYOUT),
+                new ContainerDirectionItem(ContainerDirection.VERTICAL_LAYOUT)
+            ]);
+
+            this.horizontalDirection.dataProvider = new ArrayList([
+                new ContainerHorizontalAlignItem(HorizontalAlign.LEFT),
+                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER),
+                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT)
+            ]);
+
+            this.verticalDirection.dataProvider = new ArrayList([
+                new ContainerVerticalAlignItem(VerticalAlign.TOP),
+                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE),
+                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
+            ])
+
+            this.wrapContent.selected = this.selectedItem["wrap"];
+            directionDropDownList.callLater(selectCurrentItem, [directionDropDownList]);
+            horizontalDirection.callLater(selectCurrentItem, [horizontalDirection]);
+            verticalDirection.callLater(selectCurrentItem, [verticalDirection]);
+        }
+
+        private function selectCurrentItem(dpList:DropDownList):void
+        {
+            if (this.selectedItem[dpList.labelField])
+            {
+                var dpCount:int = dpList.dataProvider.length;
+                for (var i:int = 0; i < dpCount; i++)
+                {
+                    var item:Object = dpList.dataProvider.getItemAt(i);
+                    if (item[dpList.labelField] == this.selectedItem[dpList.labelField])
+                    {
+                        dpList.selectedItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+
+        protected function onDrectionChange(event:IndexChangeEvent):void
+        {
+            var dpList:DropDownList = event.target as DropDownList;
+            if (this.selectedItem[dpList.labelField])
+            {
+                this.selectedItem[dpList.labelField] = dpList.selectedItem[dpList.labelField];
+            }
+        }
+
+        private function onWrapContentChange(event:Event):void
+        {
+            this.selectedItem["wrap"] = wrapContent.selected;
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

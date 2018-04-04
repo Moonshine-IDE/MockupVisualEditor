@@ -13,8 +13,6 @@
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
-    <forms:TextForm label="Title" textProperty="title"/>
-
     <primeFaces:DivLayoutForm />
 
 </suportclasses:BasePropertyEditor>

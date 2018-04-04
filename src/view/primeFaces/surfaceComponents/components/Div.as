@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.primeFaces.propertyEditors.DivPropertyEditor;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     public class Div extends Container implements IPrimeFacesSurfaceComponent
@@ -13,6 +14,11 @@ package view.primeFaces.surfaceComponents.components
         public function Div()
         {
             super();
+
+            this.width = 120;
+            this.height = 120;
+            this.minWidth = 20;
+            this.minHeight = 20;
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -30,7 +36,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function get propertyEditorClass():Class
         {
-            return WindowPropertyEditor;
+            return DivPropertyEditor;
         }
 
         private var _propertiesChangedEvents:Array;
@@ -45,6 +51,8 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
             XMLCodeUtils.applyChildrenPositionToXML(this, xml);
+
+            xml.@wrap = this.wrap;
 
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
@@ -83,6 +91,8 @@ package view.primeFaces.surfaceComponents.components
 
         public function fromXML(xml:XML, callback:Function):void
         {
+            this.wrap = xml.@wrap == "true";
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             XMLCodeUtils.applyChildrenPositionFromXML(xml, this);
 

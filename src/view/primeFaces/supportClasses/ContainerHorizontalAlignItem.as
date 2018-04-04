@@ -4,11 +4,11 @@ package view.primeFaces.supportClasses
 
     public class ContainerHorizontalAlignItem
     {
-        public var horiztonalAlign:String = HorizontalAlign.LEFT;
+        public var horizontalAlign:String = HorizontalAlign.LEFT;
 
         public function ContainerHorizontalAlignItem(horizontalAlign:String = HorizontalAlign.LEFT)
         {
-            this.horiztonalAlign = horizontalAlign;
+            this.horizontalAlign = horizontalAlign;
         }
     }
 }

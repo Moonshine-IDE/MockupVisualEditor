@@ -28,6 +28,7 @@
 		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 		import view.primeFaces.surfaceComponents.components.Button;
 		import view.primeFaces.surfaceComponents.components.DataTable;
+		import view.primeFaces.surfaceComponents.components.Div;
 		import view.primeFaces.surfaceComponents.components.Fieldset;
 		import view.primeFaces.surfaceComponents.components.Include;
 		import view.primeFaces.surfaceComponents.components.InputMask;
@@ -86,7 +87,8 @@
 					new ComponentListItem("Tree", view.primeFaces.surfaceComponents.components.Tree),
 					new ComponentListItem("DataTable", DataTable),
 					new ComponentListItem("Fieldset", Fieldset),
-					new ComponentListItem("Include", Include)
+					new ComponentListItem("Include", Include),
+					new ComponentListItem("Div", Div)
 				]);
 			}
 

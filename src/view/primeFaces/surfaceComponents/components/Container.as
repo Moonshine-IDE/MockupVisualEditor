@@ -19,10 +19,10 @@ package view.primeFaces.surfaceComponents.components
             this.setHoriztonalLayout();
         }
 
-        private var _direction:String;
+        private var _direction:String = "Horizontal";
         private var directionChanged:Boolean;
 
-        [Inspectable(enumeration="flexHorizontalLayout,flexVerticalLayout", defaultValue="flexHorizontalLayout")]
+        [Inspectable(enumeration="Horizontal,Vertical", defaultValue="Horizontal")]
         public function get direction():String
         {
             return _direction;
@@ -53,6 +53,7 @@ package view.primeFaces.surfaceComponents.components
             if (_wrap != value)
             {
                 _wrap = value;
+                this.directionChanged = true;
                 this.wrapChanged = true;
 
                 this.invalidateDisplayList();
@@ -185,6 +186,8 @@ package view.primeFaces.surfaceComponents.components
 
         private function setFlowLayout():void
         {
+            if (!this.wrap) return;
+
             var flowLayout:FlowLayout = new FlowLayout();
             flowLayout.horizontalGap = this.gap;
 

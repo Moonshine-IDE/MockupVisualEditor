@@ -24,7 +24,7 @@
     </s:FormItem>
     <s:FormItem label="Vertical align" skinClass="skins.StackedFormItemSkin">
         <s:DropDownList id="verticalDirection" width="100%" requireSelection="true"
-                        labelField="verticalAlign"
+                        labelField="verticalAlign" enabled="{wrapContent.selected == false}"
                         change="onDrectionChange(event)"/>
     </s:FormItem>
     <fx:Script><![CDATA[
@@ -41,6 +41,8 @@
         import view.primeFaces.supportClasses.ContainerHorizontalAlignItem;
         import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
 
+        private var verticalTopItem:ContainerVerticalAlignItem;
+
         protected function onDivLayoutFormCreationComplete(event:FlexEvent):void
         {
             this.directionDropDownList.dataProvider = new ArrayList([
@@ -54,8 +56,9 @@
                 new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT)
             ]);
 
+            verticalTopItem = new ContainerVerticalAlignItem(VerticalAlign.TOP);
             this.verticalDirection.dataProvider = new ArrayList([
-                new ContainerVerticalAlignItem(VerticalAlign.TOP),
+                verticalTopItem,
                 new ContainerVerticalAlignItem(VerticalAlign.MIDDLE),
                 new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
             ])
@@ -94,6 +97,10 @@
 
         private function onWrapContentChange(event:Event):void
         {
+            if (wrapContent.selected)
+            {
+                verticalDirection.selectedItem = verticalTopItem;
+            }
             this.selectedItem["wrap"] = wrapContent.selected;
         }
         ]]></fx:Script>

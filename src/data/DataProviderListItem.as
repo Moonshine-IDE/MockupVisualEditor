@@ -9,5 +9,6 @@ package data
 		}
 
 		public var label:String;
+		public var value:String;
 	}
 }

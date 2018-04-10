@@ -2,14 +2,30 @@
 <suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
 								  xmlns:s="library://ns.adobe.com/flex/spark"
 								  xmlns:suportclasses="view.suportClasses.*"
-								  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+								  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*"
+								  creationComplete="onCreationCompletes(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function onCreationCompletes(event:FlexEvent):void
+			{
+			}
+			
+		]]>
+	</fx:Script>
 	<suportclasses:layout>
-        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+        <s:VerticalLayout id="thisLayout" gap="10" padding="10" horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
 	<primeFaces:BasicsForm/>
 
-	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
+	<s:FormHeading label="Table Data" skinClass="skins.FormHeadingSkin" />
+	<forms:TextForm label="Var" textProperty="tableVar"/>
+	<forms:TextForm label="Value" textProperty="tableValue"/>
+	
+	<s:FormHeading label="Column Data" skinClass="skins.FormHeadingSkin" />
+	<primeFaces:DataTableForm width="100%"/>
 	<forms:ToggleButtonSelectedForm label="Enables column resizing" textProperty="resizableColumns"/>
 	<forms:ToggleButtonSelectedForm label="Enables pagination" textProperty="paginator"/>
 	<forms:TextForm label="No data to display" textProperty="emptyMessage"/>

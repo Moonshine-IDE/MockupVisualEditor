@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark">
+	
+	<s:HGroup width="100%" gap="6"
+			  visible="{!editing}" includeInLayout="{!editing}">
+		<s:Label text="{DataProviderListItem(data).label}"
+			width="60%"
+			paddingTop="4" paddingRight="5" paddingBottom="4" paddingLeft="5"
+			doubleClickEnabled="true" doubleClick="startEditing()" maxDisplayedLines="4"/>
+		<s:Label id="lblValue" 
+				 width="40%" color="0x666666" textAlign="right"
+				 paddingTop="4" paddingRight="6" paddingBottom="4" paddingLeft="5"
+				 doubleClickEnabled="true" doubleClick="startEditing()" maxDisplayedLines="4"/>
+	</s:HGroup>
+	<s:HGroup width="100%" gap="0"
+			  visible="{editing}" includeInLayout="{editing}">
+		<s:TextInput id="input" text="{DataProviderListItem(data).label}"
+			skinClass="skins.TextInputSkin" width="60%"
+			enter="commitChanges()" focusOut="commitChanges()" keyFocusChange="input_keyFocusChangeHandler(event)" />
+		<s:TextInput id="value" text="{DataProviderListItem(data).value}"
+					 skinClass="skins.TextInputSkin" width="40%"
+					 enter="commitChanges()" focusOut="commitChanges()" keyFocusChange="input_keyFocusChangeHandler(event)"/>
+	</s:HGroup>
+
+	<fx:Script><![CDATA[
+		import flash.utils.clearTimeout;
+		import flash.utils.setTimeout;
+		
+		import spark.components.List;
+		
+		import data.DataProviderListItem;
+
+		[Bindable]
+		private var editing:Boolean = false;
+		
+		private var isTabChanged:Boolean;
+
+		override public function set data(value:Object):void
+		{
+			if (value is DataProviderListItem)
+			{
+				super.data = value;
+				
+				var tabVar:String = List(this.owner).parentDocument.tableVar;
+				if (tabVar && value.value) lblValue.text = "#{"+ tabVar +"."+ value.value +"}";
+				else if (tabVar) lblValue.text = "#{"+ tabVar +".}";
+				else lblValue.text = "#{.}";
+			}
+		}
+
+		public function startEditing():void
+		{
+			if (this.editing)
+			{
+				//already editing!
+				return;
+			}
+			
+			this.editing = true;
+			this.input.setFocus();
+		}
+
+		private function commitChanges():void
+		{
+			if (!this.editing || !this.data || isTabChanged)
+			{
+				//not editing, so nothing to commit!
+				return;
+			}
+			
+			DataProviderListItem(this.data).label = this.input.text;
+			DataProviderListItem(this.data).value = this.value.text;
+			this.editing = false;
+
+			dispatchEvent(new Event("editingFinished", true));
+		}
+		
+		protected function input_keyFocusChangeHandler(event:FocusEvent):void
+		{
+			// when tab pressed make sure no commitChange perform
+			if (event.keyCode == 9)
+			{
+				event.preventDefault();
+				isTabChanged = true;
+
+				// move between input and value only
+				if (event.currentTarget.id == "input") this.value.setFocus();
+				else this.input.setFocus();
+				
+				// focus-out called by default irrespective of event.preventDefault
+				// thus we need workaround to not to end its editing upon
+				// focus-out event on currentTarget
+				var timeout:uint = setTimeout(function():void
+				{
+					isTabChanged = false;
+					clearTimeout(timeout);
+				}, 300);
+			}
+		}
+		
+	]]></fx:Script>
+</s:ItemRenderer>

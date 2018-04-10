@@ -1,14 +1,17 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
+    import mx.collections.ArrayCollection;
     import mx.collections.ArrayList;
-
+    
     import spark.components.DataGrid;
-    import spark.utils.DataItem;
-
+    import spark.components.gridClasses.GridColumn;
+    
+    import data.DataProviderListItem;
+    
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
 
@@ -37,7 +40,8 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinHeightChanged",
                 "resizableColumnsChanged",
                 "paginatorChanged",
-                "emptyMessageChanged"
+                "emptyMessageChanged",
+				"change"
             ];
 
             fillDataTable();
@@ -45,31 +49,68 @@ package view.primeFaces.surfaceComponents.components
 
         private function fillDataTable():void
         {
-            var dp:ArrayList = new ArrayList();
-
-            var dataItem:DataItem = new DataItem();
-            dataItem.Year = "1981";
-            dataItem.Brand = "Volkswagen";
-            dataItem.Color = "Maroon";
-
-            dp.addItem(dataItem);
-
-            dataItem = new DataItem();
-            dataItem.Year = "1977";
-            dataItem.Brand = "Ford";
-            dataItem.Color = "Black";
-
-            dp.addItem(dataItem);
-
-            dataItem = new DataItem();
-            dataItem.Year = "2008";
-            dataItem.Brand = "Renault";
-            dataItem.Color = "Brown";
-
-            dp.addItem(dataItem);
-
-            this.dataProvider = dp;
+			_tableColumnDescriptor = new ArrayCollection();
+			
+			var tmpTableVO:DataProviderListItem = new DataProviderListItem();
+			tmpTableVO.label = "Year";
+			_tableColumnDescriptor.addItem(tmpTableVO);
+			
+			tmpTableVO = new DataProviderListItem();
+			tmpTableVO.label = "Brand";
+			_tableColumnDescriptor.addItem(tmpTableVO);
+			
+			generateColumns();
         }
+		
+		private function generateColumns():void
+		{
+			var dp:ArrayList = new ArrayList();
+			
+			columns = new ArrayList();
+			for each (var i:DataProviderListItem in _tableColumnDescriptor.source)
+			{
+				var tmpColumn:GridColumn = new GridColumn();
+				tmpColumn.headerText = tmpColumn.dataField = i.label;
+				columns.addItem(tmpColumn);
+			}
+			
+			this.invalidateDisplayList();
+		}
+		
+		private var _tableVar:String = "";
+		
+		[Bindable("change")]
+		public function get tableVar():String
+		{
+			return _tableVar;
+		}
+		public function set tableVar(value:String):void
+		{
+			if (_tableVar == value) return;
+			
+			_tableVar = value;
+			dispatchEvent(new Event(Event.CHANGE));
+		}
+		
+		private var _tableValue:String = "";
+		public function get tableValue():String
+		{
+			return _tableValue;
+		}
+		public function set tableValue(value:String):void
+		{
+			_tableValue = value;
+		}
+		
+		private var _tableColumnDescriptor:ArrayCollection;
+		public function get tableColumnDescriptor():ArrayCollection
+		{
+			return _tableColumnDescriptor;
+		}
+		public function set tableColumnDescriptor(value:ArrayCollection):void
+		{
+			_tableColumnDescriptor = value;
+		}
 
         private var _emptyMessage:String = NO_RECORDS_FOUND;
 
@@ -142,6 +183,7 @@ package view.primeFaces.surfaceComponents.components
         {
             var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
+			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
@@ -150,24 +192,24 @@ package view.primeFaces.surfaceComponents.components
             xml.@paginator = this.paginator;
             xml.@resizableColumns = this.resizableColumns;
             xml.@emptyMessage = this.emptyMessage;
-
-            var column:XML = new XML("<column/>");
-            column.addNamespace(primeFacesNamespace);
-            column.setNamespace(primeFacesNamespace);
-            column.@headerText = "Year";
-            xml.appendChild(column);
-
-            column = new XML("<column/>");
-            column.addNamespace(primeFacesNamespace);
-            column.setNamespace(primeFacesNamespace);
-            column.@headerText = "Brand";
-            xml.appendChild(column);
-
-            column = new XML("<column/>");
-            column.addNamespace(primeFacesNamespace);
-            column.setNamespace(primeFacesNamespace);
-            column.@headerText = "Color";
-            xml.appendChild(column);
+			
+			var column:XML;
+			var outputText:XML;
+			for each (var i:DataProviderListItem in tableColumnDescriptor)
+			{
+				column = new XML("<column/>");
+				column.addNamespace(primeFacesNamespace);
+				column.setNamespace(primeFacesNamespace);
+				column.@headerText = i.label;
+				
+				outputText = new XML("<outputText/>");
+				outputText.addNamespace(hNamespace);
+				outputText.setNamespace(hNamespace);
+				outputText.@value = "#{"+ tableVar +"."+ i.value +"}";
+				
+				column.appendChild(outputText);
+				xml.appendChild(column);
+			}
 
             return xml;
         }

@@ -113,17 +113,9 @@
 			
 			GenericUtils.listScrollToBottom(itemsList);
 			
-			// make this separate function to 
-			// access class level method while triggered
-			// by callLater()
-			itemsList.callLater(updateListsAndEdit, [navigatorNumElements - 1]);
-        }
-		
-		private function updateListsAndEdit(index:int):void
-		{
-			this.itemsList.selectedIndex = index;
+			this.itemsList.selectedIndex = navigatorNumElements - 1;
 			this.editSelectedItem();
-		}
+        }
 
         private function editItemButton_clickHandler(event:MouseEvent):void
         {

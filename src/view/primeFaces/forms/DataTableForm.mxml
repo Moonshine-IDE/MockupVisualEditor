@@ -73,15 +73,7 @@
 				onItemsListEditingFinished(null);
 				GenericUtils.listScrollToBottom(itemsList);
 				
-				// make this separate function to 
-				// access class level method while triggered
-				// by callLater()
-				itemsList.callLater(updateListsAndEdit, [listItem]);
-			}
-			
-			private function updateListsAndEdit(value:DataProviderListItem):void
-			{
-				this.itemsList.selectedItem = value;
+				this.itemsList.selectedItem = listItem;
 				editSelectedItem();
 			}
 			

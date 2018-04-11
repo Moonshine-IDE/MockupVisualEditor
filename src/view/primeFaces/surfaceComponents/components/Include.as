@@ -55,7 +55,8 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var _title:String;
-		
+		private var titleChanged:Boolean;
+
 		[Bindable("titleChanged")]
         public function get title():String
         {
@@ -64,10 +65,14 @@ package view.primeFaces.surfaceComponents.components
 
         public function set title(value:String):void
         {
-			if (_title == value) return;
-			
-			includeLabel.text = _title = value;
-			dispatchEvent(new Event("titleChanged"));
+            if (_title != value)
+            {
+                _title = value;
+                titleChanged = true;
+
+                this.invalidateProperties();
+                dispatchEvent(new Event("titleChanged"));
+            }
         }
 
         private var _propertiesChangedEvents:Array;
@@ -146,8 +151,19 @@ package view.primeFaces.surfaceComponents.components
 			includeButton.addEventListener(MouseEvent.CLICK, onIncludeButtonClicked, false, 0, true);
 			addElement(includeButton);
 		}
-		
-		private function onIncludeButtonClicked(event:MouseEvent):void
+
+        override protected function commitProperties():void
+        {
+            if (titleChanged)
+            {
+                includeLabel.text = _title;
+                titleChanged = false;
+            }
+
+            super.commitProperties();
+        }
+
+        private function onIncludeButtonClicked(event:MouseEvent):void
 		{
 			MoonshineBridgeUtils.moonshineBridge.openXhtmlFile(title);
 		}

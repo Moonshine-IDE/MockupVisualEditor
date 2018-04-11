@@ -15,4 +15,5 @@ Visual Editor is built with [Apache Flex® SDK 4.16.1](https://flex.apache.org/i
 2. Setup environment variable `FLEX_HOME` or add path to the Apache Flex SDK in build.xml -> [here](https://github.com/prominic/MockupVisualEditor/blob/5922c8290a7d780e27f2cda4aa1ec15729d192f1/build.xml#L4)
 3. Uncomment [line](https://github.com/prominic/MockupVisualEditor/blob/5922c8290a7d780e27f2cda4aa1ec15729d192f1/build.xml#L7) and set `MOONSHINE_LIBS_PATH` to folder libs `Moonshine-IDE\ide\MoonshineDESKTOPevolved\libs\`
 4. Make sure that constant [CONFIG::MOONSHINE](https://github.com/prominic/MockupVisualEditor/blob/5922c8290a7d780e27f2cda4aa1ec15729d192f1/compile-config.xml#L5) is set to true.
-5. Run in command line `ant`
+5. If you would like to have debuggable swc please set [IsDebug](https://github.com/prominic/MockupVisualEditor/blob/5922c8290a7d780e27f2cda4aa1ec15729d192f1/build.xml#L9) variable to true
+6. Run in command line `ant`

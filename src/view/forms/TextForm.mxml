@@ -12,7 +12,7 @@
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:TextInput id="textInput"
                      text="{bindableText}" width="100%" minWidth="156" maxChars="{_maxChar}" restrict="{restrict}"
-                     change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin"/>
+                     change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="{prompt}"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
@@ -23,6 +23,7 @@
 
         private var _binding:ChangeWatcher;
 		
+		[Bindable] public var prompt:String;
 		[Bindable] public var restrict:String;
 
         [Bindable]

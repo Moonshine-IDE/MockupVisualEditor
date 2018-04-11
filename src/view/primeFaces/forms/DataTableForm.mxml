@@ -7,26 +7,23 @@
         creationComplete="onTabFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
-			import mx.collections.ArrayList;
-			import mx.controls.Alert;
+			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
 			import spark.components.DataGroup;
-			import spark.components.NavigatorContent;
-			import spark.containers.Navigator;
 			import spark.events.IndexChangeEvent;
 			
-			import components.tabNavigator.TabNavigatorWithOrientation;
-			
 			import data.DataProviderListItem;
+			
+			import utils.GenericUtils;
 			
 			import view.interfaces.ISelectableItemsComponent;
 			import view.primeFaces.surfaceComponents.components.DataTable;
 			
 			[Bindable] public var tableVar:String;
-			[Bindable] private var itemsListDataProvider:ArrayList;
 			
 			private var _binding:ChangeWatcher;
 			private var _label:String = "Items";
@@ -49,18 +46,13 @@
 			
 			private function editSelectedItem():void
 			{
-				Alert.show("Awaiting Update");
-				return;
-				
 				var item:DataProviderListItem = DataProviderListItem(this.itemsList.selectedItem);
 				var group:DataGroup = this.itemsList.dataGroup;
-				this.itemsList.ensureIndexIsVisible(this.itemsList.selectedIndex);
-				this.itemsList.validateNow();
 				
 				var itemCount:int = group.numElements;
 				for (var i:int = 0; i < itemCount; i++)
 				{
-					var itemRenderer:TabFormItemRenderer = group.getElementAt(i) as TabFormItemRenderer;
+					var itemRenderer:DataTableColumnFormItemRenderer = group.getElementAt(i) as DataTableColumnFormItemRenderer;
 					if (!itemRenderer)
 					{
 						continue;
@@ -75,26 +67,22 @@
 			
 			private function addItemButton_clickHandler(event:MouseEvent):void
 			{
-				Alert.show("Awaiting Update");
-				return;
-				
-				var navContent:NavigatorContent = new NavigatorContent();
-				navContent.label = "Title";
-				
-				var navigator:Navigator = (selectedItem as Navigator);
-				navigator.addElement(navContent);
-				var navigatorNumElements:int = navigator.numElements;
-				
 				var listItem:DataProviderListItem = new DataProviderListItem("Title");
-				itemsListDataProvider.addItem(listItem);
+				itemsList.dataProvider.addItem(listItem);
 				
-				if (selectedItem is ISelectableItemsComponent)
-				{
-					ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
-				}
+				onItemsListEditingFinished(null);
+				GenericUtils.listScrollToBottom(itemsList);
 				
-				this.itemsList.selectedIndex = navigatorNumElements - 1;
-				this.editSelectedItem();
+				// make this separate function to 
+				// access class level method while triggered
+				// by callLater()
+				itemsList.callLater(updateListsAndEdit, [listItem]);
+			}
+			
+			private function updateListsAndEdit(value:DataProviderListItem):void
+			{
+				this.itemsList.selectedItem = value;
+				editSelectedItem();
 			}
 			
 			private function editItemButton_clickHandler(event:MouseEvent):void
@@ -104,17 +92,9 @@
 			
 			private function deleteItemButton_clickHandler(event:MouseEvent):void
 			{
-				Alert.show("Awaiting Update");
-				return;
+				itemsList.dataProvider.removeItemAt(itemsList.selectedIndex);
 				
-				var deleteIndex:int = itemsList.selectedIndex;
-				
-				var navigator:Navigator = (selectedItem as Navigator);
-				if (navigator.numElements > 1)
-				{
-					navigator.removeItemAt(deleteIndex);
-					itemsListDataProvider.removeItemAt(deleteIndex);
-				}
+				onItemsListEditingFinished(null);
 			}
 			
 			private function itemsList_changeHandler(event:IndexChangeEvent):void
@@ -141,8 +121,8 @@
 			
 			private function onItemsListEditingFinished(event:Event):void
 			{
-				var listItem:DataProviderListItem = itemsList.selectedItem as DataProviderListItem;
-				var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
+				var grid:DataTable = (selectedItem as DataTable);
+				grid.tableColumnDescriptor = itemsList.dataProvider as ArrayCollection;
 			}
 			
 			private function updateBinding():void
@@ -161,7 +141,7 @@
 			
 			private function onTableVarUpdated(value:Object):void
 			{
-				if (value) tableVar = value.toString();
+				tableVar = value.toString();
 				(selectedItem as DataTable).tableColumnDescriptor.refresh();
 			}
 			
@@ -182,10 +162,7 @@
                                   requestedRowCount="5" requestedMaxRowCount="5"/>
             </s:layout>
         </s:List>
-        <s:Group>
-            <s:layout>
-                <s:HorizontalLayout/>
-            </s:layout>
+        <s:HGroup>
             <s:Button width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
             <s:Button styleName="editDataProviderItemButton" toolTip="Edit Item"
@@ -194,6 +171,6 @@
             <s:Button styleName="deleteDataProviderItemButton" toolTip="Delete Item"
                       enabled="{itemsList.selectedIndex !== -1 &amp;&amp; itemsList.dataProvider.length > 1}"
                       click="deleteItemButton_clickHandler(event)"/>
-        </s:Group>
+        </s:HGroup>
     </s:FormItem>
 </suportclasses:BasePropertyEditorForm>

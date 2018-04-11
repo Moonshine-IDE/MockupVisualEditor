@@ -12,10 +12,11 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.XMLCodeUtils;
     
+    import view.interfaces.IDataProviderComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
 
-    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent
+    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
         public static const ELEMENT_NAME:String = "DataTable";
@@ -52,11 +53,7 @@ package view.primeFaces.surfaceComponents.components
 			_tableColumnDescriptor = new ArrayCollection();
 			
 			var tmpTableVO:DataProviderListItem = new DataProviderListItem();
-			tmpTableVO.label = "Year";
-			_tableColumnDescriptor.addItem(tmpTableVO);
-			
-			tmpTableVO = new DataProviderListItem();
-			tmpTableVO.label = "Brand";
+			tmpTableVO.label = "Column 1";
 			_tableColumnDescriptor.addItem(tmpTableVO);
 			
 			generateColumns();
@@ -64,8 +61,6 @@ package view.primeFaces.surfaceComponents.components
 		
 		private function generateColumns():void
 		{
-			var dp:ArrayList = new ArrayList();
-			
 			columns = new ArrayList();
 			for each (var i:DataProviderListItem in _tableColumnDescriptor.source)
 			{
@@ -78,7 +73,6 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _tableVar:String = "";
-		
 		[Bindable("change")]
 		public function get tableVar():String
 		{
@@ -93,6 +87,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _tableValue:String = "";
+		[Bindable("change")]
 		public function get tableValue():String
 		{
 			return _tableValue;
@@ -100,9 +95,11 @@ package view.primeFaces.surfaceComponents.components
 		public function set tableValue(value:String):void
 		{
 			_tableValue = value;
+			dispatchEvent(new Event(Event.CHANGE));
 		}
 		
 		private var _tableColumnDescriptor:ArrayCollection;
+		[Bindable("change")]
 		public function get tableColumnDescriptor():ArrayCollection
 		{
 			return _tableColumnDescriptor;
@@ -110,6 +107,8 @@ package view.primeFaces.surfaceComponents.components
 		public function set tableColumnDescriptor(value:ArrayCollection):void
 		{
 			_tableColumnDescriptor = value;
+			generateColumns();
+			dispatchEvent(new Event(Event.CHANGE));
 		}
 
         private var _emptyMessage:String = NO_RECORDS_FOUND;
@@ -166,6 +165,17 @@ package view.primeFaces.surfaceComponents.components
             xml.@paginator = this.paginator;
             xml.@resizableColumns = this.resizableColumns;
             xml.@emptyMessage = this.emptyMessage;
+			xml.@['var'] = tableVar;
+			xml.@value = tableValue;
+			
+			var column:XML;
+			for each (var col:DataProviderListItem in tableColumnDescriptor)
+			{
+				column = new XML("<column/>");
+				column.@headerText = col.label;
+				column.@value = (col.value ||= '');
+				xml.appendChild(column);
+			}
 
             return xml;
         }
@@ -177,6 +187,22 @@ package view.primeFaces.surfaceComponents.components
             this.paginator = xml.@paginator == "true";
             this.resizableColumns = xml.@resizableColumns == "true";
             this.emptyMessage = !xml.@emptyMessage ? NO_RECORDS_FOUND : xml.@emptyMessage;
+			this.tableVar = xml.@['var'];
+			this.tableValue = xml.@value;
+			
+			var tmpColumnVO:DataProviderListItem;
+			_tableColumnDescriptor = new ArrayCollection();
+			
+			// re-generate column
+			for each (var col:XML in xml.column)
+			{
+				tmpColumnVO = new DataProviderListItem();
+				tmpColumnVO.label = col.@headerText;
+				tmpColumnVO.value = col.@value;
+				_tableColumnDescriptor.addItem(tmpColumnVO);
+			}
+			
+			generateColumns();
         }
 
         public function toCode():XML
@@ -192,22 +218,27 @@ package view.primeFaces.surfaceComponents.components
             xml.@paginator = this.paginator;
             xml.@resizableColumns = this.resizableColumns;
             xml.@emptyMessage = this.emptyMessage;
+			if (tableVar != "") xml.@['var'] = tableVar;
+			if (tableValue != "") xml.@value = tableValue;
 			
 			var column:XML;
 			var outputText:XML;
-			for each (var i:DataProviderListItem in tableColumnDescriptor)
+			for each (var col:DataProviderListItem in tableColumnDescriptor)
 			{
 				column = new XML("<column/>");
 				column.addNamespace(primeFacesNamespace);
 				column.setNamespace(primeFacesNamespace);
-				column.@headerText = i.label;
+				column.@headerText = col.label;
 				
-				outputText = new XML("<outputText/>");
-				outputText.addNamespace(hNamespace);
-				outputText.setNamespace(hNamespace);
-				outputText.@value = "#{"+ tableVar +"."+ i.value +"}";
+				if (tableVar != "")
+				{
+					outputText = new XML("<outputText/>");
+					outputText.addNamespace(hNamespace);
+					outputText.setNamespace(hNamespace);
+					outputText.@value = "#{"+ tableVar +"."+ (col.value ||= '') +"}";
+					column.appendChild(outputText);
+				}
 				
-				column.appendChild(outputText);
 				xml.appendChild(column);
 			}
 

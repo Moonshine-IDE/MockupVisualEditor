@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:ItemRenderer
 	xmlns:fx="http://ns.adobe.com/mxml/2009"
-	xmlns:s="library://ns.adobe.com/flex/spark">
+	xmlns:s="library://ns.adobe.com/flex/spark" width="100%"
+	doubleClick="startEditing()" focusOut="commitChanges()">
 	
 	<s:HGroup width="100%" gap="6"
 			  visible="{!editing}" includeInLayout="{!editing}">
 		<s:Label text="{DataProviderListItem(data).label}"
 			width="60%"
 			paddingTop="4" paddingRight="5" paddingBottom="4" paddingLeft="5"
-			doubleClickEnabled="true" doubleClick="startEditing()" maxDisplayedLines="4"/>
+			doubleClickEnabled="true" maxDisplayedLines="4"/>
 		<s:Label id="lblValue" 
 				 width="40%" color="0x666666" textAlign="right"
 				 paddingTop="4" paddingRight="6" paddingBottom="4" paddingLeft="5"
-				 doubleClickEnabled="true" doubleClick="startEditing()" maxDisplayedLines="4"/>
+				 doubleClickEnabled="true" maxDisplayedLines="4"/>
 	</s:HGroup>
 	<s:HGroup width="100%" gap="0"
 			  visible="{editing}" includeInLayout="{editing}">
 		<s:TextInput id="input" text="{DataProviderListItem(data).label}"
 			skinClass="skins.TextInputSkin" width="60%"
-			enter="commitChanges()" focusOut="commitChanges()" keyFocusChange="input_keyFocusChangeHandler(event)" />
+			enter="commitChanges()" keyFocusChange="input_keyFocusChangeHandler(event)" focusIn="editing=true" />
 		<s:TextInput id="value" text="{DataProviderListItem(data).value}"
 					 skinClass="skins.TextInputSkin" width="40%"
-					 enter="commitChanges()" focusOut="commitChanges()" keyFocusChange="input_keyFocusChangeHandler(event)"/>
+					 prompt="Property Name"
+					 enter="commitChanges()" keyFocusChange="input_keyFocusChangeHandler(event)" focusIn="editing=true"/>
 	</s:HGroup>
 
 	<fx:Script><![CDATA[
@@ -35,7 +37,7 @@
 		[Bindable]
 		private var editing:Boolean = false;
 		
-		private var isTabChanged:Boolean;
+		private var isTabKeyPressed:Boolean;
 
 		override public function set data(value:Object):void
 		{
@@ -43,10 +45,8 @@
 			{
 				super.data = value;
 				
-				var tabVar:String = List(this.owner).parentDocument.tableVar;
-				if (tabVar && value.value) lblValue.text = "#{"+ tabVar +"."+ value.value +"}";
-				else if (tabVar) lblValue.text = "#{"+ tabVar +".}";
-				else lblValue.text = "#{.}";
+				var tableVar:String = List(this.owner).parentDocument.tableVar;
+				lblValue.text = value.value ? "#{"+ tableVar +"."+ value.value +"}" : "#{"+ tableVar +".}";
 			}
 		}
 
@@ -64,17 +64,22 @@
 
 		private function commitChanges():void
 		{
-			if (!this.editing || !this.data || isTabChanged)
+			if (!this.editing || !this.data || isTabKeyPressed)
 			{
 				//not editing, so nothing to commit!
 				return;
 			}
 			
-			DataProviderListItem(this.data).label = this.input.text;
-			DataProviderListItem(this.data).value = this.value.text;
+			var hasChanges:Boolean;
+			var thisData:DataProviderListItem = data as DataProviderListItem;
+			if (thisData.label != this.input.text || thisData.value != this.value.text) hasChanges = true;
+			
+			thisData.label = this.input.text;
+			thisData.value = this.value.text;
 			this.editing = false;
-
-			dispatchEvent(new Event("editingFinished", true));
+			
+			// dispatch only when item has changes
+			if (hasChanges)	dispatchEvent(new Event("editingFinished", true));
 		}
 		
 		protected function input_keyFocusChangeHandler(event:FocusEvent):void
@@ -83,7 +88,7 @@
 			if (event.keyCode == 9)
 			{
 				event.preventDefault();
-				isTabChanged = true;
+				isTabKeyPressed = true;
 
 				// move between input and value only
 				if (event.currentTarget.id == "input") this.value.setFocus();
@@ -94,7 +99,7 @@
 				// focus-out event on currentTarget
 				var timeout:uint = setTimeout(function():void
 				{
-					isTabChanged = false;
+					isTabKeyPressed = false;
 					clearTimeout(timeout);
 				}, 300);
 			}

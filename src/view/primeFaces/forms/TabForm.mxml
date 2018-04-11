@@ -36,20 +36,21 @@
     </s:FormItem>
 
     <fx:Script><![CDATA[
-        import components.tabNavigator.TabNavigatorWithOrientation;
-
-        import data.DataProviderListItem;
-
-        import mx.collections.ArrayList;
-
-        import mx.events.FlexEvent;
-
-        import spark.components.DataGroup;
-        import spark.components.NavigatorContent;
-        import spark.containers.Navigator;
-        import spark.events.IndexChangeEvent;
-
-        import view.interfaces.ISelectableItemsComponent;
+		import mx.collections.ArrayList;
+		import mx.events.FlexEvent;
+		
+		import spark.components.DataGroup;
+		import spark.components.NavigatorContent;
+		import spark.containers.Navigator;
+		import spark.events.IndexChangeEvent;
+		
+		import components.tabNavigator.TabNavigatorWithOrientation;
+		
+		import data.DataProviderListItem;
+		
+		import utils.GenericUtils;
+		
+		import view.interfaces.ISelectableItemsComponent;
 
         [Bindable]
         private var itemsListDataProvider:ArrayList = new ArrayList();
@@ -76,8 +77,6 @@
         {
             var item:DataProviderListItem = DataProviderListItem(this.itemsList.selectedItem);
             var group:DataGroup = this.itemsList.dataGroup;
-            this.itemsList.ensureIndexIsVisible(this.itemsList.selectedIndex);
-            this.itemsList.validateNow();
 
             var itemCount:int = group.numElements;
             for (var i:int = 0; i < itemCount; i++)
@@ -111,10 +110,20 @@
             {
                 ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
             }
-
-            this.itemsList.selectedIndex = navigatorNumElements - 1;
-            this.editSelectedItem();
+			
+			GenericUtils.listScrollToBottom(itemsList);
+			
+			// make this separate function to 
+			// access class level method while triggered
+			// by callLater()
+			itemsList.callLater(updateListsAndEdit, [navigatorNumElements - 1]);
         }
+		
+		private function updateListsAndEdit(index:int):void
+		{
+			this.itemsList.selectedIndex = index;
+			this.editSelectedItem();
+		}
 
         private function editItemButton_clickHandler(event:MouseEvent):void
         {

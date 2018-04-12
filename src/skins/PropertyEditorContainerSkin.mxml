@@ -22,7 +22,7 @@
 		</s:stroke>
 	</s:Line>
 
-	<s:Scroller width="100%" height="100%" minWidth="0" minHeight="0">
+	<s:Scroller width="100%" height="100%" minWidth="0" minHeight="0" horizontalScrollPolicy="off">
 		<s:Group id="contentGroup" clipAndEnableScrolling="true">
 		</s:Group>
 	</s:Scroller>

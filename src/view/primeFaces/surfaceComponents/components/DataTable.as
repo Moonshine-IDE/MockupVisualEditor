@@ -59,10 +59,10 @@ package view.primeFaces.surfaceComponents.components
 			generateColumns();
         }
 		
-		private function generateColumns():void
+		public function generateColumns():void
 		{
 			columns = new ArrayList();
-			for each (var i:DataProviderListItem in _tableColumnDescriptor.source)
+			for each (var i:DataProviderListItem in _tableColumnDescriptor)
 			{
 				var tmpColumn:GridColumn = new GridColumn();
 				tmpColumn.headerText = tmpColumn.dataField = i.label;
@@ -107,7 +107,6 @@ package view.primeFaces.surfaceComponents.components
 		public function set tableColumnDescriptor(value:ArrayCollection):void
 		{
 			_tableColumnDescriptor = value;
-			generateColumns();
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 

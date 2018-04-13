@@ -116,12 +116,6 @@
 				dgColumns.endItemEditorSession();
 			}
 			
-			protected function onItemEditFinished(event:GridItemEditorEvent):void
-			{
-				var grid:DataTable = (selectedItem as DataTable);
-				grid.generateColumns();
-			}
-			
 			private function formattedValue(item:Object,column:GridColumn):String
 			{
 				return (item.value ? "#{"+ tableVar +"."+ item.value +"}" : "#{"+ tableVar +".}");

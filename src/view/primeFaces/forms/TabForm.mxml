@@ -5,166 +5,156 @@
         xmlns:suportclasses="view.suportClasses.*"
         skinClass="skins.FormSkin"
         creationComplete="onTabFormCreationComplete(event)">
-
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import mx.events.FlexEvent;
+			
+			import spark.components.NavigatorContent;
+			import spark.containers.Navigator;
+			import spark.events.GridItemEditorEvent;
+			import spark.events.GridSelectionEvent;
+			import spark.events.IndexChangeEvent;
+			
+			import components.tabNavigator.TabNavigatorWithOrientation;
+			
+			import data.DataProviderListItem;
+			
+			import view.interfaces.ISelectableItemsComponent;
+			
+			[Bindable]
+			private var itemsListDataProvider:ArrayList = new ArrayList();
+			
+			private var _label:String = "Items";
+			
+			[Bindable("labelChange")]
+			public function get label():String
+			{
+				return this._label;
+			}
+			
+			public function set label(value:String):void
+			{
+				if (this._label === value)
+				{
+					return;
+				}
+				this._label = value;
+				this.dispatchEvent(new Event("labelChange"));
+			}
+			
+			private function editSelectedItem():void
+			{
+				dgTabs.ensureCellIsVisible(dgTabs.selectedIndex);
+				dgTabs.startItemEditorSession(dgTabs.selectedIndex, 0);
+			}
+			
+			private function addItemButton_clickHandler(event:MouseEvent):void
+			{
+				var navContent:NavigatorContent = new NavigatorContent();
+				navContent.label = "Title";
+				
+				var navigator:Navigator = (selectedItem as Navigator);
+				navigator.addElement(navContent);
+				var navigatorNumElements:int = navigator.numElements;
+				
+				var listItem:DataProviderListItem = new DataProviderListItem("Title");
+				itemsListDataProvider.addItem(listItem);
+				
+				if (selectedItem is ISelectableItemsComponent)
+				{
+					ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
+				}
+				
+				dgTabs.validateNow();
+				dgTabs.setSelectedIndex(dgTabs.dataProvider.length - 1);
+				callLater(editSelectedItem);
+			}
+			
+			private function editItemButton_clickHandler(event:MouseEvent):void
+			{
+				this.editSelectedItem();
+			}
+			
+			private function deleteItemButton_clickHandler(event:MouseEvent):void
+			{
+				var deleteIndex:int = dgTabs.selectedIndex;
+				
+				var navigator:Navigator = (selectedItem as Navigator);
+				if (navigator.numElements > 1)
+				{
+					navigator.removeItemAt(deleteIndex);
+					dgTabs.dataProvider.removeItemAt(dgTabs.selectedIndex);
+				}
+			}
+			
+			private function itemsList_changeHandler(event:IndexChangeEvent):void
+			{
+				if (selectedItem is ISelectableItemsComponent)
+				{
+					ISelectableItemsComponent(selectedItem).selectedIndex = event.newIndex;
+				}
+			}
+			
+			private function onTabFormCreationComplete(event:FlexEvent):void
+			{
+				var navigator:Navigator = (selectedItem as Navigator);
+				var navigatorNumElements:int = navigator.numElements;
+				
+				for (var i:int = 0; i < navigatorNumElements; i++)
+				{
+					var tabItem:NavigatorContent = navigator.getElementAt(i) as NavigatorContent;
+					var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
+					itemsListDataProvider.addItem(listItem);
+				}
+				
+				dgTabs.dataProvider = itemsListDataProvider;
+			}
+			
+			protected function onItemEditFinished(event:GridItemEditorEvent):void
+			{
+				var listItem:DataProviderListItem = dgTabs.dataProvider.getItemAt(event.rowIndex) as DataProviderListItem;
+				var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
+				
+				navigator.setSelectedTabLabel(listItem.label);
+			}
+			
+			protected function onGridSelectionChanged(event:GridSelectionEvent):void
+			{
+				if (selectedItem is ISelectableItemsComponent)
+				{
+					ISelectableItemsComponent(selectedItem).selectedIndex = dgTabs.selectedIndex;
+				}
+			}
+			
+		]]>
+	</fx:Script>
     <suportclasses:layout>
         <s:FormLayout horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
-    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
-        <s:List id="itemsList" width="100%" height="100%"
-                dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
-                itemRenderer="view.primeFaces.forms.TabFormItemRenderer"
-                change="itemsList_changeHandler(event)">
-            <s:layout>
-                <s:VerticalLayout gap="0" horizontalAlign="contentJustify"
-                                  requestedRowCount="5" requestedMaxRowCount="5"/>
-            </s:layout>
-        </s:List>
-        <s:Group>
-            <s:layout>
-                <s:HorizontalLayout/>
-            </s:layout>
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
+		<s:DataGrid id="dgTabs"
+					width="100%" height="100%"
+					editable="true" sortableColumns="false" draggableColumns="false"
+					initialize="dgTabs.columnHeaderGroup.visible = dgTabs.columnHeaderGroup.includeInLayout = false"
+					gridItemEditorSessionSave="onItemEditFinished(event)"
+					selectionChange="onGridSelectionChanged(event)"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn dataField="label" headerText="Title"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+        <s:HGroup>
             <s:Button width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
             <s:Button styleName="editDataProviderItemButton" toolTip="Edit Item"
-                      enabled="{itemsList.selectedIndex !== -1}"
+                      enabled="{dgTabs.selectedIndex !== -1}"
                       click="editItemButton_clickHandler(event)"/>
             <s:Button styleName="deleteDataProviderItemButton" toolTip="Delete Item"
-                      enabled="{itemsList.selectedIndex !== -1 &amp;&amp; itemsList.dataProvider.length > 1}"
+                      enabled="{dgTabs.selectedIndex !== -1 &amp;&amp; dgTabs.dataProvider.length > 1}"
                       click="deleteItemButton_clickHandler(event)"/>
-        </s:Group>
+        </s:HGroup>
     </s:FormItem>
-
-    <fx:Script><![CDATA[
-		import mx.collections.ArrayList;
-		import mx.events.FlexEvent;
-		
-		import spark.components.DataGroup;
-		import spark.components.NavigatorContent;
-		import spark.containers.Navigator;
-		import spark.events.IndexChangeEvent;
-		
-		import components.tabNavigator.TabNavigatorWithOrientation;
-		
-		import data.DataProviderListItem;
-		
-		import utils.GenericUtils;
-		
-		import view.interfaces.ISelectableItemsComponent;
-
-        [Bindable]
-        private var itemsListDataProvider:ArrayList = new ArrayList();
-
-        private var _label:String = "Items";
-
-        [Bindable("labelChange")]
-        public function get label():String
-        {
-            return this._label;
-        }
-
-        public function set label(value:String):void
-        {
-            if (this._label === value)
-            {
-                return;
-            }
-            this._label = value;
-            this.dispatchEvent(new Event("labelChange"));
-        }
-
-        private function editSelectedItem():void
-        {
-            var item:DataProviderListItem = DataProviderListItem(this.itemsList.selectedItem);
-            var group:DataGroup = this.itemsList.dataGroup;
-
-            var itemCount:int = group.numElements;
-            for (var i:int = 0; i < itemCount; i++)
-            {
-                var itemRenderer:TabFormItemRenderer = group.getElementAt(i) as TabFormItemRenderer;
-                if (!itemRenderer)
-                {
-                    continue;
-                }
-                if (itemRenderer.data === item)
-                {
-                    itemRenderer.startEditing();
-                    break;
-                }
-            }
-        }
-
-        private function addItemButton_clickHandler(event:MouseEvent):void
-        {
-            var navContent:NavigatorContent = new NavigatorContent();
-            navContent.label = "Title";
-
-            var navigator:Navigator = (selectedItem as Navigator);
-            navigator.addElement(navContent);
-            var navigatorNumElements:int = navigator.numElements;
-
-            var listItem:DataProviderListItem = new DataProviderListItem("Title");
-            itemsListDataProvider.addItem(listItem);
-
-            if (selectedItem is ISelectableItemsComponent)
-            {
-                ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
-            }
-			
-			GenericUtils.listScrollToBottom(itemsList);
-			
-			this.itemsList.selectedIndex = navigatorNumElements - 1;
-			this.editSelectedItem();
-        }
-
-        private function editItemButton_clickHandler(event:MouseEvent):void
-        {
-            this.editSelectedItem();
-        }
-
-        private function deleteItemButton_clickHandler(event:MouseEvent):void
-        {
-            var deleteIndex:int = itemsList.selectedIndex;
-
-            var navigator:Navigator = (selectedItem as Navigator);
-            if (navigator.numElements > 1)
-            {
-                navigator.removeItemAt(deleteIndex);
-                itemsListDataProvider.removeItemAt(deleteIndex);
-            }
-        }
-
-        private function itemsList_changeHandler(event:IndexChangeEvent):void
-        {
-            if (selectedItem is ISelectableItemsComponent)
-            {
-                ISelectableItemsComponent(selectedItem).selectedIndex = event.newIndex;
-            }
-        }
-
-        private function onTabFormCreationComplete(event:FlexEvent):void
-        {
-            itemsList.addEventListener("editingFinished", onItemsListEditingFinished);
-
-            var navigator:Navigator = (selectedItem as Navigator);
-            var navigatorNumElements:int = navigator.numElements;
-
-            for (var i:int = 0; i < navigatorNumElements; i++)
-            {
-                var tabItem:NavigatorContent = navigator.getElementAt(i) as NavigatorContent;
-                var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
-                itemsListDataProvider.addItem(listItem);
-            }
-
-            itemsList.dataProvider = itemsListDataProvider;
-        }
-
-        private function onItemsListEditingFinished(event:Event):void
-        {
-            var listItem:DataProviderListItem = itemsList.selectedItem as DataProviderListItem;
-            var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
-
-            navigator.setSelectedTabLabel(listItem.label);
-        }
-        ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

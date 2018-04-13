@@ -21,6 +21,8 @@ package components
         private var _duration:Number = 200;
         private var durationChanged:Boolean;
 
+        protected var isCollapsible:Boolean = true;
+
         public function CollapsiblePanel(isOpen:Boolean = true):void
         {
             super();
@@ -55,7 +57,7 @@ package components
         /**
          * the height that the component should be when open
          */
-        private function get openHeight():Number
+        protected function get openHeight():Number
         {
             return measuredHeight;
         }
@@ -164,12 +166,11 @@ package components
             super.invalidateSize();
             if (_openAnim && !_openAnim.isPlaying)
             {
-                if (_open)
+                if (_open && isCollapsible)
                 {
                     this.height = openHeight;
                 }
             }
-
         }
 
         protected function onCollapsiblePanelCreationComplete(event:FlexEvent):void

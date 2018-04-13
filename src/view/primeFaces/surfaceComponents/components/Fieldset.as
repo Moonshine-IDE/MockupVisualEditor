@@ -42,6 +42,10 @@ package view.primeFaces.surfaceComponents.components
             super(isOpen);
 
             this.width = 110;
+            this.height = 120;
+            this.minHeight = 120;
+            this.isCollapsible = false;
+
             this.setStyle("closedIcon", closeIcon);
             this.setStyle("openIcon", openIcon);
             this.setStyle("skinClass", FieldsetSkin);
@@ -75,11 +79,12 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_toggleable != value)
             {
+                this.isCollapsible = value;
                 _toggleable = value;
                 toggleableChanged = true;
                 dispatchEvent(new Event("toggleableChanged"));
 
-                invalidateSkinState();
+                this.invalidateSkinState();
             }
         }
 
@@ -157,6 +162,8 @@ package view.primeFaces.surfaceComponents.components
                     titleGroup.removeEventListener(MouseEvent.CLICK, onTitleDisplayClick);
                 }
                 toggleableChanged = false;
+
+                this.measuredHeight = this.height;
             }
         }
     }

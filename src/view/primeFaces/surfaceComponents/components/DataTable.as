@@ -20,6 +20,9 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
         public static const ELEMENT_NAME:String = "DataTable";
+		public static const GRID_ITEM_EDIT:String = "gridItemEdit";
+		public static const GRID_ITEM_DELETE:String = "gridItemDelete";
+		public static const GRID_ITEM_ADD:String = "gridItemAdd";
 
         private static const NO_RECORDS_FOUND:String = "No records found.";
 
@@ -56,20 +59,56 @@ package view.primeFaces.surfaceComponents.components
 			tmpTableVO.label = "Column 1";
 			_tableColumnDescriptor.addItem(tmpTableVO);
 			
-			generateColumns();
+			generateColumns(true);
         }
 		
-		public function generateColumns():void
+		public function generateColumns(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
 		{
-			columns = new ArrayList();
-			for each (var i:DataProviderListItem in _tableColumnDescriptor)
-			{
-				var tmpColumn:GridColumn = new GridColumn();
-				tmpColumn.headerText = tmpColumn.dataField = i.label;
-				columns.addItem(tmpColumn);
-			}
+			var tmpColumn:GridColumn;
 			
-			this.invalidateDisplayList();
+			if (isAll)
+			{
+				columns = new ArrayList();
+				for each (var i:DataProviderListItem in _tableColumnDescriptor)
+				{
+					tmpColumn = new GridColumn();
+					tmpColumn.headerText = tmpColumn.dataField = i.label;
+					columns.addItem(tmpColumn);
+				}
+				
+				this.invalidateDisplayList();
+			}
+			else
+			{
+				switch(updateType)
+				{
+					case GRID_ITEM_ADD:
+					{
+						// item always added to last
+						tmpColumn = new GridColumn();
+						tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[_tableColumnDescriptor.length - 1].label;
+						columns.addItem(tmpColumn);
+						break;
+					}
+					case GRID_ITEM_EDIT:
+					{
+						if (itemIndex != -1)
+						{
+							tmpColumn = columns.getItemAt(itemIndex) as GridColumn;
+							tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[itemIndex].label;
+						}
+						break;
+					}
+					case GRID_ITEM_DELETE:
+					{
+						if (itemIndex != -1)
+						{
+							columns.removeItemAt(itemIndex);
+						}
+						break;
+					}
+				}
+			}
 		}
 		
 		private var _tableVar:String = "";
@@ -201,7 +240,7 @@ package view.primeFaces.surfaceComponents.components
 				_tableColumnDescriptor.addItem(tmpColumnVO);
 			}
 			
-			generateColumns();
+			generateColumns(true);
         }
 
         public function toCode():XML

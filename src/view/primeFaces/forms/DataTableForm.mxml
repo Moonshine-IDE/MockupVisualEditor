@@ -50,7 +50,7 @@
 				var listItem:DataProviderListItem = new DataProviderListItem("Title");
 				dgColumns.dataProvider.addItem(listItem);
 
-				updateToOwner();
+				updateToOwner(false, DataTable.GRID_ITEM_ADD);
 				
 				dgColumns.validateNow();
 				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
@@ -64,8 +64,8 @@
 			
 			private function deleteItemButton_clickHandler(event:MouseEvent):void
 			{
+				updateToOwner(false, DataTable.GRID_ITEM_DELETE, dgColumns.selectedIndex);
 				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
-				updateToOwner();
 			}
 			
 			private function onTabFormCreationComplete(event:FlexEvent):void
@@ -80,10 +80,10 @@
 				dgColumns.dataProvider = grid.tableColumnDescriptor;
 			}
 			
-			private function updateToOwner():void
+			private function updateToOwner(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
 			{
 				var grid:DataTable = (selectedItem as DataTable);
-				grid.generateColumns();
+				grid.generateColumns(isAll, updateType, itemIndex);
 			}
 			
 			private function updateBinding():void
@@ -108,12 +108,17 @@
 			
 			protected function onRowDragAndDropped(event:DragEvent):void
 			{
-				updateToOwner();
+				dgColumns.callLater(updateToOwner, [true]);
 			}
 			
 			protected function onRowDragStarts(event:DragEvent):void
 			{
 				dgColumns.endItemEditorSession();
+			}
+			
+			protected function onRowEditEnd(event:GridItemEditorEvent):void
+			{
+				updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
 			}
 			
 			private function formattedValue(item:Object,column:GridColumn):String
@@ -134,7 +139,7 @@
 					editable="true" sortableColumns="false" draggableColumns="false"
 					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
 					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"
-					gridItemEditorSessionSave="updateToOwner()">
+					gridItemEditorSessionSave="onRowEditEnd(event)">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="label" headerText="Title"/>

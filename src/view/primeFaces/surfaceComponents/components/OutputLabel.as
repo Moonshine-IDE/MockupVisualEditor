@@ -1,5 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import flash.events.Event;
+
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
 
@@ -32,7 +34,8 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "textChanged"
+                "textChanged",
+                "forAttributeChanged"
             ];
         }
 
@@ -66,6 +69,22 @@ package view.primeFaces.surfaceComponents.components
             return _propertiesChangedEvents;
         }
 
+        private var _forAttribute:String;
+
+        public function get forAttribute():String
+        {
+            return _forAttribute;
+        }
+
+        public function set forAttribute(value:String):void
+        {
+            if (_forAttribute != value)
+            {
+                _forAttribute = value;
+                dispatchEvent(new Event("forAttributeChanged"));
+            }
+        }
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -73,6 +92,15 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
             xml.@value = this.text;
+
+            if (!this.forAttribute)
+            {
+                delete xml["@for"];
+            }
+            else
+            {
+                xml["@for"] = this.forAttribute;
+            }
 
             return xml;
         }
@@ -82,6 +110,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             this.text = xml.@value;
+            this.forAttribute = xml["@for"];
         }
 
         public function toCode():XML
@@ -94,6 +123,14 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
             xml.@value = this.text;
+            if (!this.forAttribute)
+            {
+                delete xml["@for"];
+            }
+            else
+            {
+                xml["@for"] = this.forAttribute;
+            }
 
             return xml;
         }

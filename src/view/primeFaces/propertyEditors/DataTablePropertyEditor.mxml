@@ -13,7 +13,7 @@
 	<s:FormHeading label="Table Data" skinClass="skins.FormHeadingSkin" />
 	<forms:TextForm label="Var" textProperty="tableVar"/>
 	<forms:TextForm label="Value" textProperty="tableValue"
-					prompt="#\{class.field\}"/>
+					prompt="#\{bean.property\}"/>
 	
 	<s:FormHeading label="Column Data" skinClass="skins.FormHeadingSkin" />
 	<primeFaces:DataTableForm width="100%" height="100%"/>

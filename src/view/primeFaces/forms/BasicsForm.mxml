@@ -22,8 +22,6 @@
 	</s:FormItem>
 	<fx:Script><![CDATA[
 		import mx.core.EventPriority;
-		import mx.core.IVisualElement;
-		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
 		import mx.events.FlexEvent;
 

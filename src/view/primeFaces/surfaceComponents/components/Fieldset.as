@@ -110,10 +110,21 @@ package view.primeFaces.surfaceComponents.components
             xml.@toggleable = this.toggleable;
             xml.@toggleSpeed = this.duration;
 
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+                xml.appendChild(element.toXML());
+            }
+
             return xml;
         }
 
-        public function fromXML(xml:XML, childFromXMLCallback:Function):void
+        public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
@@ -122,6 +133,14 @@ package view.primeFaces.surfaceComponents.components
 
             var toggleDuration:Number = Number(xml.@toggleSpeed);
             this.duration = isNaN(toggleDuration) ? 200 : toggleDuration;
+
+            var elementsXML:XMLList = xml.elements();
+            var childCount:int = elementsXML.length();
+            for(var i:int = 0; i < childCount; i++)
+            {
+                var childXML:XML = elementsXML[i];
+                callback(this, childXML);
+            }
         }
 
         public function toCode():XML
@@ -136,6 +155,18 @@ package view.primeFaces.surfaceComponents.components
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;
             xml.@toggleSpeed = this.duration;
+
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+
+                xml.appendChild(element.toCode());
+            }
 
             return xml;
         }

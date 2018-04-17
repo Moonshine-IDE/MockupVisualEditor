@@ -7,11 +7,13 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.TextArea;
     
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.IIdAttribute;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputTextareaPropertyEditor;
 
-    public class InputTextarea extends TextArea implements IPrimeFacesSurfaceComponent
+    public class InputTextarea extends TextArea implements IPrimeFacesSurfaceComponent, IIdAttribute
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputTextarea";
         public static const ELEMENT_NAME:String = "InputTextarea";
@@ -37,7 +39,8 @@ package view.primeFaces.surfaceComponents.components
 				"isCounterDisplayChanged",
 				"counterChanged",
 				"counterTemplateChanged",
-				"maxLengthChanged"
+				"maxLengthChanged",
+				"idAttributeChanged"
             ];
 			
 			this.prompt = "Input Text Area";
@@ -120,6 +123,21 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
+        private var _idAttribute:String;
+        public function get idAttribute():String
+        {
+            return _idAttribute;
+        }
+
+        public function set idAttribute(value:String)
+        {
+            if (_idAttribute != value)
+            {
+                _idAttribute = value;
+                dispatchEvent(new Event("idAttributeChanged"))
+            }
+        }
+
         public function get propertyEditorClass():Class
         {
             return InputTextareaPropertyEditor;
@@ -150,6 +168,11 @@ package view.primeFaces.surfaceComponents.components
 				if (StringUtil.trim(counter).length != 0) xml.@counter = this.counter;
 			}
 
+            if (this.idAttribute)
+            {
+                xml.@id = this.idAttribute;
+            }
+
             return xml;
         }
 
@@ -166,6 +189,8 @@ package view.primeFaces.surfaceComponents.components
 				this.counterTemplate = String(xml.@counterTemplate);
 				if (xml.@counter != undefined) this.counter = String(xml.@counter);
 			}
+
+            this.idAttribute = xml.@id;
         }
 
         public function toCode():XML
@@ -188,6 +213,11 @@ package view.primeFaces.surfaceComponents.components
 				xml.@counterTemplate = this.counterTemplate;
 				if (StringUtil.trim(counter).length != 0) xml.@counter = this.counter;
 			}
+
+            if (this.idAttribute)
+            {
+                xml.@id = this.idAttribute;
+            }
 
             return xml;
         }

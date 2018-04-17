@@ -93,11 +93,7 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@value = this.text;
 
-            if (!this.forAttribute)
-            {
-                delete xml["@for"];
-            }
-            else
+            if (this.forAttribute)
             {
                 xml["@for"] = this.forAttribute;
             }
@@ -123,11 +119,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
             xml.@value = this.text;
-            if (!this.forAttribute)
-            {
-                delete xml["@for"];
-            }
-            else
+            if (this.forAttribute)
             {
                 xml["@for"] = this.forAttribute;
             }

@@ -3,27 +3,42 @@
 									  xmlns:s="library://ns.adobe.com/flex/spark"
 									  xmlns:suportclasses="view.suportClasses.*"
 									  skinClass="skins.FormSkin"
-									  creationComplete="onBasicFormCreationComplete(event)">
+									  creationComplete="onBasicFormCreationComplete(event)"
+									  currentState="normal">
+	<suportclasses:states>
+		<s:State name="normal"/>
+		<s:State name="normalWithId"/>
+	</suportclasses:states>
+
 	<suportclasses:layout>
 		<s:FormLayout />
 	</suportclasses:layout>
+	<s:FormItem label="Id" skinClass="skins.FormItemSkin" includeIn="normalWithId">
+		<s:TextInput id="idTextInput" width="100%" skinClass="skins.TextInputSkin"
+					 text="{selectedComponentIdAttributeChaged}"
+					 height="25" tabIndex="3" change="textInput_changeHandler(event)"/>
+	</s:FormItem>
 	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
 	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
 		<s:TextInput id="widthInput" width="100%"
 					 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
 					 keyDown="widthInput_keyDownHandler(event)" height="25"
-					 focusOut="commitWidth()" enter="commitWidth()" tabIndex="3"/>
+					 focusOut="commitWidth()" enter="commitWidth()" tabIndex="4"/>
 	</s:FormItem>
 	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
 		<s:TextInput id="heightInput" width="100%"
 					 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
 					 keyDown="heightInput_keyDownHandler(event)" height="25"
-					 focusOut="commitHeight()" enter="commitHeight()" tabIndex="4"/>
+					 focusOut="commitHeight()" enter="commitHeight()" tabIndex="5"/>
 	</s:FormItem>
 	<fx:Script><![CDATA[
 		import mx.core.EventPriority;
 		import mx.core.UIComponent;
 		import mx.events.FlexEvent;
+
+		import view.interfaces.IIdAttribute;
+
+		import view.interfaces.ISurfaceComponent;
 
 		CONFIG::MOONSHINE
 		{
@@ -38,6 +53,16 @@
 			return UIComponent(this.selectedItem);
 		}
 
+		override public function set selectedItem(value:ISurfaceComponent):void
+		{
+			if (super.selectedItem != value)
+			{
+				super.selectedItem = value;
+
+				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
+			}
+		}
+
 		[Bindable("propertyEditorChanged")]
 		public function get selectedComponentComputedWidth():String
 		{
@@ -50,6 +75,17 @@
 		{
 			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight + "%";
 			return selectedComponent.height.toString();
+		}
+
+		[Bindable("propertyEditorChanged")]
+		public function get selectedComponentIdAttributeChaged():String
+		{
+			if (this.selectedItem is IIdAttribute)
+			{
+				return this.selectedItem["idAttribute"];
+			}
+
+			return "";
 		}
 
 		private function commitWidth():void
@@ -73,7 +109,12 @@
 			}
 			this.heightInput.selectAll();
 		}
-		
+
+		private function textInput_changeHandler(event:Event):void
+		{
+			this.selectedItem["idAttribute"] = this.idTextInput.text;
+		}
+
 		private function widthInput_keyDownHandler(event:KeyboardEvent):void
 		{
 			if (event.keyCode === Keyboard.UP)
@@ -210,7 +251,7 @@
 			override protected function isOurFocus(target:DisplayObject):Boolean
 			{
 				return target == widthInput.textDisplay ||
-					   target == heightInput.textDisplay || super.isOurFocus(target);
+						target == heightInput.textDisplay || super.isOurFocus(target);
 			}
 
 			private function onBasicFormKeyFocusChange(event:FocusEvent):void

@@ -8,10 +8,12 @@ package view.primeFaces.surfaceComponents.components
 
     import utils.XMLCodeUtils;
 
+    import view.interfaces.IIdAttribute;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
 
-    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent
+    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
         public static const ELEMENT_NAME:String = "InputNumber";
@@ -38,12 +40,14 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "textChanged"
+                "textChanged",
+                "idAttributeChanged"
             ];
 
             this.prompt = "0.00";
             this.typicalText = "0.00";
         }
+
 
         private var _decimalSeparator:String = "";
         private var decimalSeparatorChanged:Boolean;
@@ -113,6 +117,21 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        private var _idAttribute:String;
+        public function get idAttribute():String
+        {
+            return _idAttribute;
+        }
+
+        public function set idAttribute(value:String)
+        {
+            if (_idAttribute != value)
+            {
+                _idAttribute = value;
+                dispatchEvent(new Event("idAttributeChanged"))
+            }
+        }
+
         public function get propertyEditorClass():Class
         {
             return InputNumberPropertyEditor;
@@ -135,6 +154,11 @@ package view.primeFaces.surfaceComponents.components
             xml.@thousandSeparator = this.thousandSeparator;
             xml.@decimalSeparator = this.decimalSeparator;
 
+            if (this.idAttribute)
+            {
+                xml.@id = this.idAttribute;
+            }
+
             return xml;
         }
 
@@ -145,6 +169,7 @@ package view.primeFaces.surfaceComponents.components
             this.text = xml.@value;
             this.thousandSeparator = xml.@thousandSeparator;
             this.decimalSeparator = xml.@decimalSeparator;
+            this.idAttribute = xml.@id;
         }
 
         public function toCode():XML
@@ -159,6 +184,11 @@ package view.primeFaces.surfaceComponents.components
             xml.@value = this.text;
             xml.@thousandSeparator = this.thousandSeparator;
             xml.@decimalSeparator = this.decimalSeparator;
+
+            if (this.idAttribute)
+            {
+                xml.@id = this.idAttribute;
+            }
 
             return xml;
         }

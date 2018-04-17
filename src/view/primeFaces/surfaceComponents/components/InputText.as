@@ -7,11 +7,13 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.TextInput;
     
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.IIdAttribute;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputTextPropertyEditor;
 
-    public class InputText extends TextInput implements IPrimeFacesSurfaceComponent
+    public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputText";
         public static const ELEMENT_NAME:String = "InputText";
@@ -34,10 +36,26 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-				"maxLengthChanged"
+				"maxLengthChanged",
+                "idAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
+        }
+
+        private var _idAttribute:String;
+        public function get idAttribute():String
+        {
+            return _idAttribute;
+        }
+
+        public function set idAttribute(value:String)
+        {
+            if (_idAttribute != value)
+            {
+                _idAttribute = value;
+                dispatchEvent(new Event("idAttributeChanged"))
+            }
         }
 
 		private var _maxLength:String = "";
@@ -75,6 +93,11 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
             xml.@value = this.text;
+            if (this.idAttribute)
+            {
+                xml.@id = this.idAttribute;
+            }
+
 			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
 			{
 				xml.@maxlength = this.maxLength;
@@ -89,6 +112,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.text = xml.@value;
 			this.maxLength = xml.@maxlength;
+            this.idAttribute = xml.@id;
         }
 
         public function toCode():XML
@@ -105,6 +129,11 @@ package view.primeFaces.surfaceComponents.components
 			{
 				xml.@maxlength = this.maxLength;
 			}
+
+            if (this.idAttribute)
+            {
+                xml.@id = this.idAttribute;
+            }
 
             return xml;
         }

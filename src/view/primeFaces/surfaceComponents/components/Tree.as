@@ -35,7 +35,9 @@ package view.primeFaces.surfaceComponents.components
                 "widthChanged",
                 "heightChanged",
                 "explicitMinWidthChanged",
-                "explicitMinHeightChanged"
+                "explicitMinHeightChanged",
+				"treeVarChanged",
+				"treeValueChanged"
             ];
 
             var data:Array = [
@@ -75,7 +77,7 @@ package view.primeFaces.surfaceComponents.components
         }
 		
 		private var _treeVar:String = "";
-		[Bindable("change")]
+		[Bindable("treeVarChanged")]
 		public function get treeVar():String
 		{
 			return _treeVar;
@@ -85,11 +87,11 @@ package view.primeFaces.surfaceComponents.components
 			if (_treeVar == value) return;
 			
 			_treeVar = value;
-			dispatchEvent(new Event(Event.CHANGE));
+			dispatchEvent(new Event("treeVarChanged"));
 		}
 		
 		private var _treeValue:String = "";
-		[Bindable("change")]
+		[Bindable("treeValueChanged")]
 		public function get treeValue():String
 		{
 			return _treeValue;
@@ -97,7 +99,7 @@ package view.primeFaces.surfaceComponents.components
 		public function set treeValue(value:String):void
 		{
 			_treeValue = value;
-			dispatchEvent(new Event(Event.CHANGE));
+			dispatchEvent(new Event("treeValueChanged"));
 		}
 
         public function get propertyEditorClass():Class

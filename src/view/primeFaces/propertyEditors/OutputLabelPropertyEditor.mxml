@@ -10,6 +10,6 @@
 	<primeFaces:BasicsForm/>
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
     <forms:TextForm label="Value" textProperty="text"/>
-    <forms:TextForm id="txtFor" label="For" textProperty="forAttribute"/>
+    <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>
 </suportclasses:BasePropertyEditor>

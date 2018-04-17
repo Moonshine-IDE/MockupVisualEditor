@@ -1,11 +1,13 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import flash.events.Event;
+    
     import mx.controls.Tree;
-
+    
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.BasicPropertyEditor;
+    import view.primeFaces.propertyEditors.TreePropertyEditor;
 
     public class Tree extends mx.controls.Tree implements IPrimeFacesSurfaceComponent
     {
@@ -71,10 +73,36 @@ package view.primeFaces.surfaceComponents.components
 
             this.dataProvider = data;
         }
+		
+		private var _treeVar:String = "";
+		[Bindable("change")]
+		public function get treeVar():String
+		{
+			return _treeVar;
+		}
+		public function set treeVar(value:String):void
+		{
+			if (_treeVar == value) return;
+			
+			_treeVar = value;
+			dispatchEvent(new Event(Event.CHANGE));
+		}
+		
+		private var _treeValue:String = "";
+		[Bindable("change")]
+		public function get treeValue():String
+		{
+			return _treeValue;
+		}
+		public function set treeValue(value:String):void
+		{
+			_treeValue = value;
+			dispatchEvent(new Event(Event.CHANGE));
+		}
 
         public function get propertyEditorClass():Class
         {
-            return BasicPropertyEditor;
+            return TreePropertyEditor;
         }
 
         private var _propertiesChangedEvents:Array;
@@ -101,15 +129,29 @@ package view.primeFaces.surfaceComponents.components
         {
             var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
+			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+			
+			if (treeVar != "") xml.@['var'] = treeVar;
+			if (treeValue != "") xml.@value = treeValue;
 
             var node:XML = new XML("<treeNode/>");
             node.addNamespace(primeFacesNamespace);
             node.setNamespace(primeFacesNamespace);
-
+			
+			var outputText:XML;
+			if (treeVar != "")
+			{
+				outputText = new XML("<outputText/>");
+				outputText.addNamespace(hNamespace);
+				outputText.setNamespace(hNamespace);
+				outputText.@value = "#{"+ treeVar +"}";
+				node.appendChild(outputText);
+			}
+			
             xml.appendChild(node);
 
             return xml;

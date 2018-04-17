@@ -11,6 +11,8 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
 
+        protected var mainXML:XML;
+
         public function Div()
         {
             super();
@@ -47,24 +49,9 @@ package view.primeFaces.surfaceComponents.components
 
         public function toXML():XML
         {
-            var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+            mainXML = new XML("<" + ELEMENT_NAME + "/>");
 
-            XMLCodeUtils.setSizeFromComponentToXML(this, xml);
-            XMLCodeUtils.applyChildrenPositionToXML(this, xml);
-
-            xml.@wrap = this.wrap;
-
-            var elementCount:int = this.numElements;
-            for(var i:int = 0; i < elementCount; i++)
-            {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                if(element === null)
-                {
-                    continue;
-                }
-                xml.appendChild(element.toXML());
-            }
-            return xml;
+            return this.internalToXML();
         }
 
         public function toCode():XML
@@ -103,6 +90,26 @@ package view.primeFaces.surfaceComponents.components
                 var childXML:XML = elementsXML[i];
                 callback(this, childXML);
             }
+        }
+
+        protected function internalToXML():XML
+        {
+            XMLCodeUtils.setSizeFromComponentToXML(this, mainXML);
+            XMLCodeUtils.applyChildrenPositionToXML(this, mainXML);
+
+            mainXML.@wrap = this.wrap;
+
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
+            {
+                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                if(element === null)
+                {
+                    continue;
+                }
+                mainXML.appendChild(element.toXML());
+            }
+            return mainXML;
         }
     }
 }

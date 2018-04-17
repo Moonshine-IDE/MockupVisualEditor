@@ -9,14 +9,12 @@ package view.primeFaces.surfaceComponents.components
     public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";
-		
+
 		public function MainApplication()
 		{
 			super();
 
 			this.setStyle("backgroundColor", "#FCFCFC");
-
-			Div.ELEMENT_NAME = "MainApplication";
 		}
 
         override public function get propertyEditorClass():Class
@@ -37,6 +35,13 @@ package view.primeFaces.surfaceComponents.components
                 _title = value;
                 dispatchEvent(new Event("titleChanged"));
             }
+        }
+
+        override public function toXML():XML
+        {
+            mainXML = new XML("<MainApplication/>");
+
+            return super.internalToXML();
         }
     }
 }

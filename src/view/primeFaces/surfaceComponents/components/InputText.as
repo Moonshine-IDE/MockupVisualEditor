@@ -49,7 +49,7 @@ package view.primeFaces.surfaceComponents.components
             return _idAttribute;
         }
 
-        public function set idAttribute(value:String)
+        public function set idAttribute(value:String):void
         {
             if (_idAttribute != value)
             {

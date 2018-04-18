@@ -106,11 +106,6 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
-            if (this.toggleable)
-            {
-                delete xml.@height;
-            }
-
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;
             xml.@toggleSpeed = this.duration;

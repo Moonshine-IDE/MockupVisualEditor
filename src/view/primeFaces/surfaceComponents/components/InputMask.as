@@ -36,7 +36,8 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-                "idAttributeChanged"
+                "idAttributeChanged",
+                "maskTextChanged"
             ];
         }
 

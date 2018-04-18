@@ -146,7 +146,7 @@ package components
         [Bindable]
         public var hideSeparatorInText:Boolean = true;
 
-        [Bindable]
+        [Bindable("maskTextChanged")]
         public function get maskText():String
         {
             return _maskText;
@@ -158,6 +158,8 @@ package components
             {
                 _maskText = value;
                 maskedTextChanged = true;
+                dispatchEvent(new Event("maskTextChanged"));
+
                 invalidateProperties();
             }
         }

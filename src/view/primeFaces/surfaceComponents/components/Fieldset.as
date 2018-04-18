@@ -106,6 +106,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (this.toggleable)
+            {
+                delete xml.@height;
+            }
+
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;
             xml.@toggleSpeed = this.duration;
@@ -150,7 +155,14 @@ package view.primeFaces.surfaceComponents.components
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+            //In my opinion this is ans issue in PrimeFaces. If I add height to Fieldset and it's toggleable it doesn't work.
+            var fieldsetHeight:Number = this.height;
+            if (this.toggleable)
+            {
+                fieldsetHeight = Number.NaN;
+            }
+
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, fieldsetHeight, this.percentWidth, this.percentHeight);
 
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;

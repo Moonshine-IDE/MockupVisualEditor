@@ -26,7 +26,8 @@ package utils
     import view.primeFaces.surfaceComponents.components.DataTable;
     import view.primeFaces.surfaceComponents.components.Div;
     import view.primeFaces.surfaceComponents.components.Fieldset;
-	import view.primeFaces.surfaceComponents.components.Include;
+    import view.primeFaces.surfaceComponents.components.Grid;
+    import view.primeFaces.surfaceComponents.components.Include;
 	import view.primeFaces.surfaceComponents.components.InputMask;
 	import view.primeFaces.surfaceComponents.components.InputNumber;
 	import view.primeFaces.surfaceComponents.components.InputText;
@@ -116,6 +117,7 @@ package utils
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Tree.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Tree;
                 CLASS_LOOKUP[DataTable.ELEMENT_NAME] = DataTable;
 				CLASS_LOOKUP[Div.ELEMENT_NAME] = Div;
+				CLASS_LOOKUP[Grid.ELEMENT_NAME] = Grid;
             }
 		}
 	}

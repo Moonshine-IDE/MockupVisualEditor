@@ -30,6 +30,7 @@
 		import view.primeFaces.surfaceComponents.components.DataTable;
 		import view.primeFaces.surfaceComponents.components.Div;
 		import view.primeFaces.surfaceComponents.components.Fieldset;
+		import view.primeFaces.surfaceComponents.components.Grid;
 		import view.primeFaces.surfaceComponents.components.Include;
 		import view.primeFaces.surfaceComponents.components.InputMask;
 		import view.primeFaces.surfaceComponents.components.InputNumber;
@@ -88,7 +89,8 @@
 					new ComponentListItem("DataTable", DataTable),
 					new ComponentListItem("Fieldset", Fieldset),
 					new ComponentListItem("Include", Include),
-					new ComponentListItem("Div", Div)
+					new ComponentListItem("Div", Div),
+					new ComponentListItem("Grid", Grid)
 				]);
 			}
 

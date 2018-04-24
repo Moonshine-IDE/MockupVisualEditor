@@ -34,7 +34,6 @@ package view.primeFaces.surfaceComponents.components
             this.minWidth = 20;
             this.minHeight = 20;
 
-          //  this.setStyle("backgroundColor", "#a8a8a8");
             this.setStyle("verticalGap", 1);
             this.setStyle("horizontalGap", 1);
             this.setStyle("verticalScrollPolicy", ScrollPolicy.OFF);
@@ -48,6 +47,8 @@ package view.primeFaces.surfaceComponents.components
                 "requestedColumnCountChanged",
                 "requestedRowCountChanged"
             ];
+
+            this.ensureCreateInitialColumn();
         }
 
         public function get propertyEditorClass():Class
@@ -67,6 +68,30 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            var gridRowNumElements:int = this.numElements;
+            for (var row:int = 0; row < gridRowNumElements; row++)
+            {
+                var rowXML:XML = new XML("<Row />");
+                rowXML["@class"] = "ui-g";
+
+                var gridRow:GridRow = this.getElementAt(row) as GridRow;
+                var gridColumnNumElements:int = gridRow.numElements;
+                for (var col:int = 0; col < gridColumnNumElements; col++)
+                {
+                    var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+                    var div:Div = gridCol.getElementAt(0) as Div;
+
+                    var colXML:XML = new XML("<Column />");
+                    colXML["@class"] = this.getClassNameBasedOnColumns(gridRow);
+
+                    colXML.appendChild(div.toXML());
+
+                    rowXML.appendChild(colXML);
+                }
+
+                xml.appendChild(rowXML);
+            }
+
             return xml;
         }
 
@@ -78,7 +103,50 @@ package view.primeFaces.surfaceComponents.components
             if (elementsXML.length() > 0)
             {
                 this.removeAllElements();
+
+                var elementsXML:XMLList = xml.elements();
+                var childCount:int = elementsXML.length();
+                for(var row:int = 0; row < childCount; row++)
+                {
+                    var rowXML:XML = elementsXML[row];
+                    var colListXML:XMLList = rowXML.elements();
+
+                    var gridRow:GridRow = new GridRow();
+                    gridRow.percentWidth = gridRow.percentHeight = 100;
+
+                    var colCount:int = colListXML.length();
+                    for (var col:int = 0; col < colCount; col++)
+                    {
+                        var colXML:XML = colListXML[col];
+                        if (colXML.length() > 0)
+                        {
+                            var gridItem:GridItem = new GridItem();
+                            gridItem.setStyle("backgroundColor", "#a8a8a8");
+                            gridItem.percentWidth = gridItem.percentHeight = 100;
+
+                            var divXMLList:XMLList = colXML.elements();
+                            var divXML:XML = divXMLList[0];
+
+                            var div:Div = new Div();
+                            div.percentWidth = div.percentHeight = 100;
+                            currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
+                            div.setStyle("borderColor", currentColumnColor);
+
+                            gridItem.addElement(div);
+                            gridRow.addElement(gridItem);
+
+                            div.fromXML(divXML, callback);
+                        }
+                    }
+
+                    this.addElement(gridRow);
+                }
             }
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
         }
 
         public function toCode():XML
@@ -87,12 +155,36 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
+            var gridRowNumElements:int = this.numElements;
+            for (var row:int = 0; row < gridRowNumElements; row++)
+            {
+                var rowXML:XML = new XML("<div />");
+                rowXML["@class"] = "ui-g";
+
+                var gridRow:GridRow = this.getElementAt(row) as GridRow;
+                var gridColumnNumElements:int = gridRow.numElements;
+                for (var col:int = 0; col < gridColumnNumElements; col++)
+                {
+                    var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+                    var div:Div = gridCol.getElementAt(0) as Div;
+
+                    var colXML:XML = new XML("<div />");
+                    colXML["@class"] = this.getClassNameBasedOnColumns(gridRow);
+
+                    colXML.appendChild(div.toCode());
+
+                    rowXML.appendChild(colXML);
+                }
+
+                xml.appendChild(rowXML);
+            }
+
             return xml;
         }
 
         public function addRow():void
         {
-            var addedElements:Array = [this.ensureCreateInitialRow()];
+            var addedElements:Array = [this.ensureCreateInitialColumn()];
 
             dispatchEvent(new GridEvent(GridEvent.GridElementAdded, addedElements));
         }
@@ -158,13 +250,7 @@ package view.primeFaces.surfaceComponents.components
             return null;
         }
 
-        override protected function createChildren():void
-        {
-            this.ensureCreateInitialRow();
-            super.createChildren();
-        }
-
-        private function ensureCreateInitialRow():GridItem
+        private function ensureCreateInitialColumn():GridItem
         {
             var gridRow:GridRow = new GridRow();
             gridRow.percentWidth = gridRow.percentHeight = 100;
@@ -183,6 +269,20 @@ package view.primeFaces.surfaceComponents.components
             this.addElement(gridRow);
 
             return gridItem;
+        }
+
+        private function getClassNameBasedOnColumns(gridRow:GridRow):String
+        {
+            var uigDefaultValue:int = Math.ceil(MAX_COLUMN_COUNT / gridRow.numElements);
+            var uigDefault:String = "ui-g-" + uigDefaultValue;
+            var uigDesktop:String = "ui-lg-" + uigDefaultValue;
+
+            var uigOtherScreensValue:int = Math.ceil(uigDefaultValue / 2);
+            var uigPhones:String = "ui-sm-" + uigOtherScreensValue;
+            var uigTablets:String = "ui-md-" + uigOtherScreensValue;
+            var uigBigScreens:String = "ui-xl-" + uigDefaultValue;
+
+            return uigDefault + " " + uigDesktop + " " + uigPhones + " " + uigTablets + " " + uigBigScreens;
         }
     }
 }

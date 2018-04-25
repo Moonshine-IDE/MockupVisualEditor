@@ -114,6 +114,7 @@
 			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
 
 			this.dgRows.selectedIndex = 0;
+			this.columnList.selectedIndex = 0;
 		}
 
 		protected function onGridSelectionChanged(event:GridSelectionEvent):void

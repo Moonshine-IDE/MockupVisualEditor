@@ -35,6 +35,10 @@
         import spark.layouts.HorizontalAlign;
         import spark.layouts.VerticalAlign;
 
+        import view.interfaces.IDiv;
+
+        import view.interfaces.ISurfaceComponent;
+
         import view.primeFaces.supportClasses.ContainerDirection;
 
         import view.primeFaces.supportClasses.ContainerDirectionItem;
@@ -42,6 +46,32 @@
         import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
 
         private var verticalTopItem:ContainerVerticalAlignItem;
+
+        private var _selectedItem:ISurfaceComponent;
+
+        [Bindable("change")]
+        override public function get selectedItem():ISurfaceComponent
+        {
+            return this._selectedItem;
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (this._selectedItem != value && value is IDiv)
+            {
+                if (value)
+                {
+                    this._selectedItem = (value as IDiv).div;
+                    this.registerPropertyChangedEvents(this._selectedItem);
+                }
+                else
+                {
+                    this._selectedItem = value;
+                }
+
+                this.dispatchEvent(new Event(Event.CHANGE));
+            }
+        }
 
         protected function onDivLayoutFormCreationComplete(event:FlexEvent):void
         {

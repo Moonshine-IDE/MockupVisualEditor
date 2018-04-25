@@ -2,9 +2,15 @@ package view.primeFaces.surfaceComponents.components
 {
     import components.CollapsiblePanel;
 
+    import flash.display.DisplayObject;
+
     import flash.events.Event;
 
     import flash.events.MouseEvent;
+
+    import mx.core.IVisualElement;
+
+    import mx.core.mx_internal;
 
     import mx.events.FlexEvent;
 
@@ -12,9 +18,12 @@ package view.primeFaces.surfaceComponents.components
 
     import utils.XMLCodeUtils;
 
+    import view.interfaces.IDiv;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.FieldsetPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.FieldsetSkin;
+    import view.suportClasses.events.SurfaceComponentEvent;
 
     /**
      * The icon designating a "closed" state
@@ -26,7 +35,7 @@ package view.primeFaces.surfaceComponents.components
      */
     [Style(name="openIcon", type="Object")]
 
-    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent
+    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
         public static const ELEMENT_NAME:String = "Fieldset";
@@ -61,10 +70,19 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinHeightChanged",
                 "toggleableChanged"
             ];
+
+            _div = new Div();
+            this.addEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
         }
 
         [SkinPart(required="true")]
         public var titleGroup:HGroup;
+
+        private var _div:Div;
+        public function get div():Div
+        {
+            return _div;
+        }
 
         private var _toggleable:Boolean;
         private var toggleableChanged:Boolean;
@@ -202,6 +220,54 @@ package view.primeFaces.surfaceComponents.components
                 toggleableChanged = false;
 
                 this.measuredHeight = this.height;
+            }
+        }
+
+        override protected function childrenCreated():void
+        {
+            super.childrenCreated();
+
+            this.ensureInternalDivIsAdded();
+        }
+
+        private function onFieldsetRemoved(event:Event):void
+        {
+            this.removeEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
+
+            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [this.div]));
+        }
+
+        private function ensureInternalDivIsAdded():void
+        {
+            _div.percentWidth = _div.percentHeight = 100;
+            _div.setStyle("borderVisible", false);
+
+            super.addElement(_div);
+
+            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [_div]));
+        }
+
+        override public function addElement(element:IVisualElement):IVisualElement
+        {
+            if (this.div)
+            {
+                return this.div.addElement(element);
+            }
+            else
+            {
+                return super.addElement(element);
+            }
+        }
+
+        override public function removeElement(element:IVisualElement):IVisualElement
+        {
+            if (this.div)
+            {
+                return this.div.removeElement(element);
+            }
+            else
+            {
+                return super.removeElement(element);
             }
         }
     }

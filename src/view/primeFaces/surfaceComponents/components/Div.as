@@ -2,11 +2,13 @@ package view.primeFaces.surfaceComponents.components
 {
     import utils.XMLCodeUtils;
 
+    import view.interfaces.IDiv;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
-    public class Div extends Container implements IPrimeFacesSurfaceComponent
+    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
@@ -34,6 +36,11 @@ package view.primeFaces.surfaceComponents.components
                 "verticalAlignChanged",
                 "horizontalAlignChanged"
             ];
+        }
+
+        public function get div():Div
+        {
+            return this;
         }
 
         public function get propertyEditorClass():Class

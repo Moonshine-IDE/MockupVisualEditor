@@ -57,7 +57,7 @@ package view.suportClasses
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
 
-        private function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
+        protected function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
         {
             if (!surfaceComponent.propertiesChangedEvents) return;
 

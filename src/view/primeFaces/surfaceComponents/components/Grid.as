@@ -12,7 +12,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
-    import view.primeFaces.supportClasses.events.GridEvent;
+    import view.suportClasses.events.SurfaceComponentEvent;
 
     public class Grid extends mx.containers.Grid implements IPrimeFacesSurfaceComponent
     {
@@ -184,9 +184,10 @@ package view.primeFaces.surfaceComponents.components
 
         public function addRow():void
         {
-            var addedElements:Array = [this.ensureCreateInitialColumn()];
+            var gridItem:GridItem = this.ensureCreateInitialColumn();
+            var addedElements:Array = [gridItem.getElementAt(0)];
 
-            dispatchEvent(new GridEvent(GridEvent.GridElementAdded, addedElements));
+            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, addedElements));
         }
 
         public function removeRow(index:int):IVisualElement
@@ -198,15 +199,16 @@ package view.primeFaces.surfaceComponents.components
 
                 var removedItems:Array = [];
                 var numRemovedElements:int = removedElement.numElements;
-                for (var i:int = 0; i < numRemovedElements; i++)
+                for (var row:int = 0; row < numRemovedElements; row++)
                 {
-                    removedItems.push(removedElement.getElementAt(i));
+                    var gridItem:GridItem = removedElement.getElementAt(row) as GridItem;
+                    removedItems.push(gridItem.getElementAt(0));
                 }
 
                 removedElement = this.removeElement(removedElement) as GridRow;
                 if (removedElement)
                 {
-                    dispatchEvent(new GridEvent(GridEvent.GridElementRemoved, removedItems));
+                    dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentRemoved, removedItems));
                 }
 
                 return removedElement;
@@ -234,7 +236,7 @@ package view.primeFaces.surfaceComponents.components
                 gridItem.addElement(div);
                 gridRow.addElement(gridItem);
 
-                dispatchEvent(new GridEvent(GridEvent.GridElementAdded, [gridItem]));
+                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [gridItem]));
             }
         }
 

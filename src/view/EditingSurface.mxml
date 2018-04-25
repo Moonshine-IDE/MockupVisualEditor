@@ -26,6 +26,7 @@
 		import mx.controls.scrollClasses.ScrollBar;
 		import mx.core.BitmapAsset;
 		import mx.core.DragSource;
+		import mx.core.IUIComponent;
 		import mx.core.IVisualElement;
 		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
@@ -48,9 +49,10 @@
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
 		import view.interfaces.ISurfaceComponent;
+
 		import mx.core.Container;
 
-		import view.primeFaces.supportClasses.events.GridEvent;
+		import view.suportClasses.events.SurfaceComponentEvent;
 
 		import view.primeFaces.surfaceComponents.components.Div;
 
@@ -203,7 +205,7 @@
 			{
 				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
 				multiViewContainer.removeEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
-				this.cleanupContainer( multiViewContainer.selectedView);
+				this.cleanupContainer(multiViewContainer.selectedView);
 			}
 			else if (item is SkinnableContainer)
 			{
@@ -277,23 +279,22 @@
 			}
 		}
 
-		private function onGridElementAdded(event:GridEvent):void
+		private function onGridElementAdded(event:SurfaceComponentEvent):void
 		{
 			if (event.items)
 			{
 				for (var i:int = 0; i < event.items.length; i++)
 				{
-					var gridItem:GridItem = event.items[i];
-					var div:Div = gridItem.getElementAt(0) as Div;
+					var surfaceComponent:IUIComponent = event.items[i] as IUIComponent;
 
-					div.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
-					div.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
-					div.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 				}
 			}
 		}
 
-		private function onGridElementRemoved(event:GridEvent):void
+		private function onGridElementRemoved(event:SurfaceComponentEvent):void
 		{
 			if (event.items)
 			{

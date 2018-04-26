@@ -1,16 +1,11 @@
 package view.primeFaces.surfaceComponents.components
 {
     import components.CollapsiblePanel;
-
-    import flash.display.DisplayObject;
-
     import flash.events.Event;
 
     import flash.events.MouseEvent;
 
     import mx.core.IVisualElement;
-
-    import mx.core.mx_internal;
 
     import mx.events.FlexEvent;
 
@@ -71,7 +66,6 @@ package view.primeFaces.surfaceComponents.components
                 "toggleableChanged"
             ];
 
-            _div = new Div();
             this.addEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
         }
 
@@ -154,10 +148,12 @@ package view.primeFaces.surfaceComponents.components
 
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();
+            this.ensureInternalDivIsAdded();
+
             for(var i:int = 0; i < childCount; i++)
             {
                 var childXML:XML = elementsXML[i];
-                callback(this, childXML);
+                _div.fromXML(childXML, callback);
             }
         }
 
@@ -201,6 +197,8 @@ package view.primeFaces.surfaceComponents.components
             super.onCollapsiblePanelCreationComplete(event);
 
             titleDisplay.removeEventListener(MouseEvent.CLICK, onTitleDisplayClick);
+
+            this.ensureInternalDivIsAdded();
         }
 
         override protected function commitProperties():void
@@ -223,13 +221,6 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        override protected function childrenCreated():void
-        {
-            super.childrenCreated();
-
-            this.ensureInternalDivIsAdded();
-        }
-
         private function onFieldsetRemoved(event:Event):void
         {
             this.removeEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
@@ -239,12 +230,15 @@ package view.primeFaces.surfaceComponents.components
 
         private function ensureInternalDivIsAdded():void
         {
-            _div.percentWidth = _div.percentHeight = 100;
-            _div.setStyle("borderVisible", false);
+            if (!_div)
+            {
+                _div = new Div();
+                super.addElement(_div);
+                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [_div]));
 
-            super.addElement(_div);
-
-            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [_div]));
+                _div.percentWidth = _div.percentHeight = 100;
+                _div.setStyle("borderVisible", false);
+            }
         }
 
         override public function addElement(element:IVisualElement):IVisualElement

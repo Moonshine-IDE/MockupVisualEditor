@@ -17,9 +17,9 @@ package utils
 
             if (!isPrimeFacesMainApp && element === null)
 			{
-				var container:XML = new XML("<Container />");
-                container.@percentWidth = "100";
-				container.@percentHeight = "100";
+				var container:XML = new XML("<Div />");
+                container.@width = "700";
+				container.@height = "450";
 
 				return container;
 			}

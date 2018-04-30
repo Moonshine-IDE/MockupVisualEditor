@@ -104,7 +104,6 @@ package view.primeFaces.surfaceComponents.components
             {
                 this.removeAllElements();
 
-                var elementsXML:XMLList = xml.elements();
                 var childCount:int = elementsXML.length();
                 for(var row:int = 0; row < childCount; row++)
                 {

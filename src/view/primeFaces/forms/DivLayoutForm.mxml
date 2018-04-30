@@ -64,7 +64,6 @@
                 if (value)
                 {
                     this._selectedItem = (value as IDiv).div;
-                    this.registerPropertyChangedEvents(this._selectedItem);
                 }
                 else
                 {

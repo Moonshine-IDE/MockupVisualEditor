@@ -1,24 +1,19 @@
 package view.suportClasses
 {
 	import flash.events.Event;
-
-    import mx.core.IVisualElement;
-
-    import spark.components.Form;
-
+	
+	import spark.components.Form;
+	
 	import view.EditingSurface;
-
 	import view.interfaces.IPropertyEditor;
-
 	import view.interfaces.ISurfaceComponent;
 
 	[Event(name="change",type="flash.events.Event")]
-	[Event(name="propertyEditorChanged",type="flash.events.Event")]
 	public class BasePropertyEditorForm extends Form implements IPropertyEditor
 	{
 		public function BasePropertyEditorForm()
 		{
-            this.addEventListener(Event.REMOVED, propertyEditor_removedHandler);
+            //this.addEventListener(Event.REMOVED, propertyEditor_removedHandler);
 		}
 
 		private var _surface:EditingSurface;
@@ -59,39 +54,44 @@ package view.suportClasses
 
         protected function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
         {
-            if (!surfaceComponent.propertiesChangedEvents) return;
+           /* if (!surfaceComponent.propertiesChangedEvents) return;
 
             var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
             for(var i:int = 0; i < propertiesChangedEventsCount; i++)
             {
                 surfaceComponent.addEventListener(surfaceComponent.propertiesChangedEvents[i], onSelectedItemPropertyChanged);
-            }
+            }*/
         }
 
         private function unregisterPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
         {
-            if (!surfaceComponent) return;
+            /*if (!surfaceComponent) return;
             if (!surfaceComponent.propertiesChangedEvents) return;
 
             var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
             for(var i:int = 0; i < propertiesChangedEventsCount; i++)
             {
                 surfaceComponent.removeEventListener(surfaceComponent.propertiesChangedEvents[i], onSelectedItemPropertyChanged);
-            }
+            }*/
         }
 
         private function onSelectedItemPropertyChanged(event:Event):void
         {
-            dispatchEvent(new Event("propertyEditorChanged", true));
+			/*if (event.target.hasOwnProperty("propertyChangeFieldReference"))
+			{
+				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target["propertyChangeFieldReference"]));
+			}*/
+			/*else
+            	dispatchEvent(new Event("propertyEditorChanged", true));*/
         }
 
         protected function propertyEditor_removedHandler(event:Event):void
         {
-            var object:IVisualElement = event.target as IVisualElement;
+            /*var object:IVisualElement = event.target as IVisualElement;
             if (object === this)
             {
                 unregisterPropertyChangedEvents(_selectedItem);
-            }
+            }*/
         }
 	}
 }

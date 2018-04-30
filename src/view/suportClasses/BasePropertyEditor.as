@@ -1,13 +1,14 @@
 package view.suportClasses
 {
 	import flash.events.Event;
-
+	
 	import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-
+	
 	import spark.components.Group;
-
+	
 	import view.EditingSurface;
+	import view.events.PropertyEditorChangeEvent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
 
@@ -77,10 +78,15 @@ package view.suportClasses
 			}
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
-
+		
         private function onSelectedItemPropertyChanged(event:Event):void
         {
-		    dispatchEvent(new Event("propertyEditorChanged", true));
+			if (event.target.hasOwnProperty("propertyChangeFieldReference") &&
+				event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
+			{
+				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+			}
+		    //dispatchEvent(new Event("propertyEditorChanged", true));
         }
 
 		private function populatePropertyEditors(target:IVisualElement):void

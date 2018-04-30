@@ -55,6 +55,8 @@
 		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
 		import mx.events.FlexEvent;
+		
+		import utils.GenericUtils;
 
 		CONFIG::MOONSHINE
 		{
@@ -97,22 +99,22 @@
 
 		private function commitWidth():void
 		{
-			if (this.widthInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(true);
+			if (this.widthInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
 			else
 			{
 				var newWidth:Number = parseFloat(this.widthInput.text);
-				this.applyMinAndMaxWidth(newWidth);
+				this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
 			}
 			this.widthInput.selectAll();
 		}
 
 		private function commitHeight():void
 		{
-			if (this.heightInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(false);
+			if (this.heightInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
 			else
 			{
 				var newHeight:Number = parseFloat(this.heightInput.text);
-				this.applyMinAndMaxHeight(newHeight);
+				this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
 			}
 			this.heightInput.selectAll();
 		}
@@ -192,7 +194,7 @@
 				{
 					newWidth = Math.floor(parseFloat(this.widthInput.text)) + 1;
 				}
-				this.applyMinAndMaxWidth(newWidth);
+				this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
 				this.widthInput.selectAll();
 			}
 			else if (event.keyCode === Keyboard.DOWN)
@@ -206,7 +208,7 @@
 				{
 					newWidth = Math.ceil(parseFloat(this.widthInput.text)) - 1;
 				}
-				this.applyMinAndMaxWidth(newWidth);
+				this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
 				this.widthInput.selectAll();
 			}
 		}
@@ -224,7 +226,7 @@
 				{
 					newHeight = Math.floor(parseFloat(this.heightInput.text)) + 1;
 				}
-				this.applyMinAndMaxHeight(newHeight);
+				this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
 				this.heightInput.selectAll();
 			}
 			else if (event.keyCode === Keyboard.DOWN)
@@ -238,64 +240,9 @@
 				{
 					newHeight = Math.ceil(parseFloat(this.heightInput.text)) - 1;
 				}
-				this.applyMinAndMaxHeight(newHeight);
+				this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
 				this.heightInput.selectAll();
 			}
-		}
-
-		private function applyMinAndMaxWidth(newWidth:Number):void
-		{
-			var minWidth:Number = this.selectedItem.minWidth;
-			var maxWidth:Number = this.selectedItem.maxWidth;
-			if (newWidth < minWidth)
-			{
-				newWidth = minWidth;
-			}
-			else if (newWidth > maxWidth)
-			{
-				newWidth = maxWidth;
-			}
-			this.selectedItem.percentWidth = Number.NaN;
-			this.selectedItem.width = newWidth;
-			//the text might not have updated if the width property is the same
-			//but the old text value is different
-			this.widthInput.text = this.selectedItem.width.toString();
-		}
-
-		private function applyPercentageWidthHeight(isWidth:Boolean):void
-		{
-			var pattern:RegExp = new RegExp(/(%)/g);
-			var newValue:String = isWidth ? this.widthInput.text.replace(pattern, "") : this.heightInput.text.replace(pattern, "");
-
-			if (isWidth)
-			{
-				this.selectedItem.width = Number.NaN;
-				this.selectedItem.percentWidth = Number(newValue);
-			}
-			else
-			{
-				this.selectedItem.height = Number.NaN;
-				this.selectedItem.percentHeight = Number(newValue);
-			}
-		}
-
-		private function applyMinAndMaxHeight(newHeight:Number):void
-		{
-			var minHeight:Number = this.selectedItem.minHeight;
-			var maxHeight:Number = this.selectedItem.maxHeight;
-			if (newHeight < minHeight)
-			{
-				newHeight = minHeight;
-			}
-			else if (newHeight > maxHeight)
-			{
-				newHeight = maxHeight;
-			}
-			this.selectedItem.percentHeight = Number.NaN;
-			this.selectedItem.height = newHeight;
-			//the text might not have updated if the height property is the same
-			//but the old text value is different
-			this.heightInput.text = this.selectedItem.height.toString();
 		}
 
 		private function bringToFrontButton_clickHandler(event:MouseEvent):void

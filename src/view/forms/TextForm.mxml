@@ -12,7 +12,7 @@
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:TextInput id="textInput"
                      text="{bindableText}" width="100%" minWidth="156" maxChars="{_maxChar}" restrict="{restrict}"
-                     change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="{prompt}"/>
+                     enter="textInput_changeHandler(event)" focusOut="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="{prompt}"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
@@ -107,7 +107,7 @@
             {
                 return;
             }
-            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, true);
+            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

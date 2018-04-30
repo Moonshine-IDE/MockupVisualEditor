@@ -3,6 +3,8 @@ package view.interfaces
 	import mx.core.IChildList;
 	import mx.core.IInvalidating;
 	import mx.core.IUIComponent;
+	
+	import view.models.PropertyChangeReferenceVO;
 
 	public interface ISurfaceComponent extends IUIComponent, IInvalidating, IChildList
 	{
@@ -15,6 +17,11 @@ package view.interfaces
 		 * Helper function which returns lists of events to track whether user changed any value in property editor
          */
 		function get propertiesChangedEvents():Array;
+		
+		/**
+		 * Returns last edited field reference
+		 */
+		//function get propertyChangeFieldReference():ChangeFieldReferenceVO;
 
         /**
 		 * Translates component to Visual Editor XML format

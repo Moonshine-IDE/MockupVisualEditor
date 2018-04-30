@@ -1,13 +1,14 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
-
+    
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.models.PropertyChangeReferenceVO;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
 
     public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent
@@ -35,25 +36,30 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-                "forAttributeChanged"
+                "forAttributeChanged",
+				"indicateRequiredChanged"
             ];
         }
 
         private var _indicateRequired:Boolean;
         private var indicateRequiredChanged:Boolean;
-
+		
+		[Bindable("indicateRequiredChanged")]
         public function get indicateRequired():Boolean
         {
             return _indicateRequired;
         }
-
+		
         public function set indicateRequired(value:Boolean):void
         {
             if (_indicateRequired != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReferenceVO("indicateRequired", _indicateRequired, value, this);
+				
                 _indicateRequired = value;
                 indicateRequiredChanged = true;
                 invalidateProperties();
+				dispatchEvent(new Event("indicateRequiredChanged"));
             }
         }
 
@@ -75,15 +81,49 @@ package view.primeFaces.surfaceComponents.components
         {
             return _forAttribute;
         }
-
+		
+		private var _propertyChangeFieldReference:PropertyChangeReferenceVO;
+		public function get propertyChangeFieldReference():PropertyChangeReferenceVO
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReferenceVO):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		[Bindable("forAttributeChanged")]
         public function set forAttribute(value:String):void
         {
             if (_forAttribute != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReferenceVO("forAttribute", _forAttribute, value, this);
+				
                 _forAttribute = value;
                 dispatchEvent(new Event("forAttributeChanged"));
+				
             }
         }
+		
+		[Bindable("textChanged")]
+		override public function set text(value:String):void
+		{
+			if (super.text != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReferenceVO("text", super.text, value, this);
+				
+				super.text = value;
+				dispatchEvent(new Event("textChanged"));
+			}
+		}
+		
+		public var isUpdating:Boolean;
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			this[nameField.toString()] = value;
+		}
 
         public function toXML():XML
         {
@@ -133,6 +173,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (indicateRequiredChanged)
             {
+				isUpdating = true; // do not update 'text' change to history manager as the 'text' change here is the effect of another field change
                 if (indicateRequired)
                 {
                     this.text += " *";
@@ -142,6 +183,7 @@ package view.primeFaces.surfaceComponents.components
                     this.text = this.text.replace(" *", "");
                 }
                 indicateRequiredChanged = false;
+				isUpdating = false;
             }
         }
     }

@@ -11,6 +11,7 @@ package view.suportClasses
 	import view.events.PropertyEditorChangeEvent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
+	import view.models.PropertyChangeReferenceVO;
 
 	[Event(name="change",type="flash.events.Event")]
     [Event(name="propertyEditorChanged",type="flash.events.Event")]
@@ -69,6 +70,7 @@ package view.suportClasses
 			}
 
 			_selectedItem = value;
+			_selectedItem.addEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes, false, 0, true);
 
 			var editorCount:int = this._propertyEditors.length;
 			for(var j:int = 0; j < editorCount; j++)
@@ -77,6 +79,18 @@ package view.suportClasses
 				editor.selectedItem = this._selectedItem;
 			}
 			this.dispatchEvent(new Event(Event.CHANGE));
+		}
+		
+		private function beforeSelectedItemDeletes(event:Event):void
+		{
+			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
+			if (event.target.hasOwnProperty("propertyChangeFieldReference") &&
+				event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
+			{
+				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(null, null, null, _selectedItem);
+				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
+				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));
+			}
 		}
 		
         private function onSelectedItemPropertyChanged(event:Event):void
@@ -180,6 +194,7 @@ package view.suportClasses
 			{
 				return;
 			}
+			_selectedItem.removeEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes);
 			this.cleanupPropertyEditors(object);
 		}
 	}

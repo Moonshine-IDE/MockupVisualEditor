@@ -8,6 +8,7 @@ package view.models
 		public var fieldLastValue:*;
 		public var fieldNewValue:*;
 		public var fieldClass:ISurfaceComponent;
+		public var fieldClassIndexToParent:int = -1;
 		
 		public function PropertyChangeReferenceVO(fieldName:String, fieldLastValue:*, fieldNewValue:*, fieldClass:ISurfaceComponent)
 		{

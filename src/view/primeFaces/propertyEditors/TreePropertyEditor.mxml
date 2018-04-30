@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+								  xmlns:s="library://ns.adobe.com/flex/spark"
+								  xmlns:suportclasses="view.suportClasses.*"
+								  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*"
+								  height="100%">
+	<fx:Script>
+		<![CDATA[
+			import skins.FormHeadingSkin;
+		]]>
+	</fx:Script>
+	<suportclasses:layout>
+        <s:VerticalLayout id="thisLayout" gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+	<primeFaces:BasicsForm/>
+	
+	<s:FormHeading label="Tree Data" skinClass="skins.FormHeadingSkin" />
+	<forms:TextForm label="Var" textProperty="treeVar"/>
+	<forms:TextForm label="Value" textProperty="treeValue"
+					prompt="#\{bean.property\}"/>
+</suportclasses:BasePropertyEditor>

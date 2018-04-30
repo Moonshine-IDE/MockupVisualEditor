@@ -4,6 +4,8 @@ package view.flex.surfaceComponents.components
 
     import spark.components.RadioButton;
 
+    import view.flex.surfaceComponents.skins.RadioButtonSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	import view.flex.propertyEditors.RadioButtonPropertyEditor;
@@ -15,6 +17,12 @@ package view.flex.surfaceComponents.components
 
 		public function RadioButton()
 		{
+            super();
+
+            this.setStyle("skinClass", RadioButtonSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.label = "Radio Button";
 			this.toolTip = "";
 			this.width = 100;
@@ -91,7 +99,7 @@ package view.flex.surfaceComponents.components
             this.groupName = xml.@groupName;
         }
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");

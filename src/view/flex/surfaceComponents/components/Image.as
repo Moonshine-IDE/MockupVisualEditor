@@ -20,6 +20,8 @@ package view.flex.surfaceComponents.components
 {
 	import spark.components.Image;
 
+    import view.flex.surfaceComponents.skins.ImageSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	public class Image extends spark.components.Image implements IFlexSurfaceComponent
@@ -29,6 +31,10 @@ package view.flex.surfaceComponents.components
 
 		public function Image()
 		{
+            super();
+
+            this.setStyle("skinClass", ImageSkin);
+
 			this.width = 100;
 			this.height = 100;
 			this.minWidth = 20;
@@ -72,7 +78,7 @@ package view.flex.surfaceComponents.components
 			this.height = xml.@height;
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");

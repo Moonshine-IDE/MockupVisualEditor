@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:suportclasses="view.suportClasses.*"
+        skinClass="skins.FormSkin"
+        creationComplete="onTabFormCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			
+			import spark.events.GridItemEditorEvent;
+			
+			import data.DataProviderListItem;
+			
+			import view.primeFaces.surfaceComponents.components.DataTable;
+			
+			[Bindable] public var tableVar:String;
+			
+			private var _binding:ChangeWatcher;
+			private var _label:String = "Columns";
+			
+			[Bindable("labelChange")]
+			public function get label():String
+			{
+				return this._label;
+			}
+			
+			public function set label(value:String):void
+			{
+				if (this._label === value)
+				{
+					return;
+				}
+				this._label = value;
+				this.dispatchEvent(new Event("labelChange"));
+			}
+			
+			private function editSelectedItem():void
+			{
+				dgColumns.ensureCellIsVisible(dgColumns.selectedIndex);
+				dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
+			}
+			
+			private function addItemButton_clickHandler(event:MouseEvent):void
+			{
+				var listItem:DataProviderListItem = new DataProviderListItem("Title");
+				dgColumns.dataProvider.addItem(listItem);
+
+				updateToOwner(false, DataTable.GRID_ITEM_ADD);
+				
+				dgColumns.validateNow();
+				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
+				callLater(editSelectedItem);
+			}
+			
+			private function editItemButton_clickHandler(event:MouseEvent):void
+			{
+				this.editSelectedItem();
+			}
+			
+			private function deleteItemButton_clickHandler(event:MouseEvent):void
+			{
+				updateToOwner(false, DataTable.GRID_ITEM_DELETE, dgColumns.selectedIndex);
+				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
+			}
+			
+			private function onTabFormCreationComplete(event:FlexEvent):void
+			{
+				updateColumnList();
+				updateBinding();
+			}
+			
+			private function updateColumnList():void
+			{
+				var grid:DataTable = (selectedItem as DataTable);
+				dgColumns.dataProvider = grid.tableColumnDescriptor;
+			}
+			
+			private function updateToOwner(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
+			{
+				var grid:DataTable = (selectedItem as DataTable);
+				grid.generateColumns(isAll, updateType, itemIndex);
+			}
+			
+			private function updateBinding():void
+			{
+				if (this._binding)
+				{
+					this._binding.unwatch();
+					this._binding = null;
+				}
+				if (this.selectedItem === null)
+				{
+					return;
+				}
+				this._binding = BindingUtils.bindSetter(onTableVarUpdated, selectedItem, "tableVar", false, true);
+			}
+			
+			private function onTableVarUpdated(value:Object):void
+			{
+				tableVar = value.toString();
+				(selectedItem as DataTable).tableColumnDescriptor.refresh();
+			}
+			
+			protected function onRowDragAndDropped(event:DragEvent):void
+			{
+				dgColumns.callLater(updateToOwner, [true]);
+			}
+			
+			protected function onRowDragStarts(event:DragEvent):void
+			{
+				dgColumns.endItemEditorSession();
+			}
+			
+			protected function onRowEditEnd(event:GridItemEditorEvent):void
+			{
+				updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
+			}
+			
+			private function formattedValue(item:Object,column:GridColumn):String
+			{
+				return (item.value ? "#{"+ tableVar +"."+ item.value +"}" : "#{"+ tableVar +".}");
+			}
+			
+		]]>
+	</fx:Script>
+	
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
+		<s:DataGrid id="dgColumns"
+					width="100%" height="100%"
+					editable="true" sortableColumns="false" draggableColumns="false"
+					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
+					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"
+					gridItemEditorSessionSave="onRowEditEnd(event)">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn dataField="label" headerText="Title"/>
+					<s:GridColumn dataField="value" headerText="Value" labelFunction="formattedValue"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+        <s:HGroup>
+            <s:Button width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
+                      click="addItemButton_clickHandler(event)"/>
+            <s:Button styleName="editDataProviderItemButton" toolTip="Edit Item"
+                      enabled="{dgColumns.selectedIndex !== -1}"
+                      click="editItemButton_clickHandler(event)"/>
+            <s:Button styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+                      enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"
+                      click="deleteItemButton_clickHandler(event)"/>
+        </s:HGroup>
+    </s:FormItem>
+</suportclasses:BasePropertyEditorForm>

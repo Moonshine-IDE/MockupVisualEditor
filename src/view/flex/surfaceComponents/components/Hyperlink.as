@@ -84,7 +84,7 @@ package view.flex.surfaceComponents.components
 			this.url = xml.@url;
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             return null;
         }

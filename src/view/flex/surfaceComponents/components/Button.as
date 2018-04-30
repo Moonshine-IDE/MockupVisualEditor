@@ -20,6 +20,8 @@ package view.flex.surfaceComponents.components
 {
 	import spark.components.Button;
 
+    import view.flex.surfaceComponents.skins.ButtonSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	import view.flex.propertyEditors.ButtonPropertyEditor;
@@ -31,6 +33,12 @@ package view.flex.surfaceComponents.components
 		
 		public function Button()
 		{
+			super();
+
+			this.setStyle("skinClass", ButtonSkin);
+			this.setStyle("color", "#6A6A6A");
+			this.setStyle("fontSize", 12);
+
 			this.label = "Button";
 			this.toolTip = "";
 			this.width = 100;
@@ -78,7 +86,7 @@ package view.flex.surfaceComponents.components
 			this.label = xml.@text;
 		}
 
-		public function toMXML():XML
+		public function toCode():XML
 		{
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");

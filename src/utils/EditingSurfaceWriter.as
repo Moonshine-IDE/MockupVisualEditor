@@ -1,17 +1,21 @@
 package utils
 {
     import mx.core.IVisualElementContainer;
-
+    import mx.core.UIComponent;
     import view.EditingSurface;
-    import view.interfaces.IFlexSurfaceComponent;
-    import view.interfaces.IMainApplication;
     import view.interfaces.ISurfaceComponent;
 
     public class EditingSurfaceWriter
 	{
-		public static function toXML(surface:EditingSurface):XML
+		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
 		{
 			var xml:XML = <mockup/>;
+            var primeFacesContainer:XML = null;
+            if (visualEditorType == VisualEditorType.PRIME_FACES)
+            {
+                primeFacesContainer = surface.numElements == 0 ? MainApplicationCodeUtils.appendXMLMainTag(surface) : null;
+            }
+
 			var elementCount:int = surface.numElements;
 			for(var i:int = 0; i < elementCount; i++)
 			{
@@ -21,57 +25,62 @@ package utils
 					continue;
 				}
 				var elementXML:XML = element.toXML();
-				xml.appendChild(elementXML);
+                    xml.appendChild(elementXML);
 			}
+
+            if (primeFacesContainer)
+            {
+                xml.appendChild(primeFacesContainer);
+            }
 			return xml;
 		}
 
 		CONFIG::MOONSHINE
         {
-            public static function toMXML(surface:EditingSurface):XML
+            public static function toCode(surface:EditingSurface):XML
             {
-                var element:IFlexSurfaceComponent = surface.getElementAt(0) as IFlexSurfaceComponent;
-                var elementCount:int = 0;
-				var i:int = 0;
-                var xml:XML = new XML("<WindowedApplication></WindowedApplication>");
-                var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
-                xml.addNamespace(sparkNamespace);
-                xml.setNamespace(sparkNamespace);
+                var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+                var title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
+                var xml:XML = MainApplicationCodeUtils.getParentContent(surface, title, element.width, element.height,
+                        element.percentWidth, element.percentHeight);
+                var mainContainer:XML = MainApplicationCodeUtils.getMainContainerTag(xml);
 
-                var fxNamespace:Namespace = new Namespace("fx", "http://ns.adobe.com/mxml/2009");
-                xml.addNamespace(fxNamespace);
-
-                if (element is IMainApplication)
+                var container:IVisualElementContainer = surface;
+                if (element is ISurfaceComponent)
                 {
-                    xml.@width = element.width;
-                    xml.@height = element.height;
-                    xml.@title = element["title"];
+                    container = element as IVisualElementContainer;
+                }
 
-                    elementCount = (element as IVisualElementContainer).numElements;
-                    for (i = 0; i < elementCount; i++)
+                var elementCount:int = 0;
+                if (!container)
+                {
+                    elementCount = surface.numElements;
+                    container = surface;
+                }
+                else
+                {
+                    elementCount = container.numElements;
+                }
+
+                for (var i:int = 0; i < elementCount; i++)
+                {
+                    element = container.getElementAt(i) as ISurfaceComponent;
+
+                    if (element === null)
                     {
-                        var mainWindowChild:IFlexSurfaceComponent = (element as IVisualElementContainer).getElementAt(i) as IFlexSurfaceComponent;
-                        if (mainWindowChild === null)
-                        {
-                            continue;
-                        }
-                        xml.appendChild(mainWindowChild.toMXML());
+                        continue;
+                    }
+
+                    var code:XML = element.toCode();
+                    if (mainContainer)
+                    {
+                        mainContainer.appendChild(code);
+                    }
+                    else
+                    {
+                        xml.appendChild(code);
                     }
                 }
-				else
-				{
-                    elementCount = surface.numElements;
-                    for (i = 0; i < elementCount; i++)
-                    {
-                        element = surface.getElementAt(i) as IFlexSurfaceComponent;
-                        if (element === null)
-                        {
-                            continue;
-                        }
-                        var elementXML:XML = element.toMXML();
-                        xml.appendChild(elementXML);
-                    }
-				}
 
 				return xml;
             }

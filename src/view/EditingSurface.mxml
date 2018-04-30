@@ -21,9 +21,12 @@
 	</fx:Declarations>
 
 	<fx:Script><![CDATA[
+		import mx.containers.GridItem;
+		import mx.containers.GridRow;
 		import mx.controls.scrollClasses.ScrollBar;
 		import mx.core.BitmapAsset;
 		import mx.core.DragSource;
+		import mx.core.IUIComponent;
 		import mx.core.IVisualElement;
 		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
@@ -32,17 +35,28 @@
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
 
-		import spark.components.Group;
 		import spark.components.SkinnableContainer;
 		import spark.components.supportClasses.ScrollBarBase;
+		import spark.components.supportClasses.SkinnableContainerBase;
+		import spark.containers.Navigator;
 		import spark.events.IndexChangeEvent;
 
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
 
+		import view.interfaces.IMainApplication;
+
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
 		import view.interfaces.ISurfaceComponent;
+
+		import mx.core.Container;
+
+		import view.suportClasses.events.SurfaceComponentEvent;
+
+		import view.primeFaces.surfaceComponents.components.Div;
+
+		import view.primeFaces.surfaceComponents.components.Grid;
 
 		private static const SMALL_NUDGE:int = 1;
 		private static const LARGE_NUDGE:int = 10;
@@ -51,6 +65,12 @@
 		private var _selectedItem:ISurfaceComponent = null;
 		private var _wasLoaded:Boolean = false;
 		private var _hasChanged:Boolean = false;
+		private var _visualEditorType:String;
+
+		public function set visualEditorType(value:String):void
+		{
+			_visualEditorType = value;
+		}
 
 		public function get hasChanged():Boolean
 		{
@@ -96,21 +116,21 @@
 			hasChanged = false;
 			_wasLoaded = this.numElements > 0;
 
-			return EditingSurfaceWriter.toXML(this);
+			return EditingSurfaceWriter.toXML(this, _visualEditorType);
 		}
 
 		CONFIG::MOONSHINE
 		{
-			public function toMXML():XML
+			public function toCode():XML
 			{
-				return EditingSurfaceWriter.toMXML(this);
+				return EditingSurfaceWriter.toCode(this);
 			}
 		}
 
 		public function fromXML(xml:XML):void
 		{
 			this.deleteAll();
-			EditingSurfaceReader.fromXML(this, xml);
+			EditingSurfaceReader.fromXML(this, xml, _visualEditorType);
 
 			_wasLoaded = true;
 		}
@@ -136,10 +156,10 @@
 			{
 				IFocusManagerComponent(item).focusEnabled = false;
 			}
+
 			item.addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
-			item.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void {
-				event.preventDefault();
-			});
+			item.addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
+
 			var itemContainer:SkinnableContainer = null;
 			if (item is IMultiViewContainer)
 			{
@@ -151,6 +171,22 @@
 			{
 				itemContainer = SkinnableContainer(item);
 			}
+			else if (item is Grid)
+			{
+				this.prepareGrid(item as Grid);
+				return;
+			}
+			else if (item is Navigator)
+			{
+				this.prepareContainer(item as SkinnableContainerBase);
+				return;
+			}
+			else if (item is IMainApplication)
+			{
+				this.prepareContainer(item as UIComponent);
+				return;
+			}
+
 			this.prepareContainer(itemContainer);
 		}
 
@@ -161,29 +197,34 @@
 		public function deleteItem(item:ISurfaceComponent):void
 		{
 			if (item is INonDeletableSurfaceComponent) return;
-			
+
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			container.removeElement(IVisualElement(item));
 
-			var itemContainer:SkinnableContainer = null;
 			if (item is IMultiViewContainer)
 			{
 				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
 				multiViewContainer.removeEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
-				itemContainer = multiViewContainer.selectedView;
+				this.cleanupContainer(multiViewContainer.selectedView);
 			}
 			else if (item is SkinnableContainer)
 			{
-				itemContainer = SkinnableContainer(item);
+				this.cleanupContainer(SkinnableContainer(item));
 			}
-			this.cleanupContainer(itemContainer);
+			else if (item is Navigator)
+			{
+				this.cleanupContainer(item as SkinnableContainerBase);
+			}
+			else if (item is Grid)
+			{
+				this.cleanupGrid(item as Grid);
+			}
 
 			this.selectedItem = null;
-
 			hasChanged = this.numElements > 0 && _wasLoaded;
 		}
 
-		private function prepareContainer(container:SkinnableContainer):void
+		private function prepareContainer(container:UIComponent):void
 		{
 			if (container === null)
 			{
@@ -194,7 +235,7 @@
 			container.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 		}
 
-		private function cleanupContainer(container:SkinnableContainer):void
+		private function cleanupContainer(container:UIComponent):void
 		{
 			if (container === null)
 			{
@@ -205,7 +246,104 @@
 			container.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 		}
 
-		private function showDropOverlay(dropTarget:Group):void
+		private function prepareGrid(grid:Grid):void
+		{
+			if (grid === null)
+			{
+				return;
+			}
+
+			grid.addEventListener("gridElementAdded", onGridElementAdded);
+			grid.addEventListener("gridElementRemoved", onGridElementRemoved);
+
+			var gridNumElements:int = grid.numElements;
+			for (var row:int = 0; row < gridNumElements; row++)
+			{
+				var gridRow:GridRow = grid.getElementAt(row) as GridRow;
+				if (gridRow)
+				{
+					var gridColNumElements:int = gridRow.numElements;
+					for (var col:int = 0; col < gridColNumElements; col++)
+					{
+						var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+						if (gridCol)
+						{
+							var div:Div = gridCol.getElementAt(0) as Div;
+
+							div.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+							div.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+							div.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+						}
+					}
+				}
+			}
+		}
+
+		private function onGridElementAdded(event:SurfaceComponentEvent):void
+		{
+			if (event.items)
+			{
+				for (var i:int = 0; i < event.items.length; i++)
+				{
+					var surfaceComponent:IUIComponent = event.items[i] as IUIComponent;
+
+					surfaceComponent.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+				}
+			}
+		}
+
+		private function onGridElementRemoved(event:SurfaceComponentEvent):void
+		{
+			if (event.items)
+			{
+				for (var i:int = 0; i < event.items.length; i++)
+				{
+					var gridItem:GridItem = event.items[i];
+					var div:Div = gridItem.getElementAt(0) as Div;
+
+					div.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+					div.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+					div.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+				}
+			}
+		}
+
+		private function cleanupGrid(grid:Grid):void
+		{
+			if (grid === null)
+			{
+				return;
+			}
+
+			grid.removeEventListener("gridElementAdded", onGridElementAdded);
+			grid.removeEventListener("gridElementRemoved", onGridElementRemoved);
+
+			var gridNumElements:int = grid.numElements;
+			for (var row:int = 0; row < gridNumElements; row++)
+			{
+				var gridRow:GridRow = grid.getElementAt(row) as GridRow;
+				if (gridRow)
+				{
+					var gridColNumElements:int = gridRow.numElements;
+					for (var col:int = 0; col < gridColNumElements; col++)
+					{
+						var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+						if (gridCol)
+						{
+							var div:Div = gridCol.getElementAt(0) as Div;
+
+							div.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+							div.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+							div.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+						}
+					}
+				}
+			}
+		}
+
+		private function showDropOverlay(dropTarget:UIComponent):void
 		{
 			var currentTarget:DisplayObjectContainer = dropTarget;
 			//we need to calculated the visible rectangular region where we can
@@ -215,9 +353,10 @@
 			var rect:Rectangle = new Rectangle(globalPosition.x, globalPosition.y, dropTarget.width, dropTarget.height);
 			while (currentTarget !== this)
 			{
-				if (currentTarget is SkinnableContainer)
+				var isSkinnableContainer:Boolean = currentTarget is SkinnableContainer;
+				if (isSkinnableContainer || currentTarget is IMainApplication)
 				{
-					var otherGroup:Group = SkinnableContainer(currentTarget).contentGroup;
+					var otherGroup:UIComponent = isSkinnableContainer ? SkinnableContainer(currentTarget).contentGroup : currentTarget as UIComponent;
 					globalPosition = otherGroup.localToGlobal(origin);
 					var newRect:Rectangle = new Rectangle(globalPosition.x, globalPosition.y, otherGroup.width, otherGroup.height);
 					rect = rect.intersection(newRect);
@@ -371,6 +510,11 @@
 			this.selectedItem = object;
 			this.setFocus();
 
+			if (dropTarget is IMainApplication)
+			{
+				(dropTarget as UIComponent).invalidateDisplayList();
+			}
+
 			hasChanged = true;
 		}
 
@@ -396,14 +540,22 @@
 				return;
 			}
 			var object:ISurfaceComponent = ISurfaceComponent(dragSource.dataForFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT));
-			var container:SkinnableContainer = SkinnableContainer(event.currentTarget);
+			var container:UIComponent = event.currentTarget as UIComponent;
 			if (object.contains(container))
 			{
 				//don't allow a container to be dropped on itself or one of its
 				//children!
 				return;
 			}
-			var contentGroup:Group = container.contentGroup;
+			var contentGroup:UIComponent = null;
+			if (container is SkinnableContainer || container is Navigator)
+			{
+				contentGroup = container["contentGroup"];
+			}
+			else if (container is IMainApplication || container is Container)
+			{
+				contentGroup = container;
+			}
 			var position:Point = new Point(event.stageX, event.stageY);
 			position = contentGroup.globalToLocal(position);
 			if (position.x >= 0 && position.y >= 0 &&
@@ -424,6 +576,11 @@
 			}
 			event.preventDefault();
 			this.dragDropHandler(event);
+		}
+
+		private function object_focusInHandler(event:FocusEvent):void
+		{
+			event.preventDefault();
 		}
 
 		private function object_mouseDownHandler(event:MouseEvent):void

@@ -12,8 +12,8 @@
 
     <forms:TextForm textProperty="label"/>
 
-    <s:FormHeading label="Data"/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
-    <forms:ToggleButtonSelectedForm/>
+    <forms:ToggleButtonSelectedForm label="Selected" textProperty="selected"/>
 
 </suportclasses:BasePropertyEditor>

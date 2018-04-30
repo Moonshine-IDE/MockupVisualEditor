@@ -13,28 +13,50 @@
 		<s:Button styleName="openButton" toolTip="Open Mockup" click="loadButton_clickHandler(event)"/>
 		<s:Button styleName="saveButton" toolTip="Save Mockup" click="saveButton_clickHandler(event)"/>
 	</s:BorderContainer>
-	<view:ComponentList id="componentList" top="{toolbar.height}" bottom="0" left="0"/>
+	<view:ComponentList id="componentList" minWidth="180" top="{toolbar.height}" bottom="0" left="0"
+						visualEditorType="{_visualEditorType}"/>
 
 	<containers:HDividerGroup left="{componentList.width}" right="0" bottom="0" top="{toolbar.height}"
-							  gap="0" minElementWidth="210">
+							  gap="0" minElementWidth="250">
 		<s:Scroller percentWidth="80" percentHeight="100">
-			<view:EditingSurface id="editingSurface"/>
+			<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"/>
 		</s:Scroller>
 		<view:PropertyEditorContainer id="propertyEditor"
-									  percentHeight="100" percentWidth="20" minWidth="210"
-									  selectedItem="{editingSurface.selectedItem}" />
+									  percentHeight="100" percentWidth="20" minWidth="250"
+									  selectedItem="{editingSurface.selectedItem}"/>
 	</containers:HDividerGroup>
 	<fx:Script><![CDATA[
+		import mx.collections.ArrayCollection;
 		import mx.events.FlexEvent;
-
+		
 		import spark.components.Alert;
+		
+		import utils.MoonshineBridgeUtils;
+		
+		import view.interfaces.IVisualEditorLibraryBridge;
 
 		private var _file:FileReference;
 
+		[Bindable]
+		private var _visualEditorType:String;
+
+		public function set visualEditorType(value:String):void
+		{
+			_visualEditorType = value;
+		}
+
 		CONFIG::MOONSHINE
 		{
+			import flash.filesystem.File;
+			import flash.filesystem.FileStream;
+			
 			private var _fileMoonshine:File;
 			private var _fileStreamMoonshine:FileStream;
+			
+			public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
+			{
+				MoonshineBridgeUtils.moonshineBridge = value;
+			}
 
 			public function saveEditedFile():void
 			{

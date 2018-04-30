@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
-	xmlns:mx="library://ns.adobe.com/flex/mx"
 	xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
 	alpha.disabled=".5">
 
@@ -42,10 +41,14 @@
 	<s:layout>
 		<s:FormItemLayout>
 			<s:constraintColumns>
+				<!--- The column containing the sequence label. -->
+				<s:ConstraintColumn id="sequenceCol" />
 				<!--- The column containing the form item's label. -->
 				<s:ConstraintColumn id="labelCol" />
 				<!--- The column containing the form item's content. -->
 				<s:ConstraintColumn id="contentCol" width="100%"/>
+				<!--- The column containing the form item's help content. -->
+				<s:ConstraintColumn id="helpCol"/>
 			</s:constraintColumns>
 			<s:constraintRows>
 				<!--- @private -->

@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
                                       xmlns:s="library://ns.adobe.com/flex/spark"
-                                      xmlns:suportclasses="view.suportClasses.*">
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      skinClass="skins.FormSkin">
 
     <suportclasses:layout>
-        <s:FormLayout horizontalAlign="contentJustify"/>
+        <s:FormLayout />
     </suportclasses:layout>
 
-    <s:FormItem label="{label}">
-        <s:TextInput id="textInput" width="100%"
-                     text="{bindableText}"
-                     change="textInput_changeHandler(event)"/>
+    <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
+        <s:TextInput id="textInput"
+                     text="{bindableText}" width="100%" minWidth="156" maxChars="{_maxChar}" restrict="{restrict}"
+                     change="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="{prompt}"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
-
+        
         import view.interfaces.ISurfaceComponent;
 
         private var _binding:ChangeWatcher;
+		
+		[Bindable] public var prompt:String;
+		[Bindable] public var restrict:String;
 
         [Bindable]
         public var bindableText:String;
@@ -41,6 +46,18 @@
             this._label = value;
             this.dispatchEvent(new Event("labelChange"));
         }
+
+        [Bindable]
+        private var _maxChar:int;
+
+        public function set maxChar(value:int):void
+        {
+            _maxChar = value;
+        }
+		public function get maxChar():int
+		{
+			return _maxChar;
+		}
 
         private var _textProperty:String = "text";
 
@@ -76,6 +93,7 @@
             }
             this.textInput.errorString = "";
             this.selectedItem[this._textProperty] = this.textInput.text;
+			this.dispatchEvent(new Event(Event.CHANGE));
         }
 
         private function updateBinding():void

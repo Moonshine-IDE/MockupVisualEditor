@@ -22,6 +22,8 @@ package view.flex.surfaceComponents.components
 
     import spark.components.CheckBox;
 
+    import view.flex.surfaceComponents.skins.CheckBoxSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
 	import view.flex.propertyEditors.CheckBoxPropertyEditor;
@@ -33,6 +35,12 @@ package view.flex.surfaceComponents.components
 
 		public function CheckBox()
 		{
+            super();
+
+            this.setStyle("skinClass", CheckBoxSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.label = "Check Box";
 			this.toolTip = "";
 			this.width = 90;
@@ -82,7 +90,7 @@ package view.flex.surfaceComponents.components
 			this.selected = xml.@selected == "true";
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
-	currentState="empty" minWidth="100">
+	currentState="empty" minWidth="100" skinClass="skins.PropertyEditorContainerSkin">
 
 	<fx:Metadata>
 		[Event(name="change",type="flash.events.Event")]
@@ -22,10 +22,11 @@
 	</s:Group>
 
 	<fx:Script><![CDATA[
-        import view.flex.propertyEditors.GenericPropertyEditor;
-        import view.interfaces.IPropertyEditor;
-        import view.interfaces.ISurfaceComponent;
-
+		
+		import view.flex.propertyEditors.GenericPropertyEditor;
+		import view.interfaces.IPropertyEditor;
+		import view.interfaces.ISurfaceComponent;
+		
         private var _editor:IPropertyEditor;
 
         private var _selectedItem:ISurfaceComponent = null;

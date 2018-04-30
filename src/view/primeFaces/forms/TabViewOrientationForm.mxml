@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      skinClass="skins.FormSkin">
+    <fx:Declarations>
+        <s:RadioButtonGroup id="orientRadioButtonGroup"
+                            selectedValue="{bindableText}" itemClick="onRadioItemClick(event)"/>
+    </fx:Declarations>
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+
+    <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
+        <s:HGroup gap="3" verticalAlign="middle">
+            <s:RadioButton label="top" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton label="left" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton label="bottom" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton label="right" groupName="orientRadioButtonGroup"/>
+        </s:HGroup>
+    </s:FormItem>
+
+    <fx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.ItemClickEvent;
+        import view.interfaces.ISurfaceComponent;
+
+        private var _binding:ChangeWatcher;
+
+        [Bindable]
+        public var bindableText:String;
+
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        private var _textProperty:String = "orientation";
+
+        [Bindable("change")]
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+            this.updateBinding();
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            super.selectedItem = value;
+            this.updateBinding();
+        }
+
+        private function updateBinding():void
+        {
+            if (this._binding)
+            {
+                this._binding.unwatch();
+                this._binding = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, true);
+        }
+
+        private function onRadioItemClick(event:ItemClickEvent):void
+        {
+            if (!(this.textProperty in this.selectedItem))
+            {
+                this.errorString = "Field " + this._textProperty + " does not exist";
+                return;
+            }
+            this.errorString = "";
+            this.selectedItem[this._textProperty] = this.orientRadioButtonGroup.selectedValue;
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

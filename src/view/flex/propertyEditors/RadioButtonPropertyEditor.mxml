@@ -10,12 +10,12 @@
 
     <forms:BasicsForm/>
 
-    <s:FormHeading label="Data"/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <forms:TextForm label="Text" textProperty="label"/>
 
     <forms:TextForm label="Group Name" textProperty="groupName"/>
 
-    <forms:ToggleButtonSelectedForm/>
+    <forms:ToggleButtonSelectedForm label="Selected" textProperty="selected"/>
 
 </suportclasses:BasePropertyEditor>

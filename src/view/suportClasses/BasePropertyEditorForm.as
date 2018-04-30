@@ -57,7 +57,7 @@ package view.suportClasses
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
 
-        private function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
+        protected function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
         {
             if (!surfaceComponent.propertiesChangedEvents) return;
 
@@ -85,7 +85,7 @@ package view.suportClasses
             dispatchEvent(new Event("propertyEditorChanged", true));
         }
 
-        private function propertyEditor_removedHandler(event:Event):void
+        protected function propertyEditor_removedHandler(event:Event):void
         {
             var object:IVisualElement = event.target as IVisualElement;
             if (object === this)

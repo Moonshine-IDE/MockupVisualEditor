@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+									  xmlns:s="library://ns.adobe.com/flex/spark"
+									  xmlns:suportclasses="view.suportClasses.*"
+									  skinClass="skins.FormSkin"
+									  creationComplete="onBasicFormCreationComplete(event)"
+									  currentState="normal">
+	<suportclasses:states>
+		<s:State name="normal"/>
+		<s:State name="normalWithId"/>
+	</suportclasses:states>
+
+	<suportclasses:layout>
+		<s:FormLayout />
+	</suportclasses:layout>
+	<s:FormItem label="Id" skinClass="skins.FormItemSkin" includeIn="normalWithId">
+		<s:TextInput id="idTextInput" width="100%" skinClass="skins.TextInputSkin"
+					 text="{selectedComponentIdAttributeChaged}"
+					 height="25" tabIndex="3" change="textInput_changeHandler(event)"/>
+	</s:FormItem>
+	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
+	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
+		<s:TextInput id="widthInput" width="100%"
+					 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
+					 keyDown="widthInput_keyDownHandler(event)" height="25"
+					 focusOut="commitWidth()" enter="commitWidth()" tabIndex="4"/>
+	</s:FormItem>
+	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
+		<s:TextInput id="heightInput" width="100%"
+					 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
+					 keyDown="heightInput_keyDownHandler(event)" height="25"
+					 focusOut="commitHeight()" enter="commitHeight()" tabIndex="5"/>
+	</s:FormItem>
+	<fx:Script><![CDATA[
+		import mx.core.EventPriority;
+		import mx.core.UIComponent;
+		import mx.events.FlexEvent;
+
+		import view.interfaces.IIdAttribute;
+
+		import view.interfaces.ISurfaceComponent;
+
+		CONFIG::MOONSHINE
+		{
+			private var tabDictionary:Array = [];
+		}
+
+		[Bindable("change")]
+		private function get selectedComponent():UIComponent
+		{
+			//x, y, width, and height aren't bindable on interfaces used by
+			//UIComponent, so we need to give the compiler a little hint here
+			return UIComponent(this.selectedItem);
+		}
+
+		override public function set selectedItem(value:ISurfaceComponent):void
+		{
+			if (super.selectedItem != value)
+			{
+				super.selectedItem = value;
+
+				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
+			}
+		}
+
+		[Bindable("propertyEditorChanged")]
+		public function get selectedComponentComputedWidth():String
+		{
+			if (!isNaN(selectedComponent.percentWidth)) return selectedComponent.percentWidth + "%";
+			return selectedComponent.width.toString();
+		}
+
+		[Bindable("propertyEditorChanged")]
+		public function get selectedComponentComputedHeight():String
+		{
+			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight + "%";
+			return selectedComponent.height.toString();
+		}
+
+		[Bindable("propertyEditorChanged")]
+		public function get selectedComponentIdAttributeChaged():String
+		{
+			if (this.selectedItem is IIdAttribute)
+			{
+				return this.selectedItem["idAttribute"];
+			}
+
+			return "";
+		}
+
+		private function commitWidth():void
+		{
+			if (this.widthInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(true);
+			else
+			{
+				var newWidth:Number = parseFloat(this.widthInput.text);
+				this.applyMinAndMaxWidth(newWidth);
+			}
+			this.widthInput.selectAll();
+		}
+
+		private function commitHeight():void
+		{
+			if (this.heightInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(false);
+			else
+			{
+				var newHeight:Number = parseFloat(this.heightInput.text);
+				this.applyMinAndMaxHeight(newHeight);
+			}
+			this.heightInput.selectAll();
+		}
+
+		private function textInput_changeHandler(event:Event):void
+		{
+			this.selectedItem["idAttribute"] = this.idTextInput.text;
+		}
+
+		private function widthInput_keyDownHandler(event:KeyboardEvent):void
+		{
+			if (event.keyCode === Keyboard.UP)
+			{
+				event.preventDefault();
+				if (event.shiftKey)
+				{
+					var newWidth:Number = Math.floor(parseFloat(this.widthInput.text) / 10) * 10 + 10;
+				}
+				else
+				{
+					newWidth = Math.floor(parseFloat(this.widthInput.text)) + 1;
+				}
+				this.applyMinAndMaxWidth(newWidth);
+				this.widthInput.selectAll();
+			}
+			else if (event.keyCode === Keyboard.DOWN)
+			{
+				event.preventDefault();
+				if (event.shiftKey)
+				{
+					newWidth = Math.ceil(parseFloat(this.widthInput.text) / 10) * 10 - 10;
+				}
+				else
+				{
+					newWidth = Math.ceil(parseFloat(this.widthInput.text)) - 1;
+				}
+				this.applyMinAndMaxWidth(newWidth);
+				this.widthInput.selectAll();
+			}
+		}
+
+		private function heightInput_keyDownHandler(event:KeyboardEvent):void
+		{
+			if (event.keyCode === Keyboard.UP)
+			{
+				event.preventDefault();
+				if (event.shiftKey)
+				{
+					var newHeight:Number = Math.floor(parseFloat(this.heightInput.text) / 10) * 10 + 10;
+				}
+				else
+				{
+					newHeight = Math.floor(parseFloat(this.heightInput.text)) + 1;
+				}
+				this.applyMinAndMaxHeight(newHeight);
+				this.heightInput.selectAll();
+			}
+			else if (event.keyCode === Keyboard.DOWN)
+			{
+				event.preventDefault();
+				if (event.shiftKey)
+				{
+					newHeight = Math.ceil(parseFloat(this.heightInput.text) / 10) * 10 - 10;
+				}
+				else
+				{
+					newHeight = Math.ceil(parseFloat(this.heightInput.text)) - 1;
+				}
+				this.applyMinAndMaxHeight(newHeight);
+				this.heightInput.selectAll();
+			}
+		}
+
+		private function applyMinAndMaxWidth(newWidth:Number):void
+		{
+			var minWidth:Number = this.selectedItem.minWidth;
+			var maxWidth:Number = this.selectedItem.maxWidth;
+			if (newWidth < minWidth)
+			{
+				newWidth = minWidth;
+			}
+			else if (newWidth > maxWidth)
+			{
+				newWidth = maxWidth;
+			}
+			this.selectedItem.percentWidth = Number.NaN;
+			this.selectedItem.width = newWidth;
+			//the text might not have updated if the width property is the same
+			//but the old text value is different
+			this.widthInput.text = this.selectedItem.width.toString();
+		}
+
+		private function applyPercentageWidthHeight(isWidth:Boolean):void
+		{
+			var pattern:RegExp = new RegExp(/(%)/g);
+			var newValue:String = isWidth ? this.widthInput.text.replace(pattern, "") : this.heightInput.text.replace(pattern, "");
+
+			if (isWidth)
+			{
+				this.selectedItem.width = Number.NaN;
+				this.selectedItem.percentWidth = Number(newValue);
+			}
+			else
+			{
+				this.selectedItem.height = Number.NaN;
+				this.selectedItem.percentHeight = Number(newValue);
+			}
+		}
+
+		private function applyMinAndMaxHeight(newHeight:Number):void
+		{
+			var minHeight:Number = this.selectedItem.minHeight;
+			var maxHeight:Number = this.selectedItem.maxHeight;
+			if (newHeight < minHeight)
+			{
+				newHeight = minHeight;
+			}
+			else if (newHeight > maxHeight)
+			{
+				newHeight = maxHeight;
+			}
+			this.selectedItem.percentHeight = Number.NaN;
+			this.selectedItem.height = newHeight;
+			//the text might not have updated if the height property is the same
+			//but the old text value is different
+			this.heightInput.text = this.selectedItem.height.toString();
+		}
+
+		private function onBasicFormCreationComplete(event:FlexEvent):void
+		{
+			removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
+			CONFIG::MOONSHINE
+			{
+				tabDictionary.push(widthInput);
+				tabDictionary.push(heightInput);
+
+				addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onBasicFormKeyFocusChange, false, EventPriority.DEFAULT_HANDLER);
+			}
+		}
+
+		CONFIG::MOONSHINE
+		{
+			override protected function isOurFocus(target:DisplayObject):Boolean
+			{
+				return target == widthInput.textDisplay ||
+						target == heightInput.textDisplay || super.isOurFocus(target);
+			}
+
+			private function onBasicFormKeyFocusChange(event:FocusEvent):void
+			{
+				if (event.isDefaultPrevented())
+					return;
+
+				if (!event.shiftKey && isOurFocus(DisplayObject(event.target)))
+				{
+					event.preventDefault();
+
+					var currentTabIndex:int = event.target.tabIndex;
+
+					if (currentTabIndex > -1)
+					{
+						currentTabIndex += 1;
+						if (tabDictionary.length < currentTabIndex)
+						{
+							currentTabIndex = 1;
+						}
+
+						tabDictionary[currentTabIndex - 1].setFocus();
+					}
+				}
+			}
+		}
+		]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

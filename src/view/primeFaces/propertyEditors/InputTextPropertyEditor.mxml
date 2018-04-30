@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*"
+                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+	<fx:Script>
+		<![CDATA[
+			protected function textform1_changeHandler(event:Event):void
+			{
+				if (Object(selectedItem).maxLength != "" && Object(selectedItem).maxLength != "0")
+				{
+					txtValue.maxChar = int(Object(selectedItem).maxLength);
+				}
+				else if (txtValue.maxChar != 0)
+					txtValue.maxChar = 0;
+			}
+		]]>
+	</fx:Script>
+	<suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+	<primeFaces:BasicsForm/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
+    <forms:TextForm id="txtValue" 
+					label="Value" textProperty="text"/>
+	<forms:TextForm label="Maximum Length" textProperty="maxLength"
+					restrict="0-9" change="textform1_changeHandler(event)"/>
+</suportclasses:BasePropertyEditor>

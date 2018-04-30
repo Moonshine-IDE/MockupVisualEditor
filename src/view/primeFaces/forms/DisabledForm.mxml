@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      skinClass="skins.FormSkin">
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+
+    <s:FormItem label="{label}" skinClass="skins.FormItemSkin">
+        <s:CheckBox id="check"
+                    change="check_changeHandler(event)"/>
+    </s:FormItem>
+
+    <fx:Script><![CDATA[
+        import view.interfaces.ISurfaceComponent;
+
+        private var selectedDirty:Boolean;
+        private var _textProperty:String = "enabled";
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+
+                if (value)
+                {
+                    selectedDirty = true;
+                }
+            }
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (this.check && selectedDirty)
+            {
+                this.check.selected = !this.selectedItem[_textProperty];
+                selectedDirty = false;
+            }
+        }
+
+        private function check_changeHandler(event:Event):void
+        {
+            if (!(_textProperty in this.selectedItem))
+            {
+                this.check.errorString = "Field " + this._textProperty + " does not exist";
+                return;
+            }
+            this.check.errorString = "";
+
+            this.selectedItem[this._textProperty] = !this.check.selected;
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

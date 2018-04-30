@@ -94,7 +94,7 @@ package view.flex.surfaceComponents.components
 			}
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
             var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
             var mxNamespace:Namespace = new Namespace("mx", "library://ns.adobe.com/flex/mx");

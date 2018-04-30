@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*" 
+							      xmlns:primeFaces="view.primeFaces.forms.*" 
+							      xmlns:forms="view.forms.*"
+								  preinitialize="onPreinit()" creationComplete="onCreationCompletes(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import utils.MoonshineBridgeUtils;
+			
+			private function onPreinit():void
+			{
+				// central repository to use in different Include property editor components
+				// at same time 
+				MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
+			}
+			
+			protected function onCreationCompletes(event:FlexEvent):void
+			{
+				ddl.collectionHost = MoonshineBridgeUtils;
+			}
+			
+		]]>
+	</fx:Script>
+
+    <suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+    <primeFaces:BasicsForm/>
+
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
+
+    <forms:DropdownListForm id="ddl" 
+							label="File Name" textProperty="title" 
+							collectionProperty="filesList" labelField="resourcePath"/> <!-- _this_ not constructed to use in binding will throw compiler warning -->
+
+</suportclasses:BasePropertyEditor>

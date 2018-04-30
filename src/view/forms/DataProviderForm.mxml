@@ -2,13 +2,14 @@
 <suportclasses:BasePropertyEditorForm
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:s="library://ns.adobe.com/flex/spark"
-        xmlns:suportclasses="view.suportClasses.*">
+        xmlns:suportclasses="view.suportClasses.*"
+        skinClass="skins.FormSkin">
 
     <suportclasses:layout>
         <s:FormLayout horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
-    <s:FormItem styleName="stackedFormItem" label="{label}">
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:List id="itemsList" width="100%" height="100%"
                 dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
                 dataProvider="{IDataProviderComponent(selectedItem).dataProvider}"

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <output>
+    <movie version="28"/>
+    <movie disabled="False"/>
+    <movie height="600"/>
+    <movie fps="60"/>
+    <movie background="#0F00FF"/>
+    <movie path="bin-debug/VisualEditorApplication.swf"/>
+    <movie width="800"/>
+    <movie input=""/>
+  </output>
+  &lt;!-- Other classes to be compiled into your SWF --&gt;
+  <classpaths>
+    <class path="src"/>
+  </classpaths>
+  <moonshineResourcePaths>
+    <class path="assets"/>
+  </moonshineResourcePaths>
+  <build>
+    <option es="False"/>
+    <option verboseStackTraces="False"/>
+    <option allowSourcePathOverlap="False"/>
+    <option loadConfig=""/>
+    <option linkReport=""/>
+    <option benchmark="False"/>
+    <option optimize="False"/>
+    <option showActionScriptWarnings="True"/>
+    <option additional="+configname=air -swf-version 39"/>
+    <option locale=""/>
+    <option compilerConstants="CONFIG::MOONSHINE,false"/>
+    <option showDeprecationWarnings="True"/>
+    <option antBuildPath="build/build.xml"/>
+    <option staticLinkRSL="False"/>
+    <option customSDK=""/>
+    <option strict="True"/>
+    <option accessible="False"/>
+    <option useNetwork="True"/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option useResourceBundleMetadata="True"/>
+    <option showBindingWarnings="True"/>
+    <option warnings="True"/>
+  </build>
+  <includeLibraries></includeLibraries>
+  <libraryPaths></libraryPaths>
+  <externalLibraryPaths></externalLibraryPaths>
+  <rslPaths></rslPaths>
+  <intrinsics>
+    <element path="Library/AS3/frameworks/Flex4"/>
+  </intrinsics>
+  <library></library>
+  <compileTargets>
+    <compile path="src/VisualEditorApplication.mxml"/>
+  </compileTargets>
+  <hiddenPaths></hiddenPaths>
+  <preBuildCommand>null</preBuildCommand>
+  <postBuildCommand alwaysRun="False">null</postBuildCommand>
+  <options>
+    <option showHiddenPaths="False"/>
+    <option defaultBuildTargets=""/>
+    <option testMovie="AIR"/>
+    <option testMovieCommand=""/>
+  </options>
+  <moonshineRunCustomization>
+    <option deviceSimulator="null"/>
+    <option launchMethod="Simulator"/>
+    <option targetPlatform="1"/>
+    <option urlToLaunch=""/>
+    <option projectType="1"/>
+    <deviceSimulator>null</deviceSimulator>
+    <certAndroid>null</certAndroid>
+    <certIos>null</certIos>
+    <certIosProvisioning>null</certIosProvisioning>
+  </moonshineRunCustomization>
+</project>

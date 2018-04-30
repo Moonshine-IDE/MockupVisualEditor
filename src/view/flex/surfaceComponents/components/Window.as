@@ -4,6 +4,8 @@ package view.flex.surfaceComponents.components
 
     import spark.components.Panel;
 
+    import view.flex.surfaceComponents.skins.WindowSkin;
+
     import view.interfaces.IFlexSurfaceComponent;
 
     import view.interfaces.ISurfaceComponent;
@@ -16,6 +18,12 @@ package view.flex.surfaceComponents.components
 
 		public function Window()
 		{
+			super();
+
+            this.setStyle("skinClass", WindowSkin);
+            this.setStyle("color", "#6A6A6A");
+            this.setStyle("fontSize", 12);
+
 			this.title = "Panel";
 			this.width = 200;
 			this.height = 200;
@@ -88,7 +96,7 @@ package view.flex.surfaceComponents.components
 			}
 		}
 
-        public function toMXML():XML
+        public function toCode():XML
         {
 			var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
 
@@ -108,7 +116,7 @@ package view.flex.surfaceComponents.components
                 }
                 CONFIG::MOONSHINE
                 {
-                    xml.appendChild(element.toMXML());
+                    xml.appendChild(element.toCode());
                 }
             }
 

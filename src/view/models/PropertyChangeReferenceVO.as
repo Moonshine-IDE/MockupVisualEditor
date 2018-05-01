@@ -96,7 +96,7 @@ package view.models
 			// against assigning multiple field changes
 			if (value is Array)
 			{
-				for each (var i:Object in fieldNewValue)
+				for each (var i:Object in value)
 				{
 					fieldClass["restorePropertyOnChangeReference"](i.field, i.value);
 				}

@@ -87,7 +87,7 @@ package view.suportClasses
 			{
 				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(_selectedItem);
 				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
-				tmpChangeRef.fieldClass_parent = _selectedItem.parent as IVisualElementContainer;
+				tmpChangeRef.fieldClassParent = _selectedItem.parent as IVisualElementContainer;
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));
 			}
 		}

@@ -17,7 +17,7 @@ package view.models
 		
 		public var fieldClass:ISurfaceComponent;
 		public var fieldClassIndexToParent:int = -1;
-		public var fieldClass_parent:IVisualElementContainer;
+		public var fieldClassParent:IVisualElementContainer;
 		
 		public function PropertyChangeReferenceVO(fieldClass:ISurfaceComponent, fieldName:String=null, fieldLastValue:*=null, fieldNewValue:*=null)
 		{
@@ -84,10 +84,10 @@ package view.models
 		
 		protected function addItem(editor:VisualEditor):void
 		{
-			if (fieldClass_parent && (fieldClassIndexToParent != -1))
+			if (fieldClassParent && (fieldClassIndexToParent != -1))
 			{
 				editor.editingSurface.addItem(fieldClass);
-				fieldClass_parent.addElementAt(fieldClass as IVisualElement, fieldClassIndexToParent);
+				fieldClassParent.addElementAt(fieldClass as IVisualElement, fieldClassIndexToParent);
 			}
 		}
 		

@@ -515,7 +515,7 @@
 				// event through EditingSurface
 				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(object);
 				tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.parent).getElementIndex(object as IVisualElement);
-				tmpChangeRef.fieldClass_parent = object.parent as IVisualElementContainer;
+				tmpChangeRef.fieldClassParent = object.parent as IVisualElementContainer;
 				
 				this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
 			}

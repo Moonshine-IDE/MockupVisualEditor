@@ -196,6 +196,11 @@
 			
 			item.dispatchEvent(new Event(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING));
 			
+			// @devsena
+			// missing event removals
+			item.removeEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
+			item.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
+			
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			container.removeElement(IVisualElement(item));
 
@@ -504,6 +509,7 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
+				object.dispatchEvent(new Event(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING));
 			}
 			this.selectedItem = object;
 			this.setFocus();

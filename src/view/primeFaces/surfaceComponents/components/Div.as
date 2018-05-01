@@ -14,6 +14,8 @@ package view.primeFaces.surfaceComponents.components
         public static var ELEMENT_NAME:String = "Div";
 
         protected var mainXML:XML;
+		
+		public var isUpdating:Boolean;
 
         public function Div()
         {

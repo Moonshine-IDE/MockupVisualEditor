@@ -26,6 +26,7 @@ package view.events
 	{
 		public static const PROPERTY_EDITOR_CHANGED:String = "propertyEditorChanged";
 		public static const PROPERTY_EDITOR_ITEM_DELETING:String = "propertyEditorItemDeleting";
+		public static const PROPERTY_EDITOR_ITEM_ADDING:String = "propertyEditorItemAdding";
 		
 		public var changedReference:PropertyChangeReferenceVO;
 		

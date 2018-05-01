@@ -70,7 +70,6 @@ package view.suportClasses
 			}
 
 			_selectedItem = value;
-			_selectedItem.addEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes, false, 0, true);
 
 			var editorCount:int = this._propertyEditors.length;
 			for(var j:int = 0; j < editorCount; j++)
@@ -84,18 +83,18 @@ package view.suportClasses
 		private function beforeSelectedItemDeletes(event:Event):void
 		{
 			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
-			if (event.target.hasOwnProperty("propertyChangeFieldReference") &&
-				event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
+			if (event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
 			{
 				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(null, null, null, _selectedItem);
 				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
+				tmpChangeRef.fieldClass_parent = _selectedItem.parent as IVisualElementContainer;
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));
 			}
 		}
 		
         private function onSelectedItemPropertyChanged(event:Event):void
         {
-			if (event.target.hasOwnProperty("propertyChangeFieldReference") &&
+			if (event.target.hasOwnProperty("propertyChangeFieldReference") && event.target.propertyChangeFieldReference &&
 				event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
 			{
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
@@ -152,6 +151,8 @@ package view.suportClasses
         private function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
         {
             if (!surfaceComponent.propertiesChangedEvents) return;
+			
+			surfaceComponent.addEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes, false, 0, true);
 
             var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
             for(var i:int = 0; i < propertiesChangedEventsCount; i++)
@@ -164,6 +165,8 @@ package view.suportClasses
         {
             if (!surfaceComponent) return;
             if (!surfaceComponent.propertiesChangedEvents) return;
+			
+			surfaceComponent.removeEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes);
 
             var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
             for(var i:int = 0; i < propertiesChangedEventsCount; i++)
@@ -194,7 +197,7 @@ package view.suportClasses
 			{
 				return;
 			}
-			_selectedItem.removeEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes);
+			
 			this.cleanupPropertyEditors(object);
 		}
 	}

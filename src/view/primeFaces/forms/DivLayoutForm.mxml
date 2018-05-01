@@ -28,26 +28,29 @@
                         change="onDrectionChange(event)"/>
     </s:FormItem>
     <fx:Script><![CDATA[
-        import mx.collections.ArrayList;
-        import mx.events.FlexEvent;
-
-        import spark.events.IndexChangeEvent;
-        import spark.layouts.HorizontalAlign;
-        import spark.layouts.VerticalAlign;
-
-        import view.interfaces.IDiv;
-
-        import view.interfaces.ISurfaceComponent;
-
-        import view.primeFaces.supportClasses.ContainerDirection;
-
-        import view.primeFaces.supportClasses.ContainerDirectionItem;
-        import view.primeFaces.supportClasses.ContainerHorizontalAlignItem;
-        import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
+		import mx.binding.utils.BindingUtils;
+		import mx.binding.utils.ChangeWatcher;
+		import mx.collections.ArrayList;
+		import mx.events.FlexEvent;
+		
+		import spark.events.IndexChangeEvent;
+		import spark.layouts.HorizontalAlign;
+		import spark.layouts.VerticalAlign;
+		
+		import view.interfaces.IDiv;
+		import view.interfaces.ISurfaceComponent;
+		import view.primeFaces.supportClasses.ContainerDirection;
+		import view.primeFaces.supportClasses.ContainerDirectionItem;
+		import view.primeFaces.supportClasses.ContainerHorizontalAlignItem;
+		import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
 
         private var verticalTopItem:ContainerVerticalAlignItem;
 
         private var _selectedItem:ISurfaceComponent;
+		private var _bindingDirection:ChangeWatcher;
+		private var _bindingWrap:ChangeWatcher;
+		private var _bindingVAlign:ChangeWatcher;
+		private var _bindingHAlign:ChangeWatcher;
 
         [Bindable("change")]
         override public function get selectedItem():ISurfaceComponent
@@ -67,7 +70,8 @@
                 {
                     this._selectedItem = value;
                 }
-
+				
+				updateBinding();
                 this.dispatchEvent(new Event(Event.CHANGE));
             }
         }
@@ -96,6 +100,8 @@
             directionDropDownList.callLater(selectCurrentItem, [directionDropDownList]);
             horizontalDirection.callLater(selectCurrentItem, [horizontalDirection]);
             verticalDirection.callLater(selectCurrentItem, [verticalDirection]);
+			
+			updateBinding();
         }
 
         private function selectCurrentItem(dpList:DropDownList):void
@@ -132,5 +138,47 @@
             }
             this.selectedItem["wrap"] = wrapContent.selected;
         }
+		
+		private function updateBinding():void
+		{
+			if (this._bindingDirection)
+			{
+				this._bindingDirection.unwatch();
+				this._bindingWrap.unwatch();
+				this._bindingHAlign.unwatch();
+				this._bindingVAlign.unwatch();
+				
+				this._bindingDirection = this._bindingWrap = this._bindingHAlign = this._bindingVAlign = null;
+			}
+			if (this.selectedItem === null)
+			{
+				return;
+			}
+			this._bindingDirection = BindingUtils.bindSetter(onDirectionUpdated, selectedItem, "direction", false, true);
+			this._bindingWrap = BindingUtils.bindSetter(onWrapUpdated, selectedItem, "wrap", false, true);
+			this._bindingHAlign = BindingUtils.bindSetter(onHAlignUpdated, selectedItem, "horizontalAlign", false, true);
+			this._bindingVAlign = BindingUtils.bindSetter(onVAlignUpdated, selectedItem, "verticalAlign", false, true);
+		}
+		
+		private function onDirectionUpdated(value:Object):void
+		{
+			if (directionDropDownList) selectCurrentItem(directionDropDownList);
+		}
+		
+		private function onHAlignUpdated(value:Object):void
+		{
+			if (horizontalDirection) selectCurrentItem(horizontalDirection);
+		}
+		
+		private function onVAlignUpdated(value:Object):void
+		{
+			if (verticalDirection) selectCurrentItem(verticalDirection);
+		}
+		
+		private function onWrapUpdated(value:Object):void
+		{
+			if (wrapContent) this.wrapContent.selected = value;
+		}
+		
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

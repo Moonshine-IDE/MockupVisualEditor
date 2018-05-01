@@ -1,13 +1,13 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import components.FlowLayout;
-
     import flash.events.Event;
-
+    
     import spark.components.BorderContainer;
     import spark.layouts.HorizontalLayout;
     import spark.layouts.VerticalLayout;
-
+    
+    import components.FlowLayout;
+    
     import view.primeFaces.supportClasses.ContainerDirection;
 
     public class Container extends BorderContainer
@@ -18,20 +18,28 @@ package view.primeFaces.surfaceComponents.components
 
             this.setHoriztonalLayout();
         }
-
+		
+		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			throw new Error("needs to be override in an ISurfaceComponent class.");
+		}
+		
         private var _direction:String = "Horizontal";
         private var directionChanged:Boolean;
-
+		
+		[Bindable("directionChanged")]
         [Inspectable(enumeration="Horizontal,Vertical", defaultValue="Horizontal")]
         public function get direction():String
         {
             return _direction;
         }
-
+		
         public function set direction(value:String):void
         {
             if (_direction != value)
             {
+				updatePropertyChangeReference("direction", _direction, value);
+				
                 _direction = value;
                 this.directionChanged = true;
 
@@ -42,16 +50,18 @@ package view.primeFaces.surfaceComponents.components
 
         private var _wrap:Boolean;
         private var wrapChanged:Boolean;
-
+		
+		[Bindable("wrapChanged")]
         public function get wrap():Boolean
         {
             return _wrap;
         }
-
         public function set wrap(value:Boolean):void
         {
             if (_wrap != value)
             {
+				updatePropertyChangeReference("wrap", _wrap, value);
+				
                 _wrap = value;
                 this.directionChanged = true;
                 this.wrapChanged = true;
@@ -63,7 +73,8 @@ package view.primeFaces.surfaceComponents.components
 
         private var _gap:int;
         private var gapChanged:Boolean;
-
+		
+		[Bindable("gapChanged")]
         [Inspectable(defaultValue="0")]
         public function get gap():int
         {
@@ -74,6 +85,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_gap != value)
             {
+				updatePropertyChangeReference("gap", _gap, value);
+				
                 _gap = value;
                 this.gapChanged = true;
 
@@ -85,7 +98,8 @@ package view.primeFaces.surfaceComponents.components
         private var alignChanged:Boolean;
 
         private var _verticalAlign:String = "top";
-
+		
+		[Bindable("verticalAlignChanged")]
         [Inspectable(enumeration="top,bottom,middle", defaultValue="top")]
         public function get verticalAlign():String
         {
@@ -96,6 +110,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_verticalAlign != value)
             {
+				updatePropertyChangeReference("verticalAlign", _verticalAlign, value);
+				
                 _verticalAlign = value;
                 this.alignChanged = true;
 
@@ -105,7 +121,8 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var _horizontalAlign:String = "left"; // center, right
-
+		
+		[Bindable("horizontalAlignChanged")]
         [Inspectable(enumeration="left,right,center", defaultValue="left")]
         public function get horizontalAlign():String
         {
@@ -116,6 +133,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_horizontalAlign != value)
             {
+				updatePropertyChangeReference("horizontalAlign", _horizontalAlign, value);
+				
                 _horizontalAlign = value;
                 this.alignChanged = true;
 

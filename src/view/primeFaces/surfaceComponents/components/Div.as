@@ -1,12 +1,11 @@
 package view.primeFaces.surfaceComponents.components
 {
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IDiv;
-
     import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.models.PropertyChangeReferenceVO;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
-    import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv
     {
@@ -49,6 +48,27 @@ package view.primeFaces.surfaceComponents.components
         {
             return DivPropertyEditor;
         }
+		
+		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, fieldName, oldValue, newValue);
+		}
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			this[nameField.toString()] = value;
+		}
+		
+		private var _propertyChangeFieldReference:PropertyChangeReferenceVO;
+		public function get propertyChangeFieldReference():PropertyChangeReferenceVO
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReferenceVO):void
+		{
+			_propertyChangeFieldReference = value;
+		}
 
         private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array

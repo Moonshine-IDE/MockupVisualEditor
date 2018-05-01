@@ -19,7 +19,7 @@ package view.models
 		public var fieldClassIndexToParent:int = -1;
 		public var fieldClass_parent:IVisualElementContainer;
 		
-		public function PropertyChangeReferenceVO(fieldName:String, fieldLastValue:*, fieldNewValue:*, fieldClass:ISurfaceComponent)
+		public function PropertyChangeReferenceVO(fieldClass:ISurfaceComponent, fieldName:String=null, fieldLastValue:*=null, fieldNewValue:*=null)
 		{
 			this.fieldName = fieldName;
 			this.fieldLastValue = fieldLastValue;
@@ -34,28 +34,16 @@ package view.models
 			switch(eventType)
 			{
 				case PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING:
-				{
-					if (fieldClass_parent && (fieldClassIndexToParent != -1))
-					{
-						editor.editingSurface.addItem(fieldClass);
-						fieldClass_parent.addElementAt(fieldClass as IVisualElement, fieldClassIndexToParent);
-					}
+					addItem(editor);
 					break;
-				}
-					
+				
+				case PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING:
+					deleteItem(editor);
+					break;
+				
 				default:
-				{
-					if (fieldLastValue is Array)
-					{
-						for each (var i:Object in fieldLastValue)
-						{
-							fieldClass["restorePropertyOnChangeReference"](i.field, i.value);
-						}
-					}
-					else if (fieldName)
-						fieldClass["restorePropertyOnChangeReference"](fieldName, fieldLastValue);
+					changeItem(fieldLastValue);
 					break;
-				}
 			}
 			
 			fieldClass["callLater"](function():void
@@ -71,30 +59,53 @@ package view.models
 			switch(eventType)
 			{
 				case PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING:
-				{
-					editor.editingSurface.deleteItem(fieldClass);
+					deleteItem(editor);
 					break;
-				}
 					
-				default:
-				{
-					if (fieldNewValue is Array)
-					{
-						for each (var i:Object in fieldNewValue)
-						{
-							fieldClass["restorePropertyOnChangeReference"](i.field, i.value);
-						}
-					}
-					else if (fieldName)
-						fieldClass["restorePropertyOnChangeReference"](fieldName, fieldNewValue);
+				case PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING:
+					addItem(editor);
 					break;
-				}
+				
+				default:
+					changeItem(fieldNewValue);
+					break;
 			}
 			
 			fieldClass["callLater"](function():void
 			{
 				fieldClass["isUpdating"] = false;
 			});
+		}
+		
+		protected function deleteItem(editor:VisualEditor):void
+		{
+			editor.editingSurface.deleteItem(fieldClass);
+		}
+		
+		protected function addItem(editor:VisualEditor):void
+		{
+			if (fieldClass_parent && (fieldClassIndexToParent != -1))
+			{
+				editor.editingSurface.addItem(fieldClass);
+				fieldClass_parent.addElementAt(fieldClass as IVisualElement, fieldClassIndexToParent);
+			}
+		}
+		
+		protected function changeItem(value:*):void
+		{
+			// against assigning multiple field changes
+			if (value is Array)
+			{
+				for each (var i:Object in fieldNewValue)
+				{
+					fieldClass["restorePropertyOnChangeReference"](i.field, i.value);
+				}
+			}
+			else if (fieldName)
+			{
+				// assigning single field change
+				fieldClass["restorePropertyOnChangeReference"](fieldName, value);
+			}
 		}
 	}
 }

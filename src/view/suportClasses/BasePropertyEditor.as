@@ -85,7 +85,7 @@ package view.suportClasses
 			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
 			if (event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
 			{
-				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(null, null, null, _selectedItem);
+				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(_selectedItem);
 				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
 				tmpChangeRef.fieldClass_parent = _selectedItem.parent as IVisualElementContainer;
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));

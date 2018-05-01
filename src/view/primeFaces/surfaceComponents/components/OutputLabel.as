@@ -54,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_indicateRequired != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReferenceVO("indicateRequired", _indicateRequired, value, this);
+				_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, "indicateRequired", _indicateRequired, value);
 				
                 _indicateRequired = value;
                 indicateRequiredChanged = true;
@@ -98,7 +98,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_forAttribute != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReferenceVO("forAttribute", _forAttribute, value, this);
+				_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, "forAttribute", _forAttribute, value);
 				
                 _forAttribute = value;
                 dispatchEvent(new Event("forAttributeChanged"));
@@ -111,7 +111,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (super.text != value)
 			{
-				_propertyChangeFieldReference = new PropertyChangeReferenceVO("text", super.text, value, this);
+				_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, "text", super.text, value);
 				
 				super.text = value;
 				dispatchEvent(new Event("textChanged"));

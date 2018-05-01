@@ -18,7 +18,7 @@ package utils
 			var pattern:RegExp = new RegExp(/(%)/g);
 			var newValue:String = isWidth ? width.replace(pattern, "") : height.replace(pattern, "");
 			
-			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(null, null, null, selectedItem);
+			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(selectedItem);
 			
 			if (isWidth)
 			{
@@ -51,7 +51,7 @@ package utils
 				newWidth = maxWidth;
 			}
 			
-			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(null, null, null, selectedItem);
+			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(selectedItem);
 			selectedItem["propertyChangeFieldReference"].fieldLastValue = [{field:"width", value:selectedItem.width}, {field:"percentWidth", value:selectedItem.percentWidth}];
 			selectedItem["propertyChangeFieldReference"].fieldNewValue = [{field:"width", value:newWidth}, {field:"percentWidth", value:NaN}];
 			
@@ -75,7 +75,7 @@ package utils
 				newHeight = maxHeight;
 			}
 			
-			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(null, null, null, selectedItem);
+			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(selectedItem);
 			selectedItem["propertyChangeFieldReference"].fieldLastValue = [{field:"height", value:selectedItem.height}, {field:"percentHeight", value:selectedItem.percentHeight}];
 			selectedItem["propertyChangeFieldReference"].fieldNewValue = [{field:"height", value:newHeight}, {field:"percentHeight", value:NaN}];
 			

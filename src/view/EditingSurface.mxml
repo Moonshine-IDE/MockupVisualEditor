@@ -50,6 +50,7 @@
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
 		import view.interfaces.ISurfaceComponent;
+		import view.models.PropertyChangeReferenceVO;
 		import view.primeFaces.surfaceComponents.components.Div;
 		import view.primeFaces.surfaceComponents.components.Grid;
 		import view.suportClasses.events.SurfaceComponentEvent;
@@ -509,7 +510,14 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
-				object.dispatchEvent(new Event(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING));
+				
+				// at this point property editor not created thus we send the 
+				// event through EditingSurface
+				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(object);
+				tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.parent).getElementIndex(object as IVisualElement);
+				tmpChangeRef.fieldClass_parent = object.parent as IVisualElementContainer;
+				
+				this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
 			}
 			this.selectedItem = object;
 			this.setFocus();

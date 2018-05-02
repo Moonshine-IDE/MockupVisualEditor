@@ -231,8 +231,15 @@
 				return;
 			}
 
-			container.addEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
-			container.addEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
+			if (!container.hasEventListener(SurfaceComponentEvent.ComponentAdded))
+			{
+				container.addEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
+			}
+
+			if (!container.hasEventListener(SurfaceComponentEvent.ComponentRemoved))
+			{
+				container.addEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
+			}
 
 			container.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 			container.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
@@ -245,9 +252,6 @@
 			{
 				return;
 			}
-
-			container.removeEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
-			container.removeEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
 
 			container.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 			container.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);

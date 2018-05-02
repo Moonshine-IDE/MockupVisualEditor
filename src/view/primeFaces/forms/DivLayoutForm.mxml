@@ -118,6 +118,8 @@
 
         private function selectItems():void
         {
+            if (!this.selectedItem) return;
+
             this.wrapContent.selected = this.selectedItem["wrap"];
             selectCurrentItem(directionDropDownList);
             selectCurrentItem(horizontalDirection);

@@ -1,7 +1,5 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import flash.events.Event;
-
     import mx.containers.Grid;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
@@ -49,6 +47,52 @@ package view.primeFaces.surfaceComponents.components
             ];
 
             this.ensureCreateInitialColumn();
+        }
+
+        private var _oldSelectedRow:int;
+        public function get oldSelectedRow():int
+        {
+            return _oldSelectedRow;
+        }
+
+        private var _selectedRow:int;
+
+        [Bindable]
+        public function get selectedRow():int
+        {
+            return _selectedRow;
+        }
+
+        public function set selectedRow(value:int):void
+        {
+            if (_selectedRow != value)
+            {
+                _oldSelectedRow = _selectedRow;
+                _selectedRow = value;
+            }
+        }
+
+        private var _oldSelectedColumn:int;
+        public function get oldSelectedColumn():int
+        {
+            return _oldSelectedColumn;
+        }
+
+        private var _selectedColumn:int;
+
+        [Bindable]
+        public function get selectedColumn():int
+        {
+            return _selectedColumn;
+        }
+
+        public function set selectedColumn(value:int):void
+        {
+            if (_selectedColumn != value)
+            {
+                _oldSelectedColumn = _selectedColumn;
+                _selectedColumn = value;
+            }
         }
 
         public function get propertyEditorClass():Class
@@ -187,6 +231,9 @@ package view.primeFaces.surfaceComponents.components
             var addedElements:Array = [gridItem.getElementAt(0)];
 
             dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, addedElements));
+
+            this.selectedRow += 1;
+            this.selectedColumn = 0;
         }
 
         public function removeRow(index:int):IVisualElement
@@ -209,6 +256,9 @@ package view.primeFaces.surfaceComponents.components
                 {
                     dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentRemoved, removedItems));
                 }
+
+                var selRow:int = this.selectedRow - 1;
+                this.selectedRow = selRow == -1 ? 0 : selRow;
 
                 return removedElement;
             }
@@ -235,6 +285,8 @@ package view.primeFaces.surfaceComponents.components
                 gridItem.addElement(div);
                 gridRow.addElement(gridItem);
 
+                this.selectedColumn += 1;
+
                 dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
             }
         }
@@ -245,7 +297,12 @@ package view.primeFaces.surfaceComponents.components
             if (gridRow && gridRow.numElements > MIN_COLUMN_COUNT)
             {
                 currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
-                return gridRow.removeElementAt(columnIndex);
+                var removedColumn:IVisualElement = gridRow.removeElementAt(columnIndex);
+
+                var selColumn:int = this.selectedColumn - 1;
+                this.selectedColumn = selColumn == -1 ? 0 : selColumn;
+
+                return removedColumn;
             }
 
             return null;

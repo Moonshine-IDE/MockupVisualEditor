@@ -44,25 +44,24 @@
 			}
 		}
 
+		[Bindable("change")]
+		private function get selectedGrid():Grid
+		{
+			return selectedItem as Grid;
+		}
+
 		private function addRowButton_clickHandler(event:MouseEvent):void
 		{
             var itemValue:int = this.rowsDataProvider.length + 1;
 			var rowItem:GridListItem = new GridListItem("R" + String(itemValue), itemValue);
-
 			var columnItem:GridListItem = new GridListItem("C1", 1);
+
 			rowItem.columns.addItem(columnItem);
 			this.columnsDataProvider = rowItem.columns;
-
 			this.rowsDataProvider.addItem(rowItem);
 
 			var grid:Grid = (selectedItem as Grid);
 			grid.addRow();
-
-			this.itemAdded = true;
-			this.dgRows.invalidateDisplayList();
-			this.invalidateDisplayList();
-
-			this.columnList.selectedIndex = rowItem.columns.length - 1;
 			this.selectedCell = this.getSelectedCell();
 		}
 
@@ -75,8 +74,7 @@
 			rowItem.columns.addItem(colItem);
 			this.columnsDataProvider = rowItem.columns;
 
-			var grid:Grid = (selectedItem as Grid);
-			grid.addColumn(dgRows.selectedIndex);
+			selectedGrid.addColumn(dgRows.selectedIndex);
         }
 
 		private function deleteItemButton_clickHandler(event:MouseEvent):void
@@ -84,14 +82,11 @@
 			if (this.rowsDataProvider.length > 1)
 			{
 				var grid:Grid = (selectedItem as Grid);
-				grid.removeRow(dgRows.selectedIndex);
+				grid.removeRow(selectedGrid.selectedRow);
 
-				this.rowsDataProvider.removeItemAt(dgRows.selectedIndex);
-				dgRows.selectedIndex = 0;
-				dgRows.ensureCellIsVisible(0);
+				this.rowsDataProvider.removeItemAt(selectedGrid.selectedRow);
 				this.columnsDataProvider = this.rowsDataProvider.getItemAt(dgRows.selectedIndex).columns;
 
-				this.columnList.selectedIndex = this.columnsDataProvider.length - 1;
 				this.selectedCell = this.getSelectedCell();
 			}
 		}
@@ -99,13 +94,10 @@
         private function deleteColumnButton_clickHandler(event:MouseEvent):void
         {
 			var grid:Grid = (selectedItem as Grid);
-			grid.removeColumn(dgRows.selectedIndex, columnList.selectedIndex);
+			grid.removeColumn(selectedGrid.selectedRow, selectedGrid.selectedColumn);
 
 			var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-			rowItem.columns.removeItemAt(columnList.selectedIndex);
-
-			dgRows.selectedIndex = rowsDataProvider.length - 1;
-			columnList.selectedIndex = columnsDataProvider.length - 1;
+			rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
 
 			this.selectedCell = this.getSelectedCell();
         }
@@ -143,8 +135,9 @@
 
 			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
 
-			this.dgRows.selectedIndex = 0;
-			this.columnList.selectedIndex = 0;
+
+			this.dgRows.selectedIndex = this.selectedGrid.oldSelectedRow;
+			this.columnList.selectedIndex = this.selectedGrid.oldSelectedColumn;
 
 			this.selectedCell = this.getSelectedCell();
 		}
@@ -153,7 +146,6 @@
 		{
 			var gridListItem:GridListItem = dgRows.selectedItem as GridListItem;
 			this.columnsDataProvider = gridListItem.columns;
-			this.columnList.selectedIndex = gridListItem.columns.length - 1;
 
 			this.selectedCell = this.getSelectedCell();
 		}
@@ -165,9 +157,10 @@
 
 		private function getSelectedCell():Div
 		{
-			var grid:Grid = this.selectedItem as Grid;
-			var gridRow:GridRow = grid.getElementAt(this.dgRows.selectedIndex) as GridRow;
-			var gridItem:GridItem = gridRow.getElementAt(this.columnList.selectedIndex) as GridItem;
+			if (this.selectedGrid.selectedRow == -1 || this.selectedGrid.selectedColumn == -1) return null;
+			var gridRow:GridRow = selectedGrid.getElementAt(this.selectedGrid.selectedRow) as GridRow;
+
+			var gridItem:GridItem = gridRow.getElementAt(this.selectedGrid.selectedColumn) as GridItem;
 
 			return gridItem.getElementAt(0) as Div;
 		}
@@ -182,8 +175,8 @@
 		<s:DataGrid id="dgRows"
 					width="100%" maxHeight="350"
 					sortableColumns="false" draggableColumns="false"
-					selectionChange="onGridSelectionChanged(event)"
-		 			dataProvider="{rowsDataProvider}"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->
+					selectionChange="onGridSelectionChanged(event)" requireSelection="true"
+		 			dataProvider="{rowsDataProvider}" selectedIndex="@{selectedGrid.selectedRow}">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="label" headerText="Row number"/>
@@ -200,7 +193,8 @@
     </s:FormItem>
 	<s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
 		<s:List id="columnList" width="100%" height="30" labelField="label"
-				dataProvider="{columnsDataProvider}" change="onColumnListChange(event)">
+				dataProvider="{columnsDataProvider}" requireSelection="true"
+				change="onColumnListChange(event)" selectedIndex="@{selectedGrid.selectedColumn}">
 			<s:layout>
 				<s:HorizontalLayout gap="2" horizontalAlign="left" verticalAlign="middle"/>
 			</s:layout>

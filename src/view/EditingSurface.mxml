@@ -173,7 +173,7 @@
 			}
 			else if (item is Grid)
 			{
-				this.prepareGrid(item as Grid);
+				this.prepareGridComponent(item as Grid);
 				return;
 			}
 			else if (item is Navigator)
@@ -217,7 +217,7 @@
 			}
 			else if (item is Grid)
 			{
-				this.cleanupGrid(item as Grid);
+				this.cleanupGridComponent(item as Grid);
 			}
 
 			this.selectedItem = null;
@@ -230,6 +230,10 @@
 			{
 				return;
 			}
+
+			container.addEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
+			container.addEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
+
 			container.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 			container.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 			container.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
@@ -241,20 +245,54 @@
 			{
 				return;
 			}
+
+			container.removeEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
+			container.removeEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
+
 			container.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 			container.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 			container.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 		}
 
-		private function prepareGrid(grid:Grid):void
+		private function onSurfaceComponentAdded(event:SurfaceComponentEvent):void
+		{
+			if (event.items)
+			{
+				for (var i:int = 0; i < event.items.length; i++)
+				{
+					var surfaceComponent:IUIComponent = event.items[i] as IUIComponent;
+
+					surfaceComponent.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+				}
+			}
+		}
+
+		private function onSurfaceComponentRemoved(event:SurfaceComponentEvent):void
+		{
+			if (event.items)
+			{
+				for (var i:int = 0; i < event.items.length; i++)
+				{
+					var surfaceComponent:IUIComponent = event.items[i];
+
+					surfaceComponent.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
+					surfaceComponent.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
+				}
+			}
+		}
+
+		private function prepareGridComponent(grid:Grid):void
 		{
 			if (grid === null)
 			{
 				return;
 			}
 
-			grid.addEventListener("gridElementAdded", onGridElementAdded);
-			grid.addEventListener("gridElementRemoved", onGridElementRemoved);
+			grid.addEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
+			grid.addEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
 
 			var gridNumElements:int = grid.numElements;
 			for (var row:int = 0; row < gridNumElements; row++)
@@ -279,46 +317,15 @@
 			}
 		}
 
-		private function onGridElementAdded(event:SurfaceComponentEvent):void
-		{
-			if (event.items)
-			{
-				for (var i:int = 0; i < event.items.length; i++)
-				{
-					var surfaceComponent:IUIComponent = event.items[i] as IUIComponent;
-
-					surfaceComponent.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
-					surfaceComponent.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
-					surfaceComponent.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
-				}
-			}
-		}
-
-		private function onGridElementRemoved(event:SurfaceComponentEvent):void
-		{
-			if (event.items)
-			{
-				for (var i:int = 0; i < event.items.length; i++)
-				{
-					var gridItem:GridItem = event.items[i];
-					var div:Div = gridItem.getElementAt(0) as Div;
-
-					div.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
-					div.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
-					div.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
-				}
-			}
-		}
-
-		private function cleanupGrid(grid:Grid):void
+		private function cleanupGridComponent(grid:Grid):void
 		{
 			if (grid === null)
 			{
 				return;
 			}
 
-			grid.removeEventListener("gridElementAdded", onGridElementAdded);
-			grid.removeEventListener("gridElementRemoved", onGridElementRemoved);
+			grid.removeEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
+			grid.removeEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
 
 			var gridNumElements:int = grid.numElements;
 			for (var row:int = 0; row < gridNumElements; row++)

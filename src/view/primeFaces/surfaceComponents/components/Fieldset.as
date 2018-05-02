@@ -225,7 +225,7 @@ package view.primeFaces.surfaceComponents.components
         {
             this.removeEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
 
-            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [this.div]));
+            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentRemoved, [this.div]));
         }
 
         private function ensureInternalDivIsAdded():void
@@ -233,11 +233,11 @@ package view.primeFaces.surfaceComponents.components
             if (!_div)
             {
                 _div = new Div();
-                super.addElement(_div);
-                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [_div]));
+                super.addElement(this.div);
+                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [this.div]));
 
-                _div.percentWidth = _div.percentHeight = 100;
-                _div.setStyle("borderVisible", false);
+                this.div.percentWidth = this.div.percentHeight = 100;
+                this.div.setStyle("borderVisible", false);
             }
         }
 

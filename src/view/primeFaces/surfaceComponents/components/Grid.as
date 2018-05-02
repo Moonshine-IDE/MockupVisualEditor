@@ -235,7 +235,7 @@ package view.primeFaces.surfaceComponents.components
                 gridItem.addElement(div);
                 gridRow.addElement(gridItem);
 
-                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [gridItem]));
+                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
             }
         }
 

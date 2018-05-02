@@ -14,7 +14,8 @@ package view.suportClasses
 	import view.models.PropertyChangeReferenceVO;
 
 	[Event(name="change",type="flash.events.Event")]
-    [Event(name="propertyEditorChanged",type="flash.events.Event")]
+    [Event(name="propertyEditorChanged",type="view.events.PropertyEditorChangeEvent")]
+	[Event(name="propertyEditorItemDeleting",type="view.events.PropertyEditorChangeEvent")]
 	public class BasePropertyEditor extends Group implements IPropertyEditor
 	{
 		public function BasePropertyEditor()

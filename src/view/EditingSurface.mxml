@@ -227,6 +227,10 @@
 
 			this.selectedItem = null;
 			hasChanged = this.numElements > 0 && _wasLoaded;
+			
+			// once an item deletes stage loose focus to
+			// listen any keypress event, i.e. Ctrl+Z/Y
+			this.setFocus();
 		}
 
 		private function prepareContainer(container:UIComponent):void

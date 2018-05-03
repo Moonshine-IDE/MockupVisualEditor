@@ -49,8 +49,6 @@
 
         private var _selectedItem:ISurfaceComponent;
 
-        private var dirtySelection:Boolean;
-
         [Bindable("change")]
         override public function get selectedItem():ISurfaceComponent
         {
@@ -94,36 +92,20 @@
                 new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
             ])
 
-            if (!this.selectedItem)
-            {
-                this.dirtySelection = true;
-                this.invalidateDisplayList();
-            }
-            else
-            {
-                this.selectItems();
-            }
+            this.dispatchEvent(new Event(Event.CHANGE));
         }
 
-        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        [Bindable("change")]
+        private function get itemSelection():Boolean
         {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
-
-            if (dirtySelection)
-            {
-                selectItems();
-                dirtySelection = false;
-            }
-        }
-
-        private function selectItems():void
-        {
-            if (!this.selectedItem) return;
+            if (!this.selectedItem) return false;
 
             this.wrapContent.selected = this.selectedItem["wrap"];
             selectCurrentItem(directionDropDownList);
             selectCurrentItem(horizontalDirection);
             selectCurrentItem(verticalDirection);
+
+            return true;
         }
 
         private function selectCurrentItem(dpList:DropDownList):void

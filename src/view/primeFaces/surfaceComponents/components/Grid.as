@@ -49,12 +49,6 @@ package view.primeFaces.surfaceComponents.components
             this.ensureCreateInitialColumn();
         }
 
-        private var _oldSelectedRow:int;
-        public function get oldSelectedRow():int
-        {
-            return _oldSelectedRow;
-        }
-
         private var _selectedRow:int;
 
         [Bindable]
@@ -65,17 +59,10 @@ package view.primeFaces.surfaceComponents.components
 
         public function set selectedRow(value:int):void
         {
-            if (_selectedRow != value)
+            if (_selectedRow != value && value != -1)
             {
-                _oldSelectedRow = _selectedRow;
                 _selectedRow = value;
             }
-        }
-
-        private var _oldSelectedColumn:int;
-        public function get oldSelectedColumn():int
-        {
-            return _oldSelectedColumn;
         }
 
         private var _selectedColumn:int;
@@ -88,9 +75,8 @@ package view.primeFaces.surfaceComponents.components
 
         public function set selectedColumn(value:int):void
         {
-            if (_selectedColumn != value)
+            if (_selectedColumn != value && value != -1)
             {
-                _oldSelectedColumn = _selectedColumn;
                 _selectedColumn = value;
             }
         }

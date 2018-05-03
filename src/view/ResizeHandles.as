@@ -12,11 +12,8 @@ package view
 	
 	import spark.components.Button;
 	
-	import utils.GenericUtils;
-	
 	import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.INonResizibleSurfaceComponent;
-	import view.interfaces.ISurfaceComponent;
 	import view.suportClasses.PropertyChangeReference;
 
     public class ResizeHandles extends UIComponent
@@ -227,12 +224,13 @@ package view
 			// Updating width/height on every keyframe may cause several entries to
 			// history manager, thus we should add the change entry only when
 			// resizing event is over
-			if (this._target is IHistorySurfaceComponent)
+			var historyComponent:IHistorySurfaceComponent = this._target as IHistorySurfaceComponent;
+			if (historyComponent)
 			{
-				(this._target as IHistorySurfaceComponent).isUpdating = true;
+				historyComponent.isUpdating = true;
 				
-				(this._target as IHistorySurfaceComponent).propertyChangeFieldReference = new PropertyChangeReference(this._target as IHistorySurfaceComponent);
-				(this._target as IHistorySurfaceComponent).propertyChangeFieldReference.fieldLastValue = [{field:"width", value:this._target.width}, {field:"percentWidth", value:this._target.percentWidth},
+				historyComponent.propertyChangeFieldReference = new PropertyChangeReference(historyComponent);
+				historyComponent.propertyChangeFieldReference.fieldLastValue = [{field:"width", value:this._target.width}, {field:"percentWidth", value:this._target.percentWidth},
 					{field:"height", value:this._target.height}, {field:"percentHeight", value:this._target.percentHeight}];
 			}
 			

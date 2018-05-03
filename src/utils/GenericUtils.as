@@ -18,16 +18,16 @@ package utils
 		{
 			var pattern:RegExp = new RegExp(/(%)/g);
 			var newValue:String = isWidth ? width.replace(pattern, "") : height.replace(pattern, "");
-			var isHistoryComponent:Boolean = selectedItem is IHistorySurfaceComponent;
+			var historyComponent:IHistorySurfaceComponent = selectedItem as IHistorySurfaceComponent;
 			
-			if (isHistoryComponent)	(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference = new PropertyChangeReference(selectedItem as IHistorySurfaceComponent);
+			if (historyComponent) historyComponent.propertyChangeFieldReference = new PropertyChangeReference(selectedItem as IHistorySurfaceComponent);
 			
 			if (isWidth)
 			{
-				if (isHistoryComponent)	
+				if (historyComponent)
 				{
-					(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldLastValue = [{field:"width", value:selectedItem.width}, {field:"percentWidth", value:selectedItem.percentWidth}];
-					(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldNewValue = [{field:"width", value:NaN}, {field:"percentWidth", value:Number(newValue)}];
+					historyComponent.propertyChangeFieldReference.fieldLastValue = [{field:"width", value:selectedItem.width}, {field:"percentWidth", value:selectedItem.percentWidth}];
+					historyComponent.propertyChangeFieldReference.fieldNewValue = [{field:"width", value:NaN}, {field:"percentWidth", value:Number(newValue)}];
 				}
 				
 				selectedItem.percentWidth = Number(newValue);
@@ -35,10 +35,10 @@ package utils
 			}
 			else
 			{
-				if (isHistoryComponent)	
+				if (historyComponent)	
 				{
-					(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldLastValue = [{field:"height", value:selectedItem.height}, {field:"percentHeight", value:selectedItem.percentHeight}];
-					(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldNewValue = [{field:"height", value:NaN}, {field:"percentHeight", value:Number(newValue)}];
+					historyComponent.propertyChangeFieldReference.fieldLastValue = [{field:"height", value:selectedItem.height}, {field:"percentHeight", value:selectedItem.percentHeight}];
+					historyComponent.propertyChangeFieldReference.fieldNewValue = [{field:"height", value:NaN}, {field:"percentHeight", value:Number(newValue)}];
 				}
 				
 				selectedItem.percentHeight = Number(newValue);
@@ -50,7 +50,7 @@ package utils
 		{
 			var minWidth:Number = selectedItem.minWidth;
 			var maxWidth:Number = selectedItem.maxWidth;
-			var isHistoryComponent:Boolean = selectedItem is IHistorySurfaceComponent;
+			var historyComponent:IHistorySurfaceComponent = selectedItem as IHistorySurfaceComponent;
 			
 			if (newWidth < minWidth)
 			{
@@ -61,11 +61,11 @@ package utils
 				newWidth = maxWidth;
 			}
 			
-			if (isHistoryComponent)	
+			if (historyComponent)	
 			{
-				(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference = new PropertyChangeReference(selectedItem as IHistorySurfaceComponent);
-				(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldLastValue = [{field:"width", value:selectedItem.width}, {field:"percentWidth", value:selectedItem.percentWidth}];
-				(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldNewValue = [{field:"width", value:newWidth}, {field:"percentWidth", value:NaN}];
+				historyComponent.propertyChangeFieldReference = new PropertyChangeReference(selectedItem as IHistorySurfaceComponent);
+				historyComponent.propertyChangeFieldReference.fieldLastValue = [{field:"width", value:selectedItem.width}, {field:"percentWidth", value:selectedItem.percentWidth}];
+				historyComponent.propertyChangeFieldReference.fieldNewValue = [{field:"width", value:newWidth}, {field:"percentWidth", value:NaN}];
 			}
 			
 			selectedItem.percentWidth = Number.NaN;
@@ -79,7 +79,7 @@ package utils
 		{
 			var minHeight:Number = selectedItem.minHeight;
 			var maxHeight:Number = selectedItem.maxHeight;
-			var isHistoryComponent:Boolean = selectedItem is IHistorySurfaceComponent;
+			var historyComponent:IHistorySurfaceComponent = selectedItem as IHistorySurfaceComponent;
 			
 			if (newHeight < minHeight)
 			{
@@ -90,11 +90,11 @@ package utils
 				newHeight = maxHeight;
 			}
 			
-			if (isHistoryComponent)	
+			if (historyComponent)	
 			{
-				(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference = new PropertyChangeReference(selectedItem as IHistorySurfaceComponent);
-				(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldLastValue = [{field:"height", value:selectedItem.height}, {field:"percentHeight", value:selectedItem.percentHeight}];
-				(selectedItem as IHistorySurfaceComponent).propertyChangeFieldReference.fieldNewValue = [{field:"height", value:newHeight}, {field:"percentHeight", value:NaN}];
+				historyComponent.propertyChangeFieldReference = new PropertyChangeReference(selectedItem as IHistorySurfaceComponent);
+				historyComponent.propertyChangeFieldReference.fieldLastValue = [{field:"height", value:selectedItem.height}, {field:"percentHeight", value:selectedItem.percentHeight}];
+				historyComponent.propertyChangeFieldReference.fieldNewValue = [{field:"height", value:newHeight}, {field:"percentHeight", value:NaN}];
 			}
 			
 			selectedItem.percentHeight = Number.NaN;

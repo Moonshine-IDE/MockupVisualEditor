@@ -8,7 +8,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
     
     import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.models.PropertyChangeReferenceVO;
+    import view.suportClasses.PropertyChangeReference;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
 
     public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent
@@ -54,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_indicateRequired != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, "indicateRequired", _indicateRequired, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "indicateRequired", _indicateRequired, value);
 				
                 _indicateRequired = value;
                 indicateRequiredChanged = true;
@@ -82,13 +82,13 @@ package view.primeFaces.surfaceComponents.components
             return _forAttribute;
         }
 		
-		private var _propertyChangeFieldReference:PropertyChangeReferenceVO;
-		public function get propertyChangeFieldReference():PropertyChangeReferenceVO
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
 		{
 			return _propertyChangeFieldReference;
 		}
 		
-		public function set propertyChangeFieldReference(value:PropertyChangeReferenceVO):void
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
 		{
 			_propertyChangeFieldReference = value;
 		}
@@ -98,7 +98,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_forAttribute != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, "forAttribute", _forAttribute, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "forAttribute", _forAttribute, value);
 				
                 _forAttribute = value;
                 dispatchEvent(new Event("forAttributeChanged"));
@@ -111,7 +111,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (super.text != value)
 			{
-				_propertyChangeFieldReference = new PropertyChangeReferenceVO(this, "text", super.text, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "text", super.text, value);
 				
 				super.text = value;
 				dispatchEvent(new Event("textChanged"));

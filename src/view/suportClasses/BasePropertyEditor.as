@@ -8,14 +8,13 @@ package view.suportClasses
 	import spark.components.Group;
 	
 	import view.EditingSurface;
-	import view.events.PropertyEditorChangeEvent;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
-	import view.models.PropertyChangeReferenceVO;
 
 	[Event(name="change",type="flash.events.Event")]
-    [Event(name="propertyEditorChanged",type="view.events.PropertyEditorChangeEvent")]
-	[Event(name="propertyEditorItemDeleting",type="view.events.PropertyEditorChangeEvent")]
+    [Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+	[Event(name="propertyEditorItemDeleting",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	public class BasePropertyEditor extends Group implements IPropertyEditor
 	{
 		public function BasePropertyEditor()
@@ -86,7 +85,7 @@ package view.suportClasses
 			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
 			if (event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
 			{
-				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(_selectedItem);
+				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(_selectedItem);
 				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
 				tmpChangeRef.fieldClassParent = _selectedItem.parent as IVisualElementContainer;
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));

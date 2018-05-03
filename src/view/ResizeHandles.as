@@ -16,7 +16,7 @@ package view
 	
 	import view.interfaces.INonResizibleSurfaceComponent;
 	import view.interfaces.ISurfaceComponent;
-	import view.models.PropertyChangeReferenceVO;
+	import view.suportClasses.PropertyChangeReference;
 
     public class ResizeHandles extends UIComponent
 	{
@@ -232,7 +232,7 @@ package view
 			{
 				this._target["isUpdating"] = true;
 				
-				this._target["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(this._target as ISurfaceComponent);
+				this._target["propertyChangeFieldReference"] = new PropertyChangeReference(this._target as ISurfaceComponent);
 				this._target["propertyChangeFieldReference"].fieldLastValue = [{field:"width", value:this._target.width}, {field:"percentWidth", value:this._target.percentWidth},
 					{field:"height", value:this._target.height}, {field:"percentHeight", value:this._target.percentHeight}];
 			}

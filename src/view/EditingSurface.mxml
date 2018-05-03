@@ -14,7 +14,7 @@
 	<fx:Metadata>
 		[Style(name="dragImageAlpha",inherit="true",type="Number")]
 		[Event(name="change",type="flash.events.Event")]
-		[Event(name="propertyEditorItemAdding",type="view.events.PropertyEditorChangeEvent")]
+		[Event(name="propertyEditorItemAdding",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	</fx:Metadata>
 
 	<fx:Declarations>
@@ -46,12 +46,12 @@
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
 		
-		import view.events.PropertyEditorChangeEvent;
+		import view.suportClasses.events.PropertyEditorChangeEvent;
 		import view.interfaces.IMainApplication;
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
 		import view.interfaces.ISurfaceComponent;
-		import view.models.PropertyChangeReferenceVO;
+		import view.suportClasses.PropertyChangeReference;
 		import view.primeFaces.surfaceComponents.components.Div;
 		import view.primeFaces.surfaceComponents.components.Grid;
 		import view.suportClasses.events.SurfaceComponentEvent;
@@ -518,7 +518,7 @@
 				
 				// at this point property editor not created thus we send the 
 				// event through EditingSurface
-				var tmpChangeRef:PropertyChangeReferenceVO = new PropertyChangeReferenceVO(object);
+				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(object);
 				tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.parent).getElementIndex(object as IVisualElement);
 				tmpChangeRef.fieldClassParent = object.parent as IVisualElementContainer;
 				

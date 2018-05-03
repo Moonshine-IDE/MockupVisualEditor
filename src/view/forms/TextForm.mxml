@@ -107,7 +107,7 @@
             {
                 return;
             }
-            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false);
+            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false, true);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

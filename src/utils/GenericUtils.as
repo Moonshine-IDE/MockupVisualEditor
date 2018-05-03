@@ -3,7 +3,7 @@ package utils
 	import flash.display.InteractiveObject;
 	
 	import view.interfaces.ISurfaceComponent;
-	import view.models.PropertyChangeReferenceVO;
+	import view.suportClasses.PropertyChangeReference;
 	
 	public class GenericUtils
 	{
@@ -18,7 +18,7 @@ package utils
 			var pattern:RegExp = new RegExp(/(%)/g);
 			var newValue:String = isWidth ? width.replace(pattern, "") : height.replace(pattern, "");
 			
-			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(selectedItem);
+			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReference(selectedItem);
 			
 			if (isWidth)
 			{
@@ -51,7 +51,7 @@ package utils
 				newWidth = maxWidth;
 			}
 			
-			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(selectedItem);
+			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReference(selectedItem);
 			selectedItem["propertyChangeFieldReference"].fieldLastValue = [{field:"width", value:selectedItem.width}, {field:"percentWidth", value:selectedItem.percentWidth}];
 			selectedItem["propertyChangeFieldReference"].fieldNewValue = [{field:"width", value:newWidth}, {field:"percentWidth", value:NaN}];
 			
@@ -75,7 +75,7 @@ package utils
 				newHeight = maxHeight;
 			}
 			
-			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReferenceVO(selectedItem);
+			selectedItem["propertyChangeFieldReference"] = new PropertyChangeReference(selectedItem);
 			selectedItem["propertyChangeFieldReference"].fieldLastValue = [{field:"height", value:selectedItem.height}, {field:"percentHeight", value:selectedItem.percentHeight}];
 			selectedItem["propertyChangeFieldReference"].fieldNewValue = [{field:"height", value:newHeight}, {field:"percentHeight", value:NaN}];
 			

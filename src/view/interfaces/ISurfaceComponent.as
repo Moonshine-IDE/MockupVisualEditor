@@ -4,7 +4,7 @@ package view.interfaces
 	import mx.core.IInvalidating;
 	import mx.core.IUIComponent;
 	
-	import view.models.PropertyChangeReferenceVO;
+	import view.suportClasses.PropertyChangeReference;
 
 	public interface ISurfaceComponent extends IUIComponent, IInvalidating, IChildList
 	{

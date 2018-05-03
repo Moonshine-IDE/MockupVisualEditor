@@ -8,9 +8,10 @@ package view.suportClasses
 	import spark.components.Group;
 	
 	import view.EditingSurface;
-	import view.suportClasses.events.PropertyEditorChangeEvent;
+	import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
 
 	[Event(name="change",type="flash.events.Event")]
     [Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
@@ -83,9 +84,9 @@ package view.suportClasses
 		private function beforeSelectedItemDeletes(event:Event):void
 		{
 			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
-			if (event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
+			if ((event.target is IHistorySurfaceComponent) && !event.target.isUpdating)
 			{
-				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(_selectedItem);
+				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(_selectedItem as IHistorySurfaceComponent);
 				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
 				tmpChangeRef.fieldClassParent = _selectedItem.parent as IVisualElementContainer;
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));
@@ -94,8 +95,7 @@ package view.suportClasses
 		
         private function onSelectedItemPropertyChanged(event:Event):void
         {
-			if (event.target.hasOwnProperty("propertyChangeFieldReference") && event.target.propertyChangeFieldReference &&
-				event.target.hasOwnProperty("isUpdating") && !event.target.isUpdating)
+			if ((event.target is IHistorySurfaceComponent) && event.target.propertyChangeFieldReference && !event.target.isUpdating)
 			{
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
 			}

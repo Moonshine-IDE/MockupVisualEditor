@@ -7,11 +7,12 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.XMLCodeUtils;
     
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.suportClasses.PropertyChangeReference;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent
+    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
         public static const ELEMENT_NAME:String = "OutputLabel";
@@ -118,7 +119,16 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 		
-		public var isUpdating:Boolean;
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
 		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{

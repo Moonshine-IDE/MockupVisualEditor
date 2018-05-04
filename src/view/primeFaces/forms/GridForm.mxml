@@ -88,6 +88,9 @@
 			this.columnsDataProvider = rowItem.columns;
 
 			selectedGrid.addColumn(dgRows.selectedIndex);
+
+			this.selectedCellDirty = true;
+			this.invalidateDisplayList();
 		}
 
 		private function deleteItemButton_clickHandler(event:MouseEvent):void

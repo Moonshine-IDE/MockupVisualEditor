@@ -69,6 +69,8 @@
                 }
 
                 this.dispatchEvent(new Event(Event.CHANGE));
+
+                this.callLater(refreshSelection);
             }
         }
 
@@ -92,25 +94,22 @@
                 new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
             ])
 
-            this.dispatchEvent(new Event(Event.CHANGE));
+            this.callLater(refreshSelection);
         }
 
-        [Bindable("change")]
-        private function get itemSelection():Boolean
+        private function refreshSelection():void
         {
-            if (!this.selectedItem) return false;
+            if (!this.selectedItem) return;
 
             this.wrapContent.selected = this.selectedItem["wrap"];
             selectCurrentItem(directionDropDownList);
             selectCurrentItem(horizontalDirection);
             selectCurrentItem(verticalDirection);
-
-            return true;
         }
 
         private function selectCurrentItem(dpList:DropDownList):void
         {
-            if (this.selectedItem[dpList.labelField])
+            if (this.selectedItem[dpList.labelField] && dpList.dataProvider)
             {
                 var dpCount:int = dpList.dataProvider.length;
                 for (var i:int = 0; i < dpCount; i++)

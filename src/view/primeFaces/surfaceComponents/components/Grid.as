@@ -21,7 +21,7 @@ package view.primeFaces.surfaceComponents.components
         private static const MIN_COLUMN_COUNT:int = 1;
         private static const MIN_ROW_COUNT:int = 1;
 
-        private var currentColumnColor:String = "red";
+        private static const COLUMN_BORDER_COLOR:String = "#7096ab";
 
         public function Grid()
         {
@@ -158,8 +158,8 @@ package view.primeFaces.surfaceComponents.components
 
                             var div:Div = new Div();
                             div.percentWidth = div.percentHeight = 100;
-                            currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
-                            div.setStyle("borderColor", currentColumnColor);
+
+                            div.setStyle("borderColor", COLUMN_BORDER_COLOR);
 
                             gridItem.addElement(div);
                             gridRow.addElement(gridItem);
@@ -226,7 +226,6 @@ package view.primeFaces.surfaceComponents.components
         {
             if (this.numElements > MIN_ROW_COUNT)
             {
-                currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
                 var removedElement:GridRow = this.getElementAt(index) as GridRow;
 
                 var removedItems:Array = [];
@@ -265,8 +264,7 @@ package view.primeFaces.surfaceComponents.components
 
                 var div:Div = new Div();
                 div.percentWidth = div.percentHeight = 100;
-                currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
-                div.setStyle("borderColor", currentColumnColor);
+                div.setStyle("borderColor", COLUMN_BORDER_COLOR);
 
                 gridItem.addElement(div);
                 gridRow.addElement(gridItem);
@@ -282,7 +280,6 @@ package view.primeFaces.surfaceComponents.components
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             if (gridRow && gridRow.numElements > MIN_COLUMN_COUNT)
             {
-                currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
                 var removedColumn:IVisualElement = gridRow.removeElementAt(columnIndex);
 
                 var selColumn:int = this.selectedColumn - 1;
@@ -304,8 +301,7 @@ package view.primeFaces.surfaceComponents.components
 
             var div:Div = new Div();
             div.percentWidth = div.percentHeight = 100;
-            currentColumnColor = currentColumnColor == "red" ? "yellow" : "red";
-            div.setStyle("borderColor", currentColumnColor);
+            div.setStyle("borderColor", COLUMN_BORDER_COLOR);
 
             gridItem.addElement(div);
             gridRow.addElement(gridItem);

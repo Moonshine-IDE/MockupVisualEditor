@@ -23,22 +23,29 @@
 		<s:TextInput id="widthInput" width="100%"
 					 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
 					 keyDown="widthInput_keyDownHandler(event)" height="25"
-					 focusOut="commitWidth()" enter="commitWidth()" tabIndex="4"/>
+					 tabIndex="4"/>
 	</s:FormItem>
 	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
 		<s:TextInput id="heightInput" width="100%"
 					 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
 					 keyDown="heightInput_keyDownHandler(event)" height="25"
-					 focusOut="commitHeight()" enter="commitHeight()" tabIndex="5"/>
+					 tabIndex="5"/>
 	</s:FormItem>
 	<fx:Script><![CDATA[
+		
+		import mx.binding.utils.BindingUtils;
+		import mx.binding.utils.ChangeWatcher;
 		import mx.core.EventPriority;
 		import mx.core.UIComponent;
 		import mx.events.FlexEvent;
-
+		
+		import utils.GenericUtils;
+		
 		import view.interfaces.IIdAttribute;
-
 		import view.interfaces.ISurfaceComponent;
+		
+		private var _bindingWidth:ChangeWatcher;
+		private var _bindingHeight:ChangeWatcher;
 
 		CONFIG::MOONSHINE
 		{
@@ -58,8 +65,8 @@
 			if (super.selectedItem != value)
 			{
 				super.selectedItem = value;
-
 				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
+				updateBinding();
 			}
 		}
 
@@ -87,25 +94,27 @@
 
 			return "";
 		}
-
+		
+		private var eventProgressing:uint = 0;
+		
 		private function commitWidth():void
 		{
-			if (this.widthInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(true);
+			if (this.widthInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
 			else
 			{
 				var newWidth:Number = parseFloat(this.widthInput.text);
-				this.applyMinAndMaxWidth(newWidth);
+				this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
 			}
 			this.widthInput.selectAll();
 		}
 
 		private function commitHeight():void
 		{
-			if (this.heightInput.text.indexOf("%") != -1) this.applyPercentageWidthHeight(false);
+			if (this.heightInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
 			else
 			{
 				var newHeight:Number = parseFloat(this.heightInput.text);
-				this.applyMinAndMaxHeight(newHeight);
+				this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
 			}
 			this.heightInput.selectAll();
 		}
@@ -117,121 +126,18 @@
 
 		private function widthInput_keyDownHandler(event:KeyboardEvent):void
 		{
-			if (event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
 			{
-				event.preventDefault();
-				if (event.shiftKey)
-				{
-					var newWidth:Number = Math.floor(parseFloat(this.widthInput.text) / 10) * 10 + 10;
-				}
-				else
-				{
-					newWidth = Math.floor(parseFloat(this.widthInput.text)) + 1;
-				}
-				this.applyMinAndMaxWidth(newWidth);
-				this.widthInput.selectAll();
-			}
-			else if (event.keyCode === Keyboard.DOWN)
-			{
-				event.preventDefault();
-				if (event.shiftKey)
-				{
-					newWidth = Math.ceil(parseFloat(this.widthInput.text) / 10) * 10 - 10;
-				}
-				else
-				{
-					newWidth = Math.ceil(parseFloat(this.widthInput.text)) - 1;
-				}
-				this.applyMinAndMaxWidth(newWidth);
-				this.widthInput.selectAll();
+				commitWidth();
 			}
 		}
 
 		private function heightInput_keyDownHandler(event:KeyboardEvent):void
 		{
-			if (event.keyCode === Keyboard.UP)
+			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
 			{
-				event.preventDefault();
-				if (event.shiftKey)
-				{
-					var newHeight:Number = Math.floor(parseFloat(this.heightInput.text) / 10) * 10 + 10;
-				}
-				else
-				{
-					newHeight = Math.floor(parseFloat(this.heightInput.text)) + 1;
-				}
-				this.applyMinAndMaxHeight(newHeight);
-				this.heightInput.selectAll();
+				commitHeight();
 			}
-			else if (event.keyCode === Keyboard.DOWN)
-			{
-				event.preventDefault();
-				if (event.shiftKey)
-				{
-					newHeight = Math.ceil(parseFloat(this.heightInput.text) / 10) * 10 - 10;
-				}
-				else
-				{
-					newHeight = Math.ceil(parseFloat(this.heightInput.text)) - 1;
-				}
-				this.applyMinAndMaxHeight(newHeight);
-				this.heightInput.selectAll();
-			}
-		}
-
-		private function applyMinAndMaxWidth(newWidth:Number):void
-		{
-			var minWidth:Number = this.selectedItem.minWidth;
-			var maxWidth:Number = this.selectedItem.maxWidth;
-			if (newWidth < minWidth)
-			{
-				newWidth = minWidth;
-			}
-			else if (newWidth > maxWidth)
-			{
-				newWidth = maxWidth;
-			}
-			this.selectedItem.percentWidth = Number.NaN;
-			this.selectedItem.width = newWidth;
-			//the text might not have updated if the width property is the same
-			//but the old text value is different
-			this.widthInput.text = this.selectedItem.width.toString();
-		}
-
-		private function applyPercentageWidthHeight(isWidth:Boolean):void
-		{
-			var pattern:RegExp = new RegExp(/(%)/g);
-			var newValue:String = isWidth ? this.widthInput.text.replace(pattern, "") : this.heightInput.text.replace(pattern, "");
-
-			if (isWidth)
-			{
-				this.selectedItem.width = Number.NaN;
-				this.selectedItem.percentWidth = Number(newValue);
-			}
-			else
-			{
-				this.selectedItem.height = Number.NaN;
-				this.selectedItem.percentHeight = Number(newValue);
-			}
-		}
-
-		private function applyMinAndMaxHeight(newHeight:Number):void
-		{
-			var minHeight:Number = this.selectedItem.minHeight;
-			var maxHeight:Number = this.selectedItem.maxHeight;
-			if (newHeight < minHeight)
-			{
-				newHeight = minHeight;
-			}
-			else if (newHeight > maxHeight)
-			{
-				newHeight = maxHeight;
-			}
-			this.selectedItem.percentHeight = Number.NaN;
-			this.selectedItem.height = newHeight;
-			//the text might not have updated if the height property is the same
-			//but the old text value is different
-			this.heightInput.text = this.selectedItem.height.toString();
 		}
 
 		private function onBasicFormCreationComplete(event:FlexEvent):void
@@ -243,6 +149,38 @@
 				tabDictionary.push(heightInput);
 
 				addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onBasicFormKeyFocusChange, false, EventPriority.DEFAULT_HANDLER);
+			}
+		}
+		
+		private function updateBinding():void
+		{
+			if (this._bindingWidth)
+			{
+				this._bindingWidth.unwatch();
+				this._bindingHeight.unwatch();
+				this._bindingWidth = this._bindingHeight = null;
+			}
+			if (this.selectedItem === null)
+			{
+				return;
+			}
+			this._bindingWidth = BindingUtils.bindSetter(onWidtUpdated, selectedItem, "width", false, true);
+			this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
+		}
+		
+		private function onWidtUpdated(value:Object):void
+		{
+			if (this.widthInput)
+			{
+				this.widthInput.text = !isNaN(this.selectedItem.percentWidth) ? this.selectedItem.percentWidth + "%" : this.selectedItem.width.toString();
+			}
+		}
+		
+		private function onHeightUpdated(value:Object):void
+		{
+			if (this.heightInput)
+			{
+				this.heightInput.text = !isNaN(this.selectedItem.percentHeight) ? this.selectedItem.percentHeight + "%" : this.selectedItem.height.toString();
 			}
 		}
 
@@ -278,5 +216,6 @@
 				}
 			}
 		}
-		]]></fx:Script>
+		
+	]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

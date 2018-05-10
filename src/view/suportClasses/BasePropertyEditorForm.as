@@ -1,13 +1,11 @@
 package view.suportClasses
 {
 	import flash.events.Event;
-
-    import spark.components.Form;
-
+	
+	import spark.components.Form;
+	
 	import view.EditingSurface;
-
 	import view.interfaces.IPropertyEditor;
-
 	import view.interfaces.ISurfaceComponent;
 
 	[Event(name="change",type="flash.events.Event")]

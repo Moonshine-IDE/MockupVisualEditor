@@ -1,17 +1,20 @@
 package view
 {
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	
 	import mx.core.IUIComponent;
-
 	import mx.core.UIComponent;
 	import mx.events.MoveEvent;
 	import mx.events.ResizeEvent;
 	import mx.managers.IFocusManagerComponent;
-
+	
 	import spark.components.Button;
-
-    import view.interfaces.INonResizibleSurfaceComponent;
+	
+	import view.interfaces.IHistorySurfaceComponent;
+	import view.interfaces.INonResizibleSurfaceComponent;
+	import view.suportClasses.PropertyChangeReference;
 
     public class ResizeHandles extends UIComponent
 	{
@@ -217,6 +220,20 @@ package view
 			this._resizingHeight = true;
 			this._startTargetWidth = this._target.width;
 			this._startTargetHeight = this._target.height;
+			
+			// Updating width/height on every keyframe may cause several entries to
+			// history manager, thus we should add the change entry only when
+			// resizing event is over
+			var historyComponent:IHistorySurfaceComponent = this._target as IHistorySurfaceComponent;
+			if (historyComponent)
+			{
+				historyComponent.isUpdating = true;
+				
+				historyComponent.propertyChangeFieldReference = new PropertyChangeReference(historyComponent);
+				historyComponent.propertyChangeFieldReference.fieldLastValue = [{field:"width", value:this._target.width}, {field:"percentWidth", value:this._target.percentWidth},
+					{field:"height", value:this._target.height}, {field:"percentHeight", value:this._target.percentHeight}];
+			}
+			
 			this.stage.addEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler, false, 0, true);
 			this.stage.addEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler, false, 0, true);
 		}
@@ -283,6 +300,17 @@ package view
 
 		private function stage_mouseUpHandler(event:MouseEvent):void
 		{
+			// Updating width/height on every keyframe may cause several entries to
+			// history manager, thus we should add the change entry only when
+			// resizing event is over
+			if (this._target is IHistorySurfaceComponent)
+			{
+				(this._target as IHistorySurfaceComponent).isUpdating = false;
+				(this._target as IHistorySurfaceComponent).propertyChangeFieldReference.fieldNewValue = [{field:"width", value:this._target.width}, {field:"percentWidth", value:NaN},
+																				{field:"height", value:this._target.height}, {field:"percentHeight", value:NaN}];
+				this._target.dispatchEvent(new Event("widthChanged"));
+			}
+			
 			this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMoveHandler);
 			this.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
 		}

@@ -67,7 +67,7 @@
             if (super.selectedItem != value)
             {
                 super.selectedItem = value;
-
+				this.updateBinding();
                 if (value)
                 {
                     this.selectedDirty = true;
@@ -109,7 +109,7 @@
             {
                 return;
             }
-            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, true);
+            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false, true);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

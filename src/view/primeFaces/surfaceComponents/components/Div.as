@@ -1,20 +1,20 @@
 package view.primeFaces.surfaceComponents.components
 {
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IDiv;
-
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
-    import view.primeFaces.propertyEditors.WindowPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv
+    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
 
         protected var mainXML:XML;
-
+		
         public function Div()
         {
             super();
@@ -47,6 +47,38 @@ package view.primeFaces.surfaceComponents.components
         {
             return DivPropertyEditor;
         }
+		
+		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+		}
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			this[nameField.toString()] = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
 
         private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array

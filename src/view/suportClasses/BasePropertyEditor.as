@@ -1,18 +1,21 @@
 package view.suportClasses
 {
 	import flash.events.Event;
-
+	
 	import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-
+	
 	import spark.components.Group;
-
+	
 	import view.EditingSurface;
+	import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
 
 	[Event(name="change",type="flash.events.Event")]
-    [Event(name="propertyEditorChanged",type="flash.events.Event")]
+    [Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+	[Event(name="propertyEditorItemDeleting",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	public class BasePropertyEditor extends Group implements IPropertyEditor
 	{
 		public function BasePropertyEditor()
@@ -77,10 +80,26 @@ package view.suportClasses
 			}
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
-
+		
+		private function beforeSelectedItemDeletes(event:Event):void
+		{
+			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
+			if ((event.target is IHistorySurfaceComponent) && !event.target.isUpdating)
+			{
+				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(_selectedItem as IHistorySurfaceComponent);
+				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
+				tmpChangeRef.fieldClassParent = _selectedItem.parent as IVisualElementContainer;
+				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));
+			}
+		}
+		
         private function onSelectedItemPropertyChanged(event:Event):void
         {
-		    dispatchEvent(new Event("propertyEditorChanged", true));
+			if ((event.target is IHistorySurfaceComponent) && event.target.propertyChangeFieldReference && !event.target.isUpdating)
+			{
+				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+			}
+		    //dispatchEvent(new Event("propertyEditorChanged", true));
         }
 
 		private function populatePropertyEditors(target:IVisualElement):void
@@ -132,6 +151,8 @@ package view.suportClasses
         private function registerPropertyChangedEvents(surfaceComponent:ISurfaceComponent):void
         {
             if (!surfaceComponent.propertiesChangedEvents) return;
+			
+			surfaceComponent.addEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes, false, 0, true);
 
             var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
             for(var i:int = 0; i < propertiesChangedEventsCount; i++)
@@ -144,6 +165,8 @@ package view.suportClasses
         {
             if (!surfaceComponent) return;
             if (!surfaceComponent.propertiesChangedEvents) return;
+			
+			surfaceComponent.removeEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes);
 
             var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
             for(var i:int = 0; i < propertiesChangedEventsCount; i++)
@@ -174,6 +197,7 @@ package view.suportClasses
 			{
 				return;
 			}
+			
 			this.cleanupPropertyEditors(object);
 		}
 	}

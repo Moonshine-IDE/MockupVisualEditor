@@ -5,7 +5,8 @@
 
 	<fx:Metadata>
 		[Event(name="change",type="flash.events.Event")]
-		[Event(name="propertyEditorChanged",type="flash.events.Event")]
+		[Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+		[Event(name="propertyEditorItemDeleting",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	</fx:Metadata>
 
 	<s:states>

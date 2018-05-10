@@ -3,7 +3,7 @@ package view.interfaces
 	import mx.core.IChildList;
 	import mx.core.IInvalidating;
 	import mx.core.IUIComponent;
-
+	
 	public interface ISurfaceComponent extends IUIComponent, IInvalidating, IChildList
 	{
         /**

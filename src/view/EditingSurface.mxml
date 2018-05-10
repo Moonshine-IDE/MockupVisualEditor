@@ -14,6 +14,7 @@
 	<fx:Metadata>
 		[Style(name="dragImageAlpha",inherit="true",type="Number")]
 		[Event(name="change",type="flash.events.Event")]
+		[Event(name="propertyEditorItemAdding",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	</fx:Metadata>
 
 	<fx:Declarations>
@@ -25,6 +26,7 @@
 		import mx.containers.GridRow;
 		import mx.controls.scrollClasses.ScrollBar;
 		import mx.core.BitmapAsset;
+		import mx.core.Container;
 		import mx.core.DragSource;
 		import mx.core.IUIComponent;
 		import mx.core.IVisualElement;
@@ -34,29 +36,26 @@
 		import mx.managers.DragManager;
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
-
+		
 		import spark.components.SkinnableContainer;
 		import spark.components.supportClasses.ScrollBarBase;
 		import spark.components.supportClasses.SkinnableContainerBase;
 		import spark.containers.Navigator;
 		import spark.events.IndexChangeEvent;
-
+		
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
-
+		
+		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IMainApplication;
-
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
 		import view.interfaces.ISurfaceComponent;
-
-		import mx.core.Container;
-
-		import view.suportClasses.events.SurfaceComponentEvent;
-
 		import view.primeFaces.surfaceComponents.components.Div;
-
 		import view.primeFaces.surfaceComponents.components.Grid;
+		import view.suportClasses.PropertyChangeReference;
+		import view.suportClasses.events.PropertyEditorChangeEvent;
+		import view.suportClasses.events.SurfaceComponentEvent;
 
 		private static const SMALL_NUDGE:int = 1;
 		private static const LARGE_NUDGE:int = 10;
@@ -197,7 +196,14 @@
 		public function deleteItem(item:ISurfaceComponent):void
 		{
 			if (item is INonDeletableSurfaceComponent) return;
-
+			
+			item.dispatchEvent(new Event(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING));
+			
+			// @devsena
+			// missing event removals
+			item.removeEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
+			item.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
+			
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			container.removeElement(IVisualElement(item));
 
@@ -222,6 +228,10 @@
 
 			this.selectedItem = null;
 			hasChanged = this.numElements > 0 && _wasLoaded;
+			
+			// once an item deletes stage loose focus to
+			// listen any keypress event, i.e. Ctrl+Z/Y
+			this.setFocus();
 		}
 
 		private function prepareContainer(container:UIComponent):void
@@ -517,6 +527,17 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
+				
+				// at this point property editor not created thus we send the 
+				// event through EditingSurface
+				if (object is IHistorySurfaceComponent)
+				{
+					var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(object as IHistorySurfaceComponent);
+					tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.parent).getElementIndex(object as IVisualElement);
+					tmpChangeRef.fieldClassParent = object.parent as IVisualElementContainer;
+					
+					this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
+				}
 			}
 			this.selectedItem = object;
 			this.setFocus();

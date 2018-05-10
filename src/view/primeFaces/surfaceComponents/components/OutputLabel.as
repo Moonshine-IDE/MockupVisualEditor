@@ -1,16 +1,18 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
-
+    
     import utils.XMLCodeUtils;
-
+    
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent
+    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
         public static const ELEMENT_NAME:String = "OutputLabel";
@@ -35,25 +37,30 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-                "forAttributeChanged"
+                "forAttributeChanged",
+				"indicateRequiredChanged"
             ];
         }
 
         private var _indicateRequired:Boolean;
         private var indicateRequiredChanged:Boolean;
-
+		
+		[Bindable("indicateRequiredChanged")]
         public function get indicateRequired():Boolean
         {
             return _indicateRequired;
         }
-
+		
         public function set indicateRequired(value:Boolean):void
         {
             if (_indicateRequired != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "indicateRequired", _indicateRequired, value);
+				
                 _indicateRequired = value;
                 indicateRequiredChanged = true;
                 invalidateProperties();
+				dispatchEvent(new Event("indicateRequiredChanged"));
             }
         }
 
@@ -75,15 +82,58 @@ package view.primeFaces.surfaceComponents.components
         {
             return _forAttribute;
         }
-
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		[Bindable("forAttributeChanged")]
         public function set forAttribute(value:String):void
         {
             if (_forAttribute != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "forAttribute", _forAttribute, value);
+				
                 _forAttribute = value;
                 dispatchEvent(new Event("forAttributeChanged"));
+				
             }
         }
+		
+		[Bindable("textChanged")]
+		override public function set text(value:String):void
+		{
+			if (super.text != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "text", super.text, value);
+				
+				super.text = value;
+				dispatchEvent(new Event("textChanged"));
+			}
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			this[nameField.toString()] = value;
+		}
 
         public function toXML():XML
         {
@@ -133,6 +183,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (indicateRequiredChanged)
             {
+				isUpdating = true; // do not update 'text' change to history manager as the 'text' change here is the effect of another field change
                 if (indicateRequired)
                 {
                     this.text += " *";
@@ -142,6 +193,7 @@ package view.primeFaces.surfaceComponents.components
                     this.text = this.text.replace(" *", "");
                 }
                 indicateRequiredChanged = false;
+				isUpdating = false;
             }
         }
     }

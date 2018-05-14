@@ -7,13 +7,14 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.TextInput;
     
     import utils.XMLCodeUtils;
-
+    
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputTextPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute
+    public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputText";
         public static const ELEMENT_NAME:String = "InputText";
@@ -42,24 +43,48 @@ package view.primeFaces.surfaceComponents.components
 			
 			this.prompt = "Input Text";
         }
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
 
         private var _idAttribute:String;
+		[Bindable(event="idAttributeChanged")]
         public function get idAttribute():String
         {
             return _idAttribute;
         }
-
+		
         public function set idAttribute(value:String):void
         {
             if (_idAttribute != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "idAttribute", _idAttribute, value);
+				
                 _idAttribute = value;
                 dispatchEvent(new Event("idAttributeChanged"))
             }
         }
 
 		private var _maxLength:String = "";
-
 		[Bindable(event="maxLengthChanged")]
         public function get maxLength():String
 		{
@@ -70,8 +95,22 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (_maxLength != value)
 			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "maxLength", _maxLength, value);
+				
 				_maxLength = value;
 				dispatchEvent(new Event("maxLengthChanged"));
+			}
+		}
+		
+		[Bindable("textChanged")]
+		override public function set text(value:String):void
+		{
+			if (super.text != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "text", super.text, value);
+				
+				super.text = value;
+				dispatchEvent(new Event("textChanged"));
 			}
 		}
 

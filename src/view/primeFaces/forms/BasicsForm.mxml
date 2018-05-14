@@ -15,8 +15,8 @@
 	</suportclasses:layout>
 	<s:FormItem label="Id" skinClass="skins.FormItemSkin" includeIn="normalWithId">
 		<s:TextInput id="idTextInput" width="100%" skinClass="skins.TextInputSkin"
-					 text="{selectedComponentIdAttributeChaged}"
-					 height="25" tabIndex="3" change="textInput_changeHandler(event)"/>
+					 text="{selectedComponentIdAttributeChaged}" focusOut="commitId()"
+					 height="25" tabIndex="3" keyDown="idInput_keyDownHandler(event)"/>
 	</s:FormItem>
 	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
 	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
@@ -46,6 +46,7 @@
 		
 		private var _bindingWidth:ChangeWatcher;
 		private var _bindingHeight:ChangeWatcher;
+		private var _bindingId:ChangeWatcher;
 
 		CONFIG::MOONSHINE
 		{
@@ -119,7 +120,7 @@
 			this.heightInput.selectAll();
 		}
 
-		private function textInput_changeHandler(event:Event):void
+		private function commitId():void
 		{
 			this.selectedItem["idAttribute"] = this.idTextInput.text;
 		}
@@ -137,6 +138,14 @@
 			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
 			{
 				commitHeight();
+			}
+		}
+		
+		private function idInput_keyDownHandler(event:KeyboardEvent):void
+		{
+			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+			{
+				commitId();
 			}
 		}
 
@@ -159,6 +168,12 @@
 				this._bindingWidth.unwatch();
 				this._bindingHeight.unwatch();
 				this._bindingWidth = this._bindingHeight = null;
+				
+				if (currentState == "normalWithId") 
+				{
+					this._bindingId.unwatch();
+					this._bindingId = null;
+				}
 			}
 			if (this.selectedItem === null)
 			{
@@ -166,6 +181,7 @@
 			}
 			this._bindingWidth = BindingUtils.bindSetter(onWidtUpdated, selectedItem, "width", false, true);
 			this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
+			if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "idAttribute", false, true);
 		}
 		
 		private function onWidtUpdated(value:Object):void
@@ -181,6 +197,14 @@
 			if (this.heightInput)
 			{
 				this.heightInput.text = !isNaN(this.selectedItem.percentHeight) ? this.selectedItem.percentHeight + "%" : this.selectedItem.height.toString();
+			}
+		}
+		
+		private function onIdUpdated(value:Object):void
+		{
+			if (this.idTextInput)
+			{
+				this.idTextInput.text = this.selectedItem["idAttribute"];
 			}
 		}
 

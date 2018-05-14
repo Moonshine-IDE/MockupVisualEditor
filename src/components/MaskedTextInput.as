@@ -13,8 +13,6 @@ package components
 
     import mx.utils.StringUtil;
 
-    import skins.TextInputSkin;
-
     import spark.components.RichEditableText;
 
     import spark.components.TextInput;
@@ -90,6 +88,11 @@ package components
         {
             return cleanText(fullText);
         }
+		
+		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			throw new Error("needs to be override in an ISurfaceComponent class.");
+		}
 
         /**
          * remove not allowed separators
@@ -132,6 +135,8 @@ package components
         {
             if (super.text !== value)
             {
+				updatePropertyChangeReference("text", super.text, value);
+				
                 storean = selectionAnchorPosition;
                 storeac = selectionActivePosition;
                 super.text = value;
@@ -156,6 +161,8 @@ package components
         {
             if (maskText !== value)
             {
+				updatePropertyChangeReference("maskText", _maskText, value);
+				
                 _maskText = value;
                 maskedTextChanged = true;
                 dispatchEvent(new Event("maskTextChanged"));

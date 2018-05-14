@@ -6,11 +6,13 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.XMLCodeUtils;
     
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.CheckboxPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.CheckboxSkin;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent
+    public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
 		public static const ELEMENT_NAME:String = "SelectBooleanCheckBox";
@@ -35,17 +37,53 @@ package view.primeFaces.surfaceComponents.components
 					"heightChanged",
 					"explicitMinWidthChanged",
 					"explicitMinHeightChanged",
-					"contentChange",
+					"labelChanged",
 					"selectedChanged"
 			];
+		}
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
 		}
 		
 		override public function set selected(value:Boolean):void
 		{
 			if (super.selected != value)
 			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "selected", super.selected, value);
+				
 				super.selected = value;
 				dispatchEvent(new Event("selectedChanged"));
+			}
+		}
+		
+		[Bindable("labelChanged")]
+		override public function set label(value:String):void
+		{
+			if (super.label != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "label", super.label, value);
+				
+				super.label = value;
+				dispatchEvent(new Event("labelChanged"));
 			}
 		}
 		

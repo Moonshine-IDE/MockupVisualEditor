@@ -28,7 +28,7 @@ package view.suportClasses
 			this.fieldClass = fieldClass;
 		}
 		
-		public function reverse(editor:VisualEditor):void
+		public function undo(editor:VisualEditor):void
 		{
 			fieldClass.isUpdating = true;
 			
@@ -53,7 +53,7 @@ package view.suportClasses
 			});
 		}
 		
-		public function restore(editor:VisualEditor):void
+		public function redo(editor:VisualEditor):void
 		{
 			fieldClass.isUpdating = true;
 			
@@ -99,13 +99,13 @@ package view.suportClasses
 			{
 				for each (var i:Object in value)
 				{
-					fieldClass.restorePropertyOnChangeReference(i.field, i.value);
+					fieldClass[i.field] = i.value;
 				}
 			}
 			else if (fieldName)
 			{
 				// assigning single field change
-				fieldClass.restorePropertyOnChangeReference(fieldName, value);
+				fieldClass[fieldName] = value;
 			}
 		}
 	}

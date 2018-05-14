@@ -1,16 +1,18 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import spark.components.Button;
-
+    
     import utils.XMLCodeUtils;
-
+    
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
-	import view.primeFaces.propertyEditors.ButtonPropertyEditor;
+    import view.primeFaces.propertyEditors.ButtonPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent
+    public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
 		public static const ELEMENT_NAME:String = "Button";
@@ -33,8 +35,32 @@ package view.primeFaces.surfaceComponents.components
 					"heightChanged",
 					"explicitMinWidthChanged",
 					"explicitMinHeightChanged",
-					"enabledChanged"
+					"enabledChanged",
+					"labelChanged",
+					"toolTipChanged"
 			];
+		}
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
 		}
 
         private var _enabled:Boolean = true;
@@ -52,13 +78,36 @@ package view.primeFaces.surfaceComponents.components
         {
 			if (_enabled != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "enabled", _enabled, value);
                 _enabled = value;
-
                 invalidateSkinState();
-
 				dispatchEvent(new Event("enabledChanged"));
             }
         }
+		
+		[Bindable("labelChanged")]
+		override public function set label(value:String):void
+		{
+			if (super.label != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "label", super.label, value);
+				
+				super.label = value;
+				dispatchEvent(new Event("labelChanged"));
+			}
+		}
+		
+		[Bindable("toolTipChanged")]
+		override public function set toolTip(value:String):void
+		{
+			if (super.toolTip != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "toolTip", super.toolTip, value);
+				
+				super.toolTip = value;
+				dispatchEvent(new Event("toolTipChanged"));
+			}
+		}
 
         public function get propertyEditorClass():Class
 		{

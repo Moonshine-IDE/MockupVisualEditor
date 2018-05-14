@@ -53,11 +53,6 @@ package view.primeFaces.surfaceComponents.components
 			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
 		}
 		
-		public function restorePropertyOnChangeReference(nameField:String, value:*):void
-		{
-			this[nameField.toString()] = value;
-		}
-		
 		private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
 		{

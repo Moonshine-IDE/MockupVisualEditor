@@ -9,7 +9,7 @@
 
 	<primeFaces:BasicsForm/>
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
-    <forms:TextForm label="Value" textProperty="text"/>
-    <forms:TextForm label="Decimal separator char" textProperty="decimalSeparator" maxChar="1"/>
-    <forms:TextForm label="Thousand separator char" textProperty="thousandSeparator" maxChar="1"/>
+    <forms:TextForm label="Value" textProperty="text" restrict="0-9"/>
+    <forms:TextForm label="Decimal separator char" textProperty="decimalSeparator" maxChar="1" restrict="0-9"/>
+    <forms:TextForm label="Thousand separator char" textProperty="thousandSeparator" maxChar="1" restrict="0-9"/>
 </suportclasses:BasePropertyEditor>

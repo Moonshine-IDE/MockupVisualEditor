@@ -1,19 +1,20 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import mx.formatters.NumberFormatter;
-
+    
     import spark.components.TextInput;
-
+    
     import utils.XMLCodeUtils;
-
+    
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute
+    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
         public static const ELEMENT_NAME:String = "InputNumber";
@@ -41,13 +42,36 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
-                "idAttributeChanged"
+                "idAttributeChanged",
+				"thousandSeparatorChanged",
+				"decimalSeparatorChanged"
             ];
 
             this.prompt = "0.00";
             this.typicalText = "0.00";
         }
-
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
 
         private var _decimalSeparator:String = "";
         private var decimalSeparatorChanged:Boolean;
@@ -55,44 +79,54 @@ package view.primeFaces.surfaceComponents.components
         private var _thousandSeparator:String = "";
         private var thousandsSeparatorChanged:Boolean;
 
+		[Bindable("decimalSeparatorChanged")]
         public function get decimalSeparator():String
         {
             return _decimalSeparator;
         }
-
         public function set decimalSeparator(value:String):void
         {
             if (_decimalSeparator != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "decimalSeparator", _decimalSeparator, value);
+				
                 _decimalSeparator = value;
                 decimalSeparatorChanged = true;
                 invalidateProperties();
+				dispatchEvent(new Event("decimalSeparatorChanged"));
             }
         }
 
+		[Bindable("thousandSeparatorChanged")]
         public function get thousandSeparator():String
         {
             return _thousandSeparator;
         }
-
         public function set thousandSeparator(value:String):void
         {
             if (_thousandSeparator != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "thousandSeparator", _thousandSeparator, value);
+				
                 _thousandSeparator = value;
                 thousandsSeparatorChanged = true;
                 invalidateProperties();
+				dispatchEvent(new Event("thousandSeparatorChanged"));
             }
         }
 
         [CollapseWhiteSpace]
-        [Bindable("textChanged")]
         [Bindable("change")]
+        [Bindable("textChanged")]
         override public function set text(value:String):void
         {
             if (super.text != value)
             {
+				var oldValue:String = super.text;
                 super.text = _formatter.format(value);
+				
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "text", oldValue, super.text);
+				dispatchEvent(new Event("textChanged"));
             }
         }
 
@@ -122,11 +156,14 @@ package view.primeFaces.surfaceComponents.components
         {
             return _idAttribute;
         }
-
+		
+		[Bindable("idAttributeChanged")]
         public function set idAttribute(value:String):void
         {
             if (_idAttribute != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "idAttribute", _idAttribute, value);
+				
                 _idAttribute = value;
                 dispatchEvent(new Event("idAttributeChanged"))
             }

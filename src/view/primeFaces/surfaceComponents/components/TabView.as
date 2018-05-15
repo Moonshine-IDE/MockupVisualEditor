@@ -1,20 +1,25 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import components.tabNavigator.TabNavigatorWithOrientation;
-
+    import flash.events.Event;
+    
     import mx.core.IVisualElement;
     import mx.events.CollectionEvent;
-
+    
     import spark.components.NavigatorContent;
     import spark.events.IndexChangeEvent;
-
+    
+    import components.tabNavigator.TabNavigatorWithOrientation;
+    
     import utils.XMLCodeUtils;
-
+    
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.TabViewPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.PropertyChangeReferenceTabView;
 
-    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent
+    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "TabView";
@@ -35,6 +40,11 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
+				"orientationChanged",
+				"scrollableChanged",
+				"itemRemoved",
+				"itemAdded",
+				"itemUpdated",
                 IndexChangeEvent.CHANGE,
                 CollectionEvent.COLLECTION_CHANGE
             ];
@@ -44,9 +54,65 @@ package view.primeFaces.surfaceComponents.components
 
             addElement(navigatorContent);
         }
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*, eventType:String=null):void
+		{
+			switch(nameField)
+			{
+				case "removeItemAt":
+					try
+					{
+						this.getItemIndex(value.object);
+						removeElementAt(value.index);
+					} 
+					catch(e:Error)
+					{
+						addElementAt(value.object, value.index);
+					}
+					break;
+				case "addItemAt":
+					try
+					{
+						this.getItemIndex(value);
+						removeElement(value);
+					} 
+					catch(e:Error)
+					{
+						addElementAt(value, super.numElements);
+					}
+					break;
+				default:
+					this[nameField.toString()] = value;
+					break;
+			}
+		}
 
         override public function addElement(element:IVisualElement):IVisualElement
         {
+			_propertyChangeFieldReference = new PropertyChangeReference(this, "addItemAt", element, element);
+			
             if (element is NavigatorContent)
             {
                 return super.addElement(element);
@@ -55,7 +121,18 @@ package view.primeFaces.surfaceComponents.components
             {
                 return (this.selectedItem as NavigatorContent).addElement(element);
             }
+			
+			dispatchEvent(new Event("itemAdded"));
         }
+		
+		override public function removeItemAt(index:int):Object
+		{
+			var historyObject:Object = {object:this.getItemAt(index), index:index};
+			_propertyChangeFieldReference = new PropertyChangeReference(this, "removeItemAt", historyObject, historyObject);
+			return super.removeItemAt(index);
+			
+			dispatchEvent(new Event("itemRemoved"));
+		}
 
         public function get propertyEditorClass():Class
         {
@@ -67,6 +144,12 @@ package view.primeFaces.surfaceComponents.components
         {
             return _propertiesChangedEvents;
         }
+		
+		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			if (oldValue && (oldValue is Array)) _propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, fieldName, oldValue, newValue);
+			else _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+		}
 
         public function toXML():XML
         {

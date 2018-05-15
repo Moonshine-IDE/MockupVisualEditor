@@ -1,13 +1,12 @@
 package components.tabNavigator
 {
-    import skins.tabNavigator.TabNavigatorWithOrientationSkin;
-
+    import flash.events.Event;
+    
     import spark.components.ButtonBarButton;
-
     import spark.components.NavigatorContent;
-
     import spark.containers.Navigator;
-	import flash.events.Event;
+    
+    import skins.tabNavigator.TabNavigatorWithOrientationSkin;
 
     public class TabNavigatorWithOrientation extends Navigator
 	{
@@ -17,6 +16,11 @@ package components.tabNavigator
 
 			this.setStyle("skinClass", TabNavigatorWithOrientationSkin);
 		}
+		
+		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			throw new Error("needs to be override in an ISurfaceComponent class.");
+		}
 
 		[SkinPart(required=true)]
 		public var tabBar:TabBarWithScroller;
@@ -24,7 +28,7 @@ package components.tabNavigator
 		private var _orientation:String = "top";
 		
 		[Inspectable(enumeration="top,left,bottom,right", defaultValue="top")]
-		[Bindable]
+		[Bindable("orientationChanged")]
 		public function get orientation():String
 		{
 			return _orientation;
@@ -34,6 +38,8 @@ package components.tabNavigator
 		{
 			if (_orientation != value)
 			{
+				updatePropertyChangeReference("orientation", _orientation, value);
+				
 				_orientation = value;
 				dispatchEvent(new Event("orientationChanged"));
 				this.invalidateSkinState();
@@ -41,8 +47,7 @@ package components.tabNavigator
 		}
 		
 		private var _scrollable:Boolean;
-		
-		[Bindable]
+		[Bindable("scrollableChanged")]
 		public function get scrollable():Boolean
 		{
 			return _scrollable;	
@@ -52,6 +57,8 @@ package components.tabNavigator
 		{
 			if (_scrollable != value)
 			{
+				updatePropertyChangeReference("scrollable", _scrollable, value);
+				
 				_scrollable = value;
 				dispatchEvent(new Event("scrollableChanged"));
 				this.invalidateSkinState();
@@ -77,7 +84,7 @@ package components.tabNavigator
 						break;		
 					case "bottom":
 						state += "WithBottomTabBar";
-						break;			
+						break;
 				}			
 			}
 			
@@ -88,10 +95,18 @@ package components.tabNavigator
 		public function setSelectedTabLabel(label:String):void
 		{
 			var selectedTab:NavigatorContent = (this.selectedItem as NavigatorContent);
-			selectedTab.label = label;
+			
+			if (selectedTab.label != label)
+			{
+				var item:ButtonBarButton = tabBar.dataGroup.getElementAt(this.selectedIndex) as ButtonBarButton;
+				
+				updatePropertyChangeReference("label", [{field:selectedIndex, value:selectedTab.label}, {field:selectedIndex, value:item.label}], [{field:selectedIndex, value:label}, {field:selectedIndex, value:label}]);
 
-			var item:ButtonBarButton = tabBar.dataGroup.getElementAt(this.selectedIndex) as ButtonBarButton;
-			item.label = label;
+				selectedTab.label = label;
+				item.label = label;
+				
+				dispatchEvent(new Event("itemUpdated"));
+			}
 		}
 	}
 }

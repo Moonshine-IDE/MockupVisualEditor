@@ -116,7 +116,7 @@ package view.primeFaces.surfaceComponents.components
 
         override public function addElement(element:IVisualElement):IVisualElement
         {
-			_propertyChangeFieldReference = new PropertyChangeReference(this, "addItemAt", element, element);
+			_propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, "addItemAt", element, element);
 			
             if (element is NavigatorContent)
             {
@@ -133,7 +133,7 @@ package view.primeFaces.surfaceComponents.components
 		override public function removeItemAt(index:int):Object
 		{
 			var historyObject:Object = {object:this.getItemAt(index), index:index};
-			_propertyChangeFieldReference = new PropertyChangeReference(this, "removeItemAt", historyObject, historyObject);
+			_propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, "removeItemAt", historyObject, historyObject);
 			return super.removeItemAt(index);
 			
 			dispatchEvent(new Event("itemRemoved"));

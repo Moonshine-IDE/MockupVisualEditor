@@ -23,6 +23,7 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "TabView";
+		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
         public function TabView()
         {
@@ -91,6 +92,8 @@ package view.primeFaces.surfaceComponents.components
 					{
 						addElementAt(value.object, value.index);
 					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
 					break;
 				case "addItemAt":
 					try
@@ -102,6 +105,8 @@ package view.primeFaces.surfaceComponents.components
 					{
 						addElementAt(value, super.numElements);
 					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
 					break;
 				default:
 					this[nameField.toString()] = value;

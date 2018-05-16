@@ -1,5 +1,7 @@
 package view.suportClasses
 {
+	import flash.events.Event;
+	
 	import spark.components.ButtonBarButton;
 	import spark.components.NavigatorContent;
 	
@@ -29,6 +31,8 @@ package view.suportClasses
 						selectedTab.label = i.value;
 						item.label = i.value;
 					}
+					
+					TabView(this.fieldClass).dispatchEvent(new Event(TabView.EVENT_CHILDREN_UPDATED));
 				}
 			}
 			else if (!fieldName && (value is Array))

@@ -44,7 +44,7 @@ package view.primeFaces.surfaceComponents.components
                 this.directionChanged = true;
 
                 this.invalidateDisplayList();
-                this.dispatchEvent(new Event("directionChanged"));
+                this.dispatchEvent(new Event("directionChanged", true));
             }
         }
 
@@ -67,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
                 this.wrapChanged = true;
 
                 this.invalidateDisplayList();
-                this.dispatchEvent(new Event("wrapChanged"));
+                this.dispatchEvent(new Event("wrapChanged", true));
             }
         }
 
@@ -91,7 +91,7 @@ package view.primeFaces.surfaceComponents.components
                 this.gapChanged = true;
 
                 this.invalidateDisplayList();
-                this.dispatchEvent(new Event("gapChanged"));
+                this.dispatchEvent(new Event("gapChanged", true));
             }
         }
 
@@ -116,7 +116,7 @@ package view.primeFaces.surfaceComponents.components
                 this.alignChanged = true;
 
                 this.invalidateDisplayList();
-                this.dispatchEvent(new Event("verticalAlignChanged"));
+                this.dispatchEvent(new Event("verticalAlignChanged", true));
             }
         }
 
@@ -139,7 +139,7 @@ package view.primeFaces.surfaceComponents.components
                 this.alignChanged = true;
 
                 this.invalidateDisplayList();
-                this.dispatchEvent(new Event("horizontalAlignChanged"));
+                this.dispatchEvent(new Event("horizontalAlignChanged", true));
             }
         }
 

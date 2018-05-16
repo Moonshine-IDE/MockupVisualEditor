@@ -1,11 +1,12 @@
 package components
 {
-    import flash.events.*;
-
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    
     import mx.effects.AnimateProperty;
-    import mx.events.*;
     import mx.events.EffectEvent;
-
+    import mx.events.FlexEvent;
+    
     import spark.components.Label;
     import spark.components.Panel;
 
@@ -30,6 +31,16 @@ package components
             open = isOpen;
             this.addEventListener(FlexEvent.CREATION_COMPLETE, onCollapsiblePanelCreationComplete);
         }
+		
+		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			throw new Error("needs to be override in an ISurfaceComponent class.");
+		}
+		
+		protected function updateIsUpdating(value:Boolean):void
+		{
+			throw new Error("needs to be override in an ISurfaceComponent class.");
+		}
 
         protected function onTitleDisplayClick(event:MouseEvent):void
         {
@@ -39,7 +50,13 @@ package components
         private function onOpenAnimEffectEnd(event:EffectEvent):void
         {
             contentGroup.visible = contentGroup.includeInLayout = this.open;
+			updateIsUpdating(false);
         }
+		
+		public function get isAnimationPlaying():Boolean
+		{
+			return _openAnim.isPlaying;
+		}
 
         [PercentProxy("percentHeight")]
         [Inspectable(category="General")]
@@ -81,26 +98,29 @@ package components
 
             if (!_openAnim.isPlaying)
             {
+				updatePropertyChangeReference("open", _open, !_open);
+				
                 _openAnim.fromValue = _openAnim.target.height;
                 if (!_open)
                 {
                     _openAnim.toValue = this.openHeight;
                     _open = true;
-                    dispatchEvent(new Event("openChanged"));
                     dispatchEvent(new Event(Event.OPEN));
                 }
                 else
                 {
                     _openAnim.toValue = _openAnim.target.closedHeight;
                     _open = false;
-                    dispatchEvent(new Event("openChanged"));
                     dispatchEvent(new Event(Event.CLOSE));
                 }
+
+				dispatchEvent(new Event("openChanged"));
                 _openAnim.play();
             }
         }
 
         [Inspectable(defaultValue="200")]
+		[Bindable(event="durationChanged")]
         public function get duration():Number
         {
             return _duration;
@@ -110,9 +130,13 @@ package components
         {
             if (_duration != value)
             {
+				updatePropertyChangeReference("duration", _duration, value);
+				
                 _duration = value;
                 durationChanged = true;
                 invalidateProperties();
+				
+				dispatchEvent(new Event("durationChanged"));
             }
         }
 
@@ -132,9 +156,8 @@ package components
         {
             if (_open != value)
             {
-                _open = value;
+				updateIsUpdating(true);
                 openChanged = true;
-                dispatchEvent(new Event("openChanged"));
                 invalidateProperties();
             }
         }
@@ -178,7 +201,7 @@ package components
             this.removeEventListener(FlexEvent.CREATION_COMPLETE, onCollapsiblePanelCreationComplete);
 
             _openAnim = new AnimateProperty(this);
-            _openAnim.addEventListener(EffectEvent.EFFECT_END, onOpenAnimEffectEnd);
+            _openAnim.addEventListener(EffectEvent.EFFECT_END, onOpenAnimEffectEnd, false, 0, true);
             _openAnim.duration = this.duration;
             _openAnim.property = "height";
 

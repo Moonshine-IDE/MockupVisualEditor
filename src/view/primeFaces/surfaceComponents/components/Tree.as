@@ -6,10 +6,12 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.XMLCodeUtils;
     
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.TreePropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class Tree extends mx.controls.Tree implements IPrimeFacesSurfaceComponent
+    public class Tree extends mx.controls.Tree implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tree";
         public static const ELEMENT_NAME:String = "Tree";
@@ -76,6 +78,28 @@ package view.primeFaces.surfaceComponents.components
             this.dataProvider = data;
         }
 		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
+		
 		private var _treeVar:String = "";
 		[Bindable("treeVarChanged")]
 		public function get treeVar():String
@@ -85,6 +109,8 @@ package view.primeFaces.surfaceComponents.components
 		public function set treeVar(value:String):void
 		{
 			if (_treeVar == value) return;
+			
+			_propertyChangeFieldReference = new PropertyChangeReference(this, "treeVar", _treeVar, value);
 			
 			_treeVar = value;
 			dispatchEvent(new Event("treeVarChanged"));
@@ -98,6 +124,10 @@ package view.primeFaces.surfaceComponents.components
 		}
 		public function set treeValue(value:String):void
 		{
+			if (_treeValue == value) return;
+			
+			_propertyChangeFieldReference = new PropertyChangeReference(this, "treeValue", _treeValue, value);
+			
 			_treeValue = value;
 			dispatchEvent(new Event("treeValueChanged"));
 		}

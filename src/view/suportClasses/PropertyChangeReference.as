@@ -43,7 +43,7 @@ package view.suportClasses
 					break;
 				
 				default:
-					changeItem(fieldLastValue, eventType);
+					changeItem(fieldLastValue);
 					break;
 			}
 			
@@ -68,7 +68,7 @@ package view.suportClasses
 					break;
 				
 				default:
-					changeItem(fieldNewValue, eventType);
+					changeItem(fieldNewValue);
 					break;
 			}
 			
@@ -92,20 +92,20 @@ package view.suportClasses
 			}
 		}
 		
-		protected function changeItem(value:*, eventType:String):void
+		protected function changeItem(value:*):void
 		{
 			// against assigning multiple field changes
 			if (value is Array)
 			{
 				for each (var i:Object in value)
 				{
-					fieldClass.restorePropertyOnChangeReference(i.field, i.value, eventType);
+					fieldClass[i.field] = i.value;
 				}
 			}
 			else if (fieldName)
 			{
 				// assigning single field change
-				fieldClass.restorePropertyOnChangeReference(fieldName, value, eventType);
+				fieldClass[fieldName] = value;
 			}
 		}
 	}

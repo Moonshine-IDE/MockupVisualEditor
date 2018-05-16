@@ -37,6 +37,11 @@ package view.primeFaces.surfaceComponents.components
                 "horizontalAlignChanged"
             ];
         }
+		
+		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+		}
 
         public function get div():Div
         {
@@ -47,11 +52,6 @@ package view.primeFaces.surfaceComponents.components
         {
             return DivPropertyEditor;
         }
-		
-		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
-		}
 		
 		private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean

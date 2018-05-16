@@ -1,23 +1,23 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import components.CollapsiblePanel;
     import flash.events.Event;
-
     import flash.events.MouseEvent;
-
+    
     import mx.core.IVisualElement;
-
     import mx.events.FlexEvent;
-
+    
     import spark.components.HGroup;
-
+    
+    import components.CollapsiblePanel;
+    
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IDiv;
-
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.FieldsetPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.FieldsetSkin;
+    import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.events.SurfaceComponentEvent;
 
     /**
@@ -30,7 +30,7 @@ package view.primeFaces.surfaceComponents.components
      */
     [Style(name="openIcon", type="Object")]
 
-    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv
+    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
         public static const ELEMENT_NAME:String = "Fieldset";
@@ -63,11 +63,46 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "toggleableChanged"
+                "toggleableChanged",
+				"titleChanged",
+				"durationChanged",
+				"openChanged"
             ];
 
             this.addEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
         }
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			if (!isAnimationPlaying) _isUpdating = value;
+		}
+		
+		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+		}
+		
+		override protected function updateIsUpdating(value:Boolean):void
+		{
+			isUpdating = value;
+		}
 
         [SkinPart(required="true")]
         public var titleGroup:HGroup;
@@ -86,11 +121,24 @@ package view.primeFaces.surfaceComponents.components
         {
             return _toggleable;
         }
+		
+		override public function set title(value:String):void
+		{
+			if (title != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
+				
+				super.title = value;
+				dispatchEvent(new Event("titleChanged"));
+			}
+		}
 
         public function set toggleable(value:Boolean):void
         {
             if (_toggleable != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "toggleable", _toggleable, value);
+				
                 this.isCollapsible = value;
                 _toggleable = value;
                 toggleableChanged = true;
@@ -235,11 +283,24 @@ package view.primeFaces.surfaceComponents.components
                 _div = new Div();
                 super.addElement(this.div);
                 dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [this.div]));
+				if (this.enabled) hookDivEventBypassing();
 
                 this.div.percentWidth = this.div.percentHeight = 100;
                 this.div.setStyle("borderVisible", false);
             }
         }
+		
+		private function hookDivEventBypassing():void
+		{
+			var propertiesChangedEventsCount:int = _div.propertiesChangedEvents.length;
+			for(var i:int = 0; i < propertiesChangedEventsCount; i++)
+			{
+				if ((_div.propertiesChangedEvents[i] as String).toLowerCase().indexOf("width") == -1 && (_div.propertiesChangedEvents[i] as String).toLowerCase().indexOf("height") == -1) 
+				{
+					_propertiesChangedEvents.push(_div.propertiesChangedEvents[i]);
+				}
+			}
+		}
 
         override public function addElement(element:IVisualElement):IVisualElement
         {

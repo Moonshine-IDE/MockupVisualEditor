@@ -15,7 +15,7 @@ package view.suportClasses
 			super(fieldClass, fieldName, fieldLastValue, fieldNewValue);
 		}
 		
-		override protected function changeItem(value:*, eventType:String):void
+		override protected function changeItem(value:*):void
 		{
 			var i:Object;
 			if (fieldName && (value is Array))
@@ -39,13 +39,13 @@ package view.suportClasses
 			{
 				for each (i in value)
 				{
-					fieldClass.restorePropertyOnChangeReference(i.field, i.value, eventType);
+					TabView(fieldClass).restorePropertyOnChangeReference(i.field, i.value);
 				}
 			}
 			else if (fieldName)
 			{
 				// assigning single field change
-				fieldClass.restorePropertyOnChangeReference(fieldName, value, eventType);
+				TabView(fieldClass).restorePropertyOnChangeReference(fieldName, value);
 			}
 		}
 	}

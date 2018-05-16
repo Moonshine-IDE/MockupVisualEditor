@@ -13,10 +13,12 @@ package view.primeFaces.surfaceComponents.components
     import utils.MoonshineBridgeUtils;
     import utils.XMLCodeUtils;
     
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.IncludePropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
 
-    public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent
+    public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "include";
         public static var ELEMENT_NAME:String = "Include";
@@ -48,6 +50,28 @@ package view.primeFaces.surfaceComponents.components
 			width = 110;
 			height = 100;
         }
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
 
         public function get propertyEditorClass():Class
         {
@@ -65,8 +89,12 @@ package view.primeFaces.surfaceComponents.components
 
         public function set title(value:String):void
         {
+			if (!value) return;
+			
             if (_title != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "title", _title, value);
+				
                 _title = value;
                 titleChanged = true;
 

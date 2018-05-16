@@ -26,7 +26,8 @@
 		
 		[Bindable] public var includeCollection:IList;
 		
-		private var _binding:ChangeWatcher;
+		private var _bindingCollection:ChangeWatcher;
+		private var _bindingSurfaceProperty:ChangeWatcher;
 		private var _labelField:String;
 		public function set labelField(value:String):void
 		{
@@ -121,16 +122,27 @@
 			_collectionHost ||= selectedItem;
 			if (!_collectionProperty || !(_collectionProperty in _collectionHost)) return;
 			
-			if (this._binding)
+			if (this._bindingCollection)
 			{
-				this._binding.unwatch();
-				this._binding = null;
+				this._bindingCollection.unwatch();
+				this._bindingSurfaceProperty.unwatch();
+				this._bindingCollection = null;
+				this._bindingSurfaceProperty = null;
 			}
 			if (this.selectedItem === null)
 			{
 				return;
 			}
-			this._binding = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
+			this._bindingCollection = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
+			this._bindingSurfaceProperty = BindingUtils.bindSetter(onPropertyUpdated, selectedItem, _textProperty, false, true);
+		}
+		
+		private function onPropertyUpdated(value:Object):void
+		{
+			if (ddlSelection.selectedItem != undefined) 
+			{
+				this.selectCurrentItem();
+			}
 		}
 		
 	]]></fx:Script>

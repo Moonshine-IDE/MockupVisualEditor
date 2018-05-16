@@ -11,13 +11,6 @@ package view.interfaces
 		function set propertyChangeFieldReference(value:PropertyChangeReference):void;
 		
 		/**
-		 * Restore value against a given field from history manager
-		 */
-		function restorePropertyOnChangeReference(nameField:String, value:*, eventType:String=null):void;
-		
-		/**
-		
-		/**
 		 * Handles by the history manager during a process
 		 */
 		function get isUpdating():Boolean;

@@ -129,11 +129,6 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isUpdating = value;
 		}
-		
-		public function restorePropertyOnChangeReference(nameField:String, value:*, eventType:String=null):void
-		{
-			this[nameField.toString()] = value;
-		}
 
         public function toXML():XML
         {

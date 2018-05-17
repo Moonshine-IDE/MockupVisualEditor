@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:view="view.*" xmlns:containers="spark.containers.*"
+		 xmlns:view="view.*" xmlns:collapsiblehdivider="components.collapsibleHDivider.*"
 		 creationComplete="onVisualEditorCreationComplete(event)">
 	<!--This style import is only for SWC ant compilation - remove it in case of app compilation -->
 	<fx:Style source="defaults.css"/>
@@ -13,28 +13,21 @@
 		<s:Button styleName="openButton" toolTip="Open Mockup" click="loadButton_clickHandler(event)"/>
 		<s:Button styleName="saveButton" toolTip="Save Mockup" click="saveButton_clickHandler(event)"/>
 	</s:BorderContainer>
-	<view:ComponentList id="componentList" minWidth="180" top="{toolbar.height}" bottom="0" left="0"
-						visualEditorType="{_visualEditorType}"/>
-
-	<containers:HDividerGroup left="{componentList.width}" right="0" bottom="0" top="{toolbar.height}"
-							  gap="0" minElementWidth="250">
-		<s:Scroller percentWidth="80" percentHeight="100">
+	<collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
+		<view:ComponentList id="componentList" percentWidth="20" percentHeight="100"
+							visualEditorType="{_visualEditorType}"/>
+		<s:Scroller percentWidth="70" percentHeight="100">
 			<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"/>
 		</s:Scroller>
 		<view:PropertyEditorContainer id="propertyEditor"
-									  percentHeight="100" percentWidth="20" minWidth="250"
+									  percentHeight="100" percentWidth="10" minWidth="250"
 									  selectedItem="{editingSurface.selectedItem}"/>
-	</containers:HDividerGroup>
+	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 	<fx:Script><![CDATA[
-		import mx.collections.ArrayCollection;
 		import mx.events.FlexEvent;
-		
 		import spark.components.Alert;
-		
 		import utils.MoonshineBridgeUtils;
-		
 		import view.interfaces.IVisualEditorLibraryBridge;
-
 		private var _file:FileReference;
 
 		[Bindable]
@@ -49,10 +42,10 @@
 		{
 			import flash.filesystem.File;
 			import flash.filesystem.FileStream;
-			
+
 			private var _fileMoonshine:File;
 			private var _fileStreamMoonshine:FileStream;
-			
+
 			public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
 			{
 				MoonshineBridgeUtils.moonshineBridge = value;

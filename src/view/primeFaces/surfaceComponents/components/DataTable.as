@@ -13,16 +13,20 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
     
     import view.interfaces.IDataProviderComponent;
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.PropertyChangeReferenceDataTable;
 
-    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent
+    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
         public static const ELEMENT_NAME:String = "DataTable";
 		public static const GRID_ITEM_EDIT:String = "gridItemEdit";
 		public static const GRID_ITEM_DELETE:String = "gridItemDelete";
 		public static const GRID_ITEM_ADD:String = "gridItemAdd";
+		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
         private static const NO_RECORDS_FOUND:String = "No records found.";
 
@@ -45,11 +49,38 @@ package view.primeFaces.surfaceComponents.components
                 "resizableColumnsChanged",
                 "paginatorChanged",
                 "emptyMessageChanged",
-				"change"
+				"tableVarChanged",
+				"tableValueChanged",
+				"tableColumnDescriptorChanged",
+				"itemRemoved",
+				"itemAdded",
+				"itemUpdated",
             ];
 
             fillDataTable();
         }
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
 
         private function fillDataTable():void
         {
@@ -61,6 +92,49 @@ package view.primeFaces.surfaceComponents.components
 			
 			generateColumns(true);
         }
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			switch(nameField)
+			{
+				case "removeItemAt":
+					try
+					{
+						_tableColumnDescriptor.removeItemAt(value.index);
+						generateColumns(false, DataTable.GRID_ITEM_DELETE, value.index - 1);
+					} 
+					catch(e:Error)
+					{
+						_tableColumnDescriptor.addItemAt(value.object, value.index);
+						generateColumns(true);
+					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+					break;
+				case "addItemAt":
+					try
+					{
+						var deleteIndex:int = _tableColumnDescriptor.getItemIndex(value);
+						_tableColumnDescriptor.removeItemAt(deleteIndex);
+						generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex - 1);
+					} 
+					catch(e:Error)
+					{
+						_tableColumnDescriptor.addItem(value);
+						generateColumns(true);
+					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+					break;
+				case "updateItemAt":
+					_tableColumnDescriptor[value.index] = value.object;
+					generateColumns(false, DataTable.GRID_ITEM_EDIT, value.index);
+					break;
+				default:
+					this[nameField.toString()] = value;
+					break;
+			}
+		}
 		
 		public function generateColumns(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
 		{
@@ -84,10 +158,13 @@ package view.primeFaces.surfaceComponents.components
 				{
 					case GRID_ITEM_ADD:
 					{
+						_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "addItemAt", _tableColumnDescriptor[_tableColumnDescriptor.length - 1], _tableColumnDescriptor[_tableColumnDescriptor.length - 1]);
+						
 						// item always added to last
 						tmpColumn = new GridColumn();
 						tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[_tableColumnDescriptor.length - 1].label;
 						columns.addItem(tmpColumn);
+						dispatchEvent(new Event("itemAdded"));
 						break;
 					}
 					case GRID_ITEM_EDIT:
@@ -96,6 +173,14 @@ package view.primeFaces.surfaceComponents.components
 						{
 							tmpColumn = columns.getItemAt(itemIndex) as GridColumn;
 							tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[itemIndex].label;
+							
+							// dispatch only if there are changes and user not just edit ended without makeing any change
+							if (_propertyChangeFieldReference.fieldLastValue.object.label != _tableColumnDescriptor[itemIndex].label || 
+								_propertyChangeFieldReference.fieldLastValue.object.value != _tableColumnDescriptor[itemIndex].value)
+							{
+								_propertyChangeFieldReference.fieldNewValue = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
+								dispatchEvent(new Event("itemUpdated"));
+							}
 						}
 						break;
 					}
@@ -103,7 +188,11 @@ package view.primeFaces.surfaceComponents.components
 					{
 						if (itemIndex != -1)
 						{
+							var historyObject:Object = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
+							_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "removeItemAt", historyObject, historyObject);
+							
 							columns.removeItemAt(itemIndex);
+							dispatchEvent(new Event("itemRemoved"));
 						}
 						break;
 					}
@@ -112,7 +201,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _tableVar:String = "";
-		[Bindable("change")]
+		[Bindable("tableVarChanged")]
 		public function get tableVar():String
 		{
 			return _tableVar;
@@ -120,33 +209,41 @@ package view.primeFaces.surfaceComponents.components
 		public function set tableVar(value:String):void
 		{
 			if (_tableVar == value) return;
+			_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "tableVar", _tableVar, value);
 			
 			_tableVar = value;
-			dispatchEvent(new Event(Event.CHANGE));
+			dispatchEvent(new Event("tableVarChanged"));
 		}
 		
 		private var _tableValue:String = "";
-		[Bindable("change")]
+		[Bindable("tableValueChanged")]
 		public function get tableValue():String
 		{
 			return _tableValue;
 		}
 		public function set tableValue(value:String):void
 		{
+			if (_tableValue == value) return;
+			_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "tableValue", _tableValue, value);
+			
 			_tableValue = value;
-			dispatchEvent(new Event(Event.CHANGE));
+			dispatchEvent(new Event("tableValueChanged"));
 		}
 		
 		private var _tableColumnDescriptor:ArrayCollection;
-		[Bindable("change")]
+		[Bindable("tableColumnDescriptorChanged")]
 		public function get tableColumnDescriptor():ArrayCollection
 		{
 			return _tableColumnDescriptor;
 		}
 		public function set tableColumnDescriptor(value:ArrayCollection):void
 		{
+			if (_tableColumnDescriptor === value) return;
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "tableColumnDescriptor", _tableColumnDescriptor, value);
+			
 			_tableColumnDescriptor = value;
-			dispatchEvent(new Event(Event.CHANGE));
+			dispatchEvent(new Event("tableColumnDescriptorChanged"));
 		}
 
         private var _emptyMessage:String = NO_RECORDS_FOUND;
@@ -161,6 +258,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_emptyMessage != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "emptyMessage", _emptyMessage, value);
+				
                 _emptyMessage = value;
                 dispatchEvent(new Event("emptyMessageChanged"));
             }
@@ -178,10 +277,24 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_paginator != value)
             {
+				_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "paginator", _paginator, value);
+				
                 _paginator = value;
                 dispatchEvent(new Event("paginatorChanged"));
             }
         }
+		
+		[Bindable(event="resizableColumnsChanged")]
+		override public function set resizableColumns(value:Boolean):void
+		{
+			if (super.resizableColumns != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "resizableColumns", super.resizableColumns, value);
+				
+				super.resizableColumns = value;
+				dispatchEvent(new Event("resizableColumnsChanged"));
+			}
+		}
 
         public function get propertyEditorClass():Class
         {

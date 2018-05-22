@@ -7,20 +7,26 @@
         creationComplete="onTabFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
+			import flash.net.registerClassAlias;
+			
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.DragEvent;
 			import mx.events.FlexEvent;
+			import mx.utils.ObjectUtil;
 			
 			import spark.events.GridItemEditorEvent;
 			
 			import data.DataProviderListItem;
 			
+			import view.interfaces.IHistorySurfaceComponent;
+			import view.interfaces.ISurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.DataTable;
+			import view.suportClasses.PropertyChangeReferenceDataTable;
 			
 			[Bindable] public var tableVar:String;
 			
-			private var _binding:ChangeWatcher;
+			private var _bindingTableVar:ChangeWatcher;
 			private var _label:String = "Columns";
 			
 			[Bindable("labelChange")]
@@ -41,15 +47,24 @@
 			
 			private function editSelectedItem():void
 			{
+				updatePropertyEditorPriorToEdit();
+				
 				dgColumns.ensureCellIsVisible(dgColumns.selectedIndex);
 				dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
+			}
+			
+			private function updatePropertyEditorPriorToEdit():void
+			{
+				registerClassAlias("DataProviderListItem", DataProviderListItem);
+				var historyObject:Object = {object:ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]), index:dgColumns.selectedIndex};
+				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceDataTable(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
 			}
 			
 			private function addItemButton_clickHandler(event:MouseEvent):void
 			{
 				var listItem:DataProviderListItem = new DataProviderListItem("Title");
 				dgColumns.dataProvider.addItem(listItem);
-
+				
 				updateToOwner(false, DataTable.GRID_ITEM_ADD);
 				
 				dgColumns.validateNow();
@@ -80,6 +95,11 @@
 				dgColumns.dataProvider = grid.tableColumnDescriptor;
 			}
 			
+			private function onTableUpdated(event:Event):void
+			{
+				updateColumnList();
+			}
+			
 			private function updateToOwner(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
 			{
 				var grid:DataTable = (selectedItem as DataTable);
@@ -88,16 +108,16 @@
 			
 			private function updateBinding():void
 			{
-				if (this._binding)
+				if (this._bindingTableVar)
 				{
-					this._binding.unwatch();
-					this._binding = null;
+					this._bindingTableVar.unwatch();
+					this._bindingTableVar = null;
 				}
 				if (this.selectedItem === null)
 				{
 					return;
 				}
-				this._binding = BindingUtils.bindSetter(onTableVarUpdated, selectedItem, "tableVar", false, true);
+				this._bindingTableVar = BindingUtils.bindSetter(onTableVarUpdated, selectedItem, "tableVar", false, true);
 			}
 			
 			private function onTableVarUpdated(value:Object):void
@@ -126,6 +146,17 @@
 				return (item.value ? "#{"+ tableVar +"."+ item.value +"}" : "#{"+ tableVar +".}");
 			}
 			
+			override public function set selectedItem(value:ISurfaceComponent):void
+			{
+				super.selectedItem = value;
+				selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
+			}
+			
+			protected function onRowEditStarts(event:GridItemEditorEvent):void
+			{
+				updatePropertyEditorPriorToEdit();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -139,7 +170,7 @@
 					editable="true" sortableColumns="false" draggableColumns="false"
 					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
 					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"
-					gridItemEditorSessionSave="onRowEditEnd(event)">
+					gridItemEditorSessionSave="onRowEditEnd(event)" gridItemEditorSessionStart="onRowEditStarts(event)">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="label" headerText="Title"/>

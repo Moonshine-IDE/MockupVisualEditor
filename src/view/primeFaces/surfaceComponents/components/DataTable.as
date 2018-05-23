@@ -1,9 +1,11 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
+    import flash.net.registerClassAlias;
     
     import mx.collections.ArrayCollection;
     import mx.collections.ArrayList;
+    import mx.utils.ObjectUtil;
     
     import spark.components.DataGrid;
     import spark.components.gridClasses.GridColumn;
@@ -95,13 +97,15 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
+			var deleteIndex:int;
 			switch(nameField)
 			{
 				case "removeItemAt":
 					try
 					{
-						_tableColumnDescriptor.removeItemAt(value.index);
-						generateColumns(false, DataTable.GRID_ITEM_DELETE, value.index - 1);
+						deleteIndex = _tableColumnDescriptor.getItemIndex(value.object);
+						_tableColumnDescriptor.removeItemAt(deleteIndex);
+						generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
 					} 
 					catch(e:Error)
 					{
@@ -114,9 +118,9 @@ package view.primeFaces.surfaceComponents.components
 				case "addItemAt":
 					try
 					{
-						var deleteIndex:int = _tableColumnDescriptor.getItemIndex(value);
+						deleteIndex = _tableColumnDescriptor.getItemIndex(value);
 						_tableColumnDescriptor.removeItemAt(deleteIndex);
-						generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex - 1);
+						generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
 					} 
 					catch(e:Error)
 					{
@@ -127,7 +131,7 @@ package view.primeFaces.surfaceComponents.components
 					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
 					break;
 				case "updateItemAt":
-					_tableColumnDescriptor[value.index] = value.object;
+					DataProviderListItem(_tableColumnDescriptor[value.index]).updateItemWith(value.object);
 					generateColumns(false, DataTable.GRID_ITEM_EDIT, value.index);
 					break;
 				default:
@@ -175,10 +179,11 @@ package view.primeFaces.surfaceComponents.components
 							tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[itemIndex].label;
 							
 							// dispatch only if there are changes and user not just edit ended without makeing any change
-							if (_propertyChangeFieldReference.fieldLastValue.object.label != _tableColumnDescriptor[itemIndex].label || 
-								_propertyChangeFieldReference.fieldLastValue.object.value != _tableColumnDescriptor[itemIndex].value)
+							if (!isUpdating && (_propertyChangeFieldReference.fieldLastValue.object.label != _tableColumnDescriptor[itemIndex].label || 
+								_propertyChangeFieldReference.fieldLastValue.object.value != _tableColumnDescriptor[itemIndex].value))
 							{
-								_propertyChangeFieldReference.fieldNewValue = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
+								registerClassAlias("DataProviderListItem", DataProviderListItem);
+								_propertyChangeFieldReference.fieldNewValue = {object:ObjectUtil.copy(_tableColumnDescriptor[itemIndex]), index:itemIndex};
 								dispatchEvent(new Event("itemUpdated"));
 							}
 						}
@@ -188,8 +193,11 @@ package view.primeFaces.surfaceComponents.components
 					{
 						if (itemIndex != -1)
 						{
-							var historyObject:Object = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
-							_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "removeItemAt", historyObject, historyObject);
+							if (!isUpdating)
+							{
+								var historyObject:Object = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
+								_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "removeItemAt", historyObject, historyObject);
+							}
 							
 							columns.removeItemAt(itemIndex);
 							dispatchEvent(new Event("itemRemoved"));

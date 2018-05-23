@@ -10,5 +10,11 @@ package data
 
 		public var label:String;
 		public var value:String;
+		
+		public function updateItemWith(value:DataProviderListItem):void
+		{
+			this.label = value.label;
+			this.value = value.value;
+		}
 	}
 }

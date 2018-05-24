@@ -15,13 +15,13 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
     
     import view.interfaces.IDataProviderComponent;
-    import view.interfaces.IHistorySurfaceComponent;
+    import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import view.suportClasses.PropertyChangeReferenceDataTable;
+    import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
-    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent, IHistorySurfaceComponent
+    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
         public static const ELEMENT_NAME:String = "DataTable";
@@ -162,7 +162,7 @@ package view.primeFaces.surfaceComponents.components
 				{
 					case GRID_ITEM_ADD:
 					{
-						_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "addItemAt", _tableColumnDescriptor[_tableColumnDescriptor.length - 1], _tableColumnDescriptor[_tableColumnDescriptor.length - 1]);
+						_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", _tableColumnDescriptor[_tableColumnDescriptor.length - 1], _tableColumnDescriptor[_tableColumnDescriptor.length - 1]);
 						
 						// item always added to last
 						tmpColumn = new GridColumn();
@@ -196,7 +196,7 @@ package view.primeFaces.surfaceComponents.components
 							if (!isUpdating)
 							{
 								var historyObject:Object = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
-								_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "removeItemAt", historyObject, historyObject);
+								_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
 							}
 							
 							columns.removeItemAt(itemIndex);
@@ -217,7 +217,7 @@ package view.primeFaces.surfaceComponents.components
 		public function set tableVar(value:String):void
 		{
 			if (_tableVar == value) return;
-			_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "tableVar", _tableVar, value);
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "tableVar", _tableVar, value);
 			
 			_tableVar = value;
 			dispatchEvent(new Event("tableVarChanged"));
@@ -232,7 +232,7 @@ package view.primeFaces.surfaceComponents.components
 		public function set tableValue(value:String):void
 		{
 			if (_tableValue == value) return;
-			_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "tableValue", _tableValue, value);
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "tableValue", _tableValue, value);
 			
 			_tableValue = value;
 			dispatchEvent(new Event("tableValueChanged"));
@@ -248,7 +248,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (_tableColumnDescriptor === value) return;
 			
-			_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "tableColumnDescriptor", _tableColumnDescriptor, value);
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "tableColumnDescriptor", _tableColumnDescriptor, value);
 			
 			_tableColumnDescriptor = value;
 			dispatchEvent(new Event("tableColumnDescriptorChanged"));
@@ -266,7 +266,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_emptyMessage != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "emptyMessage", _emptyMessage, value);
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "emptyMessage", _emptyMessage, value);
 				
                 _emptyMessage = value;
                 dispatchEvent(new Event("emptyMessageChanged"));
@@ -285,7 +285,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_paginator != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "paginator", _paginator, value);
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "paginator", _paginator, value);
 				
                 _paginator = value;
                 dispatchEvent(new Event("paginatorChanged"));
@@ -297,7 +297,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (super.resizableColumns != value)
 			{
-				_propertyChangeFieldReference = new PropertyChangeReferenceDataTable(this, "resizableColumns", super.resizableColumns, value);
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "resizableColumns", super.resizableColumns, value);
 				
 				super.resizableColumns = value;
 				dispatchEvent(new Event("resizableColumnsChanged"));

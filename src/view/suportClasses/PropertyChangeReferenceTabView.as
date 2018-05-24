@@ -5,6 +5,7 @@ package view.suportClasses
 	import spark.components.ButtonBarButton;
 	import spark.components.NavigatorContent;
 	
+	import view.interfaces.IHistorySurfaceCustomHandlerComponent;
 	import view.interfaces.IHistorySurfaceComponent;
 	import view.primeFaces.surfaceComponents.components.TabView;
 
@@ -39,13 +40,13 @@ package view.suportClasses
 			{
 				for each (i in value)
 				{
-					TabView(fieldClass).restorePropertyOnChangeReference(i.field, i.value);
+					IHistorySurfaceCustomHandlerComponent(fieldClass).restorePropertyOnChangeReference(i.field, i.value);
 				}
 			}
 			else if (fieldName)
 			{
 				// assigning single field change
-				TabView(fieldClass).restorePropertyOnChangeReference(fieldName, value);
+				IHistorySurfaceCustomHandlerComponent(fieldClass).restorePropertyOnChangeReference(fieldName, value);
 			}
 		}
 	}

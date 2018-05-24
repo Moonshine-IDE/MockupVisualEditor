@@ -1,21 +1,27 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import flash.events.Event;
+    
     import mx.containers.Grid;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
-
+    
     import utils.XMLCodeUtils;
-
+    
+    import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
+    import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
     import view.suportClasses.events.SurfaceComponentEvent;
 
-    public class Grid extends mx.containers.Grid implements IPrimeFacesSurfaceComponent
+    public class Grid extends mx.containers.Grid implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static const ELEMENT_NAME:String = "Grid";
+		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
         private static const MAX_COLUMN_COUNT:int = 12;
         private static const MIN_COLUMN_COUNT:int = 1;
@@ -43,11 +49,36 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "requestedColumnCountChanged",
-                "requestedRowCountChanged"
+                "requestedRowCountChanged",
+				"itemRemoved",
+				"itemAdded",
             ];
 
             this.ensureCreateInitialColumn();
+			this.hookDivEventBypassing();
         }
+		
+		private var _propertyChangeFieldReference:PropertyChangeReference;
+		public function get propertyChangeFieldReference():PropertyChangeReference
+		{
+			return _propertyChangeFieldReference;
+		}
+		
+		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+		{
+			_propertyChangeFieldReference = value;
+		}
+		
+		private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			_isUpdating = value;
+		}
 
         private var _selectedRow:int;
 
@@ -91,6 +122,69 @@ package view.primeFaces.surfaceComponents.components
         {
             return _propertiesChangedEvents;
         }
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			var deleteIndex:int;
+			switch(nameField)
+			{
+				case "removeItemAt":
+					try
+					{
+						deleteIndex = this.getElementIndex(value.object);
+						this.removeElementAt(deleteIndex);
+					} 
+					catch(e:Error)
+					{
+						this.addElementAt(value.object, value.index);
+					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+					break;
+				case "addItemAt":
+					try
+					{
+						deleteIndex = this.getElementIndex(value);
+						this.removeElementAt(deleteIndex);
+					} 
+					catch(e:Error)
+					{
+						this.addElement(value);
+					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+					break;
+				case "removeColumnAt":
+					try
+					{
+						deleteIndex = value.parent.getElementIndex(value.object);
+						value.parent.removeElementAt(deleteIndex);
+					} 
+					catch(e:Error)
+					{
+						value.parent.addElementAt(value.object, value.index);
+					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+					break;
+				case "addColumnAt":
+					try
+					{
+						deleteIndex = value.parent.getElementIndex(value.object);
+						value.parent.removeElementAt(deleteIndex);
+					} 
+					catch(e:Error)
+					{
+						value.parent.addElement(value.object);
+					}
+					
+					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+					break;
+				default:
+					this[nameField.toString()] = value;
+					break;
+			}
+		}
 
         public function toXML():XML
         {
@@ -215,11 +309,14 @@ package view.primeFaces.surfaceComponents.components
         {
             var gridItem:GridItem = this.ensureCreateInitialColumn();
             var addedElements:Array = [gridItem.getElementAt(0)];
-
+			
             dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, addedElements));
 
             this.selectedRow += 1;
             this.selectedColumn = 0;
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
+			dispatchEvent(new Event("itemAdded"));
         }
 
         public function removeRow(index:int):IVisualElement
@@ -237,13 +334,18 @@ package view.primeFaces.surfaceComponents.components
                 }
 
                 removedElement = this.removeElement(removedElement) as GridRow;
-                if (removedElement)
+				
+				var historyObject:Object = {object:removedElement, index:index};
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
+                
+				if (removedElement)
                 {
                     dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentRemoved, removedItems));
                 }
 
                 var selRow:int = this.selectedRow - 1;
                 this.selectedRow = selRow == -1 ? 0 : selRow;
+				dispatchEvent(new Event("itemRemoved"));
 
                 return removedElement;
             }
@@ -272,6 +374,10 @@ package view.primeFaces.surfaceComponents.components
                 this.selectedColumn += 1;
 
                 dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
+				
+				var historyObject:Object = {object:gridItem, parent:gridRow};
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addColumnAt", historyObject, historyObject);
+				dispatchEvent(new Event("itemAdded"));
             }
         }
 
@@ -284,6 +390,10 @@ package view.primeFaces.surfaceComponents.components
 
                 var selColumn:int = this.selectedColumn - 1;
                 this.selectedColumn = selColumn == -1 ? 0 : selColumn;
+				
+				var historyObject:Object = {object:removedColumn, parent:gridRow, index:columnIndex};
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeColumnAt", historyObject, historyObject);
+				dispatchEvent(new Event("itemRemoved"));
 
                 return removedColumn;
             }
@@ -310,6 +420,20 @@ package view.primeFaces.surfaceComponents.components
 
             return gridItem;
         }
+		
+		private function hookDivEventBypassing():void
+		{
+			var gridRow:GridRow = this.getElementAt(0) as GridRow;
+			var div:Div = (gridRow.getElementAt(0) as GridItem).getElementAt(0) as Div;
+			var propertiesChangedEventsCount:int = div.propertiesChangedEvents.length;
+			for(var i:int = 0; i < propertiesChangedEventsCount; i++)
+			{
+				if ((div.propertiesChangedEvents[i] as String).toLowerCase().indexOf("width") == -1 && (div.propertiesChangedEvents[i] as String).toLowerCase().indexOf("height") == -1) 
+				{
+					_propertiesChangedEvents.push(div.propertiesChangedEvents[i]);
+				}
+			}
+		}
 
         private function getClassNameBasedOnColumns(gridRow:GridRow):String
         {

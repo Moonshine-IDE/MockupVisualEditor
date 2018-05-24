@@ -7,7 +7,10 @@ package view.suportClasses
 	
 	import spark.components.Group;
 	
+	import utils.MoonshineBridgeUtils;
+	
 	import view.EditingSurface;
+	import view.VisualEditor;
 	import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
@@ -97,8 +100,19 @@ package view.suportClasses
         {
 			if ((event.target is IHistorySurfaceComponent) && event.target.propertyChangeFieldReference && !event.target.isUpdating)
 			{
-				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+				// if a pending event, pass after the property editor being removed
+				// from the editor panel - at this stage the parent is null and we
+				// have no way to dispatch the event through its expected parent to
+				// the history manager (#279)
+				// in that case call the expected parent reference from the Moonshine
+				if (this.parent) dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+				else 
+				{
+					var editor:VisualEditor = MoonshineBridgeUtils.getVisualEditorComponent();
+					if (editor) editor.propertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+				}
 			}
+			
 		    //dispatchEvent(new Event("propertyEditorChanged", true));
         }
 
@@ -167,12 +181,17 @@ package view.suportClasses
             if (!surfaceComponent.propertiesChangedEvents) return;
 			
 			surfaceComponent.removeEventListener(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, beforeSelectedItemDeletes);
-
-            var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
-            for(var i:int = 0; i < propertiesChangedEventsCount; i++)
-            {
-                surfaceComponent.removeEventListener(surfaceComponent.propertiesChangedEvents[i], onSelectedItemPropertyChanged);
-            }
+			
+			// call this later after bypassing any pending
+			// event from the component
+			surfaceComponent["callLater"](function():void
+			{
+				var propertiesChangedEventsCount:int = surfaceComponent.propertiesChangedEvents.length;
+	            for(var i:int = 0; i < propertiesChangedEventsCount; i++)
+	            {
+	                surfaceComponent.removeEventListener(surfaceComponent.propertiesChangedEvents[i], onSelectedItemPropertyChanged);
+	            }
+			});
         }
 
         private function propertyEditor_addedHandler(event:Event):void

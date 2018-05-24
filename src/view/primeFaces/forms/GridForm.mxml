@@ -7,174 +7,186 @@
         creationComplete="onGridFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
-		import data.GridListItem;
-
-		import mx.collections.ArrayList;
-		import mx.containers.GridItem;
-		import mx.containers.GridRow;
-		import mx.events.FlexEvent;
-
-		import spark.events.GridSelectionEvent;
-		import spark.events.IndexChangeEvent;
-
-		import view.primeFaces.surfaceComponents.components.Div;
-
-		import view.primeFaces.surfaceComponents.components.Grid;
-
-		[Bindable]
-		private var rowsDataProvider:ArrayList = new ArrayList();
-		[Bindable]
-		private var columnsDataProvider:ArrayList;
-
-		private var selectedCellDirty:Boolean;
-
-		private var _selectedCell:Div;
-
-		[Bindable]
-		public function get selectedCell():Div
-		{
-			return _selectedCell;
-		}
-
-		public function set selectedCell(value:Div):void
-		{
-			if (_selectedCell != value)
+			import mx.collections.ArrayList;
+			import mx.containers.GridItem;
+			import mx.containers.GridRow;
+			import mx.events.FlexEvent;
+			
+			import spark.events.GridSelectionEvent;
+			import spark.events.IndexChangeEvent;
+			
+			import data.GridListItem;
+			
+			import view.interfaces.ISurfaceComponent;
+			import view.primeFaces.surfaceComponents.components.Div;
+			import view.primeFaces.surfaceComponents.components.Grid;
+	
+			[Bindable]
+			private var rowsDataProvider:ArrayList = new ArrayList();
+			[Bindable]
+			private var columnsDataProvider:ArrayList;
+	
+			private var selectedCellDirty:Boolean;
+	
+			private var _selectedCell:Div;
+	
+			[Bindable]
+			public function get selectedCell():Div
 			{
-				_selectedCell = value;
+				return _selectedCell;
 			}
-		}
-
-		[Bindable("change")]
-		private function get selectedGrid():Grid
-		{
-			return selectedItem as Grid;
-		}
-
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
-
-			if (this.selectedCellDirty)
+	
+			public function set selectedCell(value:Div):void
 			{
-				this.selectedCell = this.getSelectedCell();
-				this.selectedCellDirty = false;
+				if (_selectedCell != value)
+				{
+					_selectedCell = value;
+				}
 			}
-		}
-
-		private function addRowButton_clickHandler(event:MouseEvent):void
-		{
-			var itemValue:int = this.rowsDataProvider.length + 1;
-			var rowItem:GridListItem = new GridListItem("R" + String(itemValue), itemValue);
-			var columnItem:GridListItem = new GridListItem("C1", 1);
-
-			rowItem.columns.addItem(columnItem);
-			this.columnsDataProvider = rowItem.columns;
-			this.rowsDataProvider.addItem(rowItem);
-
-			var grid:Grid = (selectedItem as Grid);
-			grid.addRow();
-
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
-		}
-
-		private function addColumnButton_clickHandler(event:MouseEvent):void
-		{
-			var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-			var colItemValue:int = rowItem.columns.length + 1;
-			var colItem:GridListItem = new GridListItem("C" + colItemValue, colItemValue);
-
-			rowItem.columns.addItem(colItem);
-			this.columnsDataProvider = rowItem.columns;
-
-			selectedGrid.addColumn(dgRows.selectedIndex);
-
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
-		}
-
-		private function deleteItemButton_clickHandler(event:MouseEvent):void
-		{
-			if (this.rowsDataProvider.length > 1)
+	
+			[Bindable("change")]
+			private function get selectedGrid():Grid
 			{
-				this.rowsDataProvider.removeItemAt(selectedGrid.selectedRow);
+				return selectedItem as Grid;
+			}
+			
+			override public function set selectedItem(value:ISurfaceComponent):void
+			{
+				super.selectedItem = value;
+				selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
+			}
+
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+	
+				if (this.selectedCellDirty)
+				{
+					this.selectedCell = this.getSelectedCell();
+					this.selectedCellDirty = false;
+				}
+			}
+			
+			private function onGridUpdated(event:Event):void
+			{
+				onGridFormCreationComplete(null);
+			}
+	
+			private function addRowButton_clickHandler(event:MouseEvent):void
+			{
+				var itemValue:int = this.rowsDataProvider.length + 1;
+				var rowItem:GridListItem = new GridListItem("R" + String(itemValue), itemValue);
+				var columnItem:GridListItem = new GridListItem("C1", 1);
+	
+				rowItem.columns.addItem(columnItem);
+				this.columnsDataProvider = rowItem.columns;
+				this.rowsDataProvider.addItem(rowItem);
+	
 				var grid:Grid = (selectedItem as Grid);
-				grid.removeRow(selectedGrid.selectedRow);
-
-				this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
-
+				grid.addRow();
+	
 				this.selectedCellDirty = true;
 				this.invalidateDisplayList();
 			}
-		}
-
-		private function deleteColumnButton_clickHandler(event:MouseEvent):void
-		{
-			var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-			rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
-			
-			var grid:Grid = (selectedItem as Grid);
-			grid.removeColumn(selectedGrid.selectedRow, selectedGrid.selectedColumn);
-
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
-		}
-
-		private function onGridFormCreationComplete(event:FlexEvent):void
-		{
-			dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
-
-			var grid:Grid = (selectedItem as Grid);
-			var gridNumElements:int = grid.numElements;
-
-			for (var row:int = 0; row < gridNumElements; row++)
+	
+			private function addColumnButton_clickHandler(event:MouseEvent):void
 			{
-				var itemValue:int = row + 1;
-				var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
-				var gridItem:GridRow = grid.getElementAt(row) as GridRow;
-				for (var col:int = 0; col < gridItem.numElements; col++)
-				{
-					itemValue = col + 1;
-					rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
-				}
-				this.rowsDataProvider.addItem(rowItem);
+				var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
+				var colItemValue:int = rowItem.columns.length + 1;
+				var colItem:GridListItem = new GridListItem("C" + colItemValue, colItemValue);
+	
+				rowItem.columns.addItem(colItem);
+				this.columnsDataProvider = rowItem.columns;
+	
+				selectedGrid.addColumn(dgRows.selectedIndex);
+	
+				this.selectedCellDirty = true;
+				this.invalidateDisplayList();
 			}
-
-			this.columnsDataProvider = this.rowsDataProvider.getItemAt(this.selectedGrid.selectedRow).columns;
-
-			this.selectedCell = this.getSelectedCell();
-			dispatchEvent(new Event(Event.CHANGE));
-		}
-
-		protected function onGridSelectionChanged(event:GridSelectionEvent):void
-		{
-			var gridListItem:GridListItem = dgRows.selectedItem as GridListItem;
-			this.columnsDataProvider = gridListItem.columns;
-
-			this.selectedGrid.selectedRow = dgRows.selectedIndex;
-			this.selectedGrid.selectedColumn = 0;
-
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
-		}
-
-		private function onColumnListChange(event:IndexChangeEvent):void
-		{
-			this.selectedGrid.selectedRow = dgRows.selectedIndex;
-			this.selectedGrid.selectedColumn = columnList.selectedIndex;
-
-			this.selectedCell = this.getSelectedCell();
-		}
-
-		private function getSelectedCell():Div
-		{
-			if (this.selectedGrid.selectedRow == -1 || this.selectedGrid.selectedColumn == -1) return null;
-			var gridRow:GridRow = selectedGrid.getElementAt(this.selectedGrid.selectedRow) as GridRow;
-
-			var gridItem:GridItem = gridRow.getElementAt(this.selectedGrid.selectedColumn) as GridItem;
-
-			return gridItem.getElementAt(0) as Div;
-		}
+	
+			private function deleteItemButton_clickHandler(event:MouseEvent):void
+			{
+				if (this.rowsDataProvider.length > 1)
+				{
+					this.rowsDataProvider.removeItemAt(selectedGrid.selectedRow);
+					var grid:Grid = (selectedItem as Grid);
+					grid.removeRow(selectedGrid.selectedRow);
+	
+					this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
+	
+					this.selectedCellDirty = true;
+					this.invalidateDisplayList();
+				}
+			}
+	
+			private function deleteColumnButton_clickHandler(event:MouseEvent):void
+			{
+				var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
+				rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
+				
+				var grid:Grid = (selectedItem as Grid);
+				grid.removeColumn(selectedGrid.selectedRow, selectedGrid.selectedColumn);
+	
+				this.selectedCellDirty = true;
+				this.invalidateDisplayList();
+			}
+	
+			private function onGridFormCreationComplete(event:FlexEvent):void
+			{
+				rowsDataProvider.removeAll();
+				dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
+	
+				var grid:Grid = (selectedItem as Grid);
+				var gridNumElements:int = grid.numElements;
+	
+				for (var row:int = 0; row < gridNumElements; row++)
+				{
+					var itemValue:int = row + 1;
+					var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
+					var gridItem:GridRow = grid.getElementAt(row) as GridRow;
+					for (var col:int = 0; col < gridItem.numElements; col++)
+					{
+						itemValue = col + 1;
+						rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
+					}
+					this.rowsDataProvider.addItem(rowItem);
+				}
+				
+				this.columnsDataProvider = this.rowsDataProvider.getItemAt(this.selectedGrid.selectedRow).columns;
+	
+				this.selectedCell = this.getSelectedCell();
+				dispatchEvent(new Event(Event.CHANGE));
+			}
+	
+			protected function onGridSelectionChanged(event:GridSelectionEvent):void
+			{
+				var gridListItem:GridListItem = dgRows.selectedItem as GridListItem;
+				this.columnsDataProvider = gridListItem.columns;
+	
+				this.selectedGrid.selectedRow = dgRows.selectedIndex;
+				this.selectedGrid.selectedColumn = 0;
+	
+				this.selectedCellDirty = true;
+				this.invalidateDisplayList();
+			}
+	
+			private function onColumnListChange(event:IndexChangeEvent):void
+			{
+				this.selectedGrid.selectedRow = dgRows.selectedIndex;
+				this.selectedGrid.selectedColumn = columnList.selectedIndex;
+	
+				this.selectedCell = this.getSelectedCell();
+			}
+	
+			private function getSelectedCell():Div
+			{
+				if (this.selectedGrid.selectedRow == -1 || this.selectedGrid.selectedColumn == -1) return null;
+				var gridRow:GridRow = selectedGrid.getElementAt(this.selectedGrid.selectedRow) as GridRow;
+	
+				var gridItem:GridItem = gridRow.getElementAt(this.selectedGrid.selectedColumn) as GridItem;
+	
+				return gridItem.getElementAt(0) as Div;
+			}
 		]]>
 	</fx:Script>
     <suportclasses:layout>

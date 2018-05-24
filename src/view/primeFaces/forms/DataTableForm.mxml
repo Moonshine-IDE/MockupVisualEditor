@@ -22,7 +22,7 @@
 			import view.interfaces.IHistorySurfaceComponent;
 			import view.interfaces.ISurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.DataTable;
-			import view.suportClasses.PropertyChangeReferenceDataTable;
+			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 			
 			[Bindable] public var tableVar:String;
 			
@@ -57,7 +57,7 @@
 			{
 				registerClassAlias("DataProviderListItem", DataProviderListItem);
 				var historyObject:Object = {object:ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]), index:dgColumns.selectedIndex};
-				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceDataTable(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
+				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
 			}
 			
 			private function addItemButton_clickHandler(event:MouseEvent):void

@@ -2,6 +2,7 @@ package utils
 {
 	import mx.collections.IList;
 	
+	import view.VisualEditor;
 	import view.interfaces.IVisualEditorLibraryBridge;
 
 	public class MoonshineBridgeUtils
@@ -12,6 +13,11 @@ package utils
 		public static function onXHtmlFilesUpdated(value:IList):void
 		{
 			filesList = value;
+		}
+		
+		public static function getVisualEditorComponent():VisualEditor
+		{
+			return moonshineBridge.getVisualEditorComponent();
 		}
 	}
 }

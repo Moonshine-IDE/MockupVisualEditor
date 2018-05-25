@@ -114,9 +114,8 @@
 	
 					this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
 					
-					// when a row deletes both the following values are suppose to be
-					// decreamented
-					this.selectedGrid.selectedRow --;
+					// when a row deletes selectedCell suppose to be
+					// return to previous cell's 0th index
 					this.selectedGrid.selectedColumn = 0;
 	
 					this.selectedCellDirty = true;

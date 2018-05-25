@@ -15,6 +15,7 @@ package view.primeFaces.surfaceComponents.components
     public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
+		public static const PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON:String = "commandButton";
 		public static const ELEMENT_NAME:String = "Button";
 		
 		public function Button()
@@ -37,7 +38,9 @@ package view.primeFaces.surfaceComponents.components
 					"explicitMinHeightChanged",
 					"enabledChanged",
 					"labelChanged",
-					"toolTipChanged"
+					"toolTipChanged",
+					"isCommandButtonChanged",
+					"actionListenerChanged"
 			];
 		}
 		
@@ -62,7 +65,26 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isUpdating = value;
 		}
-
+		
+		private var _isCommandButton:Boolean;
+		
+		[Bindable("isCommandButtonChanged")]
+		public function get isCommandButton():Boolean
+		{
+			return _isCommandButton;
+		}
+		
+		public function set isCommandButton(value:Boolean):void
+		{
+			if (_isCommandButton != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "isCommandButtonChanged", _isCommandButton, value);
+				
+				_isCommandButton = value;
+				dispatchEvent(new Event("isCommandButtonChanged"));
+			}
+		}
+		
         private var _enabled:Boolean = true;
 
         [Bindable("enabledChanged")]
@@ -108,6 +130,25 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("toolTipChanged"));
 			}
 		}
+		
+		private var _actionListener:String;
+		
+		[Bindable("actionListenerChanged")]
+		public function get actionListener():String
+		{
+			return _actionListener;
+		}
+		
+		public function set actionListener(value:String):void
+		{
+			if (_actionListener != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "actionListener", _actionListener, value);
+				
+				_actionListener = value;
+				dispatchEvent(new Event("actionListenerChanged"));
+			}
+		}
 
         public function get propertyEditorClass():Class
 		{
@@ -129,6 +170,8 @@ package view.primeFaces.surfaceComponents.components
 			xml.@disabled = !this.enabled;
             xml.@value = this.label;
 			xml.@title = this.toolTip;
+			xml.@isCommandButton = this.isCommandButton.toString();
+			xml.@actionListener = this.isCommandButton ? this.actionListener : "";
 
 			return xml;
 		}
@@ -138,13 +181,15 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             this.enabled = xml.@disabled == "false" ? true : false;
+			this.isCommandButton = xml.@isCommandButton == "true" ? true : false;
             this.label = xml.@value;
             this.toolTip = xml.@title;
+			this.actionListener = xml.@actionListener;
         }
 
 		public function toCode():XML
 		{
-			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + (isCommandButton ? PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON : PRIME_FACES_XML_ELEMENT_NAME) + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
@@ -154,6 +199,7 @@ package view.primeFaces.surfaceComponents.components
 			xml.@disabled = !this.enabled;
             xml.@value = this.label;
 			xml.@title = this.toolTip;
+			if (isCommandButton) xml.@actionListener = this.actionListener;
 
 			return xml;
 		}

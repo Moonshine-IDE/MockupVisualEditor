@@ -14,4 +14,7 @@
 	<forms:TextForm label="Value" textProperty="label"/>
 	<forms:TextForm label="Title" textProperty="toolTip"/>
 	<forms:ToggleButtonSelectedForm label="Enabled" textProperty="enabled"/>
+	<forms:ToggleButtonSelectedForm id="cbCommandButton" 
+									label="Command Button" textProperty="isCommandButton"/>
+	<forms:TextForm label="Action Listener" textProperty="actionListener" enabled="{cbCommandButton.check.selected}"/>
 </suportclasses:BasePropertyEditor>

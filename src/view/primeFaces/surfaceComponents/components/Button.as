@@ -78,7 +78,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (_isCommandButton != value)
 			{
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "isCommandButtonChanged", _isCommandButton, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "isCommandButton", _isCommandButton, value);
 				
 				_isCommandButton = value;
 				dispatchEvent(new Event("isCommandButtonChanged"));

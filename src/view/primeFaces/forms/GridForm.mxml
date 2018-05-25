@@ -113,6 +113,11 @@
 					grid.removeRow(selectedGrid.selectedRow);
 	
 					this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
+					
+					// when a row deletes both the following values are suppose to be
+					// decreamented
+					this.selectedGrid.selectedRow --;
+					this.selectedGrid.selectedColumn = 0;
 	
 					this.selectedCellDirty = true;
 					this.invalidateDisplayList();

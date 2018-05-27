@@ -3,8 +3,8 @@
 	<property environment="env"/>
 	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
 	<!--Path to Moonshine IDE libs folder where built swc will be copied. If not exists target
-		copy-bin-to-moonshine won't be fired.-->
-	<property name="MOONSHINE_LIBS_PATH" value="../Moonshine-IDE/ide/MoonshineDESKTOPevolved/libs"/>
+		copy-bin-to-moonshine won't be fired.
+	<property name="MOONSHINE_LIBS_PATH" value="../Moonshine-IDE/ide/MoonshineDESKTOPevolved/libs"/>-->
 	<property name="SWC_NAME" value="VisualEditor-${version}.swc"/>
 	<property name="IsDebug" value="false" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>

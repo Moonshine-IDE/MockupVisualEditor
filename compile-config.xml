@@ -3,7 +3,7 @@
     <compiler>
         <define>
             <name>CONFIG::MOONSHINE</name>
-            <value>false</value>
+            <value>true</value>
         </define>
     </compiler>
 

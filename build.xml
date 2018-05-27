@@ -3,13 +3,13 @@
 	<property environment="env"/>
 	<property name="FLEX_HOME" value="${env.FLEX_HOME}" />
 	<!--Path to Moonshine IDE libs folder where built swc will be copied. If not exists target
-		copy-bin-to-moonshine won't be fired.
-	<property name="MOONSHINE_LIBS_PATH" value="../Moonshine-IDE/ide/MoonshineDESKTOPevolved/libs"/>-->
+		copy-bin-to-moonshine won't be fired.-->
+	<property name="MOONSHINE_LIBS_PATH" value="../Moonshine-IDE/ide/MoonshineDESKTOPevolved/libs"/>
 	<property name="SWC_NAME" value="VisualEditor-${version}.swc"/>
 	<property name="IsDebug" value="false" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
-	<target name="main" depends="clean-up-bin, exclude-files, build, clean-up-after-compilation, copy-bin-to-moonshine"/>
+	<target name="main" depends="clean-up-bin, exclude-files, build, documentation, clean-up-after-compilation, copy-bin-to-moonshine"/>
 
 	<target name="clean-up-bin">
 		<delete>
@@ -17,6 +17,9 @@
 				<include name="*"/>
 			</fileset>
 		</delete>
+		<delete dir="${basedir}/bin/primefaces-doc" />
+		<delete dir="${basedir}/bin/flex-doc" />
+		<delete dir="${basedir}/bin/doc" />
 	</target>
 
 	<target name="exclude-files" description="Temporary move files to temp folder which should not be part of swc">
@@ -49,6 +52,31 @@
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/mx/mx.swc" append="true"/>
 			<include-sources dir="${basedir}/src" includes="*"/>
 		</compc>
+	</target>
+
+	<target name="documentation">
+		<echo>Creating documentation for all Visual Editor components</echo>
+		<asdoc output="${basedir}/bin/doc" failonerror="true">
+			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
+			<doc-sources path-element="${basedir}/src/view/flex/surfaceComponents/components"/>
+			<doc-sources path-element="${basedir}/src/view/primeFaces/surfaceComponents/components"/>
+		</asdoc>
+	</target>
+
+	<target name="documentationFlex">
+		<echo>Creating documentation for Visual Editor Flex components</echo>
+		<asdoc output="${basedir}/bin/flex-doc" failonerror="true">
+			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
+			<doc-sources path-element="${basedir}/src/view/flex/surfaceComponents/components"/>
+		</asdoc>
+	</target>
+
+	<target name="documentationPrimeFaces">
+		<echo>Creating documentation for Visual Editor PrimeFaces components</echo>
+		<asdoc output="${basedir}/bin/primefaces-doc" failonerror="true">
+			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
+			<doc-sources path-element="${basedir}/src/view/primeFaces/surfaceComponents/components"/>
+		</asdoc>
 	</target>
 
 	<target name="copy-bin-to-moonshine" if="MOONSHINE_LIBS_PATH">

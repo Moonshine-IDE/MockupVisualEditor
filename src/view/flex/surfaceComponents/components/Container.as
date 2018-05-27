@@ -261,10 +261,7 @@ package view.flex.surfaceComponents.components
                     continue;
                 }
 
-                CONFIG::MOONSHINE
-                {
-                    xml.appendChild(element.toCode());
-                }
+				xml.appendChild(element.toCode());
             }
 
             return xml;

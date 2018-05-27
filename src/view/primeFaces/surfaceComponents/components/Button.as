@@ -12,6 +12,27 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="enabled", kind="property")]
+    [Exclude(name="label", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces button component</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <listing>
+     * &lt;Button width="100" height="30" disabled="false" value="Button" title=""/&gt;
+     * </listing>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <listing>
+     * &lt;p:button style="width:100px;height:30px;" disabled="false" value="Button" title=""/&gt;
+     * </listing>
+     */
     public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";

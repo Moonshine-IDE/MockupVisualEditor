@@ -244,11 +244,10 @@ package view.flex.surfaceComponents.components
                 {
                     continue;
                 }
-                CONFIG::MOONSHINE
-                {
-                    viewStack.appendChild(element.toCode());
-                }
+
+				viewStack.appendChild(element.toCode());
             }
+
             return viewStack;
         }
 

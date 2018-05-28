@@ -1,9 +1,10 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
     import spark.components.Button;
-    
+    import spark.effects.AnimateColor;
+
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
@@ -13,9 +14,15 @@ package view.primeFaces.surfaceComponents.components
     import view.suportClasses.PropertyChangeReference;
 
     [Exclude(name="propertyChangeFieldReference", kind="property")]
+	[Exclude(name="actionListener", kind="property")]
+	[Exclude(name="isCommandButton", kind="property")]
     [Exclude(name="isUpdating", kind="property")]
+	[Exclude(name="toolTip", kind="property")]
+    //[Exclude(name="label", kind="property")]
+
+	[Exclude(name="propertiesChangedEvents", kind="property")]
+	[Exclude(name="propertyEditorClass", kind="property")]
     [Exclude(name="enabled", kind="property")]
-    [Exclude(name="label", kind="property")]
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
@@ -24,14 +31,25 @@ package view.primeFaces.surfaceComponents.components
      * <p>Representation of PrimeFaces button component</p>
      *
      * <strong>Visual Editor XML:</strong>
-     * <listing>
-     * &lt;Button width="100" height="30" disabled="false" value="Button" title=""/&gt;
-     * </listing>
+     * <pre>
+     * &lt;Button
+	 * <b>Attributes</b>
+	 * width="100"
+	 * height="30"
+	 * disabled="false"
+	 * value="Button"
+	 * title=""/&gt;
+     * </pre>
      *
      * <strong>PrimeFaces output:</strong>
-     * <listing>
-     * &lt;p:button style="width:100px;height:30px;" disabled="false" value="Button" title=""/&gt;
-     * </listing>
+     * <pre>
+     * &lt;p:button
+	 * <b>Attributes</b>
+	 * style="width:100px;height:30px;"
+	 * disabled="false"
+	 * value="Button"
+	 * title=""/&gt;
+     * </pre>
      */
     public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
 	{
@@ -127,8 +145,23 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("enabledChanged"));
             }
         }
-		
-		[Bindable("labelChanged")]
+
+        [Bindable("labelChanged")]
+        /**
+		 * <strong>PrimeFaces:</strong> value
+		 *
+		 * @default "Button"
+		 * @example <strong>PrimeFaces:</strong>
+		 *
+		 * <listing version="3.0">
+		 * &lt;p:button value="Button"/&gt;
+		 * </listing>
+         */
+        override public function get label():String
+        {
+            return super.label;
+        }
+
 		override public function set label(value:String):void
 		{
 			if (super.label != value)

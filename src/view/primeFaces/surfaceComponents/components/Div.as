@@ -8,6 +8,38 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.DivPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="div", kind="property")]
+    [Exclude(name="ELEMENT_NAME", kind="property")]
+    [Exclude(name="restorePropertyOnChangeReference", kind="method")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+    [Exclude(name="internalToXML", kind="method")]
+    [Exclude(name="mainXML", kind="property")]
+
+    /**
+     * <p>Representation of div in HTML</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;Div
+     * <b>Attributes</b>
+     * width="120"
+     * height="120"/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;div
+     * <b>Attributes</b>
+     * style="width:120px;height:120px;"/&gt;
+     * </pre>
+     */
     public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
@@ -42,6 +74,44 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
 		}
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Button height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:button style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Button width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:button style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
 
         public function get div():Div
         {

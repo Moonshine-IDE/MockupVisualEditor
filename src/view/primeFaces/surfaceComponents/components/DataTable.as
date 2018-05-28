@@ -29,6 +29,7 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="isUpdating", kind="property")]
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="toCode", kind="method")]
 
     /**

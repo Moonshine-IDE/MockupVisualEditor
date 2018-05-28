@@ -21,6 +21,49 @@ package view.primeFaces.surfaceComponents.components
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="tableColumnDescriptor", kind="property")]
+	[Exclude(name="generateColumns", kind="method")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces dataTable component</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+	 *
+     * <pre>
+     * 	&lt;DataTable
+     * 		<b>Attributes</b>
+     * 		width="120"
+     * 		height="120"
+     * 		paginator="false"
+     * 		resizableColumns="false"
+	 *  	var="" value=""
+     * 		emptyMessage="No records found."&gt;
+	 * 		   &lt;column headerText="Column 1" value=""/&gt;
+	 * &lt;/DataTable&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     *  &lt;p:dataTable
+     *      	<b>Attributes</b>
+     *      	style="width:120px;height:120px;"
+     *      	paginator="false"
+     *      	resizableColumns="false"
+	 *     	var="" value=""
+	 *     	emptyMessage="No records found."&gt;
+	 *          &lt;p:column headerText="Column 1" value=""&gt;
+	 * 		        &lt;h:outputText value=""/&gt;
+	 *          &lt;/p:column&gt;
+	 * &lt;/p:dataTable&gt;
+     * </pre>
+     */
     public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
@@ -61,8 +104,19 @@ package view.primeFaces.surfaceComponents.components
 
             fillDataTable();
         }
-		
-		private var _propertyChangeFieldReference:PropertyChangeReference;
+
+        public function get propertyEditorClass():Class
+        {
+            return DataTablePropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
 		{
 			return _propertyChangeFieldReference;
@@ -84,132 +138,57 @@ package view.primeFaces.surfaceComponents.components
 			_isUpdating = value;
 		}
 
-        private function fillDataTable():void
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable style="width:100px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
         {
-			_tableColumnDescriptor = new ArrayCollection();
-			
-			var tmpTableVO:DataProviderListItem = new DataProviderListItem();
-			tmpTableVO.label = "Column 1";
-			_tableColumnDescriptor.addItem(tmpTableVO);
-			
-			generateColumns(true);
+            return super.height;
         }
-		
-		public function restorePropertyOnChangeReference(nameField:String, value:*):void
-		{
-			var deleteIndex:int;
-			switch(nameField)
-			{
-				case "removeItemAt":
-					try
-					{
-						deleteIndex = _tableColumnDescriptor.getItemIndex(value.object);
-						_tableColumnDescriptor.removeItemAt(deleteIndex);
-						generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
-					} 
-					catch(e:Error)
-					{
-						_tableColumnDescriptor.addItemAt(value.object, value.index);
-						generateColumns(true);
-					}
-					
-					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
-					break;
-				case "addItemAt":
-					try
-					{
-						deleteIndex = _tableColumnDescriptor.getItemIndex(value);
-						_tableColumnDescriptor.removeItemAt(deleteIndex);
-						generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
-					} 
-					catch(e:Error)
-					{
-						_tableColumnDescriptor.addItem(value);
-						generateColumns(true);
-					}
-					
-					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
-					break;
-				case "updateItemAt":
-					DataProviderListItem(_tableColumnDescriptor[value.index]).updateItemWith(value.object);
-					generateColumns(false, DataTable.GRID_ITEM_EDIT, value.index);
-					break;
-				default:
-					this[nameField.toString()] = value;
-					break;
-			}
-		}
-		
-		public function generateColumns(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
-		{
-			var tmpColumn:GridColumn;
-			
-			if (isAll)
-			{
-				columns = new ArrayList();
-				for each (var i:DataProviderListItem in _tableColumnDescriptor)
-				{
-					tmpColumn = new GridColumn();
-					tmpColumn.headerText = tmpColumn.dataField = i.label;
-					columns.addItem(tmpColumn);
-				}
-				
-				this.invalidateDisplayList();
-			}
-			else
-			{
-				switch(updateType)
-				{
-					case GRID_ITEM_ADD:
-					{
-						_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", _tableColumnDescriptor[_tableColumnDescriptor.length - 1], _tableColumnDescriptor[_tableColumnDescriptor.length - 1]);
-						
-						// item always added to last
-						tmpColumn = new GridColumn();
-						tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[_tableColumnDescriptor.length - 1].label;
-						columns.addItem(tmpColumn);
-						dispatchEvent(new Event("itemAdded"));
-						break;
-					}
-					case GRID_ITEM_EDIT:
-					{
-						if (itemIndex != -1)
-						{
-							tmpColumn = columns.getItemAt(itemIndex) as GridColumn;
-							tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[itemIndex].label;
-							
-							// dispatch only if there are changes and user not just edit ended without makeing any change
-							if (!isUpdating && (_propertyChangeFieldReference.fieldLastValue.object.label != _tableColumnDescriptor[itemIndex].label || 
-								_propertyChangeFieldReference.fieldLastValue.object.value != _tableColumnDescriptor[itemIndex].value))
-							{
-								registerClassAlias("DataProviderListItem", DataProviderListItem);
-								_propertyChangeFieldReference.fieldNewValue = {object:ObjectUtil.copy(_tableColumnDescriptor[itemIndex]), index:itemIndex};
-								dispatchEvent(new Event("itemUpdated"));
-							}
-						}
-						break;
-					}
-					case GRID_ITEM_DELETE:
-					{
-						if (itemIndex != -1)
-						{
-							if (!isUpdating)
-							{
-								var historyObject:Object = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
-								_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
-							}
-							
-							columns.removeItemAt(itemIndex);
-							dispatchEvent(new Event("itemRemoved"));
-						}
-						break;
-					}
-				}
-			}
-		}
-		
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DataTable width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable style="width:120px;height:30px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
 		private var _tableVar:String = "";
+
 		[Bindable("tableVarChanged")]
+        /**
+         * <p>PrimeFaces: <strong>var</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DataTable var=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable var=""/&gt;</listing>
+         */
 		public function get tableVar():String
 		{
 			return _tableVar;
@@ -224,7 +203,18 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _tableValue:String = "";
+
 		[Bindable("tableValueChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DataTable value=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable value=""/&gt;</listing>
+         */
 		public function get tableValue():String
 		{
 			return _tableValue;
@@ -237,26 +227,21 @@ package view.primeFaces.surfaceComponents.components
 			_tableValue = value;
 			dispatchEvent(new Event("tableValueChanged"));
 		}
-		
-		private var _tableColumnDescriptor:ArrayCollection;
-		[Bindable("tableColumnDescriptorChanged")]
-		public function get tableColumnDescriptor():ArrayCollection
-		{
-			return _tableColumnDescriptor;
-		}
-		public function set tableColumnDescriptor(value:ArrayCollection):void
-		{
-			if (_tableColumnDescriptor === value) return;
-			
-			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "tableColumnDescriptor", _tableColumnDescriptor, value);
-			
-			_tableColumnDescriptor = value;
-			dispatchEvent(new Event("tableColumnDescriptorChanged"));
-		}
 
         private var _emptyMessage:String = NO_RECORDS_FOUND;
 
         [Bindable(event="emptyMessageChanged")]
+        /**
+         * <p>PrimeFaces: <strong>emptyMessage</strong></p>
+         *
+         * @default "No records found."
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DataTable emptyMessage="No records found."/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable emptyMessage="No records found."/&gt;</listing>
+         */
         public function get emptyMessage():String
         {
             return _emptyMessage;
@@ -276,6 +261,17 @@ package view.primeFaces.surfaceComponents.components
         private var _paginator:Boolean;
 
         [Bindable(event="paginatorChanged")]
+        /**
+         * <p>PrimeFaces: <strong>paginator</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DataTable paginator="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable paginator="false"/&gt;</listing>
+         */
         public function get paginator():Boolean
         {
             return _paginator;
@@ -293,6 +289,17 @@ package view.primeFaces.surfaceComponents.components
         }
 		
 		[Bindable(event="resizableColumnsChanged")]
+        /**
+         * <p>PrimeFaces: <strong>resizableColumns</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DataTable resizableColumns="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:dataTable resizableColumns="false"/&gt;</listing>
+         */
 		override public function set resizableColumns(value:Boolean):void
 		{
 			if (super.resizableColumns != value)
@@ -304,15 +311,133 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
-        public function get propertyEditorClass():Class
+        public function restorePropertyOnChangeReference(nameField:String, value:*):void
         {
-            return DataTablePropertyEditor;
+            var deleteIndex:int;
+            switch(nameField)
+            {
+                case "removeItemAt":
+                    try
+                    {
+                        deleteIndex = _tableColumnDescriptor.getItemIndex(value.object);
+                        _tableColumnDescriptor.removeItemAt(deleteIndex);
+                        generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
+                    }
+                    catch(e:Error)
+                    {
+                        _tableColumnDescriptor.addItemAt(value.object, value.index);
+                        generateColumns(true);
+                    }
+
+                    dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+                    break;
+                case "addItemAt":
+                    try
+                    {
+                        deleteIndex = _tableColumnDescriptor.getItemIndex(value);
+                        _tableColumnDescriptor.removeItemAt(deleteIndex);
+                        generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
+                    }
+                    catch(e:Error)
+                    {
+                        _tableColumnDescriptor.addItem(value);
+                        generateColumns(true);
+                    }
+
+                    dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+                    break;
+                case "updateItemAt":
+                    DataProviderListItem(_tableColumnDescriptor[value.index]).updateItemWith(value.object);
+                    generateColumns(false, DataTable.GRID_ITEM_EDIT, value.index);
+                    break;
+                default:
+                    this[nameField.toString()] = value;
+                    break;
+            }
         }
 
-        private var _propertiesChangedEvents:Array;
-        public function get propertiesChangedEvents():Array
+        public function generateColumns(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
         {
-            return _propertiesChangedEvents;
+            var tmpColumn:GridColumn;
+
+            if (isAll)
+            {
+                columns = new ArrayList();
+                for each (var i:DataProviderListItem in _tableColumnDescriptor)
+                {
+                    tmpColumn = new GridColumn();
+                    tmpColumn.headerText = tmpColumn.dataField = i.label;
+                    columns.addItem(tmpColumn);
+                }
+
+                this.invalidateDisplayList();
+            }
+            else
+            {
+                switch(updateType)
+                {
+                    case GRID_ITEM_ADD:
+                    {
+                        _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", _tableColumnDescriptor[_tableColumnDescriptor.length - 1], _tableColumnDescriptor[_tableColumnDescriptor.length - 1]);
+
+                        // item always added to last
+                        tmpColumn = new GridColumn();
+                        tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[_tableColumnDescriptor.length - 1].label;
+                        columns.addItem(tmpColumn);
+                        dispatchEvent(new Event("itemAdded"));
+                        break;
+                    }
+                    case GRID_ITEM_EDIT:
+                    {
+                        if (itemIndex != -1)
+                        {
+                            tmpColumn = columns.getItemAt(itemIndex) as GridColumn;
+                            tmpColumn.headerText = tmpColumn.dataField = _tableColumnDescriptor[itemIndex].label;
+
+                            // dispatch only if there are changes and user not just edit ended without makeing any change
+                            if (!isUpdating && (_propertyChangeFieldReference.fieldLastValue.object.label != _tableColumnDescriptor[itemIndex].label ||
+                                            _propertyChangeFieldReference.fieldLastValue.object.value != _tableColumnDescriptor[itemIndex].value))
+                            {
+                                registerClassAlias("DataProviderListItem", DataProviderListItem);
+                                _propertyChangeFieldReference.fieldNewValue = {object:ObjectUtil.copy(_tableColumnDescriptor[itemIndex]), index:itemIndex};
+                                dispatchEvent(new Event("itemUpdated"));
+                            }
+                        }
+                        break;
+                    }
+                    case GRID_ITEM_DELETE:
+                    {
+                        if (itemIndex != -1)
+                        {
+                            if (!isUpdating)
+                            {
+                                var historyObject:Object = {object:_tableColumnDescriptor[itemIndex], index:itemIndex};
+                                _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
+                            }
+
+                            columns.removeItemAt(itemIndex);
+                            dispatchEvent(new Event("itemRemoved"));
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private var _tableColumnDescriptor:ArrayCollection;
+        [Bindable("tableColumnDescriptorChanged")]
+        public function get tableColumnDescriptor():ArrayCollection
+        {
+            return _tableColumnDescriptor;
+        }
+        public function set tableColumnDescriptor(value:ArrayCollection):void
+        {
+            if (_tableColumnDescriptor === value) return;
+
+            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "tableColumnDescriptor", _tableColumnDescriptor, value);
+
+            _tableColumnDescriptor = value;
+            dispatchEvent(new Event("tableColumnDescriptorChanged"));
         }
 
         public function toXML():XML
@@ -402,6 +527,17 @@ package view.primeFaces.surfaceComponents.components
 			}
 
             return xml;
+        }
+
+        private function fillDataTable():void
+        {
+            _tableColumnDescriptor = new ArrayCollection();
+
+            var tmpTableVO:DataProviderListItem = new DataProviderListItem();
+            tmpTableVO.label = "Column 1";
+            _tableColumnDescriptor.addItem(tmpTableVO);
+
+            generateColumns(true);
         }
     }
 }

@@ -17,12 +17,9 @@ package view.primeFaces.surfaceComponents.components
 	[Exclude(name="actionListener", kind="property")]
 	[Exclude(name="isCommandButton", kind="property")]
     [Exclude(name="isUpdating", kind="property")]
-	[Exclude(name="toolTip", kind="property")]
-    //[Exclude(name="label", kind="property")]
 
 	[Exclude(name="propertiesChangedEvents", kind="property")]
 	[Exclude(name="propertyEditorClass", kind="property")]
-    [Exclude(name="enabled", kind="property")]
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
@@ -123,11 +120,57 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("isCommandButtonChanged"));
 			}
 		}
-		
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <strong>PrimeFaces:</strong> style
+         *
+         * @default "30"
+         * @example <strong>PrimeFaces:</strong>
+         *
+         * <listing version="3.0">
+         * &lt;p:button style="width:100px;height:30px;"/&gt;
+         * </listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <strong>PrimeFaces:</strong> style
+         *
+         * @default "100"
+         * @example <strong>PrimeFaces:</strong>
+         *
+         * <listing version="3.0">
+         * &lt;p:button style="width:100px;height:30px;"/&gt;
+         * </listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
         private var _enabled:Boolean = true;
 
         [Bindable("enabledChanged")]
         [Inspectable(category="General", enumeration="true,false", defaultValue="true")]
+        /**
+         * <strong>PrimeFaces:</strong> disabled
+         *
+         * @default "false"
+         * @example <strong>PrimeFaces:</strong>
+         *
+         * <listing version="3.0">
+         * &lt;p:button disabled="false"/&gt;
+         * </listing>
+         */
         override public function get enabled():Boolean
         {
             return _enabled;
@@ -150,11 +193,10 @@ package view.primeFaces.surfaceComponents.components
         /**
 		 * <strong>PrimeFaces:</strong> value
 		 *
-		 * @default "Button"
 		 * @example <strong>PrimeFaces:</strong>
 		 *
 		 * <listing version="3.0">
-		 * &lt;p:button value="Button"/&gt;
+		 * &lt;p:button title=""/&gt;
 		 * </listing>
          */
         override public function get label():String
@@ -174,6 +216,16 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		[Bindable("toolTipChanged")]
+        /**
+         * <strong>PrimeFaces:</strong> title
+         *
+         * @default "Button"
+         * @example <strong>PrimeFaces:</strong>
+         *
+         * <listing version="3.0">
+         * &lt;p:button value="Button"/&gt;
+         * </listing>
+         */
 		override public function set toolTip(value:String):void
 		{
 			if (super.toolTip != value)

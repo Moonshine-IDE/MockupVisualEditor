@@ -20,6 +20,35 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.surfaceComponents.skins.AutoCompleteDropDownListSkin;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces autoComplete component</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;DropDownList
+     * <b>Attributes</b>
+     * width="120"
+     * height="30"
+     * multiple="false"
+     * dropDown="true"/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:autoComplete
+     * <b>Attributes</b>
+     * style="width:120px;height:30px;"
+     * multiple="false"
+     * dropDown="true"/&gt;
+     * </pre>
+     */
     public class AutoCompleteDropDownList extends ComboBox implements IPrimeFacesSurfaceComponent,
             IDataProviderComponent, ISelectableItemsComponent, IHistorySurfaceComponent
     {
@@ -83,8 +112,76 @@ package view.primeFaces.surfaceComponents.components
 			_isUpdating = value;
 		}
 
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "30"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList height="30"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:button style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:autoComplete style="width:120px;height:30px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        private var _isDropDown:Boolean = true;
+
+        /**
+         * <p>PrimeFaces: <strong>dropdown</strong></p>
+         *
+         * @default "true"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList dropdown="true"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:autoComplete dropdown="true"/&gt;</listing>
+         */
+        public function get isDropDown():Boolean
+        {
+            return _isDropDown;
+        }
+
         private var _multiple:Boolean;
+
 		[Bindable("multipleChanged")]
+        /**
+         * <p>PrimeFaces: <strong>multiple</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList multiple="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:autoComplete multiple="false"/&gt;</listing>
+         */
         public function get multiple():Boolean
         {
             return _multiple;
@@ -118,6 +215,7 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
 
             return xml;
@@ -137,7 +235,7 @@ package view.primeFaces.surfaceComponents.components
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
-            xml.@dropdown = true;
+            xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);

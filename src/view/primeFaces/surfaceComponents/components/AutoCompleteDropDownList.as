@@ -112,25 +112,6 @@ package view.primeFaces.surfaceComponents.components
 			_isUpdating = value;
 		}
 
-        [PercentProxy("percentHeight")]
-        [Inspectable(category="General")]
-        [Bindable("heightChanged")]
-        /**
-         * <p>PrimeFaces: <strong>style</strong></p>
-         *
-         * @default "30"
-         * @example
-         * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;DropDownList height="30"/&gt;</listing>
-         * @example
-         * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:button style="width:100px;height:30px;"/&gt;</listing>
-         */
-        override public function get height():Number
-        {
-            return super.height;
-        }
-
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -148,6 +129,25 @@ package view.primeFaces.surfaceComponents.components
         override public function get width():Number
         {
             return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "30"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList height="30"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:button style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
         }
 
         private var _isDropDown:Boolean = true;

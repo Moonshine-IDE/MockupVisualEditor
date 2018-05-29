@@ -171,25 +171,6 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        [PercentProxy("percentHeight")]
-        [Inspectable(category="General")]
-        [Bindable("heightChanged")]
-        /**
-         * <p>PrimeFaces: <strong>style</strong></p>
-         *
-         * @default "120"
-         * @example
-         * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;Grid height="120"/&gt;</listing>
-         * @example
-         * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;div style="width:120px;height:120px;"/&gt;</listing>
-         */
-        override public function get height():Number
-        {
-            return super.height;
-        }
-
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -209,6 +190,24 @@ package view.primeFaces.surfaceComponents.components
             return super.width;
         }
 
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Grid height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
 
         public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{

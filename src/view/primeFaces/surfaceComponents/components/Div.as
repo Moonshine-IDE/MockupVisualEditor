@@ -75,25 +75,6 @@ package view.primeFaces.surfaceComponents.components
 			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
 		}
 
-        [PercentProxy("percentHeight")]
-        [Inspectable(category="General")]
-        [Bindable("heightChanged")]
-        /**
-         * <p>PrimeFaces: <strong>style</strong></p>
-         *
-         * @default "120"
-         * @example
-         * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;Button height="120"/&gt;</listing>
-         * @example
-         * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:button style="width:120px;height:120px;"/&gt;</listing>
-         */
-        override public function get height():Number
-        {
-            return super.height;
-        }
-
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -111,6 +92,25 @@ package view.primeFaces.surfaceComponents.components
         override public function get width():Number
         {
             return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Button height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:button style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
         }
 
         public function get div():Div

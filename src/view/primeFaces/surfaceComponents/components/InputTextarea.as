@@ -23,7 +23,6 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="updatePropertyChangeReference", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces inputTextarea component.</p>
@@ -34,7 +33,7 @@ package view.primeFaces.surfaceComponents.components
      *      <b>Attributes</b>
      *      id=""
      *      width="100"
-     *      height="30"
+     *      height="60"
 	 * isAutoResize="true"
      *      value=""
      *      maxlength=""
@@ -47,7 +46,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;p:inputTextarea
      *      <b>Attributes</b>
      *      id=""
-     *      style="width:100px;height:30px;"
+     *      style="width:100px;height:60px;"
 	 * autoResize="true"
      *      value=""
      *      maxlength=""
@@ -164,7 +163,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;InputTextarea width="100"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:inputTextarea style="width:100px;height:30px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:inputTextarea style="width:100px;height:60px;"/&gt;</listing>
          */
         override public function get width():Number
         {
@@ -177,13 +176,13 @@ package view.primeFaces.surfaceComponents.components
         /**
          * <p>PrimeFaces: <strong>style</strong></p>
          *
-         * @default "30"
+         * @default "60"
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;InputTextarea height="30"/&gt;</listing>
+         * <listing version="3.0">&lt;InputTextarea height="60"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:inputTextarea style="width:100px;height:30px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:inputTextarea style="width:100px;height:60px;"/&gt;</listing>
          */
         override public function get height():Number
         {

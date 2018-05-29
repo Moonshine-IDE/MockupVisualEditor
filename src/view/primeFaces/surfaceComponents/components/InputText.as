@@ -21,7 +21,6 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="updatePropertyChangeReference", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces inputText component.</p>
@@ -192,8 +191,10 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("maxLengthChanged"));
 			}
 		}
-		
-		[Bindable("textChanged")]
+
+
+        [Inspectable(category="General", defaultValue="")]
+        [Bindable("textChanged")]
         /**
          * <p>PrimeFaces: <strong>value</strong></p>
          *
@@ -204,6 +205,11 @@ package view.primeFaces.surfaceComponents.components
          * <strong>PrimeFaces:</strong>
          * <listing version="3.0">&lt;p:inputText value=""/&gt;</listing>
          */
+        override public function get text():String
+        {
+            return super.text;
+        }
+
 		override public function set text(value:String):void
 		{
 			if (super.text != value)
@@ -214,6 +220,39 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("textChanged"));
 			}
 		}
+
+        private var _required:Boolean;
+        private var requiredChanged:Boolean;
+
+        [Bindable(event="requiredChanged")]
+        /**
+         * <p>PrimeFaces: <strong>required</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputText required="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputText required="false"/&gt;</listing>
+         */
+        public function get required():Boolean
+        {
+            return _required;
+        }
+
+        public function set required(value:Boolean):void
+        {
+            if (_required != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "required", _required, value);
+
+                _required = value;
+                requiredChanged = true;
+
+                dispatchEvent(new Event("requiredChanged"));
+            }
+        }
 
         public function get propertyEditorClass():Class
         {
@@ -233,6 +272,8 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
             xml.@value = this.text;
+            xml.@required = this.required;
+
             if (this.idAttribute)
             {
                 xml.@id = this.idAttribute;
@@ -253,6 +294,7 @@ package view.primeFaces.surfaceComponents.components
             this.text = xml.@value;
 			this.maxLength = xml.@maxlength;
             this.idAttribute = xml.@id;
+            this.required = xml.@required == "true";
         }
 
         public function toCode():XML
@@ -265,6 +307,8 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
             xml.@value = this.text;
+            xml.@required = this.required;
+
 			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
 			{
 				xml.@maxlength = this.maxLength;

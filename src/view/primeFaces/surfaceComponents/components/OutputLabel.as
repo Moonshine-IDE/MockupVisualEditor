@@ -12,6 +12,38 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="commitProperties", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces outputLabel component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;OutputLabel
+     * <b>Attributes</b>
+     * width="100"
+     * height="30"
+     * value="Label"
+     * for=""
+     * indicateRequired="false"/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;h:outputLabel
+     * <b>Attributes</b>
+     * style="width:100px;height:30px;"
+     * value="Label"
+     * for=""/&gt;
+     * </pre>
+     */
     public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
@@ -42,10 +74,53 @@ package view.primeFaces.surfaceComponents.components
             ];
         }
 
+        public function get propertyEditorClass():Class
+        {
+            return OutputLabelPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _propertyChangeFieldReference:PropertyChangeReference;
+        public function get propertyChangeFieldReference():PropertyChangeReference
+        {
+            return _propertyChangeFieldReference;
+        }
+
+        public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+        {
+            _propertyChangeFieldReference = value;
+        }
+
+        private var _isUpdating:Boolean;
+        public function get isUpdating():Boolean
+        {
+            return _isUpdating;
+        }
+
+        public function set isUpdating(value:Boolean):void
+        {
+            _isUpdating = value;
+        }
+
         private var _indicateRequired:Boolean;
         private var indicateRequiredChanged:Boolean;
 		
 		[Bindable("indicateRequiredChanged")]
+        /**
+         * <p>PrimeFaces: <strong>none</strong></p>
+         *
+         * @default "false"
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;OutputLabel indicateRequired="false"/&gt;</listing>
+         */
         public function get indicateRequired():Boolean
         {
             return _indicateRequired;
@@ -64,37 +139,62 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        public function get propertyEditorClass():Class
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "100"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;OutputLabel width="100"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:outputLabel style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get width():Number
         {
-            return OutputLabelPropertyEditor;
+            return super.width;
         }
 
-        private var _propertiesChangedEvents:Array;
-
-        public function get propertiesChangedEvents():Array
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "30"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;OutputLabel height="30"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:outputLabel style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get height():Number
         {
-            return _propertiesChangedEvents;
+            return super.height;
         }
 
         private var _forAttribute:String;
 
+        [Bindable("forAttributeChanged")]
+        /**
+         * <p>PrimeFaces: <strong>for</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;OutputLabel for=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;h:outputLabel for=""/&gt;</listing>
+         */
         public function get forAttribute():String
         {
             return _forAttribute;
         }
-		
-		private var _propertyChangeFieldReference:PropertyChangeReference;
-		public function get propertyChangeFieldReference():PropertyChangeReference
-		{
-			return _propertyChangeFieldReference;
-		}
-		
-		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
-		{
-			_propertyChangeFieldReference = value;
-		}
-		
-		[Bindable("forAttributeChanged")]
+
         public function set forAttribute(value:String):void
         {
             if (_forAttribute != value)
@@ -103,11 +203,28 @@ package view.primeFaces.surfaceComponents.components
 				
                 _forAttribute = value;
                 dispatchEvent(new Event("forAttributeChanged"));
-				
             }
         }
-		
-		[Bindable("textChanged")]
+
+        [Inspectable(category="General", defaultValue="Label")]
+        [Bindable("textChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @default "Label"
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;OutputLabel value="Label"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;h:outputLabel value="Label"/&gt;</listing>
+         */
+        override public function get text():String
+        {
+            return super.text;
+        }
+
 		override public function set text(value:String):void
 		{
 			if (super.text != value)
@@ -118,17 +235,6 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("textChanged"));
 			}
 		}
-		
-		private var _isUpdating:Boolean;
-		public function get isUpdating():Boolean
-		{
-			return _isUpdating;
-		}
-		
-		public function set isUpdating(value:Boolean):void
-		{
-			_isUpdating = value;
-		}
 
         public function toXML():XML
         {
@@ -137,6 +243,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
             xml.@value = this.text;
+            xml.@indicateRequired = this.indicateRequired;
 
             if (this.forAttribute)
             {
@@ -152,6 +259,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.text = xml.@value;
             this.forAttribute = xml["@for"];
+            this.indicateRequired = xml.@indicateRequired == "true";
         }
 
         public function toCode():XML

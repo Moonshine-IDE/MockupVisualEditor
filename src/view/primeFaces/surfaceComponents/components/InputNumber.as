@@ -23,7 +23,6 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="updatePropertyChangeReference", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces inputNumber component.</p>

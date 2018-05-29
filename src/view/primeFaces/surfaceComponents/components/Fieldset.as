@@ -30,6 +30,50 @@ package view.primeFaces.surfaceComponents.components
      */
     [Style(name="openIcon", type="Object")]
 
+    [Exclude(name="closedIcon", kind="style")]
+    [Exclude(name="openIcon", kind="style")]
+    [Exclude(name="closeIcon", kind="property")]
+    [Exclude(name="openIcon", kind="property")]
+    [Exclude(name="addElement", kind="method")]
+    [Exclude(name="removeElement", kind="method")]
+    [Exclude(name="commitProperties", kind="method")]
+    [Exclude(name="onCollapsiblePanelCreationComplete", kind="method")]
+    [Exclude(name="updateIsUpdating", kind="method")]
+
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="div", kind="property")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces fieldset component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;Fieldset
+     * <b>Attributes</b>
+     * width="110"
+     * height="120"
+     * toggleable="false"
+     * legend="Basic"
+     * toggleSpeed="200"/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:fieldset
+     * <b>Attributes</b>
+     * style="width:110px;height:120px;"
+     * toggleable="false"
+     * legend="Basic"
+     * toggleSpeed="200"/&gt;
+     * </pre>
+     */
     public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
@@ -82,71 +126,6 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
-		
-		private var _isUpdating:Boolean;
-		public function get isUpdating():Boolean
-		{
-			return _isUpdating;
-		}
-		
-		public function set isUpdating(value:Boolean):void
-		{
-			if (!isAnimationPlaying) _isUpdating = value;
-		}
-		
-		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
-		}
-		
-		override protected function updateIsUpdating(value:Boolean):void
-		{
-			isUpdating = value;
-		}
-
-        [SkinPart(required="true")]
-        public var titleGroup:HGroup;
-
-        private var _div:Div;
-        public function get div():Div
-        {
-            return _div;
-        }
-
-        private var _toggleable:Boolean;
-        private var toggleableChanged:Boolean;
-
-        [Bindable(event="toggleableChanged")]
-        public function get toggleable():Boolean
-        {
-            return _toggleable;
-        }
-		
-		override public function set title(value:String):void
-		{
-			if (title != value)
-			{
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
-				
-				super.title = value;
-				dispatchEvent(new Event("titleChanged"));
-			}
-		}
-
-        public function set toggleable(value:Boolean):void
-        {
-            if (_toggleable != value)
-            {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "toggleable", _toggleable, value);
-				
-                this.isCollapsible = value;
-                _toggleable = value;
-                toggleableChanged = true;
-                dispatchEvent(new Event("toggleableChanged"));
-
-                this.invalidateSkinState();
-            }
-        }
 
         public function get propertyEditorClass():Class
         {
@@ -158,6 +137,152 @@ package view.primeFaces.surfaceComponents.components
         public function get propertiesChangedEvents():Array
         {
             return _propertiesChangedEvents;
+        }
+
+        private var _isUpdating:Boolean;
+		public function get isUpdating():Boolean
+		{
+			return _isUpdating;
+		}
+		
+		public function set isUpdating(value:Boolean):void
+		{
+			if (!isAnimationPlaying) _isUpdating = value;
+		}
+
+        [SkinPart(required="true")]
+        /**
+         * @private
+         */
+        public var titleGroup:HGroup;
+
+        private var _div:Div;
+        public function get div():Div
+        {
+            return _div;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Fieldset height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:fieldset style="width:110px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "110"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Fieldset width="110"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:fieldset style="width:110px;height:120px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        private var _toggleable:Boolean;
+        private var toggleableChanged:Boolean;
+
+        [Bindable(event="toggleableChanged")]
+        /**
+         * <p>PrimeFaces: <strong>toggleable</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Fieldset toggleable="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:fieldset toggleable="false"/&gt;</listing>
+         */
+        public function get toggleable():Boolean
+        {
+            return _toggleable;
+        }
+
+        public function set toggleable(value:Boolean):void
+        {
+            if (_toggleable != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "toggleable", _toggleable, value);
+
+                this.isCollapsible = value;
+                _toggleable = value;
+                toggleableChanged = true;
+                dispatchEvent(new Event("toggleableChanged"));
+
+                this.invalidateSkinState();
+            }
+        }
+
+        /**
+         * <p>PrimeFaces: <strong>legend</strong></p>
+         *
+         * @default "Basic"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Fieldset legend="Basic"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:fieldset legend="Basic"/&gt;</listing>
+         */
+		override public function set title(value:String):void
+		{
+			if (title != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
+				
+				super.title = value;
+				dispatchEvent(new Event("titleChanged"));
+			}
+		}
+
+        [Inspectable(defaultValue="200")]
+        [Bindable(event="durationChanged")]
+        /**
+         * <p>PrimeFaces: <strong>toggleSpeed</strong></p>
+         *
+         * @default "200"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Fieldset toggleSpeed="200"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:fieldset toggleSpeed="200"/&gt;</listing>
+         */
+        override public function get duration():Number
+        {
+            return super.duration;
+        }
+
+        override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+        {
+            _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+        }
+
+        override protected function updateIsUpdating(value:Boolean):void
+        {
+            isUpdating = value;
         }
 
         public function toXML():XML

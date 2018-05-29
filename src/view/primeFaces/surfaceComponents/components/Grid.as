@@ -17,6 +17,54 @@ package view.primeFaces.surfaceComponents.components
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
     import view.suportClasses.events.SurfaceComponentEvent;
 
+    [Exclude(name="selectedColumn", kind="property")]
+    [Exclude(name="selectedRow", kind="property")]
+    [Exclude(name="addColumn", kind="method")]
+    [Exclude(name="addRow", kind="method")]
+    [Exclude(name="removeColumn", kind="method")]
+    [Exclude(name="removeRow", kind="method")]
+    [Exclude(name="restorePropertyOnChangeReference", kind="method")]
+    [Exclude(name="updateDisplayList", kind="method")]
+
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="div", kind="property")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces Grid CSS component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;Grid
+     * <b>Attributes</b>
+     * width="110"
+     * height="120"&gt;
+     * &lt;Row&gt;
+     *  &lt;Column class="ui-g-12 ui-lg-12 ui-sm-6 ui-md-6 ui-xl-12"&gt;
+     *      &lt;Div percentWidth="100" percentHeight="100"/&gt;
+     *  &lt;/Column&gt;
+     * &lt;/Row&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;div
+     * <b>Attributes</b>
+     * style="width:110px;height:120px;"&gt;
+     *  &lt;div class="ui-g"&gt;
+     *      &lt;div class="ui-g-12 ui-lg-12 ui-sm-6 ui-md-6 ui-xl-12"&gt;
+     *          &lt;div style="width:100%;height:100%;"/&gt;
+     *      &lt;/div&gt;
+     *  &lt;/div&gt;
+     * &lt;/div&gt;
+     * </pre>
+     */
     public class Grid extends mx.containers.Grid implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
@@ -51,7 +99,7 @@ package view.primeFaces.surfaceComponents.components
                 "requestedColumnCountChanged",
                 "requestedRowCountChanged",
 				"itemRemoved",
-				"itemAdded",
+				"itemAdded"
             ];
 
             this.ensureCreateInitialColumn();
@@ -79,6 +127,17 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isUpdating = value;
 		}
+
+        public function get propertyEditorClass():Class
+        {
+            return GridPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
 
         private var _selectedRow:int;
 
@@ -112,18 +171,46 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        public function get propertyEditorClass():Class
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Grid height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
         {
-            return GridPropertyEditor;
+            return super.height;
         }
 
-        private var _propertiesChangedEvents:Array;
-        public function get propertiesChangedEvents():Array
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Grid width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get width():Number
         {
-            return _propertiesChangedEvents;
+            return super.width;
         }
-		
-		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+
+
+        public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
 			var deleteIndex:int;
 			switch(nameField)
@@ -185,6 +272,11 @@ package view.primeFaces.surfaceComponents.components
 					break;
 			}
 		}
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+        }
 
         public function toXML():XML
         {
@@ -265,11 +357,6 @@ package view.primeFaces.surfaceComponents.components
                     this.addElement(gridRow);
                 }
             }
-        }
-
-        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-        {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
         }
 
         public function toCode():XML

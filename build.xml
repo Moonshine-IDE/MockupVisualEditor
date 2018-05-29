@@ -9,7 +9,7 @@
 	<property name="IsDebug" value="false" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
-	<target name="main" depends="clean-up-bin, exclude-files, build, documentation, clean-up-after-compilation, copy-bin-to-moonshine"/>
+	<target name="main" depends="clean-up-bin, exclude-files, build, documentationPrimeFaces, clean-up-after-compilation, copy-bin-to-moonshine"/>
 
 	<target name="clean-up-bin">
 		<delete>
@@ -65,7 +65,7 @@
 
 	<target name="documentationFlex">
 		<echo>Creating documentation for Visual Editor Flex components</echo>
-		<asdoc output="${basedir}/bin/flex-doc" failonerror="true">
+		<asdoc output="${basedir}/bin/doc" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/flex/surfaceComponents/components"/>
 		</asdoc>
@@ -73,7 +73,7 @@
 
 	<target name="documentationPrimeFaces">
 		<echo>Creating documentation for Visual Editor PrimeFaces components</echo>
-		<asdoc output="${basedir}/bin/primefaces-doc" failonerror="true">
+		<asdoc output="${basedir}/bin/doc" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/primeFaces/surfaceComponents/components"/>
 		</asdoc>

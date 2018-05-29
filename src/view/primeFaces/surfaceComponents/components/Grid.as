@@ -25,6 +25,7 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="removeRow", kind="method")]
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="updateDisplayList", kind="method")]
+    [Exclude(name="EVENT_CHILDREN_UPDATED", kind="property")]
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]

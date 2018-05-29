@@ -10,6 +10,8 @@ package view.primeFaces.surfaceComponents.components
     
     import view.primeFaces.supportClasses.ContainerDirection;
 
+    [ExcludeClass("Container")]
+
     public class Container extends BorderContainer
     {
         public function Container()

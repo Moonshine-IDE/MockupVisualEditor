@@ -19,6 +19,46 @@ package view.primeFaces.surfaceComponents.components
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceTabView;
 
+    [Exclude(name="addElement", kind="method")]
+    [Exclude(name="removeItemAt", kind="method")]
+    [Exclude(name="EVENT_CHILDREN_UPDATED", kind="property")]
+
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="restorePropertyOnChangeReference", kind="method")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces tabView component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;TabView
+     * <b>Attributes</b>
+     * width="120"
+     * height="120"
+     * orientation="top"
+     * scrollable="false"&gt;
+     *  &lt;tab title="Tab" /&gt;
+     * &lt;/TabView&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:tabView
+     * <b>Attributes</b>
+     * style="width:120px;height:120px;"
+     * orientation="top"
+     * scrollable="false"/&gt;
+     *  &lt;p:tab title="Tab" /&gt;
+     * &lt;/p:tabView&gt;
+     * </pre>
+     */
     public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
@@ -66,8 +106,19 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
-		
-		private var _isUpdating:Boolean;
+
+        public function get propertyEditorClass():Class
+        {
+            return TabViewPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
 		{
 			return _isUpdating;
@@ -77,8 +128,87 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isUpdating = value;
 		}
-		
-		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;TabView width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:tabView style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;TabView height="20"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:tabView style="width:120px;height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        [Inspectable(enumeration="top,left,bottom,right", defaultValue="top")]
+        [Bindable("orientationChanged")]
+        /**
+         * <p>PrimeFaces: <strong>orientation</strong></p>
+         *
+         * @default "top"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;TabView orientation="top"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:tabView orientation="top"/&gt;</listing>
+         */
+        override public function get orientation():String
+        {
+            return super.orientation;
+        }
+
+        [Bindable("scrollableChanged")]
+        /**
+         * <p>PrimeFaces: <strong>scrollable</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;TabView scrollable="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:tabView scrollable="false"/&gt;</listing>
+         */
+        override public function get scrollable():Boolean
+        {
+            return super.scrollable;
+        }
+
+        override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+        {
+            if (oldValue && (oldValue is Array)) _propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, fieldName, oldValue, newValue);
+            else _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+        }
+
+        public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
 			switch(nameField)
 			{
@@ -137,23 +267,6 @@ package view.primeFaces.surfaceComponents.components
 			return super.removeItemAt(index);
 			
 			dispatchEvent(new Event("itemRemoved"));
-		}
-
-        public function get propertyEditorClass():Class
-        {
-            return TabViewPropertyEditor;
-        }
-
-        private var _propertiesChangedEvents:Array;
-        public function get propertiesChangedEvents():Array
-        {
-            return _propertiesChangedEvents;
-        }
-		
-		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			if (oldValue && (oldValue is Array)) _propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, fieldName, oldValue, newValue);
-			else _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
 		}
 
         public function toXML():XML

@@ -33,7 +33,8 @@ package view.primeFaces.surfaceComponents.components
      * width="100"
      * height="30"
      * value=""
-     * maxlength=""/&gt;
+     * maxlength=""
+     * required="false"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -43,7 +44,8 @@ package view.primeFaces.surfaceComponents.components
      * id=""
      * style="width:100px;height:30px;"
      * value=""
-     * maxlength=""/&gt;
+     * maxlength=""
+     * required="false"/&gt;
      * </pre>
      */
     public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent

@@ -38,7 +38,8 @@ package view.primeFaces.surfaceComponents.components
      *      value=""
      *      maxlength=""
 	 * counter=""
-	 * counterTemplate="{0} characters remaining."/&gt;
+	 * counterTemplate="{0} characters remaining."
+     * required="false"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -51,7 +52,8 @@ package view.primeFaces.surfaceComponents.components
      *      value=""
      *      maxlength=""
 	 * counter=""
-     *      counterTemplate="{0} characters remaining."/&gt;
+     *      counterTemplate="{0} characters remaining."
+     * required="false"/&gt;
      * </pre>
      */
     public class InputTextarea extends TextArea implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
@@ -302,6 +304,39 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("maxLengthChanged"));
 			}
 		}
+
+        private var _required:Boolean;
+        private var requiredChanged:Boolean;
+
+        [Bindable(event="requiredChanged")]
+        /**
+         * <p>PrimeFaces: <strong>required</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputTextarea required="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputTextarea required="false"/&gt;</listing>
+         */
+        public function get required():Boolean
+        {
+            return _required;
+        }
+
+        public function set required(value:Boolean):void
+        {
+            if (_required != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "required", _required, value);
+
+                _required = value;
+                requiredChanged = true;
+
+                dispatchEvent(new Event("requiredChanged"));
+            }
+        }
 
 		[Bindable("textChanged")]
         /**

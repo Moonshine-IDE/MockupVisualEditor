@@ -28,6 +28,7 @@
 					label="Value" textProperty="text"/>
 	<forms:TextForm label="Maximum Length" textProperty="maxLength"
 					restrict="0-9" change="textform1_changeHandler(event)"/>
+	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:ToggleButtonSelectedForm label="Auto Resize" textProperty="isAutoResize"/>
 	<forms:ToggleButtonSelectedForm label="Display As Counter" textProperty="isCounterDisplay"/>
 	<forms:TextForm label="Displaying Component's Id" textProperty="counter"

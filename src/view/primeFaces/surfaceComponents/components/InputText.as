@@ -14,6 +14,39 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.InputTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces inputText component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;InputText
+     * <b>Attributes</b>
+     * id=""
+     * width="100"
+     * height="30"
+     * value=""
+     * maxlength=""/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:inputText
+     * <b>Attributes</b>
+     * id=""
+     * style="width:100px;height:30px;"
+     * value=""
+     * maxlength=""/&gt;
+     * </pre>
+     */
     public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputText";
@@ -68,6 +101,16 @@ package view.primeFaces.surfaceComponents.components
 
         private var _idAttribute:String;
 		[Bindable(event="idAttributeChanged")]
+        /**
+         * <p>PrimeFaces: <strong>id (Optional)</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputText id=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputText id=""/&gt;</listing>
+         */
         public function get idAttribute():String
         {
             return _idAttribute;
@@ -84,8 +127,56 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "100"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputText width="100"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputText style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "30"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputText height="30"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputText style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
 		private var _maxLength:String = "";
 		[Bindable(event="maxLengthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>maxlength (Optional)</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputText maxlength=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputText maxlength=""/&gt;</listing>
+         */
         public function get maxLength():String
 		{
 			return _maxLength;
@@ -103,6 +194,16 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		[Bindable("textChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputText value=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputText value=""/&gt;</listing>
+         */
 		override public function set text(value:String):void
 		{
 			if (super.text != value)

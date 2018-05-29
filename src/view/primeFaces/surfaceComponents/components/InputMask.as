@@ -12,6 +12,39 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.InputMaskPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces inputMask component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;InputMask
+     * <b>Attributes</b>
+     * id=""
+     * width="100"
+     * height="30"
+     * value=""
+     * mask="(999) 999-9999"/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:inputMask
+     * <b>Attributes</b>
+     * id=""
+     * style="width:110px;height:30px;"
+     * value=""
+     * mask="(999) 999-9999"/&gt;
+     * </pre>
+     */
     public class InputMask extends MaskedTextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputMask";
@@ -65,6 +98,16 @@ package view.primeFaces.surfaceComponents.components
 		}
 
         private var _idAttribute:String;
+        /**
+         * <p>PrimeFaces: <strong>id (Optional)</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask id=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask id=""/&gt;</listing>
+         */
         public function get idAttribute():String
         {
             return _idAttribute;
@@ -80,6 +123,39 @@ package view.primeFaces.surfaceComponents.components
                 _idAttribute = value;
                 dispatchEvent(new Event("idAttributeChanged"))
             }
+        }
+
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask value=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask value=""/&gt;</listing>
+         */
+        override public function get text():String
+        {
+            return super.text;
+        }
+
+        [Bindable("maskTextChanged")]
+        /**
+         * <p>PrimeFaces: <strong>mask</strong></p>
+         *
+         * @default "(999) 999-9999"
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask mask="(999) 999-9999"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask mask="(999) 999-9999"/&gt;</listing>
+         */
+        override public function get maskText():String
+        {
+            return super.maskText;
         }
 
         public function get propertyEditorClass():Class

@@ -40,7 +40,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;p:inputMask
      * <b>Attributes</b>
      * id=""
-     * style="width:110px;height:30px;"
+     * style="width:100px;height:30px;"
      * value=""
      * mask="(999) 999-9999"/&gt;
      * </pre>
@@ -123,6 +123,44 @@ package view.primeFaces.surfaceComponents.components
                 _idAttribute = value;
                 dispatchEvent(new Event("idAttributeChanged"))
             }
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "100"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask width="100"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "30"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask height="30"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
         }
 
         /**

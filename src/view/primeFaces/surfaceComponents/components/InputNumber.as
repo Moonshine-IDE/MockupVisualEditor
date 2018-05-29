@@ -14,6 +14,43 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="commitProperties", kind="method")]
+
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces inputNumber component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;InputNumber
+     * <b>Attributes</b>
+     * id=""
+     * width="100"
+     * height="30"
+     * value=""
+     * decimalSeparator="."
+     * thousandSeparator=","/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:inputNumber
+     * <b>Attributes</b>
+     * id=""
+     * style="width:100px;height:30px;"
+     * value=""
+     * decimalSeparator="."
+     * thousandSeparator=","/&gt;
+     * </pre>
+     */
     public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
@@ -61,8 +98,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
-		
-		private var _isUpdating:Boolean;
+
+        public function get propertyEditorClass():Class
+        {
+            return InputNumberPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
 		{
 			return _isUpdating;
@@ -73,13 +122,88 @@ package view.primeFaces.surfaceComponents.components
 			_isUpdating = value;
 		}
 
-        private var _decimalSeparator:String = "";
+        private var _idAttribute:String;
+        /**
+         * <p>PrimeFaces: <strong>id (Optional)</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber id=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber id=""/&gt;</listing>
+         */
+        public function get idAttribute():String
+        {
+            return _idAttribute;
+        }
+
+        [Bindable("idAttributeChanged")]
+        public function set idAttribute(value:String):void
+        {
+            if (_idAttribute != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "idAttribute", _idAttribute, value);
+
+                _idAttribute = value;
+                dispatchEvent(new Event("idAttributeChanged"))
+            }
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "100"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask width="100"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "30"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputMask height="30"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask style="width:100px;height:30px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        private var _decimalSeparator:String = ".";
         private var decimalSeparatorChanged:Boolean;
 
-        private var _thousandSeparator:String = "";
-        private var thousandsSeparatorChanged:Boolean;
-
 		[Bindable("decimalSeparatorChanged")]
+        /**
+         * <p>PrimeFaces: <strong>decimalSeparator</strong></p>
+         *
+         * @default "."
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber decimalSeparator="."/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber decimalSeparator="."/&gt;</listing>
+         */
         public function get decimalSeparator():String
         {
             return _decimalSeparator;
@@ -97,7 +221,22 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        private var _thousandSeparator:String = ",";
+        private var thousandsSeparatorChanged:Boolean;
+
 		[Bindable("thousandSeparatorChanged")]
+        /**
+         * <p>PrimeFaces: <strong>thousandSeparator</strong></p>
+         *
+         * @default ","
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber thousandSeparator=","/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber thousandSeparator=","/&gt;</listing>
+         */
         public function get thousandSeparator():String
         {
             return _thousandSeparator;
@@ -118,6 +257,16 @@ package view.primeFaces.surfaceComponents.components
         [CollapseWhiteSpace]
         [Bindable("change")]
         [Bindable("textChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber value=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber value=""/&gt;</listing>
+         */
         override public function set text(value:String):void
         {
             if (super.text != value)
@@ -149,36 +298,6 @@ package view.primeFaces.surfaceComponents.components
 
                 thousandsSeparatorChanged = false;
             }
-        }
-
-        private var _idAttribute:String;
-        public function get idAttribute():String
-        {
-            return _idAttribute;
-        }
-		
-		[Bindable("idAttributeChanged")]
-        public function set idAttribute(value:String):void
-        {
-            if (_idAttribute != value)
-            {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "idAttribute", _idAttribute, value);
-				
-                _idAttribute = value;
-                dispatchEvent(new Event("idAttributeChanged"))
-            }
-        }
-
-        public function get propertyEditorClass():Class
-        {
-            return InputNumberPropertyEditor;
-        }
-
-        private var _propertiesChangedEvents:Array;
-
-        public function get propertiesChangedEvents():Array
-        {
-            return _propertiesChangedEvents;
         }
 
         public function toXML():XML

@@ -12,10 +12,41 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.surfaceComponents.skins.CheckboxSkin;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+	[Exclude(name="buttonReleased", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces selectBooleanCheckbox component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;CheckBox
+     * <b>Attributes</b>
+     * width="121"
+     * height="20"
+     * label="Checkbox"
+	 * selected="true"/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:selectBooleanCheckbox
+     * <b>Attributes</b>
+     * style="width:121px;height:20px;"
+     * label="Checkbox"
+	 * selected="true"/&gt;
+     * </pre>
+     */
     public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
-		public static const ELEMENT_NAME:String = "SelectBooleanCheckBox";
+		public static const ELEMENT_NAME:String = "CheckBox";
 		
 		public function SelectBooleanCheckbox()
 		{
@@ -37,7 +68,7 @@ package view.primeFaces.surfaceComponents.components
 					"heightChanged",
 					"explicitMinWidthChanged",
 					"explicitMinHeightChanged",
-					"labelChanged",
+					"contentChange",
 					"selectedChanged"
 			];
 		}
@@ -52,8 +83,19 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
-		
-		private var _isUpdating:Boolean;
+
+        public function get propertyEditorClass():Class
+        {
+            return CheckboxPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
 		{
 			return _isUpdating;
@@ -63,8 +105,65 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isUpdating = value;
 		}
-		
-		override public function set selected(value:Boolean):void
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "121"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;CheckBox width="121"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectBooleanCheckbox style="width:121px;height:20px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "20"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;CheckBox height="20"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectBooleanCheckbox style="width:121px;height:20px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+
+        [Inspectable(category="General", defaultValue="true")]
+        [Bindable(event="propertyChange")]
+        /**
+         * <p>PrimeFaces: <strong>selected</strong></p>
+         *
+         * @default "true"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;CheckBox selected="true"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectBooleanCheckbox selected="true"/&gt;</listing>
+         */
+        override public function get selected():Boolean
+        {
+            return super.selected;
+        }
+
+        override public function set selected(value:Boolean):void
 		{
 			if (super.selected != value)
 			{
@@ -74,8 +173,25 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("selectedChanged"));
 			}
 		}
-		
-		[Bindable("labelChanged")]
+
+        [Bindable("contentChange")]
+        [Inspectable(category="General", defaultValue="Checkbox")]
+        /**
+         * <p>PrimeFaces: <strong>label</strong></p>
+         *
+         * @default "Checkbox"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;CheckBox label="Checkbox"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectBooleanCheckbox label="Checkbox"/&gt;</listing>
+         */
+        override public function get label():String
+        {
+            return super.label;
+        }
+
 		override public function set label(value:String):void
 		{
 			if (super.label != value)
@@ -83,7 +199,6 @@ package view.primeFaces.surfaceComponents.components
 				_propertyChangeFieldReference = new PropertyChangeReference(this, "label", super.label, value);
 				
 				super.label = value;
-				dispatchEvent(new Event("labelChanged"));
 			}
 		}
 		
@@ -92,17 +207,6 @@ package view.primeFaces.surfaceComponents.components
 			//we don't want the selection to change on the editing surface
 		}
 
-        public function get propertyEditorClass():Class
-		{
-			return CheckboxPropertyEditor;
-		}		
-		
-		private var _propertiesChangedEvents:Array;
-		public function get propertiesChangedEvents():Array
-		{
-			return _propertiesChangedEvents;
-		}
-		
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");

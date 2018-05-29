@@ -11,4 +11,5 @@
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
     <forms:TextForm label="Mask: '9'(0-9), '*'(a-z, A-Z)" textProperty="maskText"/>
     <primeFaces:MaskedTextInputForm label="Value" textProperty="text" bindableMaskText="{selectedItem['maskText']}"/>
+    <forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 </suportclasses:BasePropertyEditor>

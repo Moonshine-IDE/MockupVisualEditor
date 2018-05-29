@@ -32,7 +32,8 @@ package view.primeFaces.surfaceComponents.components
      * width="100"
      * height="30"
      * value=""
-     * mask="(999) 999-9999"/&gt;
+     * mask="(999) 999-9999"
+     * required="false"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -42,7 +43,8 @@ package view.primeFaces.surfaceComponents.components
      * id=""
      * style="width:100px;height:30px;"
      * value=""
-     * mask="(999) 999-9999"/&gt;
+     * mask="(999) 999-9999"
+     * required="false"/&gt;
      * </pre>
      */
     public class InputMask extends MaskedTextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
@@ -85,8 +87,25 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
-		
-		private var _isUpdating:Boolean;
+
+        public function get propertyEditorClass():Class
+        {
+            return InputMaskPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+        {
+            _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+        }
+
+        private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
 		{
 			return _isUpdating;
@@ -196,23 +215,39 @@ package view.primeFaces.surfaceComponents.components
             return super.maskText;
         }
 
-        public function get propertyEditorClass():Class
+        private var _required:Boolean;
+        private var requiredChanged:Boolean;
+
+        [Bindable(event="requiredChanged")]
+        /**
+         * <p>PrimeFaces: <strong>required</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;inputMask required="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputMask required="false"/&gt;</listing>
+         */
+        public function get required():Boolean
         {
-            return InputMaskPropertyEditor;
+            return _required;
         }
 
-        private var _propertiesChangedEvents:Array;
-
-        public function get propertiesChangedEvents():Array
+        public function set required(value:Boolean):void
         {
-            return _propertiesChangedEvents;
+            if (_required != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "required", _required, value);
+
+                _required = value;
+                requiredChanged = true;
+
+                dispatchEvent(new Event("requiredChanged"));
+            }
         }
 
-		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
-		}
-		
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -221,6 +256,7 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@mask = this.maskText;
             xml.@value = this.text;
+            xml.@required = this.required;
 
             if (this.idAttribute)
             {
@@ -237,6 +273,7 @@ package view.primeFaces.surfaceComponents.components
             this.maskText = xml.@mask;
             this.text = xml.@value;
             this.idAttribute = xml.@id;
+            this.required = xml.@required == "true";
         }
 
         public function toCode():XML
@@ -250,6 +287,7 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@value = this.text;
             xml.@mask = this.maskText;
+            xml.@required = this.required;
 
             if (this.idAttribute)
             {

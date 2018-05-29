@@ -36,7 +36,8 @@ package view.primeFaces.surfaceComponents.components
      * height="30"
      * value=""
      * decimalSeparator="."
-     * thousandSeparator=","/&gt;
+     * thousandSeparator=","
+     * required="false"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -47,7 +48,8 @@ package view.primeFaces.surfaceComponents.components
      * style="width:100px;height:30px;"
      * value=""
      * decimalSeparator="."
-     * thousandSeparator=","/&gt;
+     * thousandSeparator=","
+     * required="false"/&gt;
      * </pre>
      */
     public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
@@ -278,6 +280,39 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        private var _required:Boolean;
+        private var requiredChanged:Boolean;
+
+        [Bindable(event="requiredChanged")]
+        /**
+         * <p>PrimeFaces: <strong>required</strong></p>
+         *
+         * @default "false"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber required="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber required="false"/&gt;</listing>
+         */
+        public function get required():Boolean
+        {
+            return _required;
+        }
+
+        public function set required(value:Boolean):void
+        {
+            if (_required != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "required", _required, value);
+
+                _required = value;
+                requiredChanged = true;
+
+                dispatchEvent(new Event("requiredChanged"));
+            }
+        }
+
         override protected function commitProperties():void
         {
             super.commitProperties();
@@ -306,6 +341,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
             xml.@value = this.text;
+            xml.@required = this.required;
             xml.@thousandSeparator = this.thousandSeparator;
             xml.@decimalSeparator = this.decimalSeparator;
 
@@ -325,6 +361,7 @@ package view.primeFaces.surfaceComponents.components
             this.thousandSeparator = xml.@thousandSeparator;
             this.decimalSeparator = xml.@decimalSeparator;
             this.idAttribute = xml.@id;
+            this.required = xml.@required == "true";
         }
 
         public function toCode():XML
@@ -339,6 +376,7 @@ package view.primeFaces.surfaceComponents.components
             xml.@value = this.text;
             xml.@thousandSeparator = this.thousandSeparator;
             xml.@decimalSeparator = this.decimalSeparator;
+            xml.@required = this.required;
 
             if (this.idAttribute)
             {

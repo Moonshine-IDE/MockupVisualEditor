@@ -385,6 +385,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
             xml.@value = this.text;
+            xml.@required = this.required;
             xml.@isAutoResize = this.isAutoResize;
 			xml.@isCounterDisplay = this.isCounterDisplay;
 			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
@@ -410,8 +411,10 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             this.text = xml.@value;
-            this.isAutoResize = (xml.@isAutoResize == "true") ? true : false;
+            this.isAutoResize = xml.@isAutoResize == "true";
 			this.maxLength = xml.@maxlength;
+            this.required = xml.@required == "true";
+
 			if (String(xml.@isCounterDisplay) == "true")
 			{
 				this.isCounterDisplay = true;
@@ -433,6 +436,8 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@value = this.text;
             xml.@autoResize = this.isAutoResize;
+            xml.@required = this.required;
+
 			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
 			{
 				xml.@maxlength = this.maxLength;

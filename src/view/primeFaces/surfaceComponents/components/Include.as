@@ -18,6 +18,38 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.IncludePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+    [Exclude(name="mainXML", kind="property")]
+    [Exclude(name="commitProperties", kind="method")]
+    [Exclude(name="createChildren", kind="method")]
+    [Exclude(name="setCommonXMLAttributes", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces include component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;Include
+     * <b>Attributes</b>
+     * width="110"
+     * height="110"
+     * src=""/&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;ui:include
+     * <b>Attributes</b>
+     * style="width:110px;height:110px;"
+     * src=""/&gt;
+     * </pre>
+     */
     public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "include";
@@ -35,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "titleChanged"
+                "pathChanged"
             ];
 			
 			backgroundFill = new SolidColor(0xFCFCFC);
@@ -48,7 +80,7 @@ package view.primeFaces.surfaceComponents.components
 			
 			toolTip = "";
 			width = 110;
-			height = 100;
+			height = 110;
         }
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
@@ -78,28 +110,76 @@ package view.primeFaces.surfaceComponents.components
             return IncludePropertyEditor;
         }
 
-        private var _title:String;
-		private var titleChanged:Boolean;
-
-		[Bindable("titleChanged")]
-        public function get title():String
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>src</strong></p>
+         *
+         * @default "110"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Include width="110"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;ui:include style="width:110px;height:110px;"/&gt;</listing>
+         */
+        override public function get width():Number
         {
-            return _title;
+            return super.width;
         }
 
-        public function set title(value:String):void
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "110"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Include height="110"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;ui:include style="width:110px;height:110px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        private var _path:String;
+		private var pathChanged:Boolean;
+
+		[Bindable("pathChanged")]
+        /**
+         * <p>PrimeFaces: <strong>src</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Include src=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;ui:include src=""/&gt;</listing>
+         */
+        public function get path():String
+        {
+            return _path;
+        }
+
+        public function set path(value:String):void
         {
 			if (!value) return;
-			
-            if (_title != value)
+
+            if (_path != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "title", _title, value);
-				
-                _title = value;
-                titleChanged = true;
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "path", _path, value);
+
+                _path = value;
+                pathChanged = true;
 
                 this.invalidateProperties();
-                dispatchEvent(new Event("titleChanged"));
+                dispatchEvent(new Event("pathChanged"));
             }
         }
 
@@ -114,7 +194,7 @@ package view.primeFaces.surfaceComponents.components
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             setCommonXMLAttributes(xml);
-			xml.@src = this.title;
+			xml.@src = this.path;
             return xml;
         }
 
@@ -122,7 +202,7 @@ package view.primeFaces.surfaceComponents.components
         {
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 			
-			this.title = xml.@src;
+			this.path = xml.@src;
         }
 
         public function toCode():XML
@@ -134,7 +214,7 @@ package view.primeFaces.surfaceComponents.components
 			
 			XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 			
-			xml.@src = this.title;
+			xml.@src = this.path;
 			return xml;
         }
 		
@@ -182,10 +262,10 @@ package view.primeFaces.surfaceComponents.components
 
         override protected function commitProperties():void
         {
-            if (titleChanged)
+            if (pathChanged)
             {
-                includeLabel.text = _title;
-                titleChanged = false;
+                includeLabel.text = this.path;
+                pathChanged = false;
             }
 
             super.commitProperties();
@@ -193,7 +273,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function onIncludeButtonClicked(event:MouseEvent):void
 		{
-			MoonshineBridgeUtils.moonshineBridge.openXhtmlFile(title);
+			MoonshineBridgeUtils.moonshineBridge.openXhtmlFile(path);
 		}
     }
 }

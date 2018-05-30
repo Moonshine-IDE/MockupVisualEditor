@@ -40,7 +40,7 @@ package utils
             public static function toCode(surface:EditingSurface):XML
             {
                 var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
-                var title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
+                var title:String = (element as UIComponent).hasOwnProperty("path") ? element["path"] : "";
                 var xml:XML = MainApplicationCodeUtils.getParentContent(surface, title, element.width, element.height,
                         element.percentWidth, element.percentHeight);
                 var mainContainer:XML = MainApplicationCodeUtils.getMainContainerTag(xml);

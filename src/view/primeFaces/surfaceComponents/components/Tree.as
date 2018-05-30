@@ -11,6 +11,42 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.TreePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces tree component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;Tree
+     * <b>Attributes</b>
+     * width="120"
+     * height="120"
+     * var=""
+     * value=""&gt;
+     *  &lt;TreeNode value="#{}"/&gt;
+     * &lt;/Tree&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:tree
+     * <b>Attributes</b>
+     * style="width:120px;height:120px;"
+     * var=""
+     * value=""&gt;
+     *  &lt;p:treeNode&gt;
+     *      &lt;h:outputText value="#{}"/&gt;
+     *  &lt;/p:treeNode&gt;
+     * &lt;/p:tree&gt;
+     * </pre>
+     */
     public class Tree extends mx.controls.Tree implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tree";
@@ -88,8 +124,19 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
-		
-		private var _isUpdating:Boolean;
+
+        public function get propertyEditorClass():Class
+        {
+            return TreePropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
 		{
 			return _isUpdating;
@@ -101,11 +148,23 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _treeVar:String = "";
+
 		[Bindable("treeVarChanged")]
+        /**
+         * <p>PrimeFaces: <strong>var</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Tree var=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:tree var=""/&gt;</listing>
+         */
 		public function get treeVar():String
 		{
 			return _treeVar;
 		}
+
 		public function set treeVar(value:String):void
 		{
 			if (_treeVar == value) return;
@@ -117,7 +176,18 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _treeValue:String = "";
+
 		[Bindable("treeValueChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Tree value=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:tree value=""/&gt;</listing>
+         */
 		public function get treeValue():String
 		{
 			return _treeValue;
@@ -132,22 +202,22 @@ package view.primeFaces.surfaceComponents.components
 			dispatchEvent(new Event("treeValueChanged"));
 		}
 
-        public function get propertyEditorClass():Class
-        {
-            return TreePropertyEditor;
-        }
-
-        private var _propertiesChangedEvents:Array;
-        public function get propertiesChangedEvents():Array
-        {
-            return _propertiesChangedEvents;
-        }
-
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+            xml.@["var"] = this.treeVar;
+            xml.@value = this.treeValue;
+
+            var treeNode:XML;
+            if (treeVar != "")
+            {
+                treeNode = new XML("<TreeNode/>");
+                treeNode.@value = "#{"+ this.treeVar +"}";
+                xml.appendChild(treeNode);
+            }
 
             return xml;
         }
@@ -155,6 +225,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            this.treeVar = xml.@["var"];
+            this.treeValue = xml.@value;
         }
 
         public function toCode():XML
@@ -167,20 +240,20 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 			
-			if (treeVar != "") xml.@['var'] = treeVar;
-			if (treeValue != "") xml.@value = treeValue;
+			xml.@["var"] = this.treeVar;
+            xml.@value = this.treeValue;
 
             var node:XML = new XML("<treeNode/>");
             node.addNamespace(primeFacesNamespace);
             node.setNamespace(primeFacesNamespace);
 			
 			var outputText:XML;
-			if (treeVar != "")
+			if (this.treeVar != "")
 			{
 				outputText = new XML("<outputText/>");
 				outputText.addNamespace(hNamespace);
 				outputText.setNamespace(hNamespace);
-				outputText.@value = "#{"+ treeVar +"}";
+				outputText.@value = "#{"+ this.treeVar +"}";
 				node.appendChild(outputText);
 			}
 			

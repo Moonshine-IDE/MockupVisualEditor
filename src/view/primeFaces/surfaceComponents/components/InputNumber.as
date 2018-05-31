@@ -87,6 +87,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.prompt = "0.00";
             this.typicalText = "0.00";
+            this.text = "0.00";
         }
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
@@ -260,6 +261,8 @@ package view.primeFaces.surfaceComponents.components
         [Bindable("textChanged")]
         /**
          * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @default "0.00"
          *
          * @example
          * <strong>Visual Editor XML:</strong>

@@ -9,6 +9,7 @@ package utils
     import view.primeFaces.supportClasses.ContainerDirection;
 
     import view.primeFaces.surfaceComponents.components.Container;
+    import view.primeFaces.surfaceComponents.components.Div;
 
     public class XMLCodeUtils
     {
@@ -84,14 +85,13 @@ package utils
             }
         }
 
-        public static function applyChildrenPositionFromXML(xml:XML, container:Container):void
+        public static function applyChildrenPositionFromXML(xml:XML, container:Div):void
         {
-            var className:String = xml["@class"];
-            if (className)
+            if (container.cssClass)
             {
-                var classes:Array = className.split(" ");
+                var classes:Array = container.cssClass.split(" ");
 
-                for each (className in classes)
+                for each (var className:String in classes)
                 {
                     switch (className)
                     {
@@ -156,69 +156,72 @@ package utils
             }
         }
 
-        public static function applyChildrenPositionToXML(container:Container, xml:XML):void
+        public static function getChildrenPositionForXML(container:Container):String
         {
+            var className:String;
+
             if (container.direction == ContainerDirection.HORIZONTAL_LAYOUT)
             {
-                xml["@class"] = container.wrap ? "flexHorizontalLayoutWrap" : "flexHorizontalLayout";
+                className = container.wrap ? "flexHorizontalLayoutWrap" : "flexHorizontalLayout";
 
                 switch (container.horizontalAlign)
                 {
                     case HorizontalAlign.LEFT:
-                        xml["@class"] += " " + "flexHorizontalLayoutLeft";
+                        className += " " + "flexHorizontalLayoutLeft";
                         break;
                     case HorizontalAlign.RIGHT:
-                        xml["@class"] += " " + "flexHorizontalLayoutRight";
+                        className += " " + "flexHorizontalLayoutRight";
                         break;
                     case HorizontalAlign.CENTER:
-                        xml["@class"] += " " + "flexCenter";
+                        className += " " + "flexCenter";
                         break;
                 }
 
                 switch (container.verticalAlign)
                 {
                     case VerticalAlign.TOP:
-                        xml["@class"] += " " + "flexHorizontalLayoutTop";
+                        className += " " + "flexHorizontalLayoutTop";
                         break;
                     case VerticalAlign.BOTTOM:
-                        xml["@class"] += " " + "flexHorizontalLayoutBottom";
+                        className += " " + "flexHorizontalLayoutBottom";
                         break;
                     case VerticalAlign.MIDDLE:
-                        xml["@class"] += " " + "flexMiddle";
+                        className += " " + "flexMiddle";
                         break;
                 }
             }
             else if (container.direction == ContainerDirection.VERTICAL_LAYOUT)
             {
-                xml["@class"] = container.wrap ? "flexVerticalLayoutWrap" : "flexVerticalLayout";
+                className = container.wrap ? "flexVerticalLayoutWrap" : "flexVerticalLayout";
 
                 switch (container.horizontalAlign)
                 {
                     case HorizontalAlign.LEFT:
-                        xml["@class"] += " " + "flexVerticalLayoutLeft";
+                        className += " " + "flexVerticalLayoutLeft";
                         break;
                     case HorizontalAlign.RIGHT:
-                        xml["@class"] += " " + "flexVerticalLayoutRight";
+                        className += " " + "flexVerticalLayoutRight";
                         break;
                     case HorizontalAlign.CENTER:
-
-                        xml["@class"] += " " + "flexMiddle";
+                        className += " " + "flexMiddle";
                         break;
                 }
 
                 switch (container.verticalAlign)
                 {
                     case VerticalAlign.TOP:
-                        xml["@class"] += " " + "flexVerticalLayoutTop";
+                        className += " " + "flexVerticalLayoutTop";
                         break;
                     case VerticalAlign.BOTTOM:
-                        xml["@class"] += " " + "flexVerticalLayoutBottom";
+                        className += " " + "flexVerticalLayoutBottom";
                         break;
                     case VerticalAlign.MIDDLE:
-                        xml["@class"] += " " + "flexCenter";
+                        className += " " + "flexCenter";
                         break;
                 }
             }
+
+            return className;
         }
     }
 }

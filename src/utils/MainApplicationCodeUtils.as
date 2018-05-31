@@ -117,7 +117,7 @@ package utils
 
 			var mainDiv:XML = new XML("<div/>");
 
-            XMLCodeUtils.applyChildrenPositionToXML(container, mainDiv);
+            mainDiv["@class"] = XMLCodeUtils.getChildrenPositionForXML(container);
             XMLCodeUtils.addSizeHtmlStyleToXML(mainDiv, width, height, percentWidth, percentHeight);
 			
 			bodyXML.appendChild(mainDiv);

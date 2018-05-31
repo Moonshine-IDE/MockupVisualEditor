@@ -30,14 +30,16 @@ package view.primeFaces.surfaceComponents.components
      * &lt;Div
      * <b>Attributes</b>
      * width="120"
-     * height="120"/&gt;
+     * height="120"
+     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
      * <pre>
      * &lt;div
      * <b>Attributes</b>
-     * style="width:120px;height:120px;"/&gt;
+     * style="width:120px;height:120px;"
+     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
     public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
@@ -69,11 +71,56 @@ package view.primeFaces.surfaceComponents.components
                 "horizontalAlignChanged"
             ];
         }
-		
-		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
-		}
+
+        private var _cssClass:String;
+        /**
+         * <p>HTML: <strong>class</strong></p>
+         *
+         * <p>This property helps laying out children Horizontally or Vertically. It uses browser FlexBox mechanism to avoid problems which occurs when children in div are positioned using default mechanism. Exported PrimeFaces project contains layout-styles.css file which has classes ready to use for laying out children.</p>
+         *
+         * <p>Use listed css classes to laying out children:</p>
+         *
+         * <p><strong>Horizontal Layout</strong></p>
+         * <ul>
+         *  <li>flexHorizontalLayoutWrap</li>
+         *  <li>flexHorizontalLayout</li>
+         *  <li>flexHorizontalLayoutLeft</li>
+         *  <li>flexHorizontalLayoutRight</li>
+         *  <li>flexHorizontalLayoutTop</li>
+         *  <li>flexHorizontalLayoutBottom</li>
+         * </ul>
+         *
+         * <p><strong>Vertical Layout</strong></p>
+         * <ul>
+         *  <li>flexVerticalLayoutWrap</li>
+         *  <li>flexVerticalLayout</li>
+         *  <li>flexVerticalLayoutLeft</li>
+         *  <li>flexVerticalLayoutRight</li>
+         *  <li>flexVerticalLayoutTop</li>
+         *  <li>flexVerticalLayoutBottom</li>
+         * </ul>
+         *
+         * <p><strong>Horizontal/Vertical Layout</strong></p>
+         * <ul>
+         *  <li>flexMiddle</li>
+         *  <li>flexCenter</li>
+         * </ul>
+         *
+         * https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+         *
+         * @default "flexHorizontalLayoutWrap flexHorizontalLayoutLeft flexHorizontalLayoutTop"
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Div class="flexHorizontalLayoutWrap flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;</listing>
+         * @example
+         * <strong>HTML:</strong>
+         * <listing version="3.0">&lt;div class="flexHorizontalLayoutWrap flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;</listing>
+         */
+        public function get cssClass():String
+        {
+            return _cssClass;
+        }
 
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
@@ -150,8 +197,13 @@ package view.primeFaces.surfaceComponents.components
         {
             return _propertiesChangedEvents;
         }
-		
-		public function restorePropertyOnChangeReference(nameField:String, value:*, eventType:String=null):void
+
+        override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+        {
+            _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+        }
+
+        public function restorePropertyOnChangeReference(nameField:String, value:*, eventType:String=null):void
 		{
 			this[nameField.toString()] = value;
 		}
@@ -168,7 +220,7 @@ package view.primeFaces.surfaceComponents.components
             var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
-            XMLCodeUtils.applyChildrenPositionToXML(this, xml);
+            xml["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
 
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
@@ -187,6 +239,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function fromXML(xml:XML, callback:Function):void
         {
+            this._cssClass = xml.@["class"];
             this.wrap = xml.@wrap == "true";
 
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -204,8 +257,8 @@ package view.primeFaces.surfaceComponents.components
         protected function internalToXML():XML
         {
             XMLCodeUtils.setSizeFromComponentToXML(this, mainXML);
-            XMLCodeUtils.applyChildrenPositionToXML(this, mainXML);
 
+            mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
             mainXML.@wrap = this.wrap;
 
             var elementCount:int = this.numElements;

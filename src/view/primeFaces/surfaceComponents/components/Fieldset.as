@@ -52,7 +52,7 @@ package view.primeFaces.surfaceComponents.components
 
     /**
      * <p>Representation of PrimeFaces fieldset component.</p>
-     *
+     * <p>Fieldset component is generated with div inside where children are positioned using FlexBox</p>
      * <strong>Visual Editor XML:</strong>
      * <pre>
      * &lt;Fieldset
@@ -61,7 +61,11 @@ package view.primeFaces.surfaceComponents.components
      * height="120"
      * toggleable="false"
      * legend="Basic"
-     * toggleSpeed="200"/&gt;
+     * toggleSpeed="200"&gt;
+     *  &lt;Div percentWidth="100" percentHeight="100"
+     *          class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"
+     *          wrap="false"/&gt;
+     * &lt;/Fieldset&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -71,7 +75,10 @@ package view.primeFaces.surfaceComponents.components
      * style="width:110px;height:120px;"
      * toggleable="false"
      * legend="Basic"
-     * toggleSpeed="200"/&gt;
+     * toggleSpeed="200"
+     *  &lt;div style="width:100%;height:100%;"
+     *          class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * &lt;/p:fieldset&gt;
      * </pre>
      */
     public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent

@@ -12,7 +12,13 @@
     <primeFaces:BasicsForm/>
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
-
+	
+	<forms:TextForm label="Value" textProperty="value" prompt="#\{bean.property\}"/>
+	<forms:TextForm label="Complete Method" textProperty="completeMethod" prompt="#\{bean.property\}"/>
+	<forms:TextForm label="Var" textProperty="fieldVar"/>
+	<forms:TextForm label="Item Label" textProperty="itemLabel" prompt="#\{bean.property\}"/>
+	<forms:TextForm label="Item Value" textProperty="itemValue" prompt="#\{bean.property\}"/>
+	<forms:TextForm label="Converter" textProperty="converter"/>
     <forms:ToggleButtonSelectedForm label="Multiple Selection" textProperty="multiple"/>
 
 </suportclasses:BasePropertyEditor>

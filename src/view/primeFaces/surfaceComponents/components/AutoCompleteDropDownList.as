@@ -86,7 +86,13 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "dropDownListChanged",
-                "multipleChanged"
+                "multipleChanged",
+				"valueChanged",
+				"completeMethodChanged",
+				"fieldVarChanged",
+				"itemLabelChanged",
+				"itemValueChanged",
+				"converterChanged"
             ];
         }
 		
@@ -197,6 +203,114 @@ package view.primeFaces.surfaceComponents.components
                 dispatchEvent(new Event("multipleChanged"));
             }
         }
+		
+		private var _value:String;
+		
+		[Bindable("valueChanged")]
+		public function get value():String
+		{
+			return _value;
+		}
+		public function set value(value:String):void
+		{
+			if (_value != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "value", _value, value);
+				
+				_value = value;
+				dispatchEvent(new Event("valueChanged"));
+			}
+		}
+		
+		private var _completeMethod:String;
+		
+		[Bindable("completeMethodChanged")]
+		public function get completeMethod():String
+		{
+			return _completeMethod;
+		}
+		public function set completeMethod(value:String):void
+		{
+			if (_completeMethod != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "completeMethod", _completeMethod, value);
+				
+				_completeMethod = value;
+				dispatchEvent(new Event("completeMethodChanged"));
+			}
+		}
+		
+		private var _fieldVar:String;
+		
+		[Bindable("fieldVarChanged")]
+		public function get fieldVar():String
+		{
+			return _fieldVar;
+		}
+		public function set fieldVar(value:String):void
+		{
+			if (_fieldVar != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "fieldVar", _fieldVar, value);
+				
+				_fieldVar = value;
+				dispatchEvent(new Event("fieldVarChanged"));
+			}
+		}
+		
+		private var _itemLabel:String;
+		
+		[Bindable("itemLabelChanged")]
+		public function get itemLabel():String
+		{
+			return _itemLabel;
+		}
+		public function set itemLabel(value:String):void
+		{
+			if (_itemLabel != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "itemLabel", _itemLabel, value);
+				
+				_itemLabel = value;
+				dispatchEvent(new Event("itemLabelChanged"));
+			}
+		}
+		
+		private var _itemValue:String;
+		
+		[Bindable("itemValueChanged")]
+		public function get itemValue():String
+		{
+			return _itemValue;
+		}
+		public function set itemValue(value:String):void
+		{
+			if (_itemValue != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "itemValue", _itemValue, value);
+				
+				_itemValue = value;
+				dispatchEvent(new Event("itemValueChanged"));
+			}
+		}
+		
+		private var _converter:String;
+		
+		[Bindable("converterChanged")]
+		public function get converter():String
+		{
+			return _converter;
+		}
+		public function set converter(value:String):void
+		{
+			if (_converter != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "converter", _converter, value);
+				
+				_converter = value;
+				dispatchEvent(new Event("converterChanged"));
+			}
+		}
 
         public function get propertyEditorClass():Class
         {
@@ -217,6 +331,12 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
+			xml.@value = this.value ? this.value : '';
+			xml.@completeMethod = this.completeMethod ? this.completeMethod : '';
+			xml.@fieldVar = this.fieldVar ? this.fieldVar : '';
+			xml.@itemLabel = this.itemLabel ? this.itemLabel : '';
+			xml.@itemValue = this.itemValue ? this.itemValue : '';
+			xml.@converter = this.converter ? this.converter : '';
 
             return xml;
         }
@@ -226,6 +346,12 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             this.multiple = xml.@multiple == "true";
+			this.value = xml.@value;
+			this.completeMethod = xml.@completeMethod;
+			this.fieldVar = xml.@fieldVar;
+			this.itemLabel = xml.@itemLabel;
+			this.itemValue = xml.@itemValue;
+			this.converter = xml.@converter;
         }
 
         public function toCode():XML
@@ -237,6 +363,13 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
+			xml.@value = this.value;
+			xml.@completeMethod = this.completeMethod;
+			
+			if (this.fieldVar && this.fieldVar != "") xml.@['var'] = this.fieldVar;
+			if (this.itemLabel && this.itemLabel != "") xml.@itemLabel = this.itemLabel;
+			if (this.itemValue && this.itemValue != "") xml.@itemValue = this.itemValue;
+			if (this.converter && this.converter != "") xml.@converter = this.converter;
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 

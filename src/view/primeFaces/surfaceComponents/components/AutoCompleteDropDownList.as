@@ -207,6 +207,16 @@ package view.primeFaces.surfaceComponents.components
 		private var _value:String;
 		
 		[Bindable("valueChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>value</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;DropDownList value=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:autoComplete value=""/&gt;</listing>
+		 */
 		public function get value():String
 		{
 			return _value;
@@ -225,6 +235,16 @@ package view.primeFaces.surfaceComponents.components
 		private var _completeMethod:String;
 		
 		[Bindable("completeMethodChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>completeMethod</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;DropDownList completeMethod=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:autoComplete completeMethod=""/&gt;</listing>
+		 */
 		public function get completeMethod():String
 		{
 			return _completeMethod;
@@ -243,6 +263,16 @@ package view.primeFaces.surfaceComponents.components
 		private var _fieldVar:String;
 		
 		[Bindable("fieldVarChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>var</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;DropDownList fieldVar=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:autoComplete var=""/&gt;</listing>
+		 */
 		public function get fieldVar():String
 		{
 			return _fieldVar;
@@ -261,6 +291,16 @@ package view.primeFaces.surfaceComponents.components
 		private var _itemLabel:String;
 		
 		[Bindable("itemLabelChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>itemLabel</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;DropDownList itemLabel=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:autoComplete itemLabel=""/&gt;</listing>
+		 */
 		public function get itemLabel():String
 		{
 			return _itemLabel;
@@ -279,6 +319,16 @@ package view.primeFaces.surfaceComponents.components
 		private var _itemValue:String;
 		
 		[Bindable("itemValueChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>itemValue</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;DropDownList itemValue=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:autoComplete itemValue=""/&gt;</listing>
+		 */
 		public function get itemValue():String
 		{
 			return _itemValue;
@@ -297,6 +347,16 @@ package view.primeFaces.surfaceComponents.components
 		private var _converter:String;
 		
 		[Bindable("converterChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>converter</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;DropDownList converter=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:autoComplete converter=""/&gt;</listing>
+		 */
 		public function get converter():String
 		{
 			return _converter;

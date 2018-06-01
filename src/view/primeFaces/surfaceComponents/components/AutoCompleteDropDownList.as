@@ -411,7 +411,6 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 			
-			this.isDropDown = xml.@dropdown == "true";
             this.multiple = xml.@multiple == "true";
 			this.value = xml.@value;
 			this.completeMethod = xml.@completeMethod;
@@ -430,8 +429,9 @@ package view.primeFaces.surfaceComponents.components
 
             xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
-			xml.@value = this.value;
-			xml.@completeMethod = this.completeMethod;
+			
+			xml.@value = this.value ? this.value : '';
+			xml.@completeMethod = this.completeMethod ? this.completeMethod : '';
 			
 			if (this.fieldVar && this.fieldVar != "") xml.@['var'] = this.fieldVar;
 			if (this.itemLabel && this.itemLabel != "") xml.@itemLabel = this.itemLabel;

@@ -37,6 +37,9 @@ package view.primeFaces.surfaceComponents.components
      * width="120"
      * height="30"
      * multiple="false"
+	 * value="" completeMethod=""
+	 * var="" itemLabel="" itemValue=""
+	 * converter=""
      * dropDown="true"/&gt;
      * </pre>
      *
@@ -46,6 +49,9 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * style="width:120px;height:30px;"
      * multiple="false"
+	 * value="" completeMethod=""
+	 * var="" itemLabel="" itemValue="" 
+	 * converter=""
      * dropDown="true"/&gt;
      * </pre>
      */
@@ -268,7 +274,7 @@ package view.primeFaces.surfaceComponents.components
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;DropDownList fieldVar=""/&gt;</listing>
+		 * <listing version="3.0">&lt;DropDownList var=""/&gt;</listing>
 		 * @example
 		 * <strong>PrimeFaces:</strong>
 		 * <listing version="3.0">&lt;p:autoComplete var=""/&gt;</listing>
@@ -393,7 +399,7 @@ package view.primeFaces.surfaceComponents.components
             xml.@multiple = this.multiple;
 			xml.@value = this.value ? this.value : '';
 			xml.@completeMethod = this.completeMethod ? this.completeMethod : '';
-			xml.@fieldVar = this.fieldVar ? this.fieldVar : '';
+			xml.@['var'] = this.fieldVar ? this.fieldVar : '';
 			xml.@itemLabel = this.itemLabel ? this.itemLabel : '';
 			xml.@itemValue = this.itemValue ? this.itemValue : '';
 			xml.@converter = this.converter ? this.converter : '';
@@ -404,11 +410,12 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-
+			
+			this.isDropDown = xml.@dropdown == "true";
             this.multiple = xml.@multiple == "true";
 			this.value = xml.@value;
 			this.completeMethod = xml.@completeMethod;
-			this.fieldVar = xml.@fieldVar;
+			this.fieldVar = xml.@['var'];
 			this.itemLabel = xml.@itemLabel;
 			this.itemValue = xml.@itemValue;
 			this.converter = xml.@converter;

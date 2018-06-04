@@ -4,9 +4,9 @@ package view.primeFaces.supportClasses
     {
         public var direction:String = ContainerDirection.HORIZONTAL_LAYOUT;
         public var wrap:Boolean;
-        public var gap:int = 0;
+        public var gap:int;
 
-        public function ContainerDirectionItem(direction:String = ContainerDirection.HORIZONTAL_LAYOUT,
+        public function ContainerDirectionItem(direction:String = "Horizontal",
                                                gap:int = 0, wrap:Boolean = false)
         {
             this.direction = direction;

@@ -23,6 +23,11 @@
 				ddl.collectionHost = MoonshineBridgeUtils;
 			}
 			
+			private function getResourceName(item:Object):String
+			{
+				return item.name;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -36,6 +41,7 @@
 
     <forms:DropdownListForm id="ddl" 
 							label="File Name" textProperty="path"
-							collectionProperty="filesList" labelField="resourcePath"/> <!-- _this_ not constructed to use in binding will throw compiler warning -->
+							collectionProperty="filesList" labelField="resourcePath" labelDisplayFunction="getResourceName"
+							/> <!-- _this_ not constructed to use in binding will throw compiler warning -->
 
 </suportclasses:BasePropertyEditor>

@@ -3,16 +3,16 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
-        creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin">
+        creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin" xmlns:forms="view.forms.*">
 
     <suportclasses:layout>
         <s:FormLayout />
     </suportclasses:layout>
 
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
-		<s:DropDownList id="ddlSelection"
+		<forms:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
-						dataProvider="{includeCollection}"
+						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}"
 						change="onSelectionChange(event)"/>
     </s:FormItem>
 
@@ -25,6 +25,7 @@
 		import spark.events.IndexChangeEvent;
 		
 		[Bindable] public var includeCollection:IList;
+		[Bindable] public var labelDisplayFunction:Function;
 		
 		private var _bindingCollection:ChangeWatcher;
 		private var _bindingSurfaceProperty:ChangeWatcher;

@@ -276,8 +276,15 @@ package view.primeFaces.surfaceComponents.components
             if (super.text != value)
             {
 				var oldValue:String = super.text;
-                super.text = _formatter.format(value);
-				
+                if (value == "0" || value == "0.00" || !value)
+                {
+                    super.text = "0.00";
+                }
+                else
+                {
+                    super.text = _formatter.format(value);
+                }
+
 				_propertyChangeFieldReference = new PropertyChangeReference(this, "text", oldValue, super.text);
 				dispatchEvent(new Event("textChanged"));
             }

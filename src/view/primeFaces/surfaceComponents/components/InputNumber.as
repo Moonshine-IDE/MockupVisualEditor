@@ -3,7 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     
     import mx.formatters.NumberFormatter;
-    
+
     import spark.components.TextInput;
     
     import utils.XMLCodeUtils;
@@ -275,18 +275,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (super.text != value)
             {
-				var oldValue:String = super.text;
-                if (value == "0" || value == "0.00" || !value)
-                {
-                    super.text = "0.00";
-                }
-                else
-                {
-                    super.text = _formatter.format(value);
-                }
-
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "text", oldValue, super.text);
-				dispatchEvent(new Event("textChanged"));
+				refreshText(value);
             }
         }
 
@@ -329,16 +318,24 @@ package view.primeFaces.surfaceComponents.components
 
             if (decimalSeparatorChanged)
             {
+                var newDecimalSeparatorText:String = this.getTextWithNewDecimalseparator();
+
                 _formatter.decimalSeparatorFrom = decimalSeparator;
                 _formatter.decimalSeparatorTo = decimalSeparator;
+
+                this.refreshText(newDecimalSeparatorText ? newDecimalSeparatorText : this.text);
 
                 decimalSeparatorChanged = false;
             }
 
             if (thousandsSeparatorChanged)
             {
+                var newThousandsSeparatorText:String = this.getTextWithNewThousandsSeparator();
+
                 _formatter.thousandsSeparatorFrom = thousandSeparator;
                 _formatter.thousandsSeparatorTo = thousandSeparator;
+
+                this.refreshText(newThousandsSeparatorText ? newThousandsSeparatorText : this.text);
 
                 thousandsSeparatorChanged = false;
             }
@@ -394,6 +391,46 @@ package view.primeFaces.surfaceComponents.components
             }
 
             return xml;
+        }
+
+        private function refreshText(value:String):void
+        {
+            var oldValue:String = super.text;
+            if (value == "0" || value == "0.00" || !value)
+            {
+                super.text = this.decimalSeparator ? "0.00".replace(".", this.decimalSeparator) : "0.00";
+            }
+            else
+            {
+                super.text = _formatter.format(value);
+            }
+
+            _propertyChangeFieldReference = new PropertyChangeReference(this, "text", oldValue, super.text);
+            dispatchEvent(new Event("textChanged"));
+        }
+
+        private function getTextWithNewThousandsSeparator():String
+        {
+            var newTextValue:String;
+            if (thousandsSeparatorChanged && _formatter.thousandsSeparatorFrom != _formatter.decimalSeparatorFrom)
+            {
+                var thousandsSeparatorReg:RegExp = new RegExp(_formatter.thousandsSeparatorFrom, "g");
+                newTextValue = this.text.replace(thousandsSeparatorReg, "");
+            }
+
+            return newTextValue;
+        }
+
+        private function getTextWithNewDecimalseparator():String
+        {
+            var newTextValue:String;
+            if (decimalSeparatorChanged && _formatter.thousandsSeparatorFrom != _formatter.decimalSeparatorFrom)
+            {
+                var decimalSeparatorReg:RegExp = new RegExp(_formatter.decimalSeparatorFrom, "g");
+                newTextValue = this.text.replace(decimalSeparatorReg, this.decimalSeparator);
+            }
+
+            return newTextValue;
         }
     }
 }

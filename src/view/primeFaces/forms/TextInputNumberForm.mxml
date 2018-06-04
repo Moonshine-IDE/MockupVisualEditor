@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<forms:TextForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                xmlns:forms="view.forms.*">
+    <fx:Script><![CDATA[
+        import view.interfaces.ISurfaceComponent;
+        import view.primeFaces.surfaceComponents.components.InputNumber;
+
+        private var hasDecimalSeparatorListener:Boolean;
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (!value && super.selectedItem && this.hasDecimalSeparatorListener)
+            {
+                this.hasDecimalSeparatorListener = false;
+                super.selectedItem.removeEventListener("decimalSeparatorChanged", onDecimalSeparatorChanged);
+            }
+
+            super.selectedItem = value;
+
+            if (value && !this.hasDecimalSeparatorListener)
+            {
+                this.hasDecimalSeparatorListener = true;
+                super.selectedItem.addEventListener("decimalSeparatorChanged", onDecimalSeparatorChanged);
+                this.refreshRestrict();
+            }
+        }
+
+        private function onDecimalSeparatorChanged(event:Event):void
+        {
+            this.refreshRestrict();
+        }
+
+        private function refreshRestrict():void
+        {
+            this.restrict = (this.selectedItem as InputNumber).decimalSeparator + "0-9";
+        }
+        ]]></fx:Script>
+</forms:TextForm>

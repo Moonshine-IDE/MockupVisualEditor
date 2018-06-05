@@ -210,7 +210,7 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 		
-		private var _value:String;
+		private var _value:String = "";
 		
 		[Bindable("valueChanged")]
 		/**
@@ -237,12 +237,40 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("valueChanged"));
 			}
 		}
-		
-		private var _completeMethod:String;
+
+        private var _fieldVar:String = "";
+
+        [Bindable("fieldVarChanged")]
+        /**
+         * <p>PrimeFaces: <strong>var</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList var=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:autoComplete var=""/&gt;</listing>
+         */
+        public function get fieldVar():String
+        {
+            return _fieldVar;
+        }
+        public function set fieldVar(value:String):void
+        {
+            if (_fieldVar != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "fieldVar", _fieldVar, value);
+
+                _fieldVar = value;
+                dispatchEvent(new Event("fieldVarChanged"));
+            }
+        }
+
+        private var _completeMethod:String;
 		
 		[Bindable("completeMethodChanged")]
 		/**
-		 * <p>PrimeFaces: <strong>completeMethod</strong></p>
+		 * <p>PrimeFaces: <strong>completeMethod (Optional)</strong></p>
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
@@ -265,40 +293,12 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("completeMethodChanged"));
 			}
 		}
-		
-		private var _fieldVar:String;
-		
-		[Bindable("fieldVarChanged")]
-		/**
-		 * <p>PrimeFaces: <strong>var</strong></p>
-		 *
-		 * @example
-		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;DropDownList var=""/&gt;</listing>
-		 * @example
-		 * <strong>PrimeFaces:</strong>
-		 * <listing version="3.0">&lt;p:autoComplete var=""/&gt;</listing>
-		 */
-		public function get fieldVar():String
-		{
-			return _fieldVar;
-		}
-		public function set fieldVar(value:String):void
-		{
-			if (_fieldVar != value)
-			{
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "fieldVar", _fieldVar, value);
-				
-				_fieldVar = value;
-				dispatchEvent(new Event("fieldVarChanged"));
-			}
-		}
-		
+
 		private var _itemLabel:String;
 		
 		[Bindable("itemLabelChanged")]
 		/**
-		 * <p>PrimeFaces: <strong>itemLabel</strong></p>
+		 * <p>PrimeFaces: <strong>itemLabel (Optional)</strong></p>
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
@@ -326,7 +326,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		[Bindable("itemValueChanged")]
 		/**
-		 * <p>PrimeFaces: <strong>itemValue</strong></p>
+		 * <p>PrimeFaces: <strong>itemValue (Optional)</strong></p>
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
@@ -354,7 +354,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		[Bindable("converterChanged")]
 		/**
-		 * <p>PrimeFaces: <strong>converter</strong></p>
+		 * <p>PrimeFaces: <strong>converter (Optional)</strong></p>
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
@@ -395,14 +395,31 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            xml.@['var'] = this.fieldVar;
+            xml.@value = this.value;
+
             xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
-			xml.@value = this.value ? this.value : '';
-			xml.@completeMethod = this.completeMethod ? this.completeMethod : '';
-			xml.@['var'] = this.fieldVar ? this.fieldVar : '';
-			xml.@itemLabel = this.itemLabel ? this.itemLabel : '';
-			xml.@itemValue = this.itemValue ? this.itemValue : '';
-			xml.@converter = this.converter ? this.converter : '';
+
+			if (this.completeMethod)
+            {
+                xml.@completeMethod = this.completeMethod;
+            }
+
+			if (this.itemLabel)
+            {
+                xml.@itemLabel = this.itemLabel;
+            }
+
+			if (this.itemValue)
+            {
+                xml.@itemValue = this.itemValue;
+            }
+
+			if (this.converter)
+            {
+                xml.@converter = this.converter;
+            }
 
             return xml;
         }
@@ -410,11 +427,13 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-			
+
+            this.value = xml.@value;
+            this.fieldVar = xml.@['var'];
+
             this.multiple = xml.@multiple == "true";
-			this.value = xml.@value;
+
 			this.completeMethod = xml.@completeMethod;
-			this.fieldVar = xml.@['var'];
 			this.itemLabel = xml.@itemLabel;
 			this.itemValue = xml.@itemValue;
 			this.converter = xml.@converter;
@@ -430,13 +449,28 @@ package view.primeFaces.surfaceComponents.components
             xml.@dropdown = this.isDropDown;
             xml.@multiple = this.multiple;
 			
-			xml.@value = this.value ? this.value : '';
-			xml.@completeMethod = this.completeMethod ? this.completeMethod : '';
-			
-			if (this.fieldVar && this.fieldVar != "") xml.@['var'] = this.fieldVar;
-			if (this.itemLabel && this.itemLabel != "") xml.@itemLabel = this.itemLabel;
-			if (this.itemValue && this.itemValue != "") xml.@itemValue = this.itemValue;
-			if (this.converter && this.converter != "") xml.@converter = this.converter;
+			xml.@value = this.value;
+            xml.@['var'] = this.fieldVar;
+
+			if (this.completeMethod)
+            {
+                xml.@completeMethod = this.completeMethod;
+            }
+
+			if (this.itemLabel)
+			{
+				xml.@itemLabel = this.itemLabel;
+            }
+
+			if (this.itemValue)
+			{
+				xml.@itemValue = this.itemValue;
+            }
+
+			if (this.converter)
+			{
+				xml.@converter = this.converter;
+            }
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 

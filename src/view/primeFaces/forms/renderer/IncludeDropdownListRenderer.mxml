@@ -35,7 +35,7 @@
 		]]>
 	</fx:Script>
 	
-	<s:Label id="txtLabel" text="{data.resourcePath}"
+	<s:Label id="txtLabel" text="{data.resourcePathWithoutRoot}"
 			 verticalCenter="0" left="4" right="4"
 			 maxDisplayedLines="1" mouseChildren="false" mouseFocusEnabled="false"/>
 </s:ItemRenderer>

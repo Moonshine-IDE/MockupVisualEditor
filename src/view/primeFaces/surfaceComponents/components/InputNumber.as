@@ -57,6 +57,9 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
         public static const ELEMENT_NAME:String = "InputNumber";
 
+        private static const DEFAULT_DECIMAL_SEPARATOR:String = ".";
+        private static const DEFAULT_THOUSANDS_SEPARATOR:String = ",";
+
         private var _formatter:NumberFormatter;
 
         public function InputNumber()
@@ -190,7 +193,7 @@ package view.primeFaces.surfaceComponents.components
             return super.height;
         }
 
-        private var _decimalSeparator:String = ".";
+        private var _decimalSeparator:String = DEFAULT_DECIMAL_SEPARATOR;
         private var decimalSeparatorChanged:Boolean;
 
 		[Bindable("decimalSeparatorChanged")]
@@ -210,10 +213,16 @@ package view.primeFaces.surfaceComponents.components
         {
             return _decimalSeparator;
         }
+
         public function set decimalSeparator(value:String):void
         {
             if (_decimalSeparator != value)
             {
+                if (!value)
+                {
+                    value = DEFAULT_DECIMAL_SEPARATOR;
+                }
+
 				_propertyChangeFieldReference = new PropertyChangeReference(this, "decimalSeparator", _decimalSeparator, value);
 				
                 _decimalSeparator = value;
@@ -223,7 +232,7 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        private var _thousandSeparator:String = ",";
+        private var _thousandSeparator:String = DEFAULT_THOUSANDS_SEPARATOR;
         private var thousandsSeparatorChanged:Boolean;
 
 		[Bindable("thousandSeparatorChanged")]
@@ -243,6 +252,7 @@ package view.primeFaces.surfaceComponents.components
         {
             return _thousandSeparator;
         }
+
         public function set thousandSeparator(value:String):void
         {
             if (_thousandSeparator != value)
@@ -334,6 +344,7 @@ package view.primeFaces.surfaceComponents.components
 
                 _formatter.thousandsSeparatorFrom = thousandSeparator;
                 _formatter.thousandsSeparatorTo = thousandSeparator;
+                _formatter.useThousandsSeparator = thousandSeparator ? true : false;
 
                 this.refreshText(newThousandsSeparatorText ? newThousandsSeparatorText : this.text);
 

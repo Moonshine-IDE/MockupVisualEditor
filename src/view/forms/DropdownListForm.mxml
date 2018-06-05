@@ -12,7 +12,7 @@
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
 		<forms:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
-						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}"
+						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}" showTooltipFunction="{showTooltipFunction}"
 						change="onSelectionChange(event)"/>
     </s:FormItem>
 
@@ -26,6 +26,9 @@
 		
 		[Bindable] public var includeCollection:IList;
 		[Bindable] public var labelDisplayFunction:Function;
+		[Bindable] public var showTooltipFunction:Function;
+		
+		public var listItemRenderer:Class;
 		
 		private var _bindingCollection:ChangeWatcher;
 		private var _bindingSurfaceProperty:ChangeWatcher;
@@ -83,6 +86,8 @@
 
         protected function onCreationCompletes(event:FlexEvent):void
         {
+			if (listItemRenderer) ddlSelection.itemRenderer = new ClassFactory(listItemRenderer);
+			
 			if (_labelField) ddlSelection.labelField = _labelField;
 			ddlSelection.callLater(selectCurrentItem);
 			

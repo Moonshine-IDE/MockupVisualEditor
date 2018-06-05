@@ -11,6 +11,8 @@
 			
 			import utils.MoonshineBridgeUtils;
 			
+			import view.primeFaces.forms.renderer.IncludeDropdownListRenderer;
+			
 			private function onPreinit():void
 			{
 				// central repository to use in different Include property editor components
@@ -28,6 +30,11 @@
 				return item.name;
 			}
 			
+			private function getResourcePathTooltip(item:Object):String
+			{
+				return item.resourcePathWithoutRoot;
+			}
+			
 		]]>
 	</fx:Script>
 
@@ -41,7 +48,8 @@
 
     <forms:DropdownListForm id="ddl" 
 							label="File Name" textProperty="path"
-							collectionProperty="filesList" labelField="resourcePath" labelDisplayFunction="getResourceName"
+							collectionProperty="filesList" labelField="resourcePathWithoutRoot" labelDisplayFunction="getResourceName" showTooltipFunction="getResourcePathTooltip"
+							listItemRenderer="{IncludeDropdownListRenderer}"
 							/> <!-- _this_ not constructed to use in binding will throw compiler warning -->
 
 </suportclasses:BasePropertyEditor>

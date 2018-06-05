@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true" minHeight="22"
+				creationComplete="onCreationCompletes(event)" removedFromStage="onRemoved(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import mx.events.ToolTipEvent;
+			
+			import utils.MoonshineBridgeUtils;
+			
+			override public function set data(value:Object):void
+			{
+				if (value)
+				{
+					super.data = value;
+					txtLabel.toolTip = data.resourcePathWithoutRoot;
+				}
+			}
+			
+			protected function onCreationCompletes(event:FlexEvent):void
+			{
+				txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
+				txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
+			}
+			
+			protected function onRemoved(event:Event):void
+			{
+				txtLabel.removeEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction());
+				txtLabel.removeEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction());
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Label id="txtLabel" text="{data.resourcePath}"
+			 verticalCenter="0" left="4" right="4"
+			 maxDisplayedLines="1" mouseChildren="false" mouseFocusEnabled="false"/>
+</s:ItemRenderer>

@@ -243,21 +243,24 @@ package view.primeFaces.surfaceComponents.components
 		{
 			super.createChildren();
 			
-			includeLabel = new Label();
-			includeLabel.maxDisplayedLines = 2;
-			includeLabel.showTruncationTip = true;
-			includeLabel.percentWidth = 90;
-			includeLabel.text = "File Name";
-			includeLabel.setStyle("textAlign", "center");
-			includeLabel.setStyle("fontSize", 12);
-			includeLabel.setStyle("fontWeight", "bold");
-			includeLabel.setStyle("textDecoration", "underline");
-			addElement(includeLabel);
-			
-			includeButton = new spark.components.Button();
-			includeButton.label = "Open in editor";
-			includeButton.addEventListener(MouseEvent.CLICK, onIncludeButtonClicked, false, 0, true);
-			addElement(includeButton);
+			if (!includeLabel)
+			{
+				includeLabel = new Label();
+				includeLabel.maxDisplayedLines = 2;
+				includeLabel.showTruncationTip = true;
+				includeLabel.percentWidth = 90;
+				includeLabel.text = "File Name";
+				includeLabel.setStyle("textAlign", "center");
+				includeLabel.setStyle("fontSize", 12);
+				includeLabel.setStyle("fontWeight", "bold");
+				includeLabel.setStyle("textDecoration", "underline");
+				addElement(includeLabel);
+				
+				includeButton = new spark.components.Button();
+				includeButton.label = "Open in editor";
+				includeButton.addEventListener(MouseEvent.CLICK, onIncludeButtonClicked, false, 0, true);
+				addElement(includeButton);
+			}
 		}
 
         override protected function commitProperties():void

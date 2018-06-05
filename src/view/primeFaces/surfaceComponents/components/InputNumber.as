@@ -340,7 +340,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (thousandsSeparatorChanged)
             {
-                var newThousandsSeparatorText:String = this.getTextWithNewThousandsSeparator();
+                var newThousandsSeparatorText:String = this.getTextWithoutThousandsSeparator();
 
                 _formatter.thousandsSeparatorFrom = thousandSeparator;
                 _formatter.thousandsSeparatorTo = thousandSeparator;
@@ -375,11 +375,19 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            this.text = xml.@value;
             this.thousandSeparator = xml.@thousandSeparator;
             this.decimalSeparator = xml.@decimalSeparator;
             this.idAttribute = xml.@id;
             this.required = xml.@required == "true";
+
+            var newTextValue:String = xml.@value;
+            if (this.thousandSeparator)
+            {
+                var thousandsSeparatorReg:RegExp = new RegExp('\\' + this.thousandSeparator, "g");
+                newTextValue = newTextValue.replace(thousandsSeparatorReg, "");
+            }
+
+            this.refreshText(newTextValue);
         }
 
         public function toCode():XML
@@ -420,12 +428,12 @@ package view.primeFaces.surfaceComponents.components
             dispatchEvent(new Event("textChanged"));
         }
 
-        private function getTextWithNewThousandsSeparator():String
+        private function getTextWithoutThousandsSeparator():String
         {
             var newTextValue:String;
             if (thousandsSeparatorChanged && _formatter.thousandsSeparatorFrom != _formatter.decimalSeparatorFrom)
             {
-                var thousandsSeparatorReg:RegExp = new RegExp(_formatter.thousandsSeparatorFrom, "g");
+                var thousandsSeparatorReg:RegExp = new RegExp('\\' + _formatter.thousandsSeparatorFrom, "g");
                 newTextValue = this.text.replace(thousandsSeparatorReg, "");
             }
 
@@ -435,10 +443,12 @@ package view.primeFaces.surfaceComponents.components
         private function getTextWithNewDecimalseparator():String
         {
             var newTextValue:String;
-            if (decimalSeparatorChanged && _formatter.thousandsSeparatorFrom != _formatter.decimalSeparatorFrom)
+            if (decimalSeparatorChanged && _formatter.decimalSeparatorFrom != this.decimalSeparator
+                    && _formatter.thousandsSeparatorFrom != _formatter.decimalSeparatorFrom)
             {
-                var decimalSeparatorReg:RegExp = new RegExp(_formatter.decimalSeparatorFrom, "g");
-                newTextValue = this.text.replace(decimalSeparatorReg, this.decimalSeparator);
+                var decimalSeparatorReg:RegExp = new RegExp('\\' + _formatter.decimalSeparatorFrom, "g");
+                    newTextValue = this.text.replace(decimalSeparatorReg, this.decimalSeparator);
+
             }
 
             return newTextValue;

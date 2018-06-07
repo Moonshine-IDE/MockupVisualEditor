@@ -92,6 +92,8 @@
 
 		private function commitWidth():void
 		{
+			if (!this.selectedItem) return;
+
 			if (this.widthInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
 			else
 			{
@@ -103,6 +105,8 @@
 
 		private function commitHeight():void
 		{
+			if (!this.selectedItem) return;
+
 			if (this.heightInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
 			else
 			{
@@ -114,6 +118,8 @@
 
 		private function commitId():void
 		{
+			if (!this.selectedItem) return;
+
 			this.selectedItem["idAttribute"] = this.idTextInput.text;
 		}
 
@@ -166,13 +172,15 @@
 			{
 				return;
 			}
-			this._bindingWidth = BindingUtils.bindSetter(onWidtUpdated, selectedItem, "width", false, true);
+			this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
 			this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
 			if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "idAttribute", false, true);
 		}
 
-		private function onWidtUpdated(value:Object):void
+		private function onWidthUpdated(value:Object):void
 		{
+			if (!this.selectedItem) return;
+
 			if (this.widthInput)
 			{
 				this.widthInput.text = !isNaN(this.selectedItem.percentWidth) ? this.selectedItem.percentWidth + "%" : this.selectedItem.width.toString();
@@ -181,6 +189,8 @@
 
 		private function onHeightUpdated(value:Object):void
 		{
+			if (!this.selectedItem) return;
+
 			if (this.heightInput)
 			{
 				this.heightInput.text = !isNaN(this.selectedItem.percentHeight) ? this.selectedItem.percentHeight + "%" : this.selectedItem.height.toString();
@@ -189,6 +199,8 @@
 
 		private function onIdUpdated(value:Object):void
 		{
+			if (!this.selectedItem) return;
+			
 			if (this.idTextInput)
 			{
 				this.idTextInput.text = this.selectedItem["idAttribute"];

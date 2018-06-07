@@ -16,7 +16,7 @@
             }
 
             super.selectedItem = value;
-			if (!selectedItem.hasEventListener(InputNumber.EVENT_CHILDREN_UPDATED)) 
+			if (value && !selectedItem.hasEventListener(InputNumber.EVENT_CHILDREN_UPDATED)) 
 			{
 				selectedItem.addEventListener(InputNumber.EVENT_CHILDREN_UPDATED, onInputNumberChildrenUpdated, false, 0, true);
 			}

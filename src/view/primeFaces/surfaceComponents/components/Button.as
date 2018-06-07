@@ -3,7 +3,6 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
     import spark.components.Button;
-    import spark.effects.AnimateColor;
 
     import utils.XMLCodeUtils;
     

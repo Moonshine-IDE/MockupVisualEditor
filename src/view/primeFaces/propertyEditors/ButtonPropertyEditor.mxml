@@ -8,7 +8,7 @@
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
-	<primeFaces:BasicsForm/>
+	<primeFaces:BasicsForm />
 
 	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
 	<forms:TextForm label="Value" textProperty="label"/>

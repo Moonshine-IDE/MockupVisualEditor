@@ -3,16 +3,17 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     
     import mx.formatters.NumberFormatter;
-
+    
     import spark.components.TextInput;
     
     import utils.XMLCodeUtils;
     
-    import view.interfaces.IHistorySurfaceComponent;
+    import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IIdAttribute;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
     [Exclude(name="commitProperties", kind="method")]
 
@@ -52,15 +53,17 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
+    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
         public static const ELEMENT_NAME:String = "InputNumber";
+		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
         private static const DEFAULT_DECIMAL_SEPARATOR:String = ".";
         private static const DEFAULT_THOUSANDS_SEPARATOR:String = ",";
 
         private var _formatter:NumberFormatter;
+		private var _multiFieldOldValues:Array;
 
         public function InputNumber()
         {
@@ -82,10 +85,9 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "textChanged",
+                "formattedTextChanged",
                 "idAttributeChanged",
-				"thousandSeparatorChanged",
-				"decimalSeparatorChanged"
+				"requiredChanged"
             ];
 
             this.prompt = "0.00";
@@ -126,6 +128,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isUpdating = value;
 		}
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			switch(nameField)
+			{
+				case "text":
+					super.text = value;
+					break;
+				default:
+					this[nameField.toString()] = value;
+					break;
+			}
+			dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+		}
 
         private var _idAttribute:String;
         /**
@@ -148,7 +164,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_idAttribute != value)
             {
-                _propertyChangeFieldReference = new PropertyChangeReference(this, "idAttribute", _idAttribute, value);
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "idAttribute", _idAttribute, value);
 
                 _idAttribute = value;
                 dispatchEvent(new Event("idAttributeChanged"))
@@ -223,7 +239,7 @@ package view.primeFaces.surfaceComponents.components
                     value = DEFAULT_DECIMAL_SEPARATOR;
                 }
 
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "decimalSeparator", _decimalSeparator, value);
+				_multiFieldOldValues = [{field:"text", value:super.text}, {field:"decimalSeparator", value:_decimalSeparator}];
 				
                 _decimalSeparator = value;
                 decimalSeparatorChanged = true;
@@ -257,8 +273,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_thousandSeparator != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "thousandSeparator", _thousandSeparator, value);
-				
+				_multiFieldOldValues = [{field:"text", value:super.text}, {field:"thousandSeparator", value:_thousandSeparator}];
+					
                 _thousandSeparator = value;
                 thousandsSeparatorChanged = true;
                 invalidateProperties();
@@ -268,7 +284,7 @@ package view.primeFaces.surfaceComponents.components
 
         [CollapseWhiteSpace]
         [Bindable("change")]
-        [Bindable("textChanged")]
+        [Bindable("formattedTextChanged")]
         /**
          * <p>PrimeFaces: <strong>value</strong></p>
          *
@@ -285,6 +301,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (super.text != value)
             {
+				_multiFieldOldValues = [{field:"text", value:super.text}];
 				refreshText(value);
             }
         }
@@ -313,7 +330,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_required != value)
             {
-                _propertyChangeFieldReference = new PropertyChangeReference(this, "required", _required, value);
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "required", _required, value);
 
                 _required = value;
                 requiredChanged = true;
@@ -414,7 +431,6 @@ package view.primeFaces.surfaceComponents.components
 
         private function refreshText(value:String):void
         {
-            var oldValue:String = super.text;
             if (value == "0" || value == "0.00" || !value)
             {
                 super.text = this.decimalSeparator ? "0.00".replace(".", this.decimalSeparator) : "0.00";
@@ -423,9 +439,9 @@ package view.primeFaces.surfaceComponents.components
             {
                 super.text = _formatter.format(value);
             }
-
-            _propertyChangeFieldReference = new PropertyChangeReference(this, "text", oldValue, super.text);
-            dispatchEvent(new Event("textChanged"));
+			
+            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, null, _multiFieldOldValues, [{field:"text", value:super.text}, {field:"decimalSeparator", value:_decimalSeparator}, {field:"thousandSeparator", value:_thousandSeparator}]);
+            dispatchEvent(new Event("formattedTextChanged"));
         }
 
         private function getTextWithoutThousandsSeparator():String

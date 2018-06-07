@@ -2,8 +2,8 @@
 <forms:TextForm xmlns:fx="http://ns.adobe.com/mxml/2009"
                 xmlns:forms="view.forms.*">
     <fx:Script><![CDATA[
-        import view.interfaces.ISurfaceComponent;
-        import view.primeFaces.surfaceComponents.components.InputNumber;
+		import view.interfaces.ISurfaceComponent;
+		import view.primeFaces.surfaceComponents.components.InputNumber;
 
         private var hasDecimalSeparatorListener:Boolean;
 
@@ -16,6 +16,10 @@
             }
 
             super.selectedItem = value;
+			if (!selectedItem.hasEventListener(InputNumber.EVENT_CHILDREN_UPDATED)) 
+			{
+				selectedItem.addEventListener(InputNumber.EVENT_CHILDREN_UPDATED, onInputNumberChildrenUpdated, false, 0, true);
+			}
 
             if (value && !this.hasDecimalSeparatorListener)
             {
@@ -34,5 +38,13 @@
         {
             this.restrict = (this.selectedItem as InputNumber).decimalSeparator + "0-9";
         }
+		
+		private function onInputNumberChildrenUpdated(event:Event):void
+		{
+			// I don't like this design but since all the logic is upon
+			// SET selectedItem I don't have any other option, unless the
+			// design change 
+			selectedItem = super.selectedItem;
+		}
         ]]></fx:Script>
 </forms:TextForm>

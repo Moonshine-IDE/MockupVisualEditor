@@ -7,156 +7,163 @@
         creationComplete="onTabFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
-			import flash.net.registerClassAlias;
-			
-			import mx.binding.utils.BindingUtils;
-			import mx.binding.utils.ChangeWatcher;
-			import mx.events.DragEvent;
-			import mx.events.FlexEvent;
-			import mx.utils.ObjectUtil;
-			
-			import spark.events.GridItemEditorEvent;
-			
-			import data.DataProviderListItem;
-			
-			import view.interfaces.IHistorySurfaceComponent;
-			import view.interfaces.ISurfaceComponent;
-			import view.primeFaces.surfaceComponents.components.DataTable;
-			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
-			
-			[Bindable] public var tableVar:String;
-			
-			private var _bindingTableVar:ChangeWatcher;
-			private var _label:String = "Columns";
-			
-			[Bindable("labelChange")]
-			public function get label():String
+		import mx.binding.utils.BindingUtils;
+		import mx.binding.utils.ChangeWatcher;
+		import mx.events.DragEvent;
+		import mx.events.FlexEvent;
+		import mx.utils.ObjectUtil;
+
+		import spark.events.GridItemEditorEvent;
+
+		import data.DataProviderListItem;
+
+		import view.interfaces.IHistorySurfaceComponent;
+		import view.interfaces.ISurfaceComponent;
+		import view.primeFaces.surfaceComponents.components.DataTable;
+		import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+
+		[Bindable]
+		public var tableVar:String;
+
+		private var _bindingTableVar:ChangeWatcher;
+		private var _label:String = "Columns";
+
+		[Bindable("labelChange")]
+		public function get label():String
+		{
+			return this._label;
+		}
+
+		public function set label(value:String):void
+		{
+			if (this._label === value)
 			{
-				return this._label;
+				return;
 			}
-			
-			public function set label(value:String):void
+			this._label = value;
+			this.dispatchEvent(new Event("labelChange"));
+		}
+
+		private function editSelectedItem():void
+		{
+			updatePropertyEditorPriorToEdit();
+
+			dgColumns.ensureCellIsVisible(dgColumns.selectedIndex);
+			dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
+		}
+
+		private function updatePropertyEditorPriorToEdit():void
+		{
+			registerClassAlias("DataProviderListItem", DataProviderListItem);
+			var historyObject:Object = {
+				object: ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]),
+				index: dgColumns.selectedIndex
+			};
+			(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
+		}
+
+		private function addItemButton_clickHandler(event:MouseEvent):void
+		{
+			var listItem:DataProviderListItem = new DataProviderListItem("Title");
+			dgColumns.dataProvider.addItem(listItem);
+
+			updateToOwner(false, DataTable.GRID_ITEM_ADD);
+
+			dgColumns.validateNow();
+			dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
+			callLater(editSelectedItem);
+		}
+
+		private function editItemButton_clickHandler(event:MouseEvent):void
+		{
+			this.editSelectedItem();
+		}
+
+		private function deleteItemButton_clickHandler(event:MouseEvent):void
+		{
+			updateToOwner(false, DataTable.GRID_ITEM_DELETE, dgColumns.selectedIndex);
+			dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
+		}
+
+		private function onTabFormCreationComplete(event:FlexEvent):void
+		{
+			updateColumnList();
+			updateBinding();
+		}
+
+		private function updateColumnList():void
+		{
+			if (!dgColumns) return;
+
+			var grid:DataTable = (selectedItem as DataTable);
+			dgColumns.dataProvider = grid.tableColumnDescriptor;
+		}
+
+		private function onTableUpdated(event:Event):void
+		{
+			updateColumnList();
+		}
+
+		private function updateToOwner(isAll:Boolean = false, updateType:String = null, itemIndex:int = -1):void
+		{
+			var grid:DataTable = (selectedItem as DataTable);
+			grid.generateColumns(isAll, updateType, itemIndex);
+		}
+
+		private function updateBinding():void
+		{
+			if (this._bindingTableVar)
 			{
-				if (this._label === value)
-				{
-					return;
-				}
-				this._label = value;
-				this.dispatchEvent(new Event("labelChange"));
+				this._bindingTableVar.unwatch();
+				this._bindingTableVar = null;
 			}
-			
-			private function editSelectedItem():void
+			if (this.selectedItem === null)
 			{
-				updatePropertyEditorPriorToEdit();
-				
-				dgColumns.ensureCellIsVisible(dgColumns.selectedIndex);
-				dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
+				return;
 			}
-			
-			private function updatePropertyEditorPriorToEdit():void
+			this._bindingTableVar = BindingUtils.bindSetter(onTableVarUpdated, selectedItem, "tableVar", false, true);
+		}
+
+		private function onTableVarUpdated(value:Object):void
+		{
+			tableVar = value.toString();
+			(selectedItem as DataTable).tableColumnDescriptor.refresh();
+		}
+
+		protected function onRowDragAndDropped(event:DragEvent):void
+		{
+			dgColumns.callLater(updateToOwner, [true]);
+		}
+
+		protected function onRowDragStarts(event:DragEvent):void
+		{
+			dgColumns.endItemEditorSession();
+		}
+
+		protected function onRowEditEnd(event:GridItemEditorEvent):void
+		{
+			updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
+		}
+
+		private function formattedValue(item:Object, column:GridColumn):String
+		{
+			return (item.value ? "#{" + tableVar + "." + item.value + "}" : "#{" + tableVar + ".}");
+		}
+
+		override public function set selectedItem(value:ISurfaceComponent):void
+		{
+			super.selectedItem = value;
+
+			if (value && !value.hasEventListener(DataTable.EVENT_CHILDREN_UPDATED))
 			{
-				registerClassAlias("DataProviderListItem", DataProviderListItem);
-				var historyObject:Object = {object:ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]), index:dgColumns.selectedIndex};
-				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
+				value.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
 			}
-			
-			private function addItemButton_clickHandler(event:MouseEvent):void
-			{
-				var listItem:DataProviderListItem = new DataProviderListItem("Title");
-				dgColumns.dataProvider.addItem(listItem);
-				
-				updateToOwner(false, DataTable.GRID_ITEM_ADD);
-				
-				dgColumns.validateNow();
-				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
-				callLater(editSelectedItem);
-			}
-			
-			private function editItemButton_clickHandler(event:MouseEvent):void
-			{
-				this.editSelectedItem();
-			}
-			
-			private function deleteItemButton_clickHandler(event:MouseEvent):void
-			{
-				updateToOwner(false, DataTable.GRID_ITEM_DELETE, dgColumns.selectedIndex);
-				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
-			}
-			
-			private function onTabFormCreationComplete(event:FlexEvent):void
-			{
-				updateColumnList();
-				updateBinding();
-			}
-			
-			private function updateColumnList():void
-			{
-				var grid:DataTable = (selectedItem as DataTable);
-				dgColumns.dataProvider = grid.tableColumnDescriptor;
-			}
-			
-			private function onTableUpdated(event:Event):void
-			{
-				updateColumnList();
-			}
-			
-			private function updateToOwner(isAll:Boolean=false, updateType:String=null, itemIndex:int=-1):void
-			{
-				var grid:DataTable = (selectedItem as DataTable);
-				grid.generateColumns(isAll, updateType, itemIndex);
-			}
-			
-			private function updateBinding():void
-			{
-				if (this._bindingTableVar)
-				{
-					this._bindingTableVar.unwatch();
-					this._bindingTableVar = null;
-				}
-				if (this.selectedItem === null)
-				{
-					return;
-				}
-				this._bindingTableVar = BindingUtils.bindSetter(onTableVarUpdated, selectedItem, "tableVar", false, true);
-			}
-			
-			private function onTableVarUpdated(value:Object):void
-			{
-				tableVar = value.toString();
-				(selectedItem as DataTable).tableColumnDescriptor.refresh();
-			}
-			
-			protected function onRowDragAndDropped(event:DragEvent):void
-			{
-				dgColumns.callLater(updateToOwner, [true]);
-			}
-			
-			protected function onRowDragStarts(event:DragEvent):void
-			{
-				dgColumns.endItemEditorSession();
-			}
-			
-			protected function onRowEditEnd(event:GridItemEditorEvent):void
-			{
-				updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
-			}
-			
-			private function formattedValue(item:Object,column:GridColumn):String
-			{
-				return (item.value ? "#{"+ tableVar +"."+ item.value +"}" : "#{"+ tableVar +".}");
-			}
-			
-			override public function set selectedItem(value:ISurfaceComponent):void
-			{
-				super.selectedItem = value;
-				selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
-			}
-			
-			protected function onRowEditStarts(event:GridItemEditorEvent):void
-			{
-				updatePropertyEditorPriorToEdit();
-			}
-			
+		}
+
+		protected function onRowEditStarts(event:GridItemEditorEvent):void
+		{
+			updatePropertyEditorPriorToEdit();
+		}
 		]]>
 	</fx:Script>
 	

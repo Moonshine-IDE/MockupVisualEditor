@@ -7,147 +7,151 @@
         creationComplete="onTabFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayList;
-			import mx.events.FlexEvent;
-			
-			import spark.components.NavigatorContent;
-			import spark.containers.Navigator;
-			import spark.events.GridItemEditorEvent;
-			import spark.events.GridSelectionEvent;
-			
-			import components.tabNavigator.TabNavigatorWithOrientation;
-			
-			import data.DataProviderListItem;
-			
-			import view.interfaces.ISelectableItemsComponent;
-			import view.interfaces.ISurfaceComponent;
-			import view.primeFaces.surfaceComponents.components.TabView;
+		import mx.collections.ArrayList;
+		import mx.events.FlexEvent;
 
-			[Bindable]
-			private var itemsListDataProvider:ArrayList;
-	
-			private var _label:String = "Items";
-			private var itemAdded:Boolean;
-	
-			[Bindable("labelChange")]
-			public function get label():String
+		import spark.components.NavigatorContent;
+		import spark.containers.Navigator;
+		import spark.events.GridItemEditorEvent;
+		import spark.events.GridSelectionEvent;
+
+		import components.tabNavigator.TabNavigatorWithOrientation;
+
+		import data.DataProviderListItem;
+
+		import view.interfaces.ISelectableItemsComponent;
+		import view.interfaces.ISurfaceComponent;
+		import view.primeFaces.surfaceComponents.components.TabView;
+
+		[Bindable]
+		private var itemsListDataProvider:ArrayList;
+
+		private var _label:String = "Items";
+		private var itemAdded:Boolean;
+
+		[Bindable("labelChange")]
+		public function get label():String
+		{
+			return this._label;
+		}
+
+		public function set label(value:String):void
+		{
+			if (this._label === value)
 			{
-				return this._label;
+				return;
 			}
-	
-			public function set label(value:String):void
+			this._label = value;
+			this.dispatchEvent(new Event("labelChange"));
+		}
+
+		private function editSelectedItem():void
+		{
+			dgTabs.ensureCellIsVisible(dgTabs.selectedIndex);
+			dgTabs.startItemEditorSession(dgTabs.selectedIndex, 0);
+		}
+
+		private function addItemButton_clickHandler(event:MouseEvent):void
+		{
+			var navContent:NavigatorContent = new NavigatorContent();
+			navContent.label = "Title";
+
+			var navigator:Navigator = (selectedItem as Navigator);
+			navigator.addElement(navContent);
+			var navigatorNumElements:int = navigator.numElements;
+
+			var listItem:DataProviderListItem = new DataProviderListItem("Title");
+			itemsListDataProvider.addItem(listItem);
+
+			if (selectedItem is ISelectableItemsComponent)
 			{
-				if (this._label === value)
-				{
-					return;
-				}
-				this._label = value;
-				this.dispatchEvent(new Event("labelChange"));
+				ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
 			}
-	
-			private function editSelectedItem():void
+
+			this.itemAdded = true;
+			this.dgTabs.invalidateDisplayList();
+			this.invalidateDisplayList();
+		}
+
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+			if (itemAdded)
 			{
-				dgTabs.ensureCellIsVisible(dgTabs.selectedIndex);
-				dgTabs.startItemEditorSession(dgTabs.selectedIndex, 0);
-			}
-	
-			private function addItemButton_clickHandler(event:MouseEvent):void
-			{
-				var navContent:NavigatorContent = new NavigatorContent();
-				navContent.label = "Title";
-	
-				var navigator:Navigator = (selectedItem as Navigator);
-				navigator.addElement(navContent);
-				var navigatorNumElements:int = navigator.numElements;
-	
-				var listItem:DataProviderListItem = new DataProviderListItem("Title");
-				itemsListDataProvider.addItem(listItem);
-	
-				if (selectedItem is ISelectableItemsComponent)
-				{
-					ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
-				}
-	
-				this.itemAdded = true;
-				this.dgTabs.invalidateDisplayList();
-				this.invalidateDisplayList();
-			}
-	
-			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-			{
-				super.updateDisplayList(unscaledWidth, unscaledHeight);
-	
-				if (itemAdded)
-				{
-					dgTabs.setSelectedIndex(dgTabs.dataProvider.length - 1);
-					this.editSelectedItem();
-					this.itemAdded = false;
-				}
-			}
-				
-			override public function set selectedItem(value:ISurfaceComponent):void
-			{
-				super.selectedItem = value;
-				selectedItem.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
-			}
-	
-			private function editItemButton_clickHandler(event:MouseEvent):void
-			{
+				dgTabs.setSelectedIndex(dgTabs.dataProvider.length - 1);
 				this.editSelectedItem();
+				this.itemAdded = false;
 			}
-	
-			private function deleteItemButton_clickHandler(event:MouseEvent):void
+		}
+
+		override public function set selectedItem(value:ISurfaceComponent):void
+		{
+			super.selectedItem = value;
+
+			if (value && !value.hasEventListener(TabView.EVENT_CHILDREN_UPDATED))
 			{
-				var deleteIndex:int = dgTabs.selectedIndex;
-	
-				var navigator:Navigator = (selectedItem as Navigator);
-				if (navigator.numElements > 1)
-				{
-					navigator.removeItemAt(deleteIndex);
-					dgTabs.dataProvider.removeItemAt(dgTabs.selectedIndex);
-					dgTabs.selectedIndex = 0;
-					dgTabs.ensureCellIsVisible(0);
-				}
+				value.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
 			}
-	
-			private function onTabFormCreationComplete(event:FlexEvent):void
+		}
+
+		private function editItemButton_clickHandler(event:MouseEvent):void
+		{
+			this.editSelectedItem();
+		}
+
+		private function deleteItemButton_clickHandler(event:MouseEvent):void
+		{
+			var deleteIndex:int = dgTabs.selectedIndex;
+
+			var navigator:Navigator = (selectedItem as Navigator);
+			if (navigator.numElements > 1)
 			{
-				dgTabs.columnHeaderGroup.visible = dgTabs.columnHeaderGroup.includeInLayout = false;
-	
-				var navigator:Navigator = (selectedItem as Navigator);
-				var navigatorNumElements:int = navigator.numElements;
-				itemsListDataProvider = new ArrayList();
-	
-				for (var i:int = 0; i < navigatorNumElements; i++)
-				{
-					var tabItem:NavigatorContent = navigator.getElementAt(i) as NavigatorContent;
-					var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
-					itemsListDataProvider.addItem(listItem);
-				}
-	
-				dgTabs.dataProvider = itemsListDataProvider;
+				navigator.removeItemAt(deleteIndex);
+				dgTabs.dataProvider.removeItemAt(dgTabs.selectedIndex);
+				dgTabs.selectedIndex = 0;
+				dgTabs.ensureCellIsVisible(0);
 			}
-			
-			private function onTabViewChildrenUpdated(event:Event):void
+		}
+
+		private function onTabFormCreationComplete(event:FlexEvent):void
+		{
+			dgTabs.columnHeaderGroup.visible = dgTabs.columnHeaderGroup.includeInLayout = false;
+
+			var navigator:Navigator = (selectedItem as Navigator);
+			var navigatorNumElements:int = navigator.numElements;
+			itemsListDataProvider = new ArrayList();
+
+			for (var i:int = 0; i < navigatorNumElements; i++)
 			{
-				onTabFormCreationComplete(null);
+				var tabItem:NavigatorContent = navigator.getElementAt(i) as NavigatorContent;
+				var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
+				itemsListDataProvider.addItem(listItem);
 			}
 
-			protected function onItemEditFinished(event:GridItemEditorEvent):void
+			dgTabs.dataProvider = itemsListDataProvider;
+		}
+
+		private function onTabViewChildrenUpdated(event:Event):void
+		{
+			onTabFormCreationComplete(null);
+		}
+
+		protected function onItemEditFinished(event:GridItemEditorEvent):void
+		{
+			var listItem:DataProviderListItem = dgTabs.dataProvider.getItemAt(event.rowIndex) as DataProviderListItem;
+			var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
+
+			navigator.setSelectedTabLabel(listItem.label);
+		}
+
+		protected function onGridSelectionChanged(event:GridSelectionEvent):void
+		{
+			if (selectedItem is ISelectableItemsComponent)
 			{
-				var listItem:DataProviderListItem = dgTabs.dataProvider.getItemAt(event.rowIndex) as DataProviderListItem;
-				var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
-	
-				navigator.setSelectedTabLabel(listItem.label);
+				ISelectableItemsComponent(selectedItem).selectedIndex = dgTabs.selectedIndex;
 			}
-	
-			protected function onGridSelectionChanged(event:GridSelectionEvent):void
-			{
-				if (selectedItem is ISelectableItemsComponent)
-				{
-					ISelectableItemsComponent(selectedItem).selectedIndex = dgTabs.selectedIndex;
-				}
-			}
+		}
 		]]>
 	</fx:Script>
     <suportclasses:layout>

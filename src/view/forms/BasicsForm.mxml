@@ -87,18 +87,24 @@
 
 		private function commitX():void
 		{
+			if (!this.selectedItem) return;
+
 			this.selectedItem.x = parseFloat(this.xInput.text);
 			this.xInput.selectAll();
 		}
 
 		private function commitY():void
 		{
+			if (!this.selectedItem) return;
+			
 			this.selectedItem.y = parseFloat(this.yInput.text);
 			this.yInput.selectAll();
 		}
 
 		private function commitWidth():void
 		{
+			if (!this.selectedItem) return;
+
 			if (this.widthInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
 			else
 			{
@@ -110,6 +116,8 @@
 
 		private function commitHeight():void
 		{
+			if (!this.selectedItem) return;
+
 			if (this.heightInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
 			else
 			{
@@ -285,50 +293,12 @@
 		private function onBasicFormCreationComplete(event:FlexEvent):void
 		{
 			removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
-			CONFIG::MOONSHINE
-			{
-				tabDictionary.push(xInput);
-				tabDictionary.push(yInput);
-				tabDictionary.push(widthInput);
-				tabDictionary.push(heightInput);
 
-				addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onBasicFormKeyFocusChange, false, EventPriority.DEFAULT_HANDLER);
-			}
-		}
-
-		CONFIG::MOONSHINE
-		{
-			override protected function isOurFocus(target:DisplayObject):Boolean
-			{
-				return target == xInput.textDisplay ||
-						target == yInput.textDisplay ||
-						target == widthInput.textDisplay ||
-						target == heightInput.textDisplay || super.isOurFocus(target);
-			}
-
-			private function onBasicFormKeyFocusChange(event:FocusEvent):void
-			{
-				if (event.isDefaultPrevented())
-					return;
-
-				if (!event.shiftKey && isOurFocus(DisplayObject(event.target)))
-				{
-					event.preventDefault();
-
-					var currentTabIndex:int = event.target.tabIndex;
-
-					if (currentTabIndex > -1)
-					{
-						currentTabIndex += 1;
-						if (tabDictionary.length < currentTabIndex)
-						{
-							currentTabIndex = 1;
-						}
-
-						tabDictionary[currentTabIndex - 1].setFocus();
-					}
-				}
-			}
+			_childrenForFocus = [];
+			_childrenForFocus.push(xInput.textDisplay);
+			_childrenForFocus.push(yInput.textDisplay);
+			_childrenForFocus.push(widthInput.textDisplay);
+			_childrenForFocus.push(heightInput.textDisplay);
 		}
 		]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

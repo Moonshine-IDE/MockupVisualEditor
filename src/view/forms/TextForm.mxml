@@ -2,7 +2,8 @@
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
                                       xmlns:s="library://ns.adobe.com/flex/spark"
                                       xmlns:suportclasses="view.suportClasses.*"
-                                      skinClass="skins.FormSkin">
+                                      skinClass="skins.FormSkin"
+                                      creationComplete="onTextFormCreationComplete(event)">
 
     <suportclasses:layout>
         <s:FormLayout />
@@ -18,13 +19,16 @@
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
-        
+        import mx.events.FlexEvent;
+
         import view.interfaces.ISurfaceComponent;
 
         private var _binding:ChangeWatcher;
-		
-		[Bindable] public var prompt:String;
-		[Bindable] public var restrict:String;
+
+        [Bindable]
+        public var prompt:String;
+        [Bindable]
+        public var restrict:String;
 
         [Bindable]
         public var bindableText:String;
@@ -54,10 +58,11 @@
         {
             _maxChar = value;
         }
-		public function get maxChar():int
-		{
-			return _maxChar;
-		}
+
+        public function get maxChar():int
+        {
+            return _maxChar;
+        }
 
         private var _textProperty:String = "text";
 
@@ -86,6 +91,8 @@
 
         private function textInput_changeHandler(event:Event):void
         {
+            if (!this.selectedItem) return;
+
             if (!(this.textProperty in this.selectedItem))
             {
                 this.textInput.errorString = "Field " + this._textProperty + " does not exist";
@@ -93,7 +100,7 @@
             }
             this.textInput.errorString = "";
             this.selectedItem[this._textProperty] = this.textInput.text;
-			this.dispatchEvent(new Event(Event.CHANGE));
+            this.dispatchEvent(new Event(Event.CHANGE));
         }
 
         private function updateBinding():void
@@ -108,6 +115,12 @@
                 return;
             }
             this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false, true);
+        }
+
+        private function onTextFormCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(textInput.textDisplay);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

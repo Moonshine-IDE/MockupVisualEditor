@@ -2,7 +2,8 @@
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
                                       xmlns:s="library://ns.adobe.com/flex/spark"
                                       xmlns:suportclasses="view.suportClasses.*"
-                                      skinClass="skins.FormSkin">
+                                      skinClass="skins.FormSkin"
+                                      creationComplete="onToggleButtonCreationComplete(event)">
 
     <suportclasses:layout>
         <s:FormLayout />
@@ -17,6 +18,7 @@
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
+        import mx.events.FlexEvent;
 
         import view.interfaces.ISurfaceComponent;
 
@@ -25,6 +27,7 @@
 
         [Bindable]
         public var bindableText:Boolean;
+
         private var _label:String = "Text";
 
         [Bindable("labelChange")]
@@ -110,6 +113,12 @@
                 return;
             }
             this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false, true);
+        }
+
+        private function onToggleButtonCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(check);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

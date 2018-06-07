@@ -1,17 +1,21 @@
 package view.suportClasses
 {
-	import flash.events.Event;
-	
-	import mx.core.IVisualElement;
+    import flash.events.Event;
+    import flash.events.FocusEvent;
+
+    import mx.core.EventPriority;
+
+    import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-	
-	import spark.components.Group;
+    import mx.core.UIComponent;
+
+    import spark.components.Group;
 	
 	import utils.MoonshineBridgeUtils;
 	
 	import view.EditingSurface;
 	import view.VisualEditor;
-	import view.interfaces.IHistorySurfaceComponent;
+    import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.IPropertyEditor;
 	import view.interfaces.ISurfaceComponent;
 	import view.suportClasses.events.PropertyEditorChangeEvent;
@@ -27,8 +31,9 @@ package view.suportClasses
 			this.addEventListener(Event.REMOVED, propertyEditor_removedHandler);
 		}
 
-		private var _propertyEditors:Vector.<IPropertyEditor> = new <IPropertyEditor>[];
+        private var childrenForFocus:Array;
 
+        private var _propertyEditors:Vector.<IPropertyEditor> = new <IPropertyEditor>[];
 		private var _surface:EditingSurface;
 
 		public function get surface():EditingSurface
@@ -124,7 +129,9 @@ package view.suportClasses
 				this._propertyEditors.push(editor);
 				editor.surface = this._surface;
 				editor.selectedItem = this._selectedItem;
+                editor.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, onEditorFocusChange, false, EventPriority.DEFAULT_HANDLER);
 			}
+
 			if(target is IVisualElementContainer)
 			{
 				var container:IVisualElementContainer = IVisualElementContainer(target);
@@ -136,6 +143,62 @@ package view.suportClasses
 				}
 			}
 		}
+
+        private function onEditorFocusChange(event:FocusEvent):void
+        {
+            if (event.isDefaultPrevented())
+                return;
+
+			if (!event.shiftKey && this.childrenForFocus)
+			{
+				event.preventDefault();
+
+                var childrenFocusCount:int = this.childrenForFocus.length;
+				for (var i:int = 0; i < childrenFocusCount; i++)
+				{
+					if (this.childrenForFocus[i] == event.target)
+					{
+						i = i + 1;
+						if (i < childrenFocusCount)
+						{
+                            this.childrenForFocus[i].setFocus();
+						}
+						else
+						{
+                            this.childrenForFocus[0].setFocus();
+						}
+                        break;
+					}
+				}
+			}
+        }
+
+        private function propertyEditor_addedHandler(event:Event):void
+        {
+            var object:IVisualElement = event.target as IVisualElement;
+            if(object === null || object === this)
+            {
+                return;
+            }
+            this.populatePropertyEditors(object);
+			this.collectChildrenForFocus();
+        }
+
+        private function propertyEditor_removedHandler(event:Event):void
+        {
+            var object:IVisualElement = event.target as IVisualElement;
+            if (object === this)
+            {
+                this.removeEventListener(Event.ADDED, propertyEditor_addedHandler);
+                this.removeEventListener(Event.REMOVED, propertyEditor_removedHandler);
+
+                unregisterPropertyChangedEvents(_selectedItem);
+
+                this.cleanupPropertyEditors(object);
+
+				childrenForFocus = null;
+            }
+        }
 
 		private function cleanupPropertyEditors(target:IVisualElement):void
 		{
@@ -149,7 +212,9 @@ package view.suportClasses
 				}
 				editor.selectedItem = null;
 				editor.surface = null;
+                editor.removeEventListener(FocusEvent.KEY_FOCUS_CHANGE, onEditorFocusChange);
 			}
+
 			if(target is IVisualElementContainer)
 			{
 				var container:IVisualElementContainer = IVisualElementContainer(target);
@@ -194,30 +259,19 @@ package view.suportClasses
 			});
         }
 
-        private function propertyEditor_addedHandler(event:Event):void
-		{
-			var object:IVisualElement = event.target as IVisualElement;
-			if(object === null || object === this)
-			{
-				return;
-			}
-			this.populatePropertyEditors(object);
-		}
+        private function collectChildrenForFocus():void
+        {
+			childrenForFocus = [];
+            var propertyEditorsCount:int = _propertyEditors.length;
+            for (var i:int = 0; i < propertyEditorsCount; i++)
+            {
+                var childrenFocusForm:BasePropertyEditorForm = _propertyEditors[i] as BasePropertyEditorForm;
 
-		private function propertyEditor_removedHandler(event:Event):void
-		{
-			var object:IVisualElement = event.target as IVisualElement;
-			if (object === this)
-			{
-				unregisterPropertyChangedEvents(_selectedItem);
-			}
-
-			if(object === null || object === this)
-			{
-				return;
-			}
-			
-			this.cleanupPropertyEditors(object);
-		}
-	}
+                if (childrenFocusForm && childrenFocusForm.hasChildToFocus)
+                {
+                    childrenForFocus.push.apply(this, childrenFocusForm.childrenForFocus);
+                }
+            }
+        }
+    }
 }

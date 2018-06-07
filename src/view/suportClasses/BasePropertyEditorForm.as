@@ -11,6 +11,18 @@ package view.suportClasses
 	[Event(name="change",type="flash.events.Event")]
 	public class BasePropertyEditorForm extends Form implements IPropertyEditor
 	{
+        protected var _childrenForFocus:Array;
+
+        public function get childrenForFocus():Array
+        {
+            return _childrenForFocus;
+        }
+
+        public function get hasChildToFocus():Boolean
+        {
+            return _childrenForFocus != null;
+        }
+
 		private var _surface:EditingSurface;
 
 		public function get surface():EditingSurface

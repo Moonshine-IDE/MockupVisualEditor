@@ -136,6 +136,9 @@
         private function onMaskedTextInputFormCreationComplete(event:FlexEvent):void
         {
             textInput.prompt = "(999) 999-9999";
+
+            _childrenForFocus = [];
+            _childrenForFocus.push(textInput.textDisplay);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

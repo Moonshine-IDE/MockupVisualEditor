@@ -2,7 +2,8 @@
 <suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
                                       xmlns:suportclasses="view.suportClasses.*"
                                       xmlns:s="library://ns.adobe.com/flex/spark"
-                                      skinClass="skins.FormSkin">
+                                      skinClass="skins.FormSkin"
+                                      creationComplete="onTabViewFormCreationComplete(event)">
     <fx:Declarations>
         <s:RadioButtonGroup id="orientRadioButtonGroup"
                             selectedValue="{bindableText}" itemClick="onRadioItemClick(event)"/>
@@ -15,16 +16,17 @@
     <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:HGroup gap="3" verticalAlign="middle">
-            <s:RadioButton label="top" groupName="orientRadioButtonGroup"/>
-            <s:RadioButton label="left" groupName="orientRadioButtonGroup"/>
-            <s:RadioButton label="bottom" groupName="orientRadioButtonGroup"/>
-            <s:RadioButton label="right" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton id="topRadioButton" label="top" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton id="leftRadioButton" label="left" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton id="bottomRadioButton" label="bottom" groupName="orientRadioButtonGroup"/>
+            <s:RadioButton id="rightRadioButton" label="right" groupName="orientRadioButtonGroup"/>
         </s:HGroup>
     </s:FormItem>
 
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
+        import mx.events.FlexEvent;
         import mx.events.ItemClickEvent;
         import view.interfaces.ISurfaceComponent;
 
@@ -99,6 +101,15 @@
             }
             this.errorString = "";
             this.selectedItem[this._textProperty] = this.orientRadioButtonGroup.selectedValue;
+        }
+
+        private function onTabViewFormCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(topRadioButton);
+            _childrenForFocus.push(leftRadioButton);
+            _childrenForFocus.push(bottomRadioButton);
+            _childrenForFocus.push(rightRadioButton);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

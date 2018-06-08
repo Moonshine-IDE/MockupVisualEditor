@@ -24,6 +24,8 @@
 		
 		import spark.events.IndexChangeEvent;
 		
+		import view.interfaces.ISurfaceComponent;
+		
 		[Bindable] public var includeCollection:IList;
 		[Bindable] public var labelDisplayFunction:Function;
 		[Bindable] public var showTooltipFunction:Function;
@@ -96,22 +98,22 @@
 		
 		private function selectCurrentItem():void
 		{
-			if (includeCollection && this.selectedItem[this._textProperty] && _labelField)
+			if (includeCollection && selectedItem[_textProperty] && _labelField)
 			{
                 var dpCount:int = ddlSelection.dataProvider.length;
 				for (var i:int = 0; i < dpCount; i++)
 				{
                     var item:Object = ddlSelection.dataProvider.getItemAt(i);
-					if (item[_labelField] == this.selectedItem[this._textProperty])
+					if (item[_labelField] == selectedItem[_textProperty])
 					{
 						ddlSelection.selectedItem = item;
 						break;
 					}
 				}
 			}
-			else if (this.selectedItem[this._textProperty])
+			else if (selectedItem[_textProperty])
 			{
-				ddlSelection.selectedItem = this.selectedItem[this._textProperty];
+				ddlSelection.selectedItem = selectedItem[_textProperty];
 			}
 				
 			ddlSelection.callLater(onSelectionChange, [null]);
@@ -119,8 +121,8 @@
 		
 		protected function onSelectionChange(event:IndexChangeEvent):void
 		{
-			if (_labelField) this.selectedItem[this._textProperty] = this.ddlSelection.selectedItem[_labelField].toString();
-			else this.selectedItem[this._textProperty] = this.ddlSelection.selectedItem.toString();
+			if (_labelField) selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+			else selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
 		}
 		
 		private function updateBinding():void
@@ -145,9 +147,10 @@
 		
 		private function onPropertyUpdated(value:Object):void
 		{
-			if (ddlSelection.selectedItem != undefined) 
+			if (ddlSelection.selectedItem && selectedItem) 
 			{
-				this.selectCurrentItem();
+				var previousValue:String = _labelField ? ddlSelection.selectedItem[_labelField].toString() : ddlSelection.selectedItem.toString();
+				if (previousValue != selectedItem[_textProperty]) selectCurrentItem();
 			}
 		}
 		

@@ -89,6 +89,11 @@
 		{
 			updateColumnList();
 			updateBinding();
+
+			_childrenForFocus = [];
+			_childrenForFocus.push(addDtColumnBtn);
+			_childrenForFocus.push(editDtColumnBtn);
+			_childrenForFocus.push(deleteDtColumnBtn);
 		}
 
 		private function updateColumnList():void
@@ -186,12 +191,12 @@
 			</s:columns>
 		</s:DataGrid>
         <s:HGroup>
-            <s:Button width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
+            <s:Button id="addDtColumnBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
-            <s:Button styleName="editDataProviderItemButton" toolTip="Edit Item"
+            <s:Button id="editDtColumnBtn" styleName="editDataProviderItemButton" toolTip="Edit Item"
                       enabled="{dgColumns.selectedIndex !== -1}"
                       click="editItemButton_clickHandler(event)"/>
-            <s:Button styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+            <s:Button id="deleteDtColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
                       enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"
                       click="deleteItemButton_clickHandler(event)"/>
         </s:HGroup>

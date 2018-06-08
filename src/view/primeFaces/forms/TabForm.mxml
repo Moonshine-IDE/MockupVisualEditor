@@ -89,9 +89,9 @@
 		{
 			super.selectedItem = value;
 
-			if (value && !value.hasEventListener(TabView.EVENT_CHILDREN_UPDATED))
+			if (value && !selectedItem.hasEventListener(TabView.EVENT_CHILDREN_UPDATED))
 			{
-				value.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
+				selectedItem.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
 			}
 		}
 
@@ -130,6 +130,11 @@
 			}
 
 			dgTabs.dataProvider = itemsListDataProvider;
+
+			_childrenForFocus = [];
+			_childrenForFocus.push(addTabBtn);
+			_childrenForFocus.push(editTabBtn);
+			_childrenForFocus.push(deleteTabBtn);
 		}
 
 		private function onTabViewChildrenUpdated(event:Event):void
@@ -162,6 +167,7 @@
 		<s:DataGrid id="dgTabs"
 					width="100%" maxHeight="350"
 					editable="true" sortableColumns="false" draggableColumns="false"
+					selectedIndex="0"
 					gridItemEditorSessionSave="onItemEditFinished(event)"
 					selectionChange="onGridSelectionChanged(event)"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->
 			<s:columns>
@@ -171,12 +177,12 @@
 			</s:columns>
 		</s:DataGrid>
         <s:HGroup>
-            <s:Button width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
+            <s:Button id="addTabBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
-            <s:Button styleName="editDataProviderItemButton" toolTip="Edit Item"
+            <s:Button id="editTabBtn" styleName="editDataProviderItemButton" toolTip="Edit Item"
                       enabled="{dgTabs.selectedIndex !== -1}"
                       click="editItemButton_clickHandler(event)"/>
-            <s:Button styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+            <s:Button id="deleteTabBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
                       enabled="{dgTabs.selectedIndex !== -1 &amp;&amp; dgTabs.dataProvider.length > 1}"
                       click="deleteItemButton_clickHandler(event)"/>
         </s:HGroup>

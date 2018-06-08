@@ -78,29 +78,6 @@
             }
         }
 
-        protected function onDivLayoutFormCreationComplete(event:FlexEvent):void
-        {
-            this.directionDropDownList.dataProvider = new ArrayList([
-                new ContainerDirectionItem(ContainerDirection.HORIZONTAL_LAYOUT),
-                new ContainerDirectionItem(ContainerDirection.VERTICAL_LAYOUT)
-            ]);
-
-            this.horizontalDirection.dataProvider = new ArrayList([
-                new ContainerHorizontalAlignItem(HorizontalAlign.LEFT),
-                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER),
-                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT)
-            ]);
-
-            verticalTopItem = new ContainerVerticalAlignItem(VerticalAlign.TOP);
-            this.verticalDirection.dataProvider = new ArrayList([
-                verticalTopItem,
-                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE),
-                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
-            ])
-
-            this.callLater(refreshSelection);
-        }
-
         private function refreshSelection():void
         {
             if (!this.selectedItem) return;
@@ -188,6 +165,35 @@
 		{
 			if (wrapContent) this.wrapContent.selected = value;
 		}
-		
+
+        protected function onDivLayoutFormCreationComplete(event:FlexEvent):void
+        {
+            this.directionDropDownList.dataProvider = new ArrayList([
+                new ContainerDirectionItem(ContainerDirection.HORIZONTAL_LAYOUT),
+                new ContainerDirectionItem(ContainerDirection.VERTICAL_LAYOUT)
+            ]);
+
+            this.horizontalDirection.dataProvider = new ArrayList([
+                new ContainerHorizontalAlignItem(HorizontalAlign.LEFT),
+                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER),
+                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT)
+            ]);
+
+            verticalTopItem = new ContainerVerticalAlignItem(VerticalAlign.TOP);
+            this.verticalDirection.dataProvider = new ArrayList([
+                verticalTopItem,
+                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE),
+                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
+            ])
+
+            this.callLater(refreshSelection);
+
+            _childrenForFocus = [];
+            _childrenForFocus.push(directionDropDownList);
+            _childrenForFocus.push(wrapContent);
+            _childrenForFocus.push(horizontalDirection);
+            _childrenForFocus.push(verticalDirection);
+        }
+
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

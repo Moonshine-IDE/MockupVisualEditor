@@ -4,7 +4,7 @@
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
 							      xmlns:forms="view.forms.*"
-								  preinitialize="onPreinit()" creationComplete="onCreationCompletes(event)">
+								  creationComplete="onCreationCompletes(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
@@ -12,13 +12,6 @@
 			import utils.MoonshineBridgeUtils;
 			
 			import view.primeFaces.forms.renderer.IncludeDropdownListRenderer;
-			
-			private function onPreinit():void
-			{
-				// central repository to use in different Include property editor components
-				// at same time 
-				MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
-			}
 			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{

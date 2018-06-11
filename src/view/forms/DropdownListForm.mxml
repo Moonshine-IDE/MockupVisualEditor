@@ -24,8 +24,6 @@
 		
 		import spark.events.IndexChangeEvent;
 		
-		import view.interfaces.ISurfaceComponent;
-		
 		[Bindable] public var includeCollection:IList;
 		[Bindable] public var labelDisplayFunction:Function;
 		[Bindable] public var showTooltipFunction:Function;

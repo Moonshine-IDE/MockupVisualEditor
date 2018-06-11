@@ -14,6 +14,7 @@ package view.primeFaces.surfaceComponents.components
     
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceComponent;
+    import view.interfaces.IInitializeAfterAddedComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.FieldsetPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.FieldsetSkin;
@@ -81,7 +82,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:fieldset&gt;
      * </pre>
      */
-    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
+    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent, IInitializeAfterAddedComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
         public static const ELEMENT_NAME:String = "Fieldset";
@@ -119,9 +120,12 @@ package view.primeFaces.surfaceComponents.components
 				"durationChanged",
 				"openChanged"
             ];
-
-            this.addEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
         }
+		
+		public function componentAddedToEditor():void
+		{
+            this.addEventListener(Event.REMOVED_FROM_STAGE, onFieldsetRemoved);
+		}
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
@@ -335,6 +339,8 @@ package view.primeFaces.surfaceComponents.components
                 var childXML:XML = elementsXML[i];
                 _div.fromXML(childXML, callback);
             }
+			
+			componentAddedToEditor();
         }
 
         public function toCode():XML

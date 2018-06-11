@@ -3,6 +3,8 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     import flash.events.MouseEvent;
     
+    import mx.events.CollectionEvent;
+    import mx.events.CollectionEventKind;
     import mx.graphics.SolidColor;
     
     import spark.components.BorderContainer;
@@ -14,9 +16,11 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
+    import view.interfaces.IInitializeAfterAddedComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.IncludePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.events.SurfaceComponentEvent;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -50,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
      * src=""/&gt;
      * </pre>
      */
-    public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IInitializeAfterAddedComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "include";
         public static var ELEMENT_NAME:String = "Include";
@@ -82,6 +86,15 @@ package view.primeFaces.surfaceComponents.components
 			width = 110;
 			height = 110;
         }
+		
+		public function componentAddedToEditor():void
+		{
+			// central repository to use in different Include property editor components
+			// at same time 
+			MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
+			MoonshineBridgeUtils.filesList.addEventListener(CollectionEvent.COLLECTION_CHANGE, onFileListUpdated, false, 0, true);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, onIncludeRemoved);
+		}
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
@@ -203,6 +216,8 @@ package view.primeFaces.surfaceComponents.components
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 			
 			this.path = xml.@src;
+			
+			componentAddedToEditor();
         }
 
         public function toCode():XML
@@ -277,6 +292,20 @@ package view.primeFaces.surfaceComponents.components
         private function onIncludeButtonClicked(event:MouseEvent):void
 		{
 			MoonshineBridgeUtils.moonshineBridge.openXhtmlFile(path);
+		}
+		
+		private function onFileListUpdated(event:CollectionEvent):void
+		{
+			if (event.kind == CollectionEventKind.REMOVE && event.items[0].resourcePathWithoutRoot == this.path)
+			{
+				path = (MoonshineBridgeUtils.filesList.length != 0) ? MoonshineBridgeUtils.filesList[0].resourcePathWithoutRoot : "Undefined";
+			}
+		}
+		
+		private function onIncludeRemoved(event:Event):void
+		{
+			this.removeEventListener(Event.REMOVED_FROM_STAGE, onIncludeRemoved);
+			MoonshineBridgeUtils.filesList.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onFileListUpdated);
 		}
     }
 }

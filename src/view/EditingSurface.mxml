@@ -47,6 +47,7 @@
 		import utils.EditingSurfaceWriter;
 		
 		import view.interfaces.IHistorySurfaceComponent;
+		import view.interfaces.IInitializeAfterAddedComponent;
 		import view.interfaces.IMainApplication;
 		import view.interfaces.IMultiViewContainer;
 		import view.interfaces.INonDeletableSurfaceComponent;
@@ -530,6 +531,10 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
+				
+				// some component may have processing should occur after
+				// being added to the editor
+				if (object is IInitializeAfterAddedComponent) (object as IInitializeAfterAddedComponent).componentAddedToEditor();
 				
 				// at this point property editor not created thus we send the 
 				// event through EditingSurface

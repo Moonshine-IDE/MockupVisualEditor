@@ -9,8 +9,6 @@
 			import mx.events.FlexEvent;
 			import mx.events.ToolTipEvent;
 			
-			import spark.components.DropDownList;
-			
 			import utils.MoonshineBridgeUtils;
 			
 			private var isTooltip:Boolean;
@@ -20,38 +18,19 @@
 				if (value)
 				{
 					super.data = value;
-					invalidateDisplayList();
-					
-					trace("vertical scroll: ", this.contentWidth, txtLabel.explicitWidth, this.width,
-						(this.owner as DropDownList).scroller.horizontalScrollBar.explicitMaxWidth,
-						(this.owner as DropDownList).scroller.horizontalScrollBar.explicitWidth,
-						(this.owner as DropDownList).scroller.horizontalScrollBar.measuredWidth,
-						(this.owner as DropDownList).scroller.horizontalScrollBar.track.visible,
-						(this.owner as DropDownList).scroller.horizontalScrollBar.viewport.contentWidth,
-						(this.owner as DropDownList).scroller.horizontalScrollBar.viewport.width,
-						this.width);
-					
-					if ((this.owner as DropDownList).scroller.horizontalScrollBar.viewport.contentWidth > this.width)
-					{
-						trace(":::: "+ this.width, this.owner.width);
-						if (!txtLabel.hasEventListener(ToolTipEvent.TOOL_TIP_CREATE))
-						{
-							txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
-							txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
-						}
-						
-						txtLabel.toolTip = data.resourcePathWithoutRoot;
-					}
-					/*else if (txtLabel.hasEventListener(ToolTipEvent.TOOL_TIP_CREATE))
-					{
-						txtLabel.removeEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction());
-						txtLabel.removeEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction());
-					}*/
+					if (isTooltip) txtLabel.toolTip = data.resourcePathWithoutRoot;
 				}
 			}
 			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
+				// lets not add tooltip when list has no horizontal scroll
+				if (this.width > this.owner.width)
+				{
+					txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
+					txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
+					isTooltip = true;
+				}
 			}
 			
 			protected function onRemoved(event:Event):void

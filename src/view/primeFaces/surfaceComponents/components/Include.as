@@ -91,7 +91,7 @@ package view.primeFaces.surfaceComponents.components
 		{
 			// central repository to use in different Include property editor components
 			// at same time 
-			MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
+			if (!MoonshineBridgeUtils.filesList) MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
 			MoonshineBridgeUtils.filesList.addEventListener(CollectionEvent.COLLECTION_CHANGE, onFileListUpdated, false, 0, true);
 			this.addEventListener(Event.REMOVED_FROM_STAGE, onIncludeRemoved);
 		}

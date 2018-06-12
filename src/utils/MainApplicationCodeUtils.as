@@ -99,7 +99,7 @@ package utils
 			var cssStyleSheetXml:XML = new XML("<link></link>");
             cssStyleSheetXml.@rel = "stylesheet";
 			cssStyleSheetXml.@type = "text/css";
-			cssStyleSheetXml.@href = "resources/layout-styles.css";
+			cssStyleSheetXml.@href = "resources/moonshine-layout-styles.css";
 
 			headXml.appendChild(cssStyleSheetXml);
 

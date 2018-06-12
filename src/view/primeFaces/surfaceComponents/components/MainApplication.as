@@ -31,7 +31,7 @@ package view.primeFaces.surfaceComponents.components
      *        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
      *        xmlns:p="http://primefaces.org/ui"&gt;
      *  &lt;h:head&gt;
-     *      &lt;link rel="stylesheet" type="text/css" href="resources/layout-styles.css"/&gt;
+     *      &lt;link rel="stylesheet" type="text/css" href="resources/moonshine-layout-styles.css"/&gt;
      *      &lt;title/&gt;
      *  &lt;/h:head&gt;
      *  &lt;h:body&gt;

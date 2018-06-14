@@ -76,7 +76,7 @@ package view.primeFaces.surfaceComponents.components
         /**
          * <p>HTML: <strong>class</strong></p>
          *
-         * <p>This property helps laying out children Horizontally or Vertically. It uses browser FlexBox mechanism to avoid problems which occurs when children in div are positioned using default mechanism. Exported PrimeFaces project contains layout-styles.css file which has classes ready to use for laying out children.</p>
+         * <p>This property helps laying out children Horizontally or Vertically. It uses browser FlexBox mechanism to avoid problems which occurs when children in div are positioned using default mechanism. Exported PrimeFaces project contains moonshine-layout-styles.css file which has classes ready to use for laying out children.</p>
          *
          * <p>Use listed css classes to laying out children:</p>
          *

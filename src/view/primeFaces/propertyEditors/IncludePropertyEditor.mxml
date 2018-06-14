@@ -10,9 +10,7 @@
 			import mx.events.FlexEvent;
 			
 			import utils.MoonshineBridgeUtils;
-			
-			import view.primeFaces.forms.renderer.IncludeDropdownListRenderer;
-			
+
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
 				ddl.collectionHost = MoonshineBridgeUtils;
@@ -42,7 +40,7 @@
     <forms:DropdownListForm id="ddl" 
 							label="File Name" textProperty="path"
 							collectionProperty="filesList" labelField="resourcePathWithoutRoot" labelDisplayFunction="getResourceName" showTooltipFunction="getResourcePathTooltip"
-							listItemRenderer="{IncludeDropdownListRenderer}"
+							listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"
 							/> <!-- _this_ not constructed to use in binding will throw compiler warning -->
 
 </suportclasses:BasePropertyEditor>

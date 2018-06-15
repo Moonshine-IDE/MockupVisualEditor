@@ -59,7 +59,7 @@ package view.primeFaces.surfaceComponents.components
         public static const ELEMENT_NAME:String = "InputNumber";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
-        private static const DEFAULT_DECIMAL_SEPARATOR:String = ".";
+        public static const DEFAULT_DECIMAL_SEPARATOR:String = ".";
         private static const DEFAULT_THOUSANDS_SEPARATOR:String = ",";
 
         private var _formatter:NumberFormatter;

@@ -25,7 +25,7 @@
 
         private function onDecimalSeparatorChanged(event:Event):void
         {
-            if (textProperty == "decimalSeparator" && !bindableText)
+            if (textProperty == "decimalSeparator" && this.textInput && !this.textInput.text)
             {
                 this.textInput.text = InputNumber.DEFAULT_DECIMAL_SEPARATOR;
             }

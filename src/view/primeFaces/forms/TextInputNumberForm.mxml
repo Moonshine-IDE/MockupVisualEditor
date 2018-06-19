@@ -32,10 +32,6 @@
         private function onDecimalSeparatorChanged(event:Event):void
         {
             this.refreshRestrict();
-            if (textProperty == "decimalSeparator")
-            {
-                this.textInput.text = InputNumber.DEFAULT_DECIMAL_SEPARATOR;
-            }
         }
 
         private function refreshRestrict():void

@@ -3,7 +3,8 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     
     import mx.formatters.NumberFormatter;
-    
+    import mx.utils.StringUtil;
+
     import spark.components.TextInput;
     
     import utils.XMLCodeUtils;
@@ -234,6 +235,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_decimalSeparator != value)
             {
+                value = StringUtil.trim(value);
+                
                 if (!value)
                 {
                     value = DEFAULT_DECIMAL_SEPARATOR;
@@ -273,6 +276,8 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_thousandSeparator != value)
             {
+                value = StringUtil.trim(value);
+
 				_multiFieldOldValues = [{field:"text", value:super.text}, {field:"thousandSeparator", value:_thousandSeparator}];
 					
                 _thousandSeparator = value;

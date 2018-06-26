@@ -63,6 +63,7 @@
 
 			public function loadFile(filePath:String):void
 			{
+				MoonshineBridgeUtils.currentFilePath = filePath;
 				_fileMoonshine = createNewFileIfNotExists(filePath);
 				_fileStreamMoonshine = new FileStream();
 				_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);

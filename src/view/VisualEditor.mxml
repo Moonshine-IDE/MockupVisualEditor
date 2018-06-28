@@ -25,9 +25,16 @@
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 	<fx:Script><![CDATA[
 		import mx.events.FlexEvent;
+
 		import spark.components.Alert;
+
+		import utils.CopyPasteVisualEditorManager;
 		import utils.MoonshineBridgeUtils;
+
 		import view.interfaces.IVisualEditorLibraryBridge;
+
+		private var copyPasteManager:CopyPasteVisualEditorManager;
+
 		private var _file:FileReference;
 
 		[Bindable]
@@ -146,6 +153,8 @@
 
 		private function onVisualEditorCreationComplete(event:FlexEvent):void
 		{
+			this.copyPasteManager = new CopyPasteVisualEditorManager(this);
+
 			CONFIG::MOONSHINE
 			{
 				toolbar.visible = toolbar.includeInLayout = false;

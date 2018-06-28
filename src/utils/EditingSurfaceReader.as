@@ -2,7 +2,7 @@ package utils
 {
 	import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-	
+
 	import view.EditingSurface;
 	import view.flex.surfaceComponents.components.Button;
 	import view.flex.surfaceComponents.components.Calendar;
@@ -39,12 +39,12 @@ package utils
 
     public class EditingSurfaceReader
 	{
-		private static var CLASS_LOOKUP:Object;
+		public static var CLASS_LOOKUP:Object;
 		
 		public static function fromXML(surface:EditingSurface, xml:XML, visualEditorType:String):void
 		{
 			initReader(visualEditorType);
-			
+
 			function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
 			{
 				var name:String = itemXML.name();
@@ -71,7 +71,7 @@ package utils
 				itemFromXML(surface, elementXML);
 			}
 		}
-		
+
 		private static function initReader(visualEditorType:String):void
 		{
             CLASS_LOOKUP = {};

@@ -17,140 +17,146 @@
     </s:FormItem>
 
     <fx:Script><![CDATA[
-		import mx.binding.utils.BindingUtils;
-		import mx.binding.utils.ChangeWatcher;
-		import mx.collections.IList;
-		import mx.events.FlexEvent;
-		
-		import spark.events.IndexChangeEvent;
-		
-		[Bindable] public var includeCollection:IList;
-		[Bindable] public var labelDisplayFunction:Function;
-		[Bindable] public var showTooltipFunction:Function;
-		
-		public var listItemRenderer:Class;
-		
-		private var _bindingCollection:ChangeWatcher;
-		private var _bindingSurfaceProperty:ChangeWatcher;
-		private var _labelField:String;
-		public function set labelField(value:String):void
-		{
-			_labelField = value;
-		}
-		
-		private var _label:String = "Text";
-		
-		[Bindable("labelChange")]
-		public function get label():String
-		{
-			return this._label;
-		}
-		
-		public function set label(value:String):void
-		{
-			if (this._label === value)
-			{
-				return;
-			}
-			this._label = value;
-			this.dispatchEvent(new Event("labelChange"));
-		}
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.collections.IList;
+        import mx.events.FlexEvent;
 
-		private var _textProperty:String = "text";
-		
-		public function get textProperty():String
-		{
-			return this._textProperty;
-		}
-		public function set textProperty(value:String):void
-		{
-			if (this._textProperty === value)
-			{
-				return;
-			}
-			this._textProperty = value;
-		}
-		
-		private var _collectionHost:*;
-		public function set collectionHost(value:*):void
-		{
-			_collectionHost = value;
-			updateBinding();
-		}
-		
-		private var _collectionProperty:String;
-		public function set collectionProperty(value:String):void
-		{
-			_collectionProperty = value;
-		}
+        import spark.events.IndexChangeEvent;
+
+        [Bindable]
+        public var includeCollection:IList;
+        [Bindable]
+        public var labelDisplayFunction:Function;
+        [Bindable]
+        public var showTooltipFunction:Function;
+
+        public var listItemRenderer:Class;
+
+        private var _bindingCollection:ChangeWatcher;
+        private var _bindingSurfaceProperty:ChangeWatcher;
+        private var _labelField:String;
+        public function set labelField(value:String):void
+        {
+            _labelField = value;
+        }
+
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        private var _textProperty:String = "text";
+
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+        }
+
+        private var _collectionHost:*;
+        public function set collectionHost(value:*):void
+        {
+            _collectionHost = value;
+            updateBinding();
+        }
+
+        private var _collectionProperty:String;
+        public function set collectionProperty(value:String):void
+        {
+            _collectionProperty = value;
+        }
 
         protected function onCreationCompletes(event:FlexEvent):void
         {
-			if (listItemRenderer) ddlSelection.itemRenderer = new ClassFactory(listItemRenderer);
-			
-			if (_labelField) ddlSelection.labelField = _labelField;
-			ddlSelection.callLater(selectCurrentItem);
-			
-			updateBinding();
+            if (listItemRenderer) ddlSelection.itemRenderer = new ClassFactory(listItemRenderer);
+
+            if (_labelField) ddlSelection.labelField = _labelField;
+            ddlSelection.callLater(selectCurrentItem);
+
+            updateBinding();
         }
-		
-		private function selectCurrentItem():void
-		{
-			if (includeCollection && selectedItem[_textProperty] && _labelField)
-			{
+
+        private function selectCurrentItem():void
+        {
+            if (includeCollection && selectedItem[_textProperty] && _labelField)
+            {
                 var dpCount:int = ddlSelection.dataProvider.length;
-				for (var i:int = 0; i < dpCount; i++)
-				{
+                for (var i:int = 0; i < dpCount; i++)
+                {
                     var item:Object = ddlSelection.dataProvider.getItemAt(i);
-					if (item[_labelField] == selectedItem[_textProperty])
-					{
-						ddlSelection.selectedItem = item;
-						break;
-					}
-				}
-			}
-			else if (selectedItem[_textProperty])
-			{
-				ddlSelection.selectedItem = selectedItem[_textProperty];
-			}
-				
-			ddlSelection.callLater(onSelectionChange, [null]);
-		}
-		
-		protected function onSelectionChange(event:IndexChangeEvent):void
-		{
-			if (_labelField) selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
-			else selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
-		}
-		
-		private function updateBinding():void
-		{
-			_collectionHost ||= selectedItem;
-			if (!_collectionProperty || !(_collectionProperty in _collectionHost)) return;
-			
-			if (this._bindingCollection)
-			{
-				this._bindingCollection.unwatch();
-				this._bindingSurfaceProperty.unwatch();
-				this._bindingCollection = null;
-				this._bindingSurfaceProperty = null;
-			}
-			if (this.selectedItem === null)
-			{
-				return;
-			}
-			this._bindingCollection = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
-			this._bindingSurfaceProperty = BindingUtils.bindSetter(onPropertyUpdated, selectedItem, _textProperty, false, true);
-		}
-		
-		private function onPropertyUpdated(value:Object):void
-		{
-			if (ddlSelection.selectedItem && selectedItem) 
-			{
-				var previousValue:String = _labelField ? ddlSelection.selectedItem[_labelField].toString() : ddlSelection.selectedItem.toString();
-				if (previousValue != selectedItem[_textProperty]) selectCurrentItem();
-			}
-		}
-		
-	]]></fx:Script>
+                    if (item[_labelField] == selectedItem[_textProperty])
+                    {
+                        ddlSelection.selectedItem = item;
+                        break;
+                    }
+                }
+            }
+            else if (selectedItem[_textProperty])
+            {
+                ddlSelection.selectedItem = selectedItem[_textProperty];
+            }
+
+            if (ddlSelection.selectedItem)
+            {
+                ddlSelection.callLater(onSelectionChange, [null]);
+            }
+        }
+
+        protected function onSelectionChange(event:IndexChangeEvent):void
+        {
+            if (_labelField) selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+            else selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+        }
+
+        private function updateBinding():void
+        {
+            _collectionHost ||= selectedItem;
+            if (!_collectionProperty || !(_collectionProperty in _collectionHost)) return;
+
+            if (this._bindingCollection)
+            {
+                this._bindingCollection.unwatch();
+                this._bindingSurfaceProperty.unwatch();
+                this._bindingCollection = null;
+                this._bindingSurfaceProperty = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._bindingCollection = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
+            this._bindingSurfaceProperty = BindingUtils.bindSetter(onPropertyUpdated, selectedItem, _textProperty, false, true);
+        }
+
+        private function onPropertyUpdated(value:Object):void
+        {
+            if (ddlSelection.selectedItem && selectedItem)
+            {
+                var previousValue:String = _labelField ? ddlSelection.selectedItem[_labelField].toString() : ddlSelection.selectedItem.toString();
+                if (previousValue != selectedItem[_textProperty]) selectCurrentItem();
+            }
+        }
+        ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

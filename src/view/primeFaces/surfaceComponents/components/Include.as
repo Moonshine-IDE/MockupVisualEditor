@@ -2,7 +2,9 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
-    
+
+    import mx.collections.ArrayCollection;
+
     import mx.events.CollectionEvent;
     import mx.events.CollectionEventKind;
     import mx.graphics.SolidColor;
@@ -11,7 +13,7 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.Button;
     import spark.components.Label;
     import spark.layouts.VerticalLayout;
-    
+
     import utils.MoonshineBridgeUtils;
     import utils.XMLCodeUtils;
     
@@ -204,6 +206,8 @@ package view.primeFaces.surfaceComponents.components
 
         public function toXML():XML
         {
+            if (!hasFileList()) return new XML();
+
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             setCommonXMLAttributes(xml);
@@ -222,6 +226,8 @@ package view.primeFaces.surfaceComponents.components
 
         public function toCode():XML
         {
+            if (!hasFileList()) return new XML();
+
 			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
 			var primeFacesNamespace:Namespace = new Namespace("ui", "http://xmlns.jcp.org/jsf/facelets");
 			xml.addNamespace(primeFacesNamespace);
@@ -307,5 +313,11 @@ package view.primeFaces.surfaceComponents.components
 			this.removeEventListener(Event.REMOVED_FROM_STAGE, onIncludeRemoved);
 			MoonshineBridgeUtils.filesList.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onFileListUpdated);
 		}
+
+        private function hasFileList():Boolean
+        {
+            var fileList:ArrayCollection = MoonshineBridgeUtils.filesList;
+            return fileList && fileList.length > 0;
+        }
     }
 }

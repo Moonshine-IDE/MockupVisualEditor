@@ -9,6 +9,7 @@ package utils
     import mx.core.IVisualElement;
 
     import mx.core.IVisualElementContainer;
+    import mx.core.UIComponent;
 
     import view.VisualEditor;
     import view.interfaces.IMainApplication;
@@ -40,27 +41,57 @@ package utils
         {
             if (event.commandKey || event.ctrlKey)
             {
-                var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
-
-                if (selectedElement)
+                if (event.keyCode == Keyboard.C)
                 {
-                    var code:XML = null;
-                    if (event.keyCode == Keyboard.C && !(selectedElement is IMainApplication))
-                    {
-                        Clipboard.generalClipboard.clear();
-                        code = selectedElement.toXML();
-                        Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, code.toXMLString());
-                    }
-                    else if (event.keyCode == Keyboard.V)
-                    {
-                        var container:IVisualElementContainer = selectedElement as IVisualElementContainer;
-                        if (container)
-                        {
-                            var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
-                            itemFromXML(container, pasteCode);
-                        }
-                    }
+                    copy();
                 }
+                else if (event.keyCode == Keyboard.V)
+                {
+                    paste();
+                }
+                else if (event.keyCode == Keyboard.H)
+                {
+                    duplicate();
+                }
+            }
+        }
+
+        private function copy():void
+        {
+            var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
+            if (!selectedElement) return;
+
+            if (!(selectedElement is IMainApplication))
+            {
+                Clipboard.generalClipboard.clear();
+                var code:XML = selectedElement.toXML();
+                Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, code.toXMLString());
+            }
+        }
+
+        private function paste():void
+        {
+            var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
+            if (!selectedElement) return;
+
+            var container:IVisualElementContainer = selectedElement as IVisualElementContainer;
+            if (container)
+            {
+                var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
+                itemFromXML(container, pasteCode);
+            }
+        }
+
+        private function duplicate():void
+        {
+            var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
+            if (!selectedElement) return;
+
+            var container:IVisualElementContainer = (selectedElement as UIComponent).parent as IVisualElementContainer;
+            if (container)
+            {
+                var code:XML = selectedElement.toXML();
+                itemFromXML(container, code);
             }
         }
 

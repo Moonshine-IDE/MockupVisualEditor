@@ -1,7 +1,8 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+    import flash.events.MouseEvent;
+
     import mx.containers.Grid;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
@@ -344,8 +345,9 @@ package view.primeFaces.surfaceComponents.components
 
                             var div:Div = new Div();
                             div.percentWidth = div.percentHeight = 100;
-
                             div.setStyle("borderColor", COLUMN_BORDER_COLOR);
+                            div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
+                            div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
 
                             gridItem.addElement(div);
                             gridRow.addElement(gridItem);
@@ -417,7 +419,11 @@ package view.primeFaces.surfaceComponents.components
                 for (var row:int = 0; row < numRemovedElements; row++)
                 {
                     var gridItem:GridItem = removedElement.getElementAt(row) as GridItem;
-                    removedItems.push(gridItem.getElementAt(0));
+                    var div:Div = gridItem.getElementAt(0) as Div;
+                    div.removeEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
+                    div.removeEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+
+                    removedItems.push(div);
                 }
 
                 removedElement = this.removeElement(removedElement) as GridRow;
@@ -454,6 +460,8 @@ package view.primeFaces.surfaceComponents.components
                 var div:Div = new Div();
                 div.percentWidth = div.percentHeight = 100;
                 div.setStyle("borderColor", COLUMN_BORDER_COLOR);
+                div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
+                div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
 
                 gridItem.addElement(div);
                 gridRow.addElement(gridItem);
@@ -474,6 +482,14 @@ package view.primeFaces.surfaceComponents.components
             if (gridRow && gridRow.numElements > MIN_COLUMN_COUNT)
             {
                 var removedColumn:IVisualElement = gridRow.removeElementAt(columnIndex);
+
+                var gridItem:GridItem = removedColumn as GridItem;
+                if (gridItem)
+                {
+                    var div:Div = gridItem.getElementAt(0) as Div;
+                    div.removeEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
+                    div.removeEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+                }
 
                 var selColumn:int = this.selectedColumn - 1;
                 this.selectedColumn = selColumn == -1 ? 0 : selColumn;
@@ -499,6 +515,8 @@ package view.primeFaces.surfaceComponents.components
             var div:Div = new Div();
             div.percentWidth = div.percentHeight = 100;
             div.setStyle("borderColor", COLUMN_BORDER_COLOR);
+            div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
+            div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
 
             gridItem.addElement(div);
             gridRow.addElement(gridItem);
@@ -534,6 +552,26 @@ package view.primeFaces.surfaceComponents.components
             var uigBigScreens:String = "ui-xl-" + uigDefaultValue;
 
             return uigDefault + " " + uigDesktop + " " + uigPhones + " " + uigTablets + " " + uigBigScreens;
+        }
+
+        private function onDivRollOver(event:MouseEvent):void
+        {
+            var target:Div = event.target as Div;
+            if (target)
+            {
+                target.setStyle("backgroundColor", this.getStyle("themeColor"));
+                target.setStyle("backgroundAlpha", 0.9);
+            }
+        }
+
+        private function onDivRollOut(event:MouseEvent):void
+        {
+            var target:Div = event.target as Div;
+            if (target)
+            {
+                target.setStyle("backgroundColor", "#FFFFFF");
+                target.setStyle("backgroundAlpha", 1);
+            }
         }
     }
 }

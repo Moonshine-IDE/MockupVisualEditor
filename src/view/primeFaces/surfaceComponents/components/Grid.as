@@ -79,6 +79,8 @@ package view.primeFaces.surfaceComponents.components
 
         private static const COLUMN_BORDER_COLOR:String = "#7096ab";
 
+        private var selectionChanged:Boolean;
+
         public function Grid()
         {
             super();
@@ -106,6 +108,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.ensureCreateInitialColumn();
 			this.hookDivEventBypassing();
+            this.selectionChanged = true;
         }
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
@@ -153,7 +156,12 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_selectedRow != value && value != -1)
             {
+                resetSelectionColorForSelectedItem(_selectedRow, _selectedColumn);
+
                 _selectedRow = value;
+                selectionChanged = true;
+
+                invalidateProperties();
             }
         }
 
@@ -169,7 +177,12 @@ package view.primeFaces.surfaceComponents.components
         {
             if (_selectedColumn != value && value != -1)
             {
+                resetSelectionColorForSelectedItem(_selectedRow, _selectedColumn);
+
                 _selectedColumn = value;
+                selectionChanged = true;
+
+                invalidateProperties();
             }
         }
 
@@ -209,6 +222,17 @@ package view.primeFaces.surfaceComponents.components
         override public function get height():Number
         {
             return super.height;
+        }
+
+        override protected function commitProperties():void
+        {
+            super.commitProperties();
+
+            if (selectionChanged)
+            {
+                setColorForSelectedItem(this.selectedRow, this.selectedColumn);
+                selectionChanged = false;
+            }
         }
 
         public function restorePropertyOnChangeReference(nameField:String, value:*):void
@@ -274,11 +298,6 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
-        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-        {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
-        }
-
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -337,7 +356,6 @@ package view.primeFaces.surfaceComponents.components
                         if (colXML.length() > 0)
                         {
                             var gridItem:GridItem = new GridItem();
-                            gridItem.setStyle("backgroundColor", "#a8a8a8");
                             gridItem.percentWidth = gridItem.percentHeight = 100;
 
                             var divXMLList:XMLList = colXML.elements();
@@ -454,7 +472,6 @@ package view.primeFaces.surfaceComponents.components
                 gridRow.percentWidth = gridRow.percentHeight = 100;
 
                 var gridItem:GridItem = new GridItem();
-                gridItem.setStyle("backgroundColor", "#a8a8a8");
                 gridItem.percentWidth = gridItem.percentHeight = 100;
 
                 var div:Div = new Div();
@@ -509,7 +526,6 @@ package view.primeFaces.surfaceComponents.components
             var gridRow:GridRow = new GridRow();
             gridRow.percentWidth = gridRow.percentHeight = 100;
             var gridItem:GridItem = new GridItem();
-            gridItem.setStyle("backgroundColor", "#a8a8a8");
             gridItem.percentWidth = gridItem.percentHeight = 100;
 
             var div:Div = new Div();
@@ -559,8 +575,11 @@ package view.primeFaces.surfaceComponents.components
             var target:Div = event.target as Div;
             if (target)
             {
-                target.setStyle("backgroundColor", this.getStyle("themeColor"));
-                target.setStyle("backgroundAlpha", 0.9);
+                if (!isDivSelected(target))
+                {
+                    target.setStyle("backgroundColor", this.getStyle("themeColor"));
+                    target.setStyle("backgroundAlpha", 0.2);
+                }
             }
         }
 
@@ -569,9 +588,53 @@ package view.primeFaces.surfaceComponents.components
             var target:Div = event.target as Div;
             if (target)
             {
-                target.setStyle("backgroundColor", "#FFFFFF");
-                target.setStyle("backgroundAlpha", 1);
+                if (!isDivSelected(target))
+                {
+                    target.setStyle("backgroundColor", "#FFFFFF");
+                    target.setStyle("backgroundAlpha", 1);
+                }
             }
+        }
+
+        private function resetSelectionColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
+        {
+            var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
+            if (div)
+            {
+                div.setStyle("backgroundColor", "#FFFFFF");
+                div.setStyle("backgroundAlpha", 1);
+            }
+        }
+
+        private function setColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
+        {
+            var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
+            if (div)
+            {
+                div.setStyle("backgroundColor", this.getStyle("themeColor"));
+                div.setStyle("backgroundAlpha", 0.4);
+            }
+        }
+
+        private function getDiv(selectedRowIndex:int, selectedColumnIndex:int):Div
+        {
+            if (selectedRowIndex == -1 && selectedColumnIndex == -1) return null;
+            var gridRow:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
+            if (gridRow.numElements > selectedColumnIndex)
+            {
+               var gridItem:GridItem = gridRow.getElementAt(selectedColumnIndex) as GridItem;
+               return gridItem.getElementAt(0) as Div;
+            }
+
+            return null;
+        }
+
+        private function isDivSelected(div:Div):Boolean
+        {
+            if (this.selectedRow == -1 && this.selectedRow == -1) return false;
+            var selectedDiv:Div = getDiv(this.selectedRow, this.selectedColumn);
+
+            return selectedDiv == div;
         }
     }
 }

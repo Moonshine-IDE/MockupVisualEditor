@@ -108,7 +108,6 @@ package view.primeFaces.surfaceComponents.components
 
             this.ensureCreateInitialColumn();
 			this.hookDivEventBypassing();
-            this.selectionChanged = true;
         }
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
@@ -144,7 +143,7 @@ package view.primeFaces.surfaceComponents.components
             return _propertiesChangedEvents;
         }
 
-        private var _selectedRow:int;
+        private var _selectedRow:int = -1;
 
         [Bindable]
         public function get selectedRow():int
@@ -165,7 +164,7 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        private var _selectedColumn:int;
+        private var _selectedColumn:int = -1;
 
         [Bindable]
         public function get selectedColumn():int
@@ -366,6 +365,7 @@ package view.primeFaces.surfaceComponents.components
                             div.setStyle("borderColor", COLUMN_BORDER_COLOR);
                             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+                            div.addEventListener(MouseEvent.CLICK, onDivClick);
 
                             gridItem.addElement(div);
                             gridRow.addElement(gridItem);
@@ -440,6 +440,7 @@ package view.primeFaces.surfaceComponents.components
                     var div:Div = gridItem.getElementAt(0) as Div;
                     div.removeEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                     div.removeEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+                    div.removeEventListener(MouseEvent.CLICK, onDivClick);
 
                     removedItems.push(div);
                 }
@@ -479,6 +480,7 @@ package view.primeFaces.surfaceComponents.components
                 div.setStyle("borderColor", COLUMN_BORDER_COLOR);
                 div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                 div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+                div.addEventListener(MouseEvent.CLICK, onDivClick);
 
                 gridItem.addElement(div);
                 gridRow.addElement(gridItem);
@@ -506,6 +508,7 @@ package view.primeFaces.surfaceComponents.components
                     var div:Div = gridItem.getElementAt(0) as Div;
                     div.removeEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                     div.removeEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+                    div.removeEventListener(MouseEvent.CLICK, onDivClick);
                 }
 
                 var selColumn:int = this.selectedColumn - 1;
@@ -533,6 +536,7 @@ package view.primeFaces.surfaceComponents.components
             div.setStyle("borderColor", COLUMN_BORDER_COLOR);
             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+            div.addEventListener(MouseEvent.CLICK, onDivClick);
 
             gridItem.addElement(div);
             gridRow.addElement(gridItem);
@@ -541,7 +545,7 @@ package view.primeFaces.surfaceComponents.components
 
             return gridItem;
         }
-		
+
 		private function hookDivEventBypassing():void
 		{
 			var gridRow:GridRow = this.getElementAt(0) as GridRow;
@@ -572,7 +576,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function onDivRollOver(event:MouseEvent):void
         {
-            var target:Div = event.target as Div;
+            var target:Div = event.currentTarget as Div;
             if (target)
             {
                 if (!isDivSelected(target))
@@ -585,13 +589,43 @@ package view.primeFaces.surfaceComponents.components
 
         private function onDivRollOut(event:MouseEvent):void
         {
-            var target:Div = event.target as Div;
+            var target:Div = event.currentTarget as Div;
             if (target)
             {
                 if (!isDivSelected(target))
                 {
                     target.setStyle("backgroundColor", "#FFFFFF");
                     target.setStyle("backgroundAlpha", 1);
+                }
+            }
+        }
+
+        private function onDivClick(event:MouseEvent):void
+        {
+            var target:Div = event.currentTarget as Div;
+            if (target)
+            {
+                if (!isDivSelected(target))
+                {
+                    resetSelectionColorForSelectedItem(this.selectedRow, this.selectedColumn);
+                }
+
+                var rowNumElements:int = this.numElements;
+                for (var i:int = 0; i < rowNumElements; i++)
+                {
+                    var gridRow:GridRow = this.getElementAt(i) as GridRow;
+                    var columnNumElements:int = gridRow.numElements;
+                    for (var j:int = 0; j < columnNumElements; j++)
+                    {
+                        var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
+                        var div:Div = gridItem.getElementAt(0) as Div;
+                        if (target == div)
+                        {
+                            this.selectedRow = i;
+                            this.selectedColumn = j;
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -618,7 +652,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function getDiv(selectedRowIndex:int, selectedColumnIndex:int):Div
         {
-            if (selectedRowIndex == -1 && selectedColumnIndex == -1) return null;
+            if (selectedRowIndex == -1 || selectedColumnIndex == -1) return null;
             var gridRow:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
             if (gridRow.numElements > selectedColumnIndex)
             {
@@ -631,7 +665,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function isDivSelected(div:Div):Boolean
         {
-            if (this.selectedRow == -1 && this.selectedRow == -1) return false;
+            if (this.selectedRow == -1 || this.selectedRow == -1) return false;
             var selectedDiv:Div = getDiv(this.selectedRow, this.selectedColumn);
 
             return selectedDiv == div;

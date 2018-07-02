@@ -145,8 +145,8 @@
 			dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
 
 			var grid:Grid = (selectedItem as Grid);
-			var gridNumElements:int = grid.numElements;
 
+			var gridNumElements:int = grid.numElements;
 			for (var row:int = 0; row < gridNumElements; row++)
 			{
 				var itemValue:int = row + 1;
@@ -160,9 +160,11 @@
 				this.rowsDataProvider.addItem(rowItem);
 			}
 
-			this.columnsDataProvider = this.rowsDataProvider.getItemAt(this.selectedGrid.selectedRow).columns;
+			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
 
+			grid.selectedRow = grid.selectedColumn = 0;
 			this.selectedCell = this.getSelectedCell();
+
 			dispatchEvent(new Event(Event.CHANGE));
 
 			_childrenForFocus = [];

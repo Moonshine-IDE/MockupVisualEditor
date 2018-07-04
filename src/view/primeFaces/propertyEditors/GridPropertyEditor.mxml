@@ -9,7 +9,8 @@
 
 	<primeFaces:BasicsForm/>
 
-	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
 	<primeFaces:GridForm id="gridForm"/>
+
+	<s:FormHeading label="Cell details" skinClass="skins.FormHeadingSkin"/>
 	<primeFaces:DivLayoutForm selectedItem="{gridForm.selectedCell}"/>
 </suportclasses:BasePropertyEditor>

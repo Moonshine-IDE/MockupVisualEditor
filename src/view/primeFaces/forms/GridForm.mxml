@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suportclasses:BasePropertyEditorForm
-        xmlns:fx="http://ns.adobe.com/mxml/2009"
-        xmlns:s="library://ns.adobe.com/flex/spark"
-        xmlns:suportclasses="view.suportClasses.*"
-        skinClass="skins.FormSkin"
-        creationComplete="onGridFormCreationComplete(event)">
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:suportclasses="view.suportClasses.*" xmlns:mx="library://ns.adobe.com/flex/mx"
+		skinClass="skins.FormSkin" creationComplete="onGridFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
 		import mx.collections.ArrayList;
 		import mx.containers.GridItem;
 		import mx.containers.GridRow;
+		import mx.events.CloseEvent;
 		import mx.events.FlexEvent;
+
+		import spark.components.Alert;
 
 		import spark.events.GridSelectionEvent;
 		import spark.events.IndexChangeEvent;
@@ -141,9 +143,9 @@
 
 		private function onGridFormCreationComplete(event:FlexEvent):void
 		{
-			rowsDataProvider.removeAll();
 			dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
 
+			rowsDataProvider.removeAll();
 			var grid:Grid = (selectedItem as Grid);
 
 			var gridNumElements:int = grid.numElements;
@@ -194,6 +196,58 @@
 			this.selectedCell = this.getSelectedCell();
 		}
 
+		private function onCreateClick(event:MouseEvent):void
+		{
+			if (!selectedGrid.isEmpty())
+			{
+				Alert.show("Grid contains some controls. This operation will remove all existing cells. Do you want to perform?",
+						"", Alert.YES | Alert.NO, null, onAlertClose);
+			}
+			else
+			{
+				createCells(amountOfRows.value, amountOfColumns.value);
+			}
+		}
+
+		private function onAlertClose(event:CloseEvent):void
+		{
+			if (event.detail == Alert.YES)
+			{
+				createCells(amountOfRows.value, amountOfColumns.value);
+			}
+		}
+
+		private function createCells(rowsCount:int, columnsCount:int):void
+		{
+			var grid:Grid = (selectedItem as Grid);
+
+			grid.removeAllElements();
+			rowsDataProvider.removeAll();
+
+			for (var row:int = 0; row < rowsCount; row++)
+			{
+				var itemValue:int = row + 1;
+				var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
+				grid.addRow();
+
+				for (var col:int = 0; col < columnsCount; col++)
+				{
+					itemValue = col + 1;
+					rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
+					if (col > 0)
+					{
+						grid.addColumn(row);
+					}
+				}
+				this.rowsDataProvider.addItem(rowItem);
+			}
+
+			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
+
+			grid.selectedRow = grid.selectedColumn = 0;
+			this.selectedCell = this.getSelectedCell();
+		}
+
 		private function getSelectedCell():Div
 		{
 			if (this.selectedGrid.selectedRow == -1 || this.selectedGrid.selectedColumn == -1) return null;
@@ -209,26 +263,39 @@
         <s:FormLayout horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
-    <s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
+	<s:FormHeading label="Create Rows X Columns" skinClass="skins.FormHeadingSkin"/>
+	<s:FormItem skinClass="skins.StackedFormItemSkin">
+		<s:HGroup horizontalAlign="left" verticalAlign="middle" gap="5" paddingTop="-15">
+			<s:NumericStepper id="amountOfRows" minimum="1" stepSize="1"/>
+			<s:Label text="X" fontWeight="bold"/>
+			<s:NumericStepper id="amountOfColumns" minimum="1" stepSize="1"/>
+			<s:Button label="Create" height="25"
+                      toolTip="Create Rows x Columns at once. It will erase all existing cells from Grid."
+                      click="onCreateClick(event)"/>
+		</s:HGroup>
+	</s:FormItem>
+
+	<s:FormHeading label="Custom Rows/Columns" skinClass="skins.FormHeadingSkin"/>
+	<s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
 		<s:DataGrid id="dgRows"
 					width="100%" maxHeight="350"
 					sortableColumns="false" draggableColumns="false"
 					selectionChange="onGridSelectionChanged(event)" requireSelection="true"
-		 			dataProvider="{rowsDataProvider}" selectedIndex="{selectedGrid.selectedRow}">
+					dataProvider="{rowsDataProvider}" selectedIndex="{selectedGrid.selectedRow}">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="label" headerText="Row number"/>
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>
-        <s:HGroup>
-            <s:Button id="addRowBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Row"
-                      click="addRowButton_clickHandler(event)"/>
-            <s:Button id="deleteRowBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
-                      enabled="{dgRows.selectedIndex !== -1 &amp;&amp; dgRows.dataProvider.length > 1}"
-                      click="deleteItemButton_clickHandler(event)"/>
-        </s:HGroup>
-    </s:FormItem>
+		<s:HGroup verticalAlign="middle">
+			<s:Button id="addRowBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Row"
+					  click="addRowButton_clickHandler(event)"/>
+			<s:Button id="deleteRowBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+					  enabled="{dgRows.selectedIndex !== -1 &amp;&amp; dgRows.dataProvider.length > 1}"
+					  click="deleteItemButton_clickHandler(event)"/>
+		</s:HGroup>
+	</s:FormItem>
 	<s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
 		<s:List id="columnList" width="100%" height="30" labelField="label"
 				dataProvider="{columnsDataProvider}" requireSelection="true"
@@ -237,12 +304,14 @@
 				<s:HorizontalLayout gap="2" horizontalAlign="left" verticalAlign="middle"/>
 			</s:layout>
 		</s:List>
-		<s:HGroup>
+		<s:HGroup verticalAlign="middle">
 			<s:Button id="addColumnBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Column"
 					  click="addColumnButton_clickHandler(event)"/>
 			<s:Button id="deleteColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Column"
 					  enabled="{columnList.selectedIndex !== -1 &amp;&amp; columnsDataProvider.length > 1}"
 					  click="deleteColumnButton_clickHandler(event)"/>
+			<s:Label text="Amount of Columns:"/>
+			<s:NumericStepper minimum="1" stepSize="1"/>
 		</s:HGroup>
 	</s:FormItem>
 </suportclasses:BasePropertyEditorForm>

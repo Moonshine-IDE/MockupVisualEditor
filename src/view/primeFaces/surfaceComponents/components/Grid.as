@@ -412,7 +412,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function addRow():void
+        public function addRow():IVisualElement
         {
             var gridItem:GridItem = this.ensureCreateInitialColumn();
             var addedElements:Array = [gridItem.getElementAt(0)];
@@ -424,6 +424,8 @@ package view.primeFaces.surfaceComponents.components
 			
 			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
 			dispatchEvent(new Event("itemAdded"));
+
+            return this.getElementAt(this.numElements - 1);
         }
 
         public function removeRow(index:int):IVisualElement
@@ -522,6 +524,35 @@ package view.primeFaces.surfaceComponents.components
             }
 
             return null;
+        }
+
+        public function isEmpty():Boolean
+        {
+            var rowNumElements:int = this.numElements;
+            for (var i:int = 0; i < rowNumElements; i++)
+            {
+                var gridRow:GridRow = this.getElementAt(i) as GridRow;
+                var columnNumElements:int = gridRow.numElements;
+                for (var j:int = 0; j < columnNumElements; j++)
+                {
+                    var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
+                    var div:Div = gridItem.getElementAt(0) as Div;
+                    if (div.numElements > 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        override public function removeAllElements():void
+        {
+            super.removeAllElements();
+
+            this._selectedRow = -1;
+            this._selectedColumn = -1;
         }
 
         private function ensureCreateInitialColumn():GridItem
@@ -653,6 +684,8 @@ package view.primeFaces.surfaceComponents.components
         private function getDiv(selectedRowIndex:int, selectedColumnIndex:int):Div
         {
             if (selectedRowIndex == -1 || selectedColumnIndex == -1) return null;
+            if (selectedRowIndex >= this.numElements) return null;
+
             var gridRow:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
             if (gridRow.numElements > selectedColumnIndex)
             {

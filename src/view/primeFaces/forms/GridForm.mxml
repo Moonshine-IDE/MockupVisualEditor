@@ -174,6 +174,9 @@
 			_childrenForFocus.push(deleteRowBtn);
 			_childrenForFocus.push(addColumnBtn);
 			_childrenForFocus.push(deleteColumnBtn);
+			_childrenForFocus.push(amountOfRows);
+			_childrenForFocus.push(amountOfColumns);
+			_childrenForFocus.push(createButton);
 		}
 
 		protected function onGridSelectionChanged(event:GridSelectionEvent):void
@@ -269,7 +272,7 @@
 			<s:NumericStepper id="amountOfRows" minimum="1" stepSize="1"/>
 			<s:Label text="X" fontWeight="bold"/>
 			<s:NumericStepper id="amountOfColumns" minimum="1" stepSize="1"/>
-			<s:Button label="Create" height="25"
+			<s:Button id="createButton" label="Create" height="25"
                       toolTip="Create Rows x Columns at once. It will erase all existing cells from Grid."
                       click="onCreateClick(event)"/>
 		</s:HGroup>

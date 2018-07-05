@@ -170,13 +170,13 @@
 			dispatchEvent(new Event(Event.CHANGE));
 
 			_childrenForFocus = [];
+			_childrenForFocus.push(amountOfRows.textDisplay.textDisplay);
+			_childrenForFocus.push(amountOfColumns.textDisplay.textDisplay);
+			_childrenForFocus.push(createButton);
 			_childrenForFocus.push(addRowBtn);
 			_childrenForFocus.push(deleteRowBtn);
 			_childrenForFocus.push(addColumnBtn);
 			_childrenForFocus.push(deleteColumnBtn);
-			_childrenForFocus.push(amountOfRows);
-			_childrenForFocus.push(amountOfColumns);
-			_childrenForFocus.push(createButton);
 		}
 
 		protected function onGridSelectionChanged(event:GridSelectionEvent):void

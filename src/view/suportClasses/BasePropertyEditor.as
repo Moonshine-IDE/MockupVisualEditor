@@ -149,7 +149,7 @@ package view.suportClasses
             if (event.isDefaultPrevented())
                 return;
 
-			if (!event.shiftKey && this.childrenForFocus)
+			if (this.childrenForFocus)
 			{
 				event.preventDefault();
 
@@ -158,8 +158,12 @@ package view.suportClasses
 				{
 					if (this.childrenForFocus[i] == event.target)
 					{
-						i = i + 1;
-						if (i < childrenFocusCount)
+						i = event.shiftKey ? i - 1 : i + 1;
+                        if (i < 0)
+                        {
+                            this.childrenForFocus[childrenFocusCount - 1].setFocus();
+                        }
+						else if (i < childrenFocusCount)
 						{
                             this.childrenForFocus[i].setFocus();
 						}

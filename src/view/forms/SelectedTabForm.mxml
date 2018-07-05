@@ -2,7 +2,8 @@
 <suportclasses:BasePropertyEditorForm
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:s="library://ns.adobe.com/flex/spark"
-        xmlns:suportclasses="view.suportClasses.*" skinClass="skins.FormItemSkin">
+        xmlns:suportclasses="view.suportClasses.*" skinClass="skins.FormItemSkin"
+        creationComplete="onSelectedTabFormCreationComplete(event)">
 
     <suportclasses:layout>
         <s:FormLayout />
@@ -19,11 +20,19 @@
     </s:FormItem>
 
     <fx:Script><![CDATA[
+        import mx.events.FlexEvent;
+
         import view.interfaces.IMultiViewContainer;
 
         private function stepper_changeHandler(event:Event):void
         {
             IMultiViewContainer(selectedItem).selectedIndex = this.stepper.value - 1;
+        }
+
+        private function onSelectedTabFormCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(stepper);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

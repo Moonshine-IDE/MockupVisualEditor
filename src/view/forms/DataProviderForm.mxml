@@ -3,7 +3,7 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
-        skinClass="skins.FormSkin">
+        skinClass="skins.FormSkin" creationComplete="onDataProviderFormCreationComplete(event)">
 
     <suportclasses:layout>
         <s:FormLayout horizontalAlign="contentJustify"/>
@@ -24,12 +24,12 @@
             <s:layout>
                 <s:HorizontalLayout/>
             </s:layout>
-            <s:Button width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
+            <s:Button id="addItem" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
-            <s:Button styleName="editDataProviderItemButton" toolTip="Edit Item"
+            <s:Button id="editItem" styleName="editDataProviderItemButton" toolTip="Edit Item"
                       enabled="{itemsList.selectedIndex !== -1}"
                       click="editItemButton_clickHandler(event)"/>
-            <s:Button styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+            <s:Button id="deleteItem" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
                       enabled="{itemsList.selectedIndex !== -1}"
                       click="deleteItemButton_clickHandler(event)"/>
         </s:Group>
@@ -39,6 +39,7 @@
         import data.DataProviderListItem;
 
         import mx.collections.IList;
+        import mx.events.FlexEvent;
 
         import spark.components.DataGroup;
         import spark.events.IndexChangeEvent;
@@ -120,6 +121,14 @@
             {
                 ISelectableItemsComponent(selectedItem).selectedIndex = event.newIndex;
             }
+        }
+
+        private function onDataProviderFormCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(addItem);
+            _childrenForFocus.push(editItem);
+            _childrenForFocus.push(deleteItem);
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

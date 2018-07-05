@@ -50,18 +50,12 @@
 	</s:Group>
 
 	<fx:Script><![CDATA[
-		import mx.core.EventPriority;
 		import mx.core.IVisualElement;
 		import mx.core.IVisualElementContainer;
 		import mx.core.UIComponent;
 		import mx.events.FlexEvent;
 		
 		import utils.GenericUtils;
-
-		CONFIG::MOONSHINE
-		{
-			private var tabDictionary:Array = [];
-		}
 
 		[Bindable("change")]
 		private function get selectedComponent():UIComponent

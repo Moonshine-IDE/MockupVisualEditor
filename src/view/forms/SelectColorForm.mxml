@@ -62,6 +62,11 @@
             ddlTypes.selectedItem = ILayoutContainer(selectedItem).layoutType;
 
             setLayoutOnContainer();
+
+            _childrenForFocus = [];
+            _childrenForFocus.push(picker);
+            _childrenForFocus.push(ddlCTypes);
+            _childrenForFocus.push(ddlTypes);
         }
 
         private function setLayoutOnContainer():void

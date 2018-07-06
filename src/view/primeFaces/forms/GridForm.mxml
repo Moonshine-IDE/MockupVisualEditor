@@ -313,8 +313,6 @@
 			<s:Button id="deleteColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Column"
 					  enabled="{columnList.selectedIndex !== -1 &amp;&amp; columnsDataProvider.length > 1}"
 					  click="deleteColumnButton_clickHandler(event)"/>
-			<s:Label text="Amount of Columns:"/>
-			<s:NumericStepper minimum="1" stepSize="1"/>
 		</s:HGroup>
 	</s:FormItem>
 </suportclasses:BasePropertyEditorForm>

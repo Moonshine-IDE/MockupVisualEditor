@@ -518,9 +518,7 @@
 			var dragSource:DragSource = event.dragSource;
 			var offset:Point = Point(dragSource.dataForFormat(ComponentListItemRenderer.OFFSET_DRAG_FORMAT));
 			var object:ISurfaceComponent = ISurfaceComponent(dragSource.dataForFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT));
-			
-			if (object.parent) return;
-			
+
 			var position:Point = new Point(event.stageX - offset.x, event.stageY - offset.y);
 			position = coorinateSystem.globalToLocal(position);
 			object.x = position.x;

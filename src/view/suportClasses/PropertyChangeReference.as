@@ -88,6 +88,10 @@ package view.suportClasses
 			if (fieldClassParent && (fieldClassIndexToParent != -1))
 			{
 				editor.editingSurface.addItem(fieldClass as ISurfaceComponent);
+				if (fieldClassIndexToParent > fieldClassParent.numElements)
+				{
+					fieldClassIndexToParent = fieldClassParent.numElements == 0 ? 0 : fieldClassParent.numElements - 1;
+				}
 				fieldClassParent.addElementAt(fieldClass as IVisualElement, fieldClassIndexToParent);
 			}
 		}

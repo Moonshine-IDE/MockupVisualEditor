@@ -36,16 +36,16 @@
 		import mx.managers.DragManager;
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
-		
+
 		import spark.components.SkinnableContainer;
 		import spark.components.supportClasses.ScrollBarBase;
 		import spark.components.supportClasses.SkinnableContainerBase;
 		import spark.containers.Navigator;
 		import spark.events.IndexChangeEvent;
-		
+
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
-		
+
 		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IInitializeAfterAddedComponent;
 		import view.interfaces.IMainApplication;
@@ -196,17 +196,23 @@
 		 */
 		public function deleteItem(item:ISurfaceComponent):void
 		{
-			if (item is INonDeletableSurfaceComponent) return;
-			
+			if (item is INonDeletableSurfaceComponent || !item.stage)
+			{
+				return;
+			}
+
 			item.dispatchEvent(new Event(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING));
-			
+
 			// @devsena
 			// missing event removals
 			item.removeEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
 			item.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
-			
+
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
-			container.removeElement(IVisualElement(item));
+			if (container.getElementIndex(IVisualElement(item)) > -1)
+			{
+				container.removeElement(IVisualElement(item));
+			}
 
 			if (item is IMultiViewContainer)
 			{
@@ -229,7 +235,7 @@
 
 			this.selectedItem = null;
 			hasChanged = this.numElements > 0 && _wasLoaded;
-			
+
 			// once an item deletes stage loose focus to
 			// listen any keypress event, i.e. Ctrl+Z/Y
 			this.setFocus();
@@ -529,11 +535,11 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
-				
+
 				// some component may have processing should occur after
 				// being added to the editor
 				if (object is IInitializeAfterAddedComponent) (object as IInitializeAfterAddedComponent).componentAddedToEditor();
-				
+
 				// at this point property editor not created thus we send the 
 				// event through EditingSurface
 				if (object is IHistorySurfaceComponent)
@@ -541,7 +547,7 @@
 					var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(object as IHistorySurfaceComponent);
 					tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.parent).getElementIndex(object as IVisualElement);
 					tmpChangeRef.fieldClassParent = object.parent as IVisualElementContainer;
-					
+
 					this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
 				}
 			}

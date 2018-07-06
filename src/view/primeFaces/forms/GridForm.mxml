@@ -132,7 +132,10 @@
 		private function deleteColumnButton_clickHandler(event:MouseEvent):void
 		{
 			var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-			rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
+			if (rowItem.columns.length > selectedGrid.selectedColumn)
+			{
+				rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
+			}
 
 			var grid:Grid = (selectedItem as Grid);
 			grid.removeColumn(selectedGrid.selectedRow, selectedGrid.selectedColumn);

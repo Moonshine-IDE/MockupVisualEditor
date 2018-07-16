@@ -7,7 +7,6 @@ package view.suportClasses
 
     import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-    import mx.core.UIComponent;
 
     import spark.components.Group;
 	

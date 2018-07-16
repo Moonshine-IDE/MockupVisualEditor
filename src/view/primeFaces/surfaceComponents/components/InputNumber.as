@@ -1,18 +1,19 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
-    import mx.formatters.NumberFormatter;
+
+    import mx.formatters.NumberBaseRoundType;
+
     import mx.utils.StringUtil;
 
     import spark.components.TextInput;
-    
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IIdAttribute;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
+    import view.primeFaces.supportClasses.InputNumberFormatter;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
@@ -63,15 +64,17 @@ package view.primeFaces.surfaceComponents.components
         public static const DEFAULT_DECIMAL_SEPARATOR:String = ".";
         private static const DEFAULT_THOUSANDS_SEPARATOR:String = ",";
 
-        private var _formatter:NumberFormatter;
+        private var _formatter:InputNumberFormatter;
 		private var _multiFieldOldValues:Array;
 
         public function InputNumber()
         {
             super();
 
-            _formatter = new NumberFormatter();
+            _formatter = new InputNumberFormatter();
             _formatter.useThousandsSeparator = true;
+            _formatter.rounding = NumberBaseRoundType.NONE;
+            _formatter.precision = -1;
 
             this.mouseChildren = false;
 

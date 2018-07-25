@@ -49,7 +49,7 @@ package utils
                 {
                     paste();
                 }
-                else if (event.keyCode == Keyboard.R)
+                else if (event.keyCode == Keyboard.U)
                 {
                     duplicate();
                 }

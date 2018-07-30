@@ -47,10 +47,17 @@ package utils
 
 			function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
 			{
-				var name:String = itemXML.name();
+				var name:String = itemXML.localName();
 				if(!(name in CLASS_LOOKUP))
 				{
-					throw new Error("Unknown item " + name);
+                    var elements:XMLList = itemXML.elements();
+                    var elementCount:int = elements.length();
+                    for(var i:int = 0; i < elementCount; i++)
+                    {
+                        var elementXML:XML = elements[i];
+                        return itemFromXML(parent, elementXML);
+                    }
+					return null;
 				}
 				var type:Class = CLASS_LOOKUP[name];
 				var item:ISurfaceComponent = new type() as ISurfaceComponent;

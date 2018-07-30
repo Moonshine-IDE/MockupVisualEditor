@@ -152,13 +152,7 @@ package view.primeFaces.supportClasses
 			for (var i:int = 0; i < this.rowCount; i++)
             {
                 var gridRow:GridRow = this.body.addRow() as GridRow;
-				if (columnCount > 1)
-                {
-                    for (var j:int = 0; j < columnCount; j++)
-                    {
-                        this.body.addColumn(this.body.selectedRow);
-                    }
-                }
+                addColumnToRow(this.body);
             }
         }
 
@@ -170,6 +164,8 @@ package view.primeFaces.supportClasses
                 gridRow.percentHeight = Number.NaN;
 				gridRow.percentWidth = 100;
                 gridRow.height = this.headerHeight;
+
+                addColumnToRow(this.header);
             }
         }
 
@@ -183,5 +179,16 @@ package view.primeFaces.supportClasses
                 gridRow.height = this.headerHeight;
             }
         }
+
+		private function addColumnToRow(grid:GridBase):void
+		{
+            if (columnCount > 1)
+            {
+                for (var i:int = 0; i < columnCount; i++)
+                {
+                    grid.addColumn(grid.selectedRow);
+                }
+            }
+		}
     }
 }

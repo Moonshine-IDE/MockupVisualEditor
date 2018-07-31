@@ -131,6 +131,8 @@
 
 		private function onTableVarUpdated(value:Object):void
 		{
+			if (selectedItem === null) return;
+
 			tableVar = value.toString();
 			(selectedItem as DataTable).tableColumnDescriptor.refresh();
 		}

@@ -82,7 +82,7 @@ package utils
             }
         }
 
-        private function duplicate():void
+        public function duplicate():void
         {
             var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
             if (!selectedElement) return;

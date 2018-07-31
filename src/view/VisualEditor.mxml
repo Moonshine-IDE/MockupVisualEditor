@@ -97,6 +97,11 @@
 
 				return tempFileMoonshine;
 			}
+
+			public function duplicateSelectedElement():void
+			{
+				this.copyPasteManager.duplicate();
+			}
 		}
 
 		private function newButton_clickHandler(event:MouseEvent):void

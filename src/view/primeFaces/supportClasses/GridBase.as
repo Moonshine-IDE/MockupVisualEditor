@@ -17,13 +17,25 @@ package view.primeFaces.supportClasses
         protected static const MIN_ROW_COUNT:int = 1;
 
         protected var maxColumnCount:int = 12;
-        protected var columnBorderColor:String = "#7096ab";
+        protected var _columnBorderColor:String = "#7096ab";
+        private var columnBorderColorChanged:Boolean;
 
         protected var selectionChanged:Boolean;
 
         public function GridBase()
         {
             super();
+        }
+
+        public function set columnBorderColor(value:String):void
+        {
+            if (_columnBorderColor != value)
+            {
+                this._columnBorderColor = value;
+                this.columnBorderColorChanged = true;
+
+                this.invalidateDisplayList();
+            }
         }
 
         protected var _selectedRow:int = -1;
@@ -61,6 +73,16 @@ package view.primeFaces.supportClasses
                 selectionChanged = true;
 
                 invalidateProperties();
+            }
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (columnBorderColorChanged)
+            {
+                refreshColumnBorderColor();
             }
         }
 
@@ -113,7 +135,7 @@ package view.primeFaces.supportClasses
             return null;
         }
 
-        public function addColumn(rowIndex:int):void
+        public function addColumn(rowIndex:int):GridItem
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             if (gridRow)
@@ -127,7 +149,11 @@ package view.primeFaces.supportClasses
 
                 dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
                 dispatchEvent(new Event("itemAdded"));
+
+                return gridItem;
             }
+
+            return null;
         }
 
         public function removeColumn(rowIndex:int, columnIndex:int):IVisualElement
@@ -157,6 +183,27 @@ package view.primeFaces.supportClasses
             return null;
         }
 
+        public function isEmpty():Boolean
+        {
+            var rowNumElements:int = this.numElements;
+            for (var i:int = 0; i < rowNumElements; i++)
+            {
+                var gridRow:GridRow = this.getElementAt(i) as GridRow;
+                var columnNumElements:int = gridRow.numElements;
+                for (var j:int = 0; j < columnNumElements; j++)
+                {
+                    var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
+                    var div:Div = gridItem.getElementAt(0) as Div;
+                    if (div.numElements > 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         protected function ensureCreateColumn(row:GridRow):GridItem
         {
             var gridItem:GridItem = new GridItem();
@@ -164,7 +211,7 @@ package view.primeFaces.supportClasses
 
             var div:Div = new Div();
             div.percentWidth = div.percentHeight = 100;
-            div.setStyle("borderColor", columnBorderColor);
+            div.setStyle("borderColor", _columnBorderColor);
             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
             div.addEventListener(MouseEvent.CLICK, onDivClick);
@@ -214,7 +261,32 @@ package view.primeFaces.supportClasses
 
         protected function onDivClick(event:MouseEvent):void
         {
+            var target:Div = event.currentTarget as Div;
+            if (target)
+            {
+                if (!isDivSelected(target))
+                {
+                    resetSelectionColorForSelectedItem(this.selectedRow, this.selectedColumn);
+                }
 
+                var rowNumElements:int = this.numElements;
+                for (var i:int = 0; i < rowNumElements; i++)
+                {
+                    var gridRow:GridRow = this.getElementAt(i) as GridRow;
+                    var columnNumElements:int = gridRow.numElements;
+                    for (var j:int = 0; j < columnNumElements; j++)
+                    {
+                        var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
+                        var div:Div = gridItem.getElementAt(0) as Div;
+                        if (target == div)
+                        {
+                            this.selectedRow = i;
+                            this.selectedColumn = j;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         protected function isDivSelected(div:Div):Boolean
@@ -238,6 +310,30 @@ package view.primeFaces.supportClasses
             }
 
             return null;
+        }
+
+        private function refreshColumnBorderColor():void
+        {
+            for (var row:int = 0; row < this.numElements; row++)
+            {
+                var gridRow:GridRow = this.getElementAt(row) as GridRow;
+                for (var col:int = 0; col < gridRow.numElements; col++)
+                {
+                    var gridItem:GridItem = gridRow.getElementAt(col) as GridItem;
+                    var div:Div = gridItem.getElementAt(0) as Div;
+                    div.setStyle("borderColor", _columnBorderColor);
+                }
+            }
+        }
+
+        protected function resetSelectionColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
+        {
+            var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
+            if (div)
+            {
+                div.setStyle("backgroundColor", "#FFFFFF");
+                div.setStyle("backgroundAlpha", 1);
+            }
         }
     }
 }

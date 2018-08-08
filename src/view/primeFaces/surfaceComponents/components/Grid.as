@@ -329,7 +329,7 @@ package view.primeFaces.surfaceComponents.components
 
                             var div:Div = new Div();
                             div.percentWidth = div.percentHeight = 100;
-                            div.setStyle("borderColor", columnBorderColor);
+                            div.setStyle("borderColor", _columnBorderColor);
                             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
                             div.addEventListener(MouseEvent.CLICK, onDivClick);
@@ -402,17 +402,18 @@ package view.primeFaces.surfaceComponents.components
             return removedElement;
         }
 
-        override public function addColumn(rowIndex:int):void
+        override public function addColumn(rowIndex:int):GridItem
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
+            var gridItem:GridItem = null;
             if (gridRow && gridRow.numElements < maxColumnCount)
             {
-                super.addColumn(rowIndex);
-
-                var gridItem:GridItem = gridRow.getElementAt(this.selectedColumn) as GridItem;
+                gridItem = super.addColumn(rowIndex);
 				var historyObject:Object = {object:gridItem, parent:gridRow};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addColumnAt", historyObject, historyObject);
             }
+
+            return gridItem;
         }
 
         override public function removeColumn(rowIndex:int, columnIndex:int):IVisualElement
@@ -429,27 +430,6 @@ package view.primeFaces.surfaceComponents.components
             }
 
             return null;
-        }
-
-        public function isEmpty():Boolean
-        {
-            var rowNumElements:int = this.numElements;
-            for (var i:int = 0; i < rowNumElements; i++)
-            {
-                var gridRow:GridRow = this.getElementAt(i) as GridRow;
-                var columnNumElements:int = gridRow.numElements;
-                for (var j:int = 0; j < columnNumElements; j++)
-                {
-                    var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
-                    var div:Div = gridItem.getElementAt(0) as Div;
-                    if (div.numElements > 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
 
         override public function removeAllElements():void
@@ -486,48 +466,6 @@ package view.primeFaces.surfaceComponents.components
             var uigBigScreens:String = "ui-xl-" + uigDefaultValue;
 
             return uigDefault + " " + uigDesktop + " " + uigPhones + " " + uigTablets + " " + uigBigScreens;
-        }
-
-        override protected function onDivClick(event:MouseEvent):void
-        {
-            super.onDivClick(event);
-
-            var target:Div = event.currentTarget as Div;
-            if (target)
-            {
-                if (!isDivSelected(target))
-                {
-                    resetSelectionColorForSelectedItem(this.selectedRow, this.selectedColumn);
-                }
-
-                var rowNumElements:int = this.numElements;
-                for (var i:int = 0; i < rowNumElements; i++)
-                {
-                    var gridRow:GridRow = this.getElementAt(i) as GridRow;
-                    var columnNumElements:int = gridRow.numElements;
-                    for (var j:int = 0; j < columnNumElements; j++)
-                    {
-                        var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
-                        var div:Div = gridItem.getElementAt(0) as Div;
-                        if (target == div)
-                        {
-                            this.selectedRow = i;
-                            this.selectedColumn = j;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        private function resetSelectionColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
-        {
-            var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
-            if (div)
-            {
-                div.setStyle("backgroundColor", "#FFFFFF");
-                div.setStyle("backgroundAlpha", 1);
-            }
         }
 
         private function setColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void

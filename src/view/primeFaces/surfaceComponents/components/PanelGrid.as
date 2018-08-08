@@ -4,7 +4,8 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.BasicPropertyEditor;
-    import view.primeFaces.supportClasses.Table;
+    import view.primeFaces.propertyEditors.PanelGridPropertyEditor;
+    import view.primeFaces.supportClasses.table.Table;
 
     public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent
     {
@@ -32,7 +33,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function get propertyEditorClass():Class
         {
-            return BasicPropertyEditor;
+            return PanelGridPropertyEditor;
         }
 
         private var _propertiesChangedEvents:Array;
@@ -47,6 +48,13 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            var header:XML = new XML("<Header/>");
+            header.@name = "header";
+            toVisualXML(header, this.headerRowCount, this.columnCount);
+            xml.appendChild(header);
+
+            toVisualXML(xml, this.body.numElements, this.columnCount);
+
             return xml;
         }
 
@@ -54,7 +62,8 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            var elementsXML:XMLList = xml.elements();
+            var header:XMLList = xml.Header;
+            var rows:XMLList = xml.Row;
         }
 
         public function toCode():XML
@@ -66,7 +75,101 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 
+            toCodeHeader(xml);
+            toCodeBody(xml);
+
             return xml;
+        }
+
+        public function addRow():void
+        {
+            this.body.addRow();
+
+            _rowCount += 1;
+
+            var selectedRowIndex:int = rowCount - 1;
+            addColumnToRow(this.body, selectedRowIndex, columnCount - 1);
+
+            this.invalidateBorders();
+        }
+
+        public function addColumn():void
+        {
+            addColumnToRow(this.header, headerRowCount - 1, 1);
+            for (var row:int = 0; row < this.rowCount; row++)
+            {
+                addColumnToRow(this.body, row, 1);
+            }
+
+            _columnCount += 1;
+            this.invalidateBorders();
+        }
+
+        private function toVisualXML(xml:XML, rowCount:int, columnCount:int):void
+        {
+            for (var row:int = 0; row < rowCount; row++)
+            {
+                var rowXML:XML = new XML("<Row/>");
+                for (var col:int = 0; col < columnCount; col++)
+                {
+                    var colXML:XML = new XML("<Column>Text</Column>");
+                    rowXML.appendChild(colXML);
+                }
+                xml.appendChild(rowXML);
+            }
+        }
+
+        private function toCodeHeader(xml:XML):void
+        {
+            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
+            var facetNamespace:Namespace = new Namespace("f", "http://xmlns.jcp.org/jsf/core");
+            var facet:XML = new XML("<facet/>");
+            facet.addNamespace(facetNamespace);
+            facet.setNamespace(facetNamespace);
+
+            facet.@name = "header";
+
+            for (var row:int = 0; row < this.headerRowCount; row++)
+            {
+                var rowXML:XML = new XML("<row/>");
+                rowXML.addNamespace(primeFacesNamespace);
+                rowXML.setNamespace(primeFacesNamespace);
+                for (var col:int = 0; col < this.columnCount; col++)
+                {
+                    var colXML:XML = new XML("<column>Header Text</column>");
+                    colXML.addNamespace(primeFacesNamespace);
+                    colXML.setNamespace(primeFacesNamespace);
+
+                    rowXML.appendChild(colXML);
+                }
+
+                facet.appendChild(rowXML);
+            }
+
+            xml.appendChild(facet);
+        }
+
+        private function toCodeBody(xml:XML):void
+        {
+            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
+
+            var bodyRowCount:int = this.body.numElements;
+            for (var row:int = 0; row < bodyRowCount; row++)
+            {
+                var rowXML:XML = new XML("<row/>");
+                rowXML.addNamespace(primeFacesNamespace);
+                rowXML.setNamespace(primeFacesNamespace);
+                for (var col:int = 0; col < this.columnCount; col++)
+                {
+                    var colXML:XML = new XML("<column>Text</column>");
+                    colXML.addNamespace(primeFacesNamespace);
+                    colXML.setNamespace(primeFacesNamespace);
+
+                    rowXML.appendChild(colXML);
+                }
+
+                xml.appendChild(rowXML);
+            }
         }
 
         override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void

@@ -89,6 +89,9 @@ package utils
 			var uiNamespace:Namespace = new Namespace("ui", "http://xmlns.jcp.org/jsf/facelets");
 			xml.addNamespace(uiNamespace);
 
+			var fNamespace:Namespace = new Namespace("f", "http://xmlns.jcp.org/jsf/core");
+			xml.addNamespace(fNamespace);
+
 			var pNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
 			xml.addNamespace(pNamespace);
 

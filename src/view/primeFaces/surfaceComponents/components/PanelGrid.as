@@ -62,8 +62,13 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            var header:XMLList = xml.Header;
-            var rows:XMLList = xml.Row;
+            var header:XMLList = xml.Header.Row;
+            this.headerRowCount = header.length();
+
+            var bodyRows:XMLList = xml.Row;
+            var columns:XMLList = bodyRows[0].Column;
+            this.rowCount = bodyRows.length();
+            this.columnCount = columns.length();
         }
 
         public function toCode():XML

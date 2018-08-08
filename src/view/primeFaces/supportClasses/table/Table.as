@@ -13,6 +13,10 @@ package view.primeFaces.supportClasses.table
 		public function Table()
 		{
             super.direction = ContainerDirection.VERTICAL_LAYOUT;
+
+            this.headerRowCount = 1;
+            this.rowCount = 1;
+            this.columnCount = 1;
 		}
 
 		private var bordersChanged:Boolean;
@@ -121,22 +125,24 @@ package view.primeFaces.supportClasses.table
 		{
 			super.createChildren();
 
-			this._header = new HeaderGrid();
-			this._header.columnBorderColor = "#000000";
-			this._header.percentWidth = 100;
-			this._header.percentHeight = Number.NaN;
+			if (!_header)
+            {
+                this._header = new HeaderGrid();
+                this._header.columnBorderColor = "#000000";
+                this._header.percentWidth = 100;
+                this._header.percentHeight = Number.NaN;
 
-			this.addElement(_header);
-			
-			this._body = new BodyGrid();
-            this._body.columnBorderColor = "#000000";
-            this._body.percentHeight = this._body.percentWidth = 100;
+                this.addElement(_header);
+            }
 
-			this.addElement(_body);
+			if (!_body)
+            {
+                this._body = new BodyGrid();
+                this._body.columnBorderColor = "#000000";
+                this._body.percentHeight = this._body.percentWidth = 100;
 
-            headerRowCount = 1;
-			columnCount = 4;
-			rowCount = 2;
+                this.addElement(_body);
+            }
 		}
 
         override protected function commitProperties():void

@@ -6,7 +6,6 @@
     <fx:Script>
 		<![CDATA[
         import mx.collections.ArrayList;
-        import mx.containers.GridItem;
         import mx.containers.GridRow;
         import mx.events.CloseEvent;
         import mx.events.FlexEvent;
@@ -19,10 +18,17 @@
         import data.GridListItem;
 
         import view.interfaces.ISurfaceComponent;
+        import view.primeFaces.supportClasses.GridBase;
         import view.primeFaces.supportClasses.table.BodyGrid;
         import view.primeFaces.surfaceComponents.components.Div;
         import view.primeFaces.surfaceComponents.components.Grid;
         import view.primeFaces.surfaceComponents.components.PanelGrid;
+
+        [Bindable]
+        private var headerRowsDataProvider:ArrayList = new ArrayList();
+
+        [Bindable]
+        private var headerColumnsDataProvider:ArrayList = new ArrayList();
 
         [Bindable]
         private var rowsDataProvider:ArrayList = new ArrayList();
@@ -156,26 +162,15 @@
 
         private function onGridFormCreationComplete(event:FlexEvent):void
         {
+            dgHeaderRows.columnHeaderGroup.visible = dgHeaderRows.columnHeaderGroup.includeInLayout = false;
             dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
 
-            rowsDataProvider.removeAll();
-
-            var grid:BodyGrid = selectedPanelGrid.body;
-            for (var row:int = 0; row < selectedPanelGrid.rowCount; row++)
-            {
-                var itemValue:int = row + 1;
-                var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
-                for (var col:int = 0; col < selectedPanelGrid.columnCount; col++)
-                {
-                    itemValue = col + 1;
-                    rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
-                }
-                this.rowsDataProvider.addItem(rowItem);
-            }
+            initializeRowsColumns(headerRowsDataProvider, selectedPanelGrid.headerRowCount, selectedPanelGrid.header);
+            initializeRowsColumns(rowsDataProvider, selectedPanelGrid.rowCount, selectedPanelGrid.body);
 
             this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
 
-            grid.selectedRow = grid.selectedColumn = 0;
+            selectRow(selectedPanelGrid.body, 0);
             //this.selectedCell = this.getSelectedCell();
 
             dispatchEvent(new Event(Event.CHANGE));
@@ -190,14 +185,23 @@
             _childrenForFocus.push(deleteColumnBtn);
         }
 
-        protected function onGridSelectionChanged(event:GridSelectionEvent):void
+        protected function onBodySelectionChanged(event:GridSelectionEvent):void
         {
             var gridListItem:GridListItem = dgRows.selectedItem as GridListItem;
             this.columnsDataProvider = gridListItem.columns;
 
-            var body:BodyGrid = this.selectedPanelGrid.body;
-            body.selectedRow = dgRows.selectedIndex;
-            body.selectedColumn = 0;
+            selectRow(this.selectedPanelGrid.body, dgRows.selectedIndex);
+
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
+
+        protected function onHeaderSelectionChanged(event:GridSelectionEvent):void
+        {
+            var gridListItem:GridListItem = dgHeaderRows.selectedItem as GridListItem;
+            this.headerColumnsDataProvider = gridListItem.columns;
+
+            selectRow(this.selectedPanelGrid.header, dgHeaderRows.selectedIndex);
 
             this.selectedCellDirty = true;
             this.invalidateDisplayList();
@@ -205,10 +209,10 @@
 
         private function onColumnListChange(event:IndexChangeEvent):void
         {
-            /*this.selectedPanelGrid.selectedRow = dgRows.selectedIndex;
-            this.selectedPanelGrid.selectedColumn = columnList.selectedIndex;
+            this.selectedPanelGrid.body.selectedRow = dgRows.selectedIndex;
+            this.selectedPanelGrid.body.selectedColumn = columnList.selectedIndex;
 
-            this.selectedCell = this.getSelectedCell();*/
+            this.selectedCell = this.getSelectedCell();
         }
 
         private function onCreateClick(event:MouseEvent):void
@@ -265,13 +269,38 @@
 
         private function getSelectedCell():Div
         {
-           /* if (this.selectedPanelGrid.selectedRow == -1 || this.selectedPanelGrid.selectedColumn == -1) return null;
-            var gridRow:GridRow = selectedPanelGrid.getElementAt(this.selectedPanelGrid.selectedRow) as GridRow;
+            /* if (this.selectedPanelGrid.selectedRow == -1 || this.selectedPanelGrid.selectedColumn == -1) return null;
+             var gridRow:GridRow = selectedPanelGrid.getElementAt(this.selectedPanelGrid.selectedRow) as GridRow;
 
-            var gridItem:GridItem = gridRow.getElementAt(this.selectedPanelGrid.selectedColumn) as GridItem;
+             var gridItem:GridItem = gridRow.getElementAt(this.selectedPanelGrid.selectedColumn) as GridItem;
 
-            return gridItem.getElementAt(0) as Div;*/
+             return gridItem.getElementAt(0) as Div;*/
             return null;
+        }
+
+        private function selectRow(grid:GridBase, rowIndex:int):void
+        {
+            grid.selectedRow = rowIndex;
+            grid.selectedColumn = 0;
+        }
+
+        private function initializeRowsColumns(rowsDp:ArrayList, rowCount:int, grid:GridBase):void
+        {
+            rowsDp.removeAll();
+
+            for (var row:int = 0; row < rowCount; row++)
+            {
+                var itemValue:int = row + 1;
+                var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
+                for (var col:int = 0; col < selectedPanelGrid.columnCount; col++)
+                {
+                    itemValue = col + 1;
+                    rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
+                }
+                rowsDp.addItem(rowItem);
+            }
+
+            grid.selectedRow = grid.selectedColumn = 0;
         }
         ]]>
 	</fx:Script>
@@ -290,13 +319,26 @@
                       click="onCreateClick(event)"/>
         </s:HGroup>
     </s:FormItem>
-
-    <s:FormHeading label="Custom Rows/Columns" skinClass="skins.FormHeadingSkin"/>
+    <s:FormHeading label="Header Rows/Columns" skinClass="skins.FormHeadingSkin"/>
+    <s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
+        <s:DataGrid id="dgHeaderRows"
+                    width="100%" maxHeight="350"
+                    sortableColumns="false" draggableColumns="false"
+                    selectionChange="onHeaderSelectionChanged(event)" requireSelection="true"
+                    dataProvider="{headerRowsDataProvider}" selectedIndex="{selectedPanelGrid.header.selectedRow}">
+            <s:columns>
+                <s:ArrayList>
+                    <s:GridColumn dataField="label" headerText="Row number"/>
+                </s:ArrayList>
+            </s:columns>
+        </s:DataGrid>
+    </s:FormItem>
+    <s:FormHeading label="Body Rows/Columns" skinClass="skins.FormHeadingSkin"/>
     <s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
         <s:DataGrid id="dgRows"
                     width="100%" maxHeight="350"
                     sortableColumns="false" draggableColumns="false"
-                    selectionChange="onGridSelectionChanged(event)" requireSelection="true"
+                    selectionChange="onBodySelectionChanged(event)" requireSelection="true"
                     dataProvider="{rowsDataProvider}" selectedIndex="{selectedPanelGrid.body.selectedRow}">
             <s:columns>
                 <s:ArrayList>

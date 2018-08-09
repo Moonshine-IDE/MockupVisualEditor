@@ -6,7 +6,6 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.BasicPropertyEditor;
     import view.primeFaces.propertyEditors.PanelGridPropertyEditor;
     import view.primeFaces.supportClasses.table.Table;
 

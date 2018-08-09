@@ -20,6 +20,26 @@ package view.primeFaces.supportClasses.table
             this.setStyle("horizontalGap", -2);
         }
 
+        public function setTitle(title:String, selectedRowIndex:int = -1, selectedColumnIndex:int = -1):void
+        {
+            if (selectedRowIndex == -1)
+            {
+                selectedRowIndex = this.selectedRow;
+            }
+
+            if (selectedColumnIndex == -1)
+            {
+                selectedColumnIndex = this.selectedColumn;
+            }
+
+            var rowItem:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
+            var colItem:GridItem = rowItem.getElementAt(selectedColumnIndex) as GridItem;
+
+            var div:Div = colItem.getElementAt(0) as Div;
+            var lbl:Label = div.getElementAt(0) as Label;
+            lbl.text = title;
+        }
+
         override public function isEmpty():Boolean
         {
             return false;

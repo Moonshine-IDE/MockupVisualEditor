@@ -6,11 +6,11 @@
     <fx:Script>
 		<![CDATA[
         import mx.collections.ArrayList;
-        import mx.containers.GridRow;
         import mx.events.CloseEvent;
         import mx.events.FlexEvent;
 
         import spark.components.Alert;
+        import spark.events.GridItemEditorEvent;
 
         import spark.events.GridSelectionEvent;
         import spark.events.IndexChangeEvent;
@@ -19,7 +19,7 @@
 
         import view.interfaces.ISurfaceComponent;
         import view.primeFaces.supportClasses.GridBase;
-        import view.primeFaces.supportClasses.table.BodyGrid;
+        import view.primeFaces.supportClasses.table.HeaderGrid;
         import view.primeFaces.surfaceComponents.components.Div;
         import view.primeFaces.surfaceComponents.components.Grid;
         import view.primeFaces.surfaceComponents.components.PanelGrid;
@@ -162,6 +162,7 @@
 
         private function onGridFormCreationComplete(event:FlexEvent):void
         {
+            dgHeaderColumns.columnHeaderGroup.visible = dgHeaderColumns.columnHeaderGroup.includeInLayout = false;
             dgHeaderRows.columnHeaderGroup.visible = dgHeaderRows.columnHeaderGroup.includeInLayout = false;
             dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
 
@@ -169,6 +170,7 @@
             initializeRowsColumns(rowsDataProvider, selectedPanelGrid.rowCount, selectedPanelGrid.body);
 
             this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
+            this.headerColumnsDataProvider = this.headerRowsDataProvider.getItemAt(0).columns;
 
             selectRow(selectedPanelGrid.body, 0);
             //this.selectedCell = this.getSelectedCell();
@@ -207,6 +209,11 @@
             this.invalidateDisplayList();
         }
 
+        protected function onHeaderColumnsSelectionChanged(event:GridSelectionEvent):void
+        {
+            this.selectedPanelGrid.header.selectedColumn = dgHeaderColumns.selectedIndex;
+        }
+
         private function onColumnListChange(event:IndexChangeEvent):void
         {
             this.selectedPanelGrid.body.selectedRow = dgRows.selectedIndex;
@@ -226,6 +233,12 @@
             {
                 createCells(amountOfRows.value, amountOfColumns.value);
             }
+        }
+
+        private function onEditColumnTitleSave(event:GridItemEditorEvent):void
+        {
+            var colItem:GridListItem = dgHeaderColumns.selectedItem as GridListItem;
+            selectedPanelGrid.header.setTitle(colItem.label);
         }
 
         private function onAlertClose(event:CloseEvent):void
@@ -295,13 +308,26 @@
                 for (var col:int = 0; col < selectedPanelGrid.columnCount; col++)
                 {
                     itemValue = col + 1;
-                    rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
+                    var colItem:GridListItem;
+
+                    if (grid is HeaderGrid)
+                    {
+                        colItem = new GridListItem("Title", itemValue);
+                        (grid as HeaderGrid).setTitle(colItem.label, row, col);
+                    }
+                    else
+                    {
+                        colItem = new GridListItem(String("C" + itemValue), itemValue);
+                    }
+
+                    rowItem.columns.addItem(colItem);
                 }
                 rowsDp.addItem(rowItem);
             }
 
             grid.selectedRow = grid.selectedColumn = 0;
         }
+
         ]]>
 	</fx:Script>
     <suportclasses:layout>
@@ -329,6 +355,20 @@
             <s:columns>
                 <s:ArrayList>
                     <s:GridColumn dataField="label" headerText="Row number"/>
+                </s:ArrayList>
+            </s:columns>
+        </s:DataGrid>
+    </s:FormItem>
+    <s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
+        <s:DataGrid id="dgHeaderColumns"
+                    width="100%" maxHeight="300" editable="true"
+                    sortableColumns="false" draggableColumns="false" requireSelection="true"
+                    dataProvider="{headerColumnsDataProvider}" selectedIndex="{selectedPanelGrid.header.selectedColumn}"
+                    selectionChange="onHeaderColumnsSelectionChanged(event)"
+                    gridItemEditorSessionSave="onEditColumnTitleSave(event)">
+            <s:columns>
+                <s:ArrayList>
+                    <s:GridColumn dataField="label" headerText="Row number" editable="true"/>
                 </s:ArrayList>
             </s:columns>
         </s:DataGrid>

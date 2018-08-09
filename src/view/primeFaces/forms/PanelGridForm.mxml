@@ -108,19 +108,28 @@
 
         private function addColumnButton_clickHandler(event:MouseEvent):void
         {
-            var rowsCount:int = rowsDataProvider.length;
             var rowItem:GridListItem;
-            for (var row:int = 0; row < rowsCount; row++)
+            var colItemValue:int;
+            var row:int;
+            for (row = 0; row < selectedPanelGrid.rowCount; row++)
             {
                 rowItem = (rowsDataProvider.getItemAt(row) as GridListItem);
-                var columns:ArrayList = rowItem.columns;
-                var colItemValue:int = rowItem.columns.length + 1;
-                var colItem:GridListItem = new GridListItem("C" + colItemValue, colItemValue);
-                columns.addItem(colItem);
+                colItemValue = rowItem.columns.length + 1;
+                rowItem.columns.addItem(new GridListItem("C" + colItemValue, colItemValue));
+            }
+
+            for (row = 0; row < selectedPanelGrid.headerRowCount; row++)
+            {
+                rowItem = (headerRowsDataProvider.getItemAt(row) as GridListItem);
+                colItemValue = rowItem.columns.length + 1;
+                rowItem.columns.addItem(new GridListItem("Title", colItemValue));
             }
 
             rowItem = dgRows.selectedItem as GridListItem;
             this.columnsDataProvider = rowItem.columns;
+
+            rowItem = dgHeaderRows.selectedItem as GridListItem;
+            this.headerColumnsDataProvider = rowItem.columns;
 
             selectedPanelGrid.addColumn();
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
-	currentState="empty" skinClass="skins.PropertyEditorContainerSkin">
+	currentState="empty" skinClass="skins.PropertyEditorContainerSkin" xmlns:view="view.*">
 
 	<fx:Metadata>
 		[Event(name="change",type="flash.events.Event")]
@@ -21,6 +21,14 @@
 		</s:layout>
 		<s:Label text="No component selected"/>
 	</s:Group>
+	<s:VGroup id="selectionHolder" excludeFrom="empty"
+			  top="0" right="0" bottom="0" left="0">
+		<view:PropertyEditorHeader componentName="{(selectedItem as Object).className}"/>
+		<s:Scroller percentWidth="100" percentHeight="100">
+			<s:Group id="editorHolder" 
+					 width="100%"/>
+		</s:Scroller>
+	</s:VGroup>
 
 	<fx:Script><![CDATA[
 		
@@ -47,7 +55,7 @@
             this._selectedItem = value;
             if (this._editor)
             {
-                this.removeElement(this._editor);
+				editorHolder.removeElement(this._editor);
                 this._editor = null;
             }
             if (this._selectedItem !== null)
@@ -64,7 +72,7 @@
                 this._editor.bottom = 0;
                 this._editor.left = 0;
                 this._editor.selectedItem = value;
-                this.addElement(this._editor);
+				editorHolder.addElement(this._editor);
             }
             else
             {

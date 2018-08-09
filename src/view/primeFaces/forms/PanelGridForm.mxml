@@ -124,36 +124,34 @@
 
         private function deleteItemButton_clickHandler(event:MouseEvent):void
         {
-           /* if (this.rowsDataProvider.length > 1)
+            if (this.rowsDataProvider.length > 1)
             {
-                this.rowsDataProvider.removeItemAt(selectedPanelGrid.selectedRow);
-                var grid:Grid = (selectedItem as Grid);
-                grid.removeRow(selectedPanelGrid.selectedRow);
+                this.rowsDataProvider.removeItemAt(selectedPanelGrid.body.selectedRow);
+                selectedPanelGrid.removeRow(selectedPanelGrid.body.selectedRow);
 
-                this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedPanelGrid.selectedRow).columns;
+                this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedPanelGrid.body.selectedRow).columns;
 
                 // when a row deletes selectedCell suppose to be
                 // return to previous cell's 0th index
-                this.selectedPanelGrid.selectedColumn = 0;
+                this.selectedPanelGrid.body.selectedColumn = 0;
 
                 this.selectedCellDirty = true;
                 this.invalidateDisplayList();
-            }*/
+            }
         }
 
         private function deleteColumnButton_clickHandler(event:MouseEvent):void
         {
-           /* var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-            if (rowItem.columns.length > selectedPanelGrid.selectedColumn)
+            var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
+            if (rowItem.columns.length > selectedPanelGrid.body.selectedColumn)
             {
-                rowItem.columns.removeItemAt(selectedPanelGrid.selectedColumn);
+                rowItem.columns.removeItemAt(selectedPanelGrid.body.selectedColumn);
             }
 
-            var grid:Grid = (selectedItem as Grid);
-            grid.removeColumn(selectedPanelGrid.selectedRow, selectedPanelGrid.selectedColumn);
+            selectedPanelGrid.removeColumn(selectedPanelGrid.body.selectedColumn);
 
             this.selectedCellDirty = true;
-            this.invalidateDisplayList();*/
+            this.invalidateDisplayList();
         }
 
         private function onGridFormCreationComplete(event:FlexEvent):void

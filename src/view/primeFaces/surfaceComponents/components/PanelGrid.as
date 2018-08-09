@@ -1,5 +1,8 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import mx.containers.GridRow;
+    import mx.core.IVisualElement;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -108,6 +111,37 @@ package view.primeFaces.surfaceComponents.components
 
             _columnCount += 1;
             this.invalidateBorders();
+        }
+
+        public function removeRow(index:int):IVisualElement
+        {
+            if (_rowCount == 1) return null;
+
+            var rowItem:IVisualElement = this.body.removeRow(index);
+
+            _rowCount -= 1;
+
+            this.invalidateBorders();
+
+            return rowItem;
+        }
+
+        public function removeColumn(columnIndex:int):IVisualElement
+        {
+            if (_columnCount == 1) return null;
+
+            for (var row:int = 0; row < this.rowCount; row++)
+            {
+                this.body.removeColumn(row, columnIndex);
+            }
+
+            var colItem:IVisualElement = this.header.removeColumn(0, columnIndex);
+
+            _columnCount -= 1;
+
+            this.invalidateBorders();
+
+            return colItem;
         }
 
         private function toVisualXML(xml:XML, rowCount:int, columnCount:int):void

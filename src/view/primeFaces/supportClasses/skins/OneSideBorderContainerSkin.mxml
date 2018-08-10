@@ -19,12 +19,14 @@
 		private var borderWeight:Number = 1;
 		[Bindable]
 		private var borderColor:Number; 
-	
+
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
 		{	
 			this.borderWeight = getStyle("borderWeight");
 			this.borderColor = getStyle("borderColor");
-			
+			this.backgroundFill.color = getStyle("backgroundColor");
+			this.backgroundFill.alpha = getStyle("backgroundAlpha");
+
 			var borderVisible:Boolean = getStyle("borderVisible");
 			var borderRightVisible:Boolean = getStyle("borderRightVisible");
 			var borderLeftVisible:Boolean = getStyle("borderLeftVisible");
@@ -40,6 +42,11 @@
 		}
 	]]>
 </fx:Script>
+	<s:Rect id="background" left="{borderWeight}" right="{borderWeight}" top="{borderWeight}" bottom="{borderWeight}">
+		<s:fill>
+			<s:SolidColor id="backgroundFill" />
+		</s:fill>
+	</s:Rect>
 	<s:Rect id="borderRight" top="0" right="0" bottom="0">
 		<s:stroke>
 			<s:SolidColorStroke color="{borderColor}" weight="{borderWeight}"/>

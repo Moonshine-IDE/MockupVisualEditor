@@ -1,6 +1,5 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import mx.containers.GridRow;
     import mx.core.IVisualElement;
 
     import utils.XMLCodeUtils;
@@ -9,6 +8,57 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.PanelGridPropertyEditor;
     import view.primeFaces.supportClasses.table.Table;
 
+    [Exclude(name="addRow", kind="method")]
+    [Exclude(name="addColumn", kind="method")]
+    [Exclude(name="removeRow", kind="method")]
+    [Exclude(name="removeColumn", kind="method")]
+    [Exclude(name="toXML", kind="method")]
+    [Exclude(name="fromXML", kind="method")]
+    [Exclude(name="toCode", kind="method")]
+
+    /**
+     * <p>Representation of PrimeFaces panelGrid component.</p>
+     *
+     * <strong>Visual Editor XML:</strong>
+     * <pre>
+     * &lt;PanelGrid
+     * <b>Attributes</b>
+     * width="100"
+     * height="30"/&gt;
+     * &lt;Header name="header"&gt;
+     *  &lt;Row&gt;
+     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *  &lt;/Row&gt;
+     *  &lt;/Header&gt;
+     *  &lt;Row&gt;
+     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *  &lt;/Row&gt;
+     *  &lt;Row&gt;
+     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *  &lt;/Row&gt;
+     * &lt;/PanelGrid&gt;
+     * </pre>
+     *
+     * <strong>PrimeFaces output:</strong>
+     * <pre>
+     * &lt;p:panelGrid
+     * <b>Attributes</b>
+     * width="100"
+     * height="30"/&gt;
+     *   &lt;f:facet name="header"&gt;
+     *       &lt;p:row&gt;
+     *        &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *       &lt;/p:row&gt;
+     *   &lt;/f:facet&gt;
+     *  &lt;p:row&gt;
+     *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *  &lt;/p:row&gt;
+     *  &lt;p:row&gt;
+     *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *  &lt;/p:row&gt;
+     * &lt;/p:panelGrid&gt;
+     * </pre>
+     */
     public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
@@ -44,11 +94,59 @@ package view.primeFaces.surfaceComponents.components
             return _propertiesChangedEvents;
         }
 
+        /**
+         * <p>PrimeFaces: <strong>headerRowCount (Optional)</strong></p>
+         *
+         * @default "1"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid headerRowCount="1"/&gt;</listing>
+         */
+        override public function get headerRowCount():int
+        {
+            return super.headerRowCount;
+        }
+
+        override public function set headerRowCount(value:int):void
+        {
+            super.headerRowCount = value;
+        }
+
+        /**
+         * <p>PrimeFaces: <strong>rowCount (Optional)</strong></p>
+         *
+         * @default "1"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid rowCount="1"/&gt;</listing>
+         */
+        override public function get rowCount():int
+        {
+            return super.rowCount;
+        }
+
+        /**
+         * <p>PrimeFaces: <strong>columnCount (Optional)</strong></p>
+         *
+         * @default "1"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid columnCount="1"/&gt;</listing>
+         */
+        override public function get columnCount():int
+        {
+            return super.columnCount;
+        }
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+            xml.@headerRowCount = this.headerRowCount;
+            xml.@rowCount = this.rowCount;
+            xml.@columnCount = this.columnCount;
 
             var header:XML = new XML("<Header/>");
             header.@name = "header";
@@ -64,13 +162,62 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            var header:XMLList = xml.Header.Row;
-            this.headerRowCount = header.length();
-
             var bodyRows:XMLList = xml.Row;
-            var columns:XMLList = bodyRows[0].Column;
-            this.rowCount = bodyRows.length();
-            this.columnCount = columns.length();
+            var rowCount:int = 1;
+            var columnCount:int = 1;
+
+            if ("@headerRowCount" in xml)
+            {
+                this.headerRowCount = xml.@headerRowCount;
+            }
+            else
+            {
+                var header:XMLList = xml.Header.Row;
+                rowCount = header.length();
+                if (rowCount > 0)
+                {
+                    this.headerRowCount = rowCount;
+                }
+                else
+                {
+                    this.headerRowCount = 1;
+                }
+            }
+
+            if ("@rowCount" in xml)
+            {
+                this.rowCount = xml.@rowCount;
+            }
+            else
+            {
+                rowCount = bodyRows.length();
+                if (rowCount > 0)
+                {
+                    this.rowCount = rowCount;
+                }
+                else
+                {
+                    this.rowCount = 1;
+                }
+            }
+
+            if ("@columnCount" in xml)
+            {
+                this.columnCount = xml.@columnCount;
+            }
+            else
+            {
+                var columns:XMLList = bodyRows[0].Column;
+                columnCount = columns.length();
+                if (columnCount > 0)
+                {
+                    this.columnCount = columnCount;
+                }
+                else
+                {
+                    this.columnCount = 1;
+                }
+            }
         }
 
         public function toCode():XML

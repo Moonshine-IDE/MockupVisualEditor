@@ -1,5 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import flash.events.Event;
+
     import mx.core.IVisualElement;
 
     import utils.XMLCodeUtils;
@@ -79,7 +81,8 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "itemRemoved",
-                "itemAdded"
+                "itemAdded",
+                "panelGridValueChanged"
             ];
         }
 
@@ -92,6 +95,33 @@ package view.primeFaces.surfaceComponents.components
         public function get propertiesChangedEvents():Array
         {
             return _propertiesChangedEvents;
+        }
+
+        private var _panelGridValue:String = "";
+
+        [Bindable("panelGridValueChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Column&gt;#{value}&lt;Column/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:column&gt;#{value}&lt;p:column/&gt;</listing>
+         */
+        public function get panelGridValue():String
+        {
+            return _panelGridValue;
+        }
+
+        public function set panelGridValue(value:String):void
+        {
+            if (_panelGridValue == value) return;
+
+            _panelGridValue = value;
+
+            dispatchEvent(new Event("panelGridValueChanged"));
         }
 
         /**
@@ -292,12 +322,23 @@ package view.primeFaces.surfaceComponents.components
 
         private function toVisualXML(xml:XML, rowCount:int, columnCount:int):void
         {
+            var isHeader:Boolean = "@name" in xml;
             for (var row:int = 0; row < rowCount; row++)
             {
                 var rowXML:XML = new XML("<Row/>");
                 for (var col:int = 0; col < columnCount; col++)
                 {
-                    var colXML:XML = new XML("<Column>Text</Column>");
+                    var xmlValue:String;
+                    if (isHeader || !this.panelGridValue)
+                    {
+                        xmlValue = "<Column></Column>";
+                    }
+                    else
+                    {
+                        xmlValue = "<Column>#{" + this.panelGridValue + "}</Column>";
+                    }
+
+                    var colXML:XML = new XML(xmlValue);
                     rowXML.appendChild(colXML);
                 }
                 xml.appendChild(rowXML);

@@ -2,9 +2,8 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
-
+    
     import mx.collections.ArrayCollection;
-
     import mx.events.CollectionEvent;
     import mx.events.CollectionEventKind;
     import mx.graphics.SolidColor;
@@ -13,8 +12,9 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.Button;
     import spark.components.Label;
     import spark.layouts.VerticalLayout;
-
+    
     import utils.MoonshineBridgeUtils;
+    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
@@ -118,6 +118,17 @@ package view.primeFaces.surfaceComponents.components
 		public function set isUpdating(value:Boolean):void
 		{
 			_isUpdating = value;
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 
         public function get propertyEditorClass():Class
@@ -228,7 +239,7 @@ package view.primeFaces.surfaceComponents.components
         {
             if (!hasFileList()) return new XML();
 
-			var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
 			var primeFacesNamespace:Namespace = new Namespace("ui", "http://xmlns.jcp.org/jsf/facelets");
 			xml.addNamespace(primeFacesNamespace);
 			xml.setNamespace(primeFacesNamespace);

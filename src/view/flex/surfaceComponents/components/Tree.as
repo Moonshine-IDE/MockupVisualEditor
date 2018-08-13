@@ -3,8 +3,10 @@ package view.flex.surfaceComponents.components
 	import mx.collections.IList;
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
-
-    import view.interfaces.IFlexSurfaceComponent;
+	
+	import utils.MxmlCodeUtils;
+	
+	import view.interfaces.IFlexSurfaceComponent;
 
 	public class Tree extends mx.controls.Tree implements IFlexSurfaceComponent
 	{
@@ -53,6 +55,17 @@ package view.flex.surfaceComponents.components
 		{
 			return null;
 		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
+		}
 
         private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array
@@ -90,7 +103,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
             var mxNamespace:Namespace = new Namespace("mx", "library://ns.adobe.com/flex/mx");
             xml.addNamespace(mxNamespace);
             xml.setNamespace(mxNamespace);

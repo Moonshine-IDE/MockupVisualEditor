@@ -35,7 +35,7 @@ package utils
                 var itemName:String = item.name();
                 if (itemName.lastIndexOf("body") > -1)
                 {
-                    return item.div[0];
+                    return item.children()[0];
                 }
             }
 
@@ -115,7 +115,7 @@ package utils
 			bodyXML.addNamespace(hNamespace);
 			bodyXML.setNamespace(hNamespace);
 
-			var mainDiv:XML = new XML("<div/>");
+			var mainDiv:XML = new XML("<"+ MxmlCodeUtils.getMXMLTagNameWithSelection(container as ISurfaceComponent, "div") +"/>");
 
             mainDiv["@class"] = XMLCodeUtils.getChildrenPositionForXML(container);
             XMLCodeUtils.addSizeHtmlStyleToXML(mainDiv, width, height, percentWidth, percentHeight);

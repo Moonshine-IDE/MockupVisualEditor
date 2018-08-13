@@ -12,6 +12,7 @@ package view.primeFaces.surfaceComponents.components
     
     import data.DataProviderListItem;
     
+    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IDataProviderComponent;
@@ -143,6 +144,17 @@ package view.primeFaces.surfaceComponents.components
 		public function set isUpdating(value:Boolean):void
 		{
 			_isUpdating = value;
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 
         [PercentProxy("percentWidth")]
@@ -498,7 +510,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
 			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
             xml.addNamespace(primeFacesNamespace);

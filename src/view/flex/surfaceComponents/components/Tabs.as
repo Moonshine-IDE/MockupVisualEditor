@@ -1,7 +1,5 @@
 package view.flex.surfaceComponents.components
 {
-	import data.DataProviderListItem;
-
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
 	import mx.containers.ViewStack;
@@ -9,22 +7,24 @@ package view.flex.surfaceComponents.components
 	import mx.events.CollectionEventKind;
 	import mx.events.FlexEvent;
 	import mx.events.PropertyChangeEvent;
-
+	
 	import spark.components.Group;
 	import spark.components.NavigatorContent;
 	import spark.components.SkinnableContainer;
 	import spark.components.TabBar;
 	import spark.events.IndexChangeEvent;
 	import spark.layouts.VerticalLayout;
-
-    import view.flex.surfaceComponents.skins.NavigatorContentSkin;
-
-    import view.interfaces.IDataProviderComponent;
-    import view.interfaces.IFlexSurfaceComponent;
-
-    import view.interfaces.IMultiViewContainer;
-	import view.interfaces.ISurfaceComponent;
+	
+	import data.DataProviderListItem;
+	
+	import utils.MxmlCodeUtils;
+	
 	import view.flex.propertyEditors.TabsPropertyEditor;
+	import view.flex.surfaceComponents.skins.NavigatorContentSkin;
+	import view.interfaces.IDataProviderComponent;
+	import view.interfaces.IFlexSurfaceComponent;
+	import view.interfaces.IMultiViewContainer;
+	import view.interfaces.ISurfaceComponent;
 
 	public class Tabs extends Group implements IFlexSurfaceComponent, IMultiViewContainer, IDataProviderComponent
 	{
@@ -76,6 +76,17 @@ package view.flex.surfaceComponents.components
 		public function get propertyEditorClass():Class
 		{
 			return TabsPropertyEditor;
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 
 		private var _dataProvider:IList;
@@ -194,7 +205,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
             xml.addNamespace(sparkNamespace);
             xml.setNamespace(sparkNamespace);

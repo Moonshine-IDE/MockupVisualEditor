@@ -61,6 +61,17 @@ package view.flex.surfaceComponents.components
 			this._url = value;
 			this.dispatchEvent(new Event("urlChange"));
 		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
+		}
 
 		public function toXML():XML
 		{

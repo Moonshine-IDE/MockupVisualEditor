@@ -1,14 +1,14 @@
 package view.flex.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import spark.components.RadioButton;
-
+    
+    import utils.MxmlCodeUtils;
+    
+    import view.flex.propertyEditors.RadioButtonPropertyEditor;
     import view.flex.surfaceComponents.skins.RadioButtonSkin;
-
     import view.interfaces.IFlexSurfaceComponent;
-
-	import view.flex.propertyEditors.RadioButtonPropertyEditor;
 
 	public class RadioButton extends spark.components.RadioButton implements IFlexSurfaceComponent
 	{
@@ -53,6 +53,17 @@ package view.flex.surfaceComponents.components
         {
             return _propertiesChangedEvents;
         }
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
+		}
 
         override public function set selected(value:Boolean):void
         {
@@ -101,7 +112,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
             xml.addNamespace(sparkNamespace);
             xml.setNamespace(sparkNamespace);

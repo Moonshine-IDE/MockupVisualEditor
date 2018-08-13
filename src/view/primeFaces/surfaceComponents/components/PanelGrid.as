@@ -409,7 +409,8 @@ package view.primeFaces.surfaceComponents.components
                 rowXML.setNamespace(primeFacesNamespace);
                 for (var col:int = 0; col < this.columnCount; col++)
                 {
-                    var colXML:XML = new XML("<column>Header Text</column>");
+                    var headerTitle:String = header.getTitle(row, col);
+                    var colXML:XML = new XML("<column>" + headerTitle + "</column>");
                     colXML.addNamespace(primeFacesNamespace);
                     colXML.setNamespace(primeFacesNamespace);
 

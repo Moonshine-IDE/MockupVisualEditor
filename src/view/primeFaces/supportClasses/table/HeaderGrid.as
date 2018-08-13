@@ -32,12 +32,23 @@ package view.primeFaces.supportClasses.table
                 selectedColumnIndex = this.selectedColumn;
             }
 
-            var rowItem:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
-            var colItem:GridItem = rowItem.getElementAt(selectedColumnIndex) as GridItem;
-
-            var div:Div = colItem.getElementAt(0) as Div;
-            var lbl:Label = div.getElementAt(0) as Label;
+            var lbl:Label = getSelectedLabel(selectedRowIndex, selectedColumnIndex);
             lbl.text = title;
+        }
+
+        public function getTitle(selectedRowIndex:int = -1, selectedColumnIndex:int = -1):String
+        {
+            if (selectedRowIndex == -1)
+            {
+                selectedRowIndex = this.selectedRow;
+            }
+
+            if (selectedColumnIndex == -1)
+            {
+                selectedColumnIndex = this.selectedColumn;
+            }
+
+            return getSelectedLabel(selectedRowIndex, selectedColumnIndex).text;
         }
 
         override public function isEmpty():Boolean
@@ -73,6 +84,15 @@ package view.primeFaces.supportClasses.table
             lbl.text = "Title";
 
             div.addElement(lbl);
+        }
+
+        private function getSelectedLabel(selectedRowIndex:int, selectedColumnIndex:int):Label
+        {
+            var rowItem:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
+            var colItem:GridItem = rowItem.getElementAt(selectedColumnIndex) as GridItem;
+
+            var div:Div = colItem.getElementAt(0) as Div;
+            return div.getElementAt(0) as Label;
         }
     }
 }

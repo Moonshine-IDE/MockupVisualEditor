@@ -376,7 +376,11 @@ package view.primeFaces.surfaceComponents.components
                 for (var col:int = 0; col < columnCount; col++)
                 {
                     var xmlValue:String;
-                    if (isHeader || !this.panelGridValue)
+                    if (isHeader)
+                    {
+                        xmlValue = "<Column>" + this.header.getTitle(row, col) + "</Column>";
+                    }
+                    else if (!this.panelGridValue)
                     {
                         xmlValue = "<Column></Column>";
                     }

@@ -22,6 +22,10 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
+    [Exclude(name="propertiesChangedEvents", kind="property")]
+    [Exclude(name="propertyChangeFieldReference", kind="property")]
+    [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="updatePropertyChangeReference", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces panelGrid component.</p>

@@ -17,6 +17,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="addColumn", kind="method")]
     [Exclude(name="removeRow", kind="method")]
     [Exclude(name="removeColumn", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="isUpdating", kind="property")]
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
@@ -134,7 +136,7 @@ package view.primeFaces.surfaceComponents.components
         {
             _isSelected = value;
         }
-        
+
         private var _panelGridValue:String = "";
 
         [Bindable("panelGridValueChanged")]

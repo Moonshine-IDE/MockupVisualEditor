@@ -37,5 +37,11 @@ package view.interfaces
          * @return Technology specific XML
          */
 		function toCode():XML;
+		
+		/**
+		 * Help to determine if 'self' is currently selected on the stage 
+		 */
+		function get isSelected():Boolean;
+		function set isSelected(value:Boolean):void;
 	}
 }

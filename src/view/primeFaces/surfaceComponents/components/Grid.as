@@ -2,12 +2,13 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
-
+    
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
+    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
@@ -119,6 +120,17 @@ package view.primeFaces.surfaceComponents.components
 		public function set isUpdating(value:Boolean):void
 		{
 			_isUpdating = value;
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 
         public function get propertyEditorClass():Class
@@ -348,7 +360,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
 

@@ -1,5 +1,6 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IDiv;
@@ -181,6 +182,17 @@ package view.primeFaces.surfaceComponents.components
 			_isUpdating = value;
 		}
 		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
+		}
+		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
 		{
@@ -217,7 +229,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
             xml["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);

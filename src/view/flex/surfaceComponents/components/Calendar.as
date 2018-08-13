@@ -19,15 +19,16 @@
 package view.flex.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import mx.controls.DateChooser;
     import mx.formatters.DateFormatter;
     import mx.utils.ObjectUtil;
-
+    
+    import utils.MxmlCodeUtils;
+    
+    import view.flex.propertyEditors.CalendarPropertyEditor;
     import view.interfaces.IFlexSurfaceComponent;
-
     import view.interfaces.ISurfaceComponent;
-	import view.flex.propertyEditors.CalendarPropertyEditor;
 
 	public class Calendar extends DateChooser implements IFlexSurfaceComponent
 	{
@@ -56,6 +57,17 @@ package view.flex.surfaceComponents.components
 		public function get propertyEditorClass():Class
 		{
 			return CalendarPropertyEditor;
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 
         private var _propertiesChangedEvents:Array;
@@ -96,7 +108,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
             var mxNamespace:Namespace = new Namespace("mx", "library://ns.adobe.com/flex/mx");
             xml.addNamespace(mxNamespace);
             xml.setNamespace(mxNamespace);

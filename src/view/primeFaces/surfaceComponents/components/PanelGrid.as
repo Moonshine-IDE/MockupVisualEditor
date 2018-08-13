@@ -124,6 +124,17 @@ package view.primeFaces.surfaceComponents.components
             _isUpdating = value;
         }
 
+        private var _isSelected:Boolean;
+        public function get isSelected():Boolean
+        {
+            return _isSelected;
+        }
+
+        public function set isSelected(value:Boolean):void
+        {
+            _isSelected = value;
+        }
+        
         private var _panelGridValue:String = "";
 
         [Bindable("panelGridValueChanged")]

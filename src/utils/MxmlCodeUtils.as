@@ -20,6 +20,8 @@ package utils
 {
     import mx.collections.ArrayList;
     import mx.utils.ObjectUtil;
+    
+    import view.interfaces.ISurfaceComponent;
 
     public class MxmlCodeUtils
     {
@@ -68,5 +70,10 @@ package utils
 
             return dpMxml;
         }
+		
+		public static function getMXMLTagNameWithSelection(component:ISurfaceComponent, rootElementName:String):String
+		{
+			return (component.isSelected ? "_moonshineSelected_"+ rootElementName : rootElementName);
+		}
     }
 }

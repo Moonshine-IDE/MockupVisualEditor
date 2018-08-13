@@ -22,19 +22,19 @@ package view.flex.surfaceComponents.components
 	
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
-
+	
 	import spark.components.BorderContainer;
 	import spark.layouts.BasicLayout;
 	import spark.layouts.HorizontalLayout;
 	import spark.layouts.VerticalLayout;
 	
 	import utils.GenericUtils;
-
-    import view.interfaces.IFlexSurfaceComponent;
-
-    import view.interfaces.ILayoutContainer;
-	import view.interfaces.ISurfaceComponent;
+	import utils.MxmlCodeUtils;
+	
 	import view.flex.propertyEditors.ContainerPropertyEditor;
+	import view.interfaces.IFlexSurfaceComponent;
+	import view.interfaces.ILayoutContainer;
+	import view.interfaces.ISurfaceComponent;
 
 	public class Container extends BorderContainer implements ILayoutContainer, IFlexSurfaceComponent
 	{
@@ -67,6 +67,17 @@ package view.flex.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged"
             ];
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 
 		public function get propertyEditorClass():Class
@@ -241,7 +252,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
 
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
             xml.addNamespace(sparkNamespace);

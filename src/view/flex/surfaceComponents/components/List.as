@@ -71,6 +71,17 @@ package view.flex.surfaceComponents.components
             return _propertiesChangedEvents;
         }
 		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
+		}
+		
 		public function toXML():XML
 		{
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -115,7 +126,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
             xml.addNamespace(sparkNamespace);
             xml.setNamespace(sparkNamespace);

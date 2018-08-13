@@ -36,16 +36,16 @@
 		import mx.managers.DragManager;
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
-
+		
 		import spark.components.SkinnableContainer;
 		import spark.components.supportClasses.ScrollBarBase;
 		import spark.components.supportClasses.SkinnableContainerBase;
 		import spark.containers.Navigator;
 		import spark.events.IndexChangeEvent;
-
+		
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
-
+		
 		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IInitializeAfterAddedComponent;
 		import view.interfaces.IMainApplication;
@@ -98,6 +98,9 @@
 			{
 				return;
 			}
+			
+			if (this._selectedItem) this._selectedItem.isSelected = false;
+			
 			this._selectedItem = value;
 			if (this._selectedItem && !this.resizer.parent)
 			{
@@ -107,6 +110,8 @@
 			{
 				PopUpManager.removePopUp(this.resizer);
 			}
+			
+			if (this._selectedItem) this._selectedItem.isSelected = true;
 			this.resizer.target = this._selectedItem;
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}

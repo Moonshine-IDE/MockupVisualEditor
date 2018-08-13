@@ -1,9 +1,10 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import spark.components.Button;
-
+    
+    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
@@ -99,6 +100,17 @@ package view.primeFaces.surfaceComponents.components
 		public function set isUpdating(value:Boolean):void
 		{
 			_isUpdating = value;
+		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
 		}
 		
 		private var _isCommandButton:Boolean;
@@ -275,7 +287,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function toXML():XML
 		{
-			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, ELEMENT_NAME) + "/>");
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
@@ -301,7 +313,8 @@ package view.primeFaces.surfaceComponents.components
 
 		public function toCode():XML
 		{
-			var xml:XML = new XML("<" + (isCommandButton ? PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON : PRIME_FACES_XML_ELEMENT_NAME) + "/>");
+			var tagFace:String = isCommandButton ? PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON : PRIME_FACES_XML_ELEMENT_NAME;
+			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, tagFace) + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);

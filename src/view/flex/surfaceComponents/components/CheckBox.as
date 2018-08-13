@@ -19,14 +19,14 @@
 package view.flex.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
     import spark.components.CheckBox;
-
+    
+    import utils.MxmlCodeUtils;
+    
+    import view.flex.propertyEditors.CheckBoxPropertyEditor;
     import view.flex.surfaceComponents.skins.CheckBoxSkin;
-
     import view.interfaces.IFlexSurfaceComponent;
-
-	import view.flex.propertyEditors.CheckBoxPropertyEditor;
 
 	public class CheckBox extends spark.components.CheckBox implements IFlexSurfaceComponent
 	{
@@ -64,6 +64,17 @@ package view.flex.surfaceComponents.components
 		{
 			return CheckBoxPropertyEditor;
 		}
+		
+		private var _isSelected:Boolean;
+		public function get isSelected():Boolean
+		{
+			return _isSelected;
+		}
+		
+		public function set isSelected(value:Boolean):void
+		{
+			_isSelected = value;
+		}
 
         private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array
@@ -92,7 +103,7 @@ package view.flex.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MXML_ELEMENT_NAME + "/>");
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
             var sparkNamespace:Namespace = new Namespace("s", "library://ns.adobe.com/flex/spark");
             xml.addNamespace(sparkNamespace);
             xml.setNamespace(sparkNamespace);

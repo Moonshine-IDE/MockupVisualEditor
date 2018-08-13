@@ -37,6 +37,7 @@
 		import view.primeFaces.surfaceComponents.components.InputText;
 		import view.primeFaces.surfaceComponents.components.InputTextarea;
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
+		import view.primeFaces.surfaceComponents.components.PanelGrid;
 		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 		import view.primeFaces.surfaceComponents.components.TabView;
 
@@ -90,7 +91,8 @@
 					new ComponentListItem("Fieldset", Fieldset),
 					new ComponentListItem("Include", Include),
 					new ComponentListItem("Div", Div),
-					new ComponentListItem("Grid", Grid)
+					new ComponentListItem("Grid", Grid),
+					new ComponentListItem("PanelGrid", PanelGrid)
 				]);
 			}
 

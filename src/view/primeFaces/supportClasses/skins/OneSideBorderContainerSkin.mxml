@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark">
+	<fx:Metadata>
+        <![CDATA[ 
+        /** 
+         * @copy spark.skins.spark.ApplicationSkin#hostComponent
+         */
+        [HostComponent("spark.components.BorderContainer")]
+        ]]>
+    </fx:Metadata> 	
+	<s:states>
+		<s:State name="normal"/>
+		<s:State name="disabled"/>
+	</s:states>
+	<fx:Script>
+	<![CDATA[
+		[Bindable]
+		private var borderWeight:Number = 1;
+		[Bindable]
+		private var borderColor:Number; 
+
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{	
+			this.borderWeight = getStyle("borderWeight");
+			this.borderColor = getStyle("borderColor");
+			this.backgroundFill.color = getStyle("backgroundColor");
+			this.backgroundFill.alpha = getStyle("backgroundAlpha");
+
+			var borderVisible:Boolean = getStyle("borderVisible");
+			var borderRightVisible:Boolean = getStyle("borderRightVisible");
+			var borderLeftVisible:Boolean = getStyle("borderLeftVisible");
+			var borderTopVisible:Boolean = getStyle("borderTopVisible");
+			var borderBottomVisible:Boolean = getStyle("borderBottomVisible");
+
+			this.borderRight.visible = this.borderRight.includeInLayout = borderVisible && borderRightVisible;
+			this.borderLeft.visible = this.borderLeft.includeInLayout = borderVisible && borderLeftVisible;
+			this.borderTop.visible = this.borderTop.includeInLayout = borderVisible && borderTopVisible;
+			this.borderBottom.visible = this.borderBottom.includeInLayout = borderVisible && borderBottomVisible;
+			
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+		}
+	]]>
+</fx:Script>
+	<s:Rect id="background" left="{borderWeight}" right="{borderWeight}" top="{borderWeight}" bottom="{borderWeight}">
+		<s:fill>
+			<s:SolidColor id="backgroundFill" />
+		</s:fill>
+	</s:Rect>
+	<s:Rect id="borderRight" top="0" right="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="{borderColor}" weight="{borderWeight}"/>
+		</s:stroke>
+	</s:Rect>
+	<s:Rect id="borderBottom" left="0" right="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="{borderColor}" weight="{borderWeight}"/>
+		</s:stroke>
+	</s:Rect>
+	<s:Rect id="borderLeft" left="0" top="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="{borderColor}" weight="{borderWeight}"/>
+		</s:stroke>
+	</s:Rect>
+	<s:Rect id="borderTop" left="0" right="0" top="0">
+		<s:stroke>
+			<s:SolidColorStroke color="{borderColor}" weight="{borderWeight}"/>
+		</s:stroke>
+	</s:Rect>
+	<s:Group id="contentGroup" left="{borderWeight}" right="{borderWeight}" top="{borderWeight}" bottom="{borderWeight}">
+	</s:Group>
+</s:SparkSkin>

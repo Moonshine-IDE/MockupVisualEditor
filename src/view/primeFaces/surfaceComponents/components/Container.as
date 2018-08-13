@@ -1,7 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
     import spark.components.BorderContainer;
     import spark.layouts.HorizontalLayout;
     import spark.layouts.VerticalLayout;
@@ -41,7 +41,7 @@ package view.primeFaces.surfaceComponents.components
             if (_direction != value)
             {
 				updatePropertyChangeReference("direction", _direction, value);
-				
+
                 _direction = value;
                 this.directionChanged = true;
 
@@ -185,7 +185,7 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        private function setHoriztonalLayout():void
+        protected function setHoriztonalLayout():void
         {
             var hLayout:HorizontalLayout = new HorizontalLayout();
             hLayout.gap = this.gap;
@@ -195,7 +195,7 @@ package view.primeFaces.surfaceComponents.components
             this.setLayoutAlign();
         }
 
-        private function setVerticalLayout():void
+        protected function setVerticalLayout():void
         {
             var hLayout:VerticalLayout = new VerticalLayout();
             hLayout.gap = this.gap;

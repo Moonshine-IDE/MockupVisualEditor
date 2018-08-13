@@ -3,7 +3,6 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     import flash.events.MouseEvent;
     
-    import mx.containers.Grid;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
@@ -15,9 +14,9 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
+    import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
-    import view.suportClasses.events.SurfaceComponentEvent;
 
     [Exclude(name="selectedColumn", kind="property")]
     [Exclude(name="selectedRow", kind="property")]
@@ -68,19 +67,11 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/div&gt;
      * </pre>
      */
-    public class Grid extends mx.containers.Grid implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
+    public class Grid extends GridBase implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static const ELEMENT_NAME:String = "Grid";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
-
-        private static const MAX_COLUMN_COUNT:int = 12;
-        private static const MIN_COLUMN_COUNT:int = 1;
-        private static const MIN_ROW_COUNT:int = 1;
-
-        private static const COLUMN_BORDER_COLOR:String = "#7096ab";
-
-        private var selectionChanged:Boolean;
 
         public function Grid()
         {
@@ -101,13 +92,11 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "requestedColumnCountChanged",
-                "requestedRowCountChanged",
 				"itemRemoved",
 				"itemAdded"
             ];
 
-            this.ensureCreateInitialColumn();
+            this.ensureCreateInitialRowWithColumn();
 			this.hookDivEventBypassing();
         }
 		
@@ -155,45 +144,23 @@ package view.primeFaces.surfaceComponents.components
             return _propertiesChangedEvents;
         }
 
-        private var _selectedRow:int = -1;
-
-        [Bindable]
-        public function get selectedRow():int
+        override public function set selectedRow(value:int):void
         {
-            return _selectedRow;
-        }
-
-        public function set selectedRow(value:int):void
-        {
-            if (_selectedRow != value && value != -1)
+            if (selectedRow != value && value != -1)
             {
-                resetSelectionColorForSelectedItem(_selectedRow, _selectedColumn);
+                resetSelectionColorForSelectedItem(selectedRow, selectedColumn);
 
-                _selectedRow = value;
-                selectionChanged = true;
-
-                invalidateProperties();
+                super.selectedRow = value;
             }
         }
 
-        private var _selectedColumn:int = -1;
-
-        [Bindable]
-        public function get selectedColumn():int
+        override public function set selectedColumn(value:int):void
         {
-            return _selectedColumn;
-        }
-
-        public function set selectedColumn(value:int):void
-        {
-            if (_selectedColumn != value && value != -1)
+            if (selectedColumn != value && value != -1)
             {
-                resetSelectionColorForSelectedItem(_selectedRow, _selectedColumn);
+                resetSelectionColorForSelectedItem(selectedRow, selectedColumn);
 
-                _selectedColumn = value;
-                selectionChanged = true;
-
-                invalidateProperties();
+                super.selectedColumn = value;
             }
         }
 
@@ -374,7 +341,7 @@ package view.primeFaces.surfaceComponents.components
 
                             var div:Div = new Div();
                             div.percentWidth = div.percentHeight = 100;
-                            div.setStyle("borderColor", COLUMN_BORDER_COLOR);
+                            div.setStyle("borderColor", _columnBorderColor);
                             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
                             div.addEventListener(MouseEvent.CLICK, onDivClick);
@@ -424,139 +391,57 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function addRow():IVisualElement
+        override public function addRow():IVisualElement
         {
-            var gridItem:GridItem = this.ensureCreateInitialColumn();
-            var addedElements:Array = [gridItem.getElementAt(0)];
-			
-            dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, addedElements));
+            var row:IVisualElement = super.addRow();
 
-            this.selectedRow += 1;
-            this.selectedColumn = 0;
-			
-			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
-			dispatchEvent(new Event("itemAdded"));
+            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
+            dispatchEvent(new Event("itemAdded"));
 
-            return this.getElementAt(this.numElements - 1);
+            return row;
         }
 
-        public function removeRow(index:int):IVisualElement
+        override public function removeRow(index:int):IVisualElement
         {
-            if (this.numElements > MIN_ROW_COUNT)
+            var removedElement:IVisualElement = super.removeRow(index);
+
+            if (removedElement)
             {
-                var removedElement:GridRow = this.getElementAt(index) as GridRow;
-
-                var removedItems:Array = [];
-                var numRemovedElements:int = removedElement.numElements;
-                for (var row:int = 0; row < numRemovedElements; row++)
-                {
-                    var gridItem:GridItem = removedElement.getElementAt(row) as GridItem;
-                    var div:Div = gridItem.getElementAt(0) as Div;
-                    div.removeEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
-                    div.removeEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
-                    div.removeEventListener(MouseEvent.CLICK, onDivClick);
-
-                    removedItems.push(div);
-                }
-
-                removedElement = this.removeElement(removedElement) as GridRow;
-				
-				var historyObject:Object = {object:removedElement, index:index};
-				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
-                
-				if (removedElement)
-                {
-                    dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentRemoved, removedItems));
-                }
-
-                var selRow:int = this.selectedRow - 1;
-                this.selectedRow = selRow == -1 ? 0 : selRow;
-				dispatchEvent(new Event("itemRemoved"));
-
-                return removedElement;
+                var historyObject:Object = {object: removedElement, index: index};
+                _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
             }
 
-            return null;
+            return removedElement;
         }
 
-        public function addColumn(rowIndex:int):void
+        override public function addColumn(rowIndex:int):GridItem
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
-            if (gridRow && gridRow.numElements < MAX_COLUMN_COUNT)
+            var gridItem:GridItem = null;
+            if (gridRow && gridRow.numElements < maxColumnCount)
             {
-                gridRow.percentWidth = gridRow.percentHeight = 100;
-
-                var gridItem:GridItem = new GridItem();
-                gridItem.percentWidth = gridItem.percentHeight = 100;
-
-                var div:Div = new Div();
-                div.percentWidth = div.percentHeight = 100;
-                div.setStyle("borderColor", COLUMN_BORDER_COLOR);
-                div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
-                div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
-                div.addEventListener(MouseEvent.CLICK, onDivClick);
-
-                gridItem.addElement(div);
-                gridRow.addElement(gridItem);
-
-                this.selectedColumn += 1;
-
-                dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
-				
+                gridItem = super.addColumn(rowIndex);
 				var historyObject:Object = {object:gridItem, parent:gridRow};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addColumnAt", historyObject, historyObject);
-				dispatchEvent(new Event("itemAdded"));
             }
+
+            return gridItem;
         }
 
-        public function removeColumn(rowIndex:int, columnIndex:int):IVisualElement
+        override public function removeColumn(rowIndex:int, columnIndex:int):IVisualElement
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             if (gridRow && gridRow.numElements > MIN_COLUMN_COUNT)
             {
-                var removedColumn:IVisualElement = gridRow.removeElementAt(columnIndex);
-
-                var gridItem:GridItem = removedColumn as GridItem;
-                if (gridItem)
-                {
-                    var div:Div = gridItem.getElementAt(0) as Div;
-                    div.removeEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
-                    div.removeEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
-                    div.removeEventListener(MouseEvent.CLICK, onDivClick);
-                }
-
-                var selColumn:int = this.selectedColumn - 1;
-                this.selectedColumn = selColumn == -1 ? 0 : selColumn;
+                var removedColumn:IVisualElement = super.removeColumn(rowIndex, columnIndex);
 				
 				var historyObject:Object = {object:removedColumn, parent:gridRow, index:columnIndex};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeColumnAt", historyObject, historyObject);
-				dispatchEvent(new Event("itemRemoved"));
 
                 return removedColumn;
             }
 
             return null;
-        }
-
-        public function isEmpty():Boolean
-        {
-            var rowNumElements:int = this.numElements;
-            for (var i:int = 0; i < rowNumElements; i++)
-            {
-                var gridRow:GridRow = this.getElementAt(i) as GridRow;
-                var columnNumElements:int = gridRow.numElements;
-                for (var j:int = 0; j < columnNumElements; j++)
-                {
-                    var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
-                    var div:Div = gridItem.getElementAt(0) as Div;
-                    if (div.numElements > 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
 
         override public function removeAllElements():void
@@ -565,28 +450,6 @@ package view.primeFaces.surfaceComponents.components
 
             this._selectedRow = -1;
             this._selectedColumn = -1;
-        }
-
-        private function ensureCreateInitialColumn():GridItem
-        {
-            var gridRow:GridRow = new GridRow();
-            gridRow.percentWidth = gridRow.percentHeight = 100;
-            var gridItem:GridItem = new GridItem();
-            gridItem.percentWidth = gridItem.percentHeight = 100;
-
-            var div:Div = new Div();
-            div.percentWidth = div.percentHeight = 100;
-            div.setStyle("borderColor", COLUMN_BORDER_COLOR);
-            div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
-            div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
-            div.addEventListener(MouseEvent.CLICK, onDivClick);
-
-            gridItem.addElement(div);
-            gridRow.addElement(gridItem);
-
-            this.addElement(gridRow);
-
-            return gridItem;
         }
 
 		private function hookDivEventBypassing():void
@@ -605,7 +468,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function getClassNameBasedOnColumns(gridRow:GridRow):String
         {
-            var uigDefaultValue:int = Math.ceil(MAX_COLUMN_COUNT / gridRow.numElements);
+            var uigDefaultValue:int = Math.ceil(maxColumnCount / gridRow.numElements);
             var uigDefault:String = "ui-g-" + uigDefaultValue;
             var uigDesktop:String = "ui-lg-" + uigDefaultValue;
 
@@ -617,72 +480,6 @@ package view.primeFaces.surfaceComponents.components
             return uigDefault + " " + uigDesktop + " " + uigPhones + " " + uigTablets + " " + uigBigScreens;
         }
 
-        private function onDivRollOver(event:MouseEvent):void
-        {
-            var target:Div = event.currentTarget as Div;
-            if (target)
-            {
-                if (!isDivSelected(target))
-                {
-                    target.setStyle("backgroundColor", this.getStyle("themeColor"));
-                    target.setStyle("backgroundAlpha", 0.2);
-                }
-            }
-        }
-
-        private function onDivRollOut(event:MouseEvent):void
-        {
-            var target:Div = event.currentTarget as Div;
-            if (target)
-            {
-                if (!isDivSelected(target))
-                {
-                    target.setStyle("backgroundColor", "#FFFFFF");
-                    target.setStyle("backgroundAlpha", 1);
-                }
-            }
-        }
-
-        private function onDivClick(event:MouseEvent):void
-        {
-            var target:Div = event.currentTarget as Div;
-            if (target)
-            {
-                if (!isDivSelected(target))
-                {
-                    resetSelectionColorForSelectedItem(this.selectedRow, this.selectedColumn);
-                }
-
-                var rowNumElements:int = this.numElements;
-                for (var i:int = 0; i < rowNumElements; i++)
-                {
-                    var gridRow:GridRow = this.getElementAt(i) as GridRow;
-                    var columnNumElements:int = gridRow.numElements;
-                    for (var j:int = 0; j < columnNumElements; j++)
-                    {
-                        var gridItem:GridItem = gridRow.getElementAt(j) as GridItem;
-                        var div:Div = gridItem.getElementAt(0) as Div;
-                        if (target == div)
-                        {
-                            this.selectedRow = i;
-                            this.selectedColumn = j;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        private function resetSelectionColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
-        {
-            var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
-            if (div)
-            {
-                div.setStyle("backgroundColor", "#FFFFFF");
-                div.setStyle("backgroundAlpha", 1);
-            }
-        }
-
         private function setColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
         {
             var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
@@ -691,29 +488,6 @@ package view.primeFaces.surfaceComponents.components
                 div.setStyle("backgroundColor", this.getStyle("themeColor"));
                 div.setStyle("backgroundAlpha", 0.4);
             }
-        }
-
-        private function getDiv(selectedRowIndex:int, selectedColumnIndex:int):Div
-        {
-            if (selectedRowIndex == -1 || selectedColumnIndex == -1) return null;
-            if (selectedRowIndex >= this.numElements) return null;
-
-            var gridRow:GridRow = this.getElementAt(selectedRowIndex) as GridRow;
-            if (gridRow.numElements > selectedColumnIndex)
-            {
-               var gridItem:GridItem = gridRow.getElementAt(selectedColumnIndex) as GridItem;
-               return gridItem.getElementAt(0) as Div;
-            }
-
-            return null;
-        }
-
-        private function isDivSelected(div:Div):Boolean
-        {
-            if (this.selectedRow == -1 || this.selectedRow == -1) return false;
-            var selectedDiv:Div = getDiv(this.selectedRow, this.selectedColumn);
-
-            return selectedDiv == div;
         }
     }
 }

@@ -34,7 +34,8 @@ package utils
 	import view.primeFaces.surfaceComponents.components.InputTextarea;
 	import view.primeFaces.surfaceComponents.components.MainApplication;
 	import view.primeFaces.surfaceComponents.components.OutputLabel;
-	import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+    import view.primeFaces.surfaceComponents.components.PanelGrid;
+    import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 	import view.primeFaces.surfaceComponents.components.TabView;
 
     public class EditingSurfaceReader
@@ -125,6 +126,7 @@ package utils
                 CLASS_LOOKUP[DataTable.ELEMENT_NAME] = DataTable;
 				CLASS_LOOKUP[Div.ELEMENT_NAME] = Div;
 				CLASS_LOOKUP[Grid.ELEMENT_NAME] = Grid;
+				CLASS_LOOKUP[PanelGrid.ELEMENT_NAME] = PanelGrid;
             }
 		}
 	}

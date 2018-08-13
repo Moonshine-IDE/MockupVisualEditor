@@ -1,0 +1,354 @@
+<?xml version="1.0"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      skinClass="skins.FormSkin" creationComplete="onGridFormCreationComplete(event)">
+    <fx:Script>
+		<![CDATA[
+        import mx.collections.ArrayList;
+        import mx.events.FlexEvent;
+
+        import spark.events.GridItemEditorEvent;
+
+        import spark.events.GridSelectionEvent;
+        import spark.events.IndexChangeEvent;
+
+        import data.GridListItem;
+
+        import view.interfaces.ISurfaceComponent;
+        import view.primeFaces.supportClasses.GridBase;
+        import view.primeFaces.supportClasses.table.HeaderGrid;
+        import view.primeFaces.surfaceComponents.components.Div;
+        import view.primeFaces.surfaceComponents.components.Grid;
+        import view.primeFaces.surfaceComponents.components.PanelGrid;
+
+        [Bindable]
+        private var headerRowsDataProvider:ArrayList = new ArrayList();
+
+        [Bindable]
+        private var headerColumnsDataProvider:ArrayList = new ArrayList();
+
+        [Bindable]
+        private var rowsDataProvider:ArrayList = new ArrayList();
+        [Bindable]
+        private var columnsDataProvider:ArrayList;
+
+        private var selectedCellDirty:Boolean;
+
+        private var _selectedCell:Div;
+
+        [Bindable]
+        public function get selectedCell():Div
+        {
+            return _selectedCell;
+        }
+
+        public function set selectedCell(value:Div):void
+        {
+            if (_selectedCell != value)
+            {
+                _selectedCell = value;
+            }
+        }
+
+        [Bindable("change")]
+        private function get selectedPanelGrid():PanelGrid
+        {
+            if (!selectedItem) return null;
+
+            return (selectedItem as PanelGrid);
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            super.selectedItem = value;
+
+            if (value && !selectedItem.hasEventListener(Grid.EVENT_CHILDREN_UPDATED))
+            {
+                selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
+            }
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (this.selectedCellDirty)
+            {
+                //this.selectedCell = this.getSelectedCell();
+                this.selectedCellDirty = false;
+            }
+        }
+
+        private function onGridUpdated(event:Event):void
+        {
+            onGridFormCreationComplete(null);
+        }
+
+        private function addRowButton_clickHandler(event:MouseEvent):void
+        {
+            var itemValue:int = this.rowsDataProvider.length + 1;
+            var rowItem:GridListItem = new GridListItem("R" + String(itemValue), itemValue);
+            for (var i:int = 0; i < selectedPanelGrid.columnCount; i++)
+            {
+                var columnItem:GridListItem = new GridListItem("C1", 1);
+                rowItem.columns.addItem(columnItem);
+            }
+
+            this.columnsDataProvider = rowItem.columns;
+            this.rowsDataProvider.addItem(rowItem);
+
+            selectedPanelGrid.addRow();
+
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
+
+        private function addColumnButton_clickHandler(event:MouseEvent):void
+        {
+            var rowItem:GridListItem;
+            var colItemValue:int;
+            var row:int;
+            for (row = 0; row < selectedPanelGrid.rowCount; row++)
+            {
+                rowItem = (rowsDataProvider.getItemAt(row) as GridListItem);
+                colItemValue = rowItem.columns.length + 1;
+                rowItem.columns.addItem(new GridListItem("C" + colItemValue, colItemValue));
+            }
+
+            for (row = 0; row < selectedPanelGrid.headerRowCount; row++)
+            {
+                rowItem = (headerRowsDataProvider.getItemAt(row) as GridListItem);
+                colItemValue = rowItem.columns.length + 1;
+                rowItem.columns.addItem(new GridListItem("Title", colItemValue));
+            }
+
+            rowItem = dgRows.selectedItem as GridListItem;
+            this.columnsDataProvider = rowItem.columns;
+
+            rowItem = dgHeaderRows.selectedItem as GridListItem;
+            this.headerColumnsDataProvider = rowItem.columns;
+
+            selectedPanelGrid.addColumn();
+
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
+
+        private function deleteItemButton_clickHandler(event:MouseEvent):void
+        {
+            if (this.rowsDataProvider.length > 1)
+            {
+                this.rowsDataProvider.removeItemAt(selectedPanelGrid.body.selectedRow);
+                selectedPanelGrid.removeRow(selectedPanelGrid.body.selectedRow);
+
+                this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedPanelGrid.body.selectedRow).columns;
+
+                // when a row deletes selectedCell suppose to be
+                // return to previous cell's 0th index
+                this.selectedPanelGrid.body.selectedColumn = 0;
+
+                this.selectedCellDirty = true;
+                this.invalidateDisplayList();
+            }
+        }
+
+        private function deleteColumnButton_clickHandler(event:MouseEvent):void
+        {
+            var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
+            if (rowItem.columns.length > selectedPanelGrid.body.selectedColumn)
+            {
+                rowItem.columns.removeItemAt(selectedPanelGrid.body.selectedColumn);
+            }
+
+            selectedPanelGrid.removeColumn(selectedPanelGrid.body.selectedColumn);
+
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
+
+        private function onGridFormCreationComplete(event:FlexEvent):void
+        {
+            dgHeaderColumns.columnHeaderGroup.visible = dgHeaderColumns.columnHeaderGroup.includeInLayout = false;
+            dgHeaderRows.columnHeaderGroup.visible = dgHeaderRows.columnHeaderGroup.includeInLayout = false;
+            dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
+
+            initializeRowsColumns(headerRowsDataProvider, selectedPanelGrid.headerRowCount, selectedPanelGrid.header);
+            initializeRowsColumns(rowsDataProvider, selectedPanelGrid.rowCount, selectedPanelGrid.body);
+
+            this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
+            this.headerColumnsDataProvider = this.headerRowsDataProvider.getItemAt(0).columns;
+
+            selectRow(selectedPanelGrid.body, 0);
+            //this.selectedCell = this.getSelectedCell();
+
+            dispatchEvent(new Event(Event.CHANGE));
+
+            _childrenForFocus = [];
+            _childrenForFocus.push(addRowBtn);
+            _childrenForFocus.push(deleteRowBtn);
+            _childrenForFocus.push(addColumnBtn);
+            _childrenForFocus.push(deleteColumnBtn);
+        }
+
+        protected function onBodySelectionChanged(event:GridSelectionEvent):void
+        {
+            var gridListItem:GridListItem = dgRows.selectedItem as GridListItem;
+            this.columnsDataProvider = gridListItem.columns;
+
+            selectRow(this.selectedPanelGrid.body, dgRows.selectedIndex);
+
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
+
+        protected function onHeaderSelectionChanged(event:GridSelectionEvent):void
+        {
+            var gridListItem:GridListItem = dgHeaderRows.selectedItem as GridListItem;
+            this.headerColumnsDataProvider = gridListItem.columns;
+
+            selectRow(this.selectedPanelGrid.header, dgHeaderRows.selectedIndex);
+
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
+
+        protected function onHeaderColumnsSelectionChanged(event:GridSelectionEvent):void
+        {
+            this.selectedPanelGrid.header.selectedColumn = dgHeaderColumns.selectedIndex;
+        }
+
+        private function onColumnListChange(event:IndexChangeEvent):void
+        {
+            this.selectedPanelGrid.body.selectedRow = dgRows.selectedIndex;
+            this.selectedPanelGrid.body.selectedColumn = columnList.selectedIndex;
+
+            this.selectedCell = this.getSelectedCell();
+        }
+
+        private function onEditColumnTitleSave(event:GridItemEditorEvent):void
+        {
+            var colItem:GridListItem = dgHeaderColumns.selectedItem as GridListItem;
+            selectedPanelGrid.header.setTitle(colItem.label);
+        }
+
+        private function getSelectedCell():Div
+        {
+            /* if (this.selectedPanelGrid.selectedRow == -1 || this.selectedPanelGrid.selectedColumn == -1) return null;
+             var gridRow:GridRow = selectedPanelGrid.getElementAt(this.selectedPanelGrid.selectedRow) as GridRow;
+
+             var gridItem:GridItem = gridRow.getElementAt(this.selectedPanelGrid.selectedColumn) as GridItem;
+
+             return gridItem.getElementAt(0) as Div;*/
+            return null;
+        }
+
+        private function selectRow(grid:GridBase, rowIndex:int):void
+        {
+            grid.selectedRow = rowIndex;
+            grid.selectedColumn = 0;
+        }
+
+        private function initializeRowsColumns(rowsDp:ArrayList, rowCount:int, grid:GridBase):void
+        {
+            rowsDp.removeAll();
+
+            for (var row:int = 0; row < rowCount; row++)
+            {
+                var itemValue:int = row + 1;
+                var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
+                for (var col:int = 0; col < selectedPanelGrid.columnCount; col++)
+                {
+                    itemValue = col + 1;
+                    var colItem:GridListItem;
+
+                    if (grid is HeaderGrid)
+                    {
+                        colItem = new GridListItem("Title", itemValue);
+                        (grid as HeaderGrid).setTitle(colItem.label, row, col);
+                    }
+                    else
+                    {
+                        colItem = new GridListItem(String("C" + itemValue), itemValue);
+                    }
+
+                    rowItem.columns.addItem(colItem);
+                }
+                rowsDp.addItem(rowItem);
+            }
+
+            grid.selectedRow = grid.selectedColumn = 0;
+        }
+
+        ]]>
+	</fx:Script>
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+    <s:FormHeading label="Header Rows/Columns" skinClass="skins.FormHeadingSkin"/>
+    <s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
+        <s:DataGrid id="dgHeaderRows"
+                    width="100%" maxHeight="350"
+                    sortableColumns="false" draggableColumns="false"
+                    selectionChange="onHeaderSelectionChanged(event)" requireSelection="true"
+                    dataProvider="{headerRowsDataProvider}" selectedIndex="{selectedPanelGrid.header.selectedRow}">
+            <s:columns>
+                <s:ArrayList>
+                    <s:GridColumn dataField="label" headerText="Row number"/>
+                </s:ArrayList>
+            </s:columns>
+        </s:DataGrid>
+    </s:FormItem>
+    <s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
+        <s:DataGrid id="dgHeaderColumns"
+                    width="100%" maxHeight="300" editable="true"
+                    sortableColumns="false" draggableColumns="false" requireSelection="true"
+                    dataProvider="{headerColumnsDataProvider}" selectedIndex="{selectedPanelGrid.header.selectedColumn}"
+                    selectionChange="onHeaderColumnsSelectionChanged(event)"
+                    gridItemEditorSessionSave="onEditColumnTitleSave(event)">
+            <s:columns>
+                <s:ArrayList>
+                    <s:GridColumn dataField="label" headerText="Row number" editable="true"/>
+                </s:ArrayList>
+            </s:columns>
+        </s:DataGrid>
+    </s:FormItem>
+    <s:FormHeading label="Body Rows/Columns" skinClass="skins.FormHeadingSkin"/>
+    <s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
+        <s:DataGrid id="dgRows"
+                    width="100%" maxHeight="350"
+                    sortableColumns="false" draggableColumns="false"
+                    selectionChange="onBodySelectionChanged(event)" requireSelection="true"
+                    dataProvider="{rowsDataProvider}" selectedIndex="{selectedPanelGrid.body.selectedRow}">
+            <s:columns>
+                <s:ArrayList>
+                    <s:GridColumn dataField="label" headerText="Row number"/>
+                </s:ArrayList>
+            </s:columns>
+        </s:DataGrid>
+        <s:HGroup verticalAlign="middle">
+            <s:Button id="addRowBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Row"
+                      click="addRowButton_clickHandler(event)"/>
+            <s:Button id="deleteRowBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+                      enabled="{dgRows.selectedIndex !== -1 &amp;&amp; dgRows.dataProvider.length > 1}"
+                      click="deleteItemButton_clickHandler(event)"/>
+        </s:HGroup>
+    </s:FormItem>
+    <s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
+        <s:List id="columnList" width="100%" height="30" labelField="label"
+                dataProvider="{columnsDataProvider}" requireSelection="true"
+                change="onColumnListChange(event)" selectedIndex="{selectedPanelGrid.body.selectedColumn}">
+            <s:layout>
+                <s:HorizontalLayout gap="2" horizontalAlign="left" verticalAlign="middle"/>
+            </s:layout>
+        </s:List>
+        <s:HGroup verticalAlign="middle">
+            <s:Button id="addColumnBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Column"
+                      click="addColumnButton_clickHandler(event)"/>
+            <s:Button id="deleteColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Column"
+                      enabled="{columnList.selectedIndex !== -1 &amp;&amp; columnsDataProvider.length > 1}"
+                      click="deleteColumnButton_clickHandler(event)"/>
+        </s:HGroup>
+    </s:FormItem>
+</suportclasses:BasePropertyEditorForm>

@@ -20,6 +20,7 @@
 		import data.GridListItem;
 
 		import view.interfaces.ISurfaceComponent;
+		import view.primeFaces.supportClasses.GridBase;
 		import view.primeFaces.surfaceComponents.components.Div;
 		import view.primeFaces.surfaceComponents.components.Grid;
 
@@ -47,9 +48,9 @@
 		}
 
 		[Bindable("change")]
-		private function get selectedGrid():Grid
+		protected function get selectedGrid():GridBase
 		{
-			return selectedItem as Grid;
+			return selectedItem as GridBase;
 		}
 
 		override public function set selectedItem(value:ISurfaceComponent):void

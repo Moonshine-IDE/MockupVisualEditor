@@ -6,9 +6,12 @@ package view.primeFaces.surfaceComponents.components
 
     import utils.XMLCodeUtils;
 
+    import view.interfaces.IHistorySurfaceComponent;
+
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.PanelGridPropertyEditor;
     import view.primeFaces.supportClasses.table.Table;
+    import view.suportClasses.PropertyChangeReference;
 
     [Exclude(name="addRow", kind="method")]
     [Exclude(name="addColumn", kind="method")]
@@ -61,7 +64,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:panelGrid&gt;
      * </pre>
      */
-    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent
+    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
         public static const ELEMENT_NAME:String = "PanelGrid";
@@ -80,8 +83,10 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "itemRemoved",
-                "itemAdded",
+                "rowAdded",
+                "columnsAdded",
+                "rowRemoved",
+                "columnsRemoved",
                 "panelGridValueChanged"
             ];
         }
@@ -95,6 +100,28 @@ package view.primeFaces.surfaceComponents.components
         public function get propertiesChangedEvents():Array
         {
             return _propertiesChangedEvents;
+        }
+
+        private var _propertyChangeFieldReference:PropertyChangeReference;
+        public function get propertyChangeFieldReference():PropertyChangeReference
+        {
+            return _propertyChangeFieldReference;
+        }
+
+        public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+        {
+            _propertyChangeFieldReference = value;
+        }
+
+        private var _isUpdating:Boolean;
+        public function get isUpdating():Boolean
+        {
+            return _isUpdating;
+        }
+
+        public function set isUpdating(value:Boolean):void
+        {
+            _isUpdating = value;
         }
 
         private var _panelGridValue:String = "";
@@ -135,11 +162,6 @@ package view.primeFaces.surfaceComponents.components
         override public function get headerRowCount():int
         {
             return super.headerRowCount;
-        }
-
-        override public function set headerRowCount(value:int):void
-        {
-            super.headerRowCount = value;
         }
 
         /**
@@ -275,6 +297,8 @@ package view.primeFaces.surfaceComponents.components
             addColumnToRow(this.body, selectedRowIndex, columnCount - 1);
 
             this.invalidateBorders();
+
+            dispatchEvent(new Event("rowAdded"));
         }
 
         public function addColumn():void
@@ -287,6 +311,8 @@ package view.primeFaces.surfaceComponents.components
 
             _columnCount += 1;
             this.invalidateBorders();
+
+            dispatchEvent(new Event("columnsAdded"));
         }
 
         public function removeRow(index:int):IVisualElement
@@ -298,6 +324,8 @@ package view.primeFaces.surfaceComponents.components
             _rowCount -= 1;
 
             this.invalidateBorders();
+
+            dispatchEvent(new Event("rowRemoved"));
 
             return rowItem;
         }
@@ -316,6 +344,8 @@ package view.primeFaces.surfaceComponents.components
             _columnCount -= 1;
 
             this.invalidateBorders();
+
+            dispatchEvent(new Event("columnsRemoved"));
 
             return colItem;
         }

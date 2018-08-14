@@ -289,7 +289,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function toXML():XML
 		{
-			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, ELEMENT_NAME) + "/>");
+			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 

@@ -115,6 +115,11 @@
 			this.resizer.target = this._selectedItem;
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
+		
+		public function setResizerVisible(value:Boolean):void
+		{
+			if (this.resizer) this.resizer.visible = value;
+		}
 
 		public function toXML():XML
 		{

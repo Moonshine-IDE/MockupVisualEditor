@@ -6,6 +6,8 @@ package view.primeFaces.surfaceComponents.components
 
     import utils.XMLCodeUtils;
 
+    import view.interfaces.IComponentSizeOutput;
+
     import view.interfaces.IHistorySurfaceComponent;
 
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -70,7 +72,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:panelGrid&gt;
      * </pre>
      */
-    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
         public static const ELEMENT_NAME:String = "PanelGrid";
@@ -95,6 +97,32 @@ package view.primeFaces.surfaceComponents.components
                 "columnsRemoved",
                 "panelGridValueChanged"
             ];
+        }
+
+        private var _widthOutput:Boolean = true;
+
+        [Bindable]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            _widthOutput = value;
+        }
+
+        private var _heightOutput:Boolean = true;
+
+        [Bindable]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            _heightOutput = value;
         }
 
         public function get propertyEditorClass():Class

@@ -10,7 +10,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.IComponentSizeOutput;
+
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
@@ -67,7 +69,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/div&gt;
      * </pre>
      */
-    public class Grid extends GridBase implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
+    public class Grid extends GridBase implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static const ELEMENT_NAME:String = "Grid";
@@ -99,7 +101,33 @@ package view.primeFaces.surfaceComponents.components
             this.ensureCreateInitialRowWithColumn();
 			this.hookDivEventBypassing();
         }
-		
+
+        private var _widthOutput:Boolean = true;
+
+        [Bindable]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            _widthOutput = value;
+        }
+
+        private var _heightOutput:Boolean = true;
+
+        [Bindable]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            _heightOutput = value;
+        }
+
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
 		{

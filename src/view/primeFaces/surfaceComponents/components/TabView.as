@@ -12,7 +12,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.IComponentSizeOutput;
+
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
@@ -60,7 +62,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:tabView&gt;
      * </pre>
      */
-    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceCustomHandlerComponent
+    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "TabView";
@@ -96,7 +98,33 @@ package view.primeFaces.surfaceComponents.components
 
             addElement(navigatorContent);
         }
-		
+
+        private var _widthOutput:Boolean = true;
+
+        [Bindable]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            _widthOutput = value;
+        }
+
+        private var _heightOutput:Boolean = true;
+
+        [Bindable]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            _heightOutput = value;
+        }
+
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
 		{

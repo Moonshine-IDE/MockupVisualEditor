@@ -2,11 +2,14 @@ package view.primeFaces.surfaceComponents.components
 {
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.IComponentSizeOutput;
+
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
+    import view.primeFaces.supportClasses.Container;
     import view.suportClasses.PropertyChangeReference;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -22,6 +25,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="updatePropertyChangeReference", kind="method")]
     [Exclude(name="internalToXML", kind="method")]
     [Exclude(name="mainXML", kind="property")]
+    [Exclude(name="widthOutput", kind="property")]
+    [Exclude(name="heightOutput", kind="property")]
 
     /**
      * <p>Representation of div in HTML</p>
@@ -43,13 +48,13 @@ package view.primeFaces.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent
+    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
 
         protected var mainXML:XML;
-		
+
         public function Div()
         {
             super();
@@ -71,6 +76,30 @@ package view.primeFaces.surfaceComponents.components
                 "verticalAlignChanged",
                 "horizontalAlignChanged"
             ];
+        }
+
+        private var _widthOutput:Boolean = true;
+        [Bindable]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            _widthOutput = value;
+        }
+
+        private var _heightOutput:Boolean = true;
+        [Bindable]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            _heightOutput = value;
         }
 
         private var _cssClass:String;
@@ -161,6 +190,11 @@ package view.primeFaces.surfaceComponents.components
             return super.height;
         }
 
+        override public function set height(value:Number):void
+        {
+            super.height = value;
+        }
+
         public function get div():Div
         {
             return this;
@@ -233,7 +267,7 @@ package view.primeFaces.surfaceComponents.components
         {
             var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
             xml["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
 
             var elementCount:int = this.numElements;

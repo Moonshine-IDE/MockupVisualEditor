@@ -1,10 +1,12 @@
 package utils
 {
+    import mx.core.UIComponent;
+
     import view.EditingSurface;
     import view.flex.surfaceComponents.components.Container;
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
-    import view.primeFaces.surfaceComponents.components.Container;
+    import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
 
     public class MainApplicationCodeUtils
@@ -42,19 +44,18 @@ package utils
 			return null;
 		}
 
-		public static function getParentContent(surface:EditingSurface, title:String, width:Number, height:Number,
-                                                percentWidth:Number, percentHeight:Number):XML
+		public static function getParentContent(surface:EditingSurface, title:String, component:UIComponent):XML
 		{
             var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
             var isPrimeFacesMainApp:MainApplication = element as MainApplication;
 
 			if (!isPrimeFacesMainApp && element is IFlexSurfaceComponent)
 			{
-				return getFlexMainContainer(title, width, height);
+				return getFlexMainContainer(title, element.width, element.height);
 			}
 			
-			return getPrimeFacesMainContainer(title, width, height, percentWidth, percentHeight,
-                    element as view.primeFaces.surfaceComponents.components.Container);
+			return getPrimeFacesMainContainer(title, component,
+                    element as view.primeFaces.supportClasses.Container);
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
@@ -73,9 +74,8 @@ package utils
 			return xml;
 		}
 		
-		private static function getPrimeFacesMainContainer(title:String, width:Number, height:Number,
-                                                           percentWidth:Number, percentHeight:Number,
-														   container:view.primeFaces.surfaceComponents.components.Container):XML
+		private static function getPrimeFacesMainContainer(title:String, element:UIComponent,
+														   container:view.primeFaces.supportClasses.Container):XML
 		{
 			var xml:XML = new XML("<html/>");
 
@@ -121,7 +121,7 @@ package utils
 			var mainDiv:XML = new XML("<"+ MxmlCodeUtils.getMXMLTagNameWithSelection(container as ISurfaceComponent, "div") +"/>");
 
             mainDiv["@class"] = XMLCodeUtils.getChildrenPositionForXML(container);
-            XMLCodeUtils.addSizeHtmlStyleToXML(mainDiv, width, height, percentWidth, percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(mainDiv, element);
 			
 			bodyXML.appendChild(mainDiv);
 			

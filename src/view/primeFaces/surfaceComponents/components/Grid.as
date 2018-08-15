@@ -364,7 +364,7 @@ package view.primeFaces.surfaceComponents.components
         {
             var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             var gridRowNumElements:int = this.numElements;
             for (var row:int = 0; row < gridRowNumElements; row++)

@@ -371,7 +371,7 @@ package view.primeFaces.surfaceComponents.components
                 fieldsetHeight = Number.NaN;
             }
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, fieldsetHeight, this.percentWidth, this.percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             xml.@legend = this.title;
             xml.@toggleable = this.toggleable;

@@ -6,46 +6,55 @@ package utils
     import spark.layouts.HorizontalAlign;
     import spark.layouts.VerticalAlign;
 
+    import view.interfaces.IComponentSizeOutput;
+
     import view.primeFaces.supportClasses.ContainerDirection;
 
-    import view.primeFaces.surfaceComponents.components.Container;
+    import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.Div;
 
     public class XMLCodeUtils
     {
 
-        public static function addSizeHtmlStyleToXML(xml:XML, width:Number, height:Number,
-                                                percentWidth:Number, percentHeight:Number):void
+        public static function addSizeHtmlStyleToXML(xml:XML, component:IUIComponent):void
         {
+            var componentSizeOutput:IComponentSizeOutput = component as IComponentSizeOutput;
             var styleDiv:String = xml.@style;
-            if (!isNaN(percentWidth))
+
+            if (!isNaN(component.percentWidth))
             {
-                styleDiv += "width:" + String(percentWidth) + "%;";
+                styleDiv += "width:" + String(component.percentWidth) + "%;";
             }
-            else if (!isNaN(width))
+            else if (!isNaN(component.width) && componentSizeOutput && componentSizeOutput.widthOutput)
             {
-                styleDiv += "width:" + String(width) + "px;";
+                styleDiv += "width:" + String(component.width) + "px;";
             }
 
-            if (!isNaN(percentHeight))
+            if (!isNaN(component.percentHeight))
             {
-                styleDiv += "height:" + String(percentHeight) + "%;";
+                styleDiv += "height:" + String(component.percentHeight) + "%;";
             }
-            else if (!isNaN(height))
+            else if (!isNaN(component.height) && componentSizeOutput && componentSizeOutput.heightOutput)
             {
-                styleDiv += "height:" + String(height) + "px;";
+                styleDiv += "height:" + String(component.height) + "px;";
             }
 
-            xml.@style += styleDiv;
+            if (styleDiv)
+            {
+                xml.@style += styleDiv;
+            }
+
         }
 
         public static function setSizeFromComponentToXML(component:IUIComponent, xml:XML):void
         {
+            var componentSizeOutput:IComponentSizeOutput = component as IComponentSizeOutput;
+
             if (!isNaN(component.percentWidth))
             {
                 xml.@percentWidth = component.percentWidth;
             }
-            else if (!isNaN(component.width))
+            else if (!isNaN(component.width) && componentSizeOutput && componentSizeOutput.widthOutput)
             {
                 xml.@width = component.width;
             }
@@ -54,7 +63,7 @@ package utils
             {
                 xml.@percentHeight = component.percentHeight;
             }
-            else if (!isNaN(component.height))
+            else if (!isNaN(component.height) && componentSizeOutput && componentSizeOutput.heightOutput)
             {
                 xml.@height = component.height;
             }
@@ -62,26 +71,56 @@ package utils
 
         public static function setSizeFromXMLToComponent(xml:XML, component:UIComponent):void
         {
+            var componentSizeOutput:IComponentSizeOutput = component as IComponentSizeOutput;
+
             if ("@width" in xml)
             {
                 component.percentWidth = Number.NaN;
                 component.width = xml.@width;
+
+                if (componentSizeOutput && isNaN(component.width))
+                {
+                    (component as IComponentSizeOutput).widthOutput = false;
+                }
+                else if (componentSizeOutput)
+                {
+                    (component as IComponentSizeOutput).widthOutput = true;
+                }
             }
             else if ("@percentWidth" in xml)
             {
                 component.width = Number.NaN;
                 component.percentWidth = xml.@percentWidth;
             }
+            else if (componentSizeOutput)
+            {
+                (component as IComponentSizeOutput).widthOutput = false;
+                component.width = Number.NaN;
+            }
 
             if ("@height" in xml)
             {
                 component.percentHeight = Number.NaN;
                 component.height = xml.@height;
+
+                if (componentSizeOutput && isNaN(component.height))
+                {
+                    (component as IComponentSizeOutput).heightOutput = false;
+                }
+                else if (componentSizeOutput)
+                {
+                    (component as IComponentSizeOutput).heightOutput = true;
+                }
             }
             else if ("@percentHeight" in xml)
             {
                 component.height = Number.NaN;
                 component.percentHeight = xml.@percentHeight;
+            }
+            else if (componentSizeOutput)
+            {
+                (component as IComponentSizeOutput).heightOutput = false;
+                component.height = Number.NaN;
             }
         }
 

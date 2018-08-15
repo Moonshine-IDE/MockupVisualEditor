@@ -5,7 +5,7 @@ package view.primeFaces.supportClasses.table
     import mx.containers.GridRow;
 
     import view.primeFaces.supportClasses.skins.OneSideBorderContainerSkin;
-    import view.primeFaces.surfaceComponents.components.Container;
+    import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.Div;
 
     public class Table extends Container

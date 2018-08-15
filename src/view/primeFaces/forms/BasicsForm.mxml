@@ -21,16 +21,28 @@
 	</s:FormItem>
 	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
 	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
-		<s:TextInput id="widthInput" width="100%"
-					 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
-					 keyDown="widthInput_keyDownHandler(event)" height="25"
-					 tabIndex="2"/>
+		<s:HGroup width="100%">
+			<s:TextInput id="widthInput" width="100%"
+						 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
+						 keyDown="widthInput_keyDownHandler(event)" height="25"
+						 tabIndex="2" />
+			<s:CheckBox id="widthOutput" visible="{selectedItem is IComponentSizeOutput}"
+						includeInLayout="{selectedItem is IComponentSizeOutput}"
+						selected="@{(selectedItem as IComponentSizeOutput).widthOutput}"
+						change="onWidthOutputChange(event)"/>
+		</s:HGroup>
 	</s:FormItem>
 	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
-		<s:TextInput id="heightInput" width="100%"
-					 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
-					 keyDown="heightInput_keyDownHandler(event)" height="25"
-					 tabIndex="3"/>
+		<s:HGroup width="100%">
+			<s:TextInput id="heightInput" width="100%"
+						 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
+						 keyDown="heightInput_keyDownHandler(event)" height="25"
+						 tabIndex="3" />
+			<s:CheckBox id="heightOutput" visible="{selectedItem is IComponentSizeOutput}"
+						includeInLayout="{selectedItem is IComponentSizeOutput}"
+						selected="@{(selectedItem as IComponentSizeOutput).heightOutput}"
+						change="onHeightOutputChange(event)"/>
+		</s:HGroup>
 	</s:FormItem>
 	<fx:Script><![CDATA[
 		import mx.binding.utils.BindingUtils;
@@ -39,6 +51,8 @@
 		import mx.events.FlexEvent;
 
 		import utils.GenericUtils;
+
+		import view.interfaces.IComponentSizeOutput;
 
 		import view.interfaces.IIdAttribute;
 		import view.interfaces.ISurfaceComponent;
@@ -62,6 +76,20 @@
 				super.selectedItem = value;
 				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
 				updateBinding();
+
+				if (value && value is IComponentSizeOutput)
+				{
+					var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
+					if (this.widthInput)
+					{
+						this.widthInput.enabled = componentSize.widthOutput;
+					}
+
+					if (this.widthInput)
+					{
+						this.heightInput.enabled = componentSize.heightOutput;
+					}
+				}
 			}
 		}
 
@@ -200,7 +228,7 @@
 		private function onIdUpdated(value:Object):void
 		{
 			if (!this.selectedItem) return;
-			
+
 			if (this.idTextInput)
 			{
 				this.idTextInput.text = this.selectedItem["idAttribute"];
@@ -227,6 +255,16 @@
 				_childrenForFocus.push(widthInput.textDisplay);
 				_childrenForFocus.push(heightInput.textDisplay);
 			}
+		}
+
+		private function onWidthOutputChange(event:Event):void
+		{
+			this.widthInput.enabled = this.widthOutput.selected;
+		}
+
+		private function onHeightOutputChange(event:Event):void
+		{
+			this.heightInput.enabled = this.heightOutput.selected;
 		}
 		]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

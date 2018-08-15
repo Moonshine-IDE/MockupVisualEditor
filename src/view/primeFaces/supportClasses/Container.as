@@ -1,4 +1,4 @@
-package view.primeFaces.surfaceComponents.components
+package view.primeFaces.supportClasses
 {
     import flash.events.Event;
 

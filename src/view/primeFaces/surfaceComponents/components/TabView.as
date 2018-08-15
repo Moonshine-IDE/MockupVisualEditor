@@ -335,7 +335,7 @@ package view.primeFaces.surfaceComponents.components
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             xml.@orientation = this.orientation;
             xml.@scrollable = this.scrollable;

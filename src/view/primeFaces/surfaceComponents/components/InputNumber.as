@@ -436,7 +436,7 @@ package view.primeFaces.surfaceComponents.components
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             xml.@value = this.text;
             xml.@thousandSeparator = this.thousandSeparator;

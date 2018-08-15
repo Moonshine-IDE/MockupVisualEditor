@@ -41,8 +41,7 @@ package utils
             {
                 var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
                 var title:String = (element as UIComponent).hasOwnProperty("path") ? element["path"] : "";
-                var xml:XML = MainApplicationCodeUtils.getParentContent(surface, title, element.width, element.height,
-                        element.percentWidth, element.percentHeight);
+                var xml:XML = MainApplicationCodeUtils.getParentContent(surface, title, element as UIComponent);
                 var mainContainer:XML = MainApplicationCodeUtils.getMainContainerTag(xml);
 
                 var container:IVisualElementContainer = surface;

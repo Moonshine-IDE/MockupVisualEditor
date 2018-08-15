@@ -486,7 +486,7 @@ package view.primeFaces.surfaceComponents.components
 				xml.@converter = this.converter;
             }
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this.width, this.height, this.percentWidth, this.percentHeight);
+            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             return xml;
         }

@@ -48,7 +48,9 @@ package view.primeFaces.surfaceComponents.components
      * &lt;Grid
      * <b>Attributes</b>
      * width="110"
-     * height="120"&gt;
+     * height="120"
+     * percentWidth="80"
+     * percentHeight="80"&gt;
      * &lt;Row&gt;
      *  &lt;Column class="ui-g-12 ui-lg-12 ui-sm-6 ui-md-6 ui-xl-12"&gt;
      *      &lt;Div percentWidth="100" percentHeight="100"/&gt;
@@ -194,6 +196,23 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Grid percentWidth="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="width:80%;"/&gt;</listing>
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
+        }
+
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -206,11 +225,28 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;Grid width="120"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;div style="width:120px;height:120px;"/&gt;</listing>
+         * <listing version="3.0">&lt;div style="width:120px;"/&gt;</listing>
          */
         override public function get width():Number
         {
             return super.width;
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Grid percentHeight="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="height:80%;"/&gt;</listing>
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
         }
 
         [PercentProxy("percentHeight")]

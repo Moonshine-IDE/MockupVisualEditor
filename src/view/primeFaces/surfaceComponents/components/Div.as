@@ -37,6 +37,8 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * width="120"
      * height="120"
+     * percentWidth="80"
+     * percentHeight="80"
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      *
@@ -154,6 +156,23 @@ package view.primeFaces.surfaceComponents.components
             return _cssClass;
         }
 
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Div percentWidth="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="width:80%;"/&gt;</listing>
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
+        }
+
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -163,14 +182,31 @@ package view.primeFaces.surfaceComponents.components
          * @default "120"
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;Button width="120"/&gt;</listing>
+         * <listing version="3.0">&lt;Div width="120"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:button style="width:120px;height:120px;"/&gt;</listing>
+         * <listing version="3.0">&lt;div style="width:120px;"/&gt;</listing>
          */
         override public function get width():Number
         {
             return super.width;
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Div percentHeight="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;div style="height:80%;"/&gt;</listing>
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
         }
 
         [PercentProxy("percentHeight")]
@@ -182,10 +218,10 @@ package view.primeFaces.surfaceComponents.components
          * @default "120"
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;Button height="120"/&gt;</listing>
+         * <listing version="3.0">&lt;Div height="120"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:button style="width:120px;height:120px;"/&gt;</listing>
+         * <listing version="3.0">&lt;div style="height:120px;"/&gt;</listing>
          */
         override public function get height():Number
         {

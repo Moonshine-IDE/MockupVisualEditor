@@ -76,20 +76,7 @@
 				super.selectedItem = value;
 				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
 				updateBinding();
-
-				if (value && value is IComponentSizeOutput)
-				{
-					var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
-					if (this.widthInput)
-					{
-						this.widthInput.enabled = componentSize.widthOutput;
-					}
-
-					if (this.widthInput)
-					{
-						this.heightInput.enabled = componentSize.heightOutput;
-					}
-				}
+				refreshWidthInputEnabled(value);
 			}
 		}
 
@@ -180,6 +167,7 @@
 			removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
 
 			this.refreshChildrenForFocus();
+			this.refreshWidthInputEnabled(selectedItem);
 		}
 
 		private function updateBinding():void
@@ -265,6 +253,25 @@
 		private function onHeightOutputChange(event:Event):void
 		{
 			this.heightInput.enabled = this.heightOutput.selected;
+		}
+
+		private function refreshWidthInputEnabled(value:ISurfaceComponent):void
+		{
+			if (!value) return;
+
+			if (value is IComponentSizeOutput)
+			{
+				var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
+				if (this.widthInput)
+				{
+					this.widthInput.enabled = componentSize.widthOutput;
+				}
+
+				if (this.widthInput)
+				{
+					this.heightInput.enabled = componentSize.heightOutput;
+				}
+			}
 		}
 		]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

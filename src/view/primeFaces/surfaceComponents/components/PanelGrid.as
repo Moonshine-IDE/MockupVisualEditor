@@ -1,19 +1,19 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-
+    
+    import mx.containers.GridRow;
     import mx.core.IVisualElement;
-
+    
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IComponentSizeOutput;
-
-    import view.interfaces.IHistorySurfaceComponent;
-
+    import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.PanelGridPropertyEditor;
     import view.primeFaces.supportClasses.table.Table;
     import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
     [Exclude(name="addRow", kind="method")]
     [Exclude(name="addColumn", kind="method")]
@@ -72,7 +72,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:panelGrid&gt;
      * </pre>
      */
-    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IComponentSizeOutput
+    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
         public static const ELEMENT_NAME:String = "PanelGrid";
@@ -95,13 +95,15 @@ package view.primeFaces.surfaceComponents.components
                 "columnsAdded",
                 "rowRemoved",
                 "columnsRemoved",
-                "panelGridValueChanged"
+                "panelGridValueChanged",
+				"widthOutputChanged",
+				"heightOutputChanged"
             ];
         }
 
         private var _widthOutput:Boolean = true;
 
-        [Bindable]
+        [Bindable("widthOutputChanged")]
         public function get widthOutput():Boolean
         {
             return _widthOutput;
@@ -109,12 +111,18 @@ package view.primeFaces.surfaceComponents.components
 
         public function set widthOutput(value:Boolean):void
         {
-            _widthOutput = value;
+			if (_widthOutput != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "widthOutput", _widthOutput, value);
+				_widthOutput = value;
+				
+				dispatchEvent(new Event("widthOutputChanged"));
+			}
         }
 
         private var _heightOutput:Boolean = true;
 
-        [Bindable]
+        [Bindable("heightOutputChanged")]
         public function get heightOutput():Boolean
         {
             return _heightOutput;
@@ -122,7 +130,13 @@ package view.primeFaces.surfaceComponents.components
 
         public function set heightOutput(value:Boolean):void
         {
-            _heightOutput = value;
+			if (_heightOutput != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "heightOutput", _heightOutput, value);
+				_heightOutput = value;
+				
+				dispatchEvent(new Event("heightOutputChanged"));
+			}
         }
 
         public function get propertyEditorClass():Class
@@ -236,6 +250,57 @@ package view.primeFaces.surfaceComponents.components
         {
             return super.columnCount;
         }
+		
+		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+		{
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, fieldName, oldValue, newValue);
+		}
+		
+		public function restorePropertyOnChangeReference(nameField:String, value:*):void
+		{
+			var deleteIndex:int;
+			var i:Object;
+			var isRemoval:Boolean;
+			switch(nameField)
+			{
+				case "addColumnAt":
+				case "addRowAt":
+				case "removeColumnAt":
+				case "removeRowAt":
+					if ((value as Array).length == 0) return;
+					
+					try
+					{
+						isRemoval = true;
+						deleteIndex = value[0].parent.getElementIndex(value[0].object);
+					}
+					catch (e:Error)
+					{
+						isRemoval = false;
+					}
+					for each (i in value)
+					{
+						if (isRemoval)
+						{
+							deleteIndex = i.parent.getElementIndex(i.object);
+							i.parent.removeElementAt(deleteIndex);
+						}
+						else
+						{
+							if (nameField == "removeColumnAt" || nameField == "removeRowAt") i.parent.addElementAt(i.object, i.index);
+							else i.parent.addElement(i.object);
+						}
+					}
+					
+					if (nameField == "addColumnAt" || nameField == "removeColumnAt") this._columnCount = isRemoval ? this._columnCount - 1 : this._columnCount + 1;
+					else if (nameField == "addRowAt" || nameField == "removeRowAt") this._rowCount = isRemoval ? this._rowCount - 1 : this._rowCount + 1;
+					dispatchEvent(new Event(Grid.EVENT_CHILDREN_UPDATED));
+					break;
+				default:
+					this[nameField.toString()] = value;
+					break;
+			}
+		}
 
         public function toXML():XML
         {
@@ -336,29 +401,41 @@ package view.primeFaces.surfaceComponents.components
 
         public function addRow():void
         {
-            this.body.addRow();
+            var rowItem:GridRow = this.body.addRow() as GridRow;
 
             _rowCount += 1;
 
             var selectedRowIndex:int = rowCount - 1;
-            addColumnToRow(this.body, selectedRowIndex, columnCount - 1);
+			var tmpArr:Array = addColumnToRow(this.body, selectedRowIndex, columnCount - 1);
 
             this.invalidateBorders();
-
+			
+			// @note
+			// #devsena
+			// it looks like the existing code auto-adds one column
+			// while creating a new row - and subsequent column addition
+			// returns a non-negative cell array by addColumnToRow therefore.
+			// we have to manually adds the initial row/column to our array
+			tmpArr.unshift({object:rowItem.getElementAt(0), parent:rowItem});
+			// also adds the row against this.body reference at very end
+			tmpArr.push({object:rowItem, parent:this.body});
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addRowAt", tmpArr, tmpArr);
             dispatchEvent(new Event("rowAdded"));
         }
 
         public function addColumn():void
         {
-            addColumnToRow(this.header, headerRowCount - 1, 1);
+            var tmpArr:Array = addColumnToRow(this.header, headerRowCount - 1, 1);
             for (var row:int = 0; row < this.rowCount; row++)
             {
-                addColumnToRow(this.body, row, 1);
+				tmpArr = tmpArr.concat(addColumnToRow(this.body, row, 1));
             }
 
             _columnCount += 1;
             this.invalidateBorders();
-
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addColumnAt", tmpArr, tmpArr);
             dispatchEvent(new Event("columnsAdded"));
         }
 
@@ -371,7 +448,9 @@ package view.primeFaces.surfaceComponents.components
             _rowCount -= 1;
 
             this.invalidateBorders();
-
+			
+			var tmpArr:Array = [{object: rowItem, parent:this.body, index: index}];
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeRowAt", tmpArr, tmpArr);
             dispatchEvent(new Event("rowRemoved"));
 
             return rowItem;
@@ -380,18 +459,21 @@ package view.primeFaces.surfaceComponents.components
         public function removeColumn(columnIndex:int):IVisualElement
         {
             if (_columnCount == 1) return null;
-
+			
+			var tmpArr:Array = [];
             for (var row:int = 0; row < this.rowCount; row++)
             {
-                this.body.removeColumn(row, columnIndex);
+				tmpArr.push({object:this.body.removeColumn(row, columnIndex), parent:this.body.getElementAt(row), index:columnIndex});
             }
 
             var colItem:IVisualElement = this.header.removeColumn(0, columnIndex);
+			tmpArr.push({object:colItem, parent:this.header.getElementAt(0), index:columnIndex});
 
             _columnCount -= 1;
 
             this.invalidateBorders();
-
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeColumnAt", tmpArr, tmpArr);
             dispatchEvent(new Event("columnsRemoved"));
 
             return colItem;
@@ -478,11 +560,6 @@ package view.primeFaces.surfaceComponents.components
 
                 xml.appendChild(rowXML);
             }
-        }
-
-        override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-        {
-
         }
     }
 }

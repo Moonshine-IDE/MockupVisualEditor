@@ -7,14 +7,13 @@
 		<![CDATA[
         import mx.collections.ArrayList;
         import mx.events.FlexEvent;
-
+        
         import spark.events.GridItemEditorEvent;
-
         import spark.events.GridSelectionEvent;
         import spark.events.IndexChangeEvent;
-
+        
         import data.GridListItem;
-
+        
         import view.interfaces.ISurfaceComponent;
         import view.primeFaces.supportClasses.GridBase;
         import view.primeFaces.supportClasses.table.HeaderGrid;
@@ -264,7 +263,7 @@
 
                     if (grid is HeaderGrid)
                     {
-                        colItem = new GridListItem("Title", itemValue);
+                        colItem = new GridListItem((grid as HeaderGrid).getTitle(row, col), itemValue);
                         (grid as HeaderGrid).setTitle(colItem.label, row, col);
                     }
                     else

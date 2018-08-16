@@ -25,10 +25,11 @@
 			<s:TextInput id="widthInput" width="100%"
 						 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
 						 keyDown="widthInput_keyDownHandler(event)" height="25"
+						 enabled="{!widthOutputFlag}"
 						 tabIndex="2" />
 			<s:CheckBox id="widthOutput" visible="{selectedItem is IComponentSizeOutput}"
 						includeInLayout="{selectedItem is IComponentSizeOutput}"
-						selected="@{(selectedItem as IComponentSizeOutput).widthOutput}"
+						selected="{widthOutputFlag}"
 						change="onWidthOutputChange(event)"/>
 		</s:HGroup>
 	</s:FormItem>
@@ -37,10 +38,11 @@
 			<s:TextInput id="heightInput" width="100%"
 						 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
 						 keyDown="heightInput_keyDownHandler(event)" height="25"
+						 enabled="{!heightOutputFlag}"
 						 tabIndex="3" />
 			<s:CheckBox id="heightOutput" visible="{selectedItem is IComponentSizeOutput}"
 						includeInLayout="{selectedItem is IComponentSizeOutput}"
-						selected="@{(selectedItem as IComponentSizeOutput).heightOutput}"
+						selected="{heightOutputFlag}"
 						change="onHeightOutputChange(event)"/>
 		</s:HGroup>
 	</s:FormItem>
@@ -49,17 +51,21 @@
 		import mx.binding.utils.ChangeWatcher;
 		import mx.core.UIComponent;
 		import mx.events.FlexEvent;
-
+		
 		import utils.GenericUtils;
-
+		
 		import view.interfaces.IComponentSizeOutput;
-
 		import view.interfaces.IIdAttribute;
 		import view.interfaces.ISurfaceComponent;
+		
+		[Bindable] public var widthOutputFlag:Boolean;
+		[Bindable] public var heightOutputFlag:Boolean;
 
 		private var _bindingWidth:ChangeWatcher;
 		private var _bindingHeight:ChangeWatcher;
 		private var _bindingId:ChangeWatcher;
+		private var _widthOutput:ChangeWatcher;
+		private var _heightOutput:ChangeWatcher;
 
 		[Bindable("change")]
 		private function get selectedComponent():UIComponent
@@ -76,7 +82,6 @@
 				super.selectedItem = value;
 				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
 				updateBinding();
-				refreshWidthInputEnabled(value);
 			}
 		}
 
@@ -184,6 +189,12 @@
 					this._bindingId = null;
 				}
 			}
+			if (this._widthOutput)
+			{
+				this._widthOutput.unwatch();
+				this._heightOutput.unwatch();
+				this._widthOutput = this._heightOutput = null;
+			}
 			if (this.selectedItem === null)
 			{
 				return;
@@ -191,6 +202,12 @@
 			this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
 			this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
 			if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "idAttribute", false, true);
+			
+			if (selectedItem is IComponentSizeOutput)
+			{
+				this._widthOutput = BindingUtils.bindProperty(this, "widthOutputFlag", this.selectedItem, "widthOutput", false, true);
+				this._heightOutput = BindingUtils.bindProperty(this, "heightOutputFlag", this.selectedItem, "heightOutput", false, true);
+			}
 		}
 
 		private function onWidthUpdated(value:Object):void
@@ -247,12 +264,14 @@
 
 		private function onWidthOutputChange(event:Event):void
 		{
-			this.widthInput.enabled = this.widthOutput.selected;
+			//this.widthInput.enabled = this.widthOutput.selected;
+			this.selectedItem["widthOutput"] = this.widthOutput.selected;
 		}
 
 		private function onHeightOutputChange(event:Event):void
 		{
-			this.heightInput.enabled = this.heightOutput.selected;
+			//this.heightInput.enabled = this.heightOutput.selected;
+			this.selectedItem["heightOutput"] = this.heightOutput.selected;
 		}
 
 		private function refreshWidthInputEnabled(value:ISurfaceComponent):void
@@ -262,15 +281,8 @@
 			if (value is IComponentSizeOutput)
 			{
 				var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
-				if (this.widthInput)
-				{
-					this.widthInput.enabled = componentSize.widthOutput;
-				}
-
-				if (this.widthInput)
-				{
-					this.heightInput.enabled = componentSize.heightOutput;
-				}
+				widthOutputFlag = componentSize.widthOutput;
+				heightOutputFlag = componentSize.heightOutput;
 			}
 		}
 		]]></fx:Script>

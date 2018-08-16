@@ -1,11 +1,12 @@
 package view.primeFaces.supportClasses.table
 {
-    import view.primeFaces.supportClasses.*;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
-
-    import view.primeFaces.supportClasses.skins.OneSideBorderContainerSkin;
+    
     import view.primeFaces.supportClasses.Container;
+    import view.primeFaces.supportClasses.ContainerDirection;
+    import view.primeFaces.supportClasses.GridBase;
+    import view.primeFaces.supportClasses.skins.OneSideBorderContainerSkin;
     import view.primeFaces.surfaceComponents.components.Div;
 
     public class Table extends Container
@@ -275,17 +276,22 @@ package view.primeFaces.supportClasses.table
             }
         }
 
-		protected function addColumnToRow(grid:GridBase, rowIndex:int, rowColumnCount:int = 1):void
+		protected function addColumnToRow(grid:GridBase, rowIndex:int, rowColumnCount:int = 1):Array
 		{
 			var gridRow:GridRow = grid.getElementAt(rowIndex) as GridRow;
             var gridItem:GridItem = gridRow.getElementAt(0) as GridItem;
 			setDivSkin(gridItem);
-
+			
+			var tmpArr:Array = [];
 			for (var i:int = 0; i < rowColumnCount; i++)
 			{
 				gridItem = grid.addColumn(rowIndex);
 				setDivSkin(gridItem);
+				
+				tmpArr.push({object:gridItem, parent:gridRow});
 			}
+			
+			return tmpArr;
 		}
 
         private function setDivSkin(gridItem:GridItem):void

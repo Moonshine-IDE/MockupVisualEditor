@@ -102,6 +102,7 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var _widthOutput:Boolean = true;
+        private var widthOutputChanged:Boolean;
 
         [Bindable("widthOutputChanged")]
         public function get widthOutput():Boolean
@@ -115,12 +116,19 @@ package view.primeFaces.surfaceComponents.components
 			{
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "widthOutput", _widthOutput, value);
 				_widthOutput = value;
-				
+
+                if (!value)
+                {
+                    widthOutputChanged = true;
+                    this.invalidateProperties();
+                }
+
 				dispatchEvent(new Event("widthOutputChanged"));
 			}
         }
 
         private var _heightOutput:Boolean = true;
+        private var heightOutputChanged:Boolean;
 
         [Bindable("heightOutputChanged")]
         public function get heightOutput():Boolean
@@ -134,7 +142,13 @@ package view.primeFaces.surfaceComponents.components
 			{
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "heightOutput", _heightOutput, value);
 				_heightOutput = value;
-				
+
+                if (!value)
+                {
+                    heightOutputChanged = true;
+                    this.invalidateProperties();
+                }
+
 				dispatchEvent(new Event("heightOutputChanged"));
 			}
         }
@@ -477,6 +491,25 @@ package view.primeFaces.surfaceComponents.components
             dispatchEvent(new Event("columnsRemoved"));
 
             return colItem;
+        }
+
+        override protected function commitProperties():void
+        {
+            super.commitProperties();
+
+            if (this.widthOutputChanged)
+            {
+                this.percentWidth = Number.NaN;
+                this.width = Number.NaN;
+                this.widthOutputChanged = false;
+            }
+
+            if (this.heightOutputChanged)
+            {
+                this.percentHeight = Number.NaN;
+                this.height = Number.NaN;
+                this.heightOutputChanged = false;
+            }
         }
 
         private function toVisualXML(xml:XML, rowCount:int, columnCount:int):void

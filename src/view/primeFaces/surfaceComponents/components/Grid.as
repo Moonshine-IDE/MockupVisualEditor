@@ -105,6 +105,7 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var _widthOutput:Boolean = true;
+        private var widthOutputChanged:Boolean;
 
         [Bindable]
         public function get widthOutput():Boolean
@@ -114,10 +115,20 @@ package view.primeFaces.surfaceComponents.components
 
         public function set widthOutput(value:Boolean):void
         {
-            _widthOutput = value;
+            if (_widthOutput != value)
+            {
+                _widthOutput = value;
+
+                if (!value)
+                {
+                    widthOutputChanged = true;
+                    this.invalidateProperties();
+                }
+            }
         }
 
         private var _heightOutput:Boolean = true;
+        private var heightOutputChanged:Boolean;
 
         [Bindable]
         public function get heightOutput():Boolean
@@ -127,7 +138,16 @@ package view.primeFaces.surfaceComponents.components
 
         public function set heightOutput(value:Boolean):void
         {
-            _heightOutput = value;
+            if (_heightOutput != value)
+            {
+                _heightOutput = value;
+
+                if (!value)
+                {
+                    heightOutputChanged = true;
+                    this.invalidateProperties();
+                }
+            }
         }
 
 		private var _propertyChangeFieldReference:PropertyChangeReference;
@@ -276,6 +296,20 @@ package view.primeFaces.surfaceComponents.components
             {
                 setColorForSelectedItem(this.selectedRow, this.selectedColumn);
                 selectionChanged = false;
+            }
+
+            if (this.widthOutputChanged)
+            {
+                this.percentWidth = Number.NaN;
+                this.width = Number.NaN;
+                this.widthOutputChanged = false;
+            }
+
+            if (this.heightOutputChanged)
+            {
+                this.percentHeight = Number.NaN;
+                this.height = Number.NaN;
+                this.heightOutputChanged = false;
             }
         }
 

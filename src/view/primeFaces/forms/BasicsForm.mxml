@@ -25,7 +25,7 @@
 			<s:TextInput id="widthInput" width="100%"
 						 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
 						 keyDown="widthInput_keyDownHandler(event)" height="25"
-						 enabled="{!widthOutputFlag}"
+						 enabled="{widthOutputFlag}"
 						 tabIndex="2" />
 			<s:CheckBox id="widthOutput" visible="{selectedItem is IComponentSizeOutput}"
 						includeInLayout="{selectedItem is IComponentSizeOutput}"
@@ -38,7 +38,7 @@
 			<s:TextInput id="heightInput" width="100%"
 						 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
 						 keyDown="heightInput_keyDownHandler(event)" height="25"
-						 enabled="{!heightOutputFlag}"
+						 enabled="{heightOutputFlag}"
 						 tabIndex="3" />
 			<s:CheckBox id="heightOutput" visible="{selectedItem is IComponentSizeOutput}"
 						includeInLayout="{selectedItem is IComponentSizeOutput}"
@@ -58,8 +58,8 @@
 		import view.interfaces.IIdAttribute;
 		import view.interfaces.ISurfaceComponent;
 		
-		[Bindable] public var widthOutputFlag:Boolean;
-		[Bindable] public var heightOutputFlag:Boolean;
+		[Bindable] public var widthOutputFlag:Boolean = true;
+		[Bindable] public var heightOutputFlag:Boolean = true;
 
 		private var _bindingWidth:ChangeWatcher;
 		private var _bindingHeight:ChangeWatcher;

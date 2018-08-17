@@ -394,8 +394,6 @@ package view.primeFaces.surfaceComponents.components
                 {
                     var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
                     var div:Div = gridCol.getElementAt(0) as Div;
-                    div.percentHeight = Number.NaN;
-                    div.heightOutput = false;
 
                     var colXML:XML = new XML("<Column />");
                     colXML["@class"] = this.getClassNameBasedOnColumns(gridRow);
@@ -404,8 +402,6 @@ package view.primeFaces.surfaceComponents.components
 
                     rowXML.appendChild(colXML);
 
-                    div.percentHeight = 100;
-                    div.heightOutput = true;
                 }
 
                 xml.appendChild(rowXML);
@@ -454,6 +450,9 @@ package view.primeFaces.surfaceComponents.components
                             gridItem.addElement(div);
                             gridRow.addElement(gridItem);
 
+                            divXML.@percentWidth = 100;
+                            divXML.@percentHeight = 100;
+
                             div.fromXML(divXML, callback);
                         }
                     }
@@ -481,18 +480,15 @@ package view.primeFaces.surfaceComponents.components
                 {
                     var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
                     var div:Div = gridCol.getElementAt(0) as Div;
-                    div.percentHeight = Number.NaN;
-                    div.heightOutput = false;
 
                     var colXML:XML = new XML("<div />");
                     colXML["@class"] = this.getClassNameBasedOnColumns(gridRow);
 
-                    colXML.appendChild(div.toCode());
+                    var divXML:XML = removeHeightFromInternalDiv(div.toCode());
+
+                    colXML.appendChild(divXML);
 
                     rowXML.appendChild(colXML);
-
-                    div.percentHeight = 100;
-                    div.heightOutput = true;
                 }
 
                 xml.appendChild(rowXML);
@@ -598,6 +594,15 @@ package view.primeFaces.surfaceComponents.components
                 div.setStyle("backgroundColor", this.getStyle("themeColor"));
                 div.setStyle("backgroundAlpha", 0.4);
             }
+        }
+
+        private function removeHeightFromInternalDiv(div:XML):XML
+        {
+            delete div.@height;
+            delete div.@percentHeight;
+            div.@style = "width:100%;";
+
+            return div;
         }
     }
 }

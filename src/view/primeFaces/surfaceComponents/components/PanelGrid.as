@@ -221,7 +221,8 @@ package view.primeFaces.surfaceComponents.components
         public function set panelGridValue(value:String):void
         {
             if (_panelGridValue == value) return;
-
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "panelGridValue", _panelGridValue, value);
             _panelGridValue = value;
 
             dispatchEvent(new Event("panelGridValueChanged"));

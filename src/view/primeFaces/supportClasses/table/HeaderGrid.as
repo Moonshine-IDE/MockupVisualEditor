@@ -3,14 +3,16 @@ package view.primeFaces.supportClasses.table
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
-
+    
     import spark.components.Label;
-
-    import view.primeFaces.supportClasses.*;
+    
+    import view.primeFaces.supportClasses.GridBase;
     import view.primeFaces.surfaceComponents.components.Div;
 
     public class HeaderGrid extends GridBase
     {
+		public var updatePropertyChangeReference:Function;
+		
         public function HeaderGrid()
         {
             super();
@@ -31,8 +33,10 @@ package view.primeFaces.supportClasses.table
             {
                 selectedColumnIndex = this.selectedColumn;
             }
-
+			
+			
             var lbl:Label = getSelectedLabel(selectedRowIndex, selectedColumnIndex);
+			if (lbl.text != title && updatePropertyChangeReference != null) updatePropertyChangeReference("titleChanged", {value:lbl.text, parent:lbl}, {value:title, parent:lbl});
             lbl.text = title;
         }
 

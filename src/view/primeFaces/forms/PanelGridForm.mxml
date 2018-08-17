@@ -53,19 +53,17 @@
         [Bindable("change")]
         private function get selectedPanelGrid():PanelGrid
         {
-            if (!selectedItem) return null;
+            if (!super.selectedItem) return null;
 
-            return (selectedItem as PanelGrid);
+            return (super.selectedItem as PanelGrid);
         }
 
         override public function set selectedItem(value:ISurfaceComponent):void
         {
+			if (selectedItem) selectedItem.removeEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated);
+			
             super.selectedItem = value;
-
-            if (value && !selectedItem.hasEventListener(Grid.EVENT_CHILDREN_UPDATED))
-            {
-                selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
-            }
+			if (value) selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
         }
 
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -126,7 +124,8 @@
             this.columnsDataProvider = rowItem.columns;
 
             rowItem = dgHeaderRows.selectedItem as GridListItem;
-            this.headerColumnsDataProvider = rowItem.columns;
+			this.headerColumnsDataProvider.removeAll();
+			this.headerColumnsDataProvider.addAll(rowItem.columns);
 
             selectedPanelGrid.addColumn();
 
@@ -154,6 +153,8 @@
 
         private function deleteColumnButton_clickHandler(event:MouseEvent):void
         {
+			this.headerColumnsDataProvider.removeItemAt(columnList.selectedIndex);
+			
             var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
             if (rowItem.columns.length > selectedPanelGrid.body.selectedColumn)
             {
@@ -176,7 +177,8 @@
             initializeRowsColumns(rowsDataProvider, selectedPanelGrid.rowCount, selectedPanelGrid.body);
 
             this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
-            this.headerColumnsDataProvider = this.headerRowsDataProvider.getItemAt(0).columns;
+			if (this.headerColumnsDataProvider) this.headerColumnsDataProvider.removeAll();
+			this.headerColumnsDataProvider.addAll(this.headerRowsDataProvider.getItemAt(0).columns);
 
             selectRow(selectedPanelGrid.body, 0);
             //this.selectedCell = this.getSelectedCell();
@@ -278,8 +280,8 @@
 
             grid.selectedRow = grid.selectedColumn = 0;
         }
-
-        ]]>
+			
+		]]>
 	</fx:Script>
     <suportclasses:layout>
         <s:FormLayout horizontalAlign="contentJustify"/>

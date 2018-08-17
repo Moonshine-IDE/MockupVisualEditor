@@ -87,12 +87,10 @@
 
 		override public function set selectedItem(value:ISurfaceComponent):void
 		{
+			if (selectedItem) selectedItem.removeEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated);
+			
 			super.selectedItem = value;
-
-			if (value && !selectedItem.hasEventListener(TabView.EVENT_CHILDREN_UPDATED))
-			{
-				selectedItem.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
-			}
+			if (value) selectedItem.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
 		}
 
 		private function editItemButton_clickHandler(event:MouseEvent):void
@@ -157,6 +155,7 @@
 				ISelectableItemsComponent(selectedItem).selectedIndex = dgTabs.selectedIndex;
 			}
 		}
+			
 		]]>
 	</fx:Script>
     <suportclasses:layout>

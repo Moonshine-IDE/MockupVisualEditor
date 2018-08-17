@@ -3,6 +3,8 @@ package view.primeFaces.supportClasses.table
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     
+    import data.GridListItem;
+    
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.primeFaces.supportClasses.GridBase;
@@ -57,6 +59,16 @@ package view.primeFaces.supportClasses.table
 				this.headerRowCountChanged = true;
 				this.invalidateProperties();
 			}
+		}
+		
+		private var _headerRowTitles:Array;
+		public function get headerRowTitles():Array
+		{
+			return _headerRowTitles;
+		}
+		public function set headerRowTitles(value:Array):void
+		{
+			_headerRowTitles = value;
 		}
 		
 		protected var _columnCount:int;
@@ -129,6 +141,7 @@ package view.primeFaces.supportClasses.table
 			if (!_header)
             {
                 this._header = new HeaderGrid();
+				this._header.updatePropertyChangeReference = this.updatePropertyChangeReference;
                 this._header.columnBorderColor = "#000000";
                 this._header.percentWidth = 100;
                 this._header.percentHeight = Number.NaN;
@@ -263,7 +276,27 @@ package view.primeFaces.supportClasses.table
 
                 addColumnToRow(this.header, i, columnCount - 1);
             }
+			
+			// once the header columns created by their own way
+			// update the title values by those loaded during
+			// editor loads XML
+			updateHeaderTitlesFromXML();
         }
+		
+		private function updateHeaderTitlesFromXML():void
+		{
+			if (!headerRowTitles) return;
+			
+			for (var row:int = 0; row < headerRowCount; row++)
+			{
+				for (var col:int = 0; col < columnCount; col++)
+				{
+					this.header.setTitle(headerRowTitles[row][col], row, col);
+				}
+			}
+			
+			headerRowTitles = null;
+		}
 
         private function updateHeadersHeight():void
         {

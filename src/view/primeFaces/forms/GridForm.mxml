@@ -55,12 +55,10 @@
 
 		override public function set selectedItem(value:ISurfaceComponent):void
 		{
+			if (selectedItem) selectedItem.removeEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated);
+			
 			super.selectedItem = value;
-
-			if (value && !selectedItem.hasEventListener(Grid.EVENT_CHILDREN_UPDATED))
-			{
-				selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
-			}
+			if (value) selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
 		}
 
 		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -264,6 +262,7 @@
 
 			return gridItem.getElementAt(0) as Div;
 		}
+			
 		]]>
 	</fx:Script>
     <suportclasses:layout>

@@ -159,18 +159,17 @@
 
 		override public function set selectedItem(value:ISurfaceComponent):void
 		{
+			if (selectedItem) selectedItem.removeEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated);
+			
 			super.selectedItem = value;
-
-			if (value && !value.hasEventListener(DataTable.EVENT_CHILDREN_UPDATED))
-			{
-				value.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
-			}
+			if (value) selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
 		}
 
 		protected function onRowEditStarts(event:GridItemEditorEvent):void
 		{
 			updatePropertyEditorPriorToEdit();
 		}
+			
 		]]>
 	</fx:Script>
 	

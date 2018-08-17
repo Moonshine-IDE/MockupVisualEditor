@@ -97,7 +97,8 @@ package view.primeFaces.surfaceComponents.components
                 "columnsRemoved",
                 "panelGridValueChanged",
 				"widthOutputChanged",
-				"heightOutputChanged"
+				"heightOutputChanged",
+				"titleChanged"
             ];
         }
 
@@ -268,6 +269,7 @@ package view.primeFaces.surfaceComponents.components
 		override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
 		{
 			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, fieldName, oldValue, newValue);
+			if (fieldName == "titleChanged") dispatchEvent(new Event(fieldName));
 		}
 		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
@@ -277,6 +279,10 @@ package view.primeFaces.surfaceComponents.components
 			var isRemoval:Boolean;
 			switch(nameField)
 			{
+				case "titleChanged":
+					value.parent.text = value.value;
+					dispatchEvent(new Event(Grid.EVENT_CHILDREN_UPDATED));
+					break;
 				case "addColumnAt":
 				case "addRowAt":
 				case "removeColumnAt":
@@ -344,23 +350,32 @@ package view.primeFaces.surfaceComponents.components
             var rowCount:int = 1;
             var columnCount:int = 1;
 
-            if ("@headerRowCount" in xml)
+            /*if ("@headerRowCount" in xml)
             {
                 this.headerRowCount = xml.@headerRowCount;
             }
             else
             {
-                var header:XMLList = xml.Header.Row;
-                rowCount = header.length();
-                if (rowCount > 0)
-                {
-                    this.headerRowCount = rowCount;
-                }
-                else
-                {
-                    this.headerRowCount = 1;
-                }
-            }
+           	}*/
+			
+			// lets parse everything from XML other than
+			// reading from @headerRowCount
+			var header:XMLList = xml.Header.Row;
+			rowCount = header.length();
+			if (rowCount > 0) this.headerRowCount = rowCount;
+			else this.headerRowCount = 1;
+			this.headerRowTitles = [];
+			
+			for (var headerIndex:int; headerIndex < rowCount; headerIndex++)
+			{
+				var tmpArr:Array = [];
+				for each (var headerTitle:XML in header[headerIndex].Column)
+				{
+					tmpArr.push(headerTitle.toString());
+				}
+				
+				headerRowTitles.push(tmpArr);
+			}
 
             if ("@rowCount" in xml)
             {

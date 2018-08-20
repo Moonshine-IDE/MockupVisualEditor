@@ -62,11 +62,11 @@ package view.primeFaces.supportClasses.table
 		}
 		
 		private var _headerRowTitles:Array;
-		public function get headerRowTitles():Array
+		protected function get headerRowTitles():Array
 		{
 			return _headerRowTitles;
 		}
-		public function set headerRowTitles(value:Array):void
+		protected function set headerRowTitles(value:Array):void
 		{
 			_headerRowTitles = value;
 		}

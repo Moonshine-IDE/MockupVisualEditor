@@ -71,7 +71,7 @@
 		{
 			_visualEditorType = value;
 		}
-
+		
 		public function get hasChanged():Boolean
 		{
 			return _hasChanged;

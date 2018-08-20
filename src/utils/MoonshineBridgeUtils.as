@@ -1,9 +1,11 @@
 package utils
 {
+    import flash.filesystem.File;
+    
     import mx.collections.ArrayCollection;
-	
-	import view.VisualEditor;
-	import view.interfaces.IVisualEditorLibraryBridge;
+    
+    import view.VisualEditor;
+    import view.interfaces.IVisualEditorLibraryBridge;
 
 	public class MoonshineBridgeUtils
 	{
@@ -11,6 +13,7 @@ package utils
 		public static var moonshineBridge:IVisualEditorLibraryBridge;
 
         private static var _filesList:ArrayCollection;
+		private static var _isTabChangeHandlerAdded:Boolean;
 
 		public static function get filesList():ArrayCollection
 		{
@@ -30,8 +33,7 @@ package utils
 				if (value)
 				{
 					value.filterFunction = function(item:Object):Boolean {
-						var path:String = item.resourcePathWithoutRoot.replace(item.resourceExtension, "xml");
-						return currentFilePath.indexOf(path) == -1;
+						return currentFilePath.indexOf(item.resourcePath) == -1;
                     }
 				}
 			}

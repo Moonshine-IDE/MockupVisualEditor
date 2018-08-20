@@ -25,12 +25,12 @@
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 	<fx:Script><![CDATA[
 		import mx.events.FlexEvent;
-
+		
 		import spark.components.Alert;
-
+		
 		import utils.CopyPasteVisualEditorManager;
 		import utils.MoonshineBridgeUtils;
-
+		
 		import view.interfaces.IVisualEditorLibraryBridge;
 
 		private var copyPasteManager:CopyPasteVisualEditorManager;
@@ -57,6 +57,11 @@
 			{
 				MoonshineBridgeUtils.moonshineBridge = value;
 			}
+			
+			public function set visualEditorFilePath(value:String):void
+			{
+				MoonshineBridgeUtils.currentFilePath = value;
+			}
 
 			public function saveEditedFile():void
 			{
@@ -70,7 +75,6 @@
 
 			public function loadFile(filePath:String):void
 			{
-				MoonshineBridgeUtils.currentFilePath = filePath;
 				_fileMoonshine = createNewFileIfNotExists(filePath);
 				_fileStreamMoonshine = new FileStream();
 				_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);

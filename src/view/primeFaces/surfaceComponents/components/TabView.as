@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     
     import mx.core.IVisualElement;
+    import mx.core.UIComponent;
     import mx.events.CollectionEvent;
     
     import spark.components.NavigatorContent;
@@ -73,11 +74,9 @@ package view.primeFaces.surfaceComponents.components
             super();
 
             this.selectedIndex = 0;
-
-            this.width = 120;
-            this.height = 120;
-            this.minWidth = 20;
-            this.minHeight = 20;
+            
+            this.minWidth = 120;
+            this.minHeight = 120;
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -432,6 +431,7 @@ package view.primeFaces.surfaceComponents.components
                 this.percentHeight = Number.NaN;
                 this.height = Number.NaN;
                 this.heightOutputChanged = false;
+                this.contentGroup.height = getContentGroupChildrensHeight();
             }
         }
 
@@ -462,6 +462,19 @@ package view.primeFaces.surfaceComponents.components
                 var childXML:XML = elementsXML[i];
                 callback(tab, childXML);
             }
+        }
+
+        private function getContentGroupChildrensHeight():Number
+        {
+            var elementsHeight:Number = 0;
+            var numEl:int = contentGroup.numElements;
+            for (var i:int = 0; i < numEl; i++)
+            {
+                var contentGroupChild:IVisualElement = contentGroup.getElementAt(i);
+                elementsHeight =+ contentGroupChild.height;
+            }
+
+            return elementsHeight;
         }
     }
 }

@@ -5,6 +5,7 @@ package view.primeFaces.surfaceComponents.components
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
     
+    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IComponentSizeOutput;
@@ -416,7 +417,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + PRIME_FACES_XML_ELEMENT_NAME + "/>");
+			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
             xml.addNamespace(primeFacesNamespace);
             xml.setNamespace(primeFacesNamespace);

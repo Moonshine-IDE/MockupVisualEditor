@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     
     import mx.core.IVisualElement;
+    import mx.core.IVisualElementContainer;
     import mx.core.UIComponent;
     import mx.events.CollectionEvent;
     
@@ -98,6 +99,8 @@ package view.primeFaces.surfaceComponents.components
             addElement(navigatorContent);
         }
 
+        private var tabViewContentHeightChanged:Boolean;
+
         private var _widthOutput:Boolean = true;
         private var widthOutputChanged:Boolean;
 
@@ -139,7 +142,9 @@ package view.primeFaces.surfaceComponents.components
                 if (!value)
                 {
                     heightOutputChanged = true;
+                    tabViewContentHeightChanged = true;
                     this.invalidateProperties();
+                    this.invalidateDisplayList();
                 }
             }
         }
@@ -373,6 +378,9 @@ package view.primeFaces.surfaceComponents.components
                 this.tabFromXML(tab, tabXML, callback);
             }
             this.selectedIndex = xml.@selectedIndex;
+
+            tabViewContentHeightChanged = true;
+            this.invalidateDisplayList();
         }
 
         public function toCode():XML
@@ -431,7 +439,17 @@ package view.primeFaces.surfaceComponents.components
                 this.percentHeight = Number.NaN;
                 this.height = Number.NaN;
                 this.heightOutputChanged = false;
+            }
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (tabViewContentHeightChanged)
+            {
                 this.contentGroup.height = getContentGroupChildrensHeight();
+                tabViewContentHeightChanged = false;
             }
         }
 
@@ -467,11 +485,19 @@ package view.primeFaces.surfaceComponents.components
         private function getContentGroupChildrensHeight():Number
         {
             var elementsHeight:Number = 0;
-            var numEl:int = contentGroup.numElements;
+            if (!selectedItem) return elementsHeight;
+
+            var visualElementContainer:IVisualElementContainer = (selectedItem as IVisualElementContainer);
+            var numEl:int = visualElementContainer.numElements;
             for (var i:int = 0; i < numEl; i++)
             {
-                var contentGroupChild:IVisualElement = contentGroup.getElementAt(i);
+                var contentGroupChild:IVisualElement = visualElementContainer.getElementAt(i);
                 elementsHeight =+ contentGroupChild.height;
+            }
+
+            if (numEl == 0)
+            {
+                return selectedItem.height;
             }
 
             return elementsHeight;

@@ -36,6 +36,8 @@ package view.primeFaces.surfaceComponents.components
      * <p>Representation of PrimeFaces panelGrid component.</p>
      *
      * <strong>Visual Editor XML:</strong>
+     *
+     * <strong>Example 1:</strong>
      * <pre>
      * &lt;PanelGrid
      * <b>Attributes</b>
@@ -43,9 +45,9 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      * &lt;Header name="header"&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title&lt;/Column&gt;
      *  &lt;/Row&gt;
-     *  &lt;/Header&gt;
+     * &lt;/Header&gt;
      *  &lt;Row&gt;
      *    &lt;Column&gt;Some Text&lt;/Column&gt;
      *  &lt;/Row&gt;
@@ -54,8 +56,29 @@ package view.primeFaces.surfaceComponents.components
      *  &lt;/Row&gt;
      * &lt;/PanelGrid&gt;
      * </pre>
+     * <strong>Example 2:</strong>
+     * * <pre>
+     * &lt;PanelGrid
+     * <b>Attributes</b>
+     * width="100"
+     * height="30"/&gt;
+     * &lt;Header name="header"&gt;
+     *  &lt;Row&gt;
+     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *  &lt;/Row&gt;
+     * &lt;/Header&gt;
+     *  &lt;Row&gt;
+     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *  &lt;/Row&gt;
+     *  &lt;Row&gt;
+     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *  &lt;/Row&gt;
+     * &lt;/PanelGrid&gt;
+     * </pre>
      *
      * <strong>PrimeFaces output:</strong>
+     *
+     * <strong>Example 1:</strong>
      * <pre>
      * &lt;p:panelGrid
      * <b>Attributes</b>
@@ -71,6 +94,26 @@ package view.primeFaces.surfaceComponents.components
      *  &lt;/p:row&gt;
      *  &lt;p:row&gt;
      *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *  &lt;/p:row&gt;
+     * &lt;/p:panelGrid&gt;
+     * </pre>
+     *
+     * <strong>Example 2:</strong>
+     * <pre>
+     * &lt;p:panelGrid
+     * <b>Attributes</b>
+     * width="100"
+     * height="30"/&gt;
+     *   &lt;f:facet name="header"&gt;
+     *       &lt;p:row&gt;
+     *        &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
+     *       &lt;/p:row&gt;
+     *   &lt;/f:facet&gt;
+     *  &lt;p:row&gt;
+     *    &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
+     *  &lt;/p:row&gt;
+     *  &lt;p:row&gt;
+     *    &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
      *  &lt;/p:row&gt;
      * &lt;/p:panelGrid&gt;
      * </pre>
@@ -103,6 +146,83 @@ package view.primeFaces.surfaceComponents.components
 				"heightOutputChanged",
 				"titleChanged"
             ];
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid percentWidth="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;panelGrid style="width:80%;"/&gt;</listing>
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;panelGrid style="width:120px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid percentHeight="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;panelGrid style="height:80%;"/&gt;</listing>
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default "120"
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;PanelGrid height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;panelGrid style="height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
+        override public function set height(value:Number):void
+        {
+            super.height = value;
         }
 
         private var _widthOutput:Boolean = true;
@@ -379,7 +499,7 @@ package view.primeFaces.surfaceComponents.components
             else
             {
                 var columns:XMLList = bodyRows[0].Column;
-                var colCount = columns.length();
+                var colCount:int = columns.length();
                 if (colCount > 0)
                 {
                     this.columnCount = colCount;
@@ -570,14 +690,20 @@ package view.primeFaces.surfaceComponents.components
             var bodyRowCount:int = this.body.numElements;
             for (var row:int = 0; row < bodyRowCount; row++)
             {
+                var gridRow:GridRow = this.body.getElementAt(row) as GridRow;
                 var rowXML:XML = new XML("<row/>");
                 rowXML.addNamespace(primeFacesNamespace);
                 rowXML.setNamespace(primeFacesNamespace);
                 for (var col:int = 0; col < this.columnCount; col++)
                 {
-                    var colXML:XML = new XML("<column>Text</column>");
+                    var gridItem:GridItem = gridRow.getElementAt(col) as GridItem;
+                    var divContent:Div = gridItem.getElementAt(0) as Div;
+
+                    var colXML:XML = new XML("<column></column>");
                     colXML.addNamespace(primeFacesNamespace);
                     colXML.setNamespace(primeFacesNamespace);
+
+                    colXML.appendChild(divContent.toCode());
 
                     rowXML.appendChild(colXML);
                 }

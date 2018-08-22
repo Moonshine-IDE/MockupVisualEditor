@@ -49,7 +49,9 @@ package view.primeFaces.surfaceComponents.components
      * height="120"
      * orientation="top"
      * scrollable="false"&gt;
-     *  &lt;tab title="Tab" /&gt;
+     *  &lt;tab title="Tab"&gt;
+     *    &lt;Div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop" wrap="false"/&gt;
+     *  &lt;/tab&gt;
      * &lt;/TabView&gt;
      * </pre>
      *
@@ -60,7 +62,9 @@ package view.primeFaces.surfaceComponents.components
      * style="width:120px;height:120px;"
      * orientation="top"
      * scrollable="false"/&gt;
-     *  &lt;p:tab title="Tab" /&gt;
+     *  &lt;p:tab title="Tab"&gt;
+     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop" /&gt;
+     *  &lt;/p:tab&gt;
      * &lt;/p:tabView&gt;
      * </pre>
      */

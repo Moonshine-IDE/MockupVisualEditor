@@ -64,7 +64,7 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      * &lt;Header name="header"&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *    &lt;Column&gt;&lt;Header Title&lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/Header&gt;
      *  &lt;Row&gt;
@@ -106,7 +106,7 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      *   &lt;f:facet name="header"&gt;
      *       &lt;p:row&gt;
-     *        &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title&lt;/p:column&gt;
      *       &lt;/p:row&gt;
      *   &lt;/f:facet&gt;
      *  &lt;p:row&gt;

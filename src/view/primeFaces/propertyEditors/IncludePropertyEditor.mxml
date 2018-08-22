@@ -4,15 +4,16 @@
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
 							      xmlns:forms="view.forms.*"
-								  creationComplete="onCreationCompletes(event)">
+								  creationComplete="onCreationCompletes(event)" addedToStage="trace('dd')">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
 			import utils.MoonshineBridgeUtils;
-
+			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
+				MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
 				ddl.collectionHost = MoonshineBridgeUtils;
 			}
 			

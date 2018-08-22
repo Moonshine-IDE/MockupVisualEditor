@@ -329,8 +329,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function hasFileList():Boolean
         {
-            var fileList:ArrayCollection = MoonshineBridgeUtils.filesList;
-            return fileList && fileList.length > 0;
+            return MoonshineBridgeUtils.hasFilesInList();
         }
     }
 }

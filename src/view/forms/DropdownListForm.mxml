@@ -21,7 +21,7 @@
         import mx.binding.utils.ChangeWatcher;
         import mx.collections.IList;
         import mx.events.FlexEvent;
-
+        
         import spark.events.IndexChangeEvent;
 
         [Bindable]

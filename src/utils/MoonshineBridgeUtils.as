@@ -1,7 +1,5 @@
 package utils
 {
-    import flash.filesystem.File;
-    
     import mx.collections.ArrayCollection;
     
     import view.VisualEditor;
@@ -23,6 +21,11 @@ package utils
             }
 
 			return _filesList;
+		}
+		
+		public static function hasFilesInList():Boolean
+		{
+			return _filesList && _filesList.length > 0;
 		}
 
 		public static function onXHtmlFilesUpdated(value:ArrayCollection):void

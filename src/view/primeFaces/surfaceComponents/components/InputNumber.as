@@ -189,6 +189,23 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber percentWidth="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber style="width:80%;"/&gt;</listing>
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
+        }
+
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -206,6 +223,23 @@ package view.primeFaces.surfaceComponents.components
         override public function get width():Number
         {
             return super.width;
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;InputNumber percentHeight="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:inputNumber style="height:80%;"/&gt;</listing>
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
         }
 
         [PercentProxy("percentHeight")]

@@ -138,6 +138,23 @@ package view.primeFaces.surfaceComponents.components
 			_isSelected = value;
 		}
 
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList percentWidth="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:autoComplete style="width:80%;"/&gt;</listing>
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
+        }
+
         [PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
@@ -157,6 +174,23 @@ package view.primeFaces.surfaceComponents.components
             return super.width;
         }
 
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;DropDownList percentHeight="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:autoComplete style="height:80%;"/&gt;</listing>
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
+        }
+
         [PercentProxy("percentHeight")]
         [Inspectable(category="General")]
         [Bindable("heightChanged")]
@@ -169,7 +203,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;DropDownList height="30"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:button style="width:100px;height:30px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:autoComplete style="width:100px;height:30px;"/&gt;</listing>
          */
         override public function get height():Number
         {

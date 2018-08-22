@@ -1,7 +1,9 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
+    import mx.containers.GridItem;
+
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
     
@@ -201,34 +203,6 @@ package view.primeFaces.surfaceComponents.components
             _isSelected = value;
         }
 
-        private var _panelGridValue:String = "";
-
-        [Bindable("panelGridValueChanged")]
-        /**
-         * <p>PrimeFaces: <strong>value</strong></p>
-         *
-         * @example
-         * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;Column&gt;#{value}&lt;Column/&gt;</listing>
-         * @example
-         * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:column&gt;#{value}&lt;p:column/&gt;</listing>
-         */
-        public function get panelGridValue():String
-        {
-            return _panelGridValue;
-        }
-
-        public function set panelGridValue(value:String):void
-        {
-            if (_panelGridValue == value) return;
-			
-			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "panelGridValue", _panelGridValue, value);
-            _panelGridValue = value;
-
-            dispatchEvent(new Event("panelGridValueChanged"));
-        }
-
         /**
          * <p>PrimeFaces: <strong>headerRowCount (Optional)</strong></p>
          *
@@ -349,26 +323,28 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             var bodyRows:XMLList = xml.Row;
-            var rowCount:int = 1;
-            var columnCount:int = 1;
+            var header:XMLList = xml.Header.Row;
+            var rCount:int = 0;
 
-            /*if ("@headerRowCount" in xml)
+            if ("@headerRowCount" in xml)
             {
                 this.headerRowCount = xml.@headerRowCount;
             }
             else
             {
-           	}*/
-			
-			// lets parse everything from XML other than
-			// reading from @headerRowCount
-			var header:XMLList = xml.Header.Row;
-			rowCount = header.length();
-			if (rowCount > 0) this.headerRowCount = rowCount;
-			else this.headerRowCount = 1;
+                rCount = header.length();
+                if (rCount > 0)
+                {
+                    this.headerRowCount = rCount;
+                }
+                else
+                {
+                    this.headerRowCount = 1;
+                }
+            }
+
 			this.headerRowTitles = [];
-			
-			for (var headerIndex:int; headerIndex < rowCount; headerIndex++)
+			for (var headerIndex:int = 0; headerIndex < this.headerRowCount; headerIndex++)
 			{
 				var tmpArr:Array = [];
 				for each (var headerTitle:XML in header[headerIndex].Column)
@@ -385,10 +361,10 @@ package view.primeFaces.surfaceComponents.components
             }
             else
             {
-                rowCount = bodyRows.length();
-                if (rowCount > 0)
+                rCount = bodyRows.length();
+                if (rCount > 0)
                 {
-                    this.rowCount = rowCount;
+                    this.rowCount = rCount;
                 }
                 else
                 {
@@ -403,16 +379,18 @@ package view.primeFaces.surfaceComponents.components
             else
             {
                 var columns:XMLList = bodyRows[0].Column;
-                columnCount = columns.length();
-                if (columnCount > 0)
+                var colCount = columns.length();
+                if (colCount > 0)
                 {
-                    this.columnCount = columnCount;
+                    this.columnCount = colCount;
                 }
                 else
                 {
                     this.columnCount = 1;
                 }
             }
+
+            this.callLater(createChildrenFromXML, [bodyRows, callback]);
         }
 
         public function toCode():XML
@@ -542,13 +520,9 @@ package view.primeFaces.surfaceComponents.components
                     {
                         xmlValue = "<Column>" + this.header.getTitle(row, col) + "</Column>";
                     }
-                    else if (!this.panelGridValue)
-                    {
-                        xmlValue = "<Column></Column>";
-                    }
                     else
                     {
-                        xmlValue = "<Column>#{" + this.panelGridValue + "}</Column>";
+                        xmlValue = "<Column></Column>";
                     }
 
                     var colXML:XML = new XML(xmlValue);
@@ -609,6 +583,29 @@ package view.primeFaces.surfaceComponents.components
                 }
 
                 xml.appendChild(rowXML);
+            }
+        }
+
+        private function createChildrenFromXML(bodyRows:XMLList, callback:Function):void
+        {
+            for (var rowIndex:int = 0; rowIndex < this.rowCount; rowIndex++)
+            {
+                var rowItem:GridRow = this.body.getElementAt(rowIndex) as GridRow;
+                var columnsXML:XMLList = bodyRows[rowIndex].Column;
+                for (var colIndex:int = 0; colIndex < this.columnCount; colIndex++)
+                {
+                    var colItem:GridItem = rowItem.getElementAt(colIndex) as GridItem;
+                    var container:Div = colItem.getElementAt(0) as Div;
+                    var colXML:XML = columnsXML[colIndex];
+
+                    for each (var columnContent:XML in colXML)
+                    {
+                        if (columnContent)
+                        {
+                            callback(container, columnContent);
+                        }
+                    }
+                }
             }
         }
     }

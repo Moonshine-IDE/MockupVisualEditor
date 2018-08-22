@@ -4,9 +4,8 @@ package view.primeFaces.surfaceComponents.components
     
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
-    import mx.core.UIComponent;
     import mx.events.CollectionEvent;
-    
+
     import spark.components.NavigatorContent;
     import spark.events.IndexChangeEvent;
     
@@ -16,6 +15,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IComponentSizeOutput;
+    import view.interfaces.IDiv;
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -64,7 +64,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:tabView&gt;
      * </pre>
      */
-    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
+    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "TabView";
@@ -100,6 +100,20 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var tabViewContentHeightChanged:Boolean;
+
+        private var _div:Div;
+        public function get div():Div
+        {
+            if (selectedItem)
+            {
+                var navContent:NavigatorContent = (selectedItem as NavigatorContent);
+                if (navContent.numElements > 0)
+                {
+                    _div = (selectedItem as NavigatorContent).getElementAt(0) as Div;
+                }
+            }
+            return _div;
+        }
 
         private var _widthOutput:Boolean = true;
         private var widthOutputChanged:Boolean;
@@ -313,14 +327,29 @@ package view.primeFaces.surfaceComponents.components
         override public function addElement(element:IVisualElement):IVisualElement
         {
 			_propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, "addItemAt", element, element);
-			
+			var divContent:Div;
+
             if (element is NavigatorContent)
             {
-                return super.addElement(element);
+                divContent = new Div();
+                divContent.percentHeight = divContent.percentWidth = 100;
+
+                element = super.addElement(element);
+                (element as NavigatorContent).addElement(divContent);
+
+                return element;
             }
             else
             {
-                return (this.selectedItem as NavigatorContent).addElement(element);
+                divContent = this.div;
+                if (divContent)
+                {
+                    return divContent.addElement(element);
+                }
+                else
+                {
+                    return (this.selectedItem as NavigatorContent).addElement(element);
+                }
             }
 			
 			dispatchEvent(new Event("itemAdded"));
@@ -370,10 +399,18 @@ package view.primeFaces.surfaceComponents.components
             for(var i:int = 0; i < tabsCount; i++)
             {
                 var tabXML:XML = tabsXML[i];
+                var tabChildren:XMLList = tabXML.Div;
+
                 var tab:NavigatorContent = new NavigatorContent();
                 tab.label = tabXML.@title;
-
-                this.addElement(tab);
+                if (tabChildren.length() == 1)
+                {
+                    super.addElement(tab);
+                }
+                else
+                {
+                    this.addElement(tab);
+                }
 
                 this.tabFromXML(tab, tabXML, callback);
             }
@@ -453,6 +490,26 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        override protected function partAdded(partName:String, instance:Object):void
+        {
+            super.partAdded(partName, instance);
+
+            if (instance == tabBar)
+            {
+                tabBar.addEventListener(IndexChangeEvent.CHANGE, onTabChange);
+            }
+        }
+
+        override protected function partRemoved(partName:String, instance:Object):void
+        {
+            super.partRemoved(partName, instance);
+
+            if (instance == tabBar)
+            {
+                tabBar.removeEventListener(IndexChangeEvent.CHANGE, onTabChange);
+            }
+        }
+
         private function tabToXML(index:int):XML
         {
             var xml:XML = new XML(<tab/>);
@@ -475,10 +532,22 @@ package view.primeFaces.surfaceComponents.components
         {
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();
+            var container:Div;
+            if (tab.numElements > 0)
+            {
+                container = tab.getElementAt(0) as Div;
+            }
             for(var i:int = 0; i < childCount; i++)
             {
                 var childXML:XML = elementsXML[i];
-                callback(tab, childXML);
+                if (container)
+                {
+                    callback(container, childXML);
+                }
+                else
+                {
+                    callback(tab, childXML);
+                }
             }
         }
 
@@ -488,7 +557,18 @@ package view.primeFaces.surfaceComponents.components
             if (!selectedItem) return elementsHeight;
 
             var visualElementContainer:IVisualElementContainer = (selectedItem as IVisualElementContainer);
+            var divContainer:Div;
             var numEl:int = visualElementContainer.numElements;
+            if (numEl > 0)
+            {
+                divContainer = visualElementContainer.getElementAt(0) as Div;
+                if (divContainer)
+                {
+                    visualElementContainer = divContainer as IVisualElementContainer;
+                    numEl = visualElementContainer.numElements;
+                }
+            }
+
             for (var i:int = 0; i < numEl; i++)
             {
                 var contentGroupChild:IVisualElement = visualElementContainer.getElementAt(i);
@@ -501,6 +581,11 @@ package view.primeFaces.surfaceComponents.components
             }
 
             return elementsHeight;
+        }
+
+        private function onTabChange(event:IndexChangeEvent):void
+        {
+            dispatchEvent(event.clone());
         }
     }
 }

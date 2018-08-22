@@ -13,5 +13,6 @@
 	<primeFaces:TabForm />
 	<primeFaces:TabViewOrientationForm textProperty="orientation" label="Orientation"/>
 	<forms:ToggleButtonSelectedForm label="Scrollable" textProperty="scrollable"/>
+	<primeFaces:DivLayoutForm />
 
 </suportclasses:BasePropertyEditor>

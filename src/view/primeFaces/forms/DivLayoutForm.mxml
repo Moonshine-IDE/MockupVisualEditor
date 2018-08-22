@@ -64,17 +64,28 @@
             {
                 if (value)
                 {
+                    value.addEventListener("change", onHostChange);
                     this._selectedItem = (value as IDiv).div;
                 }
                 else
                 {
+                    _selectedItem.removeEventListener("change", onHostChange);
                     this._selectedItem = value;
                 }
-				
-				updateBinding();
-                this.dispatchEvent(new Event(Event.CHANGE));
 
                 this.callLater(refreshSelection);
+                this.dispatchEvent(new Event(Event.CHANGE));
+            }
+        }
+
+        private function onHostChange(event:Event):void
+        {
+            if (event.currentTarget is IDiv)
+            {
+                this._selectedItem = (event.currentTarget as IDiv).div;
+
+                this.callLater(refreshSelection);
+                this.dispatchEvent(new Event(Event.CHANGE));
             }
         }
 

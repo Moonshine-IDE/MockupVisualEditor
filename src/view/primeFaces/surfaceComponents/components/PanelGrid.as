@@ -158,7 +158,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;PanelGrid percentWidth="80"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;panelGrid style="width:80%;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:panelGrid style="width:80%;"/&gt;</listing>
          */
         override public function get percentWidth():Number
         {
@@ -177,7 +177,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;PanelGrid width="120"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;panelGrid style="width:120px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:panelGrid style="width:120px;"/&gt;</listing>
          */
         override public function get width():Number
         {
@@ -194,7 +194,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;PanelGrid percentHeight="80"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;panelGrid style="height:80%;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:panelGrid style="height:80%;"/&gt;</listing>
          */
         override public function get percentHeight():Number
         {
@@ -213,7 +213,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;PanelGrid height="120"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;panelGrid style="height:120px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:panelGrid style="height:120px;"/&gt;</listing>
          */
         override public function get height():Number
         {

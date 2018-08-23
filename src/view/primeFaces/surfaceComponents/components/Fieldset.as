@@ -365,11 +365,6 @@ package view.primeFaces.surfaceComponents.components
             xml.setNamespace(primeFacesNamespace);
 
             //In my opinion this is ans issue in PrimeFaces. If I add height to Fieldset and it's toggleable it doesn't work.
-            var fieldsetHeight:Number = this.height;
-            if (this.toggleable)
-            {
-                fieldsetHeight = Number.NaN;
-            }
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 

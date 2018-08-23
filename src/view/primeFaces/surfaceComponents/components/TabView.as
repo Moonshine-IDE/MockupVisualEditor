@@ -370,6 +370,7 @@ package view.primeFaces.surfaceComponents.components
             if (element is NavigatorContent)
             {
                 divContent = new Div();
+                divContent.setStyle("borderVisible", false);
                 divContent.percentHeight = divContent.percentWidth = 100;
 
                 element = super.addElement(element);
@@ -584,8 +585,14 @@ package view.primeFaces.surfaceComponents.components
                 }
                 else
                 {
-                    callback(tab, childXML);
+                    container = new Div();
+                    container.percentWidth = container.percentHeight = 100;
+                    container.fromXML(childXML, callback);
+
+                    tab.addElement(container);
                 }
+
+                container.setStyle("borderVisible", false);
             }
         }
 

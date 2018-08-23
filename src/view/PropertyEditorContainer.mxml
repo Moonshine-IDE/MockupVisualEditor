@@ -23,7 +23,7 @@
 	</s:Group>
 	<s:VGroup id="selectionHolder" excludeFrom="empty"
 			  top="0" right="0" bottom="0" left="0">
-		<view:PropertyEditorHeader componentName="{(selectedItem as Object).className}"/>
+		<view:PropertyEditorHeader id="propertyEditorHeader" />
 		<s:Scroller percentWidth="100" percentHeight="100">
 			<s:Group id="editorHolder" 
 					 width="100%"/>
@@ -31,8 +31,6 @@
 	</s:VGroup>
 
 	<fx:Script><![CDATA[
-		import utils.MoonshineBridgeUtils;
-		
 		import view.flex.propertyEditors.GenericPropertyEditor;
 		import view.interfaces.IPropertyEditor;
 		import view.interfaces.ISurfaceComponent;
@@ -75,10 +73,13 @@
                 this._editor.left = 0;
                 this._editor.selectedItem = value;
 				editorHolder.addElement(this._editor);
+
+				propertyEditorHeader.componentName = selectedItem["className"];
             }
             else
             {
                 this.currentState = "empty";
+				propertyEditorHeader.componentName = "";
             }
             this.dispatchEvent(new Event(Event.CHANGE));
         }

@@ -31,10 +31,12 @@
 	</s:VGroup>
 
 	<fx:Script><![CDATA[
+		import utils.MoonshineBridgeUtils;
 		
 		import view.flex.propertyEditors.GenericPropertyEditor;
 		import view.interfaces.IPropertyEditor;
 		import view.interfaces.ISurfaceComponent;
+		import view.interfaces.IVisualEditorLibraryBridge;
 		
         private var _editor:IPropertyEditor;
 
@@ -80,5 +82,25 @@
             }
             this.dispatchEvent(new Event(Event.CHANGE));
         }
+		
+		private var _visualEditorFilePath:String;
+		public function set visualEditorFilePath(value:String):void
+		{
+			_visualEditorFilePath = value;
+		}
+		public function get visualEditorFilePath():String
+		{
+			return _visualEditorFilePath;
+		}
+		
+		private var _moonshineBridge:IVisualEditorLibraryBridge;
+		public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
+		{
+			_moonshineBridge = value;
+		}
+		public function get moonshineBridge():IVisualEditorLibraryBridge
+		{
+			return _moonshineBridge;
+		}
         ]]></fx:Script>
 </s:BorderContainer>

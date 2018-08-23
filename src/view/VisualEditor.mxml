@@ -55,12 +55,12 @@
 
 			public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
 			{
-				MoonshineBridgeUtils.moonshineBridge = value;
+				MoonshineBridgeUtils.moonshineBridge = propertyEditor.moonshineBridge = value;
 			}
 			
 			public function set visualEditorFilePath(value:String):void
 			{
-				MoonshineBridgeUtils.currentFilePath = value;
+				MoonshineBridgeUtils.currentFilePath = propertyEditor.visualEditorFilePath = value;
 			}
 
 			public function saveEditedFile():void

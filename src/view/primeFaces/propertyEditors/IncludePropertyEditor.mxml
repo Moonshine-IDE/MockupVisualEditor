@@ -4,15 +4,23 @@
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
 							      xmlns:forms="view.forms.*"
-								  creationComplete="onCreationCompletes(event)" addedToStage="trace('dd')">
+								  creationComplete="onCreationCompletes(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
 			import utils.MoonshineBridgeUtils;
 			
+			import view.PropertyEditorContainer;
+			
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
+				if (parentDocument is PropertyEditorContainer)
+				{
+					MoonshineBridgeUtils.moonshineBridge = (parentDocument as PropertyEditorContainer).moonshineBridge;
+					MoonshineBridgeUtils.currentFilePath = (parentDocument as PropertyEditorContainer).visualEditorFilePath;
+				}
+				
 				MoonshineBridgeUtils.moonshineBridge.getXhtmlFileUpdates(MoonshineBridgeUtils.onXHtmlFilesUpdated);
 				ddl.collectionHost = MoonshineBridgeUtils;
 			}

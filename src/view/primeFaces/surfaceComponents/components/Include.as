@@ -15,6 +15,7 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MoonshineBridgeUtils;
     import utils.MxmlCodeUtils;
+    import utils.VisualEditorType;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
@@ -273,9 +274,16 @@ package view.primeFaces.surfaceComponents.components
 
         public function toCode():XML
         {
-            if (!hasFileList()) return new XML();
+			var xml:XML;
+            if (!hasFileList()) 
+			{
+				XML.ignoreComments = false;
+				xml = new XML('<'+ VisualEditorType.PRIME_FACES_XML_COMMENT_ONLY +'/>');
+				xml.appendChild(<!-- NOTE: Include component code will generate with valid target only. -->);
+				return xml;
+			}
 
-			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
+			xml = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
 			var primeFacesNamespace:Namespace = new Namespace("ui", "http://xmlns.jcp.org/jsf/facelets");
 			xml.addNamespace(primeFacesNamespace);
 			xml.setNamespace(primeFacesNamespace);

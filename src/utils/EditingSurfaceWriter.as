@@ -2,6 +2,7 @@ package utils
 {
     import mx.core.IVisualElementContainer;
     import mx.core.UIComponent;
+    
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
 
@@ -70,14 +71,16 @@ package utils
                         continue;
                     }
 
+					XML.ignoreComments = false;
                     var code:XML = element.toCode();
+					var isCommentOnly:Boolean = code.toXMLString().indexOf(VisualEditorType.PRIME_FACES_XML_COMMENT_ONLY) != -1;
                     if (mainContainer)
                     {
-                        mainContainer.appendChild(code);
+                        mainContainer.appendChild(!isCommentOnly ? code : code.children());
                     }
                     else
                     {
-                        xml.appendChild(code);
+                        xml.appendChild(!isCommentOnly ? code : code.children());
                     }
                 }
 

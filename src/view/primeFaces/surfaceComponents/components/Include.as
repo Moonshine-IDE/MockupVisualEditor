@@ -15,6 +15,7 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MoonshineBridgeUtils;
     import utils.MxmlCodeUtils;
+    import utils.VisualEditorGlobalTags;
     import utils.VisualEditorType;
     import utils.XMLCodeUtils;
     
@@ -278,8 +279,8 @@ package view.primeFaces.surfaceComponents.components
             if (!hasFileList()) 
 			{
 				XML.ignoreComments = false;
-				xml = new XML('<'+ VisualEditorType.PRIME_FACES_XML_COMMENT_ONLY +'/>');
-				xml.appendChild(<!-- NOTE: Include component code will generate with valid target only. -->);
+				xml = new XML('<root><'+ VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY +'/></root>');
+				xml.children().appendChild(<!-- NOTE: Include component code will generate with valid target only. -->);
 				return xml;
 			}
 

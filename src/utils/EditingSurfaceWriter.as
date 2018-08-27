@@ -73,14 +73,15 @@ package utils
 
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
-					var isCommentOnly:Boolean = code.toXMLString().indexOf(VisualEditorType.PRIME_FACES_XML_COMMENT_ONLY) != -1;
+					var commentOnlyXML:XMLList = (code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY).length() > 0) ?
+						code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY) : null;
                     if (mainContainer)
                     {
-                        mainContainer.appendChild(!isCommentOnly ? code : code.children());
+                        mainContainer.appendChild(!commentOnlyXML ? code : commentOnlyXML.children());
                     }
                     else
                     {
-                        xml.appendChild(!isCommentOnly ? code : code.children());
+                        xml.appendChild(!commentOnlyXML ? code : commentOnlyXML.children());
                     }
                 }
 

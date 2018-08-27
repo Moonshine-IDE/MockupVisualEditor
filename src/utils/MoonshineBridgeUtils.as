@@ -11,7 +11,6 @@ package utils
 		public static var moonshineBridge:IVisualEditorLibraryBridge;
 
         private static var _filesList:ArrayCollection;
-		private static var _isTabChangeHandlerAdded:Boolean;
 
 		public static function get filesList():ArrayCollection
 		{
@@ -45,6 +44,11 @@ package utils
 		public static function getVisualEditorComponent():VisualEditor
 		{
 			return moonshineBridge.getVisualEditorComponent();
+		}
+
+		public static function getRelativeFilePath():String
+		{
+			return moonshineBridge.getRelativeFilePath();
 		}
 	}
 }

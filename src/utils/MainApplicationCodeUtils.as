@@ -104,6 +104,14 @@ package utils
 			cssStyleSheetXml.@type = "text/css";
 			cssStyleSheetXml.@href = "resources/moonshine-layout-styles.css";
 
+            headXml.appendChild(cssStyleSheetXml);
+
+			var relativeFilePath:String = MoonshineBridgeUtils.getRelativeFilePath();
+            cssStyleSheetXml = new XML("<link></link>");
+            cssStyleSheetXml.@rel = "stylesheet";
+            cssStyleSheetXml.@type = "text/css";
+            cssStyleSheetXml.@href = relativeFilePath + "/assets/moonshine-layout-styles.css";
+
 			headXml.appendChild(cssStyleSheetXml);
 
 			if (!title)
@@ -127,7 +135,7 @@ package utils
 			
 			xml.appendChild(headXml);
 			xml.appendChild(bodyXML);
-			
+
 			return xml;
 		}
 	}

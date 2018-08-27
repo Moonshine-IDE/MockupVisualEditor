@@ -10,5 +10,6 @@ package view.interfaces
 		function getVisualEditorComponent():VisualEditor;
 		function getCustomTooltipFunction():Function;
 		function getPositionTooltipFunction():Function;
+		function getRelativeFilePath():String;
 	}
 }

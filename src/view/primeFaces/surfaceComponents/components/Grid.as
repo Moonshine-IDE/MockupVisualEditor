@@ -382,6 +382,7 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            var maxColumnsInRow:int = getMaxColumnsInRow();
             var gridRowNumElements:int = this.numElements;
             for (var row:int = 0; row < gridRowNumElements; row++)
             {
@@ -396,7 +397,7 @@ package view.primeFaces.surfaceComponents.components
                     var div:Div = gridCol.getElementAt(0) as Div;
 
                     var colXML:XML = new XML("<Column />");
-                    colXML["@class"] = this.getClassNameBasedOnColumns(gridRow);
+                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements, maxColumnsInRow);
 
                     colXML.appendChild(div.toXML());
 
@@ -469,6 +470,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             var gridRowNumElements:int = this.numElements;
+            var maxColumnsInRow:int = getMaxColumnsInRow();
             for (var row:int = 0; row < gridRowNumElements; row++)
             {
                 var rowXML:XML = new XML("<div />");
@@ -482,7 +484,7 @@ package view.primeFaces.surfaceComponents.components
                     var div:Div = gridCol.getElementAt(0) as Div;
 
                     var colXML:XML = new XML("<div />");
-                    colXML["@class"] = this.getClassNameBasedOnColumns(gridRow);
+                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements, maxColumnsInRow);
 
                     var divXML:XML = removeHeightFromInternalDiv(div.toCode());
 
@@ -572,16 +574,21 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
-        private function getClassNameBasedOnColumns(gridRow:GridRow):String
+        private function getClassNameBasedOnColumns(columnCount:int, maxColumnInRow:int):String
         {
-            var uigDefaultValue:int = Math.ceil(maxColumnCount / gridRow.numElements);
-            var uigDefault:String = "ui-g-" + uigDefaultValue;
-            var uigDesktop:String = "ui-lg-" + uigDefaultValue;
+            if (columnCount > maxColumnCount)
+            {
+                columnCount = maxColumnCount;
+            }
 
-            var uigOtherScreensValue:int = Math.ceil(uigDefaultValue / 2);
-            var uigPhones:String = "ui-sm-" + uigOtherScreensValue;
-            var uigTablets:String = "ui-md-" + uigOtherScreensValue;
-            var uigBigScreens:String = "ui-xl-" + uigDefaultValue;
+            var columnFactor:int = maxColumnInRow / columnCount;
+
+            var uigDefault:String = "ui-g-" + columnFactor;
+            var uigDesktop:String = "ui-lg-" + columnFactor;
+
+            var uigPhones:String = "ui-sm-" + columnFactor;
+            var uigTablets:String = "ui-md-" + columnFactor;
+            var uigBigScreens:String = "ui-xl-" + columnFactor;
 
             return uigDefault + " " + uigDesktop + " " + uigPhones + " " + uigTablets + " " + uigBigScreens;
         }

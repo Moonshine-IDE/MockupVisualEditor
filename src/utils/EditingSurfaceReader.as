@@ -56,7 +56,7 @@ package utils
                     for(var i:int = 0; i < elementCount; i++)
                     {
                         var elementXML:XML = elements[i];
-                        return itemFromXML(parent, elementXML);
+                        itemFromXML(parent, elementXML);
                     }
 					return null;
 				}

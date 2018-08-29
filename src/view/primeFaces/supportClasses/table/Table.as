@@ -17,7 +17,7 @@ package view.primeFaces.supportClasses.table
 		{
             super.direction = ContainerDirection.VERTICAL_LAYOUT;
 
-            this.headerRowCount = 1;
+            this.headerRowCount = -1;
             this.rowCount = 1;
             this.columnCount = 1;
 		}
@@ -42,7 +42,7 @@ package view.primeFaces.supportClasses.table
             return _body;
         }
 
-        protected var _headerRowCount:int;
+        protected var _headerRowCount:int = -1;
 		private var headerRowCountChanged:Boolean;
 		
 		public function get headerRowCount():int
@@ -128,6 +128,11 @@ package view.primeFaces.supportClasses.table
 			}
 		}
 
+		public function get hasHeader():Boolean
+		{
+			return this.headerRowCount > 0;
+		}
+
 		public function invalidateBorders():void
 		{
 			bordersChanged = true;
@@ -145,6 +150,7 @@ package view.primeFaces.supportClasses.table
                 this._header.columnBorderColor = "#000000";
                 this._header.percentWidth = 100;
                 this._header.percentHeight = Number.NaN;
+				this._header.visible = this._header.includeInLayout = false;
 
                 this.addElement(_header);
             }
@@ -266,6 +272,7 @@ package view.primeFaces.supportClasses.table
         private function addHeaders():void
         {
 			this.header.removeAllElements();
+			this.header.visible = this.header.includeInLayout = this.hasHeader;
 
             for (var i:int = 0; i < this.headerRowCount; i++)
             {

@@ -7,13 +7,13 @@
 		<![CDATA[
         import mx.collections.ArrayList;
         import mx.events.FlexEvent;
-        
+
         import spark.events.GridItemEditorEvent;
         import spark.events.GridSelectionEvent;
         import spark.events.IndexChangeEvent;
-        
+
         import data.GridListItem;
-        
+
         import view.interfaces.ISurfaceComponent;
         import view.primeFaces.supportClasses.GridBase;
         import view.primeFaces.supportClasses.table.HeaderGrid;
@@ -60,10 +60,10 @@
 
         override public function set selectedItem(value:ISurfaceComponent):void
         {
-			if (selectedItem) selectedItem.removeEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated);
-			
+            if (selectedItem) selectedItem.removeEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated);
+
             super.selectedItem = value;
-			if (value) selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
+            if (value) selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
         }
 
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
@@ -123,9 +123,12 @@
             rowItem = dgRows.selectedItem as GridListItem;
             this.columnsDataProvider = rowItem.columns;
 
-            rowItem = dgHeaderRows.selectedItem as GridListItem;
-			this.headerColumnsDataProvider.removeAll();
-			this.headerColumnsDataProvider.addAll(rowItem.columns);
+            if (selectedPanelGrid.hasHeader)
+            {
+                rowItem = dgHeaderRows.selectedItem as GridListItem;
+                this.headerColumnsDataProvider.removeAll();
+                this.headerColumnsDataProvider.addAll(rowItem.columns);
+            }
 
             selectedPanelGrid.addColumn();
 
@@ -153,12 +156,20 @@
 
         private function deleteColumnButton_clickHandler(event:MouseEvent):void
         {
-			this.headerColumnsDataProvider.removeItemAt(columnList.selectedIndex);
-			
+            if (selectedPanelGrid.hasHeader)
+            {
+                this.headerColumnsDataProvider.removeItemAt(columnList.selectedIndex);
+            }
+
             var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
             if (rowItem.columns.length > selectedPanelGrid.body.selectedColumn)
             {
-                rowItem.columns.removeItemAt(selectedPanelGrid.body.selectedColumn);
+                var dgRowsCount:int = rowsDataProvider.length;
+                for (var row:int = 0; row < dgRowsCount; row++)
+                {
+                    rowItem = rowsDataProvider.getItemAt(row) as GridListItem;
+                    rowItem.columns.removeItemAt(selectedPanelGrid.body.selectedColumn);
+                }
             }
 
             selectedPanelGrid.removeColumn(selectedPanelGrid.body.selectedColumn);
@@ -173,12 +184,27 @@
             dgHeaderRows.columnHeaderGroup.visible = dgHeaderRows.columnHeaderGroup.includeInLayout = false;
             dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
 
-            initializeRowsColumns(headerRowsDataProvider, selectedPanelGrid.headerRowCount, selectedPanelGrid.header);
+            headerLabel.visible = headerLabel.includeInLayout = selectedPanelGrid.hasHeader;
+            headerRowsItem.visible = headerRowsItem.includeInLayout = selectedPanelGrid.hasHeader;
+            headerColumnsItem.visible = headerColumnsItem.includeInLayout = selectedPanelGrid.hasHeader;
+
+            if (selectedPanelGrid.hasHeader)
+            {
+                initializeRowsColumns(headerRowsDataProvider, selectedPanelGrid.headerRowCount, selectedPanelGrid.header);
+            }
+
             initializeRowsColumns(rowsDataProvider, selectedPanelGrid.rowCount, selectedPanelGrid.body);
 
             this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
-			if (this.headerColumnsDataProvider) this.headerColumnsDataProvider.removeAll();
-			this.headerColumnsDataProvider.addAll(this.headerRowsDataProvider.getItemAt(0).columns);
+
+            if (selectedPanelGrid.hasHeader)
+            {
+                if (this.headerColumnsDataProvider)
+                {
+                    this.headerColumnsDataProvider.removeAll();
+                }
+                this.headerColumnsDataProvider.addAll(this.headerRowsDataProvider.getItemAt(0).columns);
+            }
 
             selectRow(selectedPanelGrid.body, 0);
             //this.selectedCell = this.getSelectedCell();
@@ -280,15 +306,14 @@
 
             grid.selectedRow = grid.selectedColumn = 0;
         }
-			
-		]]>
+        ]]>
 	</fx:Script>
     <suportclasses:layout>
         <s:FormLayout horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
-    <s:FormHeading label="Header Rows/Columns" skinClass="skins.FormHeadingSkin"/>
-    <s:FormItem label="Rows" skinClass="skins.StackedFormItemSkin">
+    <s:FormHeading id="headerLabel" label="Header Rows/Columns" skinClass="skins.FormHeadingSkin"/>
+    <s:FormItem id="headerRowsItem" label="Rows" skinClass="skins.StackedFormItemSkin">
         <s:DataGrid id="dgHeaderRows"
                     width="100%" maxHeight="350"
                     sortableColumns="false" draggableColumns="false"
@@ -301,7 +326,7 @@
             </s:columns>
         </s:DataGrid>
     </s:FormItem>
-    <s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
+    <s:FormItem id="headerColumnsItem" label="Columns" skinClass="skins.StackedFormItemSkin">
         <s:DataGrid id="dgHeaderColumns"
                     width="100%" maxHeight="300" editable="true"
                     sortableColumns="false" draggableColumns="false" requireSelection="true"

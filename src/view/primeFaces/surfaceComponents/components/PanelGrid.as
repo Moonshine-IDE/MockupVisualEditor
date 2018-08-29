@@ -31,6 +31,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
+    [Exclude(name="heightOutput", kind="property")]
+    [Exclude(name="widthOutput", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces panelGrid component.</p>
@@ -371,7 +373,7 @@ package view.primeFaces.surfaceComponents.components
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
 			var deleteIndex:int;
-			var i:Object;
+			var v:Object;
 			var isRemoval:Boolean;
 			switch(nameField)
 			{
@@ -394,22 +396,35 @@ package view.primeFaces.surfaceComponents.components
 					{
 						isRemoval = false;
 					}
-					for each (i in value)
+					for each (v in value)
 					{
 						if (isRemoval)
 						{
-							deleteIndex = i.parent.getElementIndex(i.object);
-							i.parent.removeElementAt(deleteIndex);
+							deleteIndex = v.parent.getElementIndex(v.object);
+							v.parent.removeElementAt(deleteIndex);
 						}
 						else
 						{
-							if (nameField == "removeColumnAt" || nameField == "removeRowAt") i.parent.addElementAt(i.object, i.index);
-							else i.parent.addElement(i.object);
+							if (nameField == "removeColumnAt" || nameField == "removeRowAt")
+                            {
+                                v.parent.addElementAt(v.object, v.index);
+                            }
+							else
+                            {
+                                v.parent.addElement(v.object);
+                            }
 						}
 					}
 					
-					if (nameField == "addColumnAt" || nameField == "removeColumnAt") this._columnCount = isRemoval ? this._columnCount - 1 : this._columnCount + 1;
-					else if (nameField == "addRowAt" || nameField == "removeRowAt") this._rowCount = isRemoval ? this._rowCount - 1 : this._rowCount + 1;
+					if (nameField == "addColumnAt" || nameField == "removeColumnAt")
+                    {
+                        this._columnCount = isRemoval ? this._columnCount - 1 : this._columnCount + 1;
+                    }
+					else if (nameField == "addRowAt" || nameField == "removeRowAt")
+                    {
+                        this._rowCount = isRemoval ? this._rowCount - 1 : this._rowCount + 1;
+                    }
+
 					dispatchEvent(new Event(Grid.EVENT_CHILDREN_UPDATED));
 					break;
 				default:
@@ -459,21 +474,24 @@ package view.primeFaces.surfaceComponents.components
                 }
                 else
                 {
-                    this.headerRowCount = 1;
+                    this.headerRowCount = -1;
                 }
             }
 
-			this.headerRowTitles = [];
-			for (var headerIndex:int = 0; headerIndex < this.headerRowCount; headerIndex++)
-			{
-				var tmpArr:Array = [];
-				for each (var headerTitle:XML in header[headerIndex].Column)
-				{
-					tmpArr.push(headerTitle.toString());
-				}
-				
-				headerRowTitles.push(tmpArr);
-			}
+            if (this.hasHeader)
+            {
+                this.headerRowTitles = [];
+                for (var headerIndex:int = 0; headerIndex < this.headerRowCount; headerIndex++)
+                {
+                    var tmpArr:Array = [];
+                    for each (var headerTitle:XML in header[headerIndex].Column)
+                    {
+                        tmpArr.push(headerTitle.toString());
+                    }
+
+                    headerRowTitles.push(tmpArr);
+                }
+            }
 
             if ("@rowCount" in xml)
             {
@@ -555,7 +573,7 @@ package view.primeFaces.surfaceComponents.components
 
         public function addColumn():void
         {
-            var tmpArr:Array = addColumnToRow(this.header, headerRowCount - 1, 1);
+            var tmpArr:Array = this.hasHeader ? addColumnToRow(this.header, headerRowCount - 1, 1) : [];
             for (var row:int = 0; row < this.rowCount; row++)
             {
 				tmpArr = tmpArr.concat(addColumnToRow(this.body, row, 1));
@@ -595,8 +613,11 @@ package view.primeFaces.surfaceComponents.components
 				tmpArr.push({object:this.body.removeColumn(row, columnIndex), parent:this.body.getElementAt(row), index:columnIndex});
             }
 
-            var colItem:IVisualElement = this.header.removeColumn(0, columnIndex);
-			tmpArr.push({object:colItem, parent:this.header.getElementAt(0), index:columnIndex});
+            if (this.hasHeader)
+            {
+                var colItem:IVisualElement = this.header.removeColumn(0, columnIndex);
+                tmpArr.push({object: colItem, parent: this.header.getElementAt(0), index: columnIndex});
+            }
 
             _columnCount -= 1;
 
@@ -654,6 +675,8 @@ package view.primeFaces.surfaceComponents.components
 
         private function toCodeHeader(xml:XML):void
         {
+            if (!this.hasHeader) return;
+
             var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
             var facetNamespace:Namespace = new Namespace("f", "http://xmlns.jcp.org/jsf/core");
             var facet:XML = new XML("<facet/>");

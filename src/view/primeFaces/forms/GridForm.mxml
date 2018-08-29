@@ -56,7 +56,7 @@
 		override public function set selectedItem(value:ISurfaceComponent):void
 		{
 			if (selectedItem) selectedItem.removeEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated);
-			
+
 			super.selectedItem = value;
 			if (value) selectedItem.addEventListener(Grid.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
 		}
@@ -125,6 +125,8 @@
 
 				this.selectedCellDirty = true;
 				this.invalidateDisplayList();
+
+				refreshCellsNumeration(this.rowsDataProvider, "R");
 			}
 		}
 
@@ -141,6 +143,8 @@
 
 			this.selectedCellDirty = true;
 			this.invalidateDisplayList();
+
+			refreshCellsNumeration(this.columnsDataProvider, "C");
 		}
 
 		private function onGridFormCreationComplete(event:FlexEvent):void
@@ -262,7 +266,17 @@
 
 			return gridItem.getElementAt(0) as Div;
 		}
-			
+
+		private function refreshCellsNumeration(dp:ArrayList, prefix:String):void
+		{
+			var dpEnum:int = dp.length;
+			for (var i:int = 0; i < dpEnum; i++)
+			{
+				var colItem:GridListItem = dp.getItemAt(i) as GridListItem;
+				var itemValue:int = i + 1;
+				colItem.label = String(prefix + itemValue), itemValue;
+			}
+		}
 		]]>
 	</fx:Script>
     <suportclasses:layout>

@@ -17,7 +17,7 @@ package view.primeFaces.supportClasses.table
 		{
             super.direction = ContainerDirection.VERTICAL_LAYOUT;
 
-            this.headerRowCount = -1;
+            this.headerRowCount = 1;
             this.rowCount = 1;
             this.columnCount = 1;
 		}

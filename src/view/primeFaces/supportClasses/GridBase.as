@@ -54,6 +54,8 @@ package view.primeFaces.supportClasses
                 selectionChanged = true;
 
                 invalidateProperties();
+
+                dispatchEvent(new GridEvent(GridEvent.SELECTED_ROW_CHANGED, value));
             }
         }
 
@@ -73,6 +75,8 @@ package view.primeFaces.supportClasses
                 selectionChanged = true;
 
                 invalidateProperties();
+
+                dispatchEvent(new GridEvent(GridEvent.SELECTED_COLUMN_CHANGED, value));
             }
         }
 

@@ -524,6 +524,11 @@ package view.primeFaces.surfaceComponents.components
 
             return xml;
         }
+		
+		public function getComponentsChildren():Array
+		{
+			return null;
+		}
 
         override protected function dataProvider_collectionChangeHandler(event:Event):void
         {

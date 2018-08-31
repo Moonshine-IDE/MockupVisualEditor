@@ -320,6 +320,11 @@ package view.primeFaces.surfaceComponents.components
 
             return this.internalToXML();
         }
+		
+		public function getComponentsChildren():Array
+		{
+			return null;
+		}
 
         public function toCode():XML
         {

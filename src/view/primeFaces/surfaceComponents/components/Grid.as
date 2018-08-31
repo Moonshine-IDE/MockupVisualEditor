@@ -498,6 +498,11 @@ package view.primeFaces.surfaceComponents.components
 
             return xml;
         }
+		
+		public function getComponentsChildren():Array
+		{
+			return null;
+		}
 
         override public function addRow():IVisualElement
         {

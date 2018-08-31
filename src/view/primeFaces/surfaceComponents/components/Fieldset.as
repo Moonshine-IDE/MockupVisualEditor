@@ -386,6 +386,11 @@ package view.primeFaces.surfaceComponents.components
 
             return xml;
         }
+		
+		public function getComponentsChildren():Array
+		{
+			return null;
+		}
 
         override protected function onCollapsiblePanelCreationComplete(event:FlexEvent):void
         {

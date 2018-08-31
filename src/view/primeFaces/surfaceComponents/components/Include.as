@@ -295,6 +295,11 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
         }
 		
+		public function getComponentsChildren():Array
+		{
+			return null;
+		}
+		
         protected function setCommonXMLAttributes(xml:XML):void
         {
             if (!isNaN(this.percentWidth))

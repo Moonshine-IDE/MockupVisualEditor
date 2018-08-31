@@ -137,6 +137,11 @@
 			{
 				return EditingSurfaceWriter.toCode(this);
 			}
+			
+			public function getComponentsChildren():Array
+			{
+				return EditingSurfaceWriter.getComponentsChildren(this);
+			}
 		}
 
 		public function fromXML(xml:XML):void

@@ -2,9 +2,8 @@ package view.primeFaces.surfaceComponents.components
 {
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IComponentSizeOutput;
-
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -323,7 +322,22 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function getComponentsChildren():Array
 		{
-			return null;
+			var componentsArray:Array = [];
+			var elementArray:Array;
+			var element:IPrimeFacesSurfaceComponent;
+			for(var i:int = 0; i < this.numElements; i++)
+			{
+				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				if (!element)
+				{
+					continue;
+				}
+				
+				elementArray = element.getComponentsChildren();
+				if (elementArray) componentsArray.push(elementArray);
+			}
+			
+			return ((componentsArray.length > 0) ? componentsArray : null);
 		}
 
         public function toCode():XML

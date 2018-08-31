@@ -208,27 +208,6 @@ package view.primeFaces.supportClasses
             return true;
         }
 
-        protected function getMaxColumnsInRow():int
-        {
-            var columnCount:int = 0;
-            var rowNumElements:int = this.numElements;
-            for (var row:int = 0; row < rowNumElements; row++)
-            {
-                var gridRow:GridRow = this.getElementAt(row) as GridRow;
-                if (columnCount < gridRow.numElements)
-                {
-                    columnCount = gridRow.numElements;
-                }
-            }
-
-            if (columnCount > maxColumnCount)
-            {
-                return maxColumnCount;
-            }
-
-            return columnCount;
-        }
-
         protected function ensureCreateColumn(row:GridRow):GridItem
         {
             var gridItem:GridItem = new GridItem();

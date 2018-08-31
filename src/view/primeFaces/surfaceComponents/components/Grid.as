@@ -382,7 +382,6 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
-            var maxColumnsInRow:int = getMaxColumnsInRow();
             var gridRowNumElements:int = this.numElements;
             for (var row:int = 0; row < gridRowNumElements; row++)
             {
@@ -397,7 +396,7 @@ package view.primeFaces.surfaceComponents.components
                     var div:Div = gridCol.getElementAt(0) as Div;
 
                     var colXML:XML = new XML("<Column />");
-                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements, maxColumnsInRow);
+                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements);
 
                     colXML.appendChild(div.toXML());
 
@@ -470,7 +469,6 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
             var gridRowNumElements:int = this.numElements;
-            var maxColumnsInRow:int = getMaxColumnsInRow();
             for (var row:int = 0; row < gridRowNumElements; row++)
             {
                 var rowXML:XML = new XML("<div />");
@@ -484,7 +482,7 @@ package view.primeFaces.surfaceComponents.components
                     var div:Div = gridCol.getElementAt(0) as Div;
 
                     var colXML:XML = new XML("<div />");
-                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements, maxColumnsInRow);
+                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements);
 
                     var divXML:XML = removeHeightFromInternalDiv(div.toCode());
 
@@ -579,14 +577,9 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
-        private function getClassNameBasedOnColumns(columnCount:int, maxColumnInRow:int):String
+        private function getClassNameBasedOnColumns(coulumnCountInRow:int):String
         {
-            if (columnCount > maxColumnCount)
-            {
-                columnCount = maxColumnCount;
-            }
-
-            var columnFactor:int = maxColumnInRow / columnCount;
+            var columnFactor:int = maxColumnCount / coulumnCountInRow;
 
             var uigDefault:String = "ui-g-" + columnFactor;
             var uigDesktop:String = "ui-lg-" + columnFactor;

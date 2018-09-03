@@ -183,7 +183,6 @@
 
 			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
 
-			grid.selectedRow = grid.selectedColumn = 0;
 			this.selectedCell = this.getSelectedCell();
 
 			dispatchEvent(new Event(Event.CHANGE));
@@ -310,7 +309,6 @@
 		<s:DataGrid id="dgRows"
 					width="100%" maxHeight="350"
 					sortableColumns="false" draggableColumns="false"
-					requireSelection="true"
 					dataProvider="{rowsDataProvider}" selectedIndex="@{selectedGrid.selectedRow}">
 			<s:columns>
 				<s:ArrayList>
@@ -328,7 +326,7 @@
 	</s:FormItem>
 	<s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
 		<s:List id="columnList" width="100%" height="30" labelField="label"
-				dataProvider="{columnsDataProvider}" requireSelection="true"
+				dataProvider="{columnsDataProvider}"
 				selectedIndex="@{selectedGrid.selectedColumn}">
 			<s:layout>
 				<s:HorizontalLayout gap="2" horizontalAlign="left" verticalAlign="middle"/>

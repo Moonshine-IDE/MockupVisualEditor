@@ -19,9 +19,22 @@
 		<s:Scroller percentWidth="70" percentHeight="100">
 			<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"/>
 		</s:Scroller>
-		<view:PropertyEditorContainer id="propertyEditor"
-									  percentHeight="100" percentWidth="10" minWidth="250"
-									  selectedItem="{editingSurface.selectedItem}"/>
+		<s:Group width="10%" minWidth="250" height="100%">
+			<view:PropertyEditorContainer id="propertyEditor"
+										  percentWidth="100" top="0" bottom="20"
+										  selectedItem="{editingSurface.selectedItem}"
+										  visible="{bbPropertyPanel.selectedIndex==0}"/>
+			<view:ComponentsOrganizer id="componentsOrganizer"
+									  width="100%" top="0" bottom="20"
+									  visible="{bbPropertyPanel.selectedIndex==1}"/>
+			<s:ButtonBar id="bbPropertyPanel" 
+						 bottom="0" right="0" selectedIndex="0">
+				<s:ArrayList>
+					<fx:String>₲</fx:String>
+					<fx:String>₼</fx:String>
+				</s:ArrayList>
+			</s:ButtonBar>
+		</s:Group>
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 	<fx:Script><![CDATA[
 		import mx.events.FlexEvent;

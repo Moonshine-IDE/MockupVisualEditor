@@ -1,5 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import data.OrganizerItem;
+    
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
@@ -320,10 +322,10 @@ package view.primeFaces.surfaceComponents.components
             return this.internalToXML();
         }
 		
-		public function getComponentsChildren():Array
+		public function getComponentsChildren():OrganizerItem
 		{
 			var componentsArray:Array = [];
-			var elementArray:Array;
+			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent;
 			for(var i:int = 0; i < this.numElements; i++)
 			{
@@ -333,11 +335,11 @@ package view.primeFaces.surfaceComponents.components
 					continue;
 				}
 				
-				elementArray = element.getComponentsChildren();
-				if (elementArray) componentsArray.push(elementArray);
+				organizerItem = element.getComponentsChildren();
+				if (organizerItem) componentsArray.push(organizerItem);
 			}
 			
-			return ((componentsArray.length > 0) ? componentsArray : null);
+			return (new OrganizerItem(this, "Div", (componentsArray.length > 0) ? componentsArray : []));
 		}
 
         public function toCode():XML

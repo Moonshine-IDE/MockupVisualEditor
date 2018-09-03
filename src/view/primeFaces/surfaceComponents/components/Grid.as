@@ -8,11 +8,12 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
+    import data.OrganizerItem;
+    
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IComponentSizeOutput;
-
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
@@ -500,7 +501,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():Array
+		public function getComponentsChildren():OrganizerItem
 		{
 			return null;
 		}

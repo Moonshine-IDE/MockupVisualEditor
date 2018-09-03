@@ -4,6 +4,8 @@ package utils
 	
 	import mx.core.IVisualElementContainer;
 	
+	import data.OrganizerItem;
+	
 	import view.EditingSurface;
 	import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -113,7 +115,7 @@ package utils
 			var element:IPrimeFacesSurfaceComponent = surface.getElementAt(0) as IPrimeFacesSurfaceComponent;
 			var componentsArray:Array = [];				
 			var container:IVisualElementContainer = surface;
-			var children:Array;
+			var organizerItem:OrganizerItem;
 			var elementCount:int = 0;
 			
 			if (element is IPrimeFacesSurfaceComponent) container = element as IVisualElementContainer;
@@ -136,8 +138,8 @@ package utils
 					continue;
 				}
 				
-				children = element.getComponentsChildren();
-				if (children && children.length > 0) componentsArray.push(children);
+				organizerItem = element.getComponentsChildren();
+				if (organizerItem) componentsArray.push(organizerItem);
 			}
 			
 			return componentsArray;

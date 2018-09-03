@@ -5,19 +5,20 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
     import mx.events.CollectionEvent;
-
+    
     import spark.components.NavigatorContent;
     import spark.events.ElementExistenceEvent;
     import spark.events.IndexChangeEvent;
     
     import components.tabNavigator.TabNavigatorWithOrientation;
     
+    import data.OrganizerItem;
+    
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-
+    
     import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
-
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
@@ -507,7 +508,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():Array
+		public function getComponentsChildren():OrganizerItem
 		{
 			return null;
 		}

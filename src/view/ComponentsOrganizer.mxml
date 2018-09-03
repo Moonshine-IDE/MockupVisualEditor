@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="view.*"
+		 show="onShow()">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import utils.GenericUtils;
+			import utils.MoonshineBridgeUtils;
+			
+			[Bindable] private var components:ArrayCollection;
+			
+			private function onShow():void
+			{
+				components = new ArrayCollection(GenericUtils.getComponentsChildren(MoonshineBridgeUtils.moonshineBridge.getVisualEditorComponent().editingSurface));
+			}
+			
+			private function formattedValue(item:Object):String
+			{
+				return item.name;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<view:PropertyEditorHeader componentName="Organizer"/>
+	
+	<s:VGroup width="100%" height="100%">
+		<mx:Tree id="tree" dataProvider="{components}"
+				 width="100%"
+				 dragEnabled="true" dropEnabled="true" dragMoveEnabled="true"
+				 labelFunction="formattedValue"/>
+	</s:VGroup>
+</s:VGroup>

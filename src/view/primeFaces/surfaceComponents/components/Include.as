@@ -13,6 +13,8 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.Label;
     import spark.layouts.VerticalLayout;
     
+    import data.OrganizerItem;
+    
     import utils.MoonshineBridgeUtils;
     import utils.MxmlCodeUtils;
     import utils.VisualEditorGlobalTags;
@@ -295,7 +297,7 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
         }
 		
-		public function getComponentsChildren():Array
+		public function getComponentsChildren():OrganizerItem
 		{
 			return null;
 		}

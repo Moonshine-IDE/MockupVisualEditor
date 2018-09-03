@@ -4,6 +4,8 @@ package view.primeFaces.surfaceComponents.components
     
     import mx.controls.Tree;
     
+    import data.OrganizerItem;
+    
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
     
@@ -348,7 +350,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():Array
+		public function getComponentsChildren():OrganizerItem
 		{
 			return null;
 		}

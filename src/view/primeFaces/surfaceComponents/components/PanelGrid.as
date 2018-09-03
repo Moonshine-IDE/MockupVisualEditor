@@ -47,40 +47,56 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      * &lt;Header name="header"&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;Header Title&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 1&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 2&lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/Header&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      some control (ex: OutputLabel) which displays text
+     *    &lt;/Column&gt;
      *  &lt;/Row&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      some control (ex: OutputLabel) which displays text
+     *    &lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/PanelGrid&gt;
      * </pre>
-     * <strong>Example 2:</strong>
-     * * <pre>
+     *
+     * <strong>Example 2 - With control:</strong>
+     * <pre>
      * &lt;PanelGrid
      * <b>Attributes</b>
      * width="100"
      * height="30"/&gt;
      * &lt;Header name="header"&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;Header Title&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 1&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 2&lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/Header&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      &lt;Div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
+     *          &lt;OutputLabel width="100" height="30" value="Label"/&gt;
+     *      &lt;/Div&gt;
+     *    &lt;/Column&gt;
      *  &lt;/Row&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      &lt;Div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
+     *          &lt;OutputLabel width="100" height="30" value="Label"/&gt;
+     *      &lt;/Div&gt;
+     *    &lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/PanelGrid&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
      *
-     * <strong>Example 1:</strong>
+     *
+     * <strong>Output for Example 1:</strong>
      * <pre>
      * &lt;p:panelGrid
      * <b>Attributes</b>
@@ -88,19 +104,24 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      *   &lt;f:facet name="header"&gt;
      *       &lt;p:row&gt;
-     *        &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 1&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 2&lt;/p:column&gt;
      *       &lt;/p:row&gt;
      *   &lt;/f:facet&gt;
      *  &lt;p:row&gt;
-     *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *    &lt;p:column&gt;
+     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     *    &lt;/p:column&gt;
      *  &lt;/p:row&gt;
      *  &lt;p:row&gt;
-     *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *    &lt;p:column&gt;
+     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     *    &lt;/p:column&gt;
      *  &lt;/p:row&gt;
      * &lt;/p:panelGrid&gt;
      * </pre>
      *
-     * <strong>Example 2:</strong>
+     * <strong>Output for Example 1:</strong>
      * <pre>
      * &lt;p:panelGrid
      * <b>Attributes</b>
@@ -108,14 +129,15 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      *   &lt;f:facet name="header"&gt;
      *       &lt;p:row&gt;
-     *        &lt;p:column&gt;Header Title&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 1&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 2&lt;/p:column&gt;
      *       &lt;/p:row&gt;
      *   &lt;/f:facet&gt;
      *  &lt;p:row&gt;
-     *    &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
+     *    &lt;p:column&gt;&lt;p:outputLabel style="width:100px;height:30px;" value="Label Text"/&gt;&lt;/p:column&gt;
      *  &lt;/p:row&gt;
      *  &lt;p:row&gt;
-     *    &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
+     *    &lt;p:column&gt;&lt;p:outputLabel style="width:100px;height:30px;" value="Label Text"/&gt;&lt;/p:column&gt;
      *  &lt;/p:row&gt;
      * &lt;/p:panelGrid&gt;
      * </pre>

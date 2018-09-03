@@ -88,44 +88,6 @@ package utils
 
 				return xml;
             }
-			
-			public static function getComponentsChildren(surface:EditingSurface):Array
-			{
-				var element:IPrimeFacesSurfaceComponent = surface.getElementAt(0) as IPrimeFacesSurfaceComponent;
-				var componentsArray:Array = [];				
-				var container:IVisualElementContainer = surface;
-				var children:Array;
-				if (element is IPrimeFacesSurfaceComponent)
-				{
-					container = element as IVisualElementContainer;
-				}
-				
-				var elementCount:int = 0;
-				if (!container)
-				{
-					elementCount = surface.numElements;
-					container = surface;
-				}
-				else
-				{
-					elementCount = container.numElements;
-				}
-				
-				for (var i:int = 0; i < elementCount; i++)
-				{
-					element = container.getElementAt(i) as IPrimeFacesSurfaceComponent;
-					
-					if (element === null)
-					{
-						continue;
-					}
-					
-					children = element.getComponentsChildren();
-					if (children && children.length > 0) componentsArray.push(children);
-				}
-				
-				return componentsArray;
-			}
         }
 	}
 }

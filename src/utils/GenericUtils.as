@@ -2,7 +2,11 @@ package utils
 {
 	import flash.display.InteractiveObject;
 	
+	import mx.core.IVisualElementContainer;
+	
+	import view.EditingSurface;
 	import view.interfaces.IHistorySurfaceComponent;
+	import view.interfaces.IPrimeFacesSurfaceComponent;
 	import view.interfaces.ISurfaceComponent;
 	import view.suportClasses.PropertyChangeReference;
 	
@@ -102,6 +106,41 @@ package utils
 			//the text might not have updated if the height property is the same
 			//but the old text value is different
 			return selectedItem.height.toString();
+		}
+		
+		public static function getComponentsChildren(surface:EditingSurface):Array
+		{
+			var element:IPrimeFacesSurfaceComponent = surface.getElementAt(0) as IPrimeFacesSurfaceComponent;
+			var componentsArray:Array = [];				
+			var container:IVisualElementContainer = surface;
+			var children:Array;
+			var elementCount:int = 0;
+			
+			if (element is IPrimeFacesSurfaceComponent) container = element as IVisualElementContainer;
+			if (!container)
+			{
+				elementCount = surface.numElements;
+				container = surface;
+			}
+			else
+			{
+				elementCount = container.numElements;
+			}
+			
+			for (var i:int = 0; i < elementCount; i++)
+			{
+				element = container.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				
+				if (element === null)
+				{
+					continue;
+				}
+				
+				children = element.getComponentsChildren();
+				if (children && children.length > 0) componentsArray.push(children);
+			}
+			
+			return componentsArray;
 		}
 	}
 }

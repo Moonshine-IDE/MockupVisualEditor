@@ -45,6 +45,7 @@
 		
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
+		import utils.GenericUtils;
 		
 		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IInitializeAfterAddedComponent;
@@ -140,7 +141,7 @@
 			
 			public function getComponentsChildren():Array
 			{
-				return EditingSurfaceWriter.getComponentsChildren(this);
+				return GenericUtils.getComponentsChildren(this);
 			}
 		}
 

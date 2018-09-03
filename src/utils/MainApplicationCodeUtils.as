@@ -99,14 +99,15 @@ package utils
 			headXml.addNamespace(hNamespace);
 			headXml.setNamespace(hNamespace);
 
+            var relativeFilePath:String = MoonshineBridgeUtils.getRelativeFilePath();
+
 			var cssStyleSheetXml:XML = new XML("<link></link>");
             cssStyleSheetXml.@rel = "stylesheet";
 			cssStyleSheetXml.@type = "text/css";
-			cssStyleSheetXml.@href = "resources/moonshine-layout-styles.css";
+			cssStyleSheetXml.@href = relativeFilePath + "/resources/moonshine-layout-styles.css";
 
             headXml.appendChild(cssStyleSheetXml);
 
-			var relativeFilePath:String = MoonshineBridgeUtils.getRelativeFilePath();
             cssStyleSheetXml = new XML("<link></link>");
             cssStyleSheetXml.@rel = "stylesheet";
             cssStyleSheetXml.@type = "text/css";

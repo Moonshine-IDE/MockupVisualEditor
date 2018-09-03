@@ -60,7 +60,7 @@ package view.primeFaces.surfaceComponents.components
      *
      * <strong>PrimeFaces output:</strong>
      * <pre>
-     * &lt;div
+     * &lt;p:outputPanel
      * <b>Attributes</b>
      * style="width:110px;height:120px;"&gt;
      *  &lt;div class="ui-g"&gt;
@@ -68,7 +68,7 @@ package view.primeFaces.surfaceComponents.components
      *          &lt;div style="width:100%;height:100%;"/&gt;
      *      &lt;/div&gt;
      *  &lt;/div&gt;
-     * &lt;/div&gt;
+     * &lt;/p:outputPanel&gt;
      * </pre>
      */
     public class Grid extends GridBase implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput

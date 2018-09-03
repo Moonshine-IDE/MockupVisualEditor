@@ -121,7 +121,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:panelGrid&gt;
      * </pre>
      *
-     * <strong>Output for Example 1:</strong>
+     * <strong>Output for Example 2:</strong>
      * <pre>
      * &lt;p:panelGrid
      * <b>Attributes</b>

@@ -3,8 +3,6 @@ package view.primeFaces.supportClasses.table
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     
-    import data.GridListItem;
-    
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.primeFaces.supportClasses.GridBase;

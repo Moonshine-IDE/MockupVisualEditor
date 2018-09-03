@@ -183,6 +183,16 @@
 
 			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
 
+			if (selectedGrid.selectedRow == -1)
+			{
+				selectedGrid.selectedRow = 0;
+			}
+
+			if (selectedGrid.selectedColumn == -1)
+			{
+				selectedGrid.selectedColumn = 0;
+			}
+
 			this.selectedCell = this.getSelectedCell();
 
 			dispatchEvent(new Event(Event.CHANGE));

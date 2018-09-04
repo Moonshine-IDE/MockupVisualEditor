@@ -15,6 +15,13 @@
 			private function onShow():void
 			{
 				components = new ArrayCollection(GenericUtils.getComponentsChildren(MoonshineBridgeUtils.moonshineBridge.getVisualEditorComponent().editingSurface));
+				tree.callLater(function():void
+				{
+					for each (var i:Object in components)
+					{
+						tree.expandChildrenOf(i, true);
+					}
+				});
 			}
 			
 		]]>

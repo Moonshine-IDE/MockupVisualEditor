@@ -322,6 +322,7 @@ package view.primeFaces.surfaceComponents.components
             return this.internalToXML();
         }
 		
+		private static var temp:int;
 		public function getComponentsChildren():OrganizerItem
 		{
 			var componentsArray:Array = [];
@@ -339,7 +340,10 @@ package view.primeFaces.surfaceComponents.components
 				if (organizerItem) componentsArray.push(organizerItem);
 			}
 			
-			return (new OrganizerItem(this, "Div", (componentsArray.length > 0) ? componentsArray : []));
+			// @note @return
+			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
+			// children = [] (if drop acceptable component, i.e. div, tab etc.)
+			return (new OrganizerItem(this, "Div"+ (++Div.temp), (componentsArray.length > 0) ? componentsArray : []));
 		}
 
         public function toCode():XML

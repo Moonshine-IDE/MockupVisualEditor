@@ -62,7 +62,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.setStyle("skinClass", ButtonSkin);
 
-			this.label = "Button";
+			this.label = "Button"+ (++view.primeFaces.surfaceComponents.components.Button.temp); // TEST CODE
 			this.toolTip = "";
 			this.width = 100;
 			this.height = 30;
@@ -367,9 +367,13 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
 		}
 		
+		public static var temp:int;
 		public function getComponentsChildren():OrganizerItem
 		{
-			return null;
+			// @note @return
+			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
+			// children = [] (if drop acceptable component, i.e. div, tab etc.)
+			return (new OrganizerItem(this, label, null));
 		}
 	}
 }

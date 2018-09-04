@@ -27,12 +27,12 @@ package view.suportClasses
 		{
 			var items:Array = event.dragSource.dataForFormat("treeItems") as Array;
 			var droppedIndex:int;
-			var oldParentStack:OrganizerItem;
+			var draggedStack:OrganizerItem;
 			var droppedParentStack:OrganizerItem = _dropData.parent as OrganizerItem; <!-- dropped to the parent -->
 			
 			// let's concentrae on one item at once
 			// drag functionlity 
-			oldParentStack = getParentItem(items[0]) as OrganizerItem; <!-- dragged from the parent -->
+			draggedStack = items[0] as OrganizerItem; <!-- dragged item -->
 			
 			super.dragDropHandler(event);
 			
@@ -44,14 +44,14 @@ package view.suportClasses
 			}
 			
 			// finally proceed to change level
-			updateComponentLevel(oldParentStack, droppedParentStack, droppedIndex);
+			updateComponentLevel(draggedStack, droppedParentStack, droppedIndex);
 		}
 		
-		protected function updateComponentLevel(from:OrganizerItem, to:OrganizerItem, toIndex:int):void
+		protected function updateComponentLevel(dragged:OrganizerItem, to:OrganizerItem, toIndex:int):void
 		{
 			// TEST CODE
 			// GOING TO BE CHANGE
-			(to.item as IVisualElementContainer).addElementAt(from.item as IVisualElement, toIndex);
+			(to.item as IVisualElementContainer).addElementAt(dragged.item as IVisualElement, toIndex);
 		}
 		
 		private function getChildIndexInParent(parent:Object, child:Object):int

@@ -13,9 +13,6 @@
 		import spark.components.NavigatorContent;
 		import spark.containers.Navigator;
 		import spark.events.GridItemEditorEvent;
-		import spark.events.GridSelectionEvent;
-
-		import components.tabNavigator.TabNavigatorWithOrientation;
 
 		import data.DataProviderListItem;
 
@@ -43,6 +40,12 @@
 			}
 			this._label = value;
 			this.dispatchEvent(new Event("labelChange"));
+		}
+
+		[Bindable("change")]
+		protected function get selectedTabView():TabView
+		{
+			return selectedItem as TabView;
 		}
 
 		private function editSelectedItem():void
@@ -116,19 +119,19 @@
 		{
 			dgTabs.columnHeaderGroup.visible = dgTabs.columnHeaderGroup.includeInLayout = false;
 
-			var navigator:Navigator = (selectedItem as Navigator);
-			var navigatorNumElements:int = navigator.numElements;
+			var navigatorNumElements:int = selectedTabView.numElements;
 			itemsListDataProvider = new ArrayList();
 
 			for (var i:int = 0; i < navigatorNumElements; i++)
 			{
-				var tabItem:NavigatorContent = navigator.getElementAt(i) as NavigatorContent;
+				var tabItem:NavigatorContent = selectedTabView.getElementAt(i) as NavigatorContent;
 				var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
 				itemsListDataProvider.addItem(listItem);
 			}
 
 			dgTabs.dataProvider = itemsListDataProvider;
-
+			dgTabs.selectedIndex = selectedTabView.selectedIndex;
+			
 			_childrenForFocus = [];
 			_childrenForFocus.push(addTabBtn);
 			_childrenForFocus.push(editTabBtn);
@@ -143,19 +146,8 @@
 		protected function onItemEditFinished(event:GridItemEditorEvent):void
 		{
 			var listItem:DataProviderListItem = dgTabs.dataProvider.getItemAt(event.rowIndex) as DataProviderListItem;
-			var navigator:TabNavigatorWithOrientation = (selectedItem as TabNavigatorWithOrientation);
-
-			navigator.setSelectedTabLabel(listItem.label);
+			selectedTabView.setSelectedTabLabel(listItem.label);
 		}
-
-		protected function onGridSelectionChanged(event:GridSelectionEvent):void
-		{
-			if (selectedItem is ISelectableItemsComponent)
-			{
-				ISelectableItemsComponent(selectedItem).selectedIndex = dgTabs.selectedIndex;
-			}
-		}
-			
 		]]>
 	</fx:Script>
     <suportclasses:layout>
@@ -166,9 +158,8 @@
 		<s:DataGrid id="dgTabs"
 					width="100%" maxHeight="350"
 					editable="true" sortableColumns="false" draggableColumns="false"
-					selectedIndex="0"
-					gridItemEditorSessionSave="onItemEditFinished(event)"
-					selectionChange="onGridSelectionChanged(event)"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->
+					selectedIndex="@{selectedTabView.selectedIndex}"
+					gridItemEditorSessionSave="onItemEditFinished(event)"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="label" headerText="Title"/>

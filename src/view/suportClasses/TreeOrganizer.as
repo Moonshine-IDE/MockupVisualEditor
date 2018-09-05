@@ -4,11 +4,12 @@ package view.suportClasses
 	import mx.collections.IViewCursor;
 	import mx.controls.Tree;
 	import mx.core.IVisualElement;
-	import mx.core.IVisualElementContainer;
 	import mx.core.mx_internal;
 	import mx.events.DragEvent;
 	
 	import data.OrganizerItem;
+	
+	import view.interfaces.IDropAcceptableComponent;
 	
 	use namespace mx_internal;
 	
@@ -49,9 +50,8 @@ package view.suportClasses
 		
 		protected function updateComponentLevel(dragged:OrganizerItem, to:OrganizerItem, toIndex:int):void
 		{
-			// TEST CODE
-			// GOING TO BE CHANGE
-			(to.item as IVisualElementContainer).addElementAt(dragged.item as IVisualElement, toIndex);
+			if (to.item is IDropAcceptableComponent)
+				(to.item as IDropAcceptableComponent).dropElementAt(dragged.item as IVisualElement, toIndex);
 		}
 		
 		private function getChildIndexInParent(parent:Object, child:Object):int

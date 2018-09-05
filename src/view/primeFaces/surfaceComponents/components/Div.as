@@ -1,5 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import mx.core.IVisualElement;
+    
     import data.OrganizerItem;
     
     import utils.MxmlCodeUtils;
@@ -7,6 +9,7 @@ package view.primeFaces.surfaceComponents.components
     
     import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
+    import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
@@ -51,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent, IComponentSizeOutput
+    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
@@ -344,6 +347,11 @@ package view.primeFaces.surfaceComponents.components
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
 			// children = [] (if drop acceptable component, i.e. div, tab etc.)
 			return (new OrganizerItem(this, "Div"+ (++Div.temp), (componentsArray.length > 0) ? componentsArray : []));
+		}
+		
+		public function dropElementAt(element:IVisualElement, index:int):void
+		{
+			this.addElementAt(element, index);
 		}
 
         public function toCode():XML

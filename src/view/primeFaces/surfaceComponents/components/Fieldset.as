@@ -7,6 +7,7 @@ package view.primeFaces.surfaceComponents.components
     import mx.events.FlexEvent;
     
     import spark.components.HGroup;
+    import spark.components.NavigatorContent;
     
     import components.CollapsiblePanel;
     
@@ -391,7 +392,14 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function getComponentsChildren():OrganizerItem
 		{
-			return null;
+			var componentsArray:Array = [];
+			var organizerItem:OrganizerItem;
+			var element:IPrimeFacesSurfaceComponent = this.getElementAt(0) as IPrimeFacesSurfaceComponent;
+			
+			organizerItem = element.getComponentsChildren();
+			organizerItem.name = "Fieldset";
+			
+			return organizerItem;
 		}
 
         override protected function onCollapsiblePanelCreationComplete(event:FlexEvent):void

@@ -8,6 +8,8 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
+    import spark.components.NavigatorContent;
+    
     import data.OrganizerItem;
     
     import utils.MxmlCodeUtils;
@@ -503,7 +505,31 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function getComponentsChildren():OrganizerItem
 		{
-			return null;
+			var componentsArray:Array = [];
+			var organizerItem:OrganizerItem;
+			var element:IPrimeFacesSurfaceComponent;
+			
+			for (var row:int = 0; row < this.numElements; row++)
+			{
+				var gridRow:GridRow = this.getElementAt(row) as GridRow;
+				for (var col:int = 0; col < gridRow.numElements; col++)
+				{
+					var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					
+					organizerItem = element.getComponentsChildren();
+					if (organizerItem) 
+					{
+						organizerItem.name = "R"+ (row+1) +":C"+ (col+1);
+						componentsArray.push(organizerItem);
+					}
+				}
+			}
+			
+			// @note @return
+			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
+			// children = [] (if drop acceptable component, i.e. div, tab etc.)
+			return (new OrganizerItem(this, "Grid", (componentsArray.length > 0) ? componentsArray : []));
 		}
 
         override public function addRow():IVisualElement

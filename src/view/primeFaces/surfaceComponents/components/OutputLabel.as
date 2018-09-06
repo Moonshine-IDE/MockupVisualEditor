@@ -333,7 +333,10 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function getComponentsChildren():OrganizerItem
 		{
-			return null;
+			// @note @return
+			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
+			// children = [] (if drop acceptable component, i.e. div, tab etc.)
+			return (new OrganizerItem(this, "OutputLabel", null));
 		}
 
         override protected function commitProperties():void

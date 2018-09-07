@@ -2,7 +2,10 @@
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	currentState="empty" skinClass="skins.PropertyEditorContainerSkin" xmlns:view="view.*">
-
+	<s:layout>
+		<s:VerticalLayout verticalAlign="top" horizontalAlign="left"
+						  verticalAlign.empty="middle" horizontalAlign.empty="center" />
+	</s:layout>
 	<fx:Metadata>
 		[Event(name="change",type="flash.events.Event")]
 		[Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
@@ -13,22 +16,10 @@
 		<s:State name="empty"/>
 		<s:State name="selection"/>
 	</s:states>
-
-	<s:Group id="noSelectionMessage" excludeFrom="selection"
-		top="0" right="0" bottom="0" left="0">
-		<s:layout>
-			<s:VerticalLayout padding="10" horizontalAlign="center" verticalAlign="middle"/>
-		</s:layout>
-		<s:Label text="No component selected"/>
-	</s:Group>
-	<s:VGroup id="selectionHolder" excludeFrom="empty"
-			  top="0" right="0" bottom="0" left="0">
-		<view:PropertyEditorHeader id="propertyEditorHeader" />
-		<s:Scroller percentWidth="100" percentHeight="100">
-			<s:Group id="editorHolder" 
-					 width="100%"/>
-		</s:Scroller>
-	</s:VGroup>
+	
+	<s:Label text="No component selected" excludeFrom="selection" left="0" right="0"/>
+	<view:PropertyEditorHeader id="propertyEditorHeader" excludeFrom="empty"/>
+	<s:Group id="editorHolder" percentWidth="100" excludeFrom="empty"/>
 
 	<fx:Script><![CDATA[
 		import view.flex.propertyEditors.GenericPropertyEditor;

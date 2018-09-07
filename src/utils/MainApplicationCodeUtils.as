@@ -111,7 +111,7 @@ package utils
             cssStyleSheetXml = new XML("<link></link>");
             cssStyleSheetXml.@rel = "stylesheet";
             cssStyleSheetXml.@type = "text/css";
-            cssStyleSheetXml.@href = relativeFilePath + "/assets/moonshine-layout-styles.css";
+            cssStyleSheetXml.@href = relativeFilePath + "/assets/stylesheets/moonshine-layout-styles.css";
 
 			headXml.appendChild(cssStyleSheetXml);
 

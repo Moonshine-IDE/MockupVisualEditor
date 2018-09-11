@@ -142,7 +142,7 @@ package utils
 				if (organizerItem) componentsArray.push(organizerItem);
 			}
 			
-			return componentsArray;
+			return [new OrganizerItem(container, "ROOT", componentsArray)];
 		}
 	}
 }

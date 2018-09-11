@@ -6,6 +6,9 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.core.IVisualElementContainer;
+			
+			import data.OrganizerItem;
 			
 			import utils.GenericUtils;
 			import utils.MoonshineBridgeUtils;
@@ -14,7 +17,11 @@
 			
 			private function onShow():void
 			{
-				components = new ArrayCollection(GenericUtils.getComponentsChildren(MoonshineBridgeUtils.moonshineBridge.getVisualEditorComponent().editingSurface));
+				var tmpArr:Array = GenericUtils.getComponentsChildren(MoonshineBridgeUtils.moonshineBridge.getVisualEditorComponent().editingSurface);
+				tree.rootContainer = (tmpArr[0] as OrganizerItem).item as IVisualElementContainer;
+				components = new ArrayCollection((tmpArr[0] as OrganizerItem).children);
+				
+				tmpArr = null;
 				tree.callLater(function():void
 				{
 					for each (var i:Object in components)

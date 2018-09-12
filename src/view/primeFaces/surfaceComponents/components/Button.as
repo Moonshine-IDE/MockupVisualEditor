@@ -13,7 +13,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.ButtonPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
-    import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.PropertyChangeReference; 
 
     [Exclude(name="propertyChangeFieldReference", kind="property")]
 	[Exclude(name="actionListener", kind="property")]
@@ -62,7 +62,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.setStyle("skinClass", ButtonSkin);
 
-			this.label = "Button"+ (++view.primeFaces.surfaceComponents.components.Button.temp); // TEST CODE
+			this.label = "Button";
 			this.toolTip = "";
 			this.width = 100;
 			this.height = 30;
@@ -367,7 +367,6 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
 		}
 		
-		public static var temp:int;
 		public function getComponentsChildren():OrganizerItem
 		{
 			// @note @return

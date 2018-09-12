@@ -5,6 +5,7 @@ package data
 		public static const TYPE_CELL:String = "typeCell";
 		public static const TYPE_COLUMN:String = "typeColumns";
 		public static const TYPE_ROW:String = "typeRow";
+		public static const TYPE_TAB:String = "typeTab";
 		
 		public var item:Object;
 		public var children:Array;

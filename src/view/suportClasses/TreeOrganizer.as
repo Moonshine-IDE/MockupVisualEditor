@@ -14,7 +14,6 @@ package view.suportClasses
 	import data.OrganizerItem;
 	
 	import view.interfaces.IDropAcceptableComponent;
-	import view.primeFaces.surfaceComponents.components.Div;
 	
 	use namespace mx_internal;
 	
@@ -41,8 +40,8 @@ package view.suportClasses
 			var draggedStack:OrganizerItem = items[0] as OrganizerItem; <!-- dragged item -->
 			
 			// probable termination
-			// calculate target drop index even before proceed
-			// to terminate based on target component
+			// calculate target drop index before continue
+			// to terminate based on target component's type
 			var droppedIndex:int = getDropIndexToTarget(event);
 			if (!droppedParentStack && droppedIndex >= rootContainer.numElements) droppedIndex = rootContainer.numElements - 1;
 
@@ -74,7 +73,7 @@ package view.suportClasses
 			// do not let anything drgged direct to the grid
 			if (target.item is Grid) return false;
 			// don't let cells to be dragged
-			if (source.type == OrganizerItem.TYPE_CELL) return false;
+			if (source.type == OrganizerItem.TYPE_CELL || source.type == OrganizerItem.TYPE_TAB) return false;
 			
 			return true;
 		}

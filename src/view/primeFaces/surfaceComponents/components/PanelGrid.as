@@ -565,6 +565,7 @@ package view.primeFaces.surfaceComponents.components
 					if (organizerItem) 
 					{
 						organizerItem.name = "R"+ (row+1) +":C"+ (col+1);
+						organizerItem.type = OrganizerItem.TYPE_CELL;
 						componentsArray.push(organizerItem);
 					}
 				}

@@ -531,6 +531,7 @@ package view.primeFaces.surfaceComponents.components
 					if (organizerItem) 
 					{
 						organizerItem.name = navContent.label;
+						organizerItem.type = OrganizerItem.TYPE_TAB;
 						componentsArray.push(organizerItem);
 					}
 				}

@@ -208,6 +208,35 @@ package view.primeFaces.supportClasses
             return true;
         }
 
+        override public function addElement(element:IVisualElement):IVisualElement
+        {
+            if (element is GridRow)
+            {
+                return super.addElement(element);
+            }
+            else
+            {
+                var gridRow:GridRow = this.getElementAt(selectedRow) as GridRow;
+                var gridItem:GridItem = gridRow.getElementAt(selectedColumn) as GridItem;
+                if (gridItem.numElements > 0)
+                {
+                    var div:Div = gridItem.getElementAt(0) as Div;
+                    if (div)
+                    {
+                        return div.addElement(element);
+                    }
+                    else
+                    {
+                        return gridItem.addElement(element);
+                    }
+                }
+                else
+                {
+                    return gridItem.addElement(element);
+                }
+            }
+        }
+
         protected function ensureCreateColumn(row:GridRow):GridItem
         {
             var gridItem:GridItem = new GridItem();

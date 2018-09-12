@@ -2,7 +2,8 @@ package view.primeFaces.supportClasses.table
 {
     import mx.containers.GridItem;
     import mx.containers.GridRow;
-    
+    import mx.core.IVisualElement;
+
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.primeFaces.supportClasses.GridBase;
@@ -162,6 +163,18 @@ package view.primeFaces.supportClasses.table
                 this.addElement(_body);
             }
 		}
+
+        override public function addElement(element:IVisualElement):IVisualElement
+        {
+			if (element is HeaderGrid || element is BodyGrid)
+            {
+                return super.addElement(element);
+            }
+			else
+			{
+				return this._body.addElement(element);
+			}
+        }
 
         override protected function commitProperties():void
         {

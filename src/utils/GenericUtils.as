@@ -109,40 +109,5 @@ package utils
 			//but the old text value is different
 			return selectedItem.height.toString();
 		}
-		
-		public static function getComponentsChildren(surface:EditingSurface):Array
-		{
-			var element:IPrimeFacesSurfaceComponent = surface.getElementAt(0) as IPrimeFacesSurfaceComponent;
-			var componentsArray:Array = [];				
-			var container:IVisualElementContainer = surface;
-			var organizerItem:OrganizerItem;
-			var elementCount:int = 0;
-			
-			if (element is IPrimeFacesSurfaceComponent) container = element as IVisualElementContainer;
-			if (!container)
-			{
-				elementCount = surface.numElements;
-				container = surface;
-			}
-			else
-			{
-				elementCount = container.numElements;
-			}
-			
-			for (var i:int = 0; i < elementCount; i++)
-			{
-				element = container.getElementAt(i) as IPrimeFacesSurfaceComponent;
-				
-				if (element === null)
-				{
-					continue;
-				}
-				
-				organizerItem = element.getComponentsChildren();
-				if (organizerItem) componentsArray.push(organizerItem);
-			}
-			
-			return [new OrganizerItem(container, "ROOT", componentsArray)];
-		}
 	}
 }

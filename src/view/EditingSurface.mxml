@@ -60,6 +60,8 @@
 		import view.suportClasses.PropertyChangeReference;
 		import view.suportClasses.events.PropertyEditorChangeEvent;
 		import view.suportClasses.events.SurfaceComponentEvent;
+		
+		public var organizer:ComponentsOrganizer;
 
 		private static const SMALL_NUDGE:int = 1;
 		private static const LARGE_NUDGE:int = 10;
@@ -138,11 +140,6 @@
 			{
 				return EditingSurfaceWriter.toCode(this);
 			}
-			
-			public function getComponentsChildren():Array
-			{
-				return GenericUtils.getComponentsChildren(this);
-			}
 		}
 
 		public function fromXML(xml:XML):void
@@ -151,6 +148,7 @@
 			EditingSurfaceReader.fromXML(this, xml, _visualEditorType);
 
 			_wasLoaded = true;
+			this.callLater(organizer.loadFirstData, [this]);
 		}
 
 		public function deleteAll():void
@@ -561,6 +559,7 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
+				organizer.addDroppedElement(dropTarget, object as IVisualElement);
 
 				// some component may have processing should occur after
 				// being added to the editor

@@ -54,6 +54,11 @@ package view.suportClasses
 			
 			super.dragDropHandler(event);
 			
+			for (var i:int = 0; i < items.length; i++)
+			{ 
+				droppedIndex = getChildIndexInParent(getParentItem(items[i]), items[i]); <!-- relative index to target parent -->
+			}
+			
 			// finally proceed to change level
 			updateComponentLevel(draggedStack, droppedParentStack, droppedIndex);
 		}

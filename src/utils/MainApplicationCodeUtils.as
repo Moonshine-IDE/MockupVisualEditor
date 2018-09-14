@@ -104,14 +104,21 @@ package utils
 			var cssStyleSheetXml:XML = new XML("<link></link>");
             cssStyleSheetXml.@rel = "stylesheet";
 			cssStyleSheetXml.@type = "text/css";
-			cssStyleSheetXml.@href = relativeFilePath + "/resources/moonshine-layout-styles.css";
+			if (relativeFilePath == "..")
+			{
+                cssStyleSheetXml.@href = "resources/moonshine-layout-styles.css";
+			}
+			else
+			{
+                cssStyleSheetXml.@href = relativeFilePath.substring(relativeFilePath.indexOf("/") + 1) + "/resources/moonshine-layout-styles.css";
+            }
 
             headXml.appendChild(cssStyleSheetXml);
 
             cssStyleSheetXml = new XML("<link></link>");
             cssStyleSheetXml.@rel = "stylesheet";
             cssStyleSheetXml.@type = "text/css";
-            cssStyleSheetXml.@href = relativeFilePath + "/assets/stylesheets/moonshine-layout-styles.css";
+            cssStyleSheetXml.@href = relativeFilePath + "/assets/moonshine-layout-styles.css";
 
 			headXml.appendChild(cssStyleSheetXml);
 

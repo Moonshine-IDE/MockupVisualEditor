@@ -48,40 +48,52 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      * &lt;Header name="header"&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;Header Title&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 1&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 2&lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/Header&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;Some Text&lt;/Column&gt;
-     *  &lt;/Row&gt;
-     *  &lt;Row&gt;
-     *    &lt;Column&gt;Some Text&lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      some control (ex: OutputLabel) which displays text
+     *    &lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      some control (ex: OutputLabel) which displays text
+     *    &lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/PanelGrid&gt;
      * </pre>
-     * <strong>Example 2:</strong>
-     * * <pre>
+     *
+     * <strong>Example 2 - With control:</strong>
+     * <pre>
      * &lt;PanelGrid
      * <b>Attributes</b>
      * width="100"
      * height="30"/&gt;
      * &lt;Header name="header"&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;Header Title&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 1&lt;/Column&gt;
+     *    &lt;Column&gt;Header Title 2&lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/Header&gt;
      *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
-     *  &lt;/Row&gt;
-     *  &lt;Row&gt;
-     *    &lt;Column&gt;&lt;OutputLabel value="some value"/&gt;&lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      &lt;Div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
+     *          &lt;OutputLabel width="100" height="30" value="Label"/&gt;
+     *      &lt;/Div&gt;
+     *    &lt;/Column&gt;
+     *    &lt;Column&gt;
+     *      &lt;Div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
+     *          &lt;OutputLabel width="100" height="30" value="Label"/&gt;
+     *      &lt;/Div&gt;
+     *    &lt;/Column&gt;
      *  &lt;/Row&gt;
      * &lt;/PanelGrid&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
      *
-     * <strong>Example 1:</strong>
+     *
+     * <strong>Output for Example 1:</strong>
      * <pre>
      * &lt;p:panelGrid
      * <b>Attributes</b>
@@ -89,19 +101,22 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      *   &lt;f:facet name="header"&gt;
      *       &lt;p:row&gt;
-     *        &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 1&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 2&lt;/p:column&gt;
      *       &lt;/p:row&gt;
      *   &lt;/f:facet&gt;
      *  &lt;p:row&gt;
-     *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
-     *  &lt;/p:row&gt;
-     *  &lt;p:row&gt;
-     *    &lt;p:column&gt;Some Text&lt;/p:column&gt;
+     *    &lt;p:column&gt;
+     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     *    &lt;/p:column&gt;
+     *    &lt;p:column&gt;
+     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     *    &lt;/p:column&gt;
      *  &lt;/p:row&gt;
      * &lt;/p:panelGrid&gt;
      * </pre>
      *
-     * <strong>Example 2:</strong>
+     * <strong>Output for Example 2:</strong>
      * <pre>
      * &lt;p:panelGrid
      * <b>Attributes</b>
@@ -109,14 +124,13 @@ package view.primeFaces.surfaceComponents.components
      * height="30"/&gt;
      *   &lt;f:facet name="header"&gt;
      *       &lt;p:row&gt;
-     *        &lt;p:column&gt;Header Title&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 1&lt;/p:column&gt;
+     *        &lt;p:column&gt;Header Title 2&lt;/p:column&gt;
      *       &lt;/p:row&gt;
      *   &lt;/f:facet&gt;
      *  &lt;p:row&gt;
-     *    &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
-     *  &lt;/p:row&gt;
-     *  &lt;p:row&gt;
-     *    &lt;p:column&gt;&lt;p:outputLabel value="Label Text"/&gt;&lt;/p:column&gt;
+     *    &lt;p:column&gt;&lt;p:outputLabel style="width:100px;height:30px;" value="Label Text"/&gt;&lt;/p:column&gt;
+     *    &lt;p:column&gt;&lt;p:outputLabel style="width:100px;height:30px;" value="Label Text"/&gt;&lt;/p:column&gt;
      *  &lt;/p:row&gt;
      * &lt;/p:panelGrid&gt;
      * </pre>
@@ -440,16 +454,20 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
-            xml.@headerRowCount = this.headerRowCount;
             xml.@rowCount = this.rowCount;
             xml.@columnCount = this.columnCount;
 
-            var header:XML = new XML("<Header/>");
-            header.@name = "header";
-            toVisualXML(header, this.headerRowCount, this.columnCount);
-            xml.appendChild(header);
+            if (this.headerRowCount > 0)
+            {
+                xml.@headerRowCount = this.headerRowCount;
+                var header:XML = new XML("<Header/>");
+                header.@name = "header";
+                toHeaderVisualXML(header);
 
-            toVisualXML(xml, this.body.numElements, this.columnCount);
+                xml.appendChild(header);
+            }
+
+            toBodyVisualXML(xml);
 
             return xml;
         }
@@ -679,25 +697,39 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        private function toVisualXML(xml:XML, rowCount:int, columnCount:int):void
+        private function toHeaderVisualXML(xml:XML):void
         {
-            var isHeader:Boolean = "@name" in xml;
-            for (var row:int = 0; row < rowCount; row++)
+            for (var row:int = 0; row < headerRowCount; row++)
             {
                 var rowXML:XML = new XML("<Row/>");
                 for (var col:int = 0; col < columnCount; col++)
                 {
-                    var xmlValue:String;
-                    if (isHeader)
-                    {
-                        xmlValue = "<Column>" + this.header.getTitle(row, col) + "</Column>";
-                    }
-                    else
-                    {
-                        xmlValue = "<Column></Column>";
-                    }
+                    var xmlValue:String = "<Column>" + this.header.getTitle(row, col) + "</Column>";
+                    var colXML:XML = new XML(xmlValue);
+
+                    rowXML.appendChild(colXML);
+                }
+                xml.appendChild(rowXML);
+            }
+        }
+
+        private function toBodyVisualXML(xml:XML):void
+        {
+            for (var row:int = 0; row < rowCount; row++)
+            {
+                var gridRow:GridRow = this.body.getElementAt(row) as GridRow;
+                var rowXML:XML = new XML("<Row/>");
+                for (var col:int = 0; col < columnCount; col++)
+                {
+                    var gridItem:GridItem = gridRow.getElementAt(col) as GridItem;
+                    var item:IPrimeFacesSurfaceComponent = gridItem.getElementAt(0) as IPrimeFacesSurfaceComponent;
+                    if (item === null) continue;
+
+                    var xmlValue:String = "<Column></Column>";
 
                     var colXML:XML = new XML(xmlValue);
+                    colXML.appendChild(item.toXML());
+
                     rowXML.appendChild(colXML);
                 }
                 xml.appendChild(rowXML);

@@ -15,7 +15,7 @@
 	</s:BorderContainer>
 	<collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
 		<view:ComponentList id="componentList" percentWidth="20" percentHeight="100"
-							visualEditorType="{_visualEditorType}"/>
+							visualEditorType="{_visualEditorType}" minWidth="150"/>
 		<s:Scroller percentWidth="70" percentHeight="100">
 			<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"
 								 organizer="{componentsOrganizer}"/>

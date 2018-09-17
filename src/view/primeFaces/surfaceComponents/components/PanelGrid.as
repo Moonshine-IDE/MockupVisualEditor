@@ -809,12 +809,20 @@ package view.primeFaces.surfaceComponents.components
                     var colItem:GridItem = rowItem.getElementAt(colIndex) as GridItem;
                     var container:Div = colItem.getElementAt(0) as Div;
                     var colXML:XML = columnsXML[colIndex];
+                    var divs:XMLList = colXML.Div;
 
-                    for each (var columnContent:XML in colXML)
+                    if (divs.length() > 0)
                     {
-                        if (columnContent)
+                        container.fromXML(divs[0], callback);
+                    }
+                    else
+                    {
+                        for each (var columnContent:XML in colXML)
                         {
-                            callback(container, columnContent);
+                            if (columnContent)
+                            {
+                                callback(container, columnContent);
+                            }
                         }
                     }
                 }

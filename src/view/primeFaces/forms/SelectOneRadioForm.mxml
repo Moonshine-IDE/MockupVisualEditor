@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:suportclasses="view.suportClasses.*"
+        skinClass="skins.FormSkin"
+        creationComplete="onTabFormCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.FlexEvent;
+			
+			import spark.events.GridItemEditorEvent;
+			
+			import data.RadioButtonItem;
+			
+			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
+
+			[Bindable] public var columns:int;
+	
+			private var _bindingColumns:ChangeWatcher;
+			private var _label:String = "Items";
+	
+			[Bindable("labelChange")]
+			public function get label():String
+			{
+				return this._label;
+			}
+	
+			public function set label(value:String):void
+			{
+				if (this._label === value)
+				{
+					return;
+				}
+				this._label = value;
+				this.dispatchEvent(new Event("labelChange"));
+			}
+	
+			private function editSelectedItem():void
+			{
+				updatePropertyEditorPriorToEdit();
+	
+				dgColumns.ensureCellIsVisible(dgColumns.selectedIndex);
+				dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
+			}
+	
+			private function updatePropertyEditorPriorToEdit():void
+			{
+				/*registerClassAlias("DataProviderListItem", DataProviderListItem);
+				var historyObject:Object = {
+					object: ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]),
+					index: dgColumns.selectedIndex
+				};
+				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);*/
+			}
+	
+			private function addItemButton_clickHandler(event:MouseEvent):void
+			{
+				var listItem:RadioButtonItem = new RadioButtonItem("Title", "");
+				dgColumns.dataProvider.addItem(listItem);
+	
+				updateToOwner();
+	
+				dgColumns.validateNow();
+				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
+				callLater(editSelectedItem);
+			}
+	
+			private function editItemButton_clickHandler(event:MouseEvent):void
+			{
+				this.editSelectedItem();
+			}
+	
+			private function deleteItemButton_clickHandler(event:MouseEvent):void
+			{
+				updateToOwner();
+				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
+			}
+	
+			private function onTabFormCreationComplete(event:FlexEvent):void
+			{
+				updateColumnList();
+				updateBinding();
+	
+				_childrenForFocus = [];
+				_childrenForFocus.push(addDtColumnBtn);
+				_childrenForFocus.push(editDtColumnBtn);
+				_childrenForFocus.push(deleteDtColumnBtn);
+			}
+	
+			private function updateColumnList():void
+			{
+				if (!dgColumns) return;
+				dgColumns.dataProvider = (selectedItem as SelectOneRadio).items;
+				amountOfColumns.value = (selectedItem as SelectOneRadio).columns;
+			}
+	
+			private function onTableUpdated(event:Event):void
+			{
+				updateColumnList();
+			}
+	
+			private function updateToOwner():void
+			{
+				var radio:SelectOneRadio = (selectedItem as SelectOneRadio);
+				radio.updateWithItem();
+			}
+	
+			private function updateBinding():void
+			{
+				if (this._bindingColumns)
+				{
+					this._bindingColumns.unwatch();
+					this._bindingColumns = null;
+				}
+				if (this.selectedItem === null)
+				{
+					return;
+				}
+				this._bindingColumns = BindingUtils.bindSetter(onColumnsUpdated, selectedItem, "columns", false, true);
+			}
+	
+			private function onColumnsUpdated(value:Object):void
+			{
+				if (selectedItem === null) return;
+	
+				columns = value as int;
+				(selectedItem as SelectOneRadio).items.refresh();
+			}
+	
+			protected function onRowEditEnd(event:GridItemEditorEvent):void
+			{
+				//updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
+			}
+	
+			/*override public function set selectedItem(value:ISurfaceComponent):void
+			{
+				if (selectedItem) selectedItem.removeEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated);
+				
+				super.selectedItem = value;
+				if (value) selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
+			}*/
+	
+			protected function onRowEditStarts(event:GridItemEditorEvent):void
+			{
+				//updatePropertyEditorPriorToEdit();
+			}
+			
+			private function onColumnUpdates():void
+			{
+				(selectedItem as SelectOneRadio).columns = amountOfColumns.value; 
+				updateToOwner();
+			}
+			
+		]]>
+	</fx:Script>
+	
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+	
+	<s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
+		<s:HGroup horizontalAlign="left" verticalAlign="middle" gap="5">
+			<s:NumericStepper id="amountOfColumns" minimum="1" stepSize="1" maximum="10"/>
+			<s:Button id="btnUpdate" label="Update" height="25"
+					  click="onColumnUpdates()"/>
+		</s:HGroup>
+	</s:FormItem>
+	
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
+		<s:DataGrid id="dgColumns"
+					width="100%" height="100%"
+					editable="true" sortableColumns="false" draggableColumns="false"
+					gridItemEditorSessionSave="onRowEditEnd(event)" gridItemEditorSessionStart="onRowEditStarts(event)">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn dataField="itemLabel" headerText="Title"/>
+					<s:GridColumn dataField="itemValue" headerText="Value"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+        <s:HGroup>
+            <s:Button id="addDtColumnBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
+                      click="addItemButton_clickHandler(event)"/>
+            <s:Button id="editDtColumnBtn" styleName="editDataProviderItemButton" toolTip="Edit Item"
+                      enabled="false"
+                      click="editItemButton_clickHandler(event)"/>
+            <s:Button id="deleteDtColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+                      enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"
+                      click="deleteItemButton_clickHandler(event)"/>
+        </s:HGroup>
+    </s:FormItem>
+</suportclasses:BasePropertyEditorForm>

@@ -800,7 +800,8 @@ package view.primeFaces.surfaceComponents.components
 
         private function createChildrenFromXML(bodyRows:XMLList, callback:Function):void
         {
-            for (var rowIndex:int = 0; rowIndex < this.rowCount; rowIndex++)
+            var bodyRowCount:int = this.body.numElements;
+            for (var rowIndex:int = 0; rowIndex < bodyRowCount; rowIndex++)
             {
                 var rowItem:GridRow = this.body.getElementAt(rowIndex) as GridRow;
                 var columnsXML:XMLList = bodyRows[rowIndex].Column;

@@ -140,6 +140,9 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
         public static const ELEMENT_NAME:String = "PanelGrid";
 
+        private var bodyRowsXML:XMLList;
+        private var thisCallbackXML:Function;
+
         public function PanelGrid()
         {
             super();
@@ -476,7 +479,7 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            var bodyRows:XMLList = xml.Row;
+            this.bodyRowsXML = xml.Row;
             var header:XMLList = xml.Header.Row;
             var rCount:int = 0;
 
@@ -518,7 +521,7 @@ package view.primeFaces.surfaceComponents.components
             }
             else
             {
-                rCount = bodyRows.length();
+                rCount = bodyRowsXML.length();
                 if (rCount > 0)
                 {
                     this.rowCount = rCount;
@@ -535,7 +538,7 @@ package view.primeFaces.surfaceComponents.components
             }
             else
             {
-                var columns:XMLList = bodyRows[0].Column;
+                var columns:XMLList = bodyRowsXML[0].Column;
                 var colCount:int = columns.length();
                 if (colCount > 0)
                 {
@@ -547,7 +550,8 @@ package view.primeFaces.surfaceComponents.components
                 }
             }
 
-            this.callLater(createChildrenFromXML, [bodyRows, callback]);
+            thisCallbackXML = callback;
+            this.callLater(createChildrenFromXML);
         }
 
         public function toCode():XML
@@ -798,26 +802,55 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-        private function createChildrenFromXML(bodyRows:XMLList, callback:Function):void
+        override protected function addRowsWithColumnsToBody():void
         {
-            for (var rowIndex:int = 0; rowIndex < this.rowCount; rowIndex++)
+            super.addRowsWithColumnsToBody();
+
+            createChildrenFromXML();
+        }
+
+        private function createChildrenFromXML():void
+        {
+            if (!bodyRowsXML && !thisCallbackXML) return;
+
+            var bodyRowCount:int = this.body.numElements;
+            for (var rowIndex:int = 0; rowIndex < bodyRowCount; rowIndex++)
             {
                 var rowItem:GridRow = this.body.getElementAt(rowIndex) as GridRow;
-                var columnsXML:XMLList = bodyRows[rowIndex].Column;
+                var columnsXML:XMLList = bodyRowsXML[rowIndex].Column;
                 for (var colIndex:int = 0; colIndex < this.columnCount; colIndex++)
                 {
                     var colItem:GridItem = rowItem.getElementAt(colIndex) as GridItem;
                     var container:Div = colItem.getElementAt(0) as Div;
                     var colXML:XML = columnsXML[colIndex];
+                    var divs:XMLList = colXML.Div;
 
-                    for each (var columnContent:XML in colXML)
+                    if (divs.length() > 0)
                     {
-                        if (columnContent)
+                        var divXML:XMLList = divs.children();
+                        //Make transition only if div contains children, if not it does not needed.
+                        if (divXML.length() > 0)
                         {
-                            callback(container, columnContent);
+                            container.fromXML(divs[0], thisCallbackXML);
+                        }
+                    }
+                    else
+                    {
+                        for each (var columnContent:XML in colXML)
+                        {
+                            if (columnContent)
+                            {
+                                thisCallbackXML(container, columnContent);
+                            }
                         }
                     }
                 }
+            }
+
+            if (bodyRowCount > 0)
+            {
+                bodyRowsXML = null;
+                thisCallbackXML = null;
             }
         }
     }

@@ -269,7 +269,7 @@ package view.primeFaces.supportClasses.table
             }
         }
 
-        private function addRowsWithColumnsToBody():void
+        protected function addRowsWithColumnsToBody():void
         {
 			this.body.removeAllElements();
 

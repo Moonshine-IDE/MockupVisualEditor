@@ -6,11 +6,11 @@
 	<fx:Script>
 	<![CDATA[
 		import data.ComponentListItem;
-
+		
 		import org.apache.flex.collections.ArrayList;
-
+		
 		import utils.VisualEditorType;
-
+		
 		import view.flex.surfaceComponents.components.Button;
 		import view.flex.surfaceComponents.components.Calendar;
 		import view.flex.surfaceComponents.components.CheckBox;
@@ -39,7 +39,9 @@
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
 		import view.primeFaces.surfaceComponents.components.PanelGrid;
 		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+		import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 		import view.primeFaces.surfaceComponents.components.TabView;
+		import view.primeFaces.surfaceComponents.components.TextEditor;
 
 		private var _visualEditorType:String;
 
@@ -82,7 +84,9 @@
 					new ComponentListItem("InputNumber", InputNumber),
 					new ComponentListItem("InputText", InputText),
 					new ComponentListItem("InputTextarea", InputTextarea),
+					new ComponentListItem("TextEditor", TextEditor),
 					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
+					new ComponentListItem("SelectOneRadio", SelectOneRadio),
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("TabView", TabView),

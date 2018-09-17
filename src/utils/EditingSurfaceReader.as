@@ -2,7 +2,7 @@ package utils
 {
 	import mx.core.IVisualElement;
 	import mx.core.IVisualElementContainer;
-
+	
 	import view.EditingSurface;
 	import view.flex.surfaceComponents.components.Button;
 	import view.flex.surfaceComponents.components.Calendar;
@@ -23,21 +23,23 @@ package utils
 	import view.interfaces.ISurfaceComponent;
 	import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 	import view.primeFaces.surfaceComponents.components.Button;
-    import view.primeFaces.surfaceComponents.components.DataTable;
-    import view.primeFaces.surfaceComponents.components.Div;
-    import view.primeFaces.surfaceComponents.components.Fieldset;
-    import view.primeFaces.surfaceComponents.components.Grid;
-    import view.primeFaces.surfaceComponents.components.Include;
+	import view.primeFaces.surfaceComponents.components.DataTable;
+	import view.primeFaces.surfaceComponents.components.Div;
+	import view.primeFaces.surfaceComponents.components.Fieldset;
+	import view.primeFaces.surfaceComponents.components.Grid;
+	import view.primeFaces.surfaceComponents.components.Include;
 	import view.primeFaces.surfaceComponents.components.InputMask;
 	import view.primeFaces.surfaceComponents.components.InputNumber;
 	import view.primeFaces.surfaceComponents.components.InputText;
 	import view.primeFaces.surfaceComponents.components.InputTextarea;
 	import view.primeFaces.surfaceComponents.components.MainApplication;
 	import view.primeFaces.surfaceComponents.components.OutputLabel;
-    import view.primeFaces.surfaceComponents.components.OutputPanel;
-    import view.primeFaces.surfaceComponents.components.PanelGrid;
-    import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+	import view.primeFaces.surfaceComponents.components.OutputPanel;
+	import view.primeFaces.surfaceComponents.components.PanelGrid;
+	import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+	import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 	import view.primeFaces.surfaceComponents.components.TabView;
+	import view.primeFaces.surfaceComponents.components.TextEditor;
 
     public class EditingSurfaceReader
 	{
@@ -121,7 +123,9 @@ package utils
 				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
 				CLASS_LOOKUP[InputText.ELEMENT_NAME] = InputText;
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+				CLASS_LOOKUP[SelectOneRadio.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectOneRadio;
 				CLASS_LOOKUP[Include.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Include;
+				CLASS_LOOKUP[TextEditor.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.TextEditor;
 				CLASS_LOOKUP[TabView.ELEMENT_NAME] = TabView;
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Tree.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Tree;
                 CLASS_LOOKUP[DataTable.ELEMENT_NAME] = DataTable;

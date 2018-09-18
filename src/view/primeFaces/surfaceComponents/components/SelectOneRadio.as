@@ -7,9 +7,10 @@ package view.primeFaces.surfaceComponents.components
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
+    import mx.core.ScrollPolicy;
     
-    import spark.components.Group;
     import spark.components.RadioButton;
+    import spark.components.RadioButtonGroup;
     
     import data.OrganizerItem;
     import data.RadioButtonItem;
@@ -24,6 +25,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.SelectOneRadioPropertyEditor;
+    import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
@@ -42,6 +44,9 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="mainXML", kind="property")]
     [Exclude(name="widthOutput", kind="property")]
     [Exclude(name="heightOutput", kind="property")]
+	[Exclude(name="componentAddedToEditor", kind="method")]
+	[Exclude(name="getComponentsChildren", kind="method")]
+	[Exclude(name="updateItems", kind="method")]
 
     /**
      * <p>Representation of selectOneRadio in HTML</p>
@@ -65,22 +70,24 @@ package view.primeFaces.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class SelectOneRadio extends Group implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent
+    public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneRadio";
         public static const ELEMENT_NAME:String = "SelectOneRadio";
-		public static const ITEM_EDIT:String = "itemEdit";
-		public static const ITEM_DELETE:String = "itemDelete";
-		public static const ITEM_ADD:String = "itemAdd";
 
         public function SelectOneRadio()
         {
             super();
 			
-	        this.width = 120;
+	        this.width = 100;
 			this.height = 21;
             this.minWidth = 20;
             this.minHeight = 20;
+			
+			this.setStyle("verticalGap", 1);
+			this.setStyle("horizontalGap", 1);
+			this.setStyle("verticalScrollPolicy", ScrollPolicy.OFF);
+			this.setStyle("horizontalScrollPolicy", ScrollPolicy.OFF);
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -91,8 +98,12 @@ package view.primeFaces.surfaceComponents.components
             ];
 			
 			items.addItem(new RadioButtonItem("Radio", "", true));
+			this.ensureCreateInitialRowWithColumn();
         }
 		
+		/**
+		 * @Excluded from ASDoc
+		 */
 		public function componentAddedToEditor():void
 		{
 			this.maxHeight = 21;
@@ -102,11 +113,7 @@ package view.primeFaces.surfaceComponents.components
 		override protected function createChildren():void
 		{
 			super.createChildren();
-			
-			_grid.percentWidth = _grid.percentHeight = 100;
-			addElement(_grid);
-			
-			addRadio((_grid.getElementAt(0) as GridRow).getElementAt(0) as GridItem, items[0]);
+			addRadio((this.getElementAt(0) as GridRow).getElementAt(0) as GridItem, items[0]);
 		}
 		
 		private var _items:ArrayCollection = new ArrayCollection();
@@ -125,6 +132,12 @@ package view.primeFaces.surfaceComponents.components
 			dispatchEvent(new Event("itemsChanged"));
 		}
 		
+		private var _radioGroup:RadioButtonGroup = new RadioButtonGroup();
+		public function get selectedIndex():int
+		{
+			return _radioGroup.selectedIndex;
+		}
+		
 		private var _columns:int = 3;
 		public function get columns():int
 		{
@@ -139,12 +152,6 @@ package view.primeFaces.surfaceComponents.components
 				_columns = value;
 				dispatchEvent(new Event("columnChanged"));
 			}
-		}
-		
-		private var _grid:Grid = new Grid();
-		public function get grid():Grid
-		{
-			return _grid;
 		}
 		
 		private var _isSelected:Boolean;
@@ -208,45 +215,10 @@ package view.primeFaces.surfaceComponents.components
 			
 		}
 		
-		public function updateWithItem():void
+		public function updateItems(atIndex:int=-1):void
 		{
-			_grid.removeAllElements();
-			
-			this.height = this.maxHeight = 21;
-			this.invalidateDisplayList();
-			
-			_grid.addRow();
-			
-			var cell:GridItem;
-			var _rowIndex:int;
-			
-			var columnIndex:int;
-			for each (var item:RadioButtonItem in items)
-			{
-				if (columnIndex == 0)
-				{
-					addRadio((_grid.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
-					columnIndex++;
-				}
-				else if (columnIndex < columns)
-				{
-					cell = _grid.addColumn(_rowIndex);
-					addRadio(cell, item);
-					columnIndex++;
-				} 
-				else if (columnIndex == columns)
-				{
-					_rowIndex ++;
-					columnIndex = 0;
-					
-					this.maxHeight = this.height = (this.height + 21);
-					this.invalidateDisplayList();
-					
-					_grid.addRow();
-					addRadio((_grid.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
-					columnIndex++;
-				}
-			}
+			if (atIndex != -1) updateColumn(atIndex);
+			else generateColumns();
 		}
 
         public function toXML():XML
@@ -328,9 +300,64 @@ package view.primeFaces.surfaceComponents.components
 			tmpRadio.label = item.itemLabel;
 			tmpRadio.value = item.itemValue;
 			tmpRadio.selected = item.isSelected;
-			tmpRadio.mouseChildren = tmpRadio.mouseEnabled = false;
+			tmpRadio.group = _radioGroup;
 			tmpRadio.setStyle("skinClass", RadioButtonPrimeFacesSkin);
 			(gridItem.getElementAt(0) as IVisualElementContainer).addElement(tmpRadio);
+		}
+		
+		private function generateColumns():void
+		{
+			this.removeAllElements();
+			
+			this.height = this.maxHeight = 21;
+			this.invalidateDisplayList();
+			
+			super.addRow();
+			
+			var cell:GridItem;
+			var _rowIndex:int;
+			
+			var columnIndex:int;
+			for each (var item:RadioButtonItem in items)
+			{
+				if (columnIndex == 0)
+				{
+					addRadio((this.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
+					columnIndex++;
+				}
+				else if (columnIndex < columns)
+				{
+					cell = super.addColumn(_rowIndex);
+					addRadio(cell, item);
+					columnIndex++;
+				} 
+				else if (columnIndex == columns)
+				{
+					_rowIndex ++;
+					columnIndex = 0;
+					
+					this.maxHeight = this.height = (this.height + 21);
+					this.invalidateDisplayList();
+					
+					super.addRow();
+					addRadio((this.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
+					columnIndex++;
+				}
+			}
+		}
+		
+		private function updateColumn(atIndex:int):void
+		{
+			var tmpColIndex:int = atIndex;
+			var tmpRowIndex:int;
+			while (tmpColIndex >= columns)
+			{
+				tmpColIndex -= columns;
+				tmpRowIndex ++;
+			}
+			
+			var tmpRadio:RadioButton = (((this.getElementAt(tmpRowIndex) as GridRow).getElementAt(tmpColIndex) as GridItem).getElementAt(0) as Div).getElementAt(0) as RadioButton;
+			tmpRadio.label = items[atIndex].itemLabel;
 		}
     }
 }

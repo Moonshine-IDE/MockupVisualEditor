@@ -18,6 +18,8 @@
 			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 
 			[Bindable] public var columns:int;
+			
+			private static const DEFAULT_LABEL:String = "Title";
 	
 			private var _bindingColumns:ChangeWatcher;
 			private var _label:String = "Items";
@@ -58,7 +60,7 @@
 	
 			private function addItemButton_clickHandler(event:MouseEvent):void
 			{
-				var listItem:RadioButtonItem = new RadioButtonItem("Title", "");
+				var listItem:RadioButtonItem = new RadioButtonItem(DEFAULT_LABEL, "");
 				dgColumns.dataProvider.addItem(listItem);
 	
 				updateToOwner();
@@ -75,8 +77,8 @@
 	
 			private function deleteItemButton_clickHandler(event:MouseEvent):void
 			{
-				updateToOwner();
 				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
+				updateToOwner();
 			}
 	
 			private function onTabFormCreationComplete(event:FlexEvent):void
@@ -102,10 +104,10 @@
 				updateColumnList();
 			}
 	
-			private function updateToOwner():void
+			private function updateToOwner(atIndex:int=-1):void
 			{
 				var radio:SelectOneRadio = (selectedItem as SelectOneRadio);
-				radio.updateWithItem();
+				radio.updateItems(atIndex);
 			}
 	
 			private function updateBinding():void
@@ -132,7 +134,11 @@
 	
 			protected function onRowEditEnd(event:GridItemEditorEvent):void
 			{
-				//updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
+				var tmpItem:RadioButtonItem = dgColumns.dataProvider.getItemAt(dgColumns.selectedIndex) as RadioButtonItem;
+				if (tmpItem.itemLabel != DEFAULT_LABEL || tmpItem.itemValue != "")
+				{
+					updateToOwner(dgColumns.selectedIndex);
+				}
 			}
 	
 			/*override public function set selectedItem(value:ISurfaceComponent):void

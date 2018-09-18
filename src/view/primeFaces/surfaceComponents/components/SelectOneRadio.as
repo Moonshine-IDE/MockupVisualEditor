@@ -217,8 +217,14 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function updateItems(atIndex:int=-1):void
 		{
-			if (atIndex != -1) updateColumn(atIndex);
-			else generateColumns();
+			if (atIndex != -1)
+			{
+				updateColumn(atIndex);
+            }
+			else
+			{
+				generateColumns();
+            }
 		}
 
         public function toXML():XML

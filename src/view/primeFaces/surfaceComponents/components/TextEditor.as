@@ -107,8 +107,8 @@ package view.primeFaces.surfaceComponents.components
 		public function componentAddedToEditor():void
 		{
 			// update size
-			width = 250;
-			height = 100;
+			width = (width == 110) ? 250 : width;
+			height = (height == 80) ? 100 : height;
 			minWidth = 120;
 			
 			// change/update styles

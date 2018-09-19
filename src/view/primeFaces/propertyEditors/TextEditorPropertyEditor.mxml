@@ -13,5 +13,4 @@
     <forms:TextForm label="Value" textProperty="text"
 					prompt="#\{bean.property\}"/>
 	<forms:TextForm label="Placeholder" textProperty="placeholder"/>
-	<forms:TextForm label="Style" textProperty="style"/>
 </suportclasses:BasePropertyEditor>

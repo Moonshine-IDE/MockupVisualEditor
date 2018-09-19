@@ -102,7 +102,7 @@ package view.primeFaces.surfaceComponents.components
         }
 		
 		/**
-		 * @Excluded from ASDoc
+		 * Excluded from ASDoc
 		 */
 		public function componentAddedToEditor():void
 		{
@@ -140,7 +140,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		/**
-		 * @Excluded from ASDoc
+		 * Excluded from ASDoc
 		 */
 		public function getComponentsChildren():OrganizerItem
 		{
@@ -371,35 +371,6 @@ package view.primeFaces.surfaceComponents.components
 			return _widgetVar;
 		}
 		
-		private var _style:String = "";
-		
-		[Inspectable(category="General")]
-		[Bindable("styleChanged")]
-		/**
-		 * <p>PrimeFaces: <strong>value</strong></p>
-		 *
-		 * @example
-		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;TextEditor style=""/&gt;</listing>
-		 * @example
-		 * <strong>PrimeFaces:</strong>
-		 * <listing version="3.0">&lt;p:textEditor style=""/&gt;</listing>
-		 */
-		public function set style(value:String):void
-		{
-			if (_style != value)
-			{
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "style", _style, value);
-				
-				_style = value;
-				dispatchEvent(new Event("styleChanged"));
-			}
-		}
-		public function get style():String
-		{
-			return _style;
-		}
-
         private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array
         {
@@ -414,7 +385,6 @@ package view.primeFaces.surfaceComponents.components
 			xml.@widgetVar = this.widgetVar;
 			xml.@value = this.text;
 			if (StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
-			if (StringUtil.trim(this.style).length != 0) xml.@style = this.style;
             return xml;
         }
 
@@ -425,7 +395,6 @@ package view.primeFaces.surfaceComponents.components
 			this.widgetVar = xml.@widgetVar;
 			this.text = xml.@value;
 			this.placeholder = xml.@placeholder;
-			this.style = xml.@style;
 			
 			this.callLater(componentAddedToEditor);
         }
@@ -442,7 +411,6 @@ package view.primeFaces.surfaceComponents.components
 			xml.@widgetVar = this.widgetVar;
 			xml.@value = this.text;
 			if (StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
-			if (StringUtil.trim(this.style).length != 0) xml.@style = this.style;
 			return xml;
         }
 		

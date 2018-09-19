@@ -4,7 +4,7 @@
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
         skinClass="skins.FormSkin"
-        creationComplete="onTabFormCreationComplete(event)">
+        creationComplete="onTabFormCreationComplete(event)" xmlns:forms="view.forms.*">
 	<fx:Script>
 		<![CDATA[
 			import mx.binding.utils.BindingUtils;
@@ -95,6 +95,11 @@
 			private function updateColumnList():void
 			{
 				if (!dgColumns) return;
+				if ((selectedItem as SelectOneRadio).columns > 0)
+				{
+					ddlLayout.selectedIndex = 1;
+					fiColumns.includeInLayout = fiColumns.visible = true;
+				}
 				dgColumns.dataProvider = (selectedItem as SelectOneRadio).items;
 				amountOfColumns.value = (selectedItem as SelectOneRadio).columns;
 			}
@@ -160,6 +165,13 @@
 				updateToOwner();
 			}
 			
+			private function onLayoutUpdates():void
+			{
+				fiColumns.includeInLayout = fiColumns.visible = (ddlLayout.selectedIndex == 1);
+				(selectedItem as SelectOneRadio).columns = (ddlLayout.selectedIndex == 1) ? 1 : 0;
+				updateToOwner();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -167,12 +179,36 @@
         <s:FormLayout horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 	
-	<s:FormItem label="Columns" skinClass="skins.StackedFormItemSkin">
-		<s:HGroup horizontalAlign="left" verticalAlign="middle" gap="5">
-			<s:NumericStepper id="amountOfColumns" minimum="1" stepSize="1" maximum="10"/>
-			<s:Button id="btnUpdate" label="Update" height="25"
-					  click="onColumnUpdates()"/>
-		</s:HGroup>
+	<forms:TextForm label="Value" textProperty="value"
+					prompt="#\{bean.property\}"/>
+	
+	<s:FormItem label="Layout" skinClass="skins.StackedFormItemSkin">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"/>
+		</s:layout>
+		<s:DropDownList id="ddlLayout" 
+						width="100%" requireSelection="true">
+			<s:dataProvider>
+				<s:ArrayList>
+					<fx:String>Basic</fx:String>
+					<fx:String>Grid</fx:String>
+				</s:ArrayList>
+			</s:dataProvider>
+		</s:DropDownList>
+		<s:Button label="Update" height="25"
+				  click="onLayoutUpdates()"/>
+	</s:FormItem>
+	
+	<s:FormItem id="fiColumns" 
+				label="Columns" skinClass="skins.StackedFormItemSkin"
+				visible="false" includeInLayout="false">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"/>
+		</s:layout>
+		<s:NumericStepper id="amountOfColumns"
+						  width="100%" minimum="1" stepSize="1" maximum="10"/>
+		<s:Button id="btnUpdate" label="Update" height="25"
+				  click="onColumnUpdates()"/>
 	</s:FormItem>
 	
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">

@@ -11,6 +11,7 @@ package view.primeFaces.surfaceComponents.components
     
     import spark.components.RadioButton;
     import spark.components.RadioButtonGroup;
+    import spark.layouts.HorizontalLayout;
     
     import data.OrganizerItem;
     import data.RadioButtonItem;
@@ -99,21 +100,17 @@ package view.primeFaces.surfaceComponents.components
 			
 			items.addItem(new RadioButtonItem("Radio", "", true));
 			this.ensureCreateInitialRowWithColumn();
+			addRadio((this.getElementAt(0) as GridRow).getElementAt(0) as GridItem, items[0]);
         }
 		
 		/**
-		 * @Excluded from ASDoc
+		 * Excluded from ASDoc
 		 */
 		public function componentAddedToEditor():void
 		{
 			this.maxHeight = 21;
 			this.width = 230;
-		}
-		
-		override protected function createChildren():void
-		{
-			super.createChildren();
-			addRadio((this.getElementAt(0) as GridRow).getElementAt(0) as GridItem, items[0]);
+			this.columnBorderColor = "#ffffff";
 		}
 		
 		private var _items:ArrayCollection = new ArrayCollection();
@@ -132,13 +129,29 @@ package view.primeFaces.surfaceComponents.components
 			dispatchEvent(new Event("itemsChanged"));
 		}
 		
+		private var _value:String = "";
+		[Bindable("valueChanged")]
+		public function get value():String
+		{
+			return _value;
+		}
+		public function set value(value:String):void
+		{
+			if (_value === value) return;
+			
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "value", _value, value);
+			
+			_value = value;
+			dispatchEvent(new Event("valueChanged"));
+		}
+		
 		private var _radioGroup:RadioButtonGroup = new RadioButtonGroup();
 		public function get selectedIndex():int
 		{
 			return _radioGroup.selectedIndex;
 		}
 		
-		private var _columns:int = 3;
+		private var _columns:int;
 		public function get columns():int
 		{
 			return _columns;
@@ -227,13 +240,6 @@ package view.primeFaces.surfaceComponents.components
             }
 		}
 
-        public function toXML():XML
-        {
-			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-
-            return xml;
-        }
-		
 		public function getComponentsChildren():OrganizerItem
 		{
 			var componentsArray:Array = [];
@@ -261,43 +267,83 @@ package view.primeFaces.surfaceComponents.components
 		{
 			this.addElementAt(element, index);
 		}
+		
+        public function toXML():XML
+        {
+			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+			
+			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+			
+			xml["@value"] = this.value;
+			if (columns > 0)
+			{
+				xml["@layout"] = "grid";
+				xml["@columns"] = columns;
+			}
+			
+			var itemXML:XML;
+			for each (var item:RadioButtonItem in items)
+			{
+				itemXML = new XML("<selectItem />");
+				itemXML["@itemLabel"] = item.itemLabel;
+				itemXML["@itemValue"] = item.itemValue;
+				itemXML["@itemVar"] = item.itemVar;
+				itemXML["@value"] = item.value;
+				xml.appendChild(itemXML);
+			}
+
+            return xml;
+        }
+		
+		public function fromXML(xml:XML, callback:Function):void
+        {
+			componentAddedToEditor();
+            XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+			
+			this.columns = (xml.@columns != undefined) ? int(xml.@columns) : 0;
+			this.value = xml.@value;
+			
+			var tmpItem:RadioButtonItem;
+			items = new ArrayCollection();
+			for each (var i:XML in xml.selectItem)
+			{
+				tmpItem = new RadioButtonItem(i.@itemLabel, i.@itemValue);
+				tmpItem.itemVar = i.@itemVar;
+				tmpItem.value = i.@value;
+				items.addItem(tmpItem);
+			}
+			
+			generateColumns();
+        }
 
 		public function toCode():XML
         {
             var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
+			var jNamespace:Namespace = new Namespace("j", "http://java.sun.com/jsf/core");
+			var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
+			xml.addNamespace(primeFacesNamespace);
+			xml.setNamespace(primeFacesNamespace);
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-            //xml["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
-
-            var elementCount:int = this.numElements;
-            for(var i:int = 0; i < elementCount; i++)
-            {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                if(element === null)
-                {
-                    continue;
-                }
-
-                xml.appendChild(element.toCode());
-            }
+            xml["@value"] = this.value;
+			if (columns > 0)
+			{
+				xml["@layout"] = "grid";
+				xml["@columns"] = columns;
+			}
+			
+			var itemXML:XML;
+			for each (var item:RadioButtonItem in items)
+			{
+				itemXML = new XML("<selectItem />");
+				itemXML.addNamespace(jNamespace);
+				itemXML.setNamespace(jNamespace);
+				itemXML["@itemLabel"] = item.itemLabel;
+				itemXML["@itemValue"] = item.itemValue;
+				xml.appendChild(itemXML);
+			}
 
             return xml;
-        }
-
-		public function fromXML(xml:XML, callback:Function):void
-        {
-           // this._cssClass = xml.@["class"];
-            //this.wrap = xml.@wrap == "true";
-
-            XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-
-            var elementsXML:XMLList = xml.elements();
-            var childCount:int = elementsXML.length();
-            for(var i:int = 0; i < childCount; i++)
-            {
-                var childXML:XML = elementsXML[i];
-                callback(this, childXML);
-            }
         }
 		
 		private function addRadio(gridItem:GridItem, item:RadioButtonItem):void
@@ -314,7 +360,6 @@ package view.primeFaces.surfaceComponents.components
 		private function generateColumns():void
 		{
 			this.removeAllElements();
-			
 			this.height = this.maxHeight = 21;
 			this.invalidateDisplayList();
 			
@@ -322,47 +367,73 @@ package view.primeFaces.surfaceComponents.components
 			
 			var cell:GridItem;
 			var _rowIndex:int;
+			var item:RadioButtonItem;
 			
-			var columnIndex:int;
-			for each (var item:RadioButtonItem in items)
+			// when layout is not grid, or columns is 0
+			if (columns == 0)
 			{
-				if (columnIndex == 0)
+				cell = (this.getElementAt(0) as GridRow).getElementAt(0) as GridItem;
+				var tmpDiv:Div = ((this.getElementAt(0) as GridRow).getElementAt(0) as GridItem).getElementAt(0) as Div;
+				(tmpDiv.layout as HorizontalLayout).gap = 15;
+				for each (item in items)
 				{
-					addRadio((this.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
-					columnIndex++;
-				}
-				else if (columnIndex < columns)
-				{
-					cell = super.addColumn(_rowIndex);
 					addRadio(cell, item);
-					columnIndex++;
-				} 
-				else if (columnIndex == columns)
+				}
+			}
+			else
+			{
+				var columnIndex:int;
+				for each (item in items)
 				{
-					_rowIndex ++;
-					columnIndex = 0;
-					
-					this.maxHeight = this.height = (this.height + 21);
-					this.invalidateDisplayList();
-					
-					super.addRow();
-					addRadio((this.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
-					columnIndex++;
+					if (columnIndex == 0)
+					{
+						addRadio((this.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
+						columnIndex++;
+					}
+					else if (columnIndex < columns)
+					{
+						cell = super.addColumn(_rowIndex);
+						addRadio(cell, item);
+						columnIndex++;
+					} 
+					else if (columnIndex == columns)
+					{
+						_rowIndex ++;
+						columnIndex = 0;
+						
+						this.maxHeight = this.height = (this.height + 21);
+						this.invalidateDisplayList();
+						
+						super.addRow();
+						addRadio((this.getElementAt(_rowIndex) as GridRow).getElementAt(columnIndex) as GridItem, item);
+						columnIndex++;
+					}
 				}
 			}
 		}
 		
 		private function updateColumn(atIndex:int):void
 		{
-			var tmpColIndex:int = atIndex;
+			var tmpColIndex:int;
 			var tmpRowIndex:int;
-			while (tmpColIndex >= columns)
+			var tmpItemIndex:int;
+			
+			// calculate row/column only if grid layout
+			if (columns > 0)
 			{
-				tmpColIndex -= columns;
-				tmpRowIndex ++;
+				tmpColIndex = atIndex;
+				while (tmpColIndex >= columns)
+				{
+					tmpColIndex -= columns;
+					tmpRowIndex ++;
+				}
+			}
+			else
+			{
+				tmpItemIndex = atIndex;
 			}
 			
-			var tmpRadio:RadioButton = (((this.getElementAt(tmpRowIndex) as GridRow).getElementAt(tmpColIndex) as GridItem).getElementAt(0) as Div).getElementAt(0) as RadioButton;
+			var tmpRadio:RadioButton = (((this.getElementAt(tmpRowIndex) as GridRow).getElementAt(tmpColIndex) as GridItem).getElementAt(0) as Div).getElementAt(tmpItemIndex) as RadioButton;
 			tmpRadio.label = items[atIndex].itemLabel;
 		}
     }

@@ -8,12 +8,11 @@ package view.primeFaces.surfaceComponents.components
     import mx.utils.StringUtil;
     
     import spark.components.BorderContainer;
-    import spark.components.Group;
+    import spark.components.HGroup;
     import spark.components.Image;
     import spark.components.TextArea;
+    import spark.layouts.VerticalAlign;
     import spark.layouts.VerticalLayout;
-    
-    import components.FlowLayout;
     
     import data.OrganizerItem;
     
@@ -73,7 +72,7 @@ package view.primeFaces.surfaceComponents.components
 		private var menuOption2: Class;
 		
 		private var hRule:HRule;
-		private var menuGroup:Group;
+		private var menuGroup:HGroup;
 		
         public function TextEditor()
         {
@@ -114,11 +113,8 @@ package view.primeFaces.surfaceComponents.components
 			// change/update styles
 			backgroundFill = new SolidColor(0xFFFFFF);
 			
-			var tmpParentLayout:VerticalLayout = (menuGroup.parent as Group).layout as VerticalLayout;
-			tmpParentLayout.paddingLeft = tmpParentLayout.paddingRight = 12;
-			tmpParentLayout.paddingTop = tmpParentLayout.paddingBottom = 8;
-			(menuGroup.parent as Group).layout = tmpParentLayout;
-			
+			menuGroup.paddingLeft = menuGroup.paddingRight = 12;
+			menuGroup.paddingTop = menuGroup.paddingBottom = 8;
 			menuGroup.minHeight = 24;
 			
 			_editor.setStyle("paddingLeft", 12);
@@ -441,25 +437,13 @@ package view.primeFaces.surfaceComponents.components
 			
 			if (!menuGroup)
 			{
-				// unfortunately, flowlayout do not avail any
-				// padding feature thus we contain the menuGroup
-				// inside of another container having padding
-				var menuGroupContainer:Group = new Group();
-				menuGroupContainer.percentWidth = 100;
-				menuGroupContainer.layout = new VerticalLayout();
-				(menuGroupContainer.layout as VerticalLayout).paddingLeft = (menuGroupContainer.layout as VerticalLayout).paddingRight = 8;
-				(menuGroupContainer.layout as VerticalLayout).paddingTop = (menuGroupContainer.layout as VerticalLayout).paddingBottom = 8;
-				(menuGroupContainer.layout as VerticalLayout).verticalAlign = "middle";
-				
-				menuGroup = new Group();
+				menuGroup = new HGroup();
 				menuGroup.percentWidth = 100;
 				menuGroup.minHeight = 16;
-				menuGroup.layout = new FlowLayout();
-				(menuGroup.layout as FlowLayout).verticalAlign = "middle";
-				
-				menuGroupContainer.addElement(menuGroup);
-				addElement(menuGroupContainer);
-				generateMenuImages();
+				menuGroup.padding = 8;
+				menuGroup.verticalAlign = VerticalAlign.MIDDLE;
+				menuGroup.clipAndEnableScrolling = true;
+				addElement(menuGroup);
 				
 				hRule = new HRule();
 				hRule.setStyle("strokeWidth", 1);
@@ -477,6 +461,8 @@ package view.primeFaces.surfaceComponents.components
 				_editor.setStyle("borderVisible", "false");
 				_editor.prompt = "Input Text";
 				addElement(_editor);
+				
+				generateMenuImages();
 			}
 		}
 		

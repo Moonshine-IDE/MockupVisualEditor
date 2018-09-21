@@ -17,7 +17,7 @@
 				if (value)
 				{
 					super.data = value;
-					if (isTooltip) txtLabel.toolTip = data.resourcePathWithoutRoot;
+					if (isTooltip) labelDisplay.toolTip = data.resourcePathWithoutRoot;
 				}
 			}
 			
@@ -26,8 +26,8 @@
 				// lets not add tooltip when list has no horizontal scroll
 				if (this.width > this.owner.width)
 				{
-					txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
-					txtLabel.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
+					labelDisplay.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
+					labelDisplay.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
 					isTooltip = true;
 				}
 			}
@@ -36,8 +36,8 @@
 			{
 				if (isTooltip)
 				{
-					txtLabel.removeEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction());
-					txtLabel.removeEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction());
+					labelDisplay.removeEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction());
+					labelDisplay.removeEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction());
 					isTooltip = false;
 				}
 			}
@@ -45,7 +45,7 @@
 		]]>
 	</fx:Script>
 	
-	<s:Label id="txtLabel" text="{data.resourcePathWithoutRoot}"
+	<s:Label id="labelDisplay"
 			 verticalCenter="0" left="4" right="4"
 			 maxDisplayedLines="1" mouseChildren="false" mouseFocusEnabled="false"/>
 </s:ItemRenderer>

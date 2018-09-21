@@ -36,6 +36,7 @@
         private var _bindingCollection:ChangeWatcher;
         private var _bindingSurfaceProperty:ChangeWatcher;
         private var _labelField:String;
+
         public function set labelField(value:String):void
         {
             _labelField = value;
@@ -92,7 +93,11 @@
         {
             if (listItemRenderer) ddlSelection.itemRenderer = new ClassFactory(listItemRenderer);
 
-            if (_labelField) ddlSelection.labelField = _labelField;
+            if (_labelField)
+            {
+                ddlSelection.labelField = _labelField;
+            }
+
             ddlSelection.callLater(selectCurrentItem);
 
             updateBinding();
@@ -126,8 +131,14 @@
 
         protected function onSelectionChange(event:IndexChangeEvent):void
         {
-            if (_labelField) selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
-            else selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+            if (_labelField)
+            {
+                selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+            }
+            else
+            {
+                selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+            }
         }
 
         private function updateBinding():void

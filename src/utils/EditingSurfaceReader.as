@@ -135,6 +135,7 @@ package utils
 				CLASS_LOOKUP[Grid.ELEMENT_NAME] = Grid;
 				CLASS_LOOKUP[PanelGrid.ELEMENT_NAME] = PanelGrid;
 				CLASS_LOOKUP[OutputPanel.ELEMENT_NAME] = OutputPanel;
+				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Calendar.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Calendar;
             }
 		}
 	}

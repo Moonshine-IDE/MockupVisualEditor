@@ -392,7 +392,6 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function getComponentsChildren():OrganizerItem
 		{
-			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent = this.getElementAt(0) as IPrimeFacesSurfaceComponent;
 			

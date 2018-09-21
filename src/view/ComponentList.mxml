@@ -6,11 +6,11 @@
 	<fx:Script>
 	<![CDATA[
 		import data.ComponentListItem;
-		
+
 		import org.apache.flex.collections.ArrayList;
-		
+
 		import utils.VisualEditorType;
-		
+
 		import view.flex.surfaceComponents.components.Button;
 		import view.flex.surfaceComponents.components.Calendar;
 		import view.flex.surfaceComponents.components.CheckBox;
@@ -98,7 +98,8 @@
 					new ComponentListItem("Include", Include),
 					new ComponentListItem("Div", Div),
 					new ComponentListItem("Grid", Grid),
-					new ComponentListItem("PanelGrid", PanelGrid)
+					new ComponentListItem("PanelGrid", PanelGrid),
+					new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar)
 				]);
 			}
 

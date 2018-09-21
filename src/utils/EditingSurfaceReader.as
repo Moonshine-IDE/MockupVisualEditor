@@ -37,6 +37,7 @@ package utils
 	import view.primeFaces.surfaceComponents.components.OutputPanel;
 	import view.primeFaces.surfaceComponents.components.PanelGrid;
 	import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+	import view.primeFaces.surfaceComponents.components.SelectOneMenu;
 	import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	import view.primeFaces.surfaceComponents.components.TextEditor;
@@ -124,6 +125,7 @@ package utils
 				CLASS_LOOKUP[InputText.ELEMENT_NAME] = InputText;
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 				CLASS_LOOKUP[SelectOneRadio.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectOneRadio;
+				CLASS_LOOKUP[SelectOneMenu.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectOneMenu;
 				CLASS_LOOKUP[Include.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Include;
 				CLASS_LOOKUP[TextEditor.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.TextEditor;
 				CLASS_LOOKUP[TabView.ELEMENT_NAME] = TabView;

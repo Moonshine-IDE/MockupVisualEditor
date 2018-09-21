@@ -39,6 +39,7 @@
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
 		import view.primeFaces.surfaceComponents.components.PanelGrid;
 		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+		import view.primeFaces.surfaceComponents.components.SelectOneMenu;
 		import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 		import view.primeFaces.surfaceComponents.components.TabView;
 		import view.primeFaces.surfaceComponents.components.TextEditor;
@@ -87,6 +88,7 @@
 					new ComponentListItem("TextEditor", TextEditor),
 					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
 					new ComponentListItem("SelectOneRadio", SelectOneRadio),
+					new ComponentListItem("SelectOneMenu", SelectOneMenu),
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("TabView", TabView),

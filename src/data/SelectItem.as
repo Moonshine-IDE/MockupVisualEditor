@@ -1,6 +1,6 @@
 package data
 {
-	[Bindable] public class RadioButtonItem
+	[Bindable] public class SelectItem
 	{
 		public var itemLabel:String;
 		public var itemValue:String;
@@ -8,7 +8,7 @@ package data
 		public var value:String;
 		public var isSelected:Boolean;
 		
-		public function RadioButtonItem(itemLabel:String, itemValue:String, isSelected:Boolean = false)
+		public function SelectItem(itemLabel:String, itemValue:String, isSelected:Boolean = false)
 		{
 			this.itemLabel = itemLabel;
 			this.itemValue = itemValue;

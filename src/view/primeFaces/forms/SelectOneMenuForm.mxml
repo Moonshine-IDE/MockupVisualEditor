@@ -7,18 +7,13 @@
         creationComplete="onTabFormCreationComplete(event)" xmlns:forms="view.forms.*">
 	<fx:Script>
 		<![CDATA[
-			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
 			
-			import spark.events.GridItemEditorEvent;
-			
 			import data.SelectItem;
 			
-			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
+			import view.primeFaces.surfaceComponents.components.SelectOneMenu;
 
-			[Bindable] public var columns:int;
-			
 			private static const DEFAULT_LABEL:String = "Title";
 	
 			private var _bindingColumns:ChangeWatcher;
@@ -63,8 +58,6 @@
 				var listItem:SelectItem = new SelectItem(DEFAULT_LABEL, "");
 				dgColumns.dataProvider.addItem(listItem);
 	
-				updateToOwner();
-	
 				dgColumns.validateNow();
 				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
 				callLater(editSelectedItem);
@@ -78,98 +71,17 @@
 			private function deleteItemButton_clickHandler(event:MouseEvent):void
 			{
 				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
-				updateToOwner();
 			}
 	
 			private function onTabFormCreationComplete(event:FlexEvent):void
 			{
 				updateColumnList();
-				updateBinding();
-	
-				_childrenForFocus = [];
-				_childrenForFocus.push(addDtColumnBtn);
-				_childrenForFocus.push(editDtColumnBtn);
-				_childrenForFocus.push(deleteDtColumnBtn);
 			}
 	
 			private function updateColumnList():void
 			{
 				if (!dgColumns) return;
-				if ((selectedItem as SelectOneRadio).columns > 0)
-				{
-					ddlLayout.selectedIndex = 1;
-					fiColumns.includeInLayout = fiColumns.visible = true;
-				}
-				dgColumns.dataProvider = (selectedItem as SelectOneRadio).items;
-				amountOfColumns.value = (selectedItem as SelectOneRadio).columns;
-			}
-	
-			private function onTableUpdated(event:Event):void
-			{
-				updateColumnList();
-			}
-	
-			private function updateToOwner(atIndex:int=-1):void
-			{
-				var radio:SelectOneRadio = (selectedItem as SelectOneRadio);
-				radio.updateItems(atIndex);
-			}
-	
-			private function updateBinding():void
-			{
-				if (this._bindingColumns)
-				{
-					this._bindingColumns.unwatch();
-					this._bindingColumns = null;
-				}
-				if (this.selectedItem === null)
-				{
-					return;
-				}
-				this._bindingColumns = BindingUtils.bindSetter(onColumnsUpdated, selectedItem, "columns", false, true);
-			}
-	
-			private function onColumnsUpdated(value:Object):void
-			{
-				if (selectedItem === null) return;
-	
-				columns = value as int;
-				(selectedItem as SelectOneRadio).items.refresh();
-			}
-	
-			protected function onRowEditEnd(event:GridItemEditorEvent):void
-			{
-				var tmpItem:SelectItem = dgColumns.dataProvider.getItemAt(dgColumns.selectedIndex) as SelectItem;
-				if (tmpItem.itemLabel != DEFAULT_LABEL || tmpItem.itemValue != "")
-				{
-					updateToOwner(dgColumns.selectedIndex);
-				}
-			}
-	
-			/*override public function set selectedItem(value:ISurfaceComponent):void
-			{
-				if (selectedItem) selectedItem.removeEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated);
-				
-				super.selectedItem = value;
-				if (value) selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
-			}*/
-	
-			protected function onRowEditStarts(event:GridItemEditorEvent):void
-			{
-				//updatePropertyEditorPriorToEdit();
-			}
-			
-			private function onColumnUpdates():void
-			{
-				(selectedItem as SelectOneRadio).columns = amountOfColumns.value; 
-				updateToOwner();
-			}
-			
-			private function onLayoutUpdates():void
-			{
-				fiColumns.includeInLayout = fiColumns.visible = (ddlLayout.selectedIndex == 1);
-				(selectedItem as SelectOneRadio).columns = (ddlLayout.selectedIndex == 1) ? 1 : 0;
-				updateToOwner();
+				dgColumns.dataProvider = (selectedItem as SelectOneMenu).dataProvider;
 			}
 			
 		]]>
@@ -182,40 +94,12 @@
 	<forms:TextForm label="Value" textProperty="value"
 					prompt="#\{bean.property\}"/>
 	
-	<s:FormItem label="Layout" skinClass="skins.StackedFormItemSkin">
-		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle"/>
-		</s:layout>
-		<s:DropDownList id="ddlLayout" 
-						width="100%" requireSelection="true">
-			<s:dataProvider>
-				<s:ArrayList>
-					<fx:String>Basic</fx:String>
-					<fx:String>Grid</fx:String>
-				</s:ArrayList>
-			</s:dataProvider>
-		</s:DropDownList>
-		<s:Button label="Update" height="25"
-				  click="onLayoutUpdates()"/>
-	</s:FormItem>
-	
-	<s:FormItem id="fiColumns" 
-				label="Columns" skinClass="skins.StackedFormItemSkin"
-				visible="false" includeInLayout="false">
-		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle"/>
-		</s:layout>
-		<s:NumericStepper id="amountOfColumns"
-						  width="100%" minimum="1" stepSize="1" maximum="10"/>
-		<s:Button id="btnUpdate" label="Update" height="25"
-				  click="onColumnUpdates()"/>
-	</s:FormItem>
+	<forms:ToggleButtonSelectedForm label="Lazy" textProperty="lazy"/>
 	
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
 		<s:DataGrid id="dgColumns"
 					width="100%" height="100%"
-					editable="true" sortableColumns="false" draggableColumns="false"
-					gridItemEditorSessionSave="onRowEditEnd(event)" gridItemEditorSessionStart="onRowEditStarts(event)">
+					editable="true" sortableColumns="false" draggableColumns="false">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="itemLabel" headerText="Title"/>

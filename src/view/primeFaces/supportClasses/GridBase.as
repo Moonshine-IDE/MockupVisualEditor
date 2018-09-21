@@ -2,12 +2,12 @@ package view.primeFaces.supportClasses
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
-
+    
     import mx.containers.Grid;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
-
+    
     import view.primeFaces.surfaceComponents.components.Div;
     import view.suportClasses.events.SurfaceComponentEvent;
 
@@ -18,7 +18,9 @@ package view.primeFaces.supportClasses
 
         protected var maxColumnCount:int = 12;
         protected var _columnBorderColor:String = "#7096ab";
+		protected var _columnBorderAlpha:int = 1;
         private var columnBorderColorChanged:Boolean;
+		private var columnBorderAlphaChanged:Boolean;
 
         protected var selectionChanged:Boolean;
 
@@ -37,6 +39,17 @@ package view.primeFaces.supportClasses
                 this.invalidateDisplayList();
             }
         }
+		
+		public function set columnBorderAlpha(value:int):void
+		{
+			if (_columnBorderAlpha != value)
+			{
+				this._columnBorderAlpha = value;
+				this.columnBorderAlphaChanged = true;
+				
+				this.invalidateDisplayList();
+			}
+		}
 
         protected var _selectedRow:int = -1;
 
@@ -84,7 +97,7 @@ package view.primeFaces.supportClasses
         {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-            if (columnBorderColorChanged)
+            if (columnBorderColorChanged || columnBorderAlphaChanged)
             {
                 refreshColumnBorderColor();
             }
@@ -245,6 +258,7 @@ package view.primeFaces.supportClasses
             var div:Div = new Div();
             div.percentWidth = div.percentHeight = 100;
             div.setStyle("borderColor", _columnBorderColor);
+			div.setStyle("borderAlpha", _columnBorderAlpha);
             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
             div.addEventListener(MouseEvent.CLICK, onDivClick);
@@ -355,6 +369,7 @@ package view.primeFaces.supportClasses
                     var gridItem:GridItem = gridRow.getElementAt(col) as GridItem;
                     var div:Div = gridItem.getElementAt(0) as Div;
                     div.setStyle("borderColor", _columnBorderColor);
+					div.setStyle("borderAlpha", _columnBorderAlpha);
                 }
             }
         }

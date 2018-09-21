@@ -9,10 +9,10 @@ package view.primeFaces.surfaceComponents.components
     
     import spark.components.BorderContainer;
     import spark.components.HGroup;
-    import spark.components.Image;
     import spark.components.TextArea;
     import spark.layouts.VerticalAlign;
     import spark.layouts.VerticalLayout;
+    import spark.primitives.BitmapImage;
     
     import data.OrganizerItem;
     
@@ -238,10 +238,10 @@ package view.primeFaces.surfaceComponents.components
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;TextEditor placeholder=""/&gt;</listing>
+		 * <listing version="3.0">&lt;TextEditor placeholder=null/&gt;</listing>
 		 * @example
 		 * <strong>PrimeFaces:</strong>
-		 * <listing version="3.0">&lt;p:textEditor placeholder=""/&gt;</listing>
+		 * <listing version="3.0">&lt;p:textEditor placeholder=null/&gt;</listing>
 		 */
 		public function set placeholder(value:String):void
 		{
@@ -338,9 +338,8 @@ package view.primeFaces.surfaceComponents.components
             return super.height;
         }
 		
-		private var _widgetVar:String = "";
+		private var _widgetVar:String;
 		
-		[Inspectable(category="General")]
 		[Bindable("widgetVarChanged")]
 		/**
 		 * <p>PrimeFaces: <strong>value</strong></p>
@@ -378,9 +377,9 @@ package view.primeFaces.surfaceComponents.components
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             setCommonXMLAttributes(xml);
-			xml.@widgetVar = this.widgetVar;
 			xml.@value = this.text;
-			if (StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
+			if (this.widgetVar) xml.@widgetVar = this.widgetVar;
+			if (this.placeholder) xml.@placeholder = this.placeholder;
             return xml;
         }
 
@@ -404,9 +403,9 @@ package view.primeFaces.surfaceComponents.components
 			
 			XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 			
-			xml.@widgetVar = this.widgetVar;
+			xml.@widgetVar = this.widgetVar ? this.widgetVar : "";
 			xml.@value = this.text;
-			if (StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
+			if (this.placeholder && StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
 			return xml;
         }
 		
@@ -468,10 +467,10 @@ package view.primeFaces.surfaceComponents.components
 		
 		private function generateMenuImages(afterAdded:Boolean=false):void
 		{
-			var tmpImage:Image;
+			var tmpImage:BitmapImage;
 			if (!afterAdded)
 			{
-				tmpImage = new Image();
+				tmpImage = new BitmapImage();
 				tmpImage.source = new menuThumbnail();
 				menuGroup.addElement(tmpImage);
 			}
@@ -481,10 +480,10 @@ package view.primeFaces.surfaceComponents.components
 				// and a bit more realistic ones
 				menuGroup.removeAllElements();
 				
-				tmpImage = new Image();
+				tmpImage = new BitmapImage();
 				tmpImage.source = new menuOption1();
 				menuGroup.addElement(tmpImage);
-				tmpImage = new Image();
+				tmpImage = new BitmapImage();
 				tmpImage.source = new menuOption2();
 				menuGroup.addElement(tmpImage);
 			}

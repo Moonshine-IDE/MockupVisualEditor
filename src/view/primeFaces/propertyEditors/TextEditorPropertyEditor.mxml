@@ -9,8 +9,8 @@
 
 	<primeFaces:BasicsForm/>
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
-	<forms:TextForm label="WidgetVar" textProperty="widgetVar"/>
     <forms:TextForm label="Value" textProperty="text"
 					prompt="#\{bean.property\}"/>
+	<forms:TextForm label="WidgetVar" textProperty="widgetVar"/>
 	<forms:TextForm label="Placeholder" textProperty="placeholder"/>
 </suportclasses:BasePropertyEditor>

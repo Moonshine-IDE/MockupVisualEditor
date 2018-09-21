@@ -811,7 +811,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function createChildrenFromXML():void
         {
-            if (!bodyRowsXML && !thisCallbackXML) return;
+            if (!bodyRowsXML && thisCallbackXML == null) return;
 
             var bodyRowCount:int = this.body.numElements;
             for (var rowIndex:int = 0; rowIndex < bodyRowCount; rowIndex++)

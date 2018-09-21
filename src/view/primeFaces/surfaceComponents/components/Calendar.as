@@ -1,6 +1,5 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import data.DataProviderListItem;
     import data.OrganizerItem;
 
     import flash.events.Event;
@@ -34,9 +33,12 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="ELEMENT_NAME", kind="property")]
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
-    [Exclude(name="mainXML", kind="property")]
-    [Exclude(name="widthOutput", kind="property")]
-    [Exclude(name="heightOutput", kind="property")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="modes", kind="property")]
+    [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="setCurrentState", kind="method")]
+    [Exclude(name="createChildren", kind="method")]
+    [Exclude(name="PRIME_FACES_XML_ELEMENT_NAME", kind="property")]
 
     /**
      * <p>Representation of Calendar in HTML</p>
@@ -49,7 +51,8 @@ package view.primeFaces.surfaceComponents.components
      * height="120"
      * mode="popup"
      * minDate=""
-     * maxDate=""/&gt;
+     * maxDate=""
+     * pattern="MM/dd/yyyy"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -59,7 +62,8 @@ package view.primeFaces.surfaceComponents.components
      * style="width:120px;height:120px;"
      * mode="popup"
      * minDate=""
-     * maxDate""/&gt;
+     * maxDate""
+     * pattern="MM/dd/yyyy"/&gt;
      * </pre>
      */
     public class Calendar extends Container implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
@@ -317,8 +321,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

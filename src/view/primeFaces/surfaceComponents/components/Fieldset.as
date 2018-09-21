@@ -54,6 +54,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toCode", kind="method")]
     [Exclude(name="div", kind="property")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
+    [Exclude(name="componentAddedToEditor", kind="method")]
+    [Exclude(name="getComponentsChildren", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces fieldset component.</p>

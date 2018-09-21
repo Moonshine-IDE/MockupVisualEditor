@@ -42,6 +42,10 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toCode", kind="method")]
     [Exclude(name="div", kind="property")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="removeAllElements", kind="method")]
+    [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="commitProperties", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces Grid CSS component.</p>
@@ -176,8 +180,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

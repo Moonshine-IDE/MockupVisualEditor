@@ -30,7 +30,6 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="ELEMENT_NAME", kind="property")]
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
     [Exclude(name="isSelected", kind="property")]
@@ -38,7 +37,6 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="setCurrentState", kind="method")]
     [Exclude(name="createChildren", kind="method")]
-    [Exclude(name="PRIME_FACES_XML_ELEMENT_NAME", kind="property")]
 
     /**
      * <p>Representation of Calendar in HTML</p>

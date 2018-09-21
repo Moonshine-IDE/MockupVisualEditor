@@ -39,6 +39,9 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="commitProperties", kind="method")]
     [Exclude(name="createChildren", kind="method")]
     [Exclude(name="setCommonXMLAttributes", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="componentAddedToEditor", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces include component.</p>
@@ -63,7 +66,7 @@ package view.primeFaces.surfaceComponents.components
     public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IInitializeAfterAddedComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "include";
-        public static var ELEMENT_NAME:String = "Include";
+        public static const ELEMENT_NAME:String = "Include";
 		
 		private var includeLabel:Label;
 		private var includeButton:spark.components.Button;
@@ -125,8 +128,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

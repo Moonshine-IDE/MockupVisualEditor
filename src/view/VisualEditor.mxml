@@ -17,8 +17,10 @@
 		<view:ComponentList id="componentList" percentWidth="20" percentHeight="100"
 							visualEditorType="{_visualEditorType}" minWidth="150"/>
 		<s:Scroller percentWidth="70" percentHeight="100">
-			<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"
-								 organizer="{componentsOrganizer}"/>
+			<s:Group>
+				<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"
+									 organizer="{componentsOrganizer}"/>
+			</s:Group>
 		</s:Scroller>
 		<s:Group width="10%" minWidth="250" height="100%">
 			<view:PropertyEditorContainer id="propertyEditor"

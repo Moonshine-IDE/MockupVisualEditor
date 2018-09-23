@@ -39,6 +39,7 @@ package view.primeFaces.surfaceComponents.components
 	[Exclude(name="componentAddedToEditor", kind="method")]
 	[Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="editor", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces TextEditor component.</p>
@@ -49,7 +50,12 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * width="110"
      * height="110"
-     * src=""/&gt;
+     * percentWidth=""
+     * percentHeight=""
+     * placeholder=""
+     * text=""
+     * widgetVar=""
+     * /&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -57,7 +63,10 @@ package view.primeFaces.surfaceComponents.components
      * &lt;ui:textEditor
      * <b>Attributes</b>
      * style="width:110px;height:110px;"
-     * src=""/&gt;
+     * placeholder=""
+     * value=""
+     * widgetVar=""
+     * /&gt;
      * </pre>
      */
     public class TextEditor extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IInitializeAfterAddedComponent
@@ -120,7 +129,6 @@ package view.primeFaces.surfaceComponents.components
 			
 			_editor.setStyle("paddingLeft", 12);
 			_editor.setStyle("paddingRight", 12);
-			_editor.prompt = "Input Text";
 			
 			// update menu images to bit more realistic
 			generateMenuImages(true);
@@ -199,9 +207,11 @@ package view.primeFaces.surfaceComponents.components
 		/**
 		 * <p>PrimeFaces: <strong>value</strong></p>
 		 *
+         * @default null
+         *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;TextEditor value=""/&gt;</listing>
+		 * <listing version="3.0">&lt;TextEditor text=""/&gt;</listing>
 		 * @example
 		 * <strong>PrimeFaces:</strong>
 		 * <listing version="3.0">&lt;p:textEditor value=""/&gt;</listing>
@@ -236,12 +246,14 @@ package view.primeFaces.surfaceComponents.components
 		/**
 		 * <p>PrimeFaces: <strong>placeholder</strong></p>
 		 *
+         * @default null
+         *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;TextEditor placeholder=null/&gt;</listing>
+		 * <listing version="3.0">&lt;TextEditor placeholder=""/&gt;</listing>
 		 * @example
 		 * <strong>PrimeFaces:</strong>
-		 * <listing version="3.0">&lt;p:textEditor placeholder=null/&gt;</listing>
+		 * <listing version="3.0">&lt;p:textEditor placeholder=""/&gt;</listing>
 		 */
 		public function set placeholder(value:String):void
 		{
@@ -342,8 +354,10 @@ package view.primeFaces.surfaceComponents.components
 		
 		[Bindable("widgetVarChanged")]
 		/**
-		 * <p>PrimeFaces: <strong>value</strong></p>
+		 * <p>PrimeFaces: <strong>widgetVar</strong></p>
 		 *
+         * @default null
+         *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
 		 * <listing version="3.0">&lt;TextEditor widgetVar=""/&gt;</listing>
@@ -377,7 +391,7 @@ package view.primeFaces.surfaceComponents.components
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             setCommonXMLAttributes(xml);
-			xml.@value = this.text;
+			xml.@text = this.text;
 			if (this.widgetVar) xml.@widgetVar = this.widgetVar;
 			if (this.placeholder) xml.@placeholder = this.placeholder;
             return xml;
@@ -388,7 +402,7 @@ package view.primeFaces.surfaceComponents.components
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 			
 			this.widgetVar = xml.@widgetVar;
-			this.text = xml.@value;
+			this.text = xml.@text;
 			this.placeholder = xml.@placeholder;
 			
 			this.callLater(componentAddedToEditor);

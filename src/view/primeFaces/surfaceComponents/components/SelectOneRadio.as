@@ -36,17 +36,15 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="ELEMENT_NAME", kind="property")]
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
-    [Exclude(name="internalToXML", kind="method")]
-    [Exclude(name="mainXML", kind="property")]
-    [Exclude(name="widthOutput", kind="property")]
-    [Exclude(name="heightOutput", kind="property")]
 	[Exclude(name="componentAddedToEditor", kind="method")]
 	[Exclude(name="getComponentsChildren", kind="method")]
 	[Exclude(name="updateItems", kind="method")]
-
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="selectedIndex", kind="property")]
+	[Exclude(name="items", kind="property")]
+	
     /**
      * <p>Representation of selectOneRadio in HTML</p>
      *
@@ -56,17 +54,16 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * width="120"
      * height="120"
-     * percentWidth="80"
-     * percentHeight="80"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * percentWidth=""
+     * percentHeight=""/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
      * <pre>
-     * &lt;selectOneRadio
+     * &lt;p:selectOneRadio
      * <b>Attributes</b>
      * style="width:120px;height:120px;"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * /&gt;
      * </pre>
      */
     public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent
@@ -166,8 +163,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

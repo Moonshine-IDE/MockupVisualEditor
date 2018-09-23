@@ -28,16 +28,11 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="ELEMENT_NAME", kind="property")]
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
-    [Exclude(name="internalToXML", kind="method")]
-    [Exclude(name="mainXML", kind="property")]
-    [Exclude(name="widthOutput", kind="property")]
-    [Exclude(name="heightOutput", kind="property")]
-	[Exclude(name="componentAddedToEditor", kind="method")]
 	[Exclude(name="getComponentsChildren", kind="method")]
-	[Exclude(name="updateItems", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
+	[Exclude(name="dataProvider", kind="property")]
 
     /**
      * <p>Representation of selectOneMenu in HTML</p>
@@ -48,17 +43,19 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * width="120"
      * height="120"
-     * percentWidth="80"
-     * percentHeight="80"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * percentWidth=""
+     * percentHeight=""
+     * lazy="false"
+     * value=""/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
      * <pre>
-     * &lt;selectOneMenu
+     * &lt;p:selectOneMenu
      * <b>Attributes</b>
      * style="width:120px;height:120px;"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * lazy="false"
+     * value=""/&gt;
      * </pre>
      */
     public class SelectOneMenu extends DropDownList implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
@@ -100,13 +97,101 @@ package view.primeFaces.surfaceComponents.components
 			super.dataProvider = value;
 			dispatchEvent(new Event("dataProviderChanged"));
 		}
-		
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;SelectOneMenu percentWidth="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectOneMenu style="percentWidth:80%;"/&gt;</listing>
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
+        }
+
+        [PercentProxy("percentWidth")]
+        [Inspectable(category="General")]
+        [Bindable("widthChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default 120
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;SelectOneMenu width="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectOneMenu style="width:120px;"/&gt;</listing>
+         */
+        override public function get width():Number
+        {
+            return super.width;
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;SelectOneMenu percentHeight="80"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectOneMenu style="percentHeight:80%;"/&gt;</listing>
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
+        }
+
+        [PercentProxy("percentHeight")]
+        [Inspectable(category="General")]
+        [Bindable("heightChanged")]
+        /**
+         * <p>PrimeFaces: <strong>style</strong></p>
+         *
+         * @default 120
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;SelectOneMenu height="120"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectOneMenu style="height:120px;"/&gt;</listing>
+         */
+        override public function get height():Number
+        {
+            return super.height;
+        }
+
 		private var _value:String;
+
 		[Bindable("valueChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @default null
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;SelectOneMenu value=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectOneMenu value=""/&gt;</listing>
+         */
 		public function get value():String
 		{
 			return _value;
 		}
+
 		public function set value(value:String):void
 		{
 			if (_value === value) return;
@@ -118,11 +203,25 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _lazy:Boolean;
+
 		[Bindable("lazyChanged")]
+        /**
+         * <p>PrimeFaces: <strong>lazy</strong></p>
+         *
+         * @default false
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;SelectOneMenu lazy="false"/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:selectOneMenu lazy="false"/&gt;</listing>
+         */
 		public function get lazy():Boolean
 		{
 			return _lazy;
 		}
+
 		public function set lazy(value:Boolean):void
 		{
 			if (_lazy == value) return;
@@ -134,8 +233,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

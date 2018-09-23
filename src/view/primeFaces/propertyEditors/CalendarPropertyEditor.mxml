@@ -11,6 +11,8 @@
     <primeFaces:BasicsForm/>
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
+    <forms:DateForm />
+    <forms:TextForm label="Pattern" textProperty="pattern" />
     <forms:DropdownListForm id="ddl"
                             label="Mode" textProperty="mode"
                             collectionProperty="modes" labelField="label"

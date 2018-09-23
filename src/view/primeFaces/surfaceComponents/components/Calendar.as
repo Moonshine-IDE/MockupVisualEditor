@@ -45,6 +45,7 @@ package view.primeFaces.surfaceComponents.components
      * <pre>
      * &lt;Calendar
      * <b>Attributes</b>
+     * selectedDate=""
      * width="120"
      * height="120"
      * mode="popup"
@@ -57,6 +58,7 @@ package view.primeFaces.surfaceComponents.components
      * <pre>
      * &lt;p:calendar
      * <b>Attributes</b>
+     * value=""
      * style="width:120px;height:120px;"
      * mode="popup"
      * minDate=""
@@ -87,7 +89,8 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-                "modeChanged"
+                "modeChanged",
+                "selectedDateChanged"
             ];
 
             dateTimeFormatter = new DateTimeFormatter();
@@ -171,6 +174,39 @@ package view.primeFaces.surfaceComponents.components
         override public function set height(value:Number):void
         {
             super.height = value;
+        }
+
+        private var _selectedDate:Date;
+        private var selectedDateChanged:Boolean;
+
+        [Bindable("selectedDateChanged")]
+        /**
+         * <p>PrimeFaces: <strong>value</strong></p>
+         *
+         * @default null
+         *
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;Calendar selectedDate=""/&gt;</listing>
+         * @example
+         * <strong>PrimeFaces:</strong>
+         * <listing version="3.0">&lt;p:calendar value=""/&gt;</listing>
+         */
+        public function get selectedDate():Date
+        {
+            return _selectedDate;
+        }
+
+        public function set selectedDate(value:Date):void
+        {
+            if (_selectedDate == value) return;
+            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "selectedDate", _minDate, value);
+
+            _selectedDate = value;
+
+            this.selectedDateChanged = true;
+            this.invalidateDisplayList();
+            dispatchEvent(new Event("selectedDateChanged"));
         }
 
         private var _mode:String = "popup";
@@ -380,6 +416,25 @@ package view.primeFaces.surfaceComponents.components
             currentState = this.mode;
         }
 
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (selectedDateChanged)
+            {
+                if (mode == "popup")
+                {
+                    this.dateField.formatString = this.pattern.toUpperCase();
+                    this.dateField.selectedDate = this.selectedDate;
+                }
+                else if (mode == "inline")
+                {
+                    this.dateChooser.selectedDate = this.selectedDate;
+                }
+                selectedDateChanged = false;
+            }
+        }
+
         override public function setCurrentState(stateName:String, playTransition:Boolean = true):void
         {
             super.setCurrentState(stateName, playTransition);
@@ -427,6 +482,11 @@ package view.primeFaces.surfaceComponents.components
                 xml.@maxDate = dateTimeFormatter.format(this.maxDate);
             }
 
+            if (this.selectedDate)
+            {
+                xml.@selectedDate = dateTimeFormatter.format(this.selectedDate);
+            }
+
             return xml;
         }
 
@@ -453,6 +513,8 @@ package view.primeFaces.surfaceComponents.components
                 xml.@maxDate = dateTimeFormatter.format(this.maxDate);
             }
 
+            xml.@value = dateTimeFormatter.format(this.selectedDate);
+
             return xml;
         }
 
@@ -460,10 +522,15 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            this.mode = xml.@mode;
             this.pattern = xml.@pattern ? xml.@pattern : this.pattern;
-            this.minDate = DateField.stringToDate(xml.@minDate, this.pattern);
-            this.maxDate = DateField.stringToDate(xml.@maxDate, this.pattern);
+
+            var upperPattern:String = this.pattern.toUpperCase();
+
+            this.selectedDate = DateField.stringToDate(xml.@selectedDate, upperPattern);
+            this.mode = xml.@mode;
+
+            this.minDate = DateField.stringToDate(xml.@minDate, upperPattern);
+            this.maxDate = DateField.stringToDate(xml.@maxDate, upperPattern);
         }
 
         private function initializeStates():void

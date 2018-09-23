@@ -37,6 +37,7 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="setCurrentState", kind="method")]
     [Exclude(name="createChildren", kind="method")]
+    [Exclude(name="updateDisplayList", kind="method")]
 
     /**
      * <p>Representation of Calendar in HTML</p>

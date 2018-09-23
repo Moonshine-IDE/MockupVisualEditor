@@ -34,6 +34,10 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="updatePropertyChangeReference", kind="method")]
     [Exclude(name="heightOutput", kind="property")]
     [Exclude(name="widthOutput", kind="property")]
+    [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="restorePropertyOnChangeReference", kind="method")]
+    [Exclude(name="addRowsWithColumnsToBody", kind="method")]
+    [Exclude(name="commitProperties", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces panelGrid component.</p>

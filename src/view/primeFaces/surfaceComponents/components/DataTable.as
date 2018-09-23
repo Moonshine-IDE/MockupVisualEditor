@@ -27,7 +27,6 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="GRID_ITEM_EDIT", kind="property")]
     [Exclude(name="GRID_ITEM_DELETE", kind="property")]
     [Exclude(name="GRID_ITEM_ADD", kind="property")]
-    [Exclude(name="EVENT_CHILDREN_UPDATED", kind="property")]
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]

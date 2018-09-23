@@ -23,6 +23,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
 	[Exclude(name="buttonReleased", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="getComponentsChildren", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces selectBooleanCheckbox component.</p>
@@ -34,7 +36,7 @@ package view.primeFaces.surfaceComponents.components
      * width="121"
      * height="20"
      * label="Checkbox"
-	 * selected="true"/&gt;
+	 * selected="false"/&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -43,7 +45,7 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * style="width:121px;height:20px;"
      * label="Checkbox"
-	 * selected="true"/&gt;
+	 * value="null"/&gt;
      * </pre>
      */
     public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
@@ -110,8 +112,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;
@@ -198,15 +199,16 @@ package view.primeFaces.surfaceComponents.components
         [Inspectable(category="General", defaultValue="true")]
         [Bindable(event="propertyChange")]
         /**
-         * <p>PrimeFaces: <strong>selected</strong></p>
+         * <p>PrimeFaces: <strong>value</strong></p>
          *
-         * @default "true"
+		 * @default null in PrimeFaces
+		 *
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;CheckBox selected="true"/&gt;</listing>
+         * <listing version="3.0">&lt;CheckBox selected="false"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:selectBooleanCheckbox selected="true"/&gt;</listing>
+         * <listing version="3.0">&lt;p:selectBooleanCheckbox value="null"/&gt;</listing>
          */
         override public function get selected():Boolean
         {

@@ -24,6 +24,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="getComponentsChildren", kind="method")]
 
     /**
      * <p>Representation of PrimeFaces inputText component.</p>
@@ -104,8 +106,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

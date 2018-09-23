@@ -56,6 +56,7 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="updatePropertyChangeReference", kind="method")]
     [Exclude(name="componentAddedToEditor", kind="method")]
     [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="isSelected", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces fieldset component.</p>
@@ -168,8 +169,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

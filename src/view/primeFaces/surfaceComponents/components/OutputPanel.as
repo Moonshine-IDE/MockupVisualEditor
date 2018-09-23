@@ -19,13 +19,14 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
-    [Exclude(name="ELEMENT_NAME", kind="property")]
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="updatePropertyChangeReference", kind="method")]
     [Exclude(name="internalToXML", kind="method")]
     [Exclude(name="mainXML", kind="property")]
     [Exclude(name="widthOutput", kind="property")]
     [Exclude(name="heightOutput", kind="property")]
+    [Exclude(name="isSelected", kind="property")]
+    [Exclude(name="getComponentsChildren", kind="method")]
 
     /**
      * <p>Representation of div in HTML</p>
@@ -217,8 +218,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
+
 		public function get isSelected():Boolean
 		{
 			return _isSelected;

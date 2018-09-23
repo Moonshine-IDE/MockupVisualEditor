@@ -46,6 +46,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="removeAllElements", kind="method")]
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="commitProperties", kind="method")]
+    [Exclude(name="widthOutput", kind="property")]
+    [Exclude(name="heightOutput", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces Grid CSS component.</p>

@@ -237,7 +237,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;TabView percentWidth="80"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:tabView style="width:80%;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:tabView style="percentWidth:80%;"/&gt;</listing>
          */
         override public function get percentWidth():Number
         {
@@ -273,7 +273,7 @@ package view.primeFaces.surfaceComponents.components
          * <listing version="3.0">&lt;TabView percentHeight="80"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:tabView style="height:80%;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:tabView style="percentHeight:80%;"/&gt;</listing>
          */
         override public function get percentHeight():Number
         {

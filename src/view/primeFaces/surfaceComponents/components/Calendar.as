@@ -67,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
     public class Calendar extends Container implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "calendar";
-        public static var ELEMENT_NAME:String = "Calendar";
+        public static const ELEMENT_NAME:String = "Calendar";
 
         private var dateTimeFormatter:DateTimeFormatter;
 

@@ -45,7 +45,7 @@ package view.primeFaces.surfaceComponents.components
      * height="120"
      * percentWidth=""
      * percentHeight=""
-     * lazy="false"
+     * editable="false"
      * value=""/&gt;
      * </pre>
      *
@@ -54,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;p:selectOneMenu
      * <b>Attributes</b>
      * style="width:120px;height:120px;"
-     * lazy="false"
+     * editable="false"
      * value=""/&gt;
      * </pre>
      */
@@ -80,7 +80,7 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
 				"dataProviderChanged",
-				"lazyChanged"
+				"editableChanged"
             ];
 			
 			this.dataProvider = new ArrayCollection([new SelectItem("Select One", "")]);
@@ -202,34 +202,34 @@ package view.primeFaces.surfaceComponents.components
 			dispatchEvent(new Event("valueChanged"));
 		}
 		
-		private var _lazy:Boolean;
+		private var _editable:Boolean;
 
-		[Bindable("lazyChanged")]
+		[Bindable("editableChanged")]
         /**
-         * <p>PrimeFaces: <strong>lazy</strong></p>
+         * <p>PrimeFaces: <strong>editable</strong></p>
          *
          * @default false
          *
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;SelectOneMenu lazy="false"/&gt;</listing>
+         * <listing version="3.0">&lt;SelectOneMenu editable="false"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:selectOneMenu lazy="false"/&gt;</listing>
+         * <listing version="3.0">&lt;p:selectOneMenu editable="false"/&gt;</listing>
          */
-		public function get lazy():Boolean
+		public function get editable():Boolean
 		{
-			return _lazy;
+			return _editable;
 		}
 
-		public function set lazy(value:Boolean):void
+		public function set editable(value:Boolean):void
 		{
-			if (_lazy == value) return;
+			if (_editable == value) return;
 			
-			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "lazy", _lazy, value);
+			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "editable", _editable, value);
 			
-			_lazy = value;
-			dispatchEvent(new Event("lazyChanged"));
+			_editable = value;
+			dispatchEvent(new Event("editableChanged"));
 		}
 		
 		private var _isSelected:Boolean;
@@ -302,7 +302,7 @@ package view.primeFaces.surfaceComponents.components
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 			
 			xml["@value"] = this.value;
-			xml["@lazy"] = this.lazy.toString();
+			xml["@editable"] = this.editable.toString();
 			
 			var itemXML:XML;
 			for each (var item:SelectItem in dataProvider)
@@ -323,7 +323,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 			
 			this.value = xml.@value;
-			this.lazy = xml.@lazy == "true" ? true : false;
+			this.editable = xml.@editable == "true" ? true : false;
 			
 			var tmpItem:SelectItem;
 			this.dataProvider = new ArrayCollection();
@@ -346,7 +346,7 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
             xml["@value"] = this.value;
-			xml["@lazy"] = this.lazy.toString();
+			xml["@editable"] = this.editable.toString();
 			
 			var itemXML:XML;
 			for each (var item:SelectItem in dataProvider)

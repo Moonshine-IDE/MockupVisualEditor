@@ -91,7 +91,10 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "modeChanged",
-                "selectedDateChanged"
+                "selectedDateChanged",
+                "minDateChanged",
+                "maxDateChanged",
+                "patternChanged"
             ];
 
             dateTimeFormatter = new DateTimeFormatter();
@@ -241,11 +244,15 @@ package view.primeFaces.surfaceComponents.components
             dispatchEvent(new Event("modeChanged"));
         }
 
+        private var minMaxDateChanged:Boolean;
+
         private var _minDate:Date;
 
         [Bindable("minDateChanged")]
         /**
          * <p>PrimeFaces: <strong>minDate</strong></p>
+         *
+         * @default null
          *
          * @example
          * <strong>Visual Editor XML:</strong>
@@ -265,6 +272,8 @@ package view.primeFaces.surfaceComponents.components
             _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "minDate", _minDate, value);
 
             _minDate = value;
+            this.minMaxDateChanged = true;
+            this.invalidateDisplayList();
             dispatchEvent(new Event("minDateChanged"));
         }
 
@@ -273,6 +282,8 @@ package view.primeFaces.surfaceComponents.components
         [Bindable("maxDateChanged")]
         /**
          * <p>PrimeFaces: <strong>maxDate</strong></p>
+         *
+         * @default null
          *
          * @example
          * <strong>Visual Editor XML:</strong>
@@ -292,6 +303,8 @@ package view.primeFaces.surfaceComponents.components
             _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "maxDate", _maxDate, value);
 
             _maxDate = value;
+            this.minMaxDateChanged = true;
+            this.invalidateDisplayList();
             dispatchEvent(new Event("maxDateChanged"));
         }
 
@@ -433,6 +446,22 @@ package view.primeFaces.surfaceComponents.components
                     this.dateChooser.selectedDate = this.selectedDate;
                 }
                 selectedDateChanged = false;
+            }
+
+            if (minMaxDateChanged)
+            {
+                var disabledRanges:Array = [{rangeEnd: this.minDate}, {rangeStart: this.maxDate}];
+
+                if (mode == "popup")
+                {
+                    this.dateField.disabledRanges = disabledRanges;
+                }
+                else if (mode == "inline")
+                {
+                    this.dateChooser.disabledRanges = disabledRanges;
+                }
+
+                minMaxDateChanged = false;
             }
         }
 

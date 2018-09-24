@@ -11,10 +11,12 @@
     <primeFaces:BasicsForm/>
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
-    <forms:DateForm />
+    <forms:DateForm textProperty="selectedDate" label="Date"/>
     <forms:TextForm label="Pattern" textProperty="pattern" />
     <forms:DropdownListForm id="ddl"
                             label="Mode" textProperty="mode"
                             collectionProperty="modes" labelField="label"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+    <forms:DateForm textProperty="minDate" label="Minimum Date"/>
+    <forms:DateForm textProperty="maxDate" label="Maximum Date"/>
 </suportclasses:BasePropertyEditor>

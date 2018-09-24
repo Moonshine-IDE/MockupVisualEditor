@@ -2,7 +2,7 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="view.*"
-		 xmlns:suportClasses="view.suportClasses.*">
+		 xmlns:suportClasses="view.suportClasses.*" gap="0">
 	<fx:Script>
 		<![CDATA[
 			import flash.utils.clearTimeout;
@@ -149,5 +149,10 @@
 								 dataProvider="{components}"
 								 width="100%" height="100%"
 								 iconFunction="{getIconForFile}"
+								 rollOverColor="0xe1e1e1"
+								 selectionColor="0xd0d0d0"
+								 verticalScrollBarStyleName="black"
+								 alternatingItemColors="[0xeeeeee, 0xffffff]"
+								 rowHeight="18"
 								 itemRenderer="{new ClassFactory(OrganizerTreeRenderer)}"/>
 </s:VGroup>

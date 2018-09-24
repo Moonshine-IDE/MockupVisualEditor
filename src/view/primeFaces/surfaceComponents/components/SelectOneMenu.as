@@ -346,7 +346,7 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
             xml["@value"] = this.value;
-			xml["@editable"] = this.editable.toString();
+			if (this.editable) xml["@editable"] = this.editable.toString();
 			
 			var itemXML:XML;
 			for each (var item:SelectItem in dataProvider)

@@ -22,7 +22,6 @@ package components.renderers
 	import flash.events.Event;
 	
 	import mx.controls.treeClasses.TreeItemRenderer;
-	import mx.core.UIComponent;
 	import mx.core.mx_internal;
 	
 	import spark.components.Label;
@@ -32,12 +31,6 @@ package components.renderers
 	public class OrganizerTreeRenderer extends TreeItemRenderer
 	{
 		private var label2:Label;
-		
-		private var hitareaSprite:Sprite;
-		private var sourceControlBackground:UIComponent;
-		private var sourceControlText:Label;
-		private var sourceControlSystem:Label;
-		private var isTooltipListenerAdded:Boolean;
 		
 		public function OrganizerTreeRenderer()
 		{
@@ -54,60 +47,6 @@ package components.renderers
 			super.data = value;
 		}
 		
-		override protected function createChildren():void
-		{
-			super.createChildren();
-			
-			sourceControlBackground = new UIComponent();
-			sourceControlBackground.mouseEnabled = false;
-			sourceControlBackground.mouseChildren = false;
-			sourceControlBackground.visible = false;
-			sourceControlBackground.graphics.beginFill(0x484848, .9);
-			sourceControlBackground.graphics.drawRect(0, -2, 30, 17);
-			sourceControlBackground.graphics.endFill();
-			sourceControlBackground.graphics.lineStyle(1, 0x0, .3);
-			sourceControlBackground.graphics.moveTo(-1, -2);
-			sourceControlBackground.graphics.lineTo(-1, 16);
-			sourceControlBackground.graphics.lineStyle(1, 0xEEEEEE, .1);
-			sourceControlBackground.graphics.moveTo(0, -2);
-			sourceControlBackground.graphics.lineTo(0, 16);
-			addChild(sourceControlBackground);
-			
-			// For drawing SVN/GIT/HG/CVS etc
-			sourceControlSystem = new Label();
-			sourceControlSystem.width = 30;
-			sourceControlSystem.height = 16;
-			sourceControlSystem.mouseEnabled = false;
-			sourceControlSystem.mouseChildren = false;
-			sourceControlSystem.styleName = 'uiText';
-			sourceControlSystem.setStyle('fontSize', 10);
-			sourceControlSystem.setStyle('color', 0xe0e0e0);
-			sourceControlSystem.setStyle('textAlign', 'center');
-			sourceControlSystem.setStyle('paddingTop', 3);
-			sourceControlSystem.maxDisplayedLines = 1;
-			sourceControlSystem.visible = false;
-			addChild(sourceControlSystem);
-			
-			// For displaying source control status
-			sourceControlText = new Label();
-			sourceControlText.width = 20;
-			sourceControlText.height = 16;
-			sourceControlText.mouseEnabled = false;
-			sourceControlText.mouseChildren = false;
-			sourceControlText.styleName = 'uiText';
-			sourceControlText.setStyle('fontSize', 9);
-			sourceControlText.setStyle('color', 0xcdcdcd);
-			sourceControlText.setStyle('textAlign', 'center');
-			sourceControlText.setStyle('paddingTop', 3);
-			sourceControlText.maxDisplayedLines = 1;
-			sourceControlText.visible = false;
-			addChild(sourceControlText);
-			
-			hitareaSprite = new Sprite();
-			hitArea = hitareaSprite;
-			addChild(hitareaSprite);
-		}
-		
 		override mx_internal function createLabel(childIndex:int):void
 		{
 			super.createLabel(childIndex);
@@ -120,7 +59,7 @@ package components.renderers
 				label2.mouseChildren = false;
 				label2.styleName = 'uiText';
 				label2.setStyle('fontSize', 12);
-				label2.setStyle('color', 0xe0e0e0);
+				label2.setStyle('color', 0x0);
 				label2.maxDisplayedLines = 1;
 				
 				if (childIndex == -1) 
@@ -145,12 +84,6 @@ package components.renderers
 		{
 			super.updateDisplayList(unscaledWidth, unscaledHeight);
 			
-			hitareaSprite.graphics.clear();
-			hitareaSprite.graphics.beginFill(0x0, 0);
-			hitareaSprite.graphics.drawRect(0, 0, unscaledWidth, unscaledHeight);
-			hitareaSprite.graphics.endFill();
-			hitArea = hitareaSprite;
-			
 			// Draw our own FTE label
 			label2.width = label.width;
 			label2.height = label.height;
@@ -160,14 +93,6 @@ package components.renderers
 			label2.text = label.text;
 			
 			if (label) label.visible = false;
-			if (data)
-			{
-				// Update source control status
-				sourceControlSystem.visible = false;
-				sourceControlText.visible = false;
-				sourceControlBackground.visible = false;
-				
-			}
-		} // updateDisplayList
+		}
 	}
 }

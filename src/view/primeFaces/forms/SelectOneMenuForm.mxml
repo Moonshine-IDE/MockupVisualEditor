@@ -94,7 +94,7 @@
 	<forms:TextForm label="Value" textProperty="value"
 					prompt="#\{bean.property\}"/>
 	
-	<forms:ToggleButtonSelectedForm label="Lazy" textProperty="lazy"/>
+	<forms:ToggleButtonSelectedForm label="Editable" textProperty="editable"/>
 	
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
 		<s:DataGrid id="dgColumns"

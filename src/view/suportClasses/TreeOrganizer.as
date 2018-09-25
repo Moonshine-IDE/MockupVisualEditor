@@ -14,12 +14,15 @@ package view.suportClasses
 	import data.OrganizerItem;
 	
 	import view.interfaces.IDropAcceptableComponent;
+	import view.primeFaces.surfaceComponents.components.TabView;
 	
 	use namespace mx_internal;
 	
 	public class TreeOrganizer extends Tree
 	{
 		public var rootContainer:IVisualElementContainer;
+		
+		private var isDropLocationIsChildren:Boolean;
 		
 		public function TreeOrganizer()
 		{
@@ -44,7 +47,7 @@ package view.suportClasses
 			// to terminate based on target component's type
 			var droppedIndex:int = getDropIndexToTarget(event);
 			if (!droppedParentStack && droppedIndex >= rootContainer.numElements) droppedIndex = rootContainer.numElements - 1;
-
+			
 			if (!isAcceptableDrop(droppedParentStack, draggedStack, droppedIndex))
 			{
 				event.preventDefault();
@@ -71,12 +74,49 @@ package view.suportClasses
 				(to.item as IDropAcceptableComponent).dropElementAt(dragged.item as IVisualElement, toIndex);
 		}
 		
+		private function testDropLocationIfChildren(source:OrganizerItem, target:OrganizerItem):void
+		{
+			if (isDropLocationIsChildren) return;
+			if (source === target) 
+			{
+				isDropLocationIsChildren = true;
+				return;
+			}
+			if (source.children && source.children.length > 0)
+			{
+				for each (var i:OrganizerItem in source.children)
+				{
+					if (i === target)
+					{
+						isDropLocationIsChildren = true;
+						return;
+					}
+					if (i.children && i.children.length > 0)
+					{
+						testDropLocationIfChildren(i, target);
+					}
+				}
+			}
+		}
+		
 		private function isAcceptableDrop(target:OrganizerItem, source:OrganizerItem, droppedIndex:int):Boolean
 		{
-			if (!target) return true;
+			// test 1:: parent can't be drop in its children
+			isDropLocationIsChildren = false;
+			testDropLocationIfChildren(source, target);
+			if (isDropLocationIsChildren) return false;
+			
+			// test 2:: component internal logic
+			if (!target) 
+			{
+				if (source.name.indexOf(":") != -1 || 
+					source.type == OrganizerItem.TYPE_CELL || 
+					source.type == OrganizerItem.TYPE_TAB) return false;
+				else return true;
+			}
 			
 			// do not let anything drgged direct to the grid
-			if (target.item is Grid) return false;
+			if (target.item is Grid || target.item is TabView) return false;
 			// don't let cells to be dragged
 			if (source.type == OrganizerItem.TYPE_CELL || source.type == OrganizerItem.TYPE_TAB) return false;
 			

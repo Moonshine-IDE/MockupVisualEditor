@@ -266,11 +266,7 @@ package view.primeFaces.surfaceComponents.components
 					break;
 				default:
 					this[nameField.toString()] = value;
-					if (nameField.toString() == "columns") 
-					{
-						generateColumns();
-						dispatchEvent(new Event(ConstantsItems.EVENT_CHILDREN_UPDATED));
-					}
+					if (nameField.toString() == "columns") generateColumns();
 					break;
 			}
 		}

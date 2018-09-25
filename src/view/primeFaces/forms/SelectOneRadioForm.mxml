@@ -22,8 +22,6 @@
 			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
-			[Bindable] public var columns:int;
-			
 			private static const DEFAULT_LABEL:String = "Title";
 	
 			private var _bindingColumns:ChangeWatcher;
@@ -98,11 +96,6 @@
 				amountOfColumns.value = (selectedItem as SelectOneRadio).columns;
 			}
 	
-			private function onTableUpdated(event:Event):void
-			{
-				updateColumnList();
-			}
-	
 			private function updateToOwner(type:String, atIndex:int=-1):void
 			{
 				var radio:SelectOneRadio = (selectedItem as SelectOneRadio);
@@ -127,26 +120,12 @@
 			{
 				if (selectedItem === null) return;
 	
-				columns = value as int;
-				(selectedItem as SelectOneRadio).items.refresh();
+				updateColumnList();
 			}
 	
 			protected function onRowEditEnd(event:GridItemEditorEvent):void
 			{
 				updateToOwner(ConstantsItems.ITEM_EDIT, dgColumns.selectedIndex);
-			}
-	
-			override public function set selectedItem(value:ISurfaceComponent):void
-			{
-				if (selectedItem) selectedItem.removeEventListener(ConstantsItems.EVENT_CHILDREN_UPDATED, onDataUpdated);
-				
-				super.selectedItem = value;
-				if (value) selectedItem.addEventListener(ConstantsItems.EVENT_CHILDREN_UPDATED, onDataUpdated, false, 0, true);
-			}
-			
-			private function onDataUpdated(event:Event):void
-			{
-				updateColumnList();
 			}
 			
 			private function updatePropertyEditorPriorToEdit():void

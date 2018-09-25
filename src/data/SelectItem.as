@@ -8,11 +8,28 @@ package data
 		public var value:String;
 		public var isSelected:Boolean;
 		
-		public function SelectItem(itemLabel:String, itemValue:String, isSelected:Boolean = false)
+		public function SelectItem()
 		{
-			this.itemLabel = itemLabel;
-			this.itemValue = itemValue;
-			this.isSelected = isSelected;
+		}
+		
+		public function isItemChanged(comparedTo:Object):Boolean
+		{
+			if (comparedTo.hasOwnProperty("itemLabel") && comparedTo.itemLabel != this.itemLabel) return true;
+			if (comparedTo.hasOwnProperty("itemValue") && comparedTo.itemValue != this.itemValue) return true;
+			if (comparedTo.hasOwnProperty("itemVar") && comparedTo.itemVar != this.itemVar) return true;
+			if (comparedTo.hasOwnProperty("value") && comparedTo.value != this.value) return true;
+			if (comparedTo.hasOwnProperty("isSelected") && comparedTo.isSelected != this.isSelected) return true;
+			
+			return false;
+		}
+		
+		public function updateItemWith(value:SelectItem):void
+		{
+			this.itemLabel = value.itemLabel;
+			this.itemValue = value.itemValue;
+			this.itemVar = value.itemVar;
+			this.value = value.value;
+			this.isSelected = value.isSelected;
 		}
 	}
 }

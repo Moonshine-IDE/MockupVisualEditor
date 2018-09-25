@@ -10,6 +10,7 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.DataGrid;
     import spark.components.gridClasses.GridColumn;
     
+    import data.ConstantsItems;
     import data.DataProviderListItem;
     import data.OrganizerItem;
     
@@ -22,11 +23,6 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
-
-    [Exclude(name="EVENT_CHILDREN_UPDATED", kind="property")]
-    [Exclude(name="GRID_ITEM_EDIT", kind="property")]
-    [Exclude(name="GRID_ITEM_DELETE", kind="property")]
-    [Exclude(name="GRID_ITEM_ADD", kind="property")]
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -78,10 +74,6 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
         public static const ELEMENT_NAME:String = "DataTable";
-		public static const GRID_ITEM_EDIT:String = "gridItemEdit";
-		public static const GRID_ITEM_DELETE:String = "gridItemDelete";
-		public static const GRID_ITEM_ADD:String = "gridItemAdd";
-		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
         private static const NO_RECORDS_FOUND:String = "No records found.";
 
@@ -377,7 +369,7 @@ package view.primeFaces.surfaceComponents.components
                     {
                         deleteIndex = _tableColumnDescriptor.getItemIndex(value.object);
                         _tableColumnDescriptor.removeItemAt(deleteIndex);
-                        generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
+                        generateColumns(false, ConstantsItems.ITEM_DELETE, deleteIndex);
                     }
                     catch(e:Error)
                     {
@@ -385,14 +377,14 @@ package view.primeFaces.surfaceComponents.components
                         generateColumns(true);
                     }
 
-                    dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+                    dispatchEvent(new Event(ConstantsItems.EVENT_CHILDREN_UPDATED));
                     break;
                 case "addItemAt":
                     try
                     {
                         deleteIndex = _tableColumnDescriptor.getItemIndex(value);
                         _tableColumnDescriptor.removeItemAt(deleteIndex);
-                        generateColumns(false, DataTable.GRID_ITEM_DELETE, deleteIndex);
+                        generateColumns(false, ConstantsItems.ITEM_DELETE, deleteIndex);
                     }
                     catch(e:Error)
                     {
@@ -400,11 +392,11 @@ package view.primeFaces.surfaceComponents.components
                         generateColumns(true);
                     }
 
-                    dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
+                    dispatchEvent(new Event(ConstantsItems.EVENT_CHILDREN_UPDATED));
                     break;
                 case "updateItemAt":
                     DataProviderListItem(_tableColumnDescriptor[value.index]).updateItemWith(value.object);
-                    generateColumns(false, DataTable.GRID_ITEM_EDIT, value.index);
+                    generateColumns(false, ConstantsItems.ITEM_EDIT, value.index);
                     break;
                 default:
                     this[nameField.toString()] = value;
@@ -432,7 +424,7 @@ package view.primeFaces.surfaceComponents.components
             {
                 switch(updateType)
                 {
-                    case GRID_ITEM_ADD:
+                    case ConstantsItems.ITEM_ADD:
                     {
                         _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", _tableColumnDescriptor[_tableColumnDescriptor.length - 1], _tableColumnDescriptor[_tableColumnDescriptor.length - 1]);
 
@@ -443,7 +435,7 @@ package view.primeFaces.surfaceComponents.components
                         dispatchEvent(new Event("itemAdded"));
                         break;
                     }
-                    case GRID_ITEM_EDIT:
+                    case ConstantsItems.ITEM_EDIT:
                     {
                         if (itemIndex != -1)
                         {
@@ -461,7 +453,7 @@ package view.primeFaces.surfaceComponents.components
                         }
                         break;
                     }
-                    case GRID_ITEM_DELETE:
+                    case ConstantsItems.ITEM_DELETE:
                     {
                         if (itemIndex != -1)
                         {

@@ -1,17 +1,20 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
+    import flash.net.registerClassAlias;
     
     import mx.collections.ArrayCollection;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElementContainer;
     import mx.core.ScrollPolicy;
+    import mx.utils.ObjectUtil;
     
     import spark.components.RadioButton;
     import spark.components.RadioButtonGroup;
     import spark.layouts.HorizontalLayout;
     
+    import data.ConstantsItems;
     import data.OrganizerItem;
     import data.SelectItem;
     
@@ -90,10 +93,18 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-				"columnsChanged"
+				"columnsChanged",
+				"valueChanged",
+				"itemRemoved",
+				"itemAdded",
+				"itemUpdated"
             ];
 			
-			items.addItem(new SelectItem("Title", "", true));
+			var tmpItem:SelectItem = new SelectItem();
+			tmpItem.itemLabel = "Title";
+			tmpItem.isSelected = true;
+			
+			items.addItem(tmpItem);
 			this.columnBorderAlpha = 0;
 			this.ensureCreateInitialRowWithColumn();
 			addRadio((this.getElementAt(0) as GridRow).getElementAt(0) as GridItem, items[0]);
@@ -147,6 +158,7 @@ package view.primeFaces.surfaceComponents.components
 		}
 		
 		private var _columns:int;
+		[Bindable("columnsChanged")]
 		public function get columns():int
 		{
 			return _columns;
@@ -155,10 +167,10 @@ package view.primeFaces.surfaceComponents.components
 		{
 			if (_columns != value)
 			{
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "columns", _columns, value);
+				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "columns", _columns, value);
 				
 				_columns = value;
-				dispatchEvent(new Event("columnChanged"));
+				dispatchEvent(new Event("columnsChanged"));
 			}
 		}
 		
@@ -219,19 +231,93 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
-			
+			var deleteIndex:int;
+			switch(nameField)
+			{
+				case "removeItemAt":
+					try
+					{
+						deleteIndex = items.getItemIndex(value.object);
+						items.removeItemAt(deleteIndex);
+					}
+					catch(e:Error)
+					{
+						items.addItemAt(value.object, value.index);
+					}
+					
+					generateColumns();
+					break;
+				case "addItemAt":
+					try
+					{
+						deleteIndex = items.getItemIndex(value);
+						items.removeItemAt(deleteIndex);
+					}
+					catch(e:Error)
+					{
+						items.addItem(value);
+					}
+					
+					generateColumns();
+					break;
+				case "updateItemAt":
+					SelectItem(items[value.index]).updateItemWith(value.object);
+					updateColumn(value.index);
+					break;
+				default:
+					this[nameField.toString()] = value;
+					if (nameField.toString() == "columns") 
+					{
+						generateColumns();
+						dispatchEvent(new Event(ConstantsItems.EVENT_CHILDREN_UPDATED));
+					}
+					break;
+			}
 		}
 		
-		public function updateItems(atIndex:int=-1):void
+		public function updateItems(updateType:String, itemIndex:int=-1):void
 		{
-			if (atIndex != -1)
+			switch(updateType)
 			{
-				updateColumn(atIndex);
-            }
-			else
-			{
-				generateColumns();
-            }
+				case ConstantsItems.ITEM_ADD:
+					// item always added to last
+					_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", items[items.length - 1], items[items.length - 1]);
+					dispatchEvent(new Event("itemAdded"));
+					generateColumns();
+					
+					break;
+				case ConstantsItems.ITEM_DELETE:
+					if (itemIndex != -1)
+					{
+						if (!isUpdating)
+						{
+							var historyObject:Object = {object:items[itemIndex], index:itemIndex};
+							_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
+						}
+						
+						items.removeItemAt(itemIndex);
+						generateColumns();
+						dispatchEvent(new Event("itemRemoved"));
+					}
+					break;
+				case ConstantsItems.ITEM_EDIT:
+					if (itemIndex != -1)
+					{
+						// dispatch only if there are changes and user not just edit ended without makeing any change
+						if (!isUpdating && (items[itemIndex] as SelectItem).isItemChanged(_propertyChangeFieldReference.fieldLastValue.object))
+						{
+							registerClassAlias("SelectItem", SelectItem);
+							_propertyChangeFieldReference.fieldNewValue = {object:ObjectUtil.copy(items[itemIndex]), index:itemIndex};
+							dispatchEvent(new Event("itemUpdated"));
+							
+							updateColumn(itemIndex);
+						}
+					}
+					break;
+				default:
+					generateColumns();
+					break;
+			}
 		}
 
 		public function getComponentsChildren():OrganizerItem
@@ -262,7 +348,7 @@ package view.primeFaces.surfaceComponents.components
 				itemXML["@itemLabel"] = item.itemLabel;
 				itemXML["@itemValue"] = item.itemValue;
 				itemXML["@itemVar"] = item.itemVar;
-				itemXML["@value"] = item.value;
+				itemXML["@value"] = item.value ? item.value : "";
 				xml.appendChild(itemXML);
 			}
 
@@ -281,7 +367,9 @@ package view.primeFaces.surfaceComponents.components
 			items = new ArrayCollection();
 			for each (var i:XML in xml.selectItem)
 			{
-				tmpItem = new SelectItem(i.@itemLabel, i.@itemValue);
+				tmpItem = new SelectItem();
+				tmpItem.itemLabel = i.@itemLabel;
+				tmpItem.itemValue = i.@itemValue;
 				tmpItem.itemVar = i.@itemVar;
 				tmpItem.value = i.@value;
 				items.addItem(tmpItem);
@@ -313,7 +401,7 @@ package view.primeFaces.surfaceComponents.components
 				itemXML.addNamespace(facetNamespace);
 				itemXML.setNamespace(facetNamespace);
 				itemXML["@itemLabel"] = item.itemLabel;
-				itemXML["@itemValue"] = item.itemValue;
+				itemXML["@itemValue"] = item.itemValue ? item.itemValue : "";
 				xml.appendChild(itemXML);
 			}
 

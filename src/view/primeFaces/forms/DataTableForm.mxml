@@ -7,20 +7,21 @@
         creationComplete="onTabFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
-		import mx.binding.utils.BindingUtils;
-		import mx.binding.utils.ChangeWatcher;
-		import mx.events.DragEvent;
-		import mx.events.FlexEvent;
-		import mx.utils.ObjectUtil;
-
-		import spark.events.GridItemEditorEvent;
-
-		import data.DataProviderListItem;
-
-		import view.interfaces.IHistorySurfaceComponent;
-		import view.interfaces.ISurfaceComponent;
-		import view.primeFaces.surfaceComponents.components.DataTable;
-		import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.DragEvent;
+			import mx.events.FlexEvent;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.GridItemEditorEvent;
+			
+			import data.ConstantsItems;
+			import data.DataProviderListItem;
+			
+			import view.interfaces.IHistorySurfaceComponent;
+			import view.interfaces.ISurfaceComponent;
+			import view.primeFaces.surfaceComponents.components.DataTable;
+			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
 		[Bindable]
 		public var tableVar:String;
@@ -67,7 +68,7 @@
 			var listItem:DataProviderListItem = new DataProviderListItem("Title");
 			dgColumns.dataProvider.addItem(listItem);
 
-			updateToOwner(false, DataTable.GRID_ITEM_ADD);
+			updateToOwner(false, ConstantsItems.ITEM_ADD);
 
 			dgColumns.validateNow();
 			dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
@@ -81,7 +82,7 @@
 
 		private function deleteItemButton_clickHandler(event:MouseEvent):void
 		{
-			updateToOwner(false, DataTable.GRID_ITEM_DELETE, dgColumns.selectedIndex);
+			updateToOwner(false, ConstantsItems.ITEM_DELETE, dgColumns.selectedIndex);
 			dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
 		}
 
@@ -149,7 +150,7 @@
 
 		protected function onRowEditEnd(event:GridItemEditorEvent):void
 		{
-			updateToOwner(false, DataTable.GRID_ITEM_EDIT, dgColumns.selectedIndex);
+			updateToOwner(false, ConstantsItems.ITEM_EDIT, dgColumns.selectedIndex);
 		}
 
 		private function formattedValue(item:Object, column:GridColumn):String
@@ -159,10 +160,10 @@
 
 		override public function set selectedItem(value:ISurfaceComponent):void
 		{
-			if (selectedItem) selectedItem.removeEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated);
+			if (selectedItem) selectedItem.removeEventListener(ConstantsItems.EVENT_CHILDREN_UPDATED, onTableUpdated);
 			
 			super.selectedItem = value;
-			if (value) selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
+			if (value) selectedItem.addEventListener(ConstantsItems.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
 		}
 
 		protected function onRowEditStarts(event:GridItemEditorEvent):void

@@ -10,12 +10,17 @@
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
+			import mx.utils.ObjectUtil;
 			
 			import spark.events.GridItemEditorEvent;
 			
+			import data.ConstantsItems;
 			import data.SelectItem;
 			
+			import view.interfaces.IHistorySurfaceComponent;
+			import view.interfaces.ISurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
+			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
 			[Bindable] public var columns:int;
 			
@@ -48,22 +53,14 @@
 				dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
 			}
 	
-			private function updatePropertyEditorPriorToEdit():void
-			{
-				/*registerClassAlias("DataProviderListItem", DataProviderListItem);
-				var historyObject:Object = {
-					object: ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]),
-					index: dgColumns.selectedIndex
-				};
-				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);*/
-			}
 	
 			private function addItemButton_clickHandler(event:MouseEvent):void
 			{
-				var listItem:SelectItem = new SelectItem(DEFAULT_LABEL, "");
+				var listItem:SelectItem = new SelectItem();
+				listItem.itemLabel = DEFAULT_LABEL;
 				dgColumns.dataProvider.addItem(listItem);
 	
-				updateToOwner();
+				updateToOwner(ConstantsItems.ITEM_ADD);
 	
 				dgColumns.validateNow();
 				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
@@ -77,8 +74,7 @@
 	
 			private function deleteItemButton_clickHandler(event:MouseEvent):void
 			{
-				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
-				updateToOwner();
+				updateToOwner(ConstantsItems.ITEM_DELETE, dgColumns.selectedIndex);
 			}
 	
 			private function onTabFormCreationComplete(event:FlexEvent):void
@@ -95,11 +91,9 @@
 			private function updateColumnList():void
 			{
 				if (!dgColumns) return;
-				if ((selectedItem as SelectOneRadio).columns > 0)
-				{
-					ddlLayout.selectedIndex = 1;
-					fiColumns.includeInLayout = fiColumns.visible = true;
-				}
+				ddlLayout.selectedIndex = (selectedItem as SelectOneRadio).columns > 0 ? 1 : 0;
+				fiColumns.includeInLayout = fiColumns.visible = ((selectedItem as SelectOneRadio).columns > 0 ? true : false);
+				
 				dgColumns.dataProvider = (selectedItem as SelectOneRadio).items;
 				amountOfColumns.value = (selectedItem as SelectOneRadio).columns;
 			}
@@ -109,10 +103,10 @@
 				updateColumnList();
 			}
 	
-			private function updateToOwner(atIndex:int=-1):void
+			private function updateToOwner(type:String, atIndex:int=-1):void
 			{
 				var radio:SelectOneRadio = (selectedItem as SelectOneRadio);
-				radio.updateItems(atIndex);
+				radio.updateItems(type, atIndex);
 			}
 	
 			private function updateBinding():void
@@ -139,55 +133,61 @@
 	
 			protected function onRowEditEnd(event:GridItemEditorEvent):void
 			{
-				var tmpItem:SelectItem = dgColumns.dataProvider.getItemAt(dgColumns.selectedIndex) as SelectItem;
-				if (tmpItem.itemLabel != DEFAULT_LABEL || tmpItem.itemValue != "")
-				{
-					updateToOwner(dgColumns.selectedIndex);
-				}
+				updateToOwner(ConstantsItems.ITEM_EDIT, dgColumns.selectedIndex);
 			}
 	
-			/*override public function set selectedItem(value:ISurfaceComponent):void
+			override public function set selectedItem(value:ISurfaceComponent):void
 			{
-				if (selectedItem) selectedItem.removeEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated);
+				if (selectedItem) selectedItem.removeEventListener(ConstantsItems.EVENT_CHILDREN_UPDATED, onDataUpdated);
 				
 				super.selectedItem = value;
-				if (value) selectedItem.addEventListener(DataTable.EVENT_CHILDREN_UPDATED, onTableUpdated, false, 0, true);
-			}*/
+				if (value) selectedItem.addEventListener(ConstantsItems.EVENT_CHILDREN_UPDATED, onDataUpdated, false, 0, true);
+			}
+			
+			private function onDataUpdated(event:Event):void
+			{
+				updateColumnList();
+			}
+			
+			private function updatePropertyEditorPriorToEdit():void
+			{
+				registerClassAlias("SelectItem", SelectItem);
+				var historyObject:Object = {
+					object: ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]),
+					index: dgColumns.selectedIndex
+				};
+				(selectedItem as SelectOneRadio).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
+			}
 	
 			protected function onRowEditStarts(event:GridItemEditorEvent):void
 			{
-				//updatePropertyEditorPriorToEdit();
+				updatePropertyEditorPriorToEdit();
 			}
 			
 			private function onColumnUpdates():void
 			{
 				(selectedItem as SelectOneRadio).columns = amountOfColumns.value; 
-				updateToOwner();
+				updateToOwner(null);
 			}
 			
 			private function onLayoutUpdates():void
 			{
 				fiColumns.includeInLayout = fiColumns.visible = (ddlLayout.selectedIndex == 1);
 				(selectedItem as SelectOneRadio).columns = (ddlLayout.selectedIndex == 1) ? 1 : 0;
-				updateToOwner();
+				if (amountOfColumns) amountOfColumns.value = (selectedItem as SelectOneRadio).columns;
+				updateToOwner(null);
 			}
 			
 		]]>
 	</fx:Script>
 	
-    <suportclasses:layout>
-        <s:FormLayout horizontalAlign="contentJustify"/>
-    </suportclasses:layout>
-	
 	<forms:TextForm label="Value" textProperty="value"
 					prompt="#\{bean.property\}"/>
 	
 	<s:FormItem label="Layout" skinClass="skins.StackedFormItemSkin">
-		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle"/>
-		</s:layout>
 		<s:DropDownList id="ddlLayout" 
-						width="100%" requireSelection="true">
+						width="100%" requireSelection="true"
+						change="onLayoutUpdates()">
 			<s:dataProvider>
 				<s:ArrayList>
 					<fx:String>Basic</fx:String>
@@ -195,8 +195,6 @@
 				</s:ArrayList>
 			</s:dataProvider>
 		</s:DropDownList>
-		<s:Button label="Update" height="25"
-				  click="onLayoutUpdates()"/>
 	</s:FormItem>
 	
 	<s:FormItem id="fiColumns" 
@@ -227,7 +225,7 @@
             <s:Button id="addDtColumnBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
             <s:Button id="editDtColumnBtn" styleName="editDataProviderItemButton" toolTip="Edit Item"
-                      enabled="false"
+					  enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"
                       click="editItemButton_clickHandler(event)"/>
             <s:Button id="deleteDtColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
                       enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"

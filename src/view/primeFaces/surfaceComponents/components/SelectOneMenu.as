@@ -1,12 +1,14 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
+    import flash.net.registerClassAlias;
     
     import mx.collections.ArrayCollection;
-    import mx.collections.IList;
+    import mx.utils.ObjectUtil;
     
     import spark.components.DropDownList;
     
+    import data.ConstantsItems;
     import data.OrganizerItem;
     import data.SelectItem;
     
@@ -33,6 +35,7 @@ package view.primeFaces.surfaceComponents.components
 	[Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="isSelected", kind="property")]
 	[Exclude(name="dataProvider", kind="property")]
+	[Exclude(name="updateHistoryState", kind="method")]
 
     /**
      * <p>Representation of selectOneMenu in HTML</p>
@@ -79,24 +82,20 @@ package view.primeFaces.surfaceComponents.components
                 "heightChanged",
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
-				"dataProviderChanged",
-				"editableChanged"
+				"editableChanged",
+				"valueChanged",
+				"itemRemoved",
+				"itemAdded",
+				"itemUpdated"
             ];
 			
-			this.dataProvider = new ArrayCollection([new SelectItem("Select One", "")]);
+			var tmpItem:SelectItem = new SelectItem();
+			tmpItem.itemLabel = "Select One";
+			
+			this.dataProvider = new ArrayCollection([tmpItem]);
 			this.labelField = "itemLabel";
 			this.requireSelection = true;
         }
-		
-		override public function set dataProvider(value:IList):void
-		{
-			if (super.dataProvider === value) return;
-			
-			_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "dataProvider", super.dataProvider, value);
-			
-			super.dataProvider = value;
-			dispatchEvent(new Event("dataProviderChanged"));
-		}
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -284,7 +283,76 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
-			
+			var deleteIndex:int;
+			switch(nameField)
+			{
+				case "removeItemAt":
+					try
+					{
+						deleteIndex = dataProvider.getItemIndex(value.object);
+						dataProvider.removeItemAt(deleteIndex);
+					}
+					catch(e:Error)
+					{
+						dataProvider.addItemAt(value.object, value.index);
+					}
+					
+					break;
+				case "addItemAt":
+					try
+					{
+						deleteIndex = dataProvider.getItemIndex(value);
+						dataProvider.removeItemAt(deleteIndex);
+					}
+					catch(e:Error)
+					{
+						dataProvider.addItem(value);
+					}
+					
+					break;
+				case "updateItemAt":
+					SelectItem(dataProvider[value.index]).updateItemWith(value.object);
+					break;
+				default:
+					this[nameField.toString()] = value;
+					break;
+			}
+		}
+		
+		public function updateHistoryState(updateType:String=null, itemIndex:int=-1):void
+		{
+			switch(updateType)
+			{
+				case ConstantsItems.ITEM_ADD:
+					// item always added to last
+					_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", dataProvider[dataProvider.length - 1], dataProvider[dataProvider.length - 1]);
+					dispatchEvent(new Event("itemAdded"));
+					
+					break;
+				case ConstantsItems.ITEM_DELETE:
+					if (itemIndex != -1)
+					{
+						if (!isUpdating)
+						{
+							var historyObject:Object = {object:dataProvider[itemIndex], index:itemIndex};
+							_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
+						}
+						dispatchEvent(new Event("itemRemoved"));
+					}
+					break;
+				case ConstantsItems.ITEM_EDIT:
+					if (itemIndex != -1)
+					{
+						// dispatch only if there are changes and user not just edit ended without makeing any change
+						if (!isUpdating && (dataProvider[itemIndex] as SelectItem).isItemChanged(_propertyChangeFieldReference.fieldLastValue.object))
+						{
+							registerClassAlias("SelectItem", SelectItem);
+							_propertyChangeFieldReference.fieldNewValue = {object:ObjectUtil.copy(dataProvider[itemIndex]), index:itemIndex};
+							dispatchEvent(new Event("itemUpdated"));
+						}
+					}
+					break;
+			}
 		}
 
 		public function getComponentsChildren():OrganizerItem
@@ -311,7 +379,7 @@ package view.primeFaces.surfaceComponents.components
 				itemXML["@itemLabel"] = item.itemLabel;
 				itemXML["@itemValue"] = item.itemValue;
 				itemXML["@itemVar"] = item.itemVar;
-				itemXML["@value"] = item.value;
+				itemXML["@value"] = item.value ? item.value : "";
 				xml.appendChild(itemXML);
 			}
 
@@ -329,7 +397,9 @@ package view.primeFaces.surfaceComponents.components
 			this.dataProvider = new ArrayCollection();
 			for each (var i:XML in xml.selectItem)
 			{
-				tmpItem = new SelectItem(i.@itemLabel, i.@itemValue);
+				tmpItem = new SelectItem();
+				tmpItem.itemLabel = i.@itemLabel;
+				tmpItem.itemValue = i.@itemValue;
 				tmpItem.itemVar = i.@itemVar;
 				tmpItem.value = i.@value;
 				this.dataProvider.addItem(tmpItem);
@@ -355,7 +425,7 @@ package view.primeFaces.surfaceComponents.components
 				itemXML.addNamespace(facetNamespace);
 				itemXML.setNamespace(facetNamespace);
 				itemXML["@itemLabel"] = item.itemLabel;
-				itemXML["@itemValue"] = item.itemValue;
+				itemXML["@itemValue"] = item.itemValue ? item.itemValue : "";
 				xml.appendChild(itemXML);
 			}
 

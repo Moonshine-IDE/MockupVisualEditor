@@ -7,12 +7,20 @@
         creationComplete="onTabFormCreationComplete(event)" xmlns:forms="view.forms.*">
 	<fx:Script>
 		<![CDATA[
+			import flash.net.registerClassAlias;
+			
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
+			import mx.utils.ObjectUtil;
 			
+			import spark.events.GridItemEditorEvent;
+			
+			import data.ConstantsItems;
 			import data.SelectItem;
 			
+			import view.interfaces.IHistorySurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.SelectOneMenu;
+			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
 			private static const DEFAULT_LABEL:String = "Title";
 	
@@ -43,20 +51,13 @@
 				dgColumns.startItemEditorSession(dgColumns.selectedIndex, 0);
 			}
 	
-			private function updatePropertyEditorPriorToEdit():void
-			{
-				/*registerClassAlias("DataProviderListItem", DataProviderListItem);
-				var historyObject:Object = {
-					object: ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]),
-					index: dgColumns.selectedIndex
-				};
-				(selectedItem as DataTable).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);*/
-			}
-	
 			private function addItemButton_clickHandler(event:MouseEvent):void
 			{
-				var listItem:SelectItem = new SelectItem(DEFAULT_LABEL, "");
+				var listItem:SelectItem = new SelectItem();
+				listItem.itemLabel = DEFAULT_LABEL;
 				dgColumns.dataProvider.addItem(listItem);
+				
+				updateToOwner(ConstantsItems.ITEM_ADD);
 	
 				dgColumns.validateNow();
 				dgColumns.setSelectedIndex(dgColumns.dataProvider.length - 1);
@@ -70,6 +71,7 @@
 	
 			private function deleteItemButton_clickHandler(event:MouseEvent):void
 			{
+				updateToOwner(ConstantsItems.ITEM_DELETE, dgColumns.selectedIndex);
 				dgColumns.dataProvider.removeItemAt(dgColumns.selectedIndex);
 			}
 	
@@ -82,6 +84,32 @@
 			{
 				if (!dgColumns) return;
 				dgColumns.dataProvider = (selectedItem as SelectOneMenu).dataProvider;
+			}
+			
+			private function updateToOwner(updateType:String = null, itemIndex:int = -1):void
+			{
+				(selectedItem as SelectOneMenu).updateHistoryState(updateType, itemIndex);
+			}
+			
+			protected function onRowEditStarts(event:GridItemEditorEvent):void
+			{
+				updatePropertyEditorPriorToEdit();
+			}
+			
+			protected function onRowEditEnd(event:GridItemEditorEvent):void
+			{
+				updateToOwner(ConstantsItems.ITEM_EDIT, dgColumns.selectedIndex);
+			}
+			
+			private function updatePropertyEditorPriorToEdit():void
+			{
+				registerClassAlias("SelectItem", SelectItem);
+				var aab:Object = dgColumns.dataProvider[dgColumns.selectedIndex];
+				var historyObject:Object = {
+					object: ObjectUtil.copy(dgColumns.dataProvider[dgColumns.selectedIndex]),
+					index: dgColumns.selectedIndex
+				};
+				(selectedItem as SelectOneMenu).propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(selectedItem as IHistorySurfaceComponent, "updateItemAt", historyObject);
 			}
 			
 		]]>
@@ -99,7 +127,8 @@
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
 		<s:DataGrid id="dgColumns"
 					width="100%" height="100%"
-					editable="true" sortableColumns="false" draggableColumns="false">
+					editable="true" sortableColumns="false" draggableColumns="false"
+					gridItemEditorSessionSave="onRowEditEnd(event)" gridItemEditorSessionStart="onRowEditStarts(event)">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn dataField="itemLabel" headerText="Title"/>
@@ -111,7 +140,7 @@
             <s:Button id="addDtColumnBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
                       click="addItemButton_clickHandler(event)"/>
             <s:Button id="editDtColumnBtn" styleName="editDataProviderItemButton" toolTip="Edit Item"
-                      enabled="false"
+					  enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"
                       click="editItemButton_clickHandler(event)"/>
             <s:Button id="deleteDtColumnBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
                       enabled="{dgColumns.selectedIndex !== -1 &amp;&amp; dgColumns.dataProvider.length > 1}"

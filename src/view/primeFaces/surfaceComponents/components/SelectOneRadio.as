@@ -61,7 +61,7 @@ package view.primeFaces.surfaceComponents.components
 	 * columns="0"
      * percentWidth=""
      * percentHeight=""&gt;
-	 *	&lt;selectItem itemLabel="Title" itemValue="" itemVar="" value=""/&gt;
+	 *	&lt;selectItem itemLabel="Title" itemValue=""/&gt;
 	 * &lt;/SelectOneRadio&gt;
      * </pre>
      *
@@ -443,8 +443,6 @@ package view.primeFaces.surfaceComponents.components
 				itemXML = new XML("<selectItem />");
 				itemXML["@itemLabel"] = item.itemLabel;
 				itemXML["@itemValue"] = item.itemValue;
-				itemXML["@itemVar"] = item.itemVar;
-				itemXML["@value"] = item.value ? item.value : "";
 				xml.appendChild(itemXML);
 			}
 
@@ -466,8 +464,6 @@ package view.primeFaces.surfaceComponents.components
 				tmpItem = new SelectItem();
 				tmpItem.itemLabel = i.@itemLabel;
 				tmpItem.itemValue = i.@itemValue;
-				tmpItem.itemVar = i.@itemVar;
-				tmpItem.value = i.@value;
 				items.addItem(tmpItem);
 			}
 			

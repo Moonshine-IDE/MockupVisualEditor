@@ -55,17 +55,26 @@ package view.primeFaces.surfaceComponents.components
      * <pre>
      * &lt;SelectOneRadio
      * <b>Attributes</b>
-     * width="120"
-     * height="120"
+     * width="230"
+     * height="21"
+	 * value=""
      * percentWidth=""
-     * percentHeight=""/&gt;
+	 * layout=""
+	 * columns=""
+     * percentHeight=""&gt;
+	 *	&lt;selectItem itemLabel="Title" itemValue="" itemVar="" value=""/&gt;
+	 * /&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
      * <pre>
      * &lt;p:selectOneRadio
      * <b>Attributes</b>
-     * style="width:120px;height:120px;"
+	 * value=""
+	 * layout=""
+	 * columns=""
+     * style="width:230px;height:21px;"&gt;
+	 * 	&lt;f:selectItem itemLabel="Title" itemValue="" itemVar="" value=""/&gt;
      * /&gt;
      * </pre>
      */
@@ -137,6 +146,16 @@ package view.primeFaces.surfaceComponents.components
 		
 		private var _value:String = "";
 		[Bindable("valueChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>value</strong></p>
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;SelectOneRadio value=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:selectOneRadio value=""/&gt;</listing>
+		 */
 		public function get value():String
 		{
 			return _value;
@@ -156,9 +175,25 @@ package view.primeFaces.surfaceComponents.components
 		{
 			return _radioGroup.selectedIndex;
 		}
+		public function set selectedIndex(value:int):void
+		{
+			
+		}
 		
 		private var _columns:int;
 		[Bindable("columnsChanged")]
+		/**
+		 * <p>PrimeFaces: <strong>columns</strong></p>
+		 * 
+		 * @default null
+		 *
+		 * @example
+		 * <strong>Visual Editor XML:</strong>
+		 * <listing version="3.0">&lt;SelectOneRadio columns=""/&gt;</listing>
+		 * @example
+		 * <strong>PrimeFaces:</strong>
+		 * <listing version="3.0">&lt;p:selectOneRadio columns=""/&gt;</listing>
+		 */
 		public function get columns():int
 		{
 			return _columns;
@@ -223,11 +258,6 @@ package view.primeFaces.surfaceComponents.components
         {
             return SelectOneRadioPropertyEditor;
         }
-		
-		public function set selectedIndex(value:int):void
-		{
-			
-		}
 		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{

@@ -45,7 +45,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;SelectOneMenu
      * <b>Attributes</b>
      * width="120"
-     * height="120"
+     * height="30"
      * percentWidth=""
      * percentHeight=""
      * editable="false"
@@ -56,7 +56,7 @@ package view.primeFaces.surfaceComponents.components
      * <pre>
      * &lt;p:selectOneMenu
      * <b>Attributes</b>
-     * style="width:120px;height:120px;"
+     * style="width:120px;height:30px;"
      * editable="false"
      * value=""/&gt;
      * </pre>
@@ -157,14 +157,14 @@ package view.primeFaces.surfaceComponents.components
         /**
          * <p>PrimeFaces: <strong>style</strong></p>
          *
-         * @default 120
+         * @default 30
          *
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;SelectOneMenu height="120"/&gt;</listing>
+         * <listing version="3.0">&lt;SelectOneMenu height="30"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:selectOneMenu style="height:120px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:selectOneMenu style="height:30px;"/&gt;</listing>
          */
         override public function get height():Number
         {

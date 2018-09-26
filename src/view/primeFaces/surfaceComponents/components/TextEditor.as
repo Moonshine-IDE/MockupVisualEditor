@@ -48,8 +48,8 @@ package view.primeFaces.surfaceComponents.components
      * <pre>
      * &lt;TextEditor
      * <b>Attributes</b>
-     * width="110"
-     * height="110"
+     * width="250"
+     * height="100"
      * percentWidth=""
      * percentHeight=""
      * placeholder=""
@@ -62,7 +62,7 @@ package view.primeFaces.surfaceComponents.components
      * <pre>
      * &lt;p:textEditor
      * <b>Attributes</b>
-     * style="width:110px;height:110px;"
+     * style="width:250px;height:100px;"
      * placeholder=""
      * value=""
      * widgetVar=""
@@ -95,8 +95,7 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinHeightChanged",
 				"widgetVarChanged",
 				"textChanged",
-				"placeholderChanged",
-				"styleChanged"
+				"placeholderChanged"
             ];
 			
 			backgroundFill = new SolidColor(0xFCFCFC);
@@ -299,15 +298,15 @@ package view.primeFaces.surfaceComponents.components
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
         /**
-         * <p>PrimeFaces: <strong>src</strong></p>
+         * <p>PrimeFaces: <strong>style</strong></p>
          *
-         * @default "110"
+         * @default "250"
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;TextEditor width="110"/&gt;</listing>
+         * <listing version="3.0">&lt;TextEditor width="250"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:textEditor style="width:110px;height:110px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:textEditor style="width:250px;"/&gt;</listing>
          */
         override public function get width():Number
         {
@@ -337,13 +336,13 @@ package view.primeFaces.surfaceComponents.components
         /**
          * <p>PrimeFaces: <strong>style</strong></p>
          *
-         * @default "110"
+         * @default "100"
          * @example
          * <strong>Visual Editor XML:</strong>
-         * <listing version="3.0">&lt;TextEditor height="110"/&gt;</listing>
+         * <listing version="3.0">&lt;TextEditor height="100"/&gt;</listing>
          * @example
          * <strong>PrimeFaces:</strong>
-         * <listing version="3.0">&lt;p:textEditor style="width:110px;height:110px;"/&gt;</listing>
+         * <listing version="3.0">&lt;p:textEditor style="height:100px;"/&gt;</listing>
          */
         override public function get height():Number
         {

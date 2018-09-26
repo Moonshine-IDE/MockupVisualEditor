@@ -58,12 +58,11 @@ package view.primeFaces.surfaceComponents.components
      * width="230"
      * height="21"
 	 * value=""
+	 * columns="0"
      * percentWidth=""
-	 * layout=""
-	 * columns=""
      * percentHeight=""&gt;
 	 *	&lt;selectItem itemLabel="Title" itemValue="" itemVar="" value=""/&gt;
-	 * /&gt;
+	 * &lt;/SelectOneRadio&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -71,11 +70,10 @@ package view.primeFaces.surfaceComponents.components
      * &lt;p:selectOneRadio
      * <b>Attributes</b>
 	 * value=""
-	 * layout=""
-	 * columns=""
+	 * columns="0"
      * style="width:230px;height:21px;"&gt;
-	 * 	&lt;f:selectItem itemLabel="Title" itemValue="" itemVar="" value=""/&gt;
-     * /&gt;
+	 * 	&lt;f:selectItem itemLabel="Title" itemValue=""/&gt;
+     * &lt;/p:selectOneRadio&gt;
      * </pre>
      */
     public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent
@@ -185,14 +183,14 @@ package view.primeFaces.surfaceComponents.components
 		/**
 		 * <p>PrimeFaces: <strong>columns</strong></p>
 		 * 
-		 * @default null
+		 * @default 0
 		 *
 		 * @example
 		 * <strong>Visual Editor XML:</strong>
-		 * <listing version="3.0">&lt;SelectOneRadio columns=""/&gt;</listing>
+		 * <listing version="3.0">&lt;SelectOneRadio columns="0"/&gt;</listing>
 		 * @example
 		 * <strong>PrimeFaces:</strong>
-		 * <listing version="3.0">&lt;p:selectOneRadio columns=""/&gt;</listing>
+		 * <listing version="3.0">&lt;p:selectOneRadio columns="0"/&gt;</listing>
 		 */
 		public function get columns():int
 		{

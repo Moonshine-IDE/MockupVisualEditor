@@ -49,7 +49,9 @@ package view.primeFaces.surfaceComponents.components
      * percentWidth=""
      * percentHeight=""
      * editable="false"
-     * value=""/&gt;
+     * value=""&gt;
+	 *  &lt;selectItem itemLabel="Title" itemValue="" itemVar="" value=""/&gt;
+	 * &lt;/SelectOneMenu&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -58,7 +60,9 @@ package view.primeFaces.surfaceComponents.components
      * <b>Attributes</b>
      * style="width:120px;height:30px;"
      * editable="false"
-     * value=""/&gt;
+     * value=""&gt;
+	 *  &lt;f:selectItem itemLabel="Title" itemValue=""/&gt;
+	 * &lt;/p:selectOneMenu&gt;
      * </pre>
      */
     public class SelectOneMenu extends DropDownList implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent

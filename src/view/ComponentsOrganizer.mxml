@@ -80,7 +80,7 @@
 			
 			private function onComplete(event:FlexEvent):void
 			{
-				editingSurface.addEventListener(Event.CHANGE, onSurfaceChanged, false, 0, true);
+				editingSurface.addEventListener(Event.CHANGE, onItemChangedInEditingSurface, false, 0, true);
 			}
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
@@ -176,7 +176,7 @@
 				if (tree.selectedItem) editingSurface.selectedItem = tree.selectedItem.item;
 			}
 			
-			private function onSurfaceChanged(event:Event):void
+			private function onItemChangedInEditingSurface(event:Event):void
 			{
 				if (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem))
 					return;

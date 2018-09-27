@@ -1,8 +1,10 @@
 package components.tabNavigator
 {
     import flash.events.Event;
+    import flash.text.TextLineMetrics;
     
     import spark.components.ButtonBarButton;
+    import spark.components.Label;
     import spark.components.NavigatorContent;
     import spark.containers.Navigator;
     
@@ -98,12 +100,30 @@ package components.tabNavigator
 			
 			if (selectedTab.label != label)
 			{
+				var isLabelBlank:Boolean;
 				var item:ButtonBarButton = tabBar.dataGroup.getElementAt(this.selectedIndex) as ButtonBarButton;
+				trace(item.labelDisplay['width'], item.labelDisplay['height']);
 				
 				updatePropertyChangeReference("label", [{field:selectedIndex, value:selectedTab.label}, {field:selectedIndex, value:item.label}], [{field:selectedIndex, value:label}, {field:selectedIndex, value:label}]);
 
+				if (item.label == "") isLabelBlank = true;
 				selectedTab.label = label;
 				item.label = label;
+				
+				// Do not perform these action unless previous
+				// label value was blank; for some reason when label is blank
+				// item.labelDisplay starts with width/height 0/0
+				if (isLabelBlank)
+				{
+					// note:
+					// invalidateSize or invalidateDisplaylist doesn't seem affects at this pos.
+					// as per usual behavior the tab is suppose to be widen based upon label width.
+					// we need a way to determine the text length and update
+					// the size to item.labelDisplay to properly sized
+					item.labelDisplay['width'] = this.measureText(label).width + 10;
+					item.labelDisplay['height'] = 20;
+					item.invalidateDisplayList();
+				}
 				
 				dispatchEvent(new Event("itemUpdated"));
 			}

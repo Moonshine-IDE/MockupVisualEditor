@@ -23,7 +23,17 @@ package utils
 
             if (!isNaN(component.percentWidth))
             {
-                styleDiv += "width:" + String(component.percentWidth) + "%;";
+                if (componentSizeOutput)
+                {
+                    if (componentSizeOutput.widthOutput)
+                    {
+                        styleDiv += "width:" + String(component.percentWidth) + "%;";
+                    }
+                }
+                else
+                {
+                    styleDiv += "width:" + String(component.percentWidth) + "%;";
+                }
             }
             else if (!isNaN(component.width))
             {
@@ -42,7 +52,17 @@ package utils
 
             if (!isNaN(component.percentHeight))
             {
-                styleDiv += "height:" + String(component.percentHeight) + "%;";
+                if (componentSizeOutput)
+                {
+                    if (componentSizeOutput.heightOutput)
+                    {
+                        styleDiv += "height:" + String(component.percentHeight) + "%;";
+                    }
+                }
+                else
+                {
+                    styleDiv += "height:" + String(component.percentHeight) + "%;";
+                }
             }
             else if (!isNaN(component.height))
             {

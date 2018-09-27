@@ -19,7 +19,7 @@
 		<s:Scroller percentWidth="70" percentHeight="100">
 			<s:Group>
 				<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"
-									 organizer="{componentsOrganizer}"/>
+									 organizer="{componentsOrganizer}" left="0" right="0" top="0" bottom="0"/>
 			</s:Group>
 		</s:Scroller>
 		<s:Group width="10%" minWidth="250" height="100%">

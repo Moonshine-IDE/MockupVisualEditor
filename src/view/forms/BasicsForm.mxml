@@ -99,7 +99,10 @@
 		{
 			if (!this.selectedItem) return;
 
-			if (this.widthInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
+			if (this.widthInput.text.indexOf("%") != -1)
+			{
+				GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
+			}
 			else
 			{
 				var newWidth:Number = parseFloat(this.widthInput.text);
@@ -112,7 +115,10 @@
 		{
 			if (!this.selectedItem) return;
 
-			if (this.heightInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
+			if (this.heightInput.text.indexOf("%") != -1)
+			{
+				GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
+			}
 			else
 			{
 				var newHeight:Number = parseFloat(this.heightInput.text);

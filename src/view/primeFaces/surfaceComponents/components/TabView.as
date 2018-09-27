@@ -5,6 +5,7 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
     import mx.events.CollectionEvent;
+    import mx.utils.StringUtil;
     
     import spark.components.NavigatorContent;
     import spark.events.ElementExistenceEvent;
@@ -538,7 +539,7 @@ package view.primeFaces.surfaceComponents.components
 					organizerItem = surfaceElement.getComponentsChildren();
 					if (organizerItem) 
 					{
-						organizerItem.name = navContent.label;
+						organizerItem.name = StringUtil.trim(navContent.label).length > 0 ? navContent.label : "Tab (Unlabelled)";
 						organizerItem.type = OrganizerItem.TYPE_TAB;
 						componentsArray.push(organizerItem);
 					}

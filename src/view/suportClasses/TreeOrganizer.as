@@ -14,6 +14,7 @@ package view.suportClasses
 	import data.OrganizerItem;
 	
 	import view.interfaces.IDropAcceptableComponent;
+	import view.primeFaces.surfaceComponents.components.PanelGrid;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	
 	use namespace mx_internal;
@@ -116,7 +117,7 @@ package view.suportClasses
 			}
 			
 			// do not let anything drgged direct to the grid
-			if (target.item is Grid || target.item is TabView) return false;
+			if (target.item is Grid || target.item is TabView || target.item is PanelGrid) return false;
 			// don't let cells to be dragged
 			if (source.type == OrganizerItem.TYPE_CELL || source.type == OrganizerItem.TYPE_TAB) return false;
 			

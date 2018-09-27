@@ -231,6 +231,7 @@
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			if (container.getElementIndex(IVisualElement(item)) > -1)
 			{
+				organizer.removeDroppedElement(item.owner as IVisualElement, item as IVisualElement);
 				container.removeElement(IVisualElement(item));
 			}
 
@@ -559,7 +560,7 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
-				organizer.addDroppedElement(dropTarget, object as IVisualElement);
+				organizer.addDroppedElement(dropTarget as IVisualElement, object as IVisualElement);
 
 				// some component may have processing should occur after
 				// being added to the editor

@@ -2,7 +2,8 @@
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="view.*"
-		 xmlns:suportClasses="view.suportClasses.*" gap="0">
+		 xmlns:suportClasses="view.suportClasses.*" gap="0"
+		 creationComplete="onComplete(event)">
 	<fx:Script>
 		<![CDATA[
 			import flash.utils.clearTimeout;
@@ -11,13 +12,18 @@
 			import mx.collections.ArrayCollection;
 			import mx.core.IVisualElement;
 			import mx.core.IVisualElementContainer;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			
+			import components.renderers.OrganizerTreeRenderer;
 			
 			import data.OrganizerItem;
-			import components.renderers.OrganizerTreeRenderer;
 			
 			import view.interfaces.IPrimeFacesSurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.Fieldset;
 			import view.primeFaces.surfaceComponents.components.TabView;
+			
+			public var editingSurface:EditingSurface;
 			
 			[Bindable] private var components:ArrayCollection;
 			
@@ -39,9 +45,9 @@
 				});
 			}
 			
-			public function addDroppedElement(ownerComponent:IVisualElementContainer, component:IVisualElement):void
+			public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
 			{
-				findFileWrapperInDepth(components.source, isSubDivComponent(ownerComponent));
+				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
 				this.callLater(function():void
 				{
 					if (foundIndepthItem) foundIndepthItem.children.push((component as IPrimeFacesSurfaceComponent).getComponentsChildren());
@@ -50,6 +56,31 @@
 					refreshItem(foundIndepthItem);
 					foundIndepthItem = null;
 				});
+			}
+			
+			public function removeDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
+			{
+				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
+				this.callLater(function():void
+				{
+					var tmpItems:Array = foundIndepthItem ? foundIndepthItem.children : components.source; 
+					for (var i:int=0; i < tmpItems.length; i++)
+					{
+						if (tmpItems[i].item === component)
+						{
+							tmpItems.splice(i, 1);
+							break;
+						}
+					}
+					
+					refreshItem(foundIndepthItem);
+					foundIndepthItem = null;
+				});
+			}
+			
+			private function onComplete(event:FlexEvent):void
+			{
+				editingSurface.addEventListener(Event.CHANGE, onSurfaceChanged, false, 0, true);
 			}
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
@@ -87,7 +118,7 @@
 				return [new OrganizerItem(container, "ROOT", componentsArray)];
 			}
 			
-			private function findFileWrapperInDepth(items:Array, ownerComponent:IVisualElementContainer):void
+			private function findItemInDepth(items:Array, ownerComponent:IVisualElement):void
 			{
 				// probable termination
 				if (foundIndepthItem) return;
@@ -99,7 +130,7 @@
 						foundIndepthItem = oItem;
 						return;
 					}
-					else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem) findFileWrapperInDepth(oItem.children, ownerComponent);
+					else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem) findItemInDepth(oItem.children, ownerComponent);
 				}
 			}
 			
@@ -128,7 +159,7 @@
 				}, 100);
 			}
 			
-			private function isSubDivComponent(value:IVisualElementContainer):IVisualElementContainer
+			private function isSubDivComponent(value:IVisualElement):IVisualElement
 			{
 				if (value is TabView) return (value as TabView).div;
 				else if (value is Fieldset) return (value as Fieldset).div;
@@ -138,6 +169,40 @@
 			private function getIconForFile(object:Object):Class
 			{
 				return null;
+			}
+			
+			private function onItemSelectionChanged(event:ListEvent):void
+			{
+				if (tree.selectedItem) editingSurface.selectedItem = tree.selectedItem.item;
+			}
+			
+			private function onSurfaceChanged(event:Event):void
+			{
+				if (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem))
+					return;
+				
+				findItemInDepth(components.source, editingSurface.selectedItem as IVisualElement);
+				this.callLater(function():void
+				{
+					if (foundIndepthItem) 
+					{
+						tree.selectedItem = foundIndepthItem;
+						foundIndepthItem = null;
+						tree.scrollToIndex(tree.selectedIndex);
+					}
+				});
+			}
+			
+			private function onTreeItemKeyUp(event:KeyboardEvent):void
+			{
+				// Delete key-press
+				if (event.keyCode == 46 && tree.selectedItem)
+				{
+					if (tree.selectedItem.name.indexOf(":") != -1 || 
+						tree.selectedItem.type == OrganizerItem.TYPE_CELL || 
+						tree.selectedItem.type == OrganizerItem.TYPE_TAB) return;
+					editingSurface.deleteItem(tree.selectedItem.item);
+				}
 			}
 			
 		]]>
@@ -150,9 +215,11 @@
 								 width="100%" height="100%"
 								 iconFunction="{getIconForFile}"
 								 rollOverColor="0xe1e1e1"
-								 selectionColor="0xd0d0d0"
+								 selectionColor="0xf2a9ba"
 								 verticalScrollBarStyleName="black"
 								 alternatingItemColors="[0xeeeeee, 0xffffff]"
 								 rowHeight="18"
-								 itemRenderer="{new ClassFactory(OrganizerTreeRenderer)}"/>
+								 change="onItemSelectionChanged(event)"
+								 itemRenderer="{new ClassFactory(OrganizerTreeRenderer)}"
+								 keyUp="onTreeItemKeyUp(event)"/>
 </s:VGroup>

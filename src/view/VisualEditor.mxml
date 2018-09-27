@@ -29,6 +29,7 @@
 										  visible="{bbPropertyPanel.selectedIndex==0}"/>
 			<view:ComponentsOrganizer id="componentsOrganizer"
 									  width="100%" top="0" bottom="20"
+									  editingSurface="{editingSurface}"
 									  visible="{bbPropertyPanel.selectedIndex==1}"/>
 			<s:ButtonBar id="bbPropertyPanel" 
 						 bottom="0" right="0" selectedIndex="0"

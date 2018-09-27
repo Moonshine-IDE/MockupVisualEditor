@@ -53,7 +53,7 @@
 	<s:Rect id="fill" left="1" right="1" top="1" bottom="1" radiusX="6">
 		<s:fill>
 			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0xFFFFFF"
+				<s:GradientEntry color="0xFF0000"
 					color.over="0xBBBDBD"
 					color.down="0xAAAAAA"
 					alpha="0.85" />

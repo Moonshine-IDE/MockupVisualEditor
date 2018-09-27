@@ -522,7 +522,6 @@ package view.primeFaces.surfaceComponents.components
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
 			for(var i:int = 0; i < this.numElements; i++)
 			{
 				var navContent:NavigatorContent = this.getElementAt(i) as NavigatorContent;
@@ -558,7 +557,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (this.widthOutputChanged)
             {
-                this.percentWidth = Number.NaN;
+                this.percentWidth = 100;
                 this.width = Number.NaN;
                 this.widthOutputChanged = false;
             }

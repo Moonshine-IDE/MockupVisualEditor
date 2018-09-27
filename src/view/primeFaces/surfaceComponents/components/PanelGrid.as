@@ -692,7 +692,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (this.widthOutputChanged)
             {
-                this.percentWidth = Number.NaN;
+                this.percentWidth = 100;
                 this.width = Number.NaN;
                 this.widthOutputChanged = false;
             }

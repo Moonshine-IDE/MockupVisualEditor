@@ -28,6 +28,7 @@
 			[Bindable] private var components:ArrayCollection;
 			
 			private var foundIndepthItem:OrganizerItem;
+			private var lastTopParent:Object;
 			
 			public function loadFirstData(surface:EditingSurface):void
 			{
@@ -118,7 +119,7 @@
 				return [new OrganizerItem(container, "ROOT", componentsArray)];
 			}
 			
-			private function findItemInDepth(items:Array, ownerComponent:IVisualElement):void
+			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, topParent:Object=null):void
 			{
 				// probable termination
 				if (foundIndepthItem) return;
@@ -127,10 +128,15 @@
 				{
 					if (oItem.item === ownerComponent)
 					{
+						lastTopParent = topParent;
 						foundIndepthItem = oItem;
 						return;
 					}
-					else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem) findItemInDepth(oItem.children, ownerComponent);
+					else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem) 
+					{
+						if (items === components.source) topParent = oItem;
+						findItemInDepth(oItem.children, ownerComponent, topParent);
+					}
 				}
 			}
 			
@@ -181,14 +187,19 @@
 				if (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem))
 					return;
 				
+				lastTopParent = null;
 				findItemInDepth(components.source, editingSurface.selectedItem as IVisualElement);
 				this.callLater(function():void
 				{
-					if (foundIndepthItem) 
+					if (foundIndepthItem)
 					{
+						if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
+						
 						tree.selectedItem = foundIndepthItem;
-						foundIndepthItem = null;
 						tree.scrollToIndex(tree.selectedIndex);
+						
+						foundIndepthItem = null;
+						lastTopParent = null;
 					}
 				});
 			}

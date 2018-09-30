@@ -2,6 +2,8 @@ package view.primeFaces.surfaceComponents.components
 {
     import view.interfaces.INonDeletableSurfaceComponent;
 
+    [Exclude(name="toXML", kind="method")]
+    
     /**
      * <p>This component is special representation of Div, which is root component for newly created file.</p>
      *

@@ -19,7 +19,7 @@ package utils
 
             if (!isPrimeFacesMainApp && element === null)
 			{
-				var container:XML = new XML("<Div />");
+				var container:XML = new XML("<RootDiv />");
                 container.@width = "700";
 				container.@height = "450";
 

@@ -90,12 +90,12 @@ package view.suportClasses
 		
 		private function beforeSelectedItemDeletes(event:Event):void
 		{
-			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.parent).getElementIndex(_selectedItem as IVisualElement);
+			var selectedItemIndexToParent:int = IVisualElementContainer(_selectedItem.owner).getElementIndex(_selectedItem as IVisualElement);
 			if ((event.target is IHistorySurfaceComponent) && !event.target.isUpdating)
 			{
 				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(_selectedItem as IHistorySurfaceComponent);
 				tmpChangeRef.fieldClassIndexToParent = selectedItemIndexToParent;
-				tmpChangeRef.fieldClassParent = _selectedItem.parent as IVisualElementContainer;
+				tmpChangeRef.fieldClassParent = _selectedItem.owner as IVisualElementContainer;
 				dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING, tmpChangeRef));
 			}
 		}

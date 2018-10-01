@@ -46,15 +46,23 @@
 				});
 			}
 			
-			public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
+			public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement, droppedIndex:int=-1):void
 			{
 				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
 				this.callLater(function():void
 				{
-					if (foundIndepthItem) foundIndepthItem.children.push((component as IPrimeFacesSurfaceComponent).getComponentsChildren());
-					else components.addItem((component as IPrimeFacesSurfaceComponent).getComponentsChildren());
+					if (foundIndepthItem) 
+					{
+						if (droppedIndex == -1) foundIndepthItem.children.push((component as IPrimeFacesSurfaceComponent).getComponentsChildren());
+						else foundIndepthItem.children.insertAt(droppedIndex, (component as IPrimeFacesSurfaceComponent).getComponentsChildren());
+					}
+					else 
+					{
+						if (droppedIndex == -1) components.addItem((component as IPrimeFacesSurfaceComponent).getComponentsChildren());
+						else components.addItemAt((component as IPrimeFacesSurfaceComponent).getComponentsChildren(), droppedIndex);
+					}
 					
-					refreshItem(foundIndepthItem);
+					refreshItem(component);
 					foundIndepthItem = null;
 				});
 			}
@@ -70,11 +78,12 @@
 						if (tmpItems[i].item === component)
 						{
 							tmpItems.splice(i, 1);
+							tree.selectedIndex = -1;
 							break;
 						}
 					}
 					
-					refreshItem(foundIndepthItem);
+					refreshItem(component);
 					foundIndepthItem = null;
 				});
 			}
@@ -140,7 +149,7 @@
 				}
 			}
 			
-			private function refreshItem(item:OrganizerItem):void
+			private function refreshItem(item:IVisualElement, invalidateEverything:Boolean=true):void
 			{
 				var lastScrollPosition:Number = tree.verticalScrollPosition;
 				var lastSelectedItem:Object = tree.selectedItem;
@@ -150,19 +159,26 @@
 				tree.openItems = openItems;
 				tree.invalidateList();
 				
-				tree.callLater(function ():void
+				lastTopParent = foundIndepthItem = null;
+				this.callLater(function():void
 				{
-					tree.verticalScrollPosition = lastScrollPosition;
+					findItemInDepth(components.source, item);
+					if (foundIndepthItem)
+					{
+						if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
+						
+						tree.selectedItem = foundIndepthItem;
+						tree.scrollToIndex(tree.selectedIndex);
+						
+						foundIndepthItem = null;
+						lastTopParent = null;
+					}
+					else
+					{
+						tree.selectedIndex = -1;
+						tree.verticalScrollPosition = lastScrollPosition;
+					}
 				});
-				
-				var timeoutValue:uint = setTimeout(function():void
-				{
-					tree.selectedItem = lastSelectedItem;
-					
-					// if still there has no selection to the tree
-					if (!tree.selectedItem && lastSelectedIndex != -1) tree.selectedIndex = lastSelectedIndex;
-					clearTimeout(timeoutValue);
-				}, 100);
 			}
 			
 			private function isSubDivComponent(value:IVisualElement):IVisualElement
@@ -200,6 +216,10 @@
 						
 						foundIndepthItem = null;
 						lastTopParent = null;
+					}
+					else
+					{
+						tree.selectedIndex = -1;
 					}
 				});
 			}

@@ -93,6 +93,7 @@ package view.suportClasses
 					fieldClassIndexToParent = fieldClassParent.numElements == 0 ? 0 : fieldClassParent.numElements - 1;
 				}
 				fieldClassParent.addElementAt(fieldClass as IVisualElement, fieldClassIndexToParent);
+				editor.editingSurface.organizer.addDroppedElement(fieldClassParent as IVisualElement, fieldClass as IVisualElement, fieldClassIndexToParent);
 			}
 		}
 		

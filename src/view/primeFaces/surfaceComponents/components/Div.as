@@ -14,6 +14,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
     import view.primeFaces.supportClasses.Container;
+    import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -63,6 +64,8 @@ package view.primeFaces.surfaceComponents.components
         public static var ELEMENT_NAME:String = "Div";
 
         protected var mainXML:XML;
+
+        protected var contentChanged:Boolean;
 
         public function Div()
         {
@@ -320,13 +323,6 @@ package view.primeFaces.surfaceComponents.components
 			this[nameField.toString()] = value;
 		}
 
-        public function toXML():XML
-        {
-            mainXML = new XML("<" + ELEMENT_NAME + "/>");
-
-            return this.internalToXML();
-        }
-		
 		public function getComponentsChildren():OrganizerItem
 		{
 			var componentsArray:Array = [];
@@ -354,6 +350,13 @@ package view.primeFaces.surfaceComponents.components
 		{
 			this.addElementAt(element, index);
 		}
+
+        public function toXML():XML
+        {
+            mainXML = new XML("<" + ELEMENT_NAME + "/>");
+
+            return this.internalToXML();
+        }
 
         public function toCode():XML
         {
@@ -394,14 +397,13 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
-
         override protected function commitProperties():void
         {
             super.commitProperties();
 
             if (this.widthOutputChanged)
             {
-                this.percentWidth = 100;
+                this.percentWidth = Number.NaN;
                 this.width = Number.NaN;
                 this.widthOutputChanged = false;
             }
@@ -432,6 +434,60 @@ package view.primeFaces.surfaceComponents.components
                 mainXML.appendChild(element.toXML());
             }
             return mainXML;
+        }
+
+        protected function resetPercentWidthHeightBasedOnLayout():void
+        {
+            if (isNaN(this.percentHeight) && isNaN(this.percentWidth)) return;
+
+            var childrensHeight:Number = 0;
+            var childrensWidth:Number = 0;
+            var numEl:int = this.numElements;
+
+            for (var i:int = 0; i < numEl; i++)
+            {
+                var element:IVisualElement = this.getElementAt(i);
+                if (direction == ContainerDirection.VERTICAL_LAYOUT)
+                {
+                    if (!isNaN(element.height))
+                    {
+                        childrensHeight += element.height;
+                    }
+
+                    if (childrensWidth < element.width)
+                    {
+                        if (!isNaN(element.width))
+                        {
+                            childrensWidth = element.width;
+                        }
+                    }
+                }
+                else if (direction == ContainerDirection.HORIZONTAL_LAYOUT)
+                {
+                    if (!isNaN(element.width))
+                    {
+                        childrensWidth += element.width;
+                    }
+
+                    if (childrensHeight < element.height)
+                    {
+                        if (!isNaN(element.height))
+                        {
+                            childrensHeight = element.height;
+                        }
+                    }
+                }
+            }
+
+            if (childrensHeight > this.height && !isNaN(this.percentHeight))
+            {
+                this.percentHeight = Number.NaN;
+            }
+
+            if (childrensWidth > this.width && !isNaN(this.percentWidth))
+            {
+                this.percentWidth = Number.NaN;
+            }
         }
     }
 }

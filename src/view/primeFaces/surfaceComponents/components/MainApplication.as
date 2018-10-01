@@ -163,5 +163,24 @@ package view.primeFaces.surfaceComponents.components
 
             return super.internalToXML();
         }
+
+        override public function fromXML(xml:XML, callback:Function):void
+        {
+            super.fromXML(xml, callback);
+
+            contentChanged = true;
+            this.invalidateDisplayList();
+        }
+
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (contentChanged)
+            {
+                resetPercentWidthHeightBasedOnLayout();
+                contentChanged = false;
+            }
+        }
     }
 }

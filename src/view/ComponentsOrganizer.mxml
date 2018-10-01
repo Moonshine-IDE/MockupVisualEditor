@@ -239,7 +239,7 @@
 		]]>
 	</fx:Script>
 	
-	<view:PropertyEditorHeader componentName="Organizer"/>
+	<view:PropertyEditorHeader componentName="Organizer-"/>
 	
 	<suportClasses:TreeOrganizer id="tree" 
 								 dataProvider="{components}"

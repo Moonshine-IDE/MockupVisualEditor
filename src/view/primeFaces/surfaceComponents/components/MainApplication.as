@@ -4,10 +4,13 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
+    import view.interfaces.IPercentSizeValues;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="widthPercent", kind="property")]
+    [Exclude(name="heightPercent", kind="property")]
 
     /**
      * <p>Representation of index.html file.</p>
@@ -41,7 +44,7 @@ package view.primeFaces.surfaceComponents.components
      *  &lt;/html&gt;
      * </pre>
      */
-    public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication
+    public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication, IPercentSizeValues
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";
 
@@ -55,6 +58,20 @@ package view.primeFaces.surfaceComponents.components
         override public function get propertyEditorClass():Class
         {
             return WindowPropertyEditor;
+        }
+
+        private var _widthPercent:Number;
+
+        public function get widthPercent():Number
+        {
+            return _widthPercent;
+        }
+
+        private var  _heightPercent:Number;
+
+        public function get heightPercent():Number
+        {
+            return _heightPercent;
         }
 
         [Inspectable(environment="none")]
@@ -72,6 +89,15 @@ package view.primeFaces.surfaceComponents.components
         override public function get percentWidth():Number
         {
             return super.percentWidth;
+        }
+
+        override public function set percentWidth(value:Number):void
+        {
+            if (isNaN(value))
+            {
+                _widthPercent = super.percentWidth;
+            }
+            super.percentWidth = value;
         }
 
         [PercentProxy("percentWidth")]
@@ -108,6 +134,15 @@ package view.primeFaces.surfaceComponents.components
         override public function get percentHeight():Number
         {
             return super.percentHeight;
+        }
+
+        override public function set percentHeight(value:Number):void
+        {
+            if (isNaN(value))
+            {
+                _heightPercent = super.percentHeight;
+            }
+            super.percentHeight = value;
         }
 
         [PercentProxy("percentHeight")]

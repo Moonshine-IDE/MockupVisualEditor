@@ -47,243 +47,276 @@
 		</s:HGroup>
 	</s:FormItem>
 	<fx:Script><![CDATA[
-		import mx.binding.utils.BindingUtils;
-		import mx.binding.utils.ChangeWatcher;
-		import mx.core.UIComponent;
-		import mx.events.FlexEvent;
-		
-		import utils.GenericUtils;
-		
-		import view.interfaces.IComponentSizeOutput;
-		import view.interfaces.IIdAttribute;
-		import view.interfaces.ISurfaceComponent;
-		
-		[Bindable] public var widthOutputFlag:Boolean = true;
-		[Bindable] public var heightOutputFlag:Boolean = true;
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.core.UIComponent;
+        import mx.events.FlexEvent;
 
-		private var _bindingWidth:ChangeWatcher;
-		private var _bindingHeight:ChangeWatcher;
-		private var _bindingId:ChangeWatcher;
-		private var _widthOutput:ChangeWatcher;
-		private var _heightOutput:ChangeWatcher;
+        import utils.GenericUtils;
 
-		[Bindable("change")]
-		private function get selectedComponent():UIComponent
-		{
-			//x, y, width, and height aren't bindable on interfaces used by
-			//UIComponent, so we need to give the compiler a little hint here
-			return UIComponent(this.selectedItem);
-		}
+        import view.interfaces.IComponentSizeOutput;
+        import view.interfaces.IIdAttribute;
+        import view.interfaces.IPercentSizeValues;
+        import view.interfaces.ISurfaceComponent;
 
-		override public function set selectedItem(value:ISurfaceComponent):void
-		{
-			if (super.selectedItem != value)
-			{
-				super.selectedItem = value;
-				this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
-				updateBinding();
-			}
-		}
+        [Bindable]
+        public var widthOutputFlag:Boolean = true;
+        [Bindable]
+        public var heightOutputFlag:Boolean = true;
 
-		[Bindable("propertyEditorChanged")]
-		public function get selectedComponentComputedWidth():String
-		{
-			if (!isNaN(selectedComponent.percentWidth)) return selectedComponent.percentWidth + "%";
-			return selectedComponent.width.toString();
-		}
+        private var _bindingWidth:ChangeWatcher;
+        private var _bindingHeight:ChangeWatcher;
+        private var _bindingId:ChangeWatcher;
+        private var _widthOutput:ChangeWatcher;
+        private var _heightOutput:ChangeWatcher;
 
-		[Bindable("propertyEditorChanged")]
-		public function get selectedComponentComputedHeight():String
-		{
-			if (!isNaN(selectedComponent.percentHeight)) return selectedComponent.percentHeight + "%";
-			return selectedComponent.height.toString();
-		}
+        [Bindable("change")]
+        private function get selectedComponent():UIComponent
+        {
+            //x, y, width, and height aren't bindable on interfaces used by
+            //UIComponent, so we need to give the compiler a little hint here
+            return UIComponent(this.selectedItem);
+        }
 
-		[Bindable("propertyEditorChanged")]
-		public function get selectedComponentIdAttributeChaged():String
-		{
-			if (this.selectedItem is IIdAttribute)
-			{
-				return this.selectedItem["idAttribute"];
-			}
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+                this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
+                updateBinding();
+            }
+        }
 
-			return "";
-		}
+        [Bindable("propertyEditorChanged")]
+        public function get selectedComponentComputedWidth():String
+        {
+			var percentSizeComponent:IPercentSizeValues = selectedComponent as IPercentSizeValues;
+            if (!isNaN(selectedComponent.percentWidth) || percentSizeComponent)
+            {
+                if (percentSizeComponent && !isNaN(percentSizeComponent.widthPercent))
+                {
+                    return percentSizeComponent.widthPercent + "%";
+                }
+                else if (!isNaN(selectedComponent.percentWidth))
+                {
+                    return selectedComponent.percentWidth + "%";
+                }
+            }
 
-		private function commitWidth():void
-		{
-			if (!this.selectedItem) return;
+            return selectedComponent.width.toString();
+        }
 
-			if (this.widthInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
-			else
-			{
-				var newWidth:Number = parseFloat(this.widthInput.text);
-				this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
-			}
-			this.widthInput.selectAll();
-		}
+        [Bindable("propertyEditorChanged")]
+        public function get selectedComponentComputedHeight():String
+        {
+			var percentSizeComponent:IPercentSizeValues = selectedComponent as IPercentSizeValues;
+            if (!isNaN(selectedComponent.percentHeight) || percentSizeComponent)
+            {
+                if (percentSizeComponent && !isNaN(percentSizeComponent.heightPercent))
+                {
+                    return percentSizeComponent.heightPercent + "%";
+                }
+                else if (!isNaN(selectedComponent.percentHeight))
+                {
+                    return selectedComponent.percentHeight + "%";
+                }
+            }
 
-		private function commitHeight():void
-		{
-			if (!this.selectedItem) return;
+            return selectedComponent.height.toString();
+        }
 
-			if (this.heightInput.text.indexOf("%") != -1) GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
-			else
-			{
-				var newHeight:Number = parseFloat(this.heightInput.text);
-				this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
-			}
-			this.heightInput.selectAll();
-		}
+        [Bindable("propertyEditorChanged")]
+        public function get selectedComponentIdAttributeChaged():String
+        {
+            if (this.selectedItem is IIdAttribute)
+            {
+                return this.selectedItem["idAttribute"];
+            }
 
-		private function commitId():void
-		{
-			if (!this.selectedItem) return;
+            return "";
+        }
 
-			this.selectedItem["idAttribute"] = this.idTextInput.text;
-		}
+        private function commitWidth():void
+        {
+            if (!this.selectedItem) return;
 
-		private function widthInput_keyDownHandler(event:KeyboardEvent):void
-		{
-			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
-			{
-				commitWidth();
-			}
-		}
+            if (this.widthInput.text.indexOf("%") != -1)
+            {
+                GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
+            }
+            else
+            {
+                var newWidth:Number = parseFloat(this.widthInput.text);
+                this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
+            }
+            this.widthInput.selectAll();
+        }
 
-		private function heightInput_keyDownHandler(event:KeyboardEvent):void
-		{
-			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
-			{
-				commitHeight();
-			}
-		}
+        private function commitHeight():void
+        {
+            if (!this.selectedItem) return;
 
-		private function idInput_keyDownHandler(event:KeyboardEvent):void
-		{
-			if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
-			{
-				commitId();
-			}
-		}
+            if (this.heightInput.text.indexOf("%") != -1)
+            {
+                GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
+            }
+            else
+            {
+                var newHeight:Number = parseFloat(this.heightInput.text);
+                this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
+            }
+            this.heightInput.selectAll();
+        }
 
-		private function onBasicFormCreationComplete(event:FlexEvent):void
-		{
-			removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
+        private function commitId():void
+        {
+            if (!this.selectedItem) return;
 
-			this.refreshChildrenForFocus();
-			this.refreshWidthInputEnabled(selectedItem);
-		}
+            this.selectedItem["idAttribute"] = this.idTextInput.text;
+        }
 
-		private function updateBinding():void
-		{
-			if (this._bindingWidth)
-			{
-				this._bindingWidth.unwatch();
-				this._bindingHeight.unwatch();
-				this._bindingWidth = this._bindingHeight = null;
+        private function widthInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitWidth();
+            }
+        }
 
-				if (currentState == "normalWithId")
-				{
-					this._bindingId.unwatch();
-					this._bindingId = null;
-				}
-			}
-			if (this._widthOutput)
-			{
-				this._widthOutput.unwatch();
-				this._heightOutput.unwatch();
-				this._widthOutput = this._heightOutput = null;
-			}
-			if (this.selectedItem === null)
-			{
-				return;
-			}
-			this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
-			this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
-			if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "idAttribute", false, true);
-			
-			if (selectedItem is IComponentSizeOutput)
-			{
-				this._widthOutput = BindingUtils.bindProperty(this, "widthOutputFlag", this.selectedItem, "widthOutput", false, true);
-				this._heightOutput = BindingUtils.bindProperty(this, "heightOutputFlag", this.selectedItem, "heightOutput", false, true);
-			}
-		}
+        private function heightInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitHeight();
+            }
+        }
 
-		private function onWidthUpdated(value:Object):void
-		{
-			if (!this.selectedItem) return;
+        private function idInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitId();
+            }
+        }
 
-			if (this.widthInput)
-			{
-				this.widthInput.text = !isNaN(this.selectedItem.percentWidth) ? this.selectedItem.percentWidth + "%" : this.selectedItem.width.toString();
-			}
-		}
+        private function onBasicFormCreationComplete(event:FlexEvent):void
+        {
+            removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
 
-		private function onHeightUpdated(value:Object):void
-		{
-			if (!this.selectedItem) return;
+            this.refreshChildrenForFocus();
+            this.refreshWidthInputEnabled(selectedItem);
+        }
 
-			if (this.heightInput)
-			{
-				this.heightInput.text = !isNaN(this.selectedItem.percentHeight) ? this.selectedItem.percentHeight + "%" : this.selectedItem.height.toString();
-			}
-		}
+        private function updateBinding():void
+        {
+            if (this._bindingWidth)
+            {
+                this._bindingWidth.unwatch();
+                this._bindingHeight.unwatch();
+                this._bindingWidth = this._bindingHeight = null;
 
-		private function onIdUpdated(value:Object):void
-		{
-			if (!this.selectedItem) return;
+                if (currentState == "normalWithId")
+                {
+                    this._bindingId.unwatch();
+                    this._bindingId = null;
+                }
+            }
+            if (this._widthOutput)
+            {
+                this._widthOutput.unwatch();
+                this._heightOutput.unwatch();
+                this._widthOutput = this._heightOutput = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
+            this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
+            if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "idAttribute", false, true);
 
-			if (this.idTextInput)
-			{
-				this.idTextInput.text = this.selectedItem["idAttribute"];
-			}
-		}
+            if (selectedItem is IComponentSizeOutput)
+            {
+                this._widthOutput = BindingUtils.bindProperty(this, "widthOutputFlag", this.selectedItem, "widthOutput", false, true);
+                this._heightOutput = BindingUtils.bindProperty(this, "heightOutputFlag", this.selectedItem, "heightOutput", false, true);
+            }
+        }
 
-		private function onBasicFormStateChangeComplete(event:FlexEvent):void
-		{
-			this.refreshChildrenForFocus();
-		}
+        private function onWidthUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
 
-		private function refreshChildrenForFocus():void
-		{
-			if (currentState == "normal")
-			{
-				_childrenForFocus = [];
-				_childrenForFocus.push(widthInput.textDisplay);
-				_childrenForFocus.push(heightInput.textDisplay);
-			}
-			else if (currentState == "normalWithId")
-			{
-				_childrenForFocus = [];
-				_childrenForFocus.push(idTextInput.textDisplay);
-				_childrenForFocus.push(widthInput.textDisplay);
-				_childrenForFocus.push(heightInput.textDisplay);
-			}
-		}
+            if (this.widthInput)
+            {
+                this.widthInput.text = selectedComponentComputedWidth;
+            }
+        }
 
-		private function onWidthOutputChange(event:Event):void
-		{
-			//this.widthInput.enabled = this.widthOutput.selected;
-			this.selectedItem["widthOutput"] = this.widthOutput.selected;
-		}
+        private function onHeightUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
 
-		private function onHeightOutputChange(event:Event):void
-		{
-			//this.heightInput.enabled = this.heightOutput.selected;
-			this.selectedItem["heightOutput"] = this.heightOutput.selected;
-		}
+            if (this.heightInput)
+            {
+                this.heightInput.text = selectedComponentComputedHeight;
+            }
+        }
 
-		private function refreshWidthInputEnabled(value:ISurfaceComponent):void
-		{
-			if (!value) return;
+        private function onIdUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
 
-			if (value is IComponentSizeOutput)
-			{
-				var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
-				widthOutputFlag = componentSize.widthOutput;
-				heightOutputFlag = componentSize.heightOutput;
-			}
-		}
-		]]></fx:Script>
+            if (this.idTextInput)
+            {
+                this.idTextInput.text = this.selectedItem["idAttribute"];
+            }
+        }
+
+        private function onBasicFormStateChangeComplete(event:FlexEvent):void
+        {
+            this.refreshChildrenForFocus();
+        }
+
+        private function refreshChildrenForFocus():void
+        {
+            if (currentState == "normal")
+            {
+                _childrenForFocus = [];
+                _childrenForFocus.push(widthInput.textDisplay);
+                _childrenForFocus.push(heightInput.textDisplay);
+            }
+            else if (currentState == "normalWithId")
+            {
+                _childrenForFocus = [];
+                _childrenForFocus.push(idTextInput.textDisplay);
+                _childrenForFocus.push(widthInput.textDisplay);
+                _childrenForFocus.push(heightInput.textDisplay);
+            }
+        }
+
+        private function onWidthOutputChange(event:Event):void
+        {
+            //this.widthInput.enabled = this.widthOutput.selected;
+            this.selectedItem["widthOutput"] = this.widthOutput.selected;
+        }
+
+        private function onHeightOutputChange(event:Event):void
+        {
+            //this.heightInput.enabled = this.heightOutput.selected;
+            this.selectedItem["heightOutput"] = this.heightOutput.selected;
+        }
+
+        private function refreshWidthInputEnabled(value:ISurfaceComponent):void
+        {
+            if (!value) return;
+
+            if (value is IComponentSizeOutput)
+            {
+                var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
+                widthOutputFlag = componentSize.widthOutput;
+                heightOutputFlag = componentSize.heightOutput;
+            }
+        }
+        ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

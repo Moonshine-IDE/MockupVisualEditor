@@ -15,6 +15,7 @@
 		[Style(name="dragImageAlpha",inherit="true",type="Number")]
 		[Event(name="change",type="flash.events.Event")]
 		[Event(name="propertyEditorItemAdding",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+		[Event(name="propertyEditorItemMoved",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	</fx:Metadata>
 
 	<fx:Declarations>
@@ -571,8 +572,8 @@
 				if (object is IHistorySurfaceComponent)
 				{
 					var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(object as IHistorySurfaceComponent);
-					tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.parent).getElementIndex(object as IVisualElement);
-					tmpChangeRef.fieldClassParent = object.parent as IVisualElementContainer;
+					tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.owner).getElementIndex(object as IVisualElement);
+					tmpChangeRef.fieldClassParent = object.owner as IVisualElementContainer;
 
 					this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
 				}

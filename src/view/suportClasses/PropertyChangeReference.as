@@ -42,6 +42,10 @@ package view.suportClasses
 					deleteItem(editor);
 					break;
 				
+				case PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_MOVED:
+					moveItem(editor, fieldLastValue);
+					break;
+				
 				default:
 					changeItem(fieldLastValue);
 					break;
@@ -67,6 +71,10 @@ package view.suportClasses
 					addItem(editor);
 					break;
 				
+				case PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_MOVED:
+					moveItem(editor, fieldNewValue);
+					break;
+				
 				default:
 					changeItem(fieldNewValue);
 					break;
@@ -80,6 +88,7 @@ package view.suportClasses
 		
 		protected function deleteItem(editor:VisualEditor):void
 		{
+			editor.editingSurface.organizer.isRefreshTree = false;
 			editor.editingSurface.deleteItem(fieldClass as ISurfaceComponent);
 		}
 		
@@ -96,6 +105,23 @@ package view.suportClasses
 				editor.editingSurface.organizer.addDroppedElement(fieldClassParent as IVisualElement, fieldClass as IVisualElement, fieldClassIndexToParent);
 			}
 		}
+		
+		protected function moveItem(editor:VisualEditor, stateValue:Object):void
+		{
+			deleteItem(editor);
+			fieldClassParent = stateValue.fieldClassParent;
+			fieldClassIndexToParent = stateValue.fieldClassIndexToParent;
+			fieldClass["callLater"](function():void
+			{
+				editor.editingSurface.organizer.isRefreshTree = true;
+				addItem(editor);
+			});
+		}
+		
+		/*protected function moveItem(editor:VisualEditor, from:Object, to:Object):void
+		{
+			editor.editingSurface.deleteItem(fieldClass as ISurfaceComponent);
+		}*/
 		
 		protected function changeItem(value:*):void
 		{

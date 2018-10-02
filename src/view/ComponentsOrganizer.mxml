@@ -4,11 +4,11 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="view.*"
 		 xmlns:suportClasses="view.suportClasses.*" gap="0"
 		 creationComplete="onComplete(event)">
+	<fx:Metadata>
+		[Event(name="propertyEditorItemMoved",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
-			import flash.utils.clearTimeout;
-			import flash.utils.setTimeout;
-			
 			import mx.collections.ArrayCollection;
 			import mx.core.IVisualElement;
 			import mx.core.IVisualElementContainer;
@@ -24,6 +24,7 @@
 			import view.primeFaces.surfaceComponents.components.TabView;
 			
 			public var editingSurface:EditingSurface;
+			public var isRefreshTree:Boolean = true;
 			
 			[Bindable] private var components:ArrayCollection;
 			
@@ -158,6 +159,8 @@
 
 				tree.openItems = openItems;
 				tree.invalidateList();
+				
+				if (!isRefreshTree) return;
 				
 				lastTopParent = foundIndepthItem = null;
 				this.callLater(function():void

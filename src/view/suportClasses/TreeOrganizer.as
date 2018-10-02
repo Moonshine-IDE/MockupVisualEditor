@@ -14,11 +14,15 @@ package view.suportClasses
 	import data.OrganizerItem;
 	
 	import view.interfaces.IDropAcceptableComponent;
+	import view.interfaces.IHistorySurfaceComponent;
+	import view.interfaces.ISurfaceComponent;
 	import view.primeFaces.surfaceComponents.components.PanelGrid;
 	import view.primeFaces.surfaceComponents.components.TabView;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
 	
 	use namespace mx_internal;
 	
+	[Event(name="propertyEditorItemMoved",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	public class TreeOrganizer extends Tree
 	{
 		public var rootContainer:IVisualElementContainer;
@@ -69,10 +73,19 @@ package view.suportClasses
 		
 		protected function updateComponentLevel(dragged:OrganizerItem, to:OrganizerItem, toIndex:int):void
 		{
+			var selectedItemIndexToParent:int = IVisualElementContainer(dragged.item.owner).getElementIndex(dragged.item as IVisualElement);
+			var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(dragged.item as IHistorySurfaceComponent);
+			tmpChangeRef.fieldLastValue = {fieldClassIndexToParent: selectedItemIndexToParent, fieldClassParent: dragged.item.owner as IVisualElementContainer};
+			
 			if (!to && rootContainer && (rootContainer is IDropAcceptableComponent))
 				(rootContainer as IDropAcceptableComponent).dropElementAt(dragged.item as IVisualElement, toIndex);
 			else if (to.item is IDropAcceptableComponent)
 				(to.item as IDropAcceptableComponent).dropElementAt(dragged.item as IVisualElement, toIndex);
+			
+			selectedItem = dragged;
+			
+			tmpChangeRef.fieldNewValue = {fieldClassIndexToParent: toIndex, fieldClassParent: to.item as IVisualElementContainer};
+			this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_MOVED, tmpChangeRef));
 		}
 		
 		private function testDropLocationIfChildren(source:OrganizerItem, target:OrganizerItem):void

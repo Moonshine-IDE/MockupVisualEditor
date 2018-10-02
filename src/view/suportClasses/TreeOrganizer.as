@@ -73,18 +73,22 @@ package view.suportClasses
 		
 		protected function updateComponentLevel(dragged:OrganizerItem, to:OrganizerItem, toIndex:int):void
 		{
+			var isRootContainer:Boolean;
 			var selectedItemIndexToParent:int = IVisualElementContainer(dragged.item.owner).getElementIndex(dragged.item as IVisualElement);
 			var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(dragged.item as IHistorySurfaceComponent);
 			tmpChangeRef.fieldLastValue = {fieldClassIndexToParent: selectedItemIndexToParent, fieldClassParent: dragged.item.owner as IVisualElementContainer};
 			
 			if (!to && rootContainer && (rootContainer is IDropAcceptableComponent))
+			{
 				(rootContainer as IDropAcceptableComponent).dropElementAt(dragged.item as IVisualElement, toIndex);
+				isRootContainer = true;				
+			}
 			else if (to.item is IDropAcceptableComponent)
 				(to.item as IDropAcceptableComponent).dropElementAt(dragged.item as IVisualElement, toIndex);
 			
 			selectedItem = dragged;
 			
-			tmpChangeRef.fieldNewValue = {fieldClassIndexToParent: toIndex, fieldClassParent: to.item as IVisualElementContainer};
+			tmpChangeRef.fieldNewValue = {fieldClassIndexToParent: toIndex, fieldClassParent: isRootContainer ? rootContainer : to.item};
 			this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_MOVED, tmpChangeRef));
 		}
 		

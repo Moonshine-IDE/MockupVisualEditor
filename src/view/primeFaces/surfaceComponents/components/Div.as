@@ -91,7 +91,7 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var _widthOutput:Boolean = true;
-        private var widthOutputChanged:Boolean;
+        protected var widthOutputChanged:Boolean;
 
         [Bindable]
         public function get widthOutput():Boolean
@@ -114,7 +114,7 @@ package view.primeFaces.surfaceComponents.components
         }
 
         private var _heightOutput:Boolean = true;
-        private var heightOutputChanged:Boolean;
+        protected var heightOutputChanged:Boolean;
 
         [Bindable]
         public function get heightOutput():Boolean

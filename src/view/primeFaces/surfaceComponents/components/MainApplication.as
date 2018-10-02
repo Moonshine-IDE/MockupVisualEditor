@@ -9,6 +9,8 @@ package view.primeFaces.surfaceComponents.components
 
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
+    [Exclude(name="commitProperties", kind="method")]
+    [Exclude(name="updateDisplayList", kind="method")]
     [Exclude(name="widthPercent", kind="property")]
     [Exclude(name="heightPercent", kind="property")]
 
@@ -230,6 +232,21 @@ package view.primeFaces.surfaceComponents.components
                 resetPercentWidthHeightBasedOnLayout();
                 contentChanged = false;
             }
+        }
+
+        override protected function commitProperties():void
+        {
+            if (this.widthOutputChanged)
+            {
+                this._widthPercent = Number.NaN;
+            }
+
+            if (this.heightOutputChanged)
+            {
+                this._heightPercent = Number.NaN;
+            }
+
+            super.commitProperties();
         }
     }
 }

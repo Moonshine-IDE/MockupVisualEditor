@@ -236,17 +236,29 @@ package view.primeFaces.surfaceComponents.components
 
         override protected function commitProperties():void
         {
+            var resetWidthPercent:Boolean = false;
             if (this.widthOutputChanged)
+            {
+                resetWidthPercent = true;
+            }
+
+            var resetHeightPercent:Boolean = false;
+            if (this.heightOutputChanged)
+            {
+                resetHeightPercent = true;
+            }
+
+            super.commitProperties();
+
+            if (resetWidthPercent)
             {
                 this._widthPercent = Number.NaN;
             }
 
-            if (this.heightOutputChanged)
+            if (resetHeightPercent)
             {
                 this._heightPercent = Number.NaN;
             }
-
-            super.commitProperties();
         }
     }
 }

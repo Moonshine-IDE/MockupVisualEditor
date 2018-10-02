@@ -7,6 +7,7 @@ package utils
     import spark.layouts.VerticalAlign;
 
     import view.interfaces.IComponentSizeOutput;
+    import view.interfaces.IComponentPercentSizeOutput;
 
     import view.primeFaces.supportClasses.ContainerDirection;
 
@@ -19,20 +20,23 @@ package utils
         public static function addSizeHtmlStyleToXML(xml:XML, component:IUIComponent):void
         {
             var componentSizeOutput:IComponentSizeOutput = component as IComponentSizeOutput;
+            var componentPercentSize:IComponentPercentSizeOutput = component as IComponentPercentSizeOutput;
+
             var styleDiv:String = xml.@style;
 
-            if (!isNaN(component.percentWidth))
+            if (!isNaN(component.percentWidth) || (componentPercentSize && !isNaN(componentPercentSize.widthPercent)))
             {
+                var percentWidth:Number = !isNaN(component.percentWidth) ? component.percentWidth : componentPercentSize.widthPercent;
                 if (componentSizeOutput)
                 {
                     if (componentSizeOutput.widthOutput)
                     {
-                        styleDiv += "width:" + String(component.percentWidth) + "%;";
+                        styleDiv += "width:" + String(percentWidth) + "%;";
                     }
                 }
                 else
                 {
-                    styleDiv += "width:" + String(component.percentWidth) + "%;";
+                    styleDiv += "width:" + String(percentWidth) + "%;";
                 }
             }
             else if (!isNaN(component.width))
@@ -50,18 +54,19 @@ package utils
                 }
             }
 
-            if (!isNaN(component.percentHeight))
+            if (!isNaN(component.percentHeight) || (componentPercentSize && !isNaN(componentPercentSize.heightPercent)))
             {
+                var percentHeight:Number = !isNaN(component.percentHeight) ? component.percentHeight : componentPercentSize.heightPercent;
                 if (componentSizeOutput)
                 {
                     if (componentSizeOutput.heightOutput)
                     {
-                        styleDiv += "height:" + String(component.percentHeight) + "%;";
+                        styleDiv += "height:" + String(percentHeight) + "%;";
                     }
                 }
                 else
                 {
-                    styleDiv += "height:" + String(component.percentHeight) + "%;";
+                    styleDiv += "height:" + String(percentHeight) + "%;";
                 }
             }
             else if (!isNaN(component.height))

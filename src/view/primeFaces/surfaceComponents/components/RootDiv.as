@@ -1,7 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
     import view.interfaces.INonDeletableSurfaceComponent;
-    import view.interfaces.IPercentSizeValues;
+    import view.interfaces.IComponentPercentSizeOutput;
 
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
@@ -14,20 +14,13 @@ package view.primeFaces.surfaceComponents.components
      *
      * @see view.primeFaces.surfaceComponents.components.Div
      */
-    public class RootDiv extends Div implements INonDeletableSurfaceComponent, IPercentSizeValues
+    public class RootDiv extends Div implements INonDeletableSurfaceComponent, IComponentPercentSizeOutput
     {
         public static var ELEMENT_NAME:String = "RootDiv";
 
         public function RootDiv()
         {
             super();
-        }
-
-        override public function toXML():XML
-        {
-            mainXML = new XML("<RootDiv/>");
-
-            return this.internalToXML();
         }
 
         private var _widthPercent:Number;
@@ -74,6 +67,27 @@ package view.primeFaces.surfaceComponents.components
 
             contentChanged = true;
             this.invalidateDisplayList();
+        }
+
+        override public function toXML():XML
+        {
+            mainXML = new XML("<RootDiv/>");
+
+            mainXML = super.internalToXML();
+
+            if (isNaN(this.percentWidth) && !isNaN(this.widthPercent))
+            {
+                delete mainXML.@width;
+                mainXML.@percentWidth = this.widthPercent;
+            }
+
+            if (isNaN(this.percentHeight) && !isNaN(this.heightPercent))
+            {
+                delete mainXML.@height;
+                mainXML.@percentHeight = this.heightPercent;
+            }
+
+            return mainXML;
         }
 
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void

@@ -56,7 +56,7 @@
 
         import view.interfaces.IComponentSizeOutput;
         import view.interfaces.IIdAttribute;
-        import view.interfaces.IPercentSizeValues;
+        import view.interfaces.IComponentPercentSizeOutput;
         import view.interfaces.ISurfaceComponent;
 
         [Bindable]
@@ -91,7 +91,7 @@
         [Bindable("propertyEditorChanged")]
         public function get selectedComponentComputedWidth():String
         {
-			var percentSizeComponent:IPercentSizeValues = selectedComponent as IPercentSizeValues;
+            var percentSizeComponent:IComponentPercentSizeOutput = selectedComponent as IComponentPercentSizeOutput;
             if (!isNaN(selectedComponent.percentWidth) || percentSizeComponent)
             {
                 if (percentSizeComponent && !isNaN(percentSizeComponent.widthPercent))
@@ -110,7 +110,7 @@
         [Bindable("propertyEditorChanged")]
         public function get selectedComponentComputedHeight():String
         {
-			var percentSizeComponent:IPercentSizeValues = selectedComponent as IPercentSizeValues;
+            var percentSizeComponent:IComponentPercentSizeOutput = selectedComponent as IComponentPercentSizeOutput;
             if (!isNaN(selectedComponent.percentHeight) || percentSizeComponent)
             {
                 if (percentSizeComponent && !isNaN(percentSizeComponent.heightPercent))

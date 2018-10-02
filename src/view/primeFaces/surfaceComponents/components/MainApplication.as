@@ -4,7 +4,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
-    import view.interfaces.IPercentSizeValues;
+    import view.interfaces.IComponentPercentSizeOutput;
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     [Exclude(name="toXML", kind="method")]
@@ -44,7 +44,7 @@ package view.primeFaces.surfaceComponents.components
      *  &lt;/html&gt;
      * </pre>
      */
-    public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication, IPercentSizeValues
+    public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication, IComponentPercentSizeOutput
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";
 
@@ -196,7 +196,21 @@ package view.primeFaces.surfaceComponents.components
 
             mainXML.@title = this.title;
 
-            return super.internalToXML();
+            mainXML = super.internalToXML();
+
+            if (isNaN(this.percentWidth) && !isNaN(this.widthPercent))
+            {
+                delete mainXML.@width;
+                mainXML.@percentWidth = this.widthPercent;
+            }
+
+            if (isNaN(this.percentHeight) && !isNaN(this.heightPercent))
+            {
+                delete mainXML.@height;
+                mainXML.@percentHeight = this.heightPercent;
+            }
+
+            return mainXML;
         }
 
         override public function fromXML(xml:XML, callback:Function):void

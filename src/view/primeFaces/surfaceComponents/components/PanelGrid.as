@@ -555,7 +555,7 @@ package view.primeFaces.surfaceComponents.components
             }
 
             thisCallbackXML = callback;
-            this.callLater(createChildrenFromXML);
+            //this.callLater(createChildrenFromXML);
         }
 
         public function toCode():XML
@@ -704,6 +704,12 @@ package view.primeFaces.surfaceComponents.components
                 this.heightOutputChanged = false;
             }
         }
+		
+		override protected function createChildren():void
+		{
+			super.createChildren();
+			commitProperties();
+		}
 
         private function toHeaderVisualXML(xml:XML):void
         {

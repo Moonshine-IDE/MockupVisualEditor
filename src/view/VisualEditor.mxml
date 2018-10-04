@@ -50,6 +50,7 @@
 		import utils.MoonshineBridgeUtils;
 		
 		import view.interfaces.IVisualEditorLibraryBridge;
+		import view.suportClasses.events.VisualEditorEvent;
 
 		private var copyPasteManager:CopyPasteVisualEditorManager;
 
@@ -102,6 +103,16 @@
 				this.editingSurface.fromXML(xml);
 
 				_fileStreamMoonshine.close();
+
+				var xmlRootList:XMLList = xml.RootDiv.@save;
+				if (xmlRootList.length() > 0)
+				{
+					var saveFile:Boolean = xmlRootList[0] == "true";
+					if (saveFile)
+					{
+						dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
+					}
+				}
 			}
 
 			private function createNewFileIfNotExists(filePath:String):File

@@ -47,6 +47,11 @@ package view.primeFaces.surfaceComponents.components
                     _heightPercent = super.percentHeight;
                 }
             }
+            else
+            {
+                _heightPercent = Number.NaN;
+            }
+
             super.percentHeight = value;
         }
 
@@ -59,6 +64,11 @@ package view.primeFaces.surfaceComponents.components
                     _widthPercent = super.percentWidth;
                 }
             }
+            else
+            {
+                _widthPercent = Number.NaN;
+            }
+
             super.percentWidth = value;
         }
 

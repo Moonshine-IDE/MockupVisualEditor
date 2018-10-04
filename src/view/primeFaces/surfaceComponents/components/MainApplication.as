@@ -97,8 +97,16 @@ package view.primeFaces.surfaceComponents.components
         {
             if (isNaN(value))
             {
-                _widthPercent = super.percentWidth;
+                if (super.percentWidth != value)
+                {
+                    _widthPercent = super.percentWidth;
+                }
             }
+            else
+            {
+                _widthPercent = Number.NaN;
+            }
+
             super.percentWidth = value;
         }
 
@@ -142,8 +150,16 @@ package view.primeFaces.surfaceComponents.components
         {
             if (isNaN(value))
             {
-                _heightPercent = super.percentHeight;
+                if (super.percentHeight != value)
+                {
+                    _heightPercent = super.percentHeight;
+                }
             }
+            else
+            {
+                _heightPercent = Number.NaN;
+            }
+
             super.percentHeight = value;
         }
 

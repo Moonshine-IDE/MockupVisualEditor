@@ -263,7 +263,7 @@ package view.primeFaces.surfaceComponents.components
             return this.internalToXML();
         }
 		
-		public function getComponentsChildren():OrganizerItem
+		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;

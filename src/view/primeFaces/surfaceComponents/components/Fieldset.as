@@ -392,7 +392,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():OrganizerItem
+		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent = this.getElementAt(0) as IPrimeFacesSurfaceComponent;

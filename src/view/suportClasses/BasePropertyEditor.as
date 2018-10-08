@@ -109,11 +109,11 @@ package view.suportClasses
 				// have no way to dispatch the event through its expected parent to
 				// the history manager (#279)
 				// in that case call the expected parent reference from the Moonshine
-				if (this.parent) dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
-				else 
+				var editor:VisualEditor = MoonshineBridgeUtils.getVisualEditorComponent();
+				if (editor) 
 				{
-					var editor:VisualEditor = MoonshineBridgeUtils.getVisualEditorComponent();
-					if (editor) editor.propertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+					editor.propertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, event.target.propertyChangeFieldReference));
+					editor.componentsOrganizer.updateItemWithPropertyChanges(event.target.propertyChangeFieldReference);
 				}
 			}
 			

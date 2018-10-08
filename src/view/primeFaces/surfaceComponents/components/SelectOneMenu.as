@@ -359,7 +359,7 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
-		public function getComponentsChildren():OrganizerItem
+		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)

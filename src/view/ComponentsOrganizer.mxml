@@ -10,6 +10,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.containers.GridRow;
 			import mx.core.IVisualElement;
 			import mx.core.IVisualElementContainer;
 			import mx.events.FlexEvent;
@@ -21,7 +22,9 @@
 			
 			import view.interfaces.IPrimeFacesSurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.Fieldset;
+			import view.primeFaces.surfaceComponents.components.PanelGrid;
 			import view.primeFaces.surfaceComponents.components.TabView;
+			import view.suportClasses.PropertyChangeReference;
 			
 			public var editingSurface:EditingSurface;
 			public var isRefreshTree:Boolean = true;
@@ -30,6 +33,7 @@
 			
 			private var foundIndepthItem:OrganizerItem;
 			private var lastTopParent:Object;
+			private var lastChange:PropertyChangeReference;
 			
 			public function loadFirstData(surface:EditingSurface):void
 			{
@@ -89,9 +93,90 @@
 				});
 			}
 			
+			public function updateItemWithPropertyChanges(change:PropertyChangeReference):void
+			{
+				if (!tree.selectedItem) return;
+				
+				if (change.fieldClass == tree.selectedItem.item)
+				{
+					if (lastChange && (change === lastChange || (change.eventType == lastChange.eventType && change.fieldClass === lastChange.fieldClass && change.fieldLastValue === lastChange.fieldLastValue && change.fieldName === lastChange.fieldName &&
+						change.fieldNewValue === lastChange.fieldNewValue))) return;
+					
+					var surfaceComponent: IPrimeFacesSurfaceComponent;
+					var i:int;
+					var j:int;
+					
+					lastTopParent = foundIndepthItem = null;
+					lastChange = change;
+					switch (change.fieldName)
+					{
+						case "addItemAt":
+							if (change.fieldClass is TabView)
+							{
+								change.fieldClass["callLater"](function():void
+								{
+									var organizerItem: OrganizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldClass as TabView).numElements - 1);
+									if (organizerItem) 
+									{
+										tree.selectedItem.children.push(organizerItem);
+										refreshItem(change.fieldClass as IVisualElement);
+									}
+								});
+							}
+							break;
+						case "removeItemAt":
+							tree.expandItem(tree.selectedItem, true);
+							tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
+							refreshItem(change.fieldClass as IVisualElement);
+							break;
+						case "removeColumnAt":
+							tree.expandItem(tree.selectedItem, true);
+							if (change.fieldClass is PanelGrid)
+							{
+								for (i = 0; i < change.fieldLastValue.length; i++)
+								{
+									surfaceComponent = change.fieldLastValue[i].object.getElementAt(0) as IPrimeFacesSurfaceComponent;
+									for (j = 0; j < tree.selectedItem.children.length; j++)
+									{
+										if (surfaceComponent == tree.selectedItem.children[j].item)
+										{
+											tree.selectedItem.children.splice(j, 1);
+											break;
+										}
+									}
+								}
+								
+								refreshItem(change.fieldClass as IVisualElement);
+							}
+							break;
+						case "removeRowAt":
+							tree.expandItem(tree.selectedItem, true);
+							if (change.fieldClass is PanelGrid)
+							{
+								var rowItem:GridRow = change.fieldLastValue[0].object;
+								for (i = 0; i < rowItem.numElements; i++)
+								{
+									surfaceComponent = (rowItem.getElementAt(i) as IVisualElementContainer).getElementAt(0) as IPrimeFacesSurfaceComponent;
+									for (j = 0; j < tree.selectedItem.children.length; j++)
+									{
+										if (surfaceComponent == tree.selectedItem.children[j].item)
+										{
+											tree.selectedItem.children.splice(j, 1);
+											break;
+										}
+									}
+								}
+								
+								refreshItem(change.fieldClass as IVisualElement);
+							}
+							break;
+					}
+				}
+			}
+			
 			private function onComplete(event:FlexEvent):void
 			{
-				editingSurface.addEventListener(Event.CHANGE, onItemChangedInEditingSurface, false, 0, true);
+				editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
 			}
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
@@ -150,8 +235,10 @@
 				}
 			}
 			
-			private function refreshItem(item:IVisualElement, invalidateEverything:Boolean=true):void
+			private function refreshItem(item:IVisualElement=null, invalidateEverything:Boolean=true):void
 			{
+				var tmpFoundItemInDepth:OrganizerItem = (tree.selectedItem && tree.selectedItem.item == item) ? tree.selectedItem as OrganizerItem : null;
+				
 				var lastScrollPosition:Number = tree.verticalScrollPosition;
 				var lastSelectedItem:Object = tree.selectedItem;
 				var lastSelectedIndex:int = tree.selectedIndex;
@@ -160,12 +247,13 @@
 				tree.openItems = openItems;
 				tree.invalidateList();
 				
-				if (!isRefreshTree) return;
+				if (!isRefreshTree || !item) return;
 				
 				lastTopParent = foundIndepthItem = null;
 				this.callLater(function():void
 				{
-					findItemInDepth(components.source, item);
+					if (!tmpFoundItemInDepth) findItemInDepth(components.source, item);
+					else foundIndepthItem = tmpFoundItemInDepth;
 					if (foundIndepthItem)
 					{
 						if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
@@ -201,7 +289,7 @@
 				if (tree.selectedItem) editingSurface.selectedItem = tree.selectedItem.item;
 			}
 			
-			private function onItemChangedInEditingSurface(event:Event):void
+			private function onItemSelectedOnEditingSurface(event:Event):void
 			{
 				if (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem))
 					return;

@@ -573,7 +573,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():OrganizerItem
+		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;

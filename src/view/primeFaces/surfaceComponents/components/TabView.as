@@ -20,7 +20,6 @@ package view.primeFaces.surfaceComponents.components
     
     import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
-    import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
@@ -518,18 +517,40 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():OrganizerItem
+		public function getComponentsChildren(...params):OrganizerItem
 		{
-			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
+			var surfaceElement:IPrimeFacesSurfaceComponent;
+			var navContent:NavigatorContent;
+			
+			// returning particular tab index item
+			if (params.length > 0)
+			{
+				if (params[0] == "addItemAt")
+				{
+					navContent = this.getElementAt(params[1]) as NavigatorContent;
+					surfaceElement = navContent.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					organizerItem = (surfaceElement as IPrimeFacesSurfaceComponent).getComponentsChildren();
+					if (organizerItem)
+					{
+						organizerItem.name = StringUtil.trim(navContent.label).length > 0 ? navContent.label : "Tab (Unlabelled)";
+						organizerItem.type = OrganizerItem.TYPE_TAB;
+					}
+				}
+				
+				return organizerItem;
+			}
+			
+			// returning regular component item
+			var componentsArray:Array = [];
 			for(var i:int = 0; i < this.numElements; i++)
 			{
-				var navContent:NavigatorContent = this.getElementAt(i) as NavigatorContent;
+				navContent = this.getElementAt(i) as NavigatorContent;
 				var navContentCount:int = navContent.numElements;
 				
 				for (var j:int = 0; j < navContentCount; j++)
 				{
-					var surfaceElement:IPrimeFacesSurfaceComponent = navContent.getElementAt(j) as IPrimeFacesSurfaceComponent;
+					surfaceElement = navContent.getElementAt(j) as IPrimeFacesSurfaceComponent;
 					if (surfaceElement === null)
 					{
 						continue;

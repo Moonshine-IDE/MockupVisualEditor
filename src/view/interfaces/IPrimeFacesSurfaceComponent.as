@@ -4,6 +4,6 @@ package view.interfaces
 
 	public interface IPrimeFacesSurfaceComponent extends ISurfaceComponent
 	{
-		function getComponentsChildren():OrganizerItem; // shall be use to generate component tree
+		function getComponentsChildren(...params):OrganizerItem; // shall be use to generate component tree
 	}
 }

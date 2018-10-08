@@ -577,7 +577,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function getComponentsChildren():OrganizerItem
+		public function getComponentsChildren(...params):OrganizerItem
 		{
 			return (new OrganizerItem(this, "DataTable"));
 		}

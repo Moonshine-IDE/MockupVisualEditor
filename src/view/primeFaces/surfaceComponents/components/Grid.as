@@ -513,10 +513,36 @@ package view.primeFaces.surfaceComponents.components
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent;
+			var gridRow:GridRow;
 			
-			for (var row:int = 0; row < this.numElements; row++)
+			// returning particular tab index item
+			if (params.length > 0)
 			{
-				var gridRow:GridRow = this.getElementAt(row) as GridRow;
+				if (params[0] == "addItemAt")
+				{
+					parseRowItems(this, this.getElementIndex(params[1] as GridRow));
+				}
+			}
+			else
+			{
+				// return usual component reference
+				for (var row:int = 0; row < this.numElements; row++)
+				{
+					parseRowItems(this, row);
+				}
+			}
+			
+			
+			// @note @return
+			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
+			// children = [] (if drop acceptable component, i.e. div, tab etc.)
+			return (new OrganizerItem(this, "Grid", (componentsArray.length > 0) ? componentsArray : []));
+			
+			// @local
+			// parse back items inside gridRow
+			function parseRowItems(grid:Grid, rowIndex:int):void
+			{
+				gridRow = grid.getElementAt(rowIndex) as GridRow;
 				for (var col:int = 0; col < gridRow.numElements; col++)
 				{
 					var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
@@ -525,17 +551,12 @@ package view.primeFaces.surfaceComponents.components
 					organizerItem = element.getComponentsChildren();
 					if (organizerItem) 
 					{
-						organizerItem.name = "R"+ (row+1) +":C"+ (col+1);
+						organizerItem.name = "R"+ (rowIndex+1) +":C"+ (col+1);
 						organizerItem.type = OrganizerItem.TYPE_CELL;
 						componentsArray.push(organizerItem);
 					}
 				}
 			}
-			
-			// @note @return
-			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
-			// children = [] (if drop acceptable component, i.e. div, tab etc.)
-			return (new OrganizerItem(this, "Grid", (componentsArray.length > 0) ? componentsArray : []));
 		}
 
         override public function addRow():IVisualElement

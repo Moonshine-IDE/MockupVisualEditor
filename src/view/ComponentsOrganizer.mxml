@@ -22,6 +22,7 @@
 			
 			import view.interfaces.IPrimeFacesSurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.Fieldset;
+			import view.primeFaces.surfaceComponents.components.Grid;
 			import view.primeFaces.surfaceComponents.components.PanelGrid;
 			import view.primeFaces.surfaceComponents.components.TabView;
 			import view.suportClasses.PropertyChangeReference;
@@ -102,6 +103,7 @@
 					if (lastChange && (change === lastChange || (change.eventType == lastChange.eventType && change.fieldClass === lastChange.fieldClass && change.fieldLastValue === lastChange.fieldLastValue && change.fieldName === lastChange.fieldName &&
 						change.fieldNewValue === lastChange.fieldNewValue))) return;
 					
+					var organizerItem: OrganizerItem;
 					var surfaceComponent: IPrimeFacesSurfaceComponent;
 					var i:int;
 					var j:int;
@@ -115,10 +117,22 @@
 							{
 								change.fieldClass["callLater"](function():void
 								{
-									var organizerItem: OrganizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldClass as TabView).numElements - 1);
+									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldClass as TabView).numElements - 1);
 									if (organizerItem) 
 									{
 										tree.selectedItem.children.push(organizerItem);
+										refreshItem(change.fieldClass as IVisualElement);
+									}
+								});
+							}
+							else if (change.fieldClass is Grid)
+							{
+								change.fieldClass["callLater"](function():void
+								{
+									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
+									if (organizerItem) 
+									{
+										tree.selectedItem.children.splice(tree.selectedItem.children.length, 0, organizerItem.children[0]);
 										refreshItem(change.fieldClass as IVisualElement);
 									}
 								});

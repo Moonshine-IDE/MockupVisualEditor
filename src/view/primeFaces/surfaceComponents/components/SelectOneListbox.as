@@ -75,8 +75,6 @@ package view.primeFaces.surfaceComponents.components
 			this.height = 120;
 			this.minWidth = 20;
 			this.minHeight = 20;
-			
-			//this.setStyle("skinClass", SelectOneMenuSkin);
 
             _propertiesChangedEvents = [
                 "widthChanged",

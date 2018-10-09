@@ -38,7 +38,8 @@ package utils
 	import view.primeFaces.surfaceComponents.components.PanelGrid;
     import view.primeFaces.surfaceComponents.components.RootDiv;
     import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
-	import view.primeFaces.surfaceComponents.components.SelectOneMenu;
+    import view.primeFaces.surfaceComponents.components.SelectOneListbox;
+    import view.primeFaces.surfaceComponents.components.SelectOneMenu;
 	import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	import view.primeFaces.surfaceComponents.components.TextEditor;
@@ -138,6 +139,7 @@ package utils
 				CLASS_LOOKUP[OutputPanel.ELEMENT_NAME] = OutputPanel;
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Calendar.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Calendar;
 				CLASS_LOOKUP[RootDiv.ELEMENT_NAME] = RootDiv;
+				CLASS_LOOKUP[SelectOneListbox.ELEMENT_NAME] = SelectOneListbox;
             }
 		}
 	}

@@ -39,6 +39,7 @@
 		import view.primeFaces.surfaceComponents.components.OutputLabel;
 		import view.primeFaces.surfaceComponents.components.PanelGrid;
 		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+		import view.primeFaces.surfaceComponents.components.SelectOneListbox;
 		import view.primeFaces.surfaceComponents.components.SelectOneMenu;
 		import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 		import view.primeFaces.surfaceComponents.components.TabView;
@@ -99,7 +100,8 @@
 					new ComponentListItem("Div", Div),
 					new ComponentListItem("Grid", Grid),
 					new ComponentListItem("PanelGrid", PanelGrid),
-					new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar)
+					new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar),
+					new ComponentListItem("SelectOneListbox", SelectOneListbox)
 				]);
 			}
 

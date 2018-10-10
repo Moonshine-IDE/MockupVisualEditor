@@ -326,7 +326,7 @@ package view.primeFaces.surfaceComponents.components
 			var deleteIndex:int;
 			switch(nameField)
 			{
-				case "removeItemAt":
+				case "removeRowAt":
 					try
 					{
 						deleteIndex = this.getElementIndex(value.object);
@@ -339,7 +339,7 @@ package view.primeFaces.surfaceComponents.components
 					
 					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
 					break;
-				case "addItemAt":
+				case "addRowAt":
 					try
 					{
 						deleteIndex = this.getElementIndex(value);
@@ -514,13 +514,28 @@ package view.primeFaces.surfaceComponents.components
 			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent;
 			var gridRow:GridRow;
+			var gridCol:GridItem;
 			
 			// returning particular tab index item
 			if (params.length > 0)
 			{
-				if (params[0] == "addItemAt")
+				if (params[0] == "addRowAt")
 				{
 					parseRowItems(this, this.getElementIndex(params[1] as GridRow));
+				}
+				else if (params[0] == "addColumnAt")
+				{
+					gridCol = params[1] as GridItem;
+					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					organizerItem = element.getComponentsChildren();
+					
+					if (organizerItem) 
+					{
+						organizerItem.name = "R"+ (params[2]+1) +":C"+ (params[3]+1);
+						organizerItem.type = OrganizerItem.TYPE_CELL;
+					}
+					
+					return organizerItem;
 				}
 			}
 			else
@@ -545,7 +560,7 @@ package view.primeFaces.surfaceComponents.components
 				gridRow = grid.getElementAt(rowIndex) as GridRow;
 				for (var col:int = 0; col < gridRow.numElements; col++)
 				{
-					var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+					gridCol = gridRow.getElementAt(col) as GridItem;
 					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
 					
 					organizerItem = element.getComponentsChildren();
@@ -563,7 +578,7 @@ package view.primeFaces.surfaceComponents.components
         {
             var row:IVisualElement = super.addRow();
 
-            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addItemAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
+            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addRowAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
             dispatchEvent(new Event("itemAdded"));
 
             return row;
@@ -576,7 +591,8 @@ package view.primeFaces.surfaceComponents.components
             if (removedElement)
             {
                 var historyObject:Object = {object: removedElement, index: index};
-                _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeItemAt", historyObject, historyObject);
+                _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeRowAt", historyObject, historyObject);
+				dispatchEvent(new Event("itemRemoved"));
             }
 
             return removedElement;
@@ -589,8 +605,9 @@ package view.primeFaces.surfaceComponents.components
             if (gridRow && gridRow.numElements < maxColumnCount)
             {
                 gridItem = super.addColumn(rowIndex);
-				var historyObject:Object = {object:gridItem, parent:gridRow};
+				var historyObject:Object = {object:gridItem, parent:gridRow, rowIndex:rowIndex, colIndex:gridRow.numChildren-1};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addColumnAt", historyObject, historyObject);
+				dispatchEvent(new Event("itemAdded"));
             }
 
             return gridItem;
@@ -605,7 +622,8 @@ package view.primeFaces.surfaceComponents.components
 				
 				var historyObject:Object = {object:removedColumn, parent:gridRow, index:columnIndex};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeColumnAt", historyObject, historyObject);
-
+				dispatchEvent(new Event("itemRemoved"));
+				
                 return removedColumn;
             }
 

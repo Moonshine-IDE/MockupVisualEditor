@@ -106,7 +106,6 @@
 					var organizerItem: OrganizerItem;
 					var surfaceComponent: IPrimeFacesSurfaceComponent;
 					var i:int;
-					var j:int;
 					
 					lastTopParent = foundIndepthItem = null;
 					lastChange = change;
@@ -125,7 +124,14 @@
 									}
 								});
 							}
-							else if (change.fieldClass is Grid)
+							break;
+						case "removeItemAt":
+							tree.expandItem(tree.selectedItem, true);
+							tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
+							refreshItem(change.fieldClass as IVisualElement);
+							break;
+						case "addRowAt":
+							if (change.fieldClass is Grid)
 							{
 								change.fieldClass["callLater"](function():void
 								{
@@ -138,10 +144,42 @@
 								});
 							}
 							break;
-						case "removeItemAt":
+						case "removeRowAt":
 							tree.expandItem(tree.selectedItem, true);
-							tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
-							refreshItem(change.fieldClass as IVisualElement);
+							if (change.fieldClass is PanelGrid || change.fieldClass is Grid)
+							{
+								var rowItem:GridRow = (change.fieldClass is PanelGrid) ? change.fieldLastValue[0].object : change.fieldLastValue.object;
+								for (i = 0; i < rowItem.numElements; i++)
+								{
+									surfaceComponent = (rowItem.getElementAt(i) as IVisualElementContainer).getElementAt(0) as IPrimeFacesSurfaceComponent;
+									tree.selectedItem.children.some(function(item:*, index:int, array:Array):Boolean
+									{
+										if (surfaceComponent == item.item)
+										{
+											tree.selectedItem.children.splice(index, 1);
+											return true;
+										}
+										return false;
+									});
+								}
+								
+								refreshItem(change.fieldClass as IVisualElement);
+							}
+							break;
+						case "addColumnAt":
+							if (change.fieldClass is Grid)
+							{
+								change.fieldClass["callLater"](function():void
+								{
+									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue.object,
+										change.fieldLastValue.rowIndex, change.fieldLastValue.colIndex);
+									if (organizerItem) 
+									{
+										tree.selectedItem.children.splice(change.fieldLastValue.rowIndex + change.fieldLastValue.colIndex + 1, 0, organizerItem);
+										refreshItem(change.fieldClass as IVisualElement);
+									}
+								});
+							}
 							break;
 						case "removeColumnAt":
 							tree.expandItem(tree.selectedItem, true);
@@ -150,36 +188,31 @@
 								for (i = 0; i < change.fieldLastValue.length; i++)
 								{
 									surfaceComponent = change.fieldLastValue[i].object.getElementAt(0) as IPrimeFacesSurfaceComponent;
-									for (j = 0; j < tree.selectedItem.children.length; j++)
+									tree.selectedItem.children.some(function(item:*, index:int, array:Array):Boolean
 									{
-										if (surfaceComponent == tree.selectedItem.children[j].item)
+										if (surfaceComponent == item.item)
 										{
-											tree.selectedItem.children.splice(j, 1);
-											break;
+											tree.selectedItem.children.splice(index, 1);
+											return true;
 										}
-									}
+										return false;
+									});
 								}
 								
 								refreshItem(change.fieldClass as IVisualElement);
 							}
-							break;
-						case "removeRowAt":
-							tree.expandItem(tree.selectedItem, true);
-							if (change.fieldClass is PanelGrid)
+							else if (change.fieldClass is Grid)
 							{
-								var rowItem:GridRow = change.fieldLastValue[0].object;
-								for (i = 0; i < rowItem.numElements; i++)
+								surfaceComponent = change.fieldLastValue.object.getElementAt(0) as IPrimeFacesSurfaceComponent;
+								tree.selectedItem.children.some(function(item:*, index:int, array:Array):Boolean
 								{
-									surfaceComponent = (rowItem.getElementAt(i) as IVisualElementContainer).getElementAt(0) as IPrimeFacesSurfaceComponent;
-									for (j = 0; j < tree.selectedItem.children.length; j++)
+									if (surfaceComponent == item.item)
 									{
-										if (surfaceComponent == tree.selectedItem.children[j].item)
-										{
-											tree.selectedItem.children.splice(j, 1);
-											break;
-										}
+										tree.selectedItem.children.splice(index, 1);
+										return true;
 									}
-								}
+									return false;
+								});
 								
 								refreshItem(change.fieldClass as IVisualElement);
 							}

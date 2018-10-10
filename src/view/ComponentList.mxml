@@ -90,6 +90,7 @@
 					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
 					new ComponentListItem("SelectOneRadio", SelectOneRadio),
 					new ComponentListItem("SelectOneMenu", SelectOneMenu),
+					new ComponentListItem("SelectOneListbox", SelectOneListbox),
 					new ComponentListItem("OutputLabel", OutputLabel),
 					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
 					new ComponentListItem("TabView", TabView),
@@ -100,8 +101,7 @@
 					new ComponentListItem("Div", Div),
 					new ComponentListItem("Grid", Grid),
 					new ComponentListItem("PanelGrid", PanelGrid),
-					new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar),
-					new ComponentListItem("SelectOneListbox", SelectOneListbox)
+					new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar)
 				]);
 			}
 

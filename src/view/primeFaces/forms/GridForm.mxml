@@ -6,21 +6,22 @@
 		skinClass="skins.FormSkin" creationComplete="onGridFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
-		import mx.collections.ArrayList;
-		import mx.containers.GridItem;
-		import mx.containers.GridRow;
-		import mx.events.CloseEvent;
-		import mx.events.FlexEvent;
-
-		import spark.components.Alert;
-
-		import data.GridListItem;
-
-		import view.interfaces.ISurfaceComponent;
-		import view.primeFaces.supportClasses.GridBase;
-		import view.primeFaces.supportClasses.GridEvent;
-		import view.primeFaces.surfaceComponents.components.Div;
-		import view.primeFaces.surfaceComponents.components.Grid;
+			import mx.collections.ArrayList;
+			import mx.containers.GridItem;
+			import mx.containers.GridRow;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			
+			import spark.components.Alert;
+			
+			import data.GridListItem;
+			
+			import view.interfaces.ISurfaceComponent;
+			import view.primeFaces.supportClasses.GridBase;
+			import view.primeFaces.supportClasses.GridEvent;
+			import view.primeFaces.surfaceComponents.components.Div;
+			import view.primeFaces.surfaceComponents.components.Grid;
+			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
 		[Bindable]
 		private var rowsDataProvider:ArrayList = new ArrayList();
@@ -251,7 +252,11 @@
 
 			grid.removeAllElements();
 			rowsDataProvider.removeAll();
-
+			
+			grid.propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(grid, "removedAll", []);
+			grid.dispatchEvent(new Event("removedAll"));
+			grid.isUpdating = true;
+			
 			for (var row:int = 0; row < rowsCount; row++)
 			{
 				var itemValue:int = row + 1;
@@ -274,6 +279,7 @@
 
 			grid.selectedRow = grid.selectedColumn = 0;
 			this.selectedCell = this.getSelectedCell();
+			grid.isUpdating = false;
 		}
 
 		private function getSelectedCell():Div

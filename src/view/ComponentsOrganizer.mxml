@@ -21,6 +21,7 @@
 			import data.OrganizerItem;
 			
 			import view.interfaces.IPrimeFacesSurfaceComponent;
+			import view.primeFaces.supportClasses.GridBase;
 			import view.primeFaces.surfaceComponents.components.Fieldset;
 			import view.primeFaces.surfaceComponents.components.Grid;
 			import view.primeFaces.surfaceComponents.components.PanelGrid;
@@ -40,7 +41,7 @@
 			{
 				var tmpArr:Array = getComponentsChildren(surface);
 				tree.rootContainer = (tmpArr[0] as OrganizerItem).item as IVisualElementContainer;
-				components = new ArrayCollection((tmpArr[0] as OrganizerItem).children);
+				components = new ArrayCollection(tmpArr);
 				
 				tmpArr = null;
 				tree.callLater(function():void
@@ -106,6 +107,7 @@
 					var organizerItem: OrganizerItem;
 					var surfaceComponent: IPrimeFacesSurfaceComponent;
 					var i:int;
+					var cellIndex:int;
 					
 					lastTopParent = foundIndepthItem = null;
 					lastChange = change;
@@ -131,18 +133,27 @@
 							refreshItem(change.fieldClass as IVisualElement);
 							break;
 						case "addRowAt":
-							if (change.fieldClass is Grid)
+							change.fieldClass["callLater"](function():void
 							{
-								change.fieldClass["callLater"](function():void
+								if (change.fieldClass is Grid)
 								{
 									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
-									if (organizerItem) 
+									if (organizerItem)
 									{
-										tree.selectedItem.children.splice(tree.selectedItem.children.length, 0, organizerItem.children[0]);
+										tree.selectedItem.children.push(organizerItem.children[0]);
 										refreshItem(change.fieldClass as IVisualElement);
 									}
-								});
-							}
+								}
+								else if (change.fieldClass is PanelGrid)
+								{
+									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue[change.fieldLastValue.length - 1].object);
+									if (organizerItem)
+									{
+										tree.selectedItem.children = tree.selectedItem.children.concat(organizerItem.children);
+										refreshItem(change.fieldClass as IVisualElement);
+									}
+								}
+							});
 							break;
 						case "removeRowAt":
 							tree.expandItem(tree.selectedItem, true);
@@ -163,23 +174,49 @@
 									});
 								}
 								
+								updateCellLabels(tree.selectedItem as OrganizerItem);
 								refreshItem(change.fieldClass as IVisualElement);
 							}
 							break;
-						case "addColumnAt":
-							if (change.fieldClass is Grid)
+						case "removedAll":
+							tree.expandItem(tree.selectedItem, true);
+							tree.selectedItem.children = [];
+							change.fieldClass["callLater"](function():void
 							{
-								change.fieldClass["callLater"](function():void
+								organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren();
+								tree.selectedItem.children = organizerItem.children;
+								refreshItem(change.fieldClass as IVisualElement);
+							});
+							break;
+						case "addColumnAt":
+							change.fieldClass["callLater"](function():void
+							{
+								if (change.fieldClass is Grid)
 								{
 									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue.object,
 										change.fieldLastValue.rowIndex, change.fieldLastValue.colIndex);
 									if (organizerItem) 
 									{
-										tree.selectedItem.children.splice(change.fieldLastValue.rowIndex + change.fieldLastValue.colIndex + 1, 0, organizerItem);
+										if (change.fieldLastValue.rowIndex == 0) cellIndex = change.fieldLastValue.colIndex;
+										else
+										{
+											i = 0;
+											while (i <= change.fieldLastValue.rowIndex) {
+												cellIndex += (change.fieldClass as GridBase).getNumColumns(i);
+												i++;
+											}
+										}
+										
+										tree.selectedItem.children.splice(cellIndex - 1, 0, organizerItem);
+										updateCellLabels(tree.selectedItem as OrganizerItem);
 										refreshItem(change.fieldClass as IVisualElement);
 									}
-								});
-							}
+								}
+								else if (change.fieldClass is PanelGrid)
+								{
+									
+								}
+							});
 							break;
 						case "removeColumnAt":
 							tree.expandItem(tree.selectedItem, true);
@@ -214,9 +251,31 @@
 									return false;
 								});
 								
+								updateCellLabels(tree.selectedItem as OrganizerItem);
 								refreshItem(change.fieldClass as IVisualElement);
 							}
 							break;
+					}
+				}
+			}
+			
+			private function updateCellLabels(component:OrganizerItem):void
+			{
+				var numRows:int;
+				var cellIndex:int;
+				var gridBase:GridBase;
+				
+				if (component.item is Grid) gridBase = component.item as GridBase;
+				else if (component.item is PanelGrid) gridBase = (component.item as PanelGrid).body;
+				
+				numRows = gridBase.getNumRows();
+				for (var i:int=0; i < numRows; i++)
+				{
+					var numCols:int = gridBase.getNumColumns(i);
+					for (var j:int=0; j < numCols; j++)
+					{
+						component.children[cellIndex].name = "R"+ (i+1) +":C"+ (j+1);
+						cellIndex++;
 					}
 				}
 			}
@@ -258,7 +317,7 @@
 					if (organizerItem) componentsArray.push(organizerItem);
 				}
 				
-				return [new OrganizerItem(container, "ROOT", componentsArray)];
+				return [new OrganizerItem(container, "Stage", componentsArray)];
 			}
 			
 			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, topParent:Object=null):void

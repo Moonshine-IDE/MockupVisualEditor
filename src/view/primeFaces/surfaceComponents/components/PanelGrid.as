@@ -578,22 +578,37 @@ package view.primeFaces.surfaceComponents.components
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent;
+			var gridRow:GridRow;
+			var gridCol:GridItem;
 			
-			for (var row:int = 0; row < this.body.numElements; row++)
+			// returning particular tab index item
+			if (params.length > 0)
 			{
-				var gridRow:GridRow = this.body.getElementAt(row) as GridRow;
-				for (var col:int = 0; col < gridRow.numElements; col++)
+				if (params[0] == "addRowAt")
 				{
-					var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
+					parseRowItems(this, this.body.getElementIndex(params[1] as GridRow));
+				}
+				else if (params[0] == "addColumnAt")
+				{
+					gridCol = params[1] as GridItem;
 					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
-					
 					organizerItem = element.getComponentsChildren();
-					if (organizerItem) 
+					
+					if (organizerItem)
 					{
-						organizerItem.name = "R"+ (row+1) +":C"+ (col+1);
+						organizerItem.name = "R"+ (params[2]+1) +":C"+ (params[3]+1);
 						organizerItem.type = OrganizerItem.TYPE_CELL;
-						componentsArray.push(organizerItem);
 					}
+					
+					return organizerItem;
+				}
+			}
+			else
+			{
+				// return usual component reference
+				for (var row:int = 0; row < this.body.numElements; row++)
+				{
+					parseRowItems(this, row);
 				}
 			}
 			
@@ -601,6 +616,26 @@ package view.primeFaces.surfaceComponents.components
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
 			// children = [] (if drop acceptable component, i.e. div, tab etc.)
 			return (new OrganizerItem(this, "PanelGrid", (componentsArray.length > 0) ? componentsArray : []));
+			
+			// @local
+			// parse back items inside gridRow
+			function parseRowItems(grid:PanelGrid, rowIndex:int):void
+			{
+				gridRow = grid.body.getElementAt(rowIndex) as GridRow;
+				for (var col:int = 0; col < gridRow.numElements; col++)
+				{
+					gridCol = gridRow.getElementAt(col) as GridItem;
+					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					
+					organizerItem = element.getComponentsChildren();
+					if (organizerItem) 
+					{
+						organizerItem.name = "R"+ (rowIndex+1) +":C"+ (col+1);
+						organizerItem.type = OrganizerItem.TYPE_CELL;
+						componentsArray.push(organizerItem);
+					}
+				}
+			}
 		}
 
         public function addRow():void

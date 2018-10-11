@@ -15,7 +15,6 @@ package view.suportClasses
 	
 	import view.interfaces.IDropAcceptableComponent;
 	import view.interfaces.IHistorySurfaceComponent;
-	import view.interfaces.ISurfaceComponent;
 	import view.primeFaces.surfaceComponents.components.PanelGrid;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	import view.suportClasses.events.PropertyEditorChangeEvent;
@@ -51,7 +50,7 @@ package view.suportClasses
 			// calculate target drop index before continue
 			// to terminate based on target component's type
 			var droppedIndex:int = getDropIndexToTarget(event);
-			if (!droppedParentStack && droppedIndex >= rootContainer.numElements) droppedIndex = rootContainer.numElements - 1;
+			//if (!droppedParentStack && droppedIndex >= rootContainer.numElements) droppedIndex = rootContainer.numElements - 1;
 			
 			if (!isAcceptableDrop(droppedParentStack, draggedStack, droppedIndex))
 			{
@@ -119,6 +118,9 @@ package view.suportClasses
 		
 		private function isAcceptableDrop(target:OrganizerItem, source:OrganizerItem, droppedIndex:int):Boolean
 		{
+			// test 0:: do not let things dropped outside of main div
+			if (!target) return false;
+			
 			// test 1:: parent can't be drop in its children
 			isDropLocationIsChildren = false;
 			testDropLocationIfChildren(source, target);

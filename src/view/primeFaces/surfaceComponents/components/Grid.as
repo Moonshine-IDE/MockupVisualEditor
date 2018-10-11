@@ -106,6 +106,7 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
 				"itemRemoved",
+				"removedAll",
 				"itemAdded"
             ];
 
@@ -578,7 +579,7 @@ package view.primeFaces.surfaceComponents.components
         {
             var row:IVisualElement = super.addRow();
 
-            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addRowAt", this.getElementAt(selectedRow), this.getElementAt(selectedRow));
+            _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addRowAt", row, row);
             dispatchEvent(new Event("itemAdded"));
 
             return row;

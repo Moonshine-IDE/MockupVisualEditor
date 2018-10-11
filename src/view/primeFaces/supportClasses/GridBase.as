@@ -7,6 +7,7 @@ package view.primeFaces.supportClasses
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
+    import mx.core.IVisualElementContainer;
     
     import view.primeFaces.surfaceComponents.components.Div;
     import view.suportClasses.events.SurfaceComponentEvent;
@@ -92,6 +93,17 @@ package view.primeFaces.supportClasses
                 dispatchEvent(new GridEvent(GridEvent.SELECTED_COLUMN_CHANGED, value));
             }
         }
+		
+		public function getNumRows():int
+		{
+			return this.numElements;
+		}
+		
+		public function getNumColumns(row:int):int
+		{
+			if (row > (this.numElements - 1)) return -1;
+			return (this.getElementAt(row) as IVisualElementContainer).numElements;
+		}
 
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
         {

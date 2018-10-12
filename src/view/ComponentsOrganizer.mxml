@@ -3,7 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="view.*"
 		 xmlns:suportClasses="view.suportClasses.*" gap="0"
-		 creationComplete="onComplete(event)">
+		 creationComplete="onComplete(event)" initialize="onInitialized()">
 	<fx:Metadata>
 		[Event(name="propertyEditorItemMoved",type="view.suportClasses.events.PropertyEditorChangeEvent")]
 	</fx:Metadata>
@@ -15,6 +15,8 @@
 			import mx.core.IVisualElementContainer;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
+			
+			import spark.components.Image;
 			
 			import components.renderers.OrganizerTreeRenderer;
 			
@@ -30,6 +32,9 @@
 			
 			public var editingSurface:EditingSurface;
 			public var isRefreshTree:Boolean = true;
+			
+			[Embed(source='/assets/icoRefresh.png')]
+			private var sourceRefreshIcon: Class;
 			
 			[Bindable] private var components:ArrayCollection;
 			
@@ -214,7 +219,23 @@
 								}
 								else if (change.fieldClass is PanelGrid)
 								{
-									
+									if (change.fieldLastValue && change.fieldLastValue.length > 0)
+									{
+										// get the column index first by parsing any
+										cellIndex = (change.fieldLastValue[0].parent as IVisualElementContainer).getElementIndex(change.fieldLastValue[0].object);
+										// get corresponding organizer items from the owner class
+										organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue, cellIndex);
+										// place newly received organizer by row and column index wise
+										for (i = 0; i < organizerItem.children.length; i++)
+										{
+											tree.selectedItem.children.splice(cellIndex, 0, organizerItem.children[i]);
+											cellIndex += (cellIndex + 1); // +1 is for 0th index count
+										}
+										
+										// update tree label and hierarchy
+										updateCellLabels(tree.selectedItem as OrganizerItem);
+										refreshItem(change.fieldClass as IVisualElement);
+									}
 								}
 							});
 							break;
@@ -280,9 +301,22 @@
 				}
 			}
 			
+			private function onInitialized():void
+			{
+				var tmpRefreshButton:Image = new Image();
+				tmpRefreshButton.source = new sourceRefreshIcon();
+				header.rightButtons = [{icon: tmpRefreshButton, handle: this.onRefreshRequest}];
+			}
+			
+			private function onRefreshRequest(event:MouseEvent):void
+			{
+				editingSurface.selectedItem = null;
+				loadFirstData(editingSurface);
+			}
+			
 			private function onComplete(event:FlexEvent):void
 			{
-				editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
+				if (!editingSurface.isVisualEditorFlex) editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
 			}
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
@@ -436,7 +470,8 @@
 		]]>
 	</fx:Script>
 	
-	<view:PropertyEditorHeader componentName="Organizer-"/>
+	<view:PropertyEditorHeader id="header" 
+							   componentName="Organizer"/>
 	
 	<suportClasses:TreeOrganizer id="tree" 
 								 dataProvider="{components}"
@@ -450,4 +485,23 @@
 								 change="onItemSelectionChanged(event)"
 								 itemRenderer="{new ClassFactory(OrganizerTreeRenderer)}"
 								 keyUp="onTreeItemKeyUp(event)"/>
+	
+	<!-- for v1.16.0 -->
+	<s:Group id="grpMessage" 
+			 width="100%" autoLayout="true">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="0xffffCC"/>
+			</s:fill>
+			<s:stroke>
+				<s:SolidColorStroke color="0xCCCCCC"/>
+			</s:stroke>
+		</s:Rect>
+		<s:Label text="History manager is not available to Organizer. Use refresh button above if requires."
+				 width="100%" maxDisplayedLines="4" fontSize="11"
+				 paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="12"/>
+		<s:Image source="@Embed('/assets/icoClose.png')"
+				 right="4" top="4" buttonMode="true" useHandCursor="false" mouseChildren="false"
+				 click="grpMessage.includeInLayout = grpMessage.visible = false"/>
+	</s:Group>
 </s:VGroup>

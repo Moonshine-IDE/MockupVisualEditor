@@ -580,6 +580,7 @@ package view.primeFaces.surfaceComponents.components
 			var element:IPrimeFacesSurfaceComponent;
 			var gridRow:GridRow;
 			var gridCol:GridItem;
+			var row:int;
 			
 			// returning particular tab index item
 			if (params.length > 0)
@@ -590,23 +591,24 @@ package view.primeFaces.surfaceComponents.components
 				}
 				else if (params[0] == "addColumnAt")
 				{
-					gridCol = params[1] as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
-					organizerItem = element.getComponentsChildren();
-					
-					if (organizerItem)
+					for (row = 0; row < this.body.numElements; row++)
 					{
-						organizerItem.name = "R"+ (params[2]+1) +":C"+ (params[3]+1);
-						organizerItem.type = OrganizerItem.TYPE_CELL;
+						gridCol = (this.body.getElementAt(row) as GridRow).getElementAt(params[2]) as GridItem;
+						element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+						organizerItem = element.getComponentsChildren();
+						
+						if (organizerItem)
+						{
+							organizerItem.type = OrganizerItem.TYPE_CELL;
+							componentsArray.push(organizerItem);
+						}
 					}
-					
-					return organizerItem;
 				}
 			}
 			else
 			{
 				// return usual component reference
-				for (var row:int = 0; row < this.body.numElements; row++)
+				for (row = 0; row < this.body.numElements; row++)
 				{
 					parseRowItems(this, row);
 				}

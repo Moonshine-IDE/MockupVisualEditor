@@ -122,6 +122,11 @@
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
 		
+		public function get isVisualEditorFlex():Boolean
+		{
+			return (_visualEditorType == 'flex');
+		}
+		
 		public function setResizerVisible(value:Boolean):void
 		{
 			if (this.resizer) this.resizer.visible = value;
@@ -149,7 +154,7 @@
 			EditingSurfaceReader.fromXML(this, xml, _visualEditorType);
 
 			_wasLoaded = true;
-			this.callLater(organizer.loadFirstData, [this]);
+			if (!isVisualEditorFlex) this.callLater(organizer.loadFirstData, [this]);
 		}
 
 		public function deleteAll():void
@@ -232,7 +237,7 @@
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			if (container.getElementIndex(IVisualElement(item)) > -1)
 			{
-				organizer.removeDroppedElement(item.owner as IVisualElement, item as IVisualElement);
+				if (!isVisualEditorFlex) organizer.removeDroppedElement(item.owner as IVisualElement, item as IVisualElement);
 				container.removeElement(IVisualElement(item));
 			}
 
@@ -561,7 +566,7 @@
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
-				organizer.addDroppedElement(dropTarget as IVisualElement, object as IVisualElement);
+				if (!isVisualEditorFlex) organizer.addDroppedElement(dropTarget as IVisualElement, object as IVisualElement);
 
 				// some component may have processing should occur after
 				// being added to the editor
@@ -677,8 +682,11 @@
 			event.preventDefault();
 
 			var object:ISurfaceComponent = ISurfaceComponent(event.currentTarget);
-			object.addEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
-			object.stage.addEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
+			if (isVisualEditorFlex)
+			{
+				object.addEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
+				object.stage.addEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
+			}
 
 			this.selectedItem = object;
 		}
@@ -729,5 +737,6 @@
 			var newView:SkinnableContainer = container.selectedView;
 			this.prepareContainer(newView);
 		}
+		
 		]]></fx:Script>
 </s:Group>

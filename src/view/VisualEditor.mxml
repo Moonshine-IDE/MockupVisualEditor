@@ -30,10 +30,12 @@
 			<view:ComponentsOrganizer id="componentsOrganizer"
 									  width="100%" top="0" bottom="20"
 									  editingSurface="{editingSurface}"
-									  visible="{bbPropertyPanel.selectedIndex==1}"/>
+									  visible="{_visualEditorType != 'flex' &amp;&amp; bbPropertyPanel.selectedIndex==1}"
+									  includeInLayout="{_visualEditorType != 'flex'}"/>
 			<s:ButtonBar id="bbPropertyPanel" 
 						 bottom="0" right="0" selectedIndex="0"
-						 skinClass="skins.VisualEditorButtonBarSkin" requireSelection="true">
+						 skinClass="skins.VisualEditorButtonBarSkin" requireSelection="true"
+						 includeInLayout="{_visualEditorType != 'flex'}" visible="{_visualEditorType != 'flex'}">
 				<s:ArrayList>
 					<fx:Object icon="@Embed('/assets/list.png')" label="" toolTip="Properties"/>
 					<fx:Object icon="@Embed('/assets/organize.png')" label="" toolTip="Organize"/>

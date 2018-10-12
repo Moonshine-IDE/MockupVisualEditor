@@ -107,7 +107,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (contentChanged)
             {
-                resetPercentWidthHeightBasedOnLayout();
+                callLater(resetPercentWidthHeightBasedOnLayout);
                 contentChanged = false;
             }
         }

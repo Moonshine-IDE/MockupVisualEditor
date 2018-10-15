@@ -718,16 +718,23 @@ package view.primeFaces.surfaceComponents.components
 
         private function onDivElementAddRemove(event:ElementExistenceEvent):void
         {
-            if (!widthOutput || !heightOutput)
-            {
-                tabViewContentHeightChanged = true;
-                this.invalidateDisplayList();
-            }
+            invalidateTabViewSize();
         }
 
         private function onTabChange(event:IndexChangeEvent):void
         {
             dispatchEvent(event.clone());
+
+            invalidateTabViewSize();
+        }
+
+        private function invalidateTabViewSize():void
+        {
+            if (!widthOutput || !heightOutput)
+            {
+                tabViewContentHeightChanged = true;
+                this.invalidateDisplayList();
+            }
         }
     }
 }

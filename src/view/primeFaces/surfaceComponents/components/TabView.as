@@ -597,7 +597,7 @@ package view.primeFaces.surfaceComponents.components
 
             if (tabViewContentHeightChanged)
             {
-                this.setContentGroupSize();
+                callLater(setContentGroupSize);
                 tabViewContentHeightChanged = false;
             }
         }

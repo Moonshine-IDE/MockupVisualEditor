@@ -174,7 +174,10 @@ package view.primeFaces.supportClasses
                 var gridItem:GridItem = this.ensureCreateColumn(gridRow);
                 var div:Div = gridItem.getElementAt(0) as Div;
 
-                this.selectedColumn += 1;
+                if (gridRow.numElements > this.selectedColumn + 1)
+                {
+                    this.selectedColumn += 1;
+                }
 
                 dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
                 dispatchEvent(new Event("itemAdded"));

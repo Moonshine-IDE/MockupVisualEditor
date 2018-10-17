@@ -147,6 +147,8 @@ package view.primeFaces.surfaceComponents.components
         private var bodyRowsXML:XMLList;
         private var thisCallbackXML:Function;
 
+        private var contentChanged:Boolean;
+
         public function PanelGrid()
         {
             super();
@@ -170,6 +172,10 @@ package view.primeFaces.surfaceComponents.components
 				"heightOutputChanged",
 				"titleChanged"
             ];
+
+            this.addEventListener(Event.ADDED_TO_STAGE, onPanelGridAddedRemovedFromStage);
+            this.addEventListener(Event.REMOVED_FROM_STAGE, onPanelGridAddedRemovedFromStage);
+            this.addEventListener(Event.RESIZE, onPanelGridResize);
         }
 
         [Inspectable(environment="none")]
@@ -555,7 +561,6 @@ package view.primeFaces.surfaceComponents.components
             }
 
             thisCallbackXML = callback;
-            //this.callLater(createChildrenFromXML);
         }
 
         public function toCode():XML
@@ -723,6 +728,17 @@ package view.primeFaces.surfaceComponents.components
             return colItem;
         }
 
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+            if (contentChanged)
+            {
+                callLater(adjustContainerSize);
+                contentChanged = false;
+            }
+        }
+
         override protected function commitProperties():void
         {
             super.commitProperties();
@@ -747,6 +763,23 @@ package view.primeFaces.surfaceComponents.components
 			super.createChildren();
 			commitProperties();
 		}
+
+        private function onPanelGridAddedRemovedFromStage(event:Event):void
+        {
+            if (event.type == Event.ADDED_TO_STAGE)
+            {
+                this.addEventListener(Event.RESIZE, onPanelGridResize);
+            }
+            else if (event.type == Event.REMOVED_FROM_STAGE)
+            {
+                this.removeEventListener(Event.RESIZE, onPanelGridResize);
+            }
+        }
+
+        private function onPanelGridResize(event:Event):void
+        {
+            contentChanged = true;
+        }
 
         private function toHeaderVisualXML(xml:XML):void
         {
@@ -869,16 +902,26 @@ package view.primeFaces.surfaceComponents.components
                 {
                     var colItem:GridItem = rowItem.getElementAt(colIndex) as GridItem;
                     var container:Div = colItem.getElementAt(0) as Div;
+                    container.percentHeight = Number.NaN;
+
                     var colXML:XML = columnsXML[colIndex];
                     var divs:XMLList = colXML.Div;
+                    var divPercentHeight:Number = Number.NaN;
 
                     if (divs.length() > 0)
                     {
-                        var divXML:XMLList = divs.children();
+                        var divXMLList:XMLList = divs.children();
                         //Make transition only if div contains children, if not it does not needed.
-                        if (divXML.length() > 0)
+                        if (divXMLList.length() > 0)
                         {
-                            container.fromXML(divs[0], thisCallbackXML);
+                            var divXML:XML = divs[0];
+                            if ("@percentHeight" in divXML)
+                            {
+                                divPercentHeight = divXML.@percentHeight;
+                                delete divXML.@percentHeight;
+                            }
+
+                            container.fromXML(divXML, thisCallbackXML);
                         }
                     }
                     else
@@ -891,6 +934,9 @@ package view.primeFaces.surfaceComponents.components
                             }
                         }
                     }
+
+                    contentChanged = true;
+                    this.invalidateDisplayList();
                 }
             }
 
@@ -898,6 +944,24 @@ package view.primeFaces.surfaceComponents.components
             {
                 bodyRowsXML = null;
                 thisCallbackXML = null;
+            }
+        }
+
+        private function adjustContainerSize():void
+        {
+            var bodyRowCount:int = this.body.numElements;
+            for (var rowIndex:int = 0; rowIndex < bodyRowCount; rowIndex++)
+            {
+                var row:GridRow = this.body.getElementAt(rowIndex) as GridRow;
+                for (var colIndex:int = 0; colIndex < this.columnCount; colIndex++)
+                {
+                    var column:GridItem = row.getElementAt(colIndex) as GridItem;
+                    var div:Div = column.getElementAt(0) as Div;
+                    if (div.height < column.height)
+                    {
+                        div.percentHeight = 100;
+                    }
+                }
             }
         }
     }

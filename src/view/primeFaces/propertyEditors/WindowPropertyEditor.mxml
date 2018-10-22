@@ -17,4 +17,5 @@
 
     <primeFaces:DivLayoutForm />
 
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

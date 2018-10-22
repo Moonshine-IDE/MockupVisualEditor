@@ -4,7 +4,6 @@ package utils
     import mx.core.UIComponent;
     
     import view.EditingSurface;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
 
     public class EditingSurfaceWriter

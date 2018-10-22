@@ -25,7 +25,11 @@ package view.primeFaces.surfaceComponents.components
      * height="450"
      * title=""
      * wrap=""
-     * class="flexHorizontalLayoutWrap flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * class="flexHorizontalLayoutWrap flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
+     *  &lt;Script&gt;
+     *      &lt;![CDATA[ Some information ]]&gt;
+     *  &lt;/Script&gt;
+     * &lt;/MainApplication&gt;
      * </pre>
      *
      * <strong>HTML output:</strong>

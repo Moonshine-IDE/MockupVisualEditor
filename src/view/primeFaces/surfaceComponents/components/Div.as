@@ -6,7 +6,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
     import view.interfaces.IDropAcceptableComponent;
@@ -47,7 +49,11 @@ package view.primeFaces.surfaceComponents.components
      * height="120"
      * percentWidth="80"
      * percentHeight="80"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
+     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
+     *  &lt;Script&gt;
+     *      &lt;![CDATA[ Some information ]]&gt;
+ *      &lt;/Script&gt;
+     * &lt;/Div&gt;
      * </pre>
      *
      * <strong>PrimeFaces output:</strong>
@@ -58,7 +64,8 @@ package view.primeFaces.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent
+    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv,
+            IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
@@ -134,6 +141,13 @@ package view.primeFaces.surfaceComponents.components
                     this.invalidateProperties();
                 }
             }
+        }
+
+        protected var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
         }
 
         private var _cssClass:String;
@@ -387,6 +401,8 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             XMLCodeUtils.applyChildrenPositionFromXML(xml, this);
+
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();

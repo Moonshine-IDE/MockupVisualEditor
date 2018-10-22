@@ -38,6 +38,16 @@ package view.primeFaces.surfaceComponents.components
             return _heightPercent;
         }
 
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * @see view.primeFaces.surfaceComponents.components.Div#percentHeight
+         */
+        override public function get percentHeight():Number
+        {
+            return super.percentHeight;
+        }
+
         override public function set percentHeight(value:Number):void
         {
             if (isNaN(value))
@@ -53,6 +63,16 @@ package view.primeFaces.surfaceComponents.components
             }
 
             super.percentHeight = value;
+        }
+
+        [Inspectable(environment="none")]
+        [Bindable("resize")]
+        /**
+         * @see view.primeFaces.surfaceComponents.components.Div#percentHeight
+         */
+        override public function get percentWidth():Number
+        {
+            return super.percentWidth;
         }
 
         override public function set percentWidth(value:Number):void

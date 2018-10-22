@@ -14,5 +14,5 @@
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <primeFaces:DivLayoutForm />
-
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

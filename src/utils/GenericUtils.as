@@ -1,14 +1,8 @@
 package utils
 {
 	import flash.display.InteractiveObject;
-	
-	import mx.core.IVisualElementContainer;
-	
-	import data.OrganizerItem;
-	
-	import view.EditingSurface;
+
 	import view.interfaces.IHistorySurfaceComponent;
-	import view.interfaces.IPrimeFacesSurfaceComponent;
 	import view.interfaces.ISurfaceComponent;
 	import view.suportClasses.PropertyChangeReference;
 	

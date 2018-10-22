@@ -2,6 +2,7 @@ package utils
 {
     import mx.core.IUIComponent;
     import mx.core.UIComponent;
+    import mx.utils.StringUtil;
 
     import spark.layouts.HorizontalAlign;
     import spark.layouts.VerticalAlign;
@@ -16,7 +17,6 @@ package utils
 
     public class XMLCodeUtils
     {
-
         public static function addSizeHtmlStyleToXML(xml:XML, component:IUIComponent):void
         {
             var componentSizeOutput:IComponentSizeOutput = component as IComponentSizeOutput;
@@ -325,6 +325,33 @@ package utils
             }
 
             return className;
+        }
+
+        public static function getCdataInformationFromXML(component:XML):String
+        {
+            var cdataInformation:String = "";
+            var stringHelper:StringHelper = new StringHelper();
+            var scripts:XMLList = component.Script;
+            var scriptsCount:int = scripts.length();
+            if (scriptsCount > 0)
+            {
+                for (var i:int = 0; i < scriptsCount; i++)
+                {
+                    cdataInformation = String(scripts[i].text());
+                    if (cdataInformation)
+                    {
+                        cdataInformation = StringUtil.trim(cdataInformation);
+                        if (cdataInformation.length <= 2)
+                        {
+                            cdataInformation = stringHelper.trim(cdataInformation, "\n");
+                            cdataInformation = stringHelper.trim(cdataInformation, "\t");
+                        }
+                        if (cdataInformation) break;
+                    }
+                }
+            }
+
+            return cdataInformation;
         }
     }
 }

@@ -3,7 +3,6 @@ package utils
     import mx.core.UIComponent;
 
     import view.EditingSurface;
-    import view.flex.surfaceComponents.components.Container;
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;

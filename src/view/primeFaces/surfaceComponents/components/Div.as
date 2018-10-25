@@ -143,6 +143,13 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        protected var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
         protected var _cdataInformation:String;
 
         public function get cdataInformation():String
@@ -402,6 +409,7 @@ package view.primeFaces.surfaceComponents.components
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             XMLCodeUtils.applyChildrenPositionFromXML(xml, this);
 
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             var elementsXML:XMLList = xml.elements();
@@ -438,6 +446,11 @@ package view.primeFaces.surfaceComponents.components
 
             mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
             mainXML.@wrap = this.wrap;
+
+            if (_cdataXML)
+            {
+                mainXML.appendChild(_cdataXML);
+            }
 
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)

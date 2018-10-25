@@ -329,7 +329,14 @@ package utils
 
         public static function getCdataInformationFromXML(component:XML):String
         {
-            var cdataInformation:String = "";
+            var script:XML = getCdataXML(component);
+
+            return script ? String(script) : null;
+        }
+
+        public static function getCdataXML(component:XML):XML
+        {
+            var cdataInformation:String;
             var stringHelper:StringHelper = new StringHelper();
             var scripts:XMLList = component.Script;
             var scriptsCount:int = scripts.length();
@@ -346,12 +353,15 @@ package utils
                             cdataInformation = stringHelper.trim(cdataInformation, "\n");
                             cdataInformation = stringHelper.trim(cdataInformation, "\t");
                         }
-                        if (cdataInformation) break;
+                        if (cdataInformation)
+                        {
+                            return scripts[i];
+                        }
                     }
                 }
             }
 
-            return cdataInformation;
+            return null;
         }
     }
 }

@@ -12,7 +12,7 @@
     <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
         <s:TextArea id="textInput"
-                    text="{bindableText}" width="100%" minWidth="156" height="100%" editable="false" selectable="true"
+                    text="{bindableText}" width="100%" minWidth="156" editable="false" selectable="true"
                     prompt="{prompt}" />
     </s:FormItem>
 

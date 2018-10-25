@@ -37,6 +37,11 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="dropElementAt", kind="method")]
     [Exclude(name="commitProperties", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
+    [Exclude(name="_cdataXML", kind="property")]
+    [Exclude(name="_cdataInformation", kind="property")]
+    [Exclude(name="contentChanged", kind="property")]
 
     /**
      * <p>Representation of div in HTML</p>
@@ -447,9 +452,9 @@ package view.primeFaces.surfaceComponents.components
             mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
             mainXML.@wrap = this.wrap;
 
-            if (_cdataXML)
+            if (cdataXML)
             {
-                mainXML.appendChild(_cdataXML);
+                mainXML.appendChild(cdataXML);
             }
 
             var elementCount:int = this.numElements;

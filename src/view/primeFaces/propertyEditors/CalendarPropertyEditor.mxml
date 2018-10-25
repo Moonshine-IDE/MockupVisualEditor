@@ -19,4 +19,5 @@
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
     <forms:DateForm textProperty="minDate" label="Minimum Date"/>
     <forms:DateForm textProperty="maxDate" label="Maximum Date"/>
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

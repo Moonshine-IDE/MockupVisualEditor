@@ -17,4 +17,5 @@
 	<forms:ToggleButtonSelectedForm id="cbCommandButton" 
 									label="Command Button" textProperty="isCommandButton"/>
 	<forms:TextForm label="Action Listener" textProperty="actionListener" enabled="{cbCommandButton.check.selected}"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

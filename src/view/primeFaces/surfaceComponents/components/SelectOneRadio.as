@@ -22,7 +22,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -47,7 +49,9 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="selectedIndex", kind="property")]
 	[Exclude(name="items", kind="property")]
-	
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
+
     /**
      * <p>Representation of selectOneRadio in HTML</p>
      *
@@ -76,7 +80,8 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:selectOneRadio&gt;
      * </pre>
      */
-    public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent
+    public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent,
+			IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneRadio";
         public static const ELEMENT_NAME:String = "SelectOneRadio";
@@ -116,16 +121,71 @@ package view.primeFaces.surfaceComponents.components
 			this.ensureCreateInitialRowWithColumn();
 			addRadio((this.getElementAt(0) as GridRow).getElementAt(0) as GridItem, items[0]);
         }
-		
-		/**
-		 * Excluded from ASDoc
-		 */
-		public function componentAddedToEditor():void
-		{
-			this.maxHeight = 21;
-			this.width = 230;
-		}
-		
+
+        private var _isSelected:Boolean;
+
+        public function get isSelected():Boolean
+        {
+            return _isSelected;
+        }
+
+        public function set isSelected(value:Boolean):void
+        {
+            _isSelected = value;
+        }
+
+        private var _isUpdating:Boolean;
+        public function get isUpdating():Boolean
+        {
+            return _isUpdating;
+        }
+
+        public function set isUpdating(value:Boolean):void
+        {
+            _isUpdating = value;
+        }
+
+        private var _propertyChangeFieldReference:PropertyChangeReference;
+        public function get propertyChangeFieldReference():PropertyChangeReference
+        {
+            return _propertyChangeFieldReference;
+        }
+
+        public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+        {
+            _propertyChangeFieldReference = value;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+        {
+            _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+        }
+
+        public function get propertyEditorClass():Class
+        {
+            return SelectOneRadioPropertyEditor;
+        }
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
+
 		private var _items:ArrayCollection = new ArrayCollection();
 		[Bindable("itemsChanged")]
 		public function get items():ArrayCollection
@@ -279,56 +339,6 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 		
-		private var _isSelected:Boolean;
-
-		public function get isSelected():Boolean
-		{
-			return _isSelected;
-		}
-		
-		public function set isSelected(value:Boolean):void
-		{
-			_isSelected = value;
-		}
-		
-		private var _isUpdating:Boolean;
-		public function get isUpdating():Boolean
-		{
-			return _isUpdating;
-		}
-		
-		public function set isUpdating(value:Boolean):void
-		{
-			_isUpdating = value;
-		}
-		
-		private var _propertyChangeFieldReference:PropertyChangeReference;
-		public function get propertyChangeFieldReference():PropertyChangeReference
-		{
-			return _propertyChangeFieldReference;
-		}
-		
-		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
-		{
-			_propertyChangeFieldReference = value;
-		}
-		
-		private var _propertiesChangedEvents:Array;
-		public function get propertiesChangedEvents():Array
-		{
-			return _propertiesChangedEvents;
-		}
-		
-		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
-		}
-
-        public function get propertyEditorClass():Class
-        {
-            return SelectOneRadioPropertyEditor;
-        }
-		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
 			var deleteIndex:int;
@@ -416,7 +426,13 @@ package view.primeFaces.surfaceComponents.components
 			}
 		}
 
-		public function getComponentsChildren(...params):OrganizerItem
+        public function componentAddedToEditor():void
+        {
+            this.maxHeight = 21;
+            this.width = 230;
+        }
+
+        public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
@@ -429,7 +445,12 @@ package view.primeFaces.surfaceComponents.components
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 			
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
-			
+
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
 			xml["@value"] = this.value;
 			if (columns > 0)
 			{
@@ -453,7 +474,10 @@ package view.primeFaces.surfaceComponents.components
         {
 			componentAddedToEditor();
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-			
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+
 			this.columns = (xml.@columns != undefined) ? int(xml.@columns) : 0;
 			this.value = xml.@value;
 			

@@ -2,8 +2,7 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
-    
-    import mx.collections.ArrayCollection;
+
     import mx.events.CollectionEvent;
     import mx.events.CollectionEventKind;
     import mx.graphics.SolidColor;
@@ -18,7 +17,6 @@ package view.primeFaces.surfaceComponents.components
     import utils.MoonshineBridgeUtils;
     import utils.MxmlCodeUtils;
     import utils.VisualEditorGlobalTags;
-    import utils.VisualEditorType;
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
@@ -26,7 +24,6 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.IncludePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import view.suportClasses.events.SurfaceComponentEvent;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -42,6 +39,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="componentAddedToEditor", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces include component.</p>
@@ -142,6 +141,20 @@ package view.primeFaces.surfaceComponents.components
         public function get propertyEditorClass():Class
         {
             return IncludePropertyEditor;
+        }
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
         }
 
         [Inspectable(environment="none")]
@@ -263,6 +276,11 @@ package view.primeFaces.surfaceComponents.components
 
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             setCommonXMLAttributes(xml);
 			xml.@src = this.path;
             return xml;
@@ -271,7 +289,10 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-			
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+
 			this.path = xml.@src;
 			
 			componentAddedToEditor();

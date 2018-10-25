@@ -20,5 +20,5 @@
 	<forms:TextForm label="Item Value" textProperty="itemValue" prompt="#\{bean.property\}"/>
 	<forms:TextForm label="Converter" textProperty="converter"/>
     <forms:ToggleButtonSelectedForm label="Multiple Selection" textProperty="multiple"/>
-
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

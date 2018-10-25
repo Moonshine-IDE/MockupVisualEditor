@@ -26,6 +26,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toCode", kind="method")]
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces inputText component.</p>
@@ -116,6 +118,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
 
         private var _idAttribute:String;
 		[Bindable(event="idAttributeChanged")]
@@ -323,6 +339,11 @@ package view.primeFaces.surfaceComponents.components
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
 
             xml.@value = this.text;
             xml.@required = this.required;

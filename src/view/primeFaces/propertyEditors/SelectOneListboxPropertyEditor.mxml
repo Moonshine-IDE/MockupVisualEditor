@@ -11,4 +11,5 @@
 	
 	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
 	<primeFaces:SelectOneListboxForm width="100%" height="100%"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

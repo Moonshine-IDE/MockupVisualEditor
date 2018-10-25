@@ -17,7 +17,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
@@ -50,6 +52,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="div", kind="property")]
     [Exclude(name="widthOutput", kind="property")]
     [Exclude(name="heightOutput", kind="property")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces tabView component.</p>
@@ -81,7 +85,8 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:tabView&gt;
      * </pre>
      */
-    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv
+    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent,
+            IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "TabView";
@@ -226,6 +231,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -427,6 +446,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             xml.@orientation = this.orientation;
             xml.@scrollable = this.scrollable;
 
@@ -444,6 +468,9 @@ package view.primeFaces.surfaceComponents.components
             this.removeAllElements();
 
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             if ("@orientation" in xml)
             {

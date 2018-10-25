@@ -35,4 +35,5 @@
 					enabled="{Object(selectedItem).isCounterDisplay}"/>
 	<forms:TextForm label="Counter Template" textProperty="counterTemplate"
 					enabled="{Object(selectedItem).isCounterDisplay}"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

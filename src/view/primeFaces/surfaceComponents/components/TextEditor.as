@@ -18,7 +18,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -40,6 +42,8 @@ package view.primeFaces.surfaceComponents.components
 	[Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="editor", kind="property")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces TextEditor component.</p>
@@ -69,7 +73,8 @@ package view.primeFaces.surfaceComponents.components
      * /&gt;
      * </pre>
      */
-    public class TextEditor extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IInitializeAfterAddedComponent
+    public class TextEditor extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent,
+			IInitializeAfterAddedComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "textEditor";
         public static const ELEMENT_NAME:String = "TextEditor";
@@ -108,52 +113,7 @@ package view.primeFaces.surfaceComponents.components
 			width = minWidth = 110;
 			height = minHeight = 80;
         }
-		
-		/**
-		 * Excluded from ASDoc
-		 */
-		public function componentAddedToEditor():void
-		{
-			// update size
-			width = (width == 110) ? 250 : width;
-			height = (height == 80) ? 100 : height;
-			minWidth = 120;
-			
-			// change/update styles
-			backgroundFill = new SolidColor(0xFFFFFF);
-			
-			menuGroup.paddingLeft = menuGroup.paddingRight = 12;
-			menuGroup.paddingTop = menuGroup.paddingBottom = 8;
-			menuGroup.minHeight = 24;
-			
-			_editor.setStyle("paddingLeft", 12);
-			_editor.setStyle("paddingRight", 12);
-			
-			// update menu images to bit more realistic
-			generateMenuImages(true);
-			if (_pendingText)
-			{
-				_editor.text = _pendingText;
-				_pendingText = null;
-			}
-			if (_pendingPlaceHolder)
-			{
-				_editor.prompt = _pendingPlaceHolder;
-				_pendingPlaceHolder = null;
-			}
-		}
-		
-		/**
-		 * Excluded from ASDoc
-		 */
-		public function getComponentsChildren(...params):OrganizerItem
-		{
-			// @note @return
-			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
-			// children = [] (if drop acceptable component, i.e. div, tab etc.)
-			return (new OrganizerItem(this, "TextEditor", null));
-		}
-		
+
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
 		{
@@ -192,7 +152,21 @@ package view.primeFaces.surfaceComponents.components
         {
             return TextEditorPropertyEditor;
         }
-		
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
+
 		private var _editor:TextArea;
 		public function get editor():TextArea
 		{
@@ -385,9 +359,53 @@ package view.primeFaces.surfaceComponents.components
             return _propertiesChangedEvents;
         }
 
+        public function getComponentsChildren(...params):OrganizerItem
+        {
+            // @note @return
+            // children = null (if not a drop acceptable component, i.e. text input, button etc.)
+            // children = [] (if drop acceptable component, i.e. div, tab etc.)
+            return (new OrganizerItem(this, "TextEditor", null));
+        }
+
+        public function componentAddedToEditor():void
+        {
+            // update size
+            width = (width == 110) ? 250 : width;
+            height = (height == 80) ? 100 : height;
+            minWidth = 120;
+
+            // change/update styles
+            backgroundFill = new SolidColor(0xFFFFFF);
+
+            menuGroup.paddingLeft = menuGroup.paddingRight = 12;
+            menuGroup.paddingTop = menuGroup.paddingBottom = 8;
+            menuGroup.minHeight = 24;
+
+            _editor.setStyle("paddingLeft", 12);
+            _editor.setStyle("paddingRight", 12);
+
+            // update menu images to bit more realistic
+            generateMenuImages(true);
+            if (_pendingText)
+            {
+                _editor.text = _pendingText;
+                _pendingText = null;
+            }
+            if (_pendingPlaceHolder)
+            {
+                _editor.prompt = _pendingPlaceHolder;
+                _pendingPlaceHolder = null;
+            }
+        }
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
 
             setCommonXMLAttributes(xml);
 			xml.@text = this.text;
@@ -399,7 +417,10 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-			
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+
 			this.widgetVar = xml.@widgetVar;
 			this.text = xml.@text;
 			this.placeholder = xml.@placeholder;

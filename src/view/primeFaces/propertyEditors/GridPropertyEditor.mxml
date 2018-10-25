@@ -2,7 +2,7 @@
 <suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
 								  xmlns:s="library://ns.adobe.com/flex/spark"
 								  xmlns:suportclasses="view.suportClasses.*"
-								  xmlns:primeFaces="view.primeFaces.forms.*">
+								  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
 	<suportclasses:layout>
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
     </suportclasses:layout>
@@ -13,4 +13,5 @@
 
 	<s:FormHeading label="Cell details" skinClass="skins.FormHeadingSkin"/>
 	<primeFaces:DivLayoutForm selectedItem="{gridForm.selectedCell}"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

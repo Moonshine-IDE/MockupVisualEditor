@@ -7,8 +7,6 @@ package view.primeFaces.supportClasses
     import spark.layouts.VerticalLayout;
     
     import components.FlowLayout;
-    
-    import view.primeFaces.supportClasses.ContainerDirection;
 
     [ExcludeClass("Container")]
 

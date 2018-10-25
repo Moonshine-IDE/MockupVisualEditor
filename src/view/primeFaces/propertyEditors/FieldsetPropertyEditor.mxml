@@ -16,5 +16,5 @@
 	<forms:TextForm label="Toggle Duration" textProperty="duration"
 					enabled="{Object(selectedItem).toggleable}" restrict="0-9"/>
 	<primeFaces:DivLayoutForm />
-
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

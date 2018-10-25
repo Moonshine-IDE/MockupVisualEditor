@@ -20,4 +20,5 @@
 	<forms:ToggleButtonSelectedForm label="Enables column resizing" textProperty="resizableColumns"/>
 	<forms:ToggleButtonSelectedForm label="Enables pagination" textProperty="paginator"/>
 	<forms:TextForm label="No data to display" textProperty="emptyMessage"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

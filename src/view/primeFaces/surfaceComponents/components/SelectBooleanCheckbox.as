@@ -8,7 +8,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.CheckboxPropertyEditor;
@@ -25,6 +27,8 @@ package view.primeFaces.surfaceComponents.components
 	[Exclude(name="buttonReleased", kind="method")]
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces selectBooleanCheckbox component.</p>
@@ -48,7 +52,7 @@ package view.primeFaces.surfaceComponents.components
 	 * value="null"/&gt;
      * </pre>
      */
-    public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
 		public static const ELEMENT_NAME:String = "CheckBox";
@@ -122,6 +126,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -265,6 +283,11 @@ package view.primeFaces.surfaceComponents.components
 
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
 			xml.@label = this.label;
 			xml.@selected = this.selected;
 
@@ -274,6 +297,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, childFromXMLCallback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             this.label = xml.@label;
             this.selected = xml.@selected == "true" ? true : false;

@@ -10,7 +10,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -38,6 +40,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="restorePropertyOnChangeReference", kind="method")]
     [Exclude(name="addRowsWithColumnsToBody", kind="method")]
     [Exclude(name="commitProperties", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces panelGrid component.</p>
@@ -139,7 +143,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:panelGrid&gt;
      * </pre>
      */
-    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
+    public class PanelGrid extends Table implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
         public static const ELEMENT_NAME:String = "PanelGrid";
@@ -176,6 +180,117 @@ package view.primeFaces.surfaceComponents.components
             this.addEventListener(Event.ADDED_TO_STAGE, onPanelGridAddedRemovedFromStage);
             this.addEventListener(Event.REMOVED_FROM_STAGE, onPanelGridAddedRemovedFromStage);
             this.addEventListener(Event.RESIZE, onPanelGridResize);
+        }
+
+        private var _widthOutput:Boolean = true;
+        private var widthOutputChanged:Boolean;
+
+        [Bindable("widthOutputChanged")]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            if (_widthOutput != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "widthOutput", _widthOutput, value);
+                _widthOutput = value;
+
+                if (!value)
+                {
+                    widthOutputChanged = true;
+                    this.invalidateProperties();
+                }
+
+                dispatchEvent(new Event("widthOutputChanged"));
+            }
+        }
+
+        private var _heightOutput:Boolean = true;
+        private var heightOutputChanged:Boolean;
+
+        [Bindable("heightOutputChanged")]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            if (_heightOutput != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "heightOutput", _heightOutput, value);
+                _heightOutput = value;
+
+                if (!value)
+                {
+                    heightOutputChanged = true;
+                    this.invalidateProperties();
+                }
+
+                dispatchEvent(new Event("heightOutputChanged"));
+            }
+        }
+
+        public function get propertyEditorClass():Class
+        {
+            return PanelGridPropertyEditor;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        private var _propertyChangeFieldReference:PropertyChangeReference;
+        public function get propertyChangeFieldReference():PropertyChangeReference
+        {
+            return _propertyChangeFieldReference;
+        }
+
+        public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+        {
+            _propertyChangeFieldReference = value;
+        }
+
+        private var _isUpdating:Boolean;
+        public function get isUpdating():Boolean
+        {
+            return _isUpdating;
+        }
+
+        public function set isUpdating(value:Boolean):void
+        {
+            _isUpdating = value;
+        }
+
+        private var _isSelected:Boolean;
+
+        public function get isSelected():Boolean
+        {
+            return _isSelected;
+        }
+
+        public function set isSelected(value:Boolean):void
+        {
+            _isSelected = value;
+        }
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
         }
 
         [Inspectable(environment="none")]
@@ -253,104 +368,6 @@ package view.primeFaces.surfaceComponents.components
         override public function set height(value:Number):void
         {
             super.height = value;
-        }
-
-        private var _widthOutput:Boolean = true;
-        private var widthOutputChanged:Boolean;
-
-        [Bindable("widthOutputChanged")]
-        public function get widthOutput():Boolean
-        {
-            return _widthOutput;
-        }
-
-        public function set widthOutput(value:Boolean):void
-        {
-			if (_widthOutput != value)
-			{
-				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "widthOutput", _widthOutput, value);
-				_widthOutput = value;
-
-                if (!value)
-                {
-                    widthOutputChanged = true;
-                    this.invalidateProperties();
-                }
-
-				dispatchEvent(new Event("widthOutputChanged"));
-			}
-        }
-
-        private var _heightOutput:Boolean = true;
-        private var heightOutputChanged:Boolean;
-
-        [Bindable("heightOutputChanged")]
-        public function get heightOutput():Boolean
-        {
-            return _heightOutput;
-        }
-
-        public function set heightOutput(value:Boolean):void
-        {
-			if (_heightOutput != value)
-			{
-				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "heightOutput", _heightOutput, value);
-				_heightOutput = value;
-
-                if (!value)
-                {
-                    heightOutputChanged = true;
-                    this.invalidateProperties();
-                }
-
-				dispatchEvent(new Event("heightOutputChanged"));
-			}
-        }
-
-        public function get propertyEditorClass():Class
-        {
-            return PanelGridPropertyEditor;
-        }
-
-        private var _propertiesChangedEvents:Array;
-        public function get propertiesChangedEvents():Array
-        {
-            return _propertiesChangedEvents;
-        }
-
-        private var _propertyChangeFieldReference:PropertyChangeReference;
-        public function get propertyChangeFieldReference():PropertyChangeReference
-        {
-            return _propertyChangeFieldReference;
-        }
-
-        public function set propertyChangeFieldReference(value:PropertyChangeReference):void
-        {
-            _propertyChangeFieldReference = value;
-        }
-
-        private var _isUpdating:Boolean;
-        public function get isUpdating():Boolean
-        {
-            return _isUpdating;
-        }
-
-        public function set isUpdating(value:Boolean):void
-        {
-            _isUpdating = value;
-        }
-
-        private var _isSelected:Boolean;
-		
-		[Exclude(name="isSelected", kind="property")]
-        public function get isSelected():Boolean
-        {
-            return _isSelected;
-        }
-
-        public function set isSelected(value:Boolean):void
-        {
-            _isSelected = value;
         }
 
         /**
@@ -467,6 +484,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             xml.@rowCount = this.rowCount;
             xml.@columnCount = this.columnCount;
 
@@ -488,6 +510,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             this.bodyRowsXML = xml.Row;
             var header:XMLList = xml.Header.Row;

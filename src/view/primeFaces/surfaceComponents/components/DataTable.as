@@ -36,6 +36,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="toCode", kind="method")]
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces dataTable component</p>
@@ -151,6 +153,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -494,6 +510,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             xml.@paginator = this.paginator;
             xml.@resizableColumns = this.resizableColumns;
             xml.@emptyMessage = this.emptyMessage;
@@ -515,6 +536,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             this.paginator = xml.@paginator == "true";
             this.resizableColumns = xml.@resizableColumns == "true";

@@ -14,7 +14,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
@@ -36,6 +38,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="isSelected", kind="property")]
 	[Exclude(name="dataProvider", kind="property")]
 	[Exclude(name="updateHistoryState", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of selectOneMenu in HTML</p>
@@ -65,7 +69,8 @@ package view.primeFaces.surfaceComponents.components
 	 * &lt;/p:selectOneMenu&gt;
      * </pre>
      */
-    public class SelectOneMenu extends DropDownList implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent
+    public class SelectOneMenu extends DropDownList implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent,
+			IHistorySurfaceCustomHandlerComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneMenu";
         public static const ELEMENT_NAME:String = "SelectOneMenu";
@@ -99,6 +104,70 @@ package view.primeFaces.surfaceComponents.components
 			this.dataProvider = new ArrayCollection([tmpItem]);
 			this.labelField = "itemLabel";
 			this.requireSelection = true;
+        }
+
+        private var _isSelected:Boolean;
+
+        public function get isSelected():Boolean
+        {
+            return _isSelected;
+        }
+
+        public function set isSelected(value:Boolean):void
+        {
+            _isSelected = value;
+        }
+
+        private var _isUpdating:Boolean;
+        public function get isUpdating():Boolean
+        {
+            return _isUpdating;
+        }
+
+        public function set isUpdating(value:Boolean):void
+        {
+            _isUpdating = value;
+        }
+
+        private var _propertyChangeFieldReference:PropertyChangeReference;
+        public function get propertyChangeFieldReference():PropertyChangeReference
+        {
+            return _propertyChangeFieldReference;
+        }
+
+        public function set propertyChangeFieldReference(value:PropertyChangeReference):void
+        {
+            _propertyChangeFieldReference = value;
+        }
+
+        private var _propertiesChangedEvents:Array;
+        public function get propertiesChangedEvents():Array
+        {
+            return _propertiesChangedEvents;
+        }
+
+        protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
+        {
+            _propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
+        }
+
+        public function get propertyEditorClass():Class
+        {
+            return SelectOneMenuPropertyEditor;
+        }
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
         }
 
         [Inspectable(environment="none")]
@@ -234,57 +303,7 @@ package view.primeFaces.surfaceComponents.components
 			_editable = value;
 			dispatchEvent(new Event("editableChanged"));
 		}
-		
-		private var _isSelected:Boolean;
 
-		public function get isSelected():Boolean
-		{
-			return _isSelected;
-		}
-		
-		public function set isSelected(value:Boolean):void
-		{
-			_isSelected = value;
-		}
-		
-		private var _isUpdating:Boolean;
-		public function get isUpdating():Boolean
-		{
-			return _isUpdating;
-		}
-		
-		public function set isUpdating(value:Boolean):void
-		{
-			_isUpdating = value;
-		}
-		
-		private var _propertyChangeFieldReference:PropertyChangeReference;
-		public function get propertyChangeFieldReference():PropertyChangeReference
-		{
-			return _propertyChangeFieldReference;
-		}
-		
-		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
-		{
-			_propertyChangeFieldReference = value;
-		}
-		
-		private var _propertiesChangedEvents:Array;
-		public function get propertiesChangedEvents():Array
-		{
-			return _propertiesChangedEvents;
-		}
-		
-		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
-		{
-			_propertyChangeFieldReference = new PropertyChangeReference(this, fieldName, oldValue, newValue);
-		}
-
-        public function get propertyEditorClass():Class
-        {
-            return SelectOneMenuPropertyEditor;
-        }
-		
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
 			var deleteIndex:int;
@@ -372,7 +391,12 @@ package view.primeFaces.surfaceComponents.components
 			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 			
 			XMLCodeUtils.setSizeFromComponentToXML(this, xml);
-			
+
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
 			xml["@value"] = this.value;
 			xml["@editable"] = this.editable.toString();
 			
@@ -391,7 +415,10 @@ package view.primeFaces.surfaceComponents.components
 		public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-			
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+
 			this.value = xml.@value;
 			this.editable = xml.@editable == "true" ? true : false;
 			

@@ -9,7 +9,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.ICDATAInformation;
+
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
@@ -25,6 +27,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="commitProperties", kind="method")]
     [Exclude(name="isSelected", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces outputLabel component.</p>
@@ -49,7 +53,7 @@ package view.primeFaces.surfaceComponents.components
      * for=""/&gt;
      * </pre>
      */
-    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
         public static const ELEMENT_NAME:String = "OutputLabel";
@@ -125,6 +129,20 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
 
         private var _indicateRequired:Boolean;
         private var indicateRequiredChanged:Boolean;
@@ -294,6 +312,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             xml.@value = this.text;
             xml.@indicateRequired = this.indicateRequired;
 
@@ -308,6 +331,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, childFromXMLCallback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             this.text = xml.@value;
             this.forAttribute = xml["@for"];

@@ -13,4 +13,5 @@
 					prompt="#\{bean.property\}"/>
 	<forms:TextForm label="WidgetVar" textProperty="widgetVar"/>
 	<forms:TextForm label="Placeholder" textProperty="placeholder"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

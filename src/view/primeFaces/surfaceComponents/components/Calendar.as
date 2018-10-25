@@ -38,6 +38,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="setCurrentState", kind="method")]
     [Exclude(name="createChildren", kind="method")]
     [Exclude(name="updateDisplayList", kind="method")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of Calendar in HTML</p>
@@ -101,6 +103,20 @@ package view.primeFaces.surfaceComponents.components
             initializeStates();
 
             this.setStyle("borderVisible", false);
+        }
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
         }
 
         [Inspectable(environment="none")]
@@ -498,6 +514,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             xml.@mode = this.mode;
             xml.@pattern = this.pattern;
 
@@ -551,6 +572,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             this.pattern = xml.@pattern ? xml.@pattern : this.pattern;
 

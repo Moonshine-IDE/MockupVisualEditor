@@ -27,4 +27,5 @@
 	<forms:TextForm label="Maximum Length" textProperty="maxLength"
 					restrict="0-9" change="textform1_changeHandler(event)"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

@@ -4,11 +4,6 @@
 								  xmlns:suportclasses="view.suportClasses.*"
 								  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*"
 								  height="100%">
-	<fx:Script>
-		<![CDATA[
-			import skins.FormHeadingSkin;
-		]]>
-	</fx:Script>
 	<suportclasses:layout>
         <s:VerticalLayout id="thisLayout" gap="10" padding="10" horizontalAlign="contentJustify"/>
     </suportclasses:layout>
@@ -19,4 +14,5 @@
 	<forms:TextForm label="Var" textProperty="treeVar"/>
 	<forms:TextForm label="Value" textProperty="treeValue"
 					prompt="#\{bean.property\}"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

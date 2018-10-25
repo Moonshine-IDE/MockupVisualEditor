@@ -34,6 +34,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="EVENT_CHILDREN_UPDATED", kind="property")]
     [Exclude(name="DEFAULT_DECIMAL_SEPARATOR", kind="property")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces inputNumber component.</p>
@@ -152,7 +154,21 @@ package view.primeFaces.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
-		
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
+        }
+
 		public function restorePropertyOnChangeReference(nameField:String, value:*):void
 		{
 			switch(nameField)
@@ -436,6 +452,11 @@ package view.primeFaces.surfaceComponents.components
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
 
             xml.@value = this.text;
             xml.@required = this.required;

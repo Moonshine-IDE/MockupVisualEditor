@@ -48,6 +48,8 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="commitProperties", kind="method")]
     [Exclude(name="widthOutput", kind="property")]
     [Exclude(name="heightOutput", kind="property")]
+    [Exclude(name="cdataXML", kind="property")]
+    [Exclude(name="cdataInformation", kind="property")]
 
     /**
      * <p>Representation of PrimeFaces Grid CSS component.</p>
@@ -203,6 +205,20 @@ package view.primeFaces.surfaceComponents.components
         public function get propertiesChangedEvents():Array
         {
             return _propertiesChangedEvents;
+        }
+
+        private var _cdataXML:XML;
+
+        public function get cdataXML():XML
+        {
+            return _cdataXML;
+        }
+
+        private var _cdataInformation:String;
+
+        public function get cdataInformation():String
+        {
+            return _cdataInformation;
         }
 
         override public function set selectedRow(value:int):void
@@ -391,6 +407,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
+            if (cdataXML)
+            {
+                xml.appendChild(cdataXML);
+            }
+
             var gridRowNumElements:int = this.numElements;
             for (var row:int = 0; row < gridRowNumElements; row++)
             {
@@ -422,6 +443,9 @@ package view.primeFaces.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            _cdataXML = XMLCodeUtils.getCdataXML(xml);
+            _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
             var elementsXML:XMLList = xml.elements();
             if (elementsXML.length() > 0)

@@ -14,4 +14,5 @@
     <primeFaces:DecimalSeparatorTextForm label="Decimal separator char"
                                          textProperty="decimalSeparator" maxChar="1"/>
     <forms:TextForm label="Thousand separator char" textProperty="thousandSeparator" maxChar="1"/>
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

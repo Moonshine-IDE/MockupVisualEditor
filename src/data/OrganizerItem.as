@@ -19,5 +19,13 @@ package data
 			this.name = name;
 			this.type = type;
 		}
+		
+		public function setItemsWithAnother(value:OrganizerItem):void
+		{
+			this.item = value.item;
+			this.children = value.children;
+			this.name = value.name;
+			this.type = value.type;
+		}
 	}
 }

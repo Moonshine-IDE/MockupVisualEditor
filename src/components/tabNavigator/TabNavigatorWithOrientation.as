@@ -102,7 +102,6 @@ package components.tabNavigator
 			{
 				var isLabelBlank:Boolean;
 				var item:ButtonBarButton = tabBar.dataGroup.getElementAt(this.selectedIndex) as ButtonBarButton;
-				trace(item.labelDisplay['width'], item.labelDisplay['height']);
 				
 				updatePropertyChangeReference("label", [{field:selectedIndex, value:selectedTab.label}, {field:selectedIndex, value:item.label}], [{field:selectedIndex, value:label}, {field:selectedIndex, value:label}]);
 

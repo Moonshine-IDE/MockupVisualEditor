@@ -5,8 +5,9 @@ package view.suportClasses
 	import spark.components.ButtonBarButton;
 	import spark.components.NavigatorContent;
 	
-	import view.interfaces.IHistorySurfaceCustomHandlerComponent;
+	import view.VisualEditor;
 	import view.interfaces.IHistorySurfaceComponent;
+	import view.interfaces.IHistorySurfaceCustomHandlerComponent;
 	import view.primeFaces.surfaceComponents.components.TabView;
 
 	public class PropertyChangeReferenceTabView extends PropertyChangeReference
@@ -16,7 +17,7 @@ package view.suportClasses
 			super(fieldClass, fieldName, fieldLastValue, fieldNewValue);
 		}
 		
-		override protected function changeItem(value:*):void
+		override protected function changeItem(value:*, editor:VisualEditor):void
 		{
 			var i:Object;
 			if (fieldName && (value is Array))
@@ -48,6 +49,8 @@ package view.suportClasses
 				// assigning single field change
 				IHistorySurfaceCustomHandlerComponent(fieldClass).restorePropertyOnChangeReference(fieldName, value);
 			}
+			
+			editor.componentsOrganizer.updateItemWithPropertyChanges(this, true);
 		}
 	}
 }

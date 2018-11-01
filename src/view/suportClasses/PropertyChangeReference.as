@@ -47,7 +47,7 @@ package view.suportClasses
 					break;
 				
 				default:
-					changeItem(fieldLastValue);
+					changeItem(fieldLastValue, editor);
 					break;
 			}
 			
@@ -76,7 +76,7 @@ package view.suportClasses
 					break;
 				
 				default:
-					changeItem(fieldNewValue);
+					changeItem(fieldNewValue, editor);
 					break;
 			}
 			
@@ -123,7 +123,7 @@ package view.suportClasses
 			editor.editingSurface.deleteItem(fieldClass as ISurfaceComponent);
 		}*/
 		
-		protected function changeItem(value:*):void
+		protected function changeItem(value:*, editor:VisualEditor):void
 		{
 			// against assigning multiple field changes
 			if (value is Array)
@@ -138,6 +138,8 @@ package view.suportClasses
 				// assigning single field change
 				fieldClass[fieldName] = value;
 			}
+			
+			editor.componentsOrganizer.updateItemWithPropertyChanges(this, true);
 		}
 	}
 }

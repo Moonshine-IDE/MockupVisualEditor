@@ -36,7 +36,7 @@ package view.primeFaces.supportClasses.table
 			
 			
             var lbl:Label = getSelectedLabel(selectedRowIndex, selectedColumnIndex);
-			if (lbl.text != title && updatePropertyChangeReference != null) updatePropertyChangeReference("titleChanged", {value:lbl.text, parent:lbl}, {value:title, parent:lbl});
+			if (lbl.text != title && updatePropertyChangeReference != null) updatePropertyChangeReference("titleChanged", {value:lbl.text, parent:lbl, index:selectedColumn}, {value:title, parent:lbl, index:selectedColumn});
             lbl.text = title;
         }
 

@@ -100,9 +100,15 @@
 				});
 			}
 			
-			public function updateItemWithPropertyChanges(change:PropertyChangeReference):void
+			public function updateItemWithPropertyChanges(change:PropertyChangeReference, isUndoRedo:Boolean=false):void
 			{
 				if (!tree.selectedItem) return;
+				
+				if (isUndoRedo)
+				{
+					updateTreeByComponentChanges(change);
+					return;
+				}
 				
 				if (change.fieldClass == tree.selectedItem.item)
 				{
@@ -118,6 +124,14 @@
 					lastChange = change;
 					switch (change.fieldName)
 					{
+						case "label":
+							if (change.fieldClass is TabView)
+							{
+								organizerItem = (tree.selectedItem as OrganizerItem).children[change.fieldLastValue[0].field];
+								organizerItem.name = change.fieldNewValue[0].value;
+								refreshItem(change.fieldClass as IVisualElement);
+							}
+							break;
 						case "addItemAt":
 							if (change.fieldClass is TabView)
 							{
@@ -279,6 +293,25 @@
 							break;
 					}
 				}
+			}
+			
+			private function updateTreeByComponentChanges(change:PropertyChangeReference):void
+			{
+				var organizerItem: OrganizerItem;
+				var existingItem:OrganizerItem = tree.selectedItem as OrganizerItem;
+				
+				findItemInDepth(components.source, change.fieldClass as IVisualElement);
+				this.callLater(function():void
+				{
+					if ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid))
+					{
+						editingSurface.selectedItem = null;
+						organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren();
+						
+						foundIndepthItem.setItemsWithAnother(organizerItem);
+						refreshItem(change.fieldClass as IVisualElement);
+					}
+				});
 			}
 			
 			private function updateCellLabels(component:OrganizerItem):void

@@ -129,7 +129,7 @@ package view.primeFaces.supportClasses
             return gridRow;
         }
 
-        public function removeRow(index:int):IVisualElement
+        public function removeRow(index:int, dispatchChange:Boolean=true):IVisualElement
         {
             if (this.numElements > MIN_ROW_COUNT)
             {
@@ -156,7 +156,7 @@ package view.primeFaces.supportClasses
 
                 var selRow:int = this.selectedRow - 1;
                 this.selectedRow = selRow == -1 ? 0 : selRow;
-                dispatchEvent(new Event("itemRemoved"));
+                if (dispatchChange) dispatchEvent(new Event("itemRemoved"));
 
                 return removedElement;
             }
@@ -164,7 +164,7 @@ package view.primeFaces.supportClasses
             return null;
         }
 
-        public function addColumn(rowIndex:int):GridItem
+        public function addColumn(rowIndex:int, dispatchChange:Boolean=true):GridItem
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             if (gridRow)
@@ -180,7 +180,7 @@ package view.primeFaces.supportClasses
                 }
 
                 dispatchEvent(new SurfaceComponentEvent(SurfaceComponentEvent.ComponentAdded, [div]));
-                dispatchEvent(new Event("itemAdded"));
+                if (dispatchChange) dispatchEvent(new Event("itemAdded"));
 
                 return gridItem;
             }
@@ -188,7 +188,7 @@ package view.primeFaces.supportClasses
             return null;
         }
 
-        public function removeColumn(rowIndex:int, columnIndex:int):IVisualElement
+        public function removeColumn(rowIndex:int, columnIndex:int, dispatchChange:Boolean=true):IVisualElement
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             if (gridRow && gridRow.numElements > MIN_COLUMN_COUNT)
@@ -207,7 +207,7 @@ package view.primeFaces.supportClasses
                 var selColumn:int = this.selectedColumn - 1;
                 this.selectedColumn = selColumn == -1 ? 0 : selColumn;
 
-                dispatchEvent(new Event("itemRemoved"));
+                if (dispatchChange) dispatchEvent(new Event("itemRemoved"));
 
                 return removedColumn;
             }

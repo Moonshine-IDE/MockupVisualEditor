@@ -71,7 +71,7 @@ package view.primeFaces.supportClasses.table
             return rowItem;
         }
 
-        override public function addColumn(rowIndex:int):GridItem
+        override public function addColumn(rowIndex:int, dispatchChange:Boolean=true):GridItem
         {
             var gridItem:GridItem = super.addColumn(rowIndex);
             var div:Div = gridItem.getElementAt(0) as Div;

@@ -8,8 +8,6 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
-    import spark.components.NavigatorContent;
-    
     import data.OrganizerItem;
     
     import utils.MxmlCodeUtils;
@@ -348,10 +346,12 @@ package view.primeFaces.surfaceComponents.components
 					{
 						deleteIndex = this.getElementIndex(value.object);
 						this.removeElementAt(deleteIndex);
+						_selectedRow--;
 					} 
 					catch(e:Error)
 					{
 						this.addElementAt(value.object, value.index);
+						_selectedRow++;
 					}
 					
 					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
@@ -361,10 +361,12 @@ package view.primeFaces.surfaceComponents.components
 					{
 						deleteIndex = this.getElementIndex(value);
 						this.removeElementAt(deleteIndex);
+						_selectedRow--;
 					} 
 					catch(e:Error)
 					{
 						this.addElement(value);
+						_selectedRow++;
 					}
 					
 					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
@@ -374,10 +376,12 @@ package view.primeFaces.surfaceComponents.components
 					{
 						deleteIndex = value.parent.getElementIndex(value.object);
 						value.parent.removeElementAt(deleteIndex);
+						_selectedColumn--;
 					} 
 					catch(e:Error)
 					{
 						value.parent.addElementAt(value.object, value.index);
+						_selectedColumn++;
 					}
 					
 					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
@@ -387,10 +391,12 @@ package view.primeFaces.surfaceComponents.components
 					{
 						deleteIndex = value.parent.getElementIndex(value.object);
 						value.parent.removeElementAt(deleteIndex);
+						_selectedColumn--;
 					} 
 					catch(e:Error)
 					{
 						value.parent.addElement(value.object);
+						_selectedColumn++;
 					}
 					
 					dispatchEvent(new Event(EVENT_CHILDREN_UPDATED));
@@ -609,9 +615,9 @@ package view.primeFaces.surfaceComponents.components
             return row;
         }
 
-        override public function removeRow(index:int):IVisualElement
+        override public function removeRow(index:int, dispatchChange:Boolean=true):IVisualElement
         {
-            var removedElement:IVisualElement = super.removeRow(index);
+            var removedElement:IVisualElement = super.removeRow(index, false);
 
             if (removedElement)
             {
@@ -623,13 +629,13 @@ package view.primeFaces.surfaceComponents.components
             return removedElement;
         }
 
-        override public function addColumn(rowIndex:int):GridItem
+        override public function addColumn(rowIndex:int, dispatchChange:Boolean=true):GridItem
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             var gridItem:GridItem = null;
             if (gridRow && gridRow.numElements < maxColumnCount)
             {
-                gridItem = super.addColumn(rowIndex);
+                gridItem = super.addColumn(rowIndex, false);
 				var historyObject:Object = {object:gridItem, parent:gridRow, rowIndex:rowIndex, colIndex:gridRow.numChildren-1};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "addColumnAt", historyObject, historyObject);
 				dispatchEvent(new Event("itemAdded"));
@@ -638,12 +644,12 @@ package view.primeFaces.surfaceComponents.components
             return gridItem;
         }
 
-        override public function removeColumn(rowIndex:int, columnIndex:int):IVisualElement
+        override public function removeColumn(rowIndex:int, columnIndex:int, dispatchChange:Boolean=true):IVisualElement
         {
             var gridRow:GridRow = this.getElementAt(rowIndex) as GridRow;
             if (gridRow && gridRow.numElements > MIN_COLUMN_COUNT)
             {
-                var removedColumn:IVisualElement = super.removeColumn(rowIndex, columnIndex);
+                var removedColumn:IVisualElement = super.removeColumn(rowIndex, columnIndex, false);
 				
 				var historyObject:Object = {object:removedColumn, parent:gridRow, index:columnIndex};
 				_propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "removeColumnAt", historyObject, historyObject);

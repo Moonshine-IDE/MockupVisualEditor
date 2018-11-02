@@ -1,112 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:List xmlns:fx="http://ns.adobe.com/mxml/2009"
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
-	itemRenderer="view.ComponentListItemRenderer"
-    skinClass="skins.ComponentListSkin" contentBackgroundColor="#FCFCFC">
+	creationComplete="initializeComponents()"
+	gap="0">
 	<fx:Script>
-	<![CDATA[
-		import data.ComponentListItem;
-
-		import org.apache.flex.collections.ArrayList;
-
-		import utils.VisualEditorType;
-
-		import view.flex.surfaceComponents.components.Button;
-		import view.flex.surfaceComponents.components.Calendar;
-		import view.flex.surfaceComponents.components.CheckBox;
-		import view.flex.surfaceComponents.components.Container;
-		import view.flex.surfaceComponents.components.DropDownList;
-		import view.flex.surfaceComponents.components.Image;
-		import view.flex.surfaceComponents.components.Input;
-		import view.flex.surfaceComponents.components.List;
-		import view.flex.surfaceComponents.components.RadioButton;
-		import view.flex.surfaceComponents.components.Table;
-		import view.flex.surfaceComponents.components.Tabs;
-		import view.flex.surfaceComponents.components.Text;
-		import view.flex.surfaceComponents.components.Tree;
-		import view.flex.surfaceComponents.components.Window;
-		import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
-		import view.primeFaces.surfaceComponents.components.Button;
-		import view.primeFaces.surfaceComponents.components.DataTable;
-		import view.primeFaces.surfaceComponents.components.Div;
-		import view.primeFaces.surfaceComponents.components.Fieldset;
-		import view.primeFaces.surfaceComponents.components.Grid;
-		import view.primeFaces.surfaceComponents.components.Include;
-		import view.primeFaces.surfaceComponents.components.InputMask;
-		import view.primeFaces.surfaceComponents.components.InputNumber;
-		import view.primeFaces.surfaceComponents.components.InputText;
-		import view.primeFaces.surfaceComponents.components.InputTextarea;
-		import view.primeFaces.surfaceComponents.components.OutputLabel;
-		import view.primeFaces.surfaceComponents.components.PanelGrid;
-		import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
-		import view.primeFaces.surfaceComponents.components.SelectOneListbox;
-		import view.primeFaces.surfaceComponents.components.SelectOneMenu;
-		import view.primeFaces.surfaceComponents.components.SelectOneRadio;
-		import view.primeFaces.surfaceComponents.components.TabView;
-		import view.primeFaces.surfaceComponents.components.TextEditor;
-
-		private var _visualEditorType:String;
-
-		public function set visualEditorType(value:String):void
-		{
-			_visualEditorType = value;
-
-			initializeComponents();
-		}
-
-		private function initializeComponents():void
-		{
-			if (this.dataProvider || !_visualEditorType) return;
-
-			var dp:ArrayList;
-			if (VisualEditorType.FLEX == _visualEditorType)
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import data.ComponentListItem;
+			
+			import utils.VisualEditorType;
+			
+			import view.flex.surfaceComponents.components.Button;
+			import view.flex.surfaceComponents.components.Calendar;
+			import view.flex.surfaceComponents.components.CheckBox;
+			import view.flex.surfaceComponents.components.Container;
+			import view.flex.surfaceComponents.components.DropDownList;
+			import view.flex.surfaceComponents.components.Image;
+			import view.flex.surfaceComponents.components.Input;
+			import view.flex.surfaceComponents.components.List;
+			import view.flex.surfaceComponents.components.RadioButton;
+			import view.flex.surfaceComponents.components.Table;
+			import view.flex.surfaceComponents.components.Tabs;
+			import view.flex.surfaceComponents.components.Text;
+			import view.flex.surfaceComponents.components.Tree;
+			import view.flex.surfaceComponents.components.Window;
+			import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
+			import view.primeFaces.surfaceComponents.components.Button;
+			import view.primeFaces.surfaceComponents.components.DataTable;
+			import view.primeFaces.surfaceComponents.components.Div;
+			import view.primeFaces.surfaceComponents.components.Fieldset;
+			import view.primeFaces.surfaceComponents.components.Grid;
+			import view.primeFaces.surfaceComponents.components.Include;
+			import view.primeFaces.surfaceComponents.components.InputMask;
+			import view.primeFaces.surfaceComponents.components.InputNumber;
+			import view.primeFaces.surfaceComponents.components.InputText;
+			import view.primeFaces.surfaceComponents.components.InputTextarea;
+			import view.primeFaces.surfaceComponents.components.OutputLabel;
+			import view.primeFaces.surfaceComponents.components.PanelGrid;
+			import view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
+			import view.primeFaces.surfaceComponents.components.SelectOneListbox;
+			import view.primeFaces.surfaceComponents.components.SelectOneMenu;
+			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
+			import view.primeFaces.surfaceComponents.components.TabView;
+			import view.primeFaces.surfaceComponents.components.TextEditor;
+			
+			public var visualEditorType:String;
+			
+			[Bindable] private var collection:ArrayCollection;
+			
+			private function initializeComponents():void
 			{
-				dp = new ArrayList([
-					new ComponentListItem("Button", view.flex.surfaceComponents.components.Button),
-					new ComponentListItem("Calendar", view.flex.surfaceComponents.components.Calendar),
-					new ComponentListItem("Check Box", view.flex.surfaceComponents.components.CheckBox),
-					new ComponentListItem("Drop Down List", view.flex.surfaceComponents.components.DropDownList),
-					new ComponentListItem("Image", view.flex.surfaceComponents.components.Image),
-					new ComponentListItem("List", view.flex.surfaceComponents.components.List),
-					new ComponentListItem("Radio Button", view.flex.surfaceComponents.components.RadioButton),
-					new ComponentListItem("Table", view.flex.surfaceComponents.components.Table),
-					new ComponentListItem("Tabs", view.flex.surfaceComponents.components.Tabs),
-					new ComponentListItem("Text", view.flex.surfaceComponents.components.Text),
-					new ComponentListItem("Input", view.flex.surfaceComponents.components.Input),
-					new ComponentListItem("Panel", view.flex.surfaceComponents.components.Window),
-					new ComponentListItem("Tree", view.flex.surfaceComponents.components.Tree),
-					new ComponentListItem("Container", view.flex.surfaceComponents.components.Container)
-				]);
-			}
-			else
-			{
-				dp = new ArrayList([
-					new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
-					new ComponentListItem("InputMask", InputMask),
-					new ComponentListItem("InputNumber", InputNumber),
-					new ComponentListItem("InputText", InputText),
-					new ComponentListItem("InputTextarea", InputTextarea),
-					new ComponentListItem("TextEditor", TextEditor),
-					new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
-					new ComponentListItem("SelectOneRadio", SelectOneRadio),
-					new ComponentListItem("SelectOneMenu", SelectOneMenu),
-					new ComponentListItem("SelectOneListbox", SelectOneListbox),
-					new ComponentListItem("OutputLabel", OutputLabel),
-					new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
-					new ComponentListItem("TabView", TabView),
-					new ComponentListItem("Tree", view.primeFaces.surfaceComponents.components.Tree),
-					new ComponentListItem("DataTable", DataTable),
-					new ComponentListItem("Fieldset", Fieldset),
-					new ComponentListItem("Include", Include),
-					new ComponentListItem("Div", Div),
-					new ComponentListItem("Grid", Grid),
-					new ComponentListItem("PanelGrid", PanelGrid),
-					new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar)
-				]);
+				if (lstComponents.dataProvider || !visualEditorType) return;
+				
+				collection = new ArrayCollection();
+				if (VisualEditorType.FLEX == visualEditorType)
+				{
+					collection = new ArrayCollection([
+						new ComponentListItem("Button", view.flex.surfaceComponents.components.Button),
+						new ComponentListItem("Calendar", view.flex.surfaceComponents.components.Calendar),
+						new ComponentListItem("Check Box", view.flex.surfaceComponents.components.CheckBox),
+						new ComponentListItem("Drop Down List", view.flex.surfaceComponents.components.DropDownList),
+						new ComponentListItem("Image", view.flex.surfaceComponents.components.Image),
+						new ComponentListItem("List", view.flex.surfaceComponents.components.List),
+						new ComponentListItem("Radio Button", view.flex.surfaceComponents.components.RadioButton),
+						new ComponentListItem("Table", view.flex.surfaceComponents.components.Table),
+						new ComponentListItem("Tabs", view.flex.surfaceComponents.components.Tabs),
+						new ComponentListItem("Text", view.flex.surfaceComponents.components.Text),
+						new ComponentListItem("Input", view.flex.surfaceComponents.components.Input),
+						new ComponentListItem("Panel", view.flex.surfaceComponents.components.Window),
+						new ComponentListItem("Tree", view.flex.surfaceComponents.components.Tree),
+						new ComponentListItem("Container", view.flex.surfaceComponents.components.Container)
+					]);
+				}
+				else
+				{
+					collection = new ArrayCollection([
+						new ComponentListItem("Button", view.primeFaces.surfaceComponents.components.Button),
+						new ComponentListItem("InputMask", InputMask),
+						new ComponentListItem("InputNumber", InputNumber),
+						new ComponentListItem("InputText", InputText),
+						new ComponentListItem("InputTextarea", InputTextarea),
+						new ComponentListItem("TextEditor", TextEditor),
+						new ComponentListItem("SelectBooleanCheckbox", SelectBooleanCheckbox),
+						new ComponentListItem("SelectOneRadio", SelectOneRadio),
+						new ComponentListItem("SelectOneMenu", SelectOneMenu),
+						new ComponentListItem("SelectOneListbox", SelectOneListbox),
+						new ComponentListItem("OutputLabel", OutputLabel),
+						new ComponentListItem("AutoComplete", AutoCompleteDropDownList),
+						new ComponentListItem("TabView", TabView),
+						new ComponentListItem("Tree", view.primeFaces.surfaceComponents.components.Tree),
+						new ComponentListItem("DataTable", DataTable),
+						new ComponentListItem("Fieldset", Fieldset),
+						new ComponentListItem("Include", Include),
+						new ComponentListItem("Div", Div),
+						new ComponentListItem("Grid", Grid),
+						new ComponentListItem("PanelGrid", PanelGrid),
+						new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar)
+					]);
+				}
 			}
 
-			this.dataProvider = dp;
-		}
+			private function filterSearch():void
+			{
+				// probable termination
+				if (!lstComponents.dataProvider) return;
+				
+				collection.filterFunction = searchComponent;
+				collection.refresh();
+			}
+			
+			private function searchComponent(item:Object):Boolean
+			{
+				var tmpDataString:String = item.name.toLowerCase();
+				if (tmpDataString.indexOf(txtSearch.text.toLowerCase()) != -1) return true;
+				return false;
+			}
 		]]>
 	</fx:Script>
-</s:List>
+	
+	<s:TextInput id="txtSearch" 
+				 width="100%" height="30"
+				 prompt="Search Component.."
+				 change="filterSearch()"/>
+	
+	<s:List id="lstComponents" 
+			width="100%" height="100%"
+			itemRenderer="view.ComponentListItemRenderer"
+			skinClass="skins.ComponentListSkin" contentBackgroundColor="#FCFCFC"
+			dataProvider="{collection}"/>
+</s:VGroup>

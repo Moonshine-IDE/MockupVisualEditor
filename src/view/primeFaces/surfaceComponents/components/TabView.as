@@ -750,7 +750,17 @@ package view.primeFaces.surfaceComponents.components
 
         private function onTabChange(event:IndexChangeEvent):void
         {
+			// the following event throw makes Moonshine as something has changed
+			// to the file adding the * mark to the tab; 
+			// this also makes Organizer updates by the component's
+			// last PropertyChangeReference value; 
+			// I see the based on this event some fields in property editor
+			// updates though; Following flag will not raise this event outside
+			// of the Visual Editor library and will prevent Moonshine from thinking
+			// something has changed, and leave Organizer from self-updating
+			isUpdating = true;
             dispatchEvent(event.clone());
+			isUpdating = false;
 
             invalidateTabViewSize();
         }

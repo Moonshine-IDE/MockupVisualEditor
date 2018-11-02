@@ -60,6 +60,7 @@
 			
 			public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement, droppedIndex:int=-1):void
 			{
+				lastTopParent = foundIndepthItem = null;
 				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
 				this.callLater(function():void
 				{
@@ -81,6 +82,7 @@
 			
 			public function removeDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
 			{
+				lastTopParent = foundIndepthItem = null;
 				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
 				this.callLater(function():void
 				{
@@ -102,13 +104,20 @@
 			
 			public function updateItemWithPropertyChanges(change:PropertyChangeReference, isUndoRedo:Boolean=false):void
 			{
-				if (!tree.selectedItem) return;
-				
 				if (isUndoRedo)
 				{
 					updateTreeByComponentChanges(change);
 					return;
 				}
+				
+				var currentItemUnderTest:OrganizerItem = tree.selectedItem as OrganizerItem;
+				if (!currentItemUnderTest) 
+				{
+					findItemInDepth(components.source, change.fieldClass as IVisualElement);
+					if (foundIndepthItem) currentItemUnderTest = foundIndepthItem;
+				}
+				
+				if (!currentItemUnderTest) return;
 				
 				if (change.fieldClass == tree.selectedItem.item)
 				{

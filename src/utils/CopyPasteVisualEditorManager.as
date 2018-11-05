@@ -5,15 +5,17 @@ package utils
     import flash.events.FocusEvent;
     import flash.events.KeyboardEvent;
     import flash.ui.Keyboard;
-
+    
     import mx.core.IVisualElement;
-
     import mx.core.IVisualElementContainer;
     import mx.core.UIComponent;
-
+    
     import view.VisualEditor;
+    import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IMainApplication;
     import view.interfaces.ISurfaceComponent;
+    import view.suportClasses.PropertyChangeReference;
+    import view.suportClasses.events.PropertyEditorChangeEvent;
 
     public class CopyPasteVisualEditorManager
     {
@@ -111,6 +113,17 @@ package utils
             item.fromXML(itemXML, itemFromXML);
             parent.addElement(IVisualElement(item));
             this.visualEditor.editingSurface.addItem(item);
+			
+			// supplying the change to undo manager
+			if (item is IHistorySurfaceComponent)
+			{
+				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(item as IHistorySurfaceComponent);
+				tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(item.owner).getElementIndex(item as IVisualElement);
+				tmpChangeRef.fieldClassParent = item.owner as IVisualElementContainer;
+				
+				this.visualEditor.editingSurface.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
+			}
+			
             return item;
         }
     }

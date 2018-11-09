@@ -125,6 +125,7 @@ package utils
 				tmpChangeRef.fieldClassParent = item.owner as IVisualElementContainer;
 				
 				this.visualEditor.editingSurface.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
+				this.visualEditor.editingSurface.organizer.addDroppedElement(parent as IVisualElement, item as IVisualElement);
 				targetDuplicateRoot = null;
 			}
 			

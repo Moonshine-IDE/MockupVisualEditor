@@ -20,6 +20,7 @@ package utils
     public class CopyPasteVisualEditorManager
     {
         private var visualEditor:VisualEditor;
+		private var targetDuplicateRoot:IVisualElementContainer;
 
         public function CopyPasteVisualEditorManager(visualEditor:VisualEditor)
         {
@@ -73,13 +74,13 @@ package utils
 
         private function paste():void
         {
-            var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
-            if (!selectedElement) return;
+            if (!this.visualEditor.editingSurface.selectedItem) return;
 
-            var container:IVisualElementContainer = selectedElement as IVisualElementContainer;
+            var container:IVisualElementContainer = this.visualEditor.editingSurface.selectedItem as IVisualElementContainer;
             if (container)
             {
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
+				targetDuplicateRoot = container;
                 itemFromXML(container, pasteCode);
             }
         }
@@ -87,12 +88,13 @@ package utils
         public function duplicate():void
         {
             var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
-            if (!selectedElement) return;
+            if (!this.visualEditor.editingSurface.selectedItem) return;
 
             var container:IVisualElementContainer = (selectedElement as UIComponent).parent as IVisualElementContainer;
             if (container)
             {
                 var code:XML = selectedElement.toXML();
+				targetDuplicateRoot = container;
                 itemFromXML(container, code);
             }
         }
@@ -115,13 +117,15 @@ package utils
             this.visualEditor.editingSurface.addItem(item);
 			
 			// supplying the change to undo manager
-			if (item is IHistorySurfaceComponent)
+			// should execute once against target where paste/duplicate happened
+			if (item is IHistorySurfaceComponent && parent === targetDuplicateRoot)
 			{
 				var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(item as IHistorySurfaceComponent);
 				tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(item.owner).getElementIndex(item as IVisualElement);
 				tmpChangeRef.fieldClassParent = item.owner as IVisualElementContainer;
 				
 				this.visualEditor.editingSurface.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
+				targetDuplicateRoot = null;
 			}
 			
             return item;

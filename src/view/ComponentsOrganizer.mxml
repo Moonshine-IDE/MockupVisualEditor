@@ -528,23 +528,4 @@
 								 change="onItemSelectionChanged(event)"
 								 itemRenderer="{new ClassFactory(OrganizerTreeRenderer)}"
 								 keyUp="onTreeItemKeyUp(event)"/>
-	
-	<!-- for v1.16.0 -->
-	<s:Group id="grpMessage" 
-			 width="100%" autoLayout="true">
-		<s:Rect width="100%" height="100%">
-			<s:fill>
-				<s:SolidColor color="0xffffCC"/>
-			</s:fill>
-			<s:stroke>
-				<s:SolidColorStroke color="0xCCCCCC"/>
-			</s:stroke>
-		</s:Rect>
-		<s:Label text="Organizer is still under development. If the tree gets out of sync with the mockup, use the refresh button at the top of the panel."
-				 width="100%" maxDisplayedLines="4" fontSize="11"
-				 paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="12"/>
-		<s:Image source="@Embed('/assets/icoClose.png')"
-				 right="4" top="4" buttonMode="true" useHandCursor="false" mouseChildren="false"
-				 click="grpMessage.includeInLayout = grpMessage.visible = false"/>
-	</s:Group>
 </s:VGroup>

@@ -10,6 +10,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayCollection;
+			import mx.containers.GridItem;
 			import mx.containers.GridRow;
 			import mx.core.IVisualElement;
 			import mx.core.IVisualElementContainer;
@@ -41,6 +42,7 @@
 			private var foundIndepthItem:OrganizerItem;
 			private var lastTopParent:Object;
 			private var lastChange:PropertyChangeReference;
+			private var isProcessRunning:Boolean;
 			
 			public function loadFirstData(surface:EditingSurface):void
 			{
@@ -60,7 +62,7 @@
 			
 			public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement, droppedIndex:int=-1):void
 			{
-				lastTopParent = foundIndepthItem = null;
+				isProcessRunning = true;
 				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
 				this.callLater(function():void
 				{
@@ -77,12 +79,12 @@
 					
 					refreshItem(component);
 					foundIndepthItem = null;
+					isProcessRunning = false;
 				});
 			}
 			
 			public function removeDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
 			{
-				lastTopParent = foundIndepthItem = null;
 				findItemInDepth(components.source, isSubDivComponent(ownerComponent));
 				this.callLater(function():void
 				{
@@ -312,13 +314,13 @@
 				findItemInDepth(components.source, change.fieldClass as IVisualElement);
 				this.callLater(function():void
 				{
-					if ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid))
+					if (foundIndepthItem && ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid)))
 					{
-						editingSurface.selectedItem = null;
 						organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren();
 						
 						foundIndepthItem.setItemsWithAnother(organizerItem);
 						refreshItem(change.fieldClass as IVisualElement);
+						editingSurface.selectedItem = null;
 					}
 				});
 			}
@@ -397,10 +399,11 @@
 				return [new OrganizerItem(container, "Stage", componentsArray)];
 			}
 			
-			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, topParent:Object=null):void
+			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, isRoot:Boolean=true, topParent:Object=null):void
 			{
 				// probable termination
-				if (foundIndepthItem) return;
+				if (isRoot) lastTopParent = foundIndepthItem = null;
+				else if (foundIndepthItem) return;
 				
 				for each (var oItem:OrganizerItem in items)
 				{
@@ -413,7 +416,7 @@
 					else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem) 
 					{
 						if (items === components.source) topParent = oItem;
-						findItemInDepth(oItem.children, ownerComponent, topParent);
+						findItemInDepth(oItem.children, ownerComponent, false, topParent);
 					}
 				}
 			}
@@ -432,7 +435,6 @@
 				
 				if (!isRefreshTree || !item) return;
 				
-				lastTopParent = foundIndepthItem = null;
 				this.callLater(function():void
 				{
 					if (!tmpFoundItemInDepth) findItemInDepth(components.source, item);
@@ -459,6 +461,13 @@
 			{
 				if (value is TabView) return (value as TabView).div;
 				else if (value is Fieldset) return (value as Fieldset).div;
+				else if ((value is Grid) || (value is PanelGrid)) 
+				{
+					var grid:GridBase = (value is GridBase) ? value as GridBase : (value as PanelGrid).body;
+					var gridRow:GridRow = grid.getElementAt(grid.selectedRow) as GridRow;
+					var gridItem:GridItem = gridRow.getElementAt(grid.selectedColumn) as GridItem;
+					return gridItem.getElementAt(0);
+				}
 				return value;
 			}
 			
@@ -474,16 +483,18 @@
 			
 			private function onItemSelectedOnEditingSurface(event:Event):void
 			{
-				if (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem))
+				if (isProcessRunning || (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem)))
 					return;
 				
-				lastTopParent = null;
 				findItemInDepth(components.source, editingSurface.selectedItem as IVisualElement);
 				this.callLater(function():void
 				{
 					if (foundIndepthItem)
 					{
-						if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
+						if (!tree.getParentItem(foundIndepthItem)) 
+						{
+							tree.expandChildrenOf(lastTopParent, true);
+						}
 						
 						tree.selectedItem = foundIndepthItem;
 						tree.scrollToIndex(tree.selectedIndex);

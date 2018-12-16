@@ -8,7 +8,9 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
+
+    import view.interfaces.IComponentSizeOutput;
+
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -54,7 +56,8 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputMask extends MaskedTextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent
+    public class InputMask extends MaskedTextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent,
+            IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputMask";
         public static const ELEMENT_NAME:String = "InputMask";
@@ -83,7 +86,53 @@ package view.primeFaces.surfaceComponents.components
                 "maskTextChanged"
             ];
         }
-		
+
+        private var _widthOutput:Boolean = true;
+        protected var widthOutputChanged:Boolean;
+
+        [Bindable]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            if (_widthOutput != value)
+            {
+                _widthOutput = value;
+
+                if (!value)
+                {
+                    widthOutputChanged = true;
+                    this.invalidateProperties();
+                }
+            }
+        }
+
+        private var _heightOutput:Boolean = true;
+        protected var heightOutputChanged:Boolean;
+
+        [Bindable]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            if (_heightOutput != value)
+            {
+                _heightOutput = value;
+
+                if (!value)
+                {
+                    heightOutputChanged = true;
+                    this.invalidateProperties();
+                }
+            }
+        }
+
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
 		{
@@ -312,6 +361,25 @@ package view.primeFaces.surfaceComponents.components
                 requiredChanged = true;
 
                 dispatchEvent(new Event("requiredChanged"));
+            }
+        }
+
+        override protected function commitProperties():void
+        {
+            super.commitProperties();
+
+            if (this.widthOutputChanged)
+            {
+                this.percentWidth = Number.NaN;
+                this.width = Number.NaN;
+                this.widthOutputChanged = false;
+            }
+
+            if (this.heightOutputChanged)
+            {
+                this.percentHeight = Number.NaN;
+                this.height = Number.NaN;
+                this.heightOutputChanged = false;
             }
         }
 

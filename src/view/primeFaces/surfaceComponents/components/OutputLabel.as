@@ -11,6 +11,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
+    import view.interfaces.IComponentSizeOutput;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -53,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
      * for=""/&gt;
      * </pre>
      */
-    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
+    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
         public static const ELEMENT_NAME:String = "OutputLabel";
@@ -82,6 +83,52 @@ package view.primeFaces.surfaceComponents.components
                 "forAttributeChanged",
 				"indicateRequiredChanged"
             ];
+        }
+
+        private var _widthOutput:Boolean = true;
+        protected var widthOutputChanged:Boolean;
+
+        [Bindable]
+        public function get widthOutput():Boolean
+        {
+            return _widthOutput;
+        }
+
+        public function set widthOutput(value:Boolean):void
+        {
+            if (_widthOutput != value)
+            {
+                _widthOutput = value;
+
+                if (!value)
+                {
+                    widthOutputChanged = true;
+                    this.invalidateProperties();
+                }
+            }
+        }
+
+        private var _heightOutput:Boolean = true;
+        protected var heightOutputChanged:Boolean;
+
+        [Bindable]
+        public function get heightOutput():Boolean
+        {
+            return _heightOutput;
+        }
+
+        public function set heightOutput(value:Boolean):void
+        {
+            if (_heightOutput != value)
+            {
+                _heightOutput = value;
+
+                if (!value)
+                {
+                    heightOutputChanged = true;
+                    this.invalidateProperties();
+                }
+            }
         }
 
         public function get propertyEditorClass():Class
@@ -383,6 +430,20 @@ package view.primeFaces.surfaceComponents.components
                 }
                 indicateRequiredChanged = false;
 				isUpdating = false;
+            }
+
+            if (this.widthOutputChanged)
+            {
+                this.percentWidth = Number.NaN;
+                this.width = Number.NaN;
+                this.widthOutputChanged = false;
+            }
+
+            if (this.heightOutputChanged)
+            {
+                this.percentHeight = Number.NaN;
+                this.height = Number.NaN;
+                this.heightOutputChanged = false;
             }
         }
     }

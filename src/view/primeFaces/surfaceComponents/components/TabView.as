@@ -1,7 +1,9 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
+    import interfaces.IComponentSizeOutput;
+
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
     import mx.events.CollectionEvent;
@@ -20,7 +22,6 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.ICDATAInformation;
 
-    import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;

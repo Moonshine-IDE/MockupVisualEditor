@@ -2,7 +2,9 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
-    
+
+    import interfaces.IComponentSizeOutput;
+
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
@@ -12,8 +14,7 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-    
-    import view.interfaces.IComponentSizeOutput;
+
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;

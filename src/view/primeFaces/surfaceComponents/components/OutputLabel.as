@@ -1,7 +1,9 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
+    import interfaces.IComponentSizeOutput;
+
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
     
@@ -11,7 +13,6 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
-    import view.interfaces.IComponentSizeOutput;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;

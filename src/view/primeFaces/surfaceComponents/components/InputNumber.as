@@ -1,7 +1,9 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
+    import interfaces.IComponentSizeOutput;
+
     import mx.formatters.NumberBaseRoundType;
     import mx.utils.StringUtil;
     
@@ -11,8 +13,6 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-
-    import view.interfaces.IComponentSizeOutput;
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IIdAttribute;

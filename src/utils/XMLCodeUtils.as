@@ -1,14 +1,14 @@
 package utils
 {
+    import interfaces.IComponentPercentSizeOutput;
+    import interfaces.IComponentSizeOutput;
+
     import mx.core.IUIComponent;
     import mx.core.UIComponent;
     import mx.utils.StringUtil;
 
     import spark.layouts.HorizontalAlign;
     import spark.layouts.VerticalAlign;
-
-    import view.interfaces.IComponentSizeOutput;
-    import view.interfaces.IComponentPercentSizeOutput;
 
     import view.primeFaces.supportClasses.ContainerDirection;
 

@@ -47,16 +47,17 @@
 		</s:HGroup>
 	</s:FormItem>
 	<fx:Script><![CDATA[
-        import mx.binding.utils.BindingUtils;
+		import interfaces.IComponentPercentSizeOutput;
+		import interfaces.IComponentSizeOutput;
+
+		import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.core.UIComponent;
         import mx.events.FlexEvent;
 
         import utils.GenericUtils;
 
-        import view.interfaces.IComponentSizeOutput;
         import view.interfaces.IIdAttribute;
-        import view.interfaces.IComponentPercentSizeOutput;
         import view.interfaces.ISurfaceComponent;
 
         [Bindable]

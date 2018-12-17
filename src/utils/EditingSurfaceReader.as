@@ -1,9 +1,9 @@
 package utils
 {
-	import mx.core.IVisualElement;
-	import mx.core.IVisualElementContainer;
-	
-	import view.EditingSurface;
+    import converter.Converter;
+
+    import interfaces.ISurface;
+
 	import view.flex.surfaceComponents.components.Button;
 	import view.flex.surfaceComponents.components.Calendar;
 	import view.flex.surfaceComponents.components.CheckBox;
@@ -20,7 +20,6 @@ package utils
 	import view.flex.surfaceComponents.components.Text;
 	import view.flex.surfaceComponents.components.Tree;
 	import view.flex.surfaceComponents.components.Window;
-	import view.interfaces.ISurfaceComponent;
 	import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 	import view.primeFaces.surfaceComponents.components.Button;
 	import view.primeFaces.surfaceComponents.components.DataTable;
@@ -46,44 +45,14 @@ package utils
 
     public class EditingSurfaceReader
 	{
-		public static var CLASS_LOOKUP:Object;
-		
-		public static function fromXML(surface:EditingSurface, xml:XML, visualEditorType:String):void
-		{
-			initReader(visualEditorType);
+        public static var CLASS_LOOKUP:Object;
+        private static var conv:Converter;
 
-			function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
-			{
-				var name:String = itemXML.localName();
-				if(!(name in CLASS_LOOKUP))
-				{
-                    var elements:XMLList = itemXML.elements();
-                    var elementCount:int = elements.length();
-                    for(var i:int = 0; i < elementCount; i++)
-                    {
-                        var elementXML:XML = elements[i];
-                        itemFromXML(parent, elementXML);
-                    }
-					return null;
-				}
-				var type:Class = CLASS_LOOKUP[name];
-				var item:ISurfaceComponent = new type() as ISurfaceComponent;
-				if(item === null)
-				{
-					throw new Error("Failed to create surface component: " + name);
-				}
-				item.fromXML(itemXML, itemFromXML);
-				parent.addElement(IVisualElement(item));
-				surface.addItem(item);
-				return item;
-			}
-			var elements:XMLList = xml.elements();
-			var elementCount:int = elements.length();
-			for(var i:int = 0; i < elementCount; i++)
-			{
-				var elementXML:XML = elements[i];
-				itemFromXML(surface, elementXML);
-			}
+		public static function fromXML(surface:ISurface, xml:XML, visualEditorType:String):void
+		{
+            initReader(visualEditorType);
+            conv = Converter.getInstance(CLASS_LOOKUP);
+            conv.fromXML(surface, xml);
 		}
 
 		private static function initReader(visualEditorType:String):void

@@ -1,7 +1,12 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import components.primeFaces.Button;
+    import components.primeFaces.Button;
+
     import flash.events.Event;
-    
+
+    import interfaces.components.IButton;
+
     import spark.components.Button;
     
     import data.OrganizerItem;
@@ -60,10 +65,14 @@ package view.primeFaces.surfaceComponents.components
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
 		public static const PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON:String = "commandButton";
 		public static const ELEMENT_NAME:String = "Button";
-		
+
+		private var component:IButton;
+
 		public function Button()
 		{
 			super();
+
+            component = new components.primeFaces.Button();
 
             this.setStyle("skinClass", ButtonSkin);
 
@@ -363,36 +372,38 @@ package view.primeFaces.surfaceComponents.components
 
         public function fromXML(xml:XML, childFromXMLCallback:Function):void
         {
-            XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+			component.fromXML(xml, childFromXMLCallback);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            this.enabled = xml.@disabled == "false" ? true : false;
-			this.isCommandButton = xml.@isCommandButton == "true" ? true : false;
-            this.label = xml.@value;
-            this.toolTip = xml.@title;
-			this.actionListener = xml.@actionListener;
+            this.enabled = component.enabled;
+			this.isCommandButton = component.isCommandButton;
+            this.label = component.label;
+            this.toolTip = component.toolTip;
+			this.actionListener = component.actionListener;
+			this.width = component.width;
+			this.height = component.height;
+			this.percentWidth = component.percentWidth;
+			this.percentHeight = component.percentHeight;
         }
 
 		public function toCode():XML
 		{
-			var tagFace:String = isCommandButton ? PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON : PRIME_FACES_XML_ELEMENT_NAME;
-			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, tagFace) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
+			component.enabled = this.enabled;
+			component.label = this.label;
+			component.toolTip = this.toolTip;
+			component.isCommandButton = this.isCommandButton;
+			component.actionListener = this.actionListener;
+            component.isSelected = this.isSelected;
+            component.width = this.width;
+            component.height = this.height;
+            component.percentWidth = this.percentWidth;
+            component.percentHeight = this.percentHeight;
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-			xml.@disabled = !this.enabled;
-            xml.@value = this.label;
-			xml.@title = this.toolTip;
-			if (isCommandButton) xml.@actionListener = this.actionListener;
-
-			return xml;
+			return component.toCode();
 		}
-		
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return

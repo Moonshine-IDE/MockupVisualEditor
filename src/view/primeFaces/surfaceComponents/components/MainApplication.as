@@ -2,9 +2,11 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
 
+    import interfaces.IComponentPercentSizeOutput;
+
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
-    import view.interfaces.IComponentPercentSizeOutput;
+
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     [Exclude(name="toXML", kind="method")]

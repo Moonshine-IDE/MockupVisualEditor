@@ -2,7 +2,7 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 	xmlns:s="library://ns.adobe.com/flex/spark"
 	xmlns:view="view.*"
-	implements="mx.managers.IFocusManagerComponent"
+	implements="mx.managers.IFocusManagerComponent, interfaces.ISurface"
 	mouseDown="editingSurface_mouseDownHandler(event)"
 	dragComplete="editingSurface_dragCompleteHandler(event)"
 	dragEnter="editingSurface_dragEnterOrOverHandler(event)"
@@ -23,6 +23,8 @@
 	</fx:Declarations>
 
 	<fx:Script><![CDATA[
+		import interfaces.IComponent;
+
 		import mx.containers.GridItem;
 		import mx.containers.GridRow;
 		import mx.controls.scrollClasses.ScrollBar;
@@ -37,17 +39,17 @@
 		import mx.managers.DragManager;
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
-		
+
 		import spark.components.SkinnableContainer;
 		import spark.components.supportClasses.ScrollBarBase;
 		import spark.components.supportClasses.SkinnableContainerBase;
 		import spark.containers.Navigator;
 		import spark.events.IndexChangeEvent;
-		
+
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
 		import utils.GenericUtils;
-		
+
 		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IInitializeAfterAddedComponent;
 		import view.interfaces.IMainApplication;
@@ -61,7 +63,7 @@
 		import view.suportClasses.PropertyChangeReference;
 		import view.suportClasses.events.PropertyEditorChangeEvent;
 		import view.suportClasses.events.SurfaceComponentEvent;
-		
+
 		public var organizer:ComponentsOrganizer;
 
 		private static const SMALL_NUDGE:int = 1;
@@ -77,7 +79,7 @@
 		{
 			_visualEditorType = value;
 		}
-		
+
 		public function get hasChanged():Boolean
 		{
 			return _hasChanged;
@@ -104,9 +106,9 @@
 			{
 				return;
 			}
-			
+
 			if (this._selectedItem) this._selectedItem.isSelected = false;
-			
+
 			this._selectedItem = value;
 			if (this._selectedItem && !this.resizer.parent)
 			{
@@ -116,17 +118,17 @@
 			{
 				PopUpManager.removePopUp(this.resizer);
 			}
-			
+
 			if (this._selectedItem) this._selectedItem.isSelected = true;
 			this.resizer.target = this._selectedItem;
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
-		
+
 		public function get isVisualEditorFlex():Boolean
 		{
 			return (_visualEditorType == 'flex');
 		}
-		
+
 		public function setResizerVisible(value:Boolean):void
 		{
 			if (this.resizer) this.resizer.visible = value;
@@ -170,50 +172,6 @@
 				this.deleteItem(element);
 			}
 			hasChanged = false;
-		}
-
-		public function addItem(item:ISurfaceComponent):void
-		{
-			if (item is IFocusManagerComponent)
-			{
-				IFocusManagerComponent(item).focusEnabled = false;
-			}
-
-			item.addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
-			item.addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
-
-			var itemContainer:SkinnableContainer = null;
-			if (item is IMultiViewContainer)
-			{
-				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
-				multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
-				itemContainer = multiViewContainer.selectedView;
-			}
-			else if (item is PanelGrid)
-			{
-				this.prepareGridComponent((item as PanelGrid).body as GridBase);
-			}
-			else if (item is SkinnableContainer)
-			{
-				itemContainer = SkinnableContainer(item);
-			}
-			else if (item is Grid)
-			{
-				this.prepareGridComponent(item as Grid);
-				return;
-			}
-			else if (item is Navigator)
-			{
-				this.prepareContainer(item as SkinnableContainerBase);
-				return;
-			}
-			else if (item is IMainApplication)
-			{
-				this.prepareContainer(item as UIComponent);
-				return;
-			}
-
-			this.prepareContainer(itemContainer);
 		}
 
 		/**
@@ -737,6 +695,49 @@
 			var newView:SkinnableContainer = container.selectedView;
 			this.prepareContainer(newView);
 		}
-		
+
+		public function addItem(item:IComponent):void
+		{
+			if (item is IFocusManagerComponent)
+			{
+				IFocusManagerComponent(item).focusEnabled = false;
+			}
+
+			(item as ISurfaceComponent).addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
+			(item as ISurfaceComponent).addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
+
+			var itemContainer:SkinnableContainer = null;
+			if (item is IMultiViewContainer)
+			{
+				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
+				multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
+				itemContainer = multiViewContainer.selectedView;
+			}
+			else if (item is PanelGrid)
+			{
+				this.prepareGridComponent((item as PanelGrid).body as GridBase);
+			}
+			else if (item is SkinnableContainer)
+			{
+				itemContainer = SkinnableContainer(item);
+			}
+			else if (item is Grid)
+			{
+				this.prepareGridComponent(item as Grid);
+				return;
+			}
+			else if (item is Navigator)
+			{
+				this.prepareContainer(item as SkinnableContainerBase);
+				return;
+			}
+			else if (item is IMainApplication)
+			{
+				this.prepareContainer(item as UIComponent);
+				return;
+			}
+
+			this.prepareContainer(itemContainer);
+		}
 		]]></fx:Script>
 </s:Group>

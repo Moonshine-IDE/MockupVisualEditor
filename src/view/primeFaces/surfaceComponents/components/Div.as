@@ -1,5 +1,7 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import interfaces.IComponentSizeOutput;
+
     import mx.core.IVisualElement;
     
     import data.OrganizerItem;
@@ -8,8 +10,6 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
-
-    import view.interfaces.IComponentSizeOutput;
     import view.interfaces.IDiv;
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;

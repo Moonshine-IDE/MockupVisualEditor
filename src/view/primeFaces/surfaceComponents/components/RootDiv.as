@@ -1,7 +1,8 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import interfaces.IComponentPercentSizeOutput;
+
     import view.interfaces.INonDeletableSurfaceComponent;
-    import view.interfaces.IComponentPercentSizeOutput;
 
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]

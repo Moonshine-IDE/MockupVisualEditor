@@ -1,7 +1,9 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
+
+    import interfaces.IComponentSizeOutput;
+
     import mx.utils.StringUtil;
     
     import spark.components.TextInput;
@@ -10,8 +12,6 @@ package view.primeFaces.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-
-    import view.interfaces.IComponentSizeOutput;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;

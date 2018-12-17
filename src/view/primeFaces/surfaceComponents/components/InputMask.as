@@ -5,11 +5,11 @@ package view.primeFaces.surfaceComponents.components
     import components.MaskedTextInput;
     
     import data.OrganizerItem;
-    
+
+    import interfaces.IComponentSizeOutput;
+
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
-
-    import view.interfaces.IComponentSizeOutput;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;

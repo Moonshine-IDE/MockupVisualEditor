@@ -370,20 +370,18 @@ package view.primeFaces.surfaceComponents.components
 
         public function fromXML(xml:XML, childFromXMLCallback:Function):void
         {
-			component.fromXML(xml, childFromXMLCallback);
+            XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+
+            component.fromXML(xml, childFromXMLCallback);
 
             this.enabled = component.enabled;
 			this.isCommandButton = component.isCommandButton;
             this.label = component.label;
             this.toolTip = component.toolTip;
 			this.actionListener = component.actionListener;
-			this.width = component.width;
-			this.height = component.height;
-			this.percentWidth = component.percentWidth;
-			this.percentHeight = component.percentHeight;
         }
 
 		public function toCode():XML
@@ -400,7 +398,7 @@ package view.primeFaces.surfaceComponents.components
             component.percentHeight = this.percentHeight;
 
 			return component.toCode();
-		}
+        }
 
 		public function getComponentsChildren(...params):OrganizerItem
 		{

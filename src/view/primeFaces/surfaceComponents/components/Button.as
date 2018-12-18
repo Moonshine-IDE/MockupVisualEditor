@@ -1,7 +1,6 @@
 package view.primeFaces.surfaceComponents.components
 {
     import components.primeFaces.Button;
-    import components.primeFaces.Button;
 
     import flash.events.Event;
 
@@ -10,8 +9,7 @@ package view.primeFaces.surfaceComponents.components
     import spark.components.Button;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;

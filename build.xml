@@ -51,6 +51,7 @@
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/framework.swc" append="true"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/mx/mx.swc" append="true"/>
 			<external-library-path file="${FLEX_HOME}/frameworks/libs/apache.swc" append="true"/>
+			<library-path file="${basedir}/libs/VisualEditorConverterLib-0.1.0.swc" append="true"/>
 			<include-sources dir="${basedir}/src" includes="*"/>
 		</compc>
 	</target>

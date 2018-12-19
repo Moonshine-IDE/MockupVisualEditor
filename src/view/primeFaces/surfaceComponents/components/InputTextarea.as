@@ -507,7 +507,10 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
-            xml.@value = this.text;
+            if (this.text)
+            {
+                xml.@value = this.text;
+            }
             xml.@autoResize = this.isAutoResize;
             xml.@required = this.required;
 

@@ -564,7 +564,11 @@ package view.primeFaces.surfaceComponents.components
                 xml.@maxDate = dateTimeFormatter.format(this.maxDate);
             }
 
-            xml.@value = dateTimeFormatter.format(this.selectedDate);
+            var formattedDate:String = dateTimeFormatter.format(this.selectedDate);
+            if (formattedDate)
+            {
+                xml.@value = formattedDate;
+            }
 
             return xml;
         }

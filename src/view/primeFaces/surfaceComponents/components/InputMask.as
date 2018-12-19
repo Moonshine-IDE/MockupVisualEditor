@@ -428,7 +428,11 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
-            xml.@value = this.text;
+            if (this.text)
+            {
+                xml.@value = this.text;
+            }
+
             xml.@mask = this.maskText;
             xml.@required = this.required;
 

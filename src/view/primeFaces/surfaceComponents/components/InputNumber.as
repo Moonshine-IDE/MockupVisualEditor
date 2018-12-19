@@ -562,7 +562,10 @@ package view.primeFaces.surfaceComponents.components
 
             XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 
-            xml.@value = this.text;
+            if (this.text)
+            {
+                xml.@value = this.text;
+            }
             xml.@thousandSeparator = this.thousandSeparator;
             xml.@decimalSeparator = this.decimalSeparator;
             xml.@required = this.required;

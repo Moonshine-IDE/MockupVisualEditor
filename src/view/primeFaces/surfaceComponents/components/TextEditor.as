@@ -438,7 +438,11 @@ package view.primeFaces.surfaceComponents.components
 			XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
 			
 			xml.@widgetVar = this.widgetVar ? this.widgetVar : "";
-			xml.@value = this.text;
+			if (this.text)
+            {
+                xml.@value = this.text;
+            }
+
 			if (this.placeholder && StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
 			return xml;
         }

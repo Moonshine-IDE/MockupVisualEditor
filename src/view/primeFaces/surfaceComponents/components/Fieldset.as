@@ -421,7 +421,7 @@ package view.primeFaces.surfaceComponents.components
 			var element:IPrimeFacesSurfaceComponent = this.getElementAt(0) as IPrimeFacesSurfaceComponent;
 			
 			organizerItem = element.getComponentsChildren();
-			organizerItem.name = "Fieldset";
+			organizerItem.name = ELEMENT_NAME;
 			
 			return organizerItem;
 		}

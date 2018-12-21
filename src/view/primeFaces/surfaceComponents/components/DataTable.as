@@ -603,7 +603,7 @@ package view.primeFaces.surfaceComponents.components
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{
-			return (new OrganizerItem(this, "DataTable"));
+			return (new OrganizerItem(this, ELEMENT_NAME));
 		}
 
         private function fillDataTable():void

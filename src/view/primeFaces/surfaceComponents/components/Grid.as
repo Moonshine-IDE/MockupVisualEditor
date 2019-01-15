@@ -583,7 +583,7 @@ package view.primeFaces.surfaceComponents.components
 			// @note @return
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
 			// children = [] (if drop acceptable component, i.e. div, tab etc.)
-			return (new OrganizerItem(this, "Grid", (componentsArray.length > 0) ? componentsArray : []));
+			return (new OrganizerItem(this, ELEMENT_NAME, (componentsArray.length > 0) ? componentsArray : []));
 			
 			// @local
 			// parse back items inside gridRow

@@ -369,7 +369,7 @@ package view.primeFaces.surfaceComponents.components
 			// @note @return
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
 			// children = [] (if drop acceptable component, i.e. div, tab etc.)
-			return (new OrganizerItem(this, "Div", (componentsArray.length > 0) ? componentsArray : []));
+			return (new OrganizerItem(this, ELEMENT_NAME, (componentsArray.length > 0) ? componentsArray : []));
 		}
 		
 		public function dropElementAt(element:IVisualElement, index:int):void

@@ -325,7 +325,7 @@ package view.primeFaces.surfaceComponents.components
 			// @note @return
 			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
 			// children = [] (if drop acceptable component, i.e. div, tab etc.)
-			return (new OrganizerItem(this, "Include", null));
+			return (new OrganizerItem(this, ELEMENT_NAME, null));
 		}
 		
         protected function setCommonXMLAttributes(xml:XML):void

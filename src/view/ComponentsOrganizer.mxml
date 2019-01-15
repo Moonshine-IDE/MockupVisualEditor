@@ -114,14 +114,11 @@
 					return;
 				}
 				
-				var currentItemUnderTest:OrganizerItem = tree.selectedItem as OrganizerItem;
-				if (!currentItemUnderTest) 
+				if (!tree.selectedItem)
 				{
 					findItemInDepth(components.source, change.fieldClass as IVisualElement);
-					if (foundIndepthItem) currentItemUnderTest = foundIndepthItem;
+					if (!foundIndepthItem) return;
 				}
-				
-				if (!currentItemUnderTest) return;
 				
 				if (change.fieldClass == tree.selectedItem.item)
 				{
@@ -404,7 +401,10 @@
 			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, isRoot:Boolean=true, topParent:Object=null):void
 			{
 				// probable termination
-				if (isRoot) lastTopParent = foundIndepthItem = null;
+				if (isRoot) 
+				{
+					lastTopParent = foundIndepthItem = null;
+				}
 				else if (foundIndepthItem) return;
 				
 				for each (var oItem:OrganizerItem in items)
@@ -445,11 +445,14 @@
 					{
 						if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
 						
-						tree.selectedItem = foundIndepthItem;
-						tree.scrollToIndex(tree.selectedIndex);
-						
-						foundIndepthItem = null;
-						lastTopParent = null;
+						tree.callLater(function():void
+						{
+							tree.selectedItem = foundIndepthItem;
+							tree.scrollToIndex(tree.selectedIndex);
+							
+							foundIndepthItem = null;
+							lastTopParent = null;
+						});
 					}
 					else
 					{
@@ -493,16 +496,16 @@
 				{
 					if (foundIndepthItem)
 					{
-						if (!tree.getParentItem(foundIndepthItem)) 
+						if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
+						
+						tree.callLater(function():void
 						{
-							tree.expandChildrenOf(lastTopParent, true);
-						}
-						
-						tree.selectedItem = foundIndepthItem;
-						tree.scrollToIndex(tree.selectedIndex);
-						
-						foundIndepthItem = null;
-						lastTopParent = null;
+							tree.selectedItem = foundIndepthItem;
+							tree.scrollToIndex(tree.selectedIndex);
+							
+							foundIndepthItem = null;
+							lastTopParent = null;
+						});
 					}
 					else
 					{

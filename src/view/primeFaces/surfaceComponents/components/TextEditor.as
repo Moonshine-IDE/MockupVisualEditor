@@ -422,7 +422,7 @@ package view.primeFaces.surfaceComponents.components
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
 			this.widgetVar = xml.@widgetVar;
-			this.text = xml.@text;
+			this.text = xml.@value;
 			this.placeholder = xml.@placeholder;
 			
 			this.callLater(componentAddedToEditor);

@@ -23,6 +23,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.AutoCompleteDropDownListPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.AutoCompleteDropDownListSkin;
     import view.suportClasses.PropertyChangeReference;
+    import interfaces.components.IAutoCompleteDropDownList;
+    import components.primeFaces.AutoCompleteDropDownList;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -71,10 +73,14 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "autoComplete";
         public static const ELEMENT_NAME:String = "DropDownList";
 
+		private var component:IAutoCompleteDropDownList;
+		
         public function AutoCompleteDropDownList()
         {
             super();
-
+			
+			component = new components.primeFaces.AutoCompleteDropDownList();
+			
             this.setStyle("skinClass", AutoCompleteDropDownListSkin);
             this.setStyle("borderColor", "#a8a8a8");
 
@@ -505,54 +511,37 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+			
+			this.component.fromXML(xml, callback);
+			
+            this.value = component.value;
+            this.fieldVar = component.fieldVar;
 
-            this.value = xml.@value;
-            this.fieldVar = xml.@['var'];
+            this.multiple = component.multiple;
 
-            this.multiple = xml.@multiple == "true";
-
-			this.completeMethod = xml.@completeMethod;
-			this.itemLabel = xml.@itemLabel;
-			this.itemValue = xml.@itemValue;
-			this.converter = xml.@converter;
+			this.completeMethod = component.completeMethod;
+			this.itemLabel = component.itemLabel;
+			this.itemValue = component.itemValue;
+			this.converter = component.converter;
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            xml.@dropdown = this.isDropDown;
-            xml.@multiple = this.multiple;
+            component.multiple = this.multiple;
 			
-			xml.@value = this.value;
-            xml.@['var'] = this.fieldVar;
-
-			if (this.completeMethod)
-            {
-                xml.@completeMethod = this.completeMethod;
-            }
-
-			if (this.itemLabel)
-			{
-				xml.@itemLabel = this.itemLabel;
-            }
-
-			if (this.itemValue)
-			{
-				xml.@itemValue = this.itemValue;
-            }
-
-			if (this.converter)
-			{
-				xml.@converter = this.converter;
-            }
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            return xml;
+			component.value = this.value;
+            component.fieldVar = this.fieldVar;
+			component.completeMethod = this.completeMethod;
+			component.itemLabel = this.itemLabel;
+			component.itemValue = this.itemValue;
+			component.converter = this.converter;
+			
+			(component as components.primeFaces.AutoCompleteDropDownList).percentWidth = this.percentWidth;
+			(component as components.primeFaces.AutoCompleteDropDownList).percentHeight = this.percentHeight;
+			(component as components.primeFaces.AutoCompleteDropDownList).height = this.height;
+			(component as components.primeFaces.AutoCompleteDropDownList).width = this.width;
+			
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

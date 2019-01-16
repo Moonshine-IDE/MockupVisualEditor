@@ -1,72 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
   <output>
-    <movie version="28"/>
     <movie disabled="False"/>
-    <movie height="600"/>
+    <movie platform="AIR"/>
+    <movie version="31"/>
+    <movie width="800"/>
     <movie fps="60"/>
+    <movie height="600"/>
     <movie background="#0F00FF"/>
     <movie path="bin-debug/VisualEditorApplication.swf"/>
-    <movie width="800"/>
     <movie input=""/>
   </output>
   &lt;!-- Other classes to be compiled into your SWF --&gt;
+  <jsOutput>
+    <option path=""/>
+  </jsOutput>
   <classpaths>
     <class path="src"/>
   </classpaths>
   <moonshineResourcePaths>
     <class path="assets"/>
   </moonshineResourcePaths>
+  <moonshineNativeExtensionPaths>
+    <!-- <empty/> -->
+  </moonshineNativeExtensionPaths>
   <build>
-    <option es="False"/>
-    <option verboseStackTraces="False"/>
-    <option allowSourcePathOverlap="False"/>
-    <option loadConfig=""/>
-    <option linkReport=""/>
-    <option benchmark="False"/>
-    <option optimize="False"/>
-    <option showActionScriptWarnings="True"/>
-    <option additional="+configname=air -swf-version 39"/>
-    <option locale=""/>
-    <option compilerConstants="CONFIG::MOONSHINE,false"/>
-    <option showDeprecationWarnings="True"/>
-    <option antBuildPath="build/build.xml"/>
+    <option warnings="True"/>
     <option staticLinkRSL="False"/>
+    <option es="False"/>
+    <option showActionScriptWarnings="True"/>
     <option customSDK=""/>
+    <option allowSourcePathOverlap="False"/>
+    <option showBindingWarnings="True"/>
+    <option optimize="False"/>
+    <option showDeprecationWarnings="True"/>
+    <option compilerConstants="CONFIG::MOONSHINE,false"/>
     <option strict="True"/>
     <option accessible="False"/>
-    <option useNetwork="True"/>
+    <option locale=""/>
     <option showUnusedTypeSelectorWarnings="True"/>
     <option useResourceBundleMetadata="True"/>
-    <option showBindingWarnings="True"/>
-    <option warnings="True"/>
+    <option benchmark="False"/>
+    <option additional="+configname=air -swf-version 39"/>
+    <option useNetwork="True"/>
+    <option verboseStackTraces="False"/>
+    <option antBuildPath="build/build.xml"/>
+    <option loadConfig=""/>
+    <option linkReport=""/>
   </build>
-  <includeLibraries></includeLibraries>
-  <libraryPaths></libraryPaths>
-  <externalLibraryPaths></externalLibraryPaths>
-  <rslPaths></rslPaths>
+  <mavenBuild>
+    <option mavenBuildPath=""/>
+    <option settingsFilePath=""/>
+    <option commandLine=""/>
+    <actions>
+      <action actionName="Build" action="install"/>
+      <action actionName="Clean" action="clean"/>
+      <action actionName="Clean and Build" action="clean install"/>
+      <action actionName="Exploded" action="war:exploded"/>
+    </actions>
+  </mavenBuild>
+  <includeLibraries>
+    <!-- <empty/> -->
+  </includeLibraries>
+  <libraryPaths>
+    <element path="libs"/>
+  </libraryPaths>
+  <externalLibraryPaths>
+    <!-- <empty/> -->
+  </externalLibraryPaths>
+  <rslPaths>
+    <!-- <empty/> -->
+  </rslPaths>
   <intrinsics>
     <element path="Library/AS3/frameworks/Flex4"/>
   </intrinsics>
-  <library></library>
+  <library>
+    <!-- <empty/> -->
+  </library>
   <compileTargets>
     <compile path="src/VisualEditorApplication.mxml"/>
   </compileTargets>
-  <hiddenPaths></hiddenPaths>
+  <hiddenPaths>
+    <!-- <empty/> -->
+  </hiddenPaths>
   <preBuildCommand>null</preBuildCommand>
   <postBuildCommand alwaysRun="False">null</postBuildCommand>
+  <trustSVNCertificate>False</trustSVNCertificate>
   <options>
     <option showHiddenPaths="False"/>
-    <option defaultBuildTargets=""/>
+    <option visualEditorExportPath=""/>
     <option testMovie="AIR"/>
     <option testMovieCommand=""/>
+    <option isPrimeFacesVisualEditor="False"/>
+    <option defaultBuildTargets=""/>
+    <option isExportedToExistingSource="False"/>
   </options>
   <moonshineRunCustomization>
-    <option deviceSimulator="null"/>
+    <option projectType="1"/>
     <option launchMethod="Simulator"/>
     <option targetPlatform="1"/>
+    <option deviceSimulator="null"/>
     <option urlToLaunch=""/>
-    <option projectType="1"/>
+    <option customUrlToLaunch=""/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>

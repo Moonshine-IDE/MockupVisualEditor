@@ -392,10 +392,11 @@ package view.primeFaces.surfaceComponents.components
 			component.isCommandButton = this.isCommandButton;
 			component.actionListener = this.actionListener;
             component.isSelected = this.isSelected;
-            component.width = this.width;
-            component.height = this.height;
-            component.percentWidth = this.percentWidth;
-            component.percentHeight = this.percentHeight;
+
+            (component as components.primeFaces.Button).width = this.width;
+            (component as components.primeFaces.Button).height = this.height;
+            (component as components.primeFaces.Button).percentWidth = this.percentWidth;
+            (component as components.primeFaces.Button).percentHeight = this.percentHeight;
 
 			return component.toCode();
         }

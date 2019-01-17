@@ -1,28 +1,32 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import components.primeFaces.DataTable;
+
+    import data.ConstantsItems;
+    import data.OrganizerItem;
+
     import flash.events.Event;
     import flash.net.registerClassAlias;
-    
+
+    import interfaces.components.IDataTable;
+
     import mx.collections.ArrayCollection;
     import mx.collections.ArrayList;
     import mx.utils.ObjectUtil;
-    
+
     import spark.components.DataGrid;
     import spark.components.gridClasses.GridColumn;
-    
-    import data.ConstantsItems;
-    import data.DataProviderListItem;
-    import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
-    
+
     import view.interfaces.IDataProviderComponent;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+
+    import vo.DataProviderListItem;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -79,10 +83,14 @@ package view.primeFaces.surfaceComponents.components
 
         private static const NO_RECORDS_FOUND:String = "No records found.";
 
+		private var component:IDataTable;
+		
         public function DataTable()
         {
             super();
 
+			component = new components.primeFaces.DataTable();
+			
             this.mouseChildren = false;
             this.width = 120;
             this.height = 120;
@@ -540,65 +548,34 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            this.paginator = xml.@paginator == "true";
-            this.resizableColumns = xml.@resizableColumns == "true";
-            this.emptyMessage = !xml.@emptyMessage ? NO_RECORDS_FOUND : xml.@emptyMessage;
-			this.tableVar = xml.@['var'];
-			this.tableValue = xml.@value;
+			component.fromXML(xml, callback);
 			
-			var tmpColumnVO:DataProviderListItem;
-			_tableColumnDescriptor = new ArrayCollection();
+            this.paginator = component.paginator;
+            this.resizableColumns = component.resizableColumns;
+            this.emptyMessage = component.emptyMessage;
+			this.tableVar = component.tableVar;
+			this.tableValue = component.tableValue;
 			
-			// re-generate column
-			for each (var col:XML in xml.column)
-			{
-				tmpColumnVO = new DataProviderListItem();
-				tmpColumnVO.label = col.@headerText;
-				tmpColumnVO.value = col.@value;
-				_tableColumnDescriptor.addItem(tmpColumnVO);
-			}
+			_tableColumnDescriptor = new ArrayCollection(component.tableColumnDescriptor);
 			
 			generateColumns(true);
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
+			component.paginator = this.paginator;
+			component.resizableColumns = this.resizableColumns;
+			component.emptyMessage = this.emptyMessage;
+			component.tableVar = this.tableVar;
+			component.tableValue = this.tableValue;
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.DataTable).width = this.width;
+			(component as components.primeFaces.DataTable).height = this.width;
+			(component as components.primeFaces.DataTable).percentWidth = this.width;
+			(component as components.primeFaces.DataTable).percentHeight = this.width;
 
-            xml.@paginator = this.paginator;
-            xml.@resizableColumns = this.resizableColumns;
-            xml.@emptyMessage = this.emptyMessage;
-			if (tableVar != "") xml.@['var'] = tableVar;
-			if (tableValue != "") xml.@value = tableValue;
-			
-			var column:XML;
-			var outputText:XML;
-			for each (var col:DataProviderListItem in tableColumnDescriptor)
-			{
-				column = new XML("<column/>");
-				column.addNamespace(primeFacesNamespace);
-				column.setNamespace(primeFacesNamespace);
-				column.@headerText = col.label;
-				
-				if (tableVar != "")
-				{
-					outputText = new XML("<outputText/>");
-					outputText.addNamespace(hNamespace);
-					outputText.setNamespace(hNamespace);
-					outputText.@value = "#{"+ tableVar +"."+ (col.value ||= '') +"}";
-					column.appendChild(outputText);
-				}
-				
-				xml.appendChild(column);
-			}
-
-            return xml;
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

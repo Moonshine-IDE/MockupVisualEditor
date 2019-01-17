@@ -16,7 +16,7 @@
 			import spark.events.GridItemEditorEvent;
 			
 			import data.ConstantsItems;
-			import data.DataProviderListItem;
+			import vo.DataProviderListItem;			
 			
 			import view.interfaces.IHistorySurfaceComponent;
 			import view.interfaces.ISurfaceComponent;

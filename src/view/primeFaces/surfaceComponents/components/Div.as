@@ -5,8 +5,7 @@ package view.primeFaces.surfaceComponents.components
     import mx.core.IVisualElement;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
@@ -18,6 +17,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
+    import interfaces.components.IDiv;
+    import components.primeFaces.Div;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -69,12 +70,14 @@ package view.primeFaces.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class Div extends Container implements IPrimeFacesSurfaceComponent, IDiv,
+    public class Div extends Container implements IPrimeFacesSurfaceComponent, view.interfaces.IDiv,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
         public static var ELEMENT_NAME:String = "Div";
 
+		private var component:interfaces.components.IDiv;
+		
         protected var mainXML:XML;
 
         protected var contentChanged:Boolean;
@@ -82,7 +85,9 @@ package view.primeFaces.surfaceComponents.components
         public function Div()
         {
             super();
-
+			
+			component = new components.primeFaces.Div();
+			
             this.width = 120;
             this.height = 120;
             this.minWidth = 20;
@@ -384,46 +389,33 @@ package view.primeFaces.surfaceComponents.components
             return this.internalToXML();
         }
 
-        public function toCode():XML
-        {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-            xml["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
-
-            var elementCount:int = this.numElements;
-            for(var i:int = 0; i < elementCount; i++)
-            {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                if(element === null)
-                {
-                    continue;
-                }
-
-                xml.appendChild(element.toCode());
-            }
-
-            return xml;
-        }
-
         public function fromXML(xml:XML, callback:Function):void
         {
-            this._cssClass = xml.@["class"];
-            this.wrap = xml.@wrap == "true";
+            component.fromXML(xml, callback);
 
+			_cssClass = component.cssClass;
+			wrap = component.wrap;
+			
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             XMLCodeUtils.applyChildrenPositionFromXML(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+        }
 
-            var elementsXML:XMLList = xml.elements();
-            var childCount:int = elementsXML.length();
-            for(var i:int = 0; i < childCount; i++)
-            {
-                var childXML:XML = elementsXML[i];
-                callback(this, childXML);
-            }
+        public function toCode():XML
+        {
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.Div).width = this.width;
+			(component as components.primeFaces.Div).height = this.width;
+			(component as components.primeFaces.Div).percentWidth = this.width;
+			(component as components.primeFaces.Div).percentHeight = this.width;
+			
+            var xml:XML = component.toCode();
+			
+            xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
+
+            return xml;
         }
 
         override protected function commitProperties():void

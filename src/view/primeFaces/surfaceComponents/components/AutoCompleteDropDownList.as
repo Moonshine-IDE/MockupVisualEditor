@@ -536,6 +536,7 @@ package view.primeFaces.surfaceComponents.components
 			component.itemValue = this.itemValue;
 			component.converter = this.converter;
 			
+			component.isSelected = this.isSelected;
 			(component as components.primeFaces.AutoCompleteDropDownList).percentWidth = this.percentWidth;
 			(component as components.primeFaces.AutoCompleteDropDownList).percentHeight = this.percentHeight;
 			(component as components.primeFaces.AutoCompleteDropDownList).height = this.height;

@@ -22,6 +22,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.Container;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+    import interfaces.components.ICalendar;
+    import components.primeFaces.Calendar;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -74,6 +76,8 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "calendar";
         public static const ELEMENT_NAME:String = "Calendar";
 
+		private var component:ICalendar;
+		
         private var dateTimeFormatter:DateTimeFormatter;
 
         private var dateChooser:DateChooser;
@@ -82,7 +86,9 @@ package view.primeFaces.surfaceComponents.components
         public function Calendar()
         {
             super();
-
+			
+			component = new components.primeFaces.Calendar();
+			
             this.width = 120;
             this.minWidth = 20;
             this.minHeight = 20;
@@ -541,38 +547,6 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function toCode():XML
-        {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            xml.@mode = this.mode;
-            xml.@pattern = this.pattern;
-
-            this.dateTimeFormatter.dateTimePattern = this.pattern;
-            if (this.minDate)
-            {
-                xml.@minDate = dateTimeFormatter.format(this.minDate);
-            }
-
-            if (this.maxDate)
-            {
-                xml.@maxDate = dateTimeFormatter.format(this.maxDate);
-            }
-
-            var formattedDate:String = dateTimeFormatter.format(this.selectedDate);
-            if (formattedDate)
-            {
-                xml.@value = formattedDate;
-            }
-
-            return xml;
-        }
-
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -580,15 +554,48 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            this.pattern = xml.@pattern ? xml.@pattern : this.pattern;
+			this.component.fromXML(xml, callback);
+
+            this.pattern = component.pattern;
 
             var upperPattern:String = this.pattern.toUpperCase();
 
-            this.selectedDate = DateField.stringToDate(xml.@selectedDate, upperPattern);
-            this.mode = xml.@mode;
+            this.selectedDate = DateField.stringToDate(component.selectedDate, upperPattern);
+            this.mode = component.mode;
 
-            this.minDate = DateField.stringToDate(xml.@minDate, upperPattern);
-            this.maxDate = DateField.stringToDate(xml.@maxDate, upperPattern);
+            this.minDate = DateField.stringToDate(component.minDate, upperPattern);
+            this.maxDate = DateField.stringToDate(component.maxDate, upperPattern);
+        }
+
+        public function toCode():XML
+        {
+            component.mode = this.mode;
+            component.pattern = this.pattern;
+
+            this.dateTimeFormatter.dateTimePattern = this.pattern;
+            if (this.minDate)
+            {
+                component.minDate = dateTimeFormatter.format(this.minDate);
+            }
+
+            if (this.maxDate)
+            {
+                component.maxDate = dateTimeFormatter.format(this.maxDate);
+            }
+
+            var formattedDate:String = dateTimeFormatter.format(this.selectedDate);
+            if (formattedDate)
+            {
+                component.selectedDate = formattedDate;
+            }
+
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.Calendar).width = this.width;
+			(component as components.primeFaces.Calendar).height = this.width;
+			(component as components.primeFaces.Calendar).percentWidth = this.width;
+			(component as components.primeFaces.Calendar).percentHeight = this.width;
+
+            return component.toCode();
         }
 
         private function initializeStates():void

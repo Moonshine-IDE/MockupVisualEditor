@@ -371,32 +371,15 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-			
-			component.fromXML(xml, callback);
+
+            this.ensureInternalDivIsAdded();
+
+            component.fromXML(xml, callback);
 			
 			this.title = component.title;
 			this.toggleable = component.toggleable;
 			this.duration = component.duration;
-			
-			this.ensureInternalDivIsAdded();
-			
-			/*
-            this.title = xml.@legend;
-            this.toggleable = xml.@toggleable == "true" ? true : false;
 
-            var toggleDuration:Number = Number(xml.@toggleSpeed);
-            this.duration = isNaN(toggleDuration) ? 200 : toggleDuration;
-
-            var elementsXML:XMLList = xml.elements();
-            var childCount:int = elementsXML.length();
-            this.ensureInternalDivIsAdded();
-
-            for(var i:int = 0; i < childCount; i++)
-            {
-                var childXML:XML = elementsXML[i];
-                _div.fromXML(childXML, callback);
-            }
-			*/
 			componentAddedToEditor();
         }
 

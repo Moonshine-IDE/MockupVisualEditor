@@ -1,20 +1,22 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import components.CollapsiblePanel;
+    import components.primeFaces.Fieldset;
+
+    import data.OrganizerItem;
+
     import flash.events.Event;
     import flash.events.MouseEvent;
-    
+
+    import interfaces.components.IFieldset;
+
     import mx.core.IVisualElement;
     import mx.events.FlexEvent;
-    
+
     import spark.components.HGroup;
-    
-    import components.CollapsiblePanel;
-    
-    import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
-    
+
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
@@ -100,11 +102,15 @@ package view.primeFaces.surfaceComponents.components
 
         [Embed(source='/assets/plus_open.png')]
         public var openIcon:Class;
-
+		
+		private var component:IFieldset;
+		
         public function Fieldset(isOpen:Boolean = true)
         {
             super(isOpen);
-
+			
+			component = new components.primeFaces.Fieldset();
+			
             this.width = 110;
             this.height = 120;
             this.minHeight = 120;
@@ -365,7 +371,16 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
+			
+			component.fromXML(xml, callback);
+			
+			this.title = component.title;
+			this.toggleable = component.toggleable;
+			this.duration = component.duration;
+			
+			this.ensureInternalDivIsAdded();
+			
+			/*
             this.title = xml.@legend;
             this.toggleable = xml.@toggleable == "true" ? true : false;
 
@@ -381,38 +396,24 @@ package view.primeFaces.surfaceComponents.components
                 var childXML:XML = elementsXML[i];
                 _div.fromXML(childXML, callback);
             }
-			
+			*/
 			componentAddedToEditor();
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
             //In my opinion this is ans issue in PrimeFaces. If I add height to Fieldset and it's toggleable it doesn't work.
+            component.title = this.title;
+            component.toggleable = this.toggleable;
+            component.duration = this.duration;
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.Fieldset).width = this.width;
+			(component as components.primeFaces.Fieldset).height = this.width;
+			(component as components.primeFaces.Fieldset).percentWidth = this.width;
+			(component as components.primeFaces.Fieldset).percentHeight = this.width;
 
-            xml.@legend = this.title;
-            xml.@toggleable = this.toggleable;
-            xml.@toggleSpeed = this.duration;
-
-            var elementCount:int = this.numElements;
-            for(var i:int = 0; i < elementCount; i++)
-            {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                if(element === null)
-                {
-                    continue;
-                }
-
-                xml.appendChild(element.toCode());
-            }
-
-            return xml;
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

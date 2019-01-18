@@ -109,7 +109,7 @@ package view.primeFaces.surfaceComponents.components
         {
             super(isOpen);
 			
-			component = new components.primeFaces.Fieldset();
+			component = new components.primeFaces.Fieldset(this);
 			
             this.width = 110;
             this.height = 120;

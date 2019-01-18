@@ -86,7 +86,7 @@ package view.primeFaces.surfaceComponents.components
         {
             super();
 			
-			component = new components.primeFaces.Div();
+			component = new components.primeFaces.Div(this);
 			
             this.width = 120;
             this.height = 120;

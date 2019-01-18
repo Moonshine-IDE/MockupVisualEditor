@@ -20,7 +20,8 @@ package utils
 	import view.flex.surfaceComponents.components.Text;
 	import view.flex.surfaceComponents.components.Tree;
 	import view.flex.surfaceComponents.components.Window;
-	import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
+    import view.primeFaces.supportClasses.Container;
+    import view.primeFaces.surfaceComponents.components.AutoCompleteDropDownList;
 	import view.primeFaces.surfaceComponents.components.Button;
 	import view.primeFaces.surfaceComponents.components.DataTable;
 	import view.primeFaces.surfaceComponents.components.Div;
@@ -42,6 +43,8 @@ package utils
 	import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	import view.primeFaces.surfaceComponents.components.TextEditor;
+	import mx.containers.GridItem;
+	import mx.containers.GridRow;
 
     public class EditingSurfaceReader
 	{
@@ -66,7 +69,7 @@ package utils
 
                 CLASS_LOOKUP[view.flex.surfaceComponents.components.Button.ELEMENT_NAME] =
                         view.flex.surfaceComponents.components.Button;
-                CLASS_LOOKUP[Container.ELEMENT_NAME] = Container;
+                CLASS_LOOKUP[view.flex.surfaceComponents.components.Container.ELEMENT_NAME] = view.flex.surfaceComponents.components.Container;
                 CLASS_LOOKUP[Calendar.ELEMENT_NAME] = Calendar;
                 CLASS_LOOKUP[CheckBox.ELEMENT_NAME] = CheckBox;
                 CLASS_LOOKUP[DropDownList.ELEMENT_NAME] = DropDownList;
@@ -109,6 +112,9 @@ package utils
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.Calendar.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.Calendar;
 				CLASS_LOOKUP[RootDiv.ELEMENT_NAME] = RootDiv;
 				CLASS_LOOKUP[SelectOneListbox.ELEMENT_NAME] = SelectOneListbox;
+				CLASS_LOOKUP[view.primeFaces.supportClasses.Container.ELEMENT_NAME] = view.primeFaces.supportClasses.Container;
+				CLASS_LOOKUP["GridItem"] = GridItem;
+				CLASS_LOOKUP["GridRow"] = GridRow;
             }
 		}
 	}

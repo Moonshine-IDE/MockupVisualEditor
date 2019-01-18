@@ -21,7 +21,9 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
-
+    import interfaces.components.IGrid;
+	import components.primeFaces.Grid;
+	
     [Exclude(name="selectedColumn", kind="property")]
     [Exclude(name="selectedRow", kind="property")]
     [Exclude(name="addColumn", kind="method")]
@@ -87,10 +89,14 @@ package view.primeFaces.surfaceComponents.components
         public static const ELEMENT_NAME:String = "Grid";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
+		private var component:IGrid;
+		
         public function Grid()
         {
             super();
-
+			
+			component = new components.primeFaces.Grid(this);
+			
             this.width = 120;
             this.height = 120;
             this.minWidth = 20;
@@ -453,7 +459,9 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
+			
+			component.fromXML(xml, callback);
+			
             var elementsXML:XMLList = xml.elements();
             if (elementsXML.length() > 0)
             {
@@ -465,79 +473,33 @@ package view.primeFaces.surfaceComponents.components
                     var rowXML:XML = elementsXML[row];
                     var colListXML:XMLList = rowXML.elements();
 
-                    var gridRow:GridRow = new GridRow();
-                    gridRow.percentWidth = gridRow.percentHeight = 100;
-
                     var colCount:int = colListXML.length();
                     for (var col:int = 0; col < colCount; col++)
                     {
                         var colXML:XML = colListXML[col];
                         if (colXML.length() > 0)
                         {
-                            var gridItem:GridItem = new GridItem();
-                            gridItem.percentWidth = gridItem.percentHeight = 100;
-
-                            var divXMLList:XMLList = colXML.elements();
-                            var divXML:XML = divXMLList[0];
-
-                            var div:Div = new Div();
+                            var div:Div = getDiv(row, col);
                             div.percentWidth = div.percentHeight = 100;
                             div.setStyle("borderColor", _columnBorderColor);
                             div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
                             div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
                             div.addEventListener(MouseEvent.CLICK, onDivClick);
-
-                            gridItem.addElement(div);
-                            gridRow.addElement(gridItem);
-
-                            divXML.@percentWidth = 100;
-                            divXML.@percentHeight = 100;
-
-                            div.fromXML(divXML, callback);
                         }
                     }
-
-                    this.addElement(gridRow);
                 }
             }
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
+            component.isSelected = this.isSelected;
+			(component as components.primeFaces.Grid).width = this.width;
+			(component as components.primeFaces.Grid).height = this.width;
+			(component as components.primeFaces.Grid).percentWidth = this.width;
+			(component as components.primeFaces.Grid).percentHeight = this.width;
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            var gridRowNumElements:int = this.numElements;
-            for (var row:int = 0; row < gridRowNumElements; row++)
-            {
-                var rowXML:XML = new XML("<div />");
-                rowXML["@class"] = "ui-g";
-
-                var gridRow:GridRow = this.getElementAt(row) as GridRow;
-                var gridColumnNumElements:int = gridRow.numElements;
-                for (var col:int = 0; col < gridColumnNumElements; col++)
-                {
-                    var gridCol:GridItem = gridRow.getElementAt(col) as GridItem;
-                    var div:Div = gridCol.getElementAt(0) as Div;
-
-                    var colXML:XML = new XML("<div />");
-                    colXML["@class"] = this.getClassNameBasedOnColumns(gridColumnNumElements);
-
-                    var divXML:XML = removeHeightFromInternalDiv(div.toCode());
-
-                    colXML.appendChild(divXML);
-
-                    rowXML.appendChild(colXML);
-                }
-
-                xml.appendChild(rowXML);
-            }
-
-            return xml;
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

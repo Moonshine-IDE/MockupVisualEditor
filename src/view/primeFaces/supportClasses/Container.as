@@ -12,6 +12,8 @@ package view.primeFaces.supportClasses
 
     public class Container extends BorderContainer
     {
+        public static const ELEMENT_NAME:String = "Container";
+
         public function Container()
         {
             super();

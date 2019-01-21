@@ -1,18 +1,20 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import flash.events.Event;
-    
-    import mx.utils.StringUtil;
-    
-    import spark.components.TextArea;
-    
+    import components.primeFaces.InputTextarea;
+
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
+    import flash.events.Event;
+
+    import interfaces.components.IInputTextarea;
+
+    import mx.utils.StringUtil;
+
+    import spark.components.TextArea;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
-
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -70,10 +72,14 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputTextarea";
         public static const ELEMENT_NAME:String = "InputTextarea";
 
+		private var component:IInputTextarea;
+		
         public function InputTextarea()
         {
             super();
-
+			
+			component = new components.primeFaces.InputTextarea();
+			
             this.mouseChildren = false;
             this.toolTip = "";
             this.width = 100;
@@ -483,53 +489,30 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            this.text = xml.@value;
-            this.isAutoResize = xml.@isAutoResize == "true";
-			this.maxLength = xml.@maxlength;
-            this.required = xml.@required == "true";
-
-			if (String(xml.@isCounterDisplay) == "true")
-			{
-				this.isCounterDisplay = true;
-				this.counterTemplate = String(xml.@counterTemplate);
-				if (xml.@counter != undefined) this.counter = String(xml.@counter);
-			}
-
-            this.idAttribute = xml.@id;
+			component.fromXML(xml, callback);
+			
+            this.text = component.text;
+            this.isAutoResize = component.isAutoResize;
+			this.maxLength = component.maxLength;
+            this.required = component.required;
+			this.isCounterDisplay = component.isCounterDisplay;
+			this.counterTemplate = component.counterTemplate;
+			this.counter = component.counter;
+			this.idAttribute = component.idAttribute;
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
+			component.text = this.text;
+			component.isAutoResize = this.isAutoResize;
+			component.required = this.required;
+			component.maxLength = this.maxLength;
+			component.isCounterDisplay = this.isCounterDisplay;
+			component.counterTemplate = this.counterTemplate;
+			component.idAttribute = this.idAttribute;
+			component.counter = this.counter;
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            if (this.text)
-            {
-                xml.@value = this.text;
-            }
-            xml.@autoResize = this.isAutoResize;
-            xml.@required = this.required;
-
-			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
-			{
-				xml.@maxlength = this.maxLength;
-			}
-			if (isCounterDisplay)
-			{
-				xml.@counterTemplate = this.counterTemplate;
-				if (StringUtil.trim(counter).length != 0) xml.@counter = this.counter;
-			}
-
-            if (this.idAttribute)
-            {
-                xml.@id = this.idAttribute;
-            }
-
-            return xml;
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

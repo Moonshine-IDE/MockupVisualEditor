@@ -1,24 +1,27 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import components.primeFaces.Include;
+
+    import data.OrganizerItem;
+
     import flash.events.Event;
     import flash.events.MouseEvent;
+
+    import interfaces.components.IInclude;
 
     import mx.events.CollectionEvent;
     import mx.events.CollectionEventKind;
     import mx.graphics.SolidColor;
-    
+
     import spark.components.BorderContainer;
     import spark.components.Button;
     import spark.components.Label;
     import spark.layouts.VerticalLayout;
-    
-    import data.OrganizerItem;
-    
+
     import utils.MoonshineBridgeUtils;
-    import utils.MxmlCodeUtils;
     import utils.VisualEditorGlobalTags;
     import utils.XMLCodeUtils;
-    
+
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -67,13 +70,17 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "include";
         public static const ELEMENT_NAME:String = "Include";
 		
+		private var component:IInclude;
+		
 		private var includeLabel:Label;
 		private var includeButton:spark.components.Button;
 		
         public function Include()
         {
             super();
-
+			
+			component = new components.primeFaces.Include();
+			
             _propertiesChangedEvents = [
                 "widthChanged",
                 "heightChanged",
@@ -293,31 +300,32 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			this.path = xml.@src;
+			this.component.fromXML(xml, callback);
+
+			this.path = component.path;
 			
 			componentAddedToEditor();
         }
 
         public function toCode():XML
         {
-			var xml:XML;
             if (!hasFileList()) 
 			{
 				XML.ignoreComments = false;
-				xml = new XML('<root><'+ VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY +'/></root>');
+				var xml:XML = new XML('<root><'+ VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY +'/></root>');
 				xml.children().appendChild(<!-- NOTE: Include component code will generate with valid target only. -->);
 				return xml;
 			}
 
-			xml = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-			var primeFacesNamespace:Namespace = new Namespace("ui", "http://xmlns.jcp.org/jsf/facelets");
-			xml.addNamespace(primeFacesNamespace);
-			xml.setNamespace(primeFacesNamespace);
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.Include).width = this.width;
+			(component as components.primeFaces.Include).height = this.width;
+			(component as components.primeFaces.Include).percentWidth = this.width;
+			(component as components.primeFaces.Include).percentHeight = this.width;
+		
+			component.path = this.path;
 			
-			XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-			
-			xml.@src = this.path;
-			return xml;
+			return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

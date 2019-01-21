@@ -1,14 +1,15 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import flash.events.Event;
-    
     import components.MaskedTextInput;
-    
+    import components.primeFaces.InputMask;
+
     import data.OrganizerItem;
 
-    import interfaces.IComponentSizeOutput;
+    import flash.events.Event;
 
-    import utils.MxmlCodeUtils;
+    import interfaces.IComponentSizeOutput;
+    import interfaces.components.IInputMask;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
@@ -62,10 +63,14 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputMask";
         public static const ELEMENT_NAME:String = "InputMask";
 
+		private var component:IInputMask;
+
         public function InputMask()
         {
             super();
-
+				
+			component = new components.primeFaces.InputMask();
+			
             this.maskText = "(999) 999-9999";
             this.mouseChildren = false;
             this.showMaskWhileWrite = false;
@@ -413,35 +418,28 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            this.maskText = xml.@mask;
-            this.text = xml.@value;
-            this.idAttribute = xml.@id;
-            this.required = xml.@required == "true";
+			component.fromXML(xml, callback);
+			
+            this.maskText = component.maskText;
+            this.text = component.text;
+            this.idAttribute = component.idAttribute;
+            this.required = component.required;
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            if (this.text)
-            {
-                xml.@value = this.text;
-            }
-
-            xml.@mask = this.maskText;
-            xml.@required = this.required;
-
-            if (this.idAttribute)
-            {
-                xml.@id = this.idAttribute;
-            }
-
-            return xml;
+            component.text = this.text;
+			component.maskText = this.maskText;
+            component.required = this.required;
+			component.idAttribute = this.idAttribute;
+   
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.InputMask).width = this.width;
+			(component as components.primeFaces.InputMask).height = this.width;
+			(component as components.primeFaces.InputMask).percentWidth = this.width;
+			(component as components.primeFaces.InputMask).percentHeight = this.width;
+			
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

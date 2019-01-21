@@ -1,7 +1,7 @@
 package view.primeFaces.supportClasses.table
 {
-    import mx.containers.GridItem;
-    import mx.containers.GridRow;
+    import view.primeFaces.supportClasses.GridItem;
+    import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     
     import spark.components.Label;

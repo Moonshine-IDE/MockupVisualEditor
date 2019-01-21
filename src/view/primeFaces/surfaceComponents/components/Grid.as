@@ -5,8 +5,8 @@ package view.primeFaces.surfaceComponents.components
 
     import interfaces.IComponentSizeOutput;
 
-    import mx.containers.GridItem;
-    import mx.containers.GridRow;
+    import view.primeFaces.supportClasses.GridItem;
+    import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
@@ -459,14 +459,17 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-			
-			component.fromXML(xml, callback);
-			
+
             var elementsXML:XMLList = xml.elements();
             if (elementsXML.length() > 0)
             {
                 this.removeAllElements();
+            }
 
+			component.fromXML(xml, callback);
+
+            if (elementsXML.length() > 0)
+            {
                 var childCount:int = elementsXML.length();
                 for(var row:int = 0; row < childCount; row++)
                 {

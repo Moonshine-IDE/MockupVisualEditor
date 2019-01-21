@@ -43,8 +43,8 @@ package utils
 	import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	import view.primeFaces.surfaceComponents.components.TextEditor;
-	import mx.containers.GridItem;
-	import mx.containers.GridRow;
+	import view.primeFaces.supportClasses.GridItem;
+	import view.primeFaces.supportClasses.GridRow;
 
     public class EditingSurfaceReader
 	{

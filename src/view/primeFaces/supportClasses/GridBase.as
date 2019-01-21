@@ -4,8 +4,8 @@ package view.primeFaces.supportClasses
     import flash.events.MouseEvent;
     
     import mx.containers.Grid;
-    import mx.containers.GridItem;
-    import mx.containers.GridRow;
+    import view.primeFaces.supportClasses.GridItem;
+    import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
     

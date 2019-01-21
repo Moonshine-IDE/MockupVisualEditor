@@ -21,6 +21,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.InputNumberFormatter;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+    import interfaces.components.IInputNumber;
+    import components.primeFaces.InputNumber;
 
     [Exclude(name="commitProperties", kind="method")]
 
@@ -77,13 +79,17 @@ package view.primeFaces.surfaceComponents.components
         public static const DEFAULT_DECIMAL_SEPARATOR:String = ".";
         private static const DEFAULT_THOUSANDS_SEPARATOR:String = ",";
 
+		private var component:IInputNumber;
+
         private var _formatter:InputNumberFormatter;
 		private var _multiFieldOldValues:Array;
 
         public function InputNumber()
         {
             super();
-
+			
+			component = new components.primeFaces.InputNumber();
+			
             _formatter = new InputNumberFormatter();
             _formatter.useThousandsSeparator = true;
             _formatter.rounding = NumberBaseRoundType.NONE;
@@ -538,44 +544,26 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            this.thousandSeparator = xml.@thousandSeparator;
-            this.decimalSeparator = xml.@decimalSeparator;
-            this.idAttribute = xml.@id;
-            this.required = xml.@required == "true";
+			component.fromXML(xml, callback);
+			
+            this.thousandSeparator = component.thousandSeparator;
+            this.decimalSeparator = component.decimalSeparator;
+            this.idAttribute = component.idAttribute;
+            this.required = component.required;
 
-            var newTextValue:String = xml.@value;
-            if (this.thousandSeparator)
-            {
-                var thousandsSeparatorReg:RegExp = new RegExp('\\' + this.thousandSeparator, "g");
-                newTextValue = newTextValue.replace(thousandsSeparatorReg, "");
-            }
-
-            this.refreshText(newTextValue);
+            this.refreshText(component.text);
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
+            component.text = this.text;
+           
+			component.decimalSeparator = this.decimalSeparator;
+			component.thousandSeparator = this.thousandSeparator;
+			component.required = this.required;
+			component.idAttribute = this.idAttribute;
 
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            if (this.text)
-            {
-                xml.@value = this.text;
-            }
-            xml.@thousandSeparator = this.thousandSeparator;
-            xml.@decimalSeparator = this.decimalSeparator;
-            xml.@required = this.required;
-
-            if (this.idAttribute)
-            {
-                xml.@id = this.idAttribute;
-            }
-
-            return xml;
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem
@@ -588,15 +576,7 @@ package view.primeFaces.surfaceComponents.components
 
         private function refreshText(value:String):void
         {
-            if (value == "0" || value == "0.00" || !value)
-            {
-                super.text = this.decimalSeparator ? "0.00".replace(".", this.decimalSeparator) : "0.00";
-            }
-            else
-            {
-                super.text = _formatter.format(value);
-            }
-			
+			super.text = value;
             _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, null, _multiFieldOldValues, [{field:"text", value:super.text}, {field:"decimalSeparator", value:_decimalSeparator}, {field:"thousandSeparator", value:_thousandSeparator}]);
             dispatchEvent(new Event("formattedTextChanged"));
         }

@@ -592,8 +592,8 @@ package view.primeFaces.surfaceComponents.components
 			component.isSelected = this.isSelected;
 			(component as components.primeFaces.Calendar).width = this.width;
 			(component as components.primeFaces.Calendar).height = this.width;
-			(component as components.primeFaces.Calendar).percentWidth = this.width;
-			(component as components.primeFaces.Calendar).percentHeight = this.width;
+			(component as components.primeFaces.Calendar).percentWidth = this.percentWidth;
+			(component as components.primeFaces.Calendar).percentHeight = this.percentHeight;
 
             return component.toCode();
         }

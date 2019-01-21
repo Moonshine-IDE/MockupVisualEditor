@@ -408,8 +408,8 @@ package view.primeFaces.surfaceComponents.components
 			component.isSelected = this.isSelected;
 			(component as components.primeFaces.Div).width = this.width;
 			(component as components.primeFaces.Div).height = this.width;
-			(component as components.primeFaces.Div).percentWidth = this.width;
-			(component as components.primeFaces.Div).percentHeight = this.width;
+			(component as components.primeFaces.Div).percentWidth = this.percentWidth;
+			(component as components.primeFaces.Div).percentHeight = this.percentHeight;
 			
             var xml:XML = component.toCode();
 			

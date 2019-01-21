@@ -436,8 +436,8 @@ package view.primeFaces.surfaceComponents.components
 			component.isSelected = this.isSelected;
 			(component as components.primeFaces.InputMask).width = this.width;
 			(component as components.primeFaces.InputMask).height = this.width;
-			(component as components.primeFaces.InputMask).percentWidth = this.width;
-			(component as components.primeFaces.InputMask).percentHeight = this.width;
+			(component as components.primeFaces.InputMask).percentWidth = this.percentWidth;
+			(component as components.primeFaces.InputMask).percentHeight = this.percentHeight;
 			
             return component.toCode();
         }

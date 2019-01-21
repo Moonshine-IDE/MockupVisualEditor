@@ -393,8 +393,8 @@ package view.primeFaces.surfaceComponents.components
 			component.isSelected = this.isSelected;
 			(component as components.primeFaces.Fieldset).width = this.width;
 			(component as components.primeFaces.Fieldset).height = this.width;
-			(component as components.primeFaces.Fieldset).percentWidth = this.width;
-			(component as components.primeFaces.Fieldset).percentHeight = this.width;
+			(component as components.primeFaces.Fieldset).percentWidth = this.percentWidth;
+			(component as components.primeFaces.Fieldset).percentHeight = this.percentHeight;
 
             return component.toCode();
         }

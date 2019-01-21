@@ -511,7 +511,13 @@ package view.primeFaces.surfaceComponents.components
 			component.counterTemplate = this.counterTemplate;
 			component.idAttribute = this.idAttribute;
 			component.counter = this.counter;
-
+			
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.InputTextarea).width = this.width;
+			(component as components.primeFaces.InputTextarea).height = this.width;
+			(component as components.primeFaces.InputTextarea).percentWidth = this.percentWidth;
+			(component as components.primeFaces.InputTextarea).percentHeight = this.percentHeight;
+			
             return component.toCode();
         }
 		

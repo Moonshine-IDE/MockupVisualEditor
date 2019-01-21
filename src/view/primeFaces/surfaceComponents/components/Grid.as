@@ -499,8 +499,8 @@ package view.primeFaces.surfaceComponents.components
             component.isSelected = this.isSelected;
 			(component as components.primeFaces.Grid).width = this.width;
 			(component as components.primeFaces.Grid).height = this.width;
-			(component as components.primeFaces.Grid).percentWidth = this.width;
-			(component as components.primeFaces.Grid).percentHeight = this.width;
+			(component as components.primeFaces.Grid).percentWidth = this.percentWidth;
+			(component as components.primeFaces.Grid).percentHeight = this.percentHeight;
 
             return component.toCode();
         }

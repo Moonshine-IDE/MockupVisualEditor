@@ -320,8 +320,8 @@ package view.primeFaces.surfaceComponents.components
 			component.isSelected = this.isSelected;
 			(component as components.primeFaces.Include).width = this.width;
 			(component as components.primeFaces.Include).height = this.width;
-			(component as components.primeFaces.Include).percentWidth = this.width;
-			(component as components.primeFaces.Include).percentHeight = this.width;
+			(component as components.primeFaces.Include).percentWidth = this.percentWidth;
+			(component as components.primeFaces.Include).percentHeight = this.percentHeight;
 		
 			component.path = this.path;
 			

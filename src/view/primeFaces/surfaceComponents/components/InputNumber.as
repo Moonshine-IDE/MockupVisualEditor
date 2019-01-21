@@ -562,7 +562,13 @@ package view.primeFaces.surfaceComponents.components
 			component.thousandSeparator = this.thousandSeparator;
 			component.required = this.required;
 			component.idAttribute = this.idAttribute;
-
+			
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.InputNumber).width = this.width;
+			(component as components.primeFaces.InputNumber).height = this.width;
+			(component as components.primeFaces.InputNumber).percentWidth = this.percentWidth;
+			(component as components.primeFaces.InputNumber).percentHeight = this.percentHeight;
+			
             return component.toCode();
         }
 		

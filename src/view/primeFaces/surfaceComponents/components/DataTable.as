@@ -572,8 +572,8 @@ package view.primeFaces.surfaceComponents.components
 			component.isSelected = this.isSelected;
 			(component as components.primeFaces.DataTable).width = this.width;
 			(component as components.primeFaces.DataTable).height = this.width;
-			(component as components.primeFaces.DataTable).percentWidth = this.width;
-			(component as components.primeFaces.DataTable).percentHeight = this.width;
+			(component as components.primeFaces.DataTable).percentWidth = this.percentWidth;
+			(component as components.primeFaces.DataTable).percentHeight = this.percentHeight;
 
             return component.toCode();
         }

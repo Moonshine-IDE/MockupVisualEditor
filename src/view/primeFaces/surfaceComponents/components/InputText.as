@@ -18,6 +18,8 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.InputTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
+    import interfaces.components.IInputText;
+    import components.primeFaces.InputText;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -62,11 +64,15 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputText";
         public static const ELEMENT_NAME:String = "InputText";
-
+		
+		private var component:IInputText;
+		
         public function InputText()
         {
             super();
-
+			
+			component = new components.primeFaces.InputText();
+			
             this.mouseChildren = false;
             this.toolTip = "";
 			this.width = 100;
@@ -433,39 +439,28 @@ package view.primeFaces.surfaceComponents.components
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-            this.text = xml.@value;
-			this.maxLength = xml.@maxlength;
-            this.idAttribute = xml.@id;
-            this.required = xml.@required == "true";
+			component.fromXML(xml, callback);
+			
+            this.text = component.text;
+			this.maxLength = component.maxLength;
+            this.idAttribute = component.idAttribute;
+            this.required = component.required;
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            if (this.text)
-            {
-                xml.@value = this.text;
-            }
-
-            xml.@required = this.required;
-
-			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
-			{
-				xml.@maxlength = this.maxLength;
-			}
-
-            if (this.idAttribute)
-            {
-                xml.@id = this.idAttribute;
-            }
-
-            return xml;
+            component.text = this.text;
+            component.required = this.required;
+			component.maxLength = this.maxLength;
+			component.idAttribute = this.idAttribute;
+				
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.InputText).width = this.width;
+			(component as components.primeFaces.InputText).height = this.width;
+			(component as components.primeFaces.InputText).percentWidth = this.percentWidth;
+			(component as components.primeFaces.InputText).percentHeight = this.percentHeight;
+			
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

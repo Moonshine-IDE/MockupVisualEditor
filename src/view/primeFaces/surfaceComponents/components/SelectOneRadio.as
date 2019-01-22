@@ -16,7 +16,6 @@ package view.primeFaces.surfaceComponents.components
     
     import data.ConstantsItems;
     import data.OrganizerItem;
-    import data.SelectItem;
     
     import skins.RadioButtonPrimeFacesSkin;
     
@@ -33,6 +32,9 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+    import interfaces.components.ISelectOneRadio;
+    import components.primeFaces.SelectOneRadio;
+    import vo.SelectItem;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -86,10 +88,15 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneRadio";
         public static const ELEMENT_NAME:String = "SelectOneRadio";
 
+		private var component:ISelectOneRadio;
+		
         public function SelectOneRadio()
         {
             super();
 			
+			component = new components.primeFaces.SelectOneRadio();
+			items = new ArrayCollection(component.items);
+
 	        this.width = 100;
 			this.height = 21;
             this.minWidth = 20;
@@ -186,7 +193,7 @@ package view.primeFaces.surfaceComponents.components
             return _cdataInformation;
         }
 
-		private var _items:ArrayCollection = new ArrayCollection();
+		private var _items:ArrayCollection;
 		[Bindable("itemsChanged")]
 		public function get items():ArrayCollection
 		{
@@ -478,50 +485,28 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			this.columns = (xml.@columns != undefined) ? int(xml.@columns) : 0;
-			this.value = xml.@value;
+            items.removeAll();
+
+			component.fromXML(xml, callback);
 			
-			var tmpItem:SelectItem;
-			items = new ArrayCollection();
-			for each (var i:XML in xml.selectItem)
-			{
-				tmpItem = new SelectItem();
-				tmpItem.itemLabel = i.@itemLabel;
-				tmpItem.itemValue = i.@itemValue;
-				items.addItem(tmpItem);
-			}
-			
+			this.columns = component.columns;
+			this.value = component.value;
+
 			generateColumns();
         }
 
 		public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-			var facetNamespace:Namespace = new Namespace("f", "http://xmlns.jcp.org/jsf/core");
-			var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-			xml.addNamespace(primeFacesNamespace);
-			xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-            xml["@value"] = this.value;
-			if (columns > 0)
-			{
-				xml["@layout"] = "grid";
-				xml["@columns"] = columns;
-			}
+			component.value = this.value;
+			component.columns = this.columns;
 			
-			var itemXML:XML;
-			for each (var item:SelectItem in items)
-			{
-				itemXML = new XML("<selectItem />");
-				itemXML.addNamespace(facetNamespace);
-				itemXML.setNamespace(facetNamespace);
-				itemXML["@itemLabel"] = item.itemLabel;
-				itemXML["@itemValue"] = item.itemValue ? item.itemValue : "";
-				xml.appendChild(itemXML);
-			}
-
-            return xml;
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.SelectOneRadio).width = this.width;
+			(component as components.primeFaces.SelectOneRadio).height = this.width;
+			(component as components.primeFaces.SelectOneRadio).percentWidth = this.percentWidth;
+			(component as components.primeFaces.SelectOneRadio).percentHeight = this.percentHeight;
+			
+            return component.toCode();
         }
 		
 		private function addRadio(gridItem:GridItem, item:SelectItem):void

@@ -7,18 +7,17 @@
         creationComplete="onTabFormCreationComplete(event)" xmlns:forms="view.forms.*">
 	<fx:Script>
 		<![CDATA[
+			import data.ConstantsItems;
+			import vo.SelectItem;
+
 			import mx.binding.utils.BindingUtils;
 			import mx.binding.utils.ChangeWatcher;
 			import mx.events.FlexEvent;
 			import mx.utils.ObjectUtil;
-			
+
 			import spark.events.GridItemEditorEvent;
-			
-			import data.ConstantsItems;
-			import data.SelectItem;
-			
+
 			import view.interfaces.IHistorySurfaceComponent;
-			import view.interfaces.ISurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.SelectOneRadio;
 			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 

@@ -18,6 +18,8 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
+    import interfaces.components.IOutputLabel;
+    import components.primeFaces.OutputLabel;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -59,11 +61,15 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
         public static const ELEMENT_NAME:String = "OutputLabel";
-
+		
+		private var component:IOutputLabel;
+		
         public function OutputLabel()
         {
             super();
-
+			
+			component = new components.primeFaces.OutputLabel();
+			
             this.text = "Label";
 
             this.setStyle("verticalAlign", VerticalAlign.MIDDLE);
@@ -376,34 +382,33 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, childFromXMLCallback:Function):void
+        public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
-            this.text = xml.@value;
-            this.forAttribute = xml["@for"];
-            this.indicateRequired = xml.@indicateRequired == "true";
+			
+			component.fromXML(xml, callback);
+			
+            this.text = component.text;
+            this.forAttribute = component.forAttribute;
+            this.indicateRequired = component.indicateRequired;
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            xml.@value = this.text;
-            if (this.forAttribute)
-            {
-                xml["@for"] = this.forAttribute;
-            }
-
-            return xml;
+			component.text = this.text;
+			component.forAttribute = this.forAttribute;
+			component.indicateRequired = this.indicateRequired;
+			
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.OutputLabel).width = this.width;
+			(component as components.primeFaces.OutputLabel).height = this.width;
+			(component as components.primeFaces.OutputLabel).percentWidth = this.percentWidth;
+			(component as components.primeFaces.OutputLabel).percentHeight = this.percentHeight;
+			
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem
@@ -421,11 +426,11 @@ package view.primeFaces.surfaceComponents.components
             if (indicateRequiredChanged)
             {
 				isUpdating = true; // do not update 'text' change to history manager as the 'text' change here is the effect of another field change
-                if (indicateRequired)
+                if (indicateRequired && !hasIndicationRequired())
                 {
                     this.text += " *";
                 }
-                else if (this.text)
+                else if (this.text && !indicateRequired)
                 {
                     this.text = this.text.replace(" *", "");
                 }
@@ -447,5 +452,18 @@ package view.primeFaces.surfaceComponents.components
                 this.heightOutputChanged = false;
             }
         }
+
+		private function hasIndicationRequired():Boolean
+		{	
+			if (!this.text) return false;
+			
+			var indicationReqIndex:int = this.text.lastIndexOf("*");
+			if (this.text.length - 1 == indicationReqIndex)
+			{
+				return true;
+			}
+			
+			return false;
+		}
     }
 }

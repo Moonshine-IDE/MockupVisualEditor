@@ -16,6 +16,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.CheckboxPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.CheckboxSkin;
     import view.suportClasses.PropertyChangeReference;
+    import interfaces.components.ISelectBooleanCheckbox;
+    import components.primeFaces.SelectBooleanCheckbox;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -57,10 +59,14 @@ package view.primeFaces.surfaceComponents.components
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
 		public static const ELEMENT_NAME:String = "CheckBox";
 		
+		private var component:ISelectBooleanCheckbox;
+		
 		public function SelectBooleanCheckbox()
 		{
 			super();
-
+			
+			component = new components.primeFaces.SelectBooleanCheckbox();
+			
             this.setStyle("skinClass", CheckboxSkin);
 
 			this.selected = true;
@@ -294,30 +300,31 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
 		}
 
-        public function fromXML(xml:XML, childFromXMLCallback:Function):void
+        public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            this.label = xml.@label;
-            this.selected = xml.@selected == "true" ? true : false;
+			component.fromXML(xml, callback);
+			
+            this.label = component.label;
+            this.selected = component.selected;
         }
 
 		public function toCode():XML
 		{
-			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-			xml.@value = this.selected;
-			if (this.label && this.label != "") xml.@itemLabel = this.label;
-
-			return xml;
+			component.selected = this.selected;
+			component.label = this.label;
+			
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.SelectBooleanCheckbox).width = this.width;
+			(component as components.primeFaces.SelectBooleanCheckbox).height = this.width;
+			(component as components.primeFaces.SelectBooleanCheckbox).percentWidth = this.percentWidth;
+			(component as components.primeFaces.SelectBooleanCheckbox).percentHeight = this.percentHeight;
+			
+			return component.toCode();
 		}
 		
 		public function getComponentsChildren(...params):OrganizerItem

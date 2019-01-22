@@ -26,6 +26,8 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.TextEditorPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
+    import interfaces.components.ITextEditor;
+    import components.primeFaces.TextEditor;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -79,6 +81,8 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "textEditor";
         public static const ELEMENT_NAME:String = "TextEditor";
 		
+		private var component:ITextEditor;
+		
 		[Embed(source='/assets/richTextThumbItems.png')]
 		private var menuThumbnail: Class;
 		[Embed(source='/assets/richTextMenuItem1.png')]
@@ -92,7 +96,9 @@ package view.primeFaces.surfaceComponents.components
         public function TextEditor()
         {
             super();
-
+			
+			component = new components.primeFaces.TextEditor();
+			
             _propertiesChangedEvents = [
                 "widthChanged",
                 "heightChanged",
@@ -420,31 +426,29 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
-			this.widgetVar = xml.@widgetVar;
-			this.text = xml.@text;
-			this.placeholder = xml.@placeholder;
+			
+			component.fromXML(xml, callback);
+			
+			this.widgetVar = component.widgetVar;
+			this.text = component.text;
+			this.placeholder = component.placeholder;
 			
 			this.callLater(componentAddedToEditor);
         }
 
         public function toCode():XML
         {
-			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-			var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-			xml.addNamespace(primeFacesNamespace);
-			xml.setNamespace(primeFacesNamespace);
+			component.widgetVar = this.widgetVar;
+			component.text = this.text;
+			component.placeholder = this.placeholder;
 			
-			XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.TextEditor).width = this.width;
+			(component as components.primeFaces.TextEditor).height = this.width;
+			(component as components.primeFaces.TextEditor).percentWidth = this.percentWidth;
+			(component as components.primeFaces.TextEditor).percentHeight = this.percentHeight;
 			
-			xml.@widgetVar = this.widgetVar ? this.widgetVar : "";
-			if (this.text)
-            {
-                xml.@value = this.text;
-            }
-
-			if (this.placeholder && StringUtil.trim(this.placeholder).length != 0) xml.@placeholder = this.placeholder;
-			return xml;
+			return component.toCode();
         }
 		
         protected function setCommonXMLAttributes(xml:XML):void

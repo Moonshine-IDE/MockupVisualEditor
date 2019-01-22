@@ -14,7 +14,7 @@
 			import spark.events.GridItemEditorEvent;
 			
 			import data.ConstantsItems;
-			import data.SelectItem;
+			import vo.SelectItem;
 			
 			import view.interfaces.IHistorySurfaceComponent;
 			import view.primeFaces.surfaceComponents.components.SelectOneListbox;

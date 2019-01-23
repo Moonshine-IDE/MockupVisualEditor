@@ -1,22 +1,23 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import flash.events.Event;
-    import flash.net.registerClassAlias;
-    
-    import mx.collections.ArrayCollection;
-    import mx.utils.ObjectUtil;
-    
-    import spark.components.DropDownList;
-    
+    import components.primeFaces.SelectOneMenu;
+
     import data.ConstantsItems;
     import data.OrganizerItem;
-    import data.SelectItem;
-    
-    import utils.MxmlCodeUtils;
+
+    import flash.events.Event;
+    import flash.net.registerClassAlias;
+
+    import interfaces.components.ISelectOneMenu;
+
+    import mx.collections.ArrayCollection;
+    import mx.utils.ObjectUtil;
+
+    import spark.components.DropDownList;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
-
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
@@ -24,6 +25,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.surfaceComponents.skins.SelectOneMenuSkin;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+
+    import vo.SelectItem;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -74,10 +77,14 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneMenu";
         public static const ELEMENT_NAME:String = "SelectOneMenu";
-
+		
+		private var component:ISelectOneMenu;
+		
         public function SelectOneMenu()
         {
             super();
+			
+			component = new components.primeFaces.SelectOneMenu();
 			
 			this.width = 120;
 			this.height = 30;
@@ -97,11 +104,8 @@ package view.primeFaces.surfaceComponents.components
 				"itemAdded",
 				"itemUpdated"
             ];
-			
-			var tmpItem:SelectItem = new SelectItem();
-			tmpItem.itemLabel = "Select One";
-			
-			this.dataProvider = new ArrayCollection([tmpItem]);
+
+			this.dataProvider = new ArrayCollection(component.dataProvider);
 			this.labelField = "itemLabel";
 			this.requireSelection = true;
         }
@@ -418,45 +422,25 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
-			this.value = xml.@value;
-			this.editable = xml.@editable == "true" ? true : false;
 			
-			var tmpItem:SelectItem;
-			this.dataProvider = new ArrayCollection();
-			for each (var i:XML in xml.selectItem)
-			{
-				tmpItem = new SelectItem();
-				tmpItem.itemLabel = i.@itemLabel;
-				tmpItem.itemValue = i.@itemValue;
-				this.dataProvider.addItem(tmpItem);
-			}
+			component.fromXML(xml, callback);
+			
+			this.value = component.value;
+			this.editable = component.editable;
         }
 
 		public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-			var facetNamespace:Namespace = new Namespace("f", "http://xmlns.jcp.org/jsf/core");
-			var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-			xml.addNamespace(primeFacesNamespace);
-			xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-            xml["@value"] = this.value;
-			if (this.editable) xml["@editable"] = this.editable.toString();
+			component.value = this.value;
+			component.editable = this.editable;
 			
-			var itemXML:XML;
-			for each (var item:SelectItem in dataProvider)
-			{
-				itemXML = new XML("<selectItem />");
-				itemXML.addNamespace(facetNamespace);
-				itemXML.setNamespace(facetNamespace);
-				itemXML["@itemLabel"] = item.itemLabel;
-				itemXML["@itemValue"] = item.itemValue ? item.itemValue : "";
-				xml.appendChild(itemXML);
-			}
-
-            return xml;
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.SelectOneMenu).width = this.width;
+			(component as components.primeFaces.SelectOneMenu).height = this.width;
+			(component as components.primeFaces.SelectOneMenu).percentWidth = this.percentWidth;
+			(component as components.primeFaces.SelectOneMenu).percentHeight = this.percentHeight;
+			
+            return component.toCode();
         }
     }
 }

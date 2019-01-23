@@ -1,16 +1,18 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import flash.events.Event;
-    
-    import mx.controls.Tree;
-    
+    import components.primeFaces.Tree;
+
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
+    import flash.events.Event;
+
+    import interfaces.components.ITree;
+
+    import mx.controls.Tree;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
-
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.TreePropertyEditor;
@@ -60,11 +62,15 @@ package view.primeFaces.surfaceComponents.components
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tree";
         public static const ELEMENT_NAME:String = "Tree";
-
+		
+		private var component:ITree;
+		
         public function Tree()
         {
             super();
-
+			
+			component = new components.primeFaces.Tree();
+			
             this.mouseChildren = false;
             this.width = 120;
             this.height = 120;
@@ -341,40 +347,24 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            this.treeVar = xml.@["var"];
-            this.treeValue = xml.@value;
+			component.fromXML(xml, callback);
+			
+            this.treeVar = component.treeVar;
+            this.treeValue = component.treeValue;
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-			var hNamespace:Namespace = new Namespace("h", "http://xmlns.jcp.org/jsf/html");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
+			component.treeValue = this.treeValue;
+			component.treeVar = this.treeVar;
 			
-			xml.@["var"] = this.treeVar;
-            xml.@value = this.treeValue;
-
-            var node:XML = new XML("<treeNode/>");
-            node.addNamespace(primeFacesNamespace);
-            node.setNamespace(primeFacesNamespace);
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.Tree).width = this.width;
+			(component as components.primeFaces.Tree).height = this.width;
+			(component as components.primeFaces.Tree).percentWidth = this.percentWidth;
+			(component as components.primeFaces.Tree).percentHeight = this.percentHeight;
 			
-			var outputText:XML;
-			if (this.treeVar != "")
-			{
-				outputText = new XML("<outputText/>");
-				outputText.addNamespace(hNamespace);
-				outputText.setNamespace(hNamespace);
-				outputText.@value = "#{"+ this.treeVar +"}";
-				node.appendChild(outputText);
-			}
-			
-            xml.appendChild(node);
-
-            return xml;
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

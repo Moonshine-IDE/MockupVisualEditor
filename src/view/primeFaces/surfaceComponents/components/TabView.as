@@ -1,33 +1,33 @@
 package view.primeFaces.surfaceComponents.components
 {
+    import components.primeFaces.TabView;
+    import components.tabNavigator.TabNavigatorWithOrientation;
+
+    import data.OrganizerItem;
+
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
+    import interfaces.components.ITabView;
 
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
     import mx.events.CollectionEvent;
     import mx.utils.StringUtil;
-    
-    import spark.components.NavigatorContent;
+
     import spark.events.ElementExistenceEvent;
     import spark.events.IndexChangeEvent;
-    
-    import components.tabNavigator.TabNavigatorWithOrientation;
-    
-    import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
-
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.TabViewPropertyEditor;
     import view.primeFaces.supportClasses.ContainerDirection;
+    import view.primeFaces.supportClasses.NavigatorContent;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceTabView;
 
@@ -93,10 +93,14 @@ package view.primeFaces.surfaceComponents.components
         public static const ELEMENT_NAME:String = "TabView";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
+		private var component:ITabView;
+		
         public function TabView()
         {
             super();
-
+			
+			component = new components.primeFaces.TabView(this);
+			
             this.selectedIndex = 0;
 
             this.minWidth = 120;
@@ -399,20 +403,14 @@ package view.primeFaces.surfaceComponents.components
         override public function addElement(element:IVisualElement):IVisualElement
         {
 			_propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, "addItemAt", element, element);
-			var divContent:Div;
 
             if (element is NavigatorContent)
             {
-                divContent = this.getNewDiv();
-
-                element = super.addElement(element);
-                (element as NavigatorContent).addElement(divContent);
-
-                return element;
+                return super.addElement(element);
             }
             else
             {
-                divContent = this.div;
+                var divContent:Div = this.div;
                 if (divContent)
                 {
                     return divContent.addElement(element);
@@ -473,76 +471,38 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            if ("@orientation" in xml)
-            {
-                this.orientation = xml.@orientation == "" ? "top" : xml.@orientation;
-            }
-            this.scrollable = xml.@scrollable == "true";
-
-            var tabsXML:XMLList = xml.elements("tab");
+			component.fromXML(xml, callback);
+			
+			this.orientation = component.orientation;
+			this.scrollable = component.scrollable;
+			this.selectedIndex = component.selectedIndex;
+			
+			var tabsXML:XMLList = xml.elements("tab");
             var tabsCount:int = tabsXML.length();
             for(var i:int = 0; i < tabsCount; i++)
             {
                 var tabXML:XML = tabsXML[i];
-                var tabChildren:XMLList = tabXML.Div;
-
-                var tab:NavigatorContent = new NavigatorContent();
-                tab.label = tabXML.@title;
-                if (tabChildren.length() == 1)
-                {
-                    super.addElement(tab);
-                }
-                else
-                {
-                    this.addElement(tab);
-                }
-
-                this.tabFromXML(tab, tabXML, callback);
+                var tab:NavigatorContent = this.getElementAt(i) as NavigatorContent;
+  
+                this.tabFromXML(tab, tabXML);
             }
-            this.selectedIndex = xml.@selectedIndex;
-
+	
             tabViewContentHeightChanged = true;
             this.invalidateDisplayList();
         }
 
         public function toCode():XML
         {
-            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            xml.@orientation = this.orientation;
-            xml.@scrollable = this.scrollable;
-
-            var tabCount:int = this.numElements;
-            for (var i:int = 0; i < tabCount; i++)
-            {
-                var navContent:NavigatorContent = this.getElementAt(i) as NavigatorContent;
-                var navContentCount:int = navContent.numElements;
-
-                var tab:XML = new XML("<tab />");
-                tab.addNamespace(primeFacesNamespace);
-                tab.setNamespace(primeFacesNamespace);
-                tab.@title = navContent.label;
-
-                for (var j:int = 0; j < navContentCount; j++)
-                {
-                    var surfaceElement:IPrimeFacesSurfaceComponent = navContent.getElementAt(j) as IPrimeFacesSurfaceComponent;
-                    if (surfaceElement === null)
-                    {
-                        continue;
-                    }
-
-                    tab.appendChild(surfaceElement.toCode());
-                }
-
-                xml.appendChild(tab);
-            }
-
-            return xml;
+            component.orientation = this.orientation;
+            component.scrollable = this.scrollable;
+			
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.TabView).width = this.width;
+			(component as components.primeFaces.TabView).height = this.width;
+			(component as components.primeFaces.TabView).percentWidth = this.percentWidth;
+			(component as components.primeFaces.TabView).percentHeight = this.percentHeight;
+			
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem
@@ -599,6 +559,17 @@ package view.primeFaces.surfaceComponents.components
 			// children = [] (if drop acceptable component, i.e. div, tab etc.)
 			return (new OrganizerItem(this, ELEMENT_NAME, (componentsArray.length > 0) ? componentsArray : []));
 		}
+
+        public function getNewDiv():Div
+        {
+            var div:Div = new Div();
+            div.percentWidth = div.percentHeight = 100;
+            div.setStyle("borderVisible", false);
+            div.addEventListener(ElementExistenceEvent.ELEMENT_ADD, onDivElementAddRemove);
+            div.addEventListener(ElementExistenceEvent.ELEMENT_REMOVE, onDivElementAddRemove);
+
+            return div;
+        }
 
         override protected function commitProperties():void
         {
@@ -668,7 +639,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        private function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function):void
+        private function tabFromXML(tab:NavigatorContent, xml:XML):void
         {
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();
@@ -683,14 +654,9 @@ package view.primeFaces.surfaceComponents.components
                 if (container)
                 {
                     container.setStyle("borderVisible", false);
-                    callback(container, childXML);
-                }
-                else
-                {
-                    container = this.getNewDiv();
-                    container.fromXML(childXML, callback);
-
-                    tab.addElement(container);
+					container.percentWidth = div.percentHeight = 100;
+                    container.addEventListener(ElementExistenceEvent.ELEMENT_ADD, onDivElementAddRemove);
+                    container.addEventListener(ElementExistenceEvent.ELEMENT_REMOVE, onDivElementAddRemove);
                 }
             }
         }
@@ -731,17 +697,6 @@ package view.primeFaces.surfaceComponents.components
                 this.contentGroup.width = elementsWidth;
             }
 
-        }
-
-        private function getNewDiv():Div
-        {
-            var div:Div = new Div();
-            div.percentWidth = div.percentHeight = 100;
-            div.setStyle("borderVisible", false);
-            div.addEventListener(ElementExistenceEvent.ELEMENT_ADD, onDivElementAddRemove);
-            div.addEventListener(ElementExistenceEvent.ELEMENT_REMOVE, onDivElementAddRemove);
-
-            return div;
         }
 
         private function onDivElementAddRemove(event:ElementExistenceEvent):void

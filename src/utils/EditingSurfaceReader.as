@@ -45,6 +45,7 @@ package utils
 	import view.primeFaces.surfaceComponents.components.TextEditor;
 	import view.primeFaces.supportClasses.GridItem;
 	import view.primeFaces.supportClasses.GridRow;
+	import view.primeFaces.supportClasses.NavigatorContent;
 
     public class EditingSurfaceReader
 	{
@@ -113,8 +114,9 @@ package utils
 				CLASS_LOOKUP[RootDiv.ELEMENT_NAME] = RootDiv;
 				CLASS_LOOKUP[SelectOneListbox.ELEMENT_NAME] = SelectOneListbox;
 				CLASS_LOOKUP[view.primeFaces.supportClasses.Container.ELEMENT_NAME] = view.primeFaces.supportClasses.Container;
-				CLASS_LOOKUP["GridItem"] = GridItem;
-				CLASS_LOOKUP["GridRow"] = GridRow;
+				CLASS_LOOKUP[GridItem.ELEMENT_NAME] = GridItem;
+				CLASS_LOOKUP[GridRow.ELEMENT_NAME] = GridRow;
+				CLASS_LOOKUP[NavigatorContent.ELEMENT_NAME] = NavigatorContent;
             }
 		}
 	}

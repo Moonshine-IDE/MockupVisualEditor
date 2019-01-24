@@ -5,6 +5,8 @@ package view.primeFaces.supportClasses
 	
 	public class GridRow extends mx.containers.GridRow implements IComponent
 	{
+		public static const ELEMENT_NAME:String = "GridRow";
+		
 		public function GridRow()
 		{
 			super();

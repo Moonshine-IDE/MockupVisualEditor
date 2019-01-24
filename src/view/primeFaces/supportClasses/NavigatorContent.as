@@ -1,13 +1,13 @@
 package view.primeFaces.supportClasses
 {
+    import spark.components.NavigatorContent;
     import interfaces.IComponent;
-    import mx.containers.GridItem;
 
-	public class GridItem extends mx.containers.GridItem implements IComponent
+	public class NavigatorContent extends spark.components.NavigatorContent implements IComponent
 	{
-		public static const ELEMENT_NAME:String = "GridItem";
+		public static const ELEMENT_NAME:String = "NavigatorContent";
 		
-		public function GridItem()
+		public function NavigatorContent()
 		{
 			super();
 		}

@@ -10,7 +10,7 @@
 		import mx.collections.ArrayList;
 		import mx.events.FlexEvent;
 
-		import spark.components.NavigatorContent;
+		import view.primeFaces.supportClasses.NavigatorContent;
 		import spark.containers.Navigator;
 		import spark.events.GridItemEditorEvent;
 
@@ -57,6 +57,7 @@
 		private function addItemButton_clickHandler(event:MouseEvent):void
 		{
 			var navContent:NavigatorContent = new NavigatorContent();
+			navContent.addElement(selectedTabView.getNewDiv());
 			navContent.label = "Title";
 
 			var navigator:Navigator = (selectedItem as Navigator);

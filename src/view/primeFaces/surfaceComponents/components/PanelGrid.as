@@ -10,7 +10,6 @@ package view.primeFaces.surfaceComponents.components
     
     import data.OrganizerItem;
     
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
@@ -21,6 +20,9 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.table.Table;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+    import interfaces.IComponent;
+    import interfaces.components.IPanelGrid;
+    import components.primeFaces.PanelGrid;
 
     [Exclude(name="addRow", kind="method")]
     [Exclude(name="addColumn", kind="method")]
@@ -149,6 +151,8 @@ package view.primeFaces.surfaceComponents.components
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "panelGrid";
         public static const ELEMENT_NAME:String = "PanelGrid";
 
+		private var component:IPanelGrid;
+		
         private var bodyRowsXML:XMLList;
         private var thisCallbackXML:Function;
 
@@ -158,6 +162,8 @@ package view.primeFaces.surfaceComponents.components
         {
             super();
 
+			component = new components.primeFaces.PanelGrid(this);
+			
             this.width = 120;
             this.height = 120;
             this.minWidth = 20;
@@ -514,94 +520,32 @@ package view.primeFaces.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
-            this.bodyRowsXML = xml.Row;
-            var header:XMLList = xml.Header.Row;
-            var rCount:int = 0;
-
-            if ("@headerRowCount" in xml)
-            {
-                this.headerRowCount = xml.@headerRowCount;
-            }
-            else
-            {
-                rCount = header.length();
-                if (rCount > 0)
-                {
-                    this.headerRowCount = rCount;
-                }
-                else
-                {
-                    this.headerRowCount = -1;
-                }
-            }
-
-            if (this.hasHeader)
-            {
-                this.headerRowTitles = [];
-                for (var headerIndex:int = 0; headerIndex < this.headerRowCount; headerIndex++)
-                {
-                    var tmpArr:Array = [];
-                    for each (var headerTitle:XML in header[headerIndex].Column)
-                    {
-                        tmpArr.push(headerTitle.toString());
-                    }
-
-                    headerRowTitles.push(tmpArr);
-                }
-            }
-
-            if ("@rowCount" in xml)
-            {
-                this.rowCount = xml.@rowCount;
-            }
-            else
-            {
-                rCount = bodyRowsXML.length();
-                if (rCount > 0)
-                {
-                    this.rowCount = rCount;
-                }
-                else
-                {
-                    this.rowCount = 1;
-                }
-            }
-
-            if ("@columnCount" in xml)
-            {
-                this.columnCount = xml.@columnCount;
-            }
-            else
-            {
-                var columns:XMLList = bodyRowsXML[0].Column;
-                var colCount:int = columns.length();
-                if (colCount > 0)
-                {
-                    this.columnCount = colCount;
-                }
-                else
-                {
-                    this.columnCount = 1;
-                }
-            }
-
-            thisCallbackXML = callback;
+			
+			component.fromXML(xml, callback);
+					
+			this.thisCallbackXML = component.callbackXML;
+			this.bodyRowsXML = component.bodyRowsXML;
+			
+			this.headerRowCount = component.headerRowCount;
+			this.headerRowTitles = component.headerRowTitles;
+			this.rowCount = component.rowCount;
+			this.columnCount = component.columnCount;
         }
 
         public function toCode():XML
         {
-			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, PRIME_FACES_XML_ELEMENT_NAME) + "/>");
-            var primeFacesNamespace:Namespace = new Namespace("p", "http://primefaces.org/ui");
-            xml.addNamespace(primeFacesNamespace);
-            xml.setNamespace(primeFacesNamespace);
-
-            XMLCodeUtils.addSizeHtmlStyleToXML(xml, this);
-
-            toCodeHeader(xml);
-            toCodeBody(xml);
-
-            return xml;
+			component.headerRowCount = this.headerRowCount;
+			component.headerRowTitles = this.headerRowTitles;
+			component.rowCount = this.rowCount;
+			component.columnCount = this.columnCount;
+			
+			component.isSelected = this.isSelected;
+			(component as components.primeFaces.PanelGrid).width = this.width;
+			(component as components.primeFaces.PanelGrid).height = this.width;
+			(component as components.primeFaces.PanelGrid).percentWidth = this.percentWidth;
+			(component as components.primeFaces.PanelGrid).percentHeight = this.percentHeight;
+			
+            return component.toCode();
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem
@@ -754,6 +698,11 @@ package view.primeFaces.surfaceComponents.components
             return colItem;
         }
 
+        public function getTitle(row:int, col:int):String
+        {
+            return header.getTitle(row, col);
+        }
+
         override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
         {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
@@ -865,7 +814,7 @@ package view.primeFaces.surfaceComponents.components
                 rowXML.setNamespace(primeFacesNamespace);
                 for (var col:int = 0; col < this.columnCount; col++)
                 {
-                    var headerTitle:String = header.getTitle(row, col);
+                    var headerTitle:String = this.getTitle(row, col);
                     var colXML:XML = new XML("<column>" + headerTitle + "</column>");
                     colXML.addNamespace(primeFacesNamespace);
                     colXML.setNamespace(primeFacesNamespace);

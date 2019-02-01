@@ -73,6 +73,7 @@
         private function dateField_changeHandler(event:Event):void
         {
             selectedItem[textProperty] = this.dateField.selectedDate;
+            this.dispatchEvent(new Event(Event.CHANGE));
         }
 
         private function updateBinding():void

@@ -231,7 +231,7 @@ package view.primeFaces.surfaceComponents.components
             _selectedDate = value;
 
             this.selectedDateChanged = true;
-            this.invalidateDisplayList();
+            this.invalidateProperties();
             dispatchEvent(new Event("selectedDateChanged"));
         }
 
@@ -295,7 +295,7 @@ package view.primeFaces.surfaceComponents.components
 
             _minDate = value;
             this.minMaxDateChanged = true;
-            this.invalidateDisplayList();
+            this.invalidateProperties();
             dispatchEvent(new Event("minDateChanged"));
         }
 
@@ -326,11 +326,12 @@ package view.primeFaces.surfaceComponents.components
 
             _maxDate = value;
             this.minMaxDateChanged = true;
-            this.invalidateDisplayList();
+            this.invalidateProperties();
             dispatchEvent(new Event("maxDateChanged"));
         }
 
         private var _pattern:String = "MM/dd/yyyy";
+        private var patternChanged:Boolean;
 
         [Bindable("patternChanged")]
         /**
@@ -362,6 +363,8 @@ package view.primeFaces.surfaceComponents.components
             _propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(this, "pattern", _pattern, value);
 
             _pattern = value;
+            patternChanged = true;
+            this.invalidateProperties();
             dispatchEvent(new Event("patternChanged"));
         }
 
@@ -452,11 +455,11 @@ package view.primeFaces.surfaceComponents.components
             currentState = this.mode;
         }
 
-        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        override protected function commitProperties():void
         {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            super.commitProperties();
 
-            if (selectedDateChanged)
+            if (selectedDateChanged || patternChanged)
             {
                 if (mode == "popup")
                 {
@@ -468,6 +471,7 @@ package view.primeFaces.surfaceComponents.components
                     this.dateChooser.selectedDate = this.selectedDate;
                 }
                 selectedDateChanged = false;
+                patternChanged = false;
             }
 
             if (minMaxDateChanged)
@@ -559,12 +563,11 @@ package view.primeFaces.surfaceComponents.components
             this.pattern = component.pattern;
 
             var upperPattern:String = this.pattern.toUpperCase();
-
             this.selectedDate = DateField.stringToDate(component.selectedDate, upperPattern);
-            this.mode = component.mode;
-
             this.minDate = DateField.stringToDate(component.minDate, upperPattern);
             this.maxDate = DateField.stringToDate(component.maxDate, upperPattern);
+
+            this.mode = component.mode;
         }
 
         public function toCode():XML

@@ -7,7 +7,6 @@ package view.flex.surfaceComponents.components
 	import mx.events.CollectionEventKind;
 	import mx.events.FlexEvent;
 	import mx.events.PropertyChangeEvent;
-	
 	import spark.components.Group;
 	import spark.components.NavigatorContent;
 	import spark.components.SkinnableContainer;
@@ -16,7 +15,9 @@ package view.flex.surfaceComponents.components
 	import spark.layouts.VerticalLayout;
 	
 	import data.DataProviderListItem;
-	
+
+	import utils.GenericUtils;
+
 	import utils.MxmlCodeUtils;
 	
 	import view.flex.propertyEditors.TabsPropertyEditor;
@@ -214,8 +215,6 @@ package view.flex.surfaceComponents.components
             tabBar.addNamespace(sparkNamespace);
             tabBar.setNamespace(sparkNamespace);
 
-			tabBar.@mouseEnabled = false;
-			tabBar.@mouseChildren = false;
 			tabBar.@percentWidth = 100;
 
             var viewStack:XML = new XML("<ViewStack></ViewStack>");
@@ -223,6 +222,9 @@ package view.flex.surfaceComponents.components
             viewStack.addNamespace(mxNamespace);
             viewStack.setNamespace(mxNamespace);
 
+			var viewStackId:String = GenericUtils.getRandomId("viewStack");
+
+			viewStack.@id = viewStackId;
 			viewStack.@selectedIndex = selectedIndex;
 
             var tabCount:int = this._dataProvider.length;
@@ -231,6 +233,7 @@ package view.flex.surfaceComponents.components
                 viewStack.appendChild(this.tabToMXML(i));
             }
 
+			tabBar.@dataProvider = "{".concat(viewStackId, "}");
 			xml.appendChild(tabBar);
 			xml.appendChild(viewStack);
 

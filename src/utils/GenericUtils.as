@@ -103,5 +103,12 @@ package utils
 			//but the old text value is different
 			return selectedItem.height.toString();
 		}
+
+		public static function getRandomId(prefix:String):String
+		{
+			var v:Number = 1 + Math.random() * (100 - 1);
+
+			return prefix + String(Math.round(v));
+		}
 	}
 }

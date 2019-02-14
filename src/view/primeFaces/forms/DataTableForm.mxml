@@ -180,7 +180,7 @@
 
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin" height="100%">
 		<s:DataGrid id="dgColumns"
-					width="100%" height="100%"
+					width="100%" height="130" requestedMinRowCount="4"
 					editable="true" sortableColumns="false" draggableColumns="false"
 					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
 					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"

@@ -157,7 +157,7 @@
 
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
 		<s:DataGrid id="dgTabs"
-					width="100%" maxHeight="350"
+					width="100%" requestedMinRowCount="4" height="130"
 					editable="true" sortableColumns="false" draggableColumns="false"
 					selectedIndex="@{selectedTabView.selectedIndex}"
 					gridItemEditorSessionSave="onItemEditFinished(event)"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->

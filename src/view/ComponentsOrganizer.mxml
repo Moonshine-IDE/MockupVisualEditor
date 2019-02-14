@@ -158,7 +158,10 @@
 							break;
 						case "removeItemAt":
 							tree.expandItem(tree.selectedItem, true);
-							tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
+							if (tree.selectedItem.children)
+							{
+								tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
+							}
 							refreshItem(change.fieldClass as IVisualElement);
 							break;
 						case "addRowAt":

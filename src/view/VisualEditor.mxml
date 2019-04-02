@@ -15,10 +15,10 @@
 	</s:BorderContainer>
 	<collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
 		<view:ComponentList id="componentList" percentWidth="20" percentHeight="100"
-							visualEditorType="{_visualEditorType}" minWidth="150"/>
+							visualEditorType="{visualEditorType}" minWidth="150"/>
 		<s:Scroller percentWidth="70" percentHeight="100">
 			<s:Group>
-				<view:EditingSurface id="editingSurface" visualEditorType="{_visualEditorType}"
+				<view:EditingSurface id="editingSurface" visualEditorType="{visualEditorType}"
 									 organizer="{componentsOrganizer}" left="0" right="0" top="0" bottom="0"/>
 			</s:Group>
 		</s:Scroller>
@@ -30,12 +30,12 @@
 			<view:ComponentsOrganizer id="componentsOrganizer"
 									  width="100%" top="0" bottom="20"
 									  editingSurface="{editingSurface}"
-									  visible="{_visualEditorType != 'flex' &amp;&amp; bbPropertyPanel.selectedIndex==1}"
-									  includeInLayout="{_visualEditorType != 'flex'}"/>
+									  visible="{visualEditorType != 'flex' &amp;&amp; bbPropertyPanel.selectedIndex==1}"
+									  includeInLayout="{visualEditorType != 'flex'}"/>
 			<s:ButtonBar id="bbPropertyPanel" 
 						 bottom="0" right="0" selectedIndex="0"
 						 skinClass="skins.VisualEditorButtonBarSkin" requireSelection="true"
-						 includeInLayout="{_visualEditorType != 'flex'}" visible="{_visualEditorType != 'flex'}">
+						 includeInLayout="{visualEditorType != 'flex'}" visible="{visualEditorType != 'flex'}">
 				<s:ArrayList>
 					<fx:Object icon="@Embed('/assets/list.png')" label="" toolTip="Properties"/>
 					<fx:Object icon="@Embed('/assets/organize.png')" label="" toolTip="Organize"/>
@@ -58,8 +58,13 @@
 
 		private var _file:FileReference;
 
-		[Bindable]
 		private var _visualEditorType:String;
+
+		[Bindable]
+		public function get visualEditorType():String
+		{
+			return _visualEditorType;
+		}
 
 		public function set visualEditorType(value:String):void
 		{

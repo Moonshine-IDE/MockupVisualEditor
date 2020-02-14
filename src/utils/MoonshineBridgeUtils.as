@@ -43,7 +43,12 @@ package utils
 		
 		public static function getVisualEditorComponent():VisualEditor
 		{
-			return moonshineBridge.getVisualEditorComponent();
+			if(moonshineBridge==null){
+				return null;
+			}else{
+				return moonshineBridge.getVisualEditorComponent();
+			}
+			
 		}
 
 		public static function getRelativeFilePath():String

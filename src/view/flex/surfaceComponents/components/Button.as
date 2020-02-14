@@ -118,5 +118,12 @@ package view.flex.surfaceComponents.components
             xml.@width = this.width;
             xml.@height = this.height;
 		}
+
+		public function toDominoCode():XML
+        {
+			var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, MXML_ELEMENT_NAME) + "/>");
+           
+			return xml;
+		}
     }
 }

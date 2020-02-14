@@ -24,6 +24,8 @@
 			import data.OrganizerItem;
 			
 			import view.interfaces.IPrimeFacesSurfaceComponent;
+			import view.interfaces.IDominoSurfaceComponent;
+			import view.interfaces.ISurfaceComponent;
 			import view.primeFaces.supportClasses.GridBase;
 			import view.primeFaces.surfaceComponents.components.Fieldset;
 			import view.primeFaces.surfaceComponents.components.Grid;
@@ -368,37 +370,61 @@
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
 			{
-				var element:IPrimeFacesSurfaceComponent = surface.getElementAt(0) as IPrimeFacesSurfaceComponent;
-				var componentsArray:Array = [];				
-				var container:IVisualElementContainer = surface;
-				var organizerItem:OrganizerItem;
-				var elementCount:int = 0;
 				
-				if (element is IPrimeFacesSurfaceComponent) container = element as IVisualElementContainer;
-				if (!container)
-				{
-					elementCount = surface.numElements;
-					container = surface;
-				}
-				else
-				{
-					elementCount = container.numElements;
-				}
-				
-				for (var i:int = 0; i < elementCount; i++)
-				{
-					element = container.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				if(surface.numChildren>0){
+					var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
 					
-					if (element === null)
+			
+					
+					var componentsArray:Array = [];				
+					var container:IVisualElementContainer = surface;
+					var organizerItem:OrganizerItem;
+					var elementCount:int = 0;
+					
+					
+					
+					if (editingSurface.isVisualEditorDomino || editingSurface.isVisualEditorFlex) 
 					{
-						continue;
+						container = element as IVisualElementContainer;
 					}
 					
-					organizerItem = element.getComponentsChildren();
-					if (organizerItem) componentsArray.push(organizerItem);
-				}
+					
+					if (!container)
+					{
+						elementCount = surface.numElements;
+						container = surface;
+					}
+					else
+					{
+						elementCount = container.numElements;
+					}
+					
+					for (var i:int = 0; i < elementCount; i++)
+					{
+						element = container.getElementAt(i) as ISurfaceComponent;
+						
+						if (element === null)
+						{
+							continue;
+						}
+						var domino_element:IDominoSurfaceComponent;
+						var primeface_element:IPrimeFacesSurfaceComponent;
+
+						if(editingSurface.isVisualEditorDomino){
+							domino_element = element as IDominoSurfaceComponent;
+							organizerItem = domino_element.getComponentsChildren();
+						}else{
+							primeface_element = element as IPrimeFacesSurfaceComponent;
+							organizerItem = primeface_element.getComponentsChildren();
+						}
+
+						if (organizerItem) componentsArray.push(organizerItem);
+					}
 				
-				return [new OrganizerItem(container, "Stage", componentsArray)];
+					return [new OrganizerItem(container, "Stage", componentsArray)];
+				}else{
+					return [new OrganizerItem(surface, "Stage", [])];	
+				}
 			}
 			
 			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, isRoot:Boolean=true, topParent:Object=null):void

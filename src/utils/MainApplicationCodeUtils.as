@@ -28,6 +28,24 @@ package utils
 			return null;
 		}
 
+		/**
+		 * return domino main xml tag
+		 */
+		public static function appendDominoXMLMainTag(surface:EditingSurface):XML
+		{
+			var element:ISurfaceComponent = surface.numElements > 0 ? surface.getElementAt(0) as ISurfaceComponent : null;
+			var isDominoMainApp:MainApplication = element as MainApplication;
+
+            if (element === null && !isDominoMainApp)
+			{
+				var container:XML = new XML("<form />");
+
+				return container;
+			}
+
+			return null;
+		}
+
 		public static function getMainContainerTag(xml:XML):XML
 		{
             var body:XMLList = xml.children();
@@ -42,7 +60,7 @@ package utils
 
 			return null;
 		}
-
+		
 		public static function getParentContent(surface:EditingSurface, title:String, component:UIComponent):XML
 		{
             var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
@@ -55,6 +73,18 @@ package utils
 			
 			return getPrimeFacesMainContainer(title, component,
                     element as view.primeFaces.supportClasses.Container);
+		}
+		/**
+		 * Overloaded this function, so that the domino project can call it
+		 */
+
+		public static function getDominoParentContent(surface:EditingSurface, title:String):XML
+		{	   
+       
+
+			return getDominoMainContainer(title);	
+
+				
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
@@ -142,6 +172,68 @@ package utils
 			
 			xml.appendChild(headXml);
 			xml.appendChild(bodyXML);
+
+			return xml;
+		}
+
+
+		private static function getDominoMainContainer(title:String):XML
+		{
+			var xml:XML = new XML("<form xmlns='http://www.lotus.com/dxl'  publicaccess='false'  renderpassthrough='true' />");
+
+            // var dxlNamespace:Namespace = new Namespace("", "http://www.lotus.com/dxl");
+            // xml.addNamespace(dxlNamespace);
+           
+
+			var noteinfoXml:XML = new XML("<noteinfo/>");
+			noteinfoXml.@noteid ="1eda";
+			noteinfoXml.@unid="4D129C5913A7BF5986256E51003F7C01";
+			noteinfoXml.@sequence="17";
+
+			var dat:Date = new Date();
+			var createdXml:XML = new XML("<created/>");
+			var datetimeXml:XML=new XML("<datetime>"+dat+"</datetime>");
+			
+			createdXml.appendChild(datetimeXml);
+			var modifiedXml:XML=new XML("<modified>"+"<datetime>"+dat+"</datetime>"+"</modified>");
+			modifiedXml.appendChild(datetimeXml);
+			var revisedXml:XML=new XML("<revised dst='true'>"+"<datetime>"+dat+"</datetime>"+"</revised>");
+			revisedXml.appendChild(datetimeXml);
+			var lastaccessedXml:XML=new XML("<lastaccessed>"+"<datetime>"+dat+"</datetime>"+"</lastaccessed>");
+			lastaccessedXml.appendChild(datetimeXml);
+			var addedtofileXml:XML=new XML("<addedtofile/>");
+			addedtofileXml.appendChild(datetimeXml);
+
+			noteinfoXml.appendChild(createdXml);
+			noteinfoXml.appendChild(modifiedXml);
+			noteinfoXml.appendChild(revisedXml);
+			noteinfoXml.appendChild(lastaccessedXml);
+			noteinfoXml.appendChild(addedtofileXml);
+			
+			xml.appendChild(noteinfoXml);
+
+			/**
+			 * For current simple demo ,it not useful.
+			 * But it must need add in later
+			 */
+
+			// var codeXml:XML = new XML("<code event='windowtitle'>"+"</code>");
+			// var formulaXml:XML = new XML("<formula>"+"</formula>");
+			// codeXml.appendChild(formulaXml);
+
+			//xml.appendChild(codeXml);
+
+
+			var actionbarXml:XML = new XML("<actionbar  bgcolor='#ece9d8' bordercolor='black'>"+"</actionbar>");
+
+			xml.appendChild(actionbarXml);
+
+			
+	
+			var bodyXml:XML = new XML("<body><richtext><par def='6'></par></richtext></body>");
+
+			
+			xml.appendChild(bodyXml);
 
 			return xml;
 		}

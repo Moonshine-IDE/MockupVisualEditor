@@ -45,6 +45,8 @@
 			import view.primeFaces.surfaceComponents.components.TabView;
 			import view.primeFaces.surfaceComponents.components.TextEditor;
 			
+			import view.domino.surfaceComponents.components.DominoInputText;
+			
 			public var visualEditorType:String;
 			
 			[Bindable] private var collection:ArrayCollection;
@@ -54,7 +56,12 @@
 				if (lstComponents.dataProvider || !visualEditorType) return;
 				
 				collection = new ArrayCollection();
-				if (VisualEditorType.FLEX == visualEditorType)
+				if (VisualEditorType.DOMINO == visualEditorType)
+				{
+					collection = new ArrayCollection([
+						new ComponentListItem("Input", DominoInputText),
+					]);
+				} else if (VisualEditorType.FLEX == visualEditorType)
 				{
 					collection = new ArrayCollection([
 						new ComponentListItem("Button", view.flex.surfaceComponents.components.Button),

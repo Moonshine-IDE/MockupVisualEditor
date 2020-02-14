@@ -1,7 +1,7 @@
 package utils
 {
     import converter.Converter;
-
+	import converter.DominoConverter;
     import interfaces.ISurface;
 
 	import view.flex.surfaceComponents.components.Button;
@@ -47,24 +47,36 @@ package utils
 	import view.primeFaces.supportClasses.GridRow;
 	import view.primeFaces.supportClasses.NavigatorContent;
 
+	import view.domino.surfaceComponents.components.DominoInputText;
+
     public class EditingSurfaceReader
 	{
         public static var CLASS_LOOKUP:Object;
         private static var conv:Converter;
+		private static var domino_conv:DominoConverter;
 
 		public static function fromXML(surface:ISurface, xml:XML, visualEditorType:String):void
 		{
             initReader(visualEditorType);
-            conv = Converter.getInstance(CLASS_LOOKUP);
-            conv.fromXML(surface, xml);
+			if(visualEditorType == VisualEditorType.DOMINO){
+				domino_conv = DominoConverter.getInstance(CLASS_LOOKUP);
+            	domino_conv.fromXML(surface, xml);
+			}else{
+				conv = Converter.getInstance(CLASS_LOOKUP);
+            	conv.fromXML(surface, xml);
+			}
+         
 		}
+
+	
 
 		private static function initReader(visualEditorType:String):void
 		{
             CLASS_LOOKUP = {};
-
-			if (visualEditorType == VisualEditorType.FLEX)
-            {
+			if (visualEditorType == VisualEditorType.DOMINO){
+				CLASS_LOOKUP[DominoInputText.ELEMENT_NAME] = DominoInputText;
+			}else if (visualEditorType == VisualEditorType.FLEX)
+			{
                 CLASS_LOOKUP[view.flex.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
                         view.flex.surfaceComponents.components.MainApplication;
 
@@ -97,7 +109,7 @@ package utils
 				CLASS_LOOKUP[OutputLabel.ELEMENT_NAME] = OutputLabel;
 				CLASS_LOOKUP[Fieldset.ELEMENT_NAME] = Fieldset;
 				CLASS_LOOKUP[InputTextarea.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputTextarea;
-				CLASS_LOOKUP[InputText.ELEMENT_NAME] = InputText;
+				CLASS_LOOKUP[InputText.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.InputText;
 				CLASS_LOOKUP[SelectBooleanCheckbox.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectBooleanCheckbox;
 				CLASS_LOOKUP[SelectOneRadio.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectOneRadio;
 				CLASS_LOOKUP[SelectOneMenu.ELEMENT_NAME] = view.primeFaces.surfaceComponents.components.SelectOneMenu;

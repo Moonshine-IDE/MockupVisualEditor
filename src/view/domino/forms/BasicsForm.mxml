@@ -8,17 +8,19 @@
 									  currentState="normal">
 	<suportclasses:states>
 		<s:State name="normal"/>
-		<s:State name="normalWithId"/>
+		<s:State name="normalWithName"/>
 	</suportclasses:states>
 
 	<suportclasses:layout>
 		<s:FormLayout />
 	</suportclasses:layout>
-	<s:FormItem label="Id" skinClass="skins.FormItemSkin" includeIn="normalWithId">
-		<s:TextInput id="idTextInput" width="100%" skinClass="skins.TextInputSkin"
-					 text="{selectedComponentIdAttributeChaged}" focusOut="commitId()"
-					 height="25" tabIndex="1" keyDown="idInput_keyDownHandler(event)"/>
+	<s:FormItem label="Name" skinClass="skins.FormItemSkin" includeIn="normalWithName">
+		<s:TextInput id="nameTextInput" width="100%" skinClass="skins.TextInputSkin"
+					 text="{selectedComponentNameAttributeChaged}" focusOut="commitName()"
+					 height="25" tabIndex="1" keyDown="nameInput_keyDownHandler(event)"/>
 	</s:FormItem>
+
+
     
 	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
 	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
@@ -59,6 +61,7 @@
         import utils.GenericUtils;
 
         import view.interfaces.IIdAttribute;
+        //import view.interfaces.INameAttribute;
         import view.interfaces.ISurfaceComponent;
 
         [Bindable]
@@ -85,7 +88,7 @@
             if (super.selectedItem != value)
             {
                 super.selectedItem = value;
-                this.currentState = value is IIdAttribute ? "normalWithId" : "normal";
+                this.currentState = value is IIdAttribute ? "normalWithName" : "normal";
                 updateBinding();
             }
         }
@@ -129,15 +132,17 @@
         }
 
         [Bindable("propertyEditorChanged")]
-        public function get selectedComponentIdAttributeChaged():String
+        public function get selectedComponentNameAttributeChaged():String
         {
             if (this.selectedItem is IIdAttribute)
             {
-                return this.selectedItem["idAttribute"];
+                return this.selectedItem["nameAttribute"];
             }
 
             return "";
         }
+
+     
 
         private function commitWidth():void
         {
@@ -171,11 +176,18 @@
             this.heightInput.selectAll();
         }
 
-        private function commitId():void
+        // private function commitId():void
+        // {
+        //     if (!this.selectedItem) return;
+
+        //     this.selectedItem["idAttribute"] = this.idTextInput.text;
+        // }
+
+            private function commitName():void
         {
             if (!this.selectedItem) return;
 
-            this.selectedItem["idAttribute"] = this.idTextInput.text;
+            this.selectedItem["nameAttribute"] = this.nameTextInput.text;
         }
 
         private function widthInput_keyDownHandler(event:KeyboardEvent):void
@@ -194,11 +206,11 @@
             }
         }
 
-        private function idInput_keyDownHandler(event:KeyboardEvent):void
+        private function nameInput_keyDownHandler(event:KeyboardEvent):void
         {
             if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
             {
-                commitId();
+                commitName();
             }
         }
 
@@ -218,7 +230,7 @@
                 this._bindingHeight.unwatch();
                 this._bindingWidth = this._bindingHeight = null;
 
-                if (currentState == "normalWithId")
+                if (currentState == "normalWithName")
                 {
                     this._bindingId.unwatch();
                     this._bindingId = null;
@@ -236,7 +248,7 @@
             }
             this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
             this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
-            if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "nameAttribute", false, true);
+            if (currentState == "normalWithName") this._bindingId = BindingUtils.bindSetter(onNameUpdated, selectedItem, "nameAttribute", false, true);
 
             if (selectedItem is IComponentSizeOutput)
             {
@@ -269,9 +281,19 @@
         {
             if (!this.selectedItem) return;
 
-            if (this.idTextInput)
+            if (this.nameTextInput)
             {
-                this.idTextInput.text = this.selectedItem["idAttribute"];
+                this.nameTextInput.text = this.selectedItem["nameAttribute"];
+            }
+        }
+
+        private function onNameUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
+
+            if (this.nameTextInput)
+            {
+                this.nameTextInput.text = this.selectedItem["nameAttribute"];
             }
         }
 
@@ -288,10 +310,10 @@
                 _childrenForFocus.push(widthInput.textDisplay);
                 _childrenForFocus.push(heightInput.textDisplay);
             }
-            else if (currentState == "normalWithId")
+            else if (currentState == "normalWithName")
             {
                 _childrenForFocus = [];
-                _childrenForFocus.push(idTextInput.textDisplay);
+                _childrenForFocus.push(nameTextInput.textDisplay);
                 _childrenForFocus.push(widthInput.textDisplay);
                 _childrenForFocus.push(heightInput.textDisplay);
             }

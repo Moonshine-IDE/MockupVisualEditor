@@ -75,6 +75,8 @@
 		private var _hasChanged:Boolean = false;
 		private var _visualEditorType:String;
 
+		private var _isDominoProject:Boolean = false;
+
 		public function set visualEditorType(value:String):void
 		{
 			_visualEditorType = value;
@@ -129,6 +131,11 @@
 			return (_visualEditorType == 'flex');
 		}
 
+		public function get isVisualEditorDomino():Boolean
+		{
+			return (_visualEditorType == 'domino');
+		}
+
 		public function setResizerVisible(value:Boolean):void
 		{
 			if (this.resizer) this.resizer.visible = value;
@@ -148,16 +155,28 @@
 			{
 				return EditingSurfaceWriter.toCode(this);
 			}
+			/**
+			 * overloading the toCode method, when domino project
+			 * call this method will pass the project_type parameter.
+			 * Only domino project will call this method ,this will keep old method work fine.
+			 *
+			 */
+			public function toDominoCode():XML
+			{
+				_isDominoProject = true ;
+				return EditingSurfaceWriter.toDominoCode(this);
+			}
+			
 		}
 
 		public function fromXML(xml:XML):void
 		{
 			this.deleteAll();
 			EditingSurfaceReader.fromXML(this, xml, _visualEditorType);
-
 			_wasLoaded = true;
 			if (!isVisualEditorFlex) this.callLater(organizer.loadFirstData, [this]);
 		}
+
 
 		public function deleteAll():void
 		{
@@ -513,23 +532,19 @@
 			var dragSource:DragSource = event.dragSource;
 			var offset:Point = Point(dragSource.dataForFormat(ComponentListItemRenderer.OFFSET_DRAG_FORMAT));
 			var object:ISurfaceComponent = ISurfaceComponent(dragSource.dataForFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT));
-
 			var position:Point = new Point(event.stageX - offset.x, event.stageY - offset.y);
 			position = coorinateSystem.globalToLocal(position);
 			object.x = position.x;
 			object.y = position.y;
 			this.addItem(object);
-
 			//this will either add a new object or move an existing object to the top
 			if (object.parent !== dropTarget)
 			{
 				dropTarget.addElement(IVisualElement(object));
 				if (!isVisualEditorFlex) organizer.addDroppedElement(dropTarget as IVisualElement, object as IVisualElement);
-
 				// some component may have processing should occur after
 				// being added to the editor
 				if (object is IInitializeAfterAddedComponent) (object as IInitializeAfterAddedComponent).componentAddedToEditor();
-
 				// at this point property editor not created thus we send the 
 				// event through EditingSurface
 				if (object is IHistorySurfaceComponent)
@@ -537,18 +552,15 @@
 					var tmpChangeRef:PropertyChangeReference = new PropertyChangeReference(object as IHistorySurfaceComponent);
 					tmpChangeRef.fieldClassIndexToParent = IVisualElementContainer(object.owner).getElementIndex(object as IVisualElement);
 					tmpChangeRef.fieldClassParent = object.owner as IVisualElementContainer;
-
 					this.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_ADDING, tmpChangeRef));
 				}
 			}
 			this.selectedItem = object;
 			this.setFocus();
-
 			if (dropTarget is IMainApplication)
 			{
 				(dropTarget as UIComponent).invalidateDisplayList();
 			}
-
 			hasChanged = true;
 		}
 

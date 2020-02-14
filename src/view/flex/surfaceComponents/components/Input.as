@@ -30,6 +30,7 @@ package view.flex.surfaceComponents.components
 	{
         private static const MXML_ELEMENT_NAME:String = "TextInput";
 		public static const ELEMENT_NAME:String = "input";
+		private static const DOMINO_ELEMENT_NAME:String = "field";
 
 		public function Input()
 		{
@@ -110,6 +111,31 @@ package view.flex.surfaceComponents.components
 
             return xml;
         }
+
+		public function toDominoCode():XML
+        {
+            var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, DOMINO_ELEMENT_NAME) + "/>");
+          
+
+            setDominoCommonXMLAttributes(xml);
+
+            return xml;
+        }
+
+		private function setDominoCommonXMLAttributes(xml:XML):void
+		{
+			/**
+			 * full dxl field Attributes please access follow url
+			 * https://www.ibm.com/support/knowledgecenter/en/SSVRGU_9.0.1/basic/H_FIELD_ELEMENT_XML.html
+			 * we only implement a basic attibutes setting in here
+			 */
+		  	xml.@type = 'text';
+            xml.@kind = 'editable';
+			xml.@allowmultivalues='false';
+            xml.@width = this.width;
+            xml.@height = this.height;
+            // xml.@text = this.text;
+		}
 
         private function setCommonXMLAttributes(xml:XML):void
 		{

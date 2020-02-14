@@ -1,4 +1,4 @@
-package view.primeFaces.surfaceComponents.components
+package view.domino.surfaceComponents.components
 {
     import flash.events.Event;
 
@@ -15,11 +15,13 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.InputTextPropertyEditor;
+    import view.interfaces.INameAttribute;
+    import view.interfaces.IDominoSurfaceComponent;
+    import view.domino.propertyEditors.InputTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IInputText;
-    import components.primeFaces.InputText;
+    import interfaces.dominoComponents.IDominoInputText;
+    import components.domino.DominoInputText;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -59,20 +61,20 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute,
+    public class DominoInputText extends TextInput implements IDominoSurfaceComponent,IIdAttribute,
             IHistorySurfaceComponent, IComponentSizeOutput
     {
-        public static const DOMINO_XML_ELEMENT_NAME:String = "field";
-        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputText";
-        public static const ELEMENT_NAME:String = "InputText";
+        public static const DOMINO_ELEMENT_NAME:String = "field";
+       
+        public static const ELEMENT_NAME:String = "Field";
 		
-		private var component:IInputText;
+		private var component:IDominoInputText;
 		
-        public function InputText()
+        public function DominoInputText()
         {
             super();
 			
-			component = new components.primeFaces.InputText();
+			component = new components.domino.DominoInputText();
 			
             this.mouseChildren = false;
             this.toolTip = "";
@@ -89,7 +91,11 @@ package view.primeFaces.surfaceComponents.components
                 "explicitMinHeightChanged",
                 "textChanged",
 				"maxLengthChanged",
-                "idAttributeChanged"
+                "idAttributeChanged", 
+                "nameAttributeChanged", 
+                "kindAttributeChanged", 
+                "typeAttributeChanged", 
+                "allowmultivaluesAttributeChanged", 
             ];
 			
 			this.prompt = "Input Text";
@@ -345,6 +351,93 @@ package view.primeFaces.surfaceComponents.components
 				dispatchEvent(new Event("textChanged"));
 			}
 		}
+        /**
+         * Domino property list start***********************
+         */
+
+        //-----name-------------------------
+        private var _nameAttribute:String;
+		[Bindable(event="nameAttributeChanged")]
+        public function get nameAttribute():String
+        {
+            return _nameAttribute;
+        }
+		
+        public function set nameAttribute(value:String):void
+        {
+            if (_nameAttribute != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "nameAttribute", _nameAttribute, value);
+				
+                _nameAttribute = value;
+                dispatchEvent(new Event("nameAttributeChanged"))
+            }
+        }
+        //-----allowmultiple-------------------------
+        private var _allowmultivalues:Boolean;
+        private var allowmultipleChanged:Boolean;
+
+        [Bindable(event="allowmultipleChanged")]
+        public function get allowmultivalues():Boolean
+        {
+            return _allowmultivalues;
+        }
+
+        public function set allowmultivalues(value:Boolean):void
+        {
+            if (_allowmultivalues != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "allowmultipleChanged", _allowmultivalues, value);
+
+                _allowmultivalues = value;
+                allowmultipleChanged = true;
+
+                dispatchEvent(new Event("allowmultipleChanged"));
+            }
+        }
+
+         //-----type-------------------------
+         private var _type:String;
+		[Bindable(event="typeAttributeChanged")]
+        public function get type():String
+        {
+            return _type;
+        }
+		
+        public function set type(value:String):void
+        {
+            if (_type != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "type", _type, value);
+				
+                _type = value;
+                dispatchEvent(new Event("typeAttributeChanged"))
+            }
+        }
+
+          //-----kind-------------------------
+          private var _kind:String;
+		[Bindable(event="kindAttributeChanged")]
+        public function get kind():String
+        {
+            return _kind;
+        }
+		
+        public function set kind(value:String):void
+        {
+            if (_kind != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "kind", _kind, value);
+				
+                _kind = value;
+                dispatchEvent(new Event("kindAttributeChanged"))
+            }
+        }
+          //-----width-------------------------
+          //-----heigh-------------------------
+         /**
+         * Domino property list end***********************
+         */
 
         private var _required:Boolean;
         private var requiredChanged:Boolean;
@@ -456,10 +549,10 @@ package view.primeFaces.surfaceComponents.components
 			component.idAttribute = this.idAttribute;
 				
 			component.isSelected = this.isSelected;
-			(component as components.primeFaces.InputText).width = this.width;
-			(component as components.primeFaces.InputText).height = this.width;
-			(component as components.primeFaces.InputText).percentWidth = this.percentWidth;
-			(component as components.primeFaces.InputText).percentHeight = this.percentHeight;
+			(component as components.domino.DominoInputText).width = this.width;
+			(component as components.domino.DominoInputText).height = this.width;
+			(component as components.domino.DominoInputText).percentWidth = this.percentWidth;
+			(component as components.domino.DominoInputText).percentHeight = this.percentHeight;
 			
             return component.toCode();
         }

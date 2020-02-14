@@ -30,5 +30,6 @@ package view.interfaces
 		 */
 		function get isSelected():Boolean;
 		function set isSelected(value:Boolean):void;
+
 	}
 }

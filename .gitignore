@@ -4,5 +4,8 @@ bin/VisualEditor-0.2.0.swc.cache
 bin-debug/
 obj/MockupVisualEditorConfig.xml
 bin/
+.DS_Store
+*.code-workspace
+.vscode/
 IntelliJ_IDEA/IntelliJ_IDEA/idea-C02041AD-F87539B5-flexunit.xml
 IntelliJ_IDEA/idea-C02041AD-F87539B5-flexunit.xml

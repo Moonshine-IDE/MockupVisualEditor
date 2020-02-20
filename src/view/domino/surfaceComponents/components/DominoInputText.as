@@ -12,6 +12,7 @@ package view.domino.surfaceComponents.components
     
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
+    import mx.collections.ArrayList;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
@@ -34,6 +35,10 @@ package view.domino.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
+    /**domino exclude property */
+    [Exclude(name="kinds", kind="property")]
+    [Exclude(name="types", kind="property")]
+
 
     /**
      * <p>Representation of PrimeFaces inputText component.</p>
@@ -367,7 +372,7 @@ package view.domino.surfaceComponents.components
         {
             if (_nameAttribute != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "nameAttribute", _nameAttribute, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "nameAtfitribute", _nameAttribute, value);
 				
                 _nameAttribute = value;
                 dispatchEvent(new Event("nameAttributeChanged"))
@@ -397,7 +402,35 @@ package view.domino.surfaceComponents.components
         }
 
          //-----type-------------------------
-         private var _type:String;
+        /**
+          * https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_FIELD_ELEMENT_XML.html
+          * Type of field as defined in the %field.types; entity.
+          * The %field.types; entity lists the types of fields. 
+          * <!ENTITY % field.types "text | number | datetime | richtext | keyword | names | authors | 
+          * readers | password | formula | timezone | richtextlite | color ">
+          */
+        [Bindable]
+        private var _types:ArrayList = new ArrayList([
+            {label: "text",description:"A text field."}, 
+            {label: "number",description:"A number field."},
+            {label: "datetime",description:"A date/time field."}, 
+            {label: "richtext",description:"A rich text field."},
+            {label: "keyword",description:"Presents a list of keywords for entry into the field, as a result of a formula or a list of constants. The Dialog List field is a keyword field that can also display a list of choices from the address dialog, view dialog, or ACL."}, 
+            {label: "names",description:"A computed or editable field that lists usernames."}, 
+            {label: "authors",description:"Lists the users who can edit the documents that they created."},
+            {label: "password",description:"A text field that displays text characters as a string of asterisks (*) to hide the content of the field. This type is often used for field in which users enter their passwords."},
+            {label: "formula",description:"A field that contains an @function or @command formula."},
+            {label: "timezone",description:"A field that displays a drop-down list of all available world time zones."},
+            {label: "richtextlite",description:"A rich text field that a user can paste a limited number of objects into; a helper icon listing the available element types displays beside this field."},
+            {label: "readers",description:"Lists the users who can read the documents created from a form."},
+            {label: "color",description:"A field that displays a color picker."}
+        ]);
+        public function get types():ArrayList
+        {
+            return _types;
+        }
+       
+        private var _type:String;
 		[Bindable(event="typeAttributeChanged")]
         public function get type():String
         {
@@ -415,8 +448,28 @@ package view.domino.surfaceComponents.components
             }
         }
 
-          //-----kind-------------------------
-          private var _kind:String;
+        //-----kind-------------------------
+        /**
+         * The kind attritube  entity lists the options for defining whether a field is editable or computed. 
+         * This entity is used in the <field> and <section> elements. 
+         * https://www.ibm.com/support/knowledgecenter/en/SSVRGU_9.0.1/basic/H_DEFINED_ENTITIES_XML.html
+         * "editable | computed | computedfordisplay |computedwhencomposed "
+         * 
+         */
+        [Bindable]
+        private var _kinds:ArrayList = new ArrayList([
+        {label: "editable",description: "A user can enter or change its value."},
+        {label: "computed",description:"A formula calculates its value each time a user creates, saves, or refreshes a document."},
+        {label: "computedfordisplay",description:"A formula recalculates its value each time a user opens or saves a document. "}, 
+        {label: "computedwhencomposed",description:"A formula calculates its value only once: when a user first creates the document."}
+        ]);
+
+        public function get kinds():ArrayList
+        {
+            return _kinds;
+        }
+    
+        private var _kind:String = "editable";
 		[Bindable(event="kindAttributeChanged")]
         public function get kind():String
         {
@@ -521,6 +574,29 @@ package view.domino.surfaceComponents.components
                 xml.@id = this.idAttribute;
             }
 
+            if(this.nameAttribute){
+                xml.@name = this.nameAttribute;
+            }
+
+            if(this.allowmultivalues){
+                xml.@allowmultivalues = this.allowmultivalues;
+            }
+
+            if(this.kind){
+                xml.@kind = this.kind;
+            }
+
+            if(this.type){
+                xml.@type = this.type;
+            }
+
+            if(this.width){
+                xml.@width = this.width;
+            }
+            if(this.height){
+                xml.@height = this.height;
+            }
+
 			if ((StringUtil.trim(maxLength).length != 0) && Math.round(Number(maxLength)) != 0)
 			{
 				xml.@maxlength = this.maxLength;
@@ -539,6 +615,13 @@ package view.domino.surfaceComponents.components
 			this.maxLength = component.maxLength;
             this.idAttribute = component.idAttribute;
             this.required = component.required;
+
+            this.nameAttribute=component.nameAttribute;
+            this.kind = component.kind;
+            this.type = component.type;
+            this.allowmultivalues = component.allowmultivalues;
+            this.width = component.width;
+            this.height = component.height;
         }
 
         public function toCode():XML
@@ -547,10 +630,16 @@ package view.domino.surfaceComponents.components
             component.required = this.required;
 			component.maxLength = this.maxLength;
 			component.idAttribute = this.idAttribute;
+            component.nameAttribute = this.nameAttribute;
+            component.type=this.type;
+            component.kind = this.kind;
+            component.allowmultivalues = this.allowmultivalues;
+            component.width= this.width;
+            component.height= this.height;
 				
 			component.isSelected = this.isSelected;
-			(component as components.domino.DominoInputText).width = this.width;
-			(component as components.domino.DominoInputText).height = this.width;
+			// (component as components.domino.DominoInputText).width = this.width;
+			// (component as components.domino.DominoInputText).height = this.width;
 			(component as components.domino.DominoInputText).percentWidth = this.percentWidth;
 			(component as components.domino.DominoInputText).percentHeight = this.percentHeight;
 			

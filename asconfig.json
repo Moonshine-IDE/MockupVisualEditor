@@ -1,0 +1,40 @@
+{
+	"compilerOptions": {
+		"source-path": [
+			"src"
+		],
+		"default-frame-rate": 60,
+		"default-background-color": "#0F00FF",
+		"output": "bin-debug/VisualEditorApplication.swf",
+		"default-size": {
+			"width": 800,
+			"height": 600
+		},
+		"target-player": "31.0",
+		"warnings": true,
+		"static-link-runtime-shared-libraries": false,
+		"optimize": false,
+		"define": [
+			{
+				"name": "CONFIG::MOONSHINE",
+				"value": false
+			}
+		],
+		"strict": true,
+		"accessible": false,
+		"show-unused-type-selector-warnings": true,
+		"use-resource-bundle-metadata": true,
+		"benchmark": false,
+		"use-network": true,
+		"verbose-stacktraces": false,
+		"library-path": [
+			"libs"
+		]
+	},
+	"files": [
+		"src/VisualEditorApplication.mxml"
+	],
+	"config": "air",
+	"application": "application.xml",
+	"additionalOptions": "+configname=air -swf-version 39"
+}

@@ -20,9 +20,6 @@
 					 height="25" tabIndex="1" keyDown="nameInput_keyDownHandler(event)"/>
 	</s:FormItem>
 
-
-    
-	<s:FormHeading label="Size" skinClass="skins.FormHeadingSkin"/>
 	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
 		<s:HGroup width="100%">
 			<s:TextInput id="widthInput" width="100%"
@@ -71,7 +68,7 @@
 
         private var _bindingWidth:ChangeWatcher;
         private var _bindingHeight:ChangeWatcher;
-        private var _bindingId:ChangeWatcher;
+        private var _bindingName:ChangeWatcher;
         private var _widthOutput:ChangeWatcher;
         private var _heightOutput:ChangeWatcher;
 
@@ -183,7 +180,7 @@
         //     this.selectedItem["idAttribute"] = this.idTextInput.text;
         // }
 
-            private function commitName():void
+        private function commitName():void
         {
             if (!this.selectedItem) return;
 
@@ -232,8 +229,8 @@
 
                 if (currentState == "normalWithName")
                 {
-                    this._bindingId.unwatch();
-                    this._bindingId = null;
+                    this._bindingName.unwatch();
+                    this._bindingName = null;
                 }
             }
             if (this._widthOutput)
@@ -248,7 +245,7 @@
             }
             this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
             this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
-            if (currentState == "normalWithName") this._bindingId = BindingUtils.bindSetter(onNameUpdated, selectedItem, "nameAttribute", false, true);
+            if (currentState == "normalWithName") this._bindingName = BindingUtils.bindSetter(onNameUpdated, selectedItem, "nameAttribute", false, true);
 
             if (selectedItem is IComponentSizeOutput)
             {
@@ -277,15 +274,7 @@
             }
         }
 
-        private function onIdUpdated(value:Object):void
-        {
-            if (!this.selectedItem) return;
-
-            if (this.nameTextInput)
-            {
-                this.nameTextInput.text = this.selectedItem["nameAttribute"];
-            }
-        }
+   
 
         private function onNameUpdated(value:Object):void
         {

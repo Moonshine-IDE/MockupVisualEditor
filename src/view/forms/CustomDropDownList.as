@@ -18,9 +18,13 @@ package view.forms
 		public function CustomDropDownList()
 		{
 			super();
+
+			//some times ,the moonshineBridge will return null, so I add some code in this case
+			if(MoonshineBridgeUtils.moonshineBridge!=null){
+				this.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
+				this.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
+			}
 			
-			this.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
-			this.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
 		}
 		
 		override mx_internal function updateLabelDisplay(displayItem:* = undefined):void

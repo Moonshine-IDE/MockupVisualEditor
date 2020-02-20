@@ -236,7 +236,7 @@
             }
             this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
             this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
-            if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "nameAttribute", false, true);
+            if (currentState == "normalWithId") this._bindingId = BindingUtils.bindSetter(onIdUpdated, selectedItem, "idAttribute", false, true);
 
             if (selectedItem is IComponentSizeOutput)
             {

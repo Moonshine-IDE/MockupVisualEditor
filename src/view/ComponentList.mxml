@@ -46,6 +46,7 @@
 			import view.primeFaces.surfaceComponents.components.TextEditor;
 			
 			import view.domino.surfaceComponents.components.DominoInputText;
+			import view.domino.surfaceComponents.components.DominoLabel;
 			
 			public var visualEditorType:String;
 			
@@ -60,6 +61,7 @@
 				{
 					collection = new ArrayCollection([
 						new ComponentListItem("Input", DominoInputText),
+						new ComponentListItem("Label", DominoLabel),
 					]);
 				} else if (VisualEditorType.FLEX == visualEditorType)
 				{

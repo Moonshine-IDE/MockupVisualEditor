@@ -22,8 +22,10 @@
 		<view:ResizeHandles id="resizer"/>
 	</fx:Declarations>
 
+
 	<fx:Script><![CDATA[
 		import interfaces.IComponent;
+
 		import mx.containers.GridItem;
 		import mx.containers.GridRow;
 		import mx.controls.scrollClasses.ScrollBar;
@@ -38,14 +40,17 @@
 		import mx.managers.DragManager;
 		import mx.managers.IFocusManagerComponent;
 		import mx.managers.PopUpManager;
+
 		import spark.components.SkinnableContainer;
 		import spark.components.supportClasses.ScrollBarBase;
 		import spark.components.supportClasses.SkinnableContainerBase;
 		import spark.containers.Navigator;
 		import spark.events.IndexChangeEvent;
+
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
 		import utils.GenericUtils;
+
 		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IInitializeAfterAddedComponent;
 		import view.interfaces.IMainApplication;
@@ -59,23 +64,31 @@
 		import view.suportClasses.PropertyChangeReference;
 		import view.suportClasses.events.PropertyEditorChangeEvent;
 		import view.suportClasses.events.SurfaceComponentEvent;
+
+	
 		public var organizer:ComponentsOrganizer;
+
 		private static const SMALL_NUDGE:int = 1;
 		private static const LARGE_NUDGE:int = 10;
+
 		private var _dropOverlay:UIComponent = new UIComponent();
 		private var _selectedItem:ISurfaceComponent = null;
 		private var _wasLoaded:Boolean = false;
 		private var _hasChanged:Boolean = false;
 		private var _visualEditorType:String;
+
 		private var _isDominoProject:Boolean = false;
+
 		public function set visualEditorType(value:String):void
 		{
 			_visualEditorType = value;
 		}
+
 		public function get hasChanged():Boolean
 		{
 			return _hasChanged;
 		}
+
 		public function set hasChanged(value:Boolean):void
 		{
 			if (_hasChanged != value)
@@ -84,49 +97,60 @@
 				dispatchEvent(new Event(Event.CHANGE));
 			}
 		}
+
 		[Bindable("change")]
 		public function get selectedItem():ISurfaceComponent
 		{
 			return this._selectedItem;
 		}
+
 		public function set selectedItem(value:ISurfaceComponent):void
 		{
 			if (this._selectedItem === value)
 			{
 				return;
 			}
+
 			if (this._selectedItem) this._selectedItem.isSelected = false;
+
 			this._selectedItem = value;
-			if (this._selectedItem && !this.resizer.parent)
-			{
-				PopUpManager.addPopUp(this.resizer, this, false);
-			}
-			else if (!this._selectedItem && this.resizer.parent)
-			{
-				PopUpManager.removePopUp(this.resizer);
-			}
+			// if (this._selectedItem && !this.resizer.parent)
+			// {
+			// 	PopUpManager.addPopUp(this.resizer, this, false);
+			// }
+			// else if (!this._selectedItem && this.resizer.parent)
+			// {
+			// 	PopUpManager.removePopUp(this.resizer);
+			// }
+
 			if (this._selectedItem) this._selectedItem.isSelected = true;
-			this.resizer.target = this._selectedItem;
+			//this.resizer.target = this._selectedItem;
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
+
 		public function get isVisualEditorFlex():Boolean
 		{
 			return (_visualEditorType == 'flex');
 		}
+
 		public function get isVisualEditorDomino():Boolean
 		{
 			return (_visualEditorType == 'domino');
 		}
+
 		public function setResizerVisible(value:Boolean):void
 		{
-			if (this.resizer) this.resizer.visible = value;
+			//if (this.resizer) this.resizer.visible = value;
 		}
+
 		public function toXML():XML
 		{
 			hasChanged = false;
 			_wasLoaded = this.numElements > 0;
+
 			return EditingSurfaceWriter.toXML(this, _visualEditorType);
 		}
+
 		CONFIG::MOONSHINE
 		{
 			public function toCode():XML
@@ -146,6 +170,7 @@
 			}
 			
 		}
+
 		public function fromXML(xml:XML):void
 		{
 			this.deleteAll();
@@ -153,6 +178,8 @@
 			_wasLoaded = true;
 			if (!isVisualEditorFlex) this.callLater(organizer.loadFirstData, [this]);
 		}
+
+
 		public function deleteAll():void
 		{
 			var elementCount:int = this.numElements;
@@ -167,6 +194,7 @@
 			}
 			hasChanged = false;
 		}
+
 		/**
 		 * Do not call removeElement(). Calling deleteItem() will ensure that
 		 * everything is cleaned up properly.
@@ -177,17 +205,21 @@
 			{
 				return;
 			}
+
 			item.dispatchEvent(new Event(PropertyEditorChangeEvent.PROPERTY_EDITOR_ITEM_DELETING));
+
 			// @devsena
 			// missing event removals
 			item.removeEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
 			item.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
+
 			var container:IVisualElementContainer = IVisualElementContainer(item.parent);
 			if (container.getElementIndex(IVisualElement(item)) > -1)
 			{
 				if (!isVisualEditorFlex) organizer.removeDroppedElement(item.owner as IVisualElement, item as IVisualElement);
 				container.removeElement(IVisualElement(item));
 			}
+
 			if (item is IMultiViewContainer)
 			{
 				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
@@ -210,40 +242,49 @@
 			{
 				this.cleanupGridComponent(item as GridBase);
 			}
+
 			this.selectedItem = null;
 			hasChanged = this.numElements > 0 && _wasLoaded;
+
 			// once an item deletes stage loose focus to
 			// listen any keypress event, i.e. Ctrl+Z/Y
 			this.setFocus();
 		}
+
 		private function prepareContainer(container:UIComponent):void
 		{
 			if (container === null)
 			{
 				return;
 			}
+
 			if (!container.hasEventListener(SurfaceComponentEvent.ComponentAdded))
 			{
 				container.addEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
 			}
+
 			if (!container.hasEventListener(SurfaceComponentEvent.ComponentRemoved))
 			{
 				container.addEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
 			}
+
 			container.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 			container.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 			container.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 		}
+
 		private function cleanupContainer(container:UIComponent):void
 		{
 			if (container === null)
 			{
 				return;
 			}
+
 			container.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 			container.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 			container.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 		}
+
 		private function onSurfaceComponentAdded(event:SurfaceComponentEvent):void
 		{
 			if (event.items)
@@ -251,12 +292,14 @@
 				for (var i:int = 0; i < event.items.length; i++)
 				{
 					var surfaceComponent:IUIComponent = event.items[i] as IUIComponent;
+
 					surfaceComponent.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 					surfaceComponent.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 					surfaceComponent.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 				}
 			}
 		}
+
 		private function onSurfaceComponentRemoved(event:SurfaceComponentEvent):void
 		{
 			if (event.items)
@@ -264,20 +307,24 @@
 				for (var i:int = 0; i < event.items.length; i++)
 				{
 					var surfaceComponent:IUIComponent = event.items[i];
+
 					surfaceComponent.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 					surfaceComponent.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 					surfaceComponent.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
 				}
 			}
 		}
+
 		private function prepareGridComponent(grid:GridBase):void
 		{
 			if (grid === null)
 			{
 				return;
 			}
+
 			grid.addEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
 			grid.addEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
+
 			var gridNumElements:int = grid.numElements;
 			for (var row:int = 0; row < gridNumElements; row++)
 			{
@@ -291,6 +338,7 @@
 						if (gridCol)
 						{
 							var div:Div = gridCol.getElementAt(0) as Div;
+
 							div.addEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 							div.addEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 							div.addEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
@@ -299,14 +347,17 @@
 				}
 			}
 		}
+
 		private function cleanupGridComponent(grid:GridBase):void
 		{
 			if (grid === null)
 			{
 				return;
 			}
+
 			grid.removeEventListener(SurfaceComponentEvent.ComponentAdded, onSurfaceComponentAdded);
 			grid.removeEventListener(SurfaceComponentEvent.ComponentRemoved, onSurfaceComponentRemoved);
+
 			var gridNumElements:int = grid.numElements;
 			for (var row:int = 0; row < gridNumElements; row++)
 			{
@@ -320,6 +371,7 @@
 						if (gridCol)
 						{
 							var div:Div = gridCol.getElementAt(0) as Div;
+
 							div.removeEventListener(DragEvent.DRAG_ENTER, skinnableContainer_dragEnterOrOverHandler);
 							div.removeEventListener(DragEvent.DRAG_OVER, skinnableContainer_dragEnterOrOverHandler);
 							div.removeEventListener(DragEvent.DRAG_DROP, skinnableContainer_dragDropHandler);
@@ -328,6 +380,7 @@
 				}
 			}
 		}
+
 		private function showDropOverlay(dropTarget:UIComponent):void
 		{
 			var currentTarget:DisplayObjectContainer = dropTarget;
@@ -358,6 +411,7 @@
 			this._dropOverlay.graphics.endFill();
 			PopUpManager.addPopUp(this._dropOverlay, dropTarget, false);
 		}
+
 		private function editingSurface_keyDownHandler(event:KeyboardEvent):void
 		{
 			if (DragManager.isDragging)
@@ -417,6 +471,7 @@
 				}
 			}
 		}
+
 		private function editingSurface_mouseDownHandler(event:MouseEvent):void
 		{
 			if (event.isDefaultPrevented())
@@ -425,6 +480,7 @@
 			}
 			this.selectedItem = null;
 		}
+
 		private function editingSurface_dragExitHandler(event:DragEvent):void
 		{
 			if (this._dropOverlay.isPopUp)
@@ -432,6 +488,7 @@
 				PopUpManager.removePopUp(this._dropOverlay);
 			}
 		}
+
 		private function editingSurface_dragEnterOrOverHandler(event:DragEvent):void
 		{
 			if (event.isDefaultPrevented())
@@ -451,15 +508,17 @@
 				this.selectedItem = null;
 			}
 		}
+
 		private function editingSurface_dragCompleteHandler(event:DragEvent):void
 		{
-			this.resizer.mouseEnabled = true;
-			this.resizer.mouseChildren = true;
+			// this.resizer.mouseEnabled = true;
+			// this.resizer.mouseChildren = true;
 			if (this._dropOverlay.isPopUp)
 			{
 				PopUpManager.removePopUp(this._dropOverlay);
 			}
 		}
+
 		private function dragDropHandler(event:DragEvent):void
 		{
 			if (this._dropOverlay.isPopUp)
@@ -506,6 +565,7 @@
 			}
 			hasChanged = true;
 		}
+
 		private function editingSurface_dragDropHandler(event:DragEvent):void
 		{
 			if (event.isDefaultPrevented())
@@ -515,6 +575,7 @@
 			event.preventDefault();
 			this.dragDropHandler(event);
 		}
+
 		private function skinnableContainer_dragEnterOrOverHandler(event:DragEvent):void
 		{
 			if (event.isDefaultPrevented())
@@ -554,6 +615,7 @@
 				DragManager.showFeedback(DragManager.MOVE);
 			}
 		}
+
 		private function skinnableContainer_dragDropHandler(event:DragEvent):void
 		{
 			if (event.isDefaultPrevented())
@@ -563,10 +625,12 @@
 			event.preventDefault();
 			this.dragDropHandler(event);
 		}
+
 		private function object_focusInHandler(event:FocusEvent):void
 		{
 			event.preventDefault();
 		}
+
 		private function object_mouseDownHandler(event:MouseEvent):void
 		{
 			if (event.isDefaultPrevented())
@@ -575,6 +639,7 @@
 				//prevent the container from being dragged
 				return;
 			}
+
 			var target:DisplayObject = DisplayObject(event.target);
 			while (target !== event.currentTarget)
 			{
@@ -585,15 +650,19 @@
 				}
 				target = target.parent;
 			}
+
 			event.preventDefault();
+
 			var object:ISurfaceComponent = ISurfaceComponent(event.currentTarget);
 			if (isVisualEditorFlex)
 			{
 				object.addEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
 				object.stage.addEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
 			}
+
 			this.selectedItem = object;
 		}
+
 		private function object_mouseMoveHandler(event:MouseEvent):void
 		{
 			this._selectedItem.removeEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
@@ -602,8 +671,9 @@
 			dragSource.addData(this._selectedItem, ComponentListItemRenderer.COMPONENT_DRAG_FORMAT);
 			var offset:Point = new Point(this._selectedItem.mouseX, this._selectedItem.mouseY);
 			dragSource.addData(offset, ComponentListItemRenderer.OFFSET_DRAG_FORMAT);
-			this.resizer.mouseEnabled = false;
-			this.resizer.mouseChildren = false;
+			// this.resizer.mouseEnabled = false;
+			// this.resizer.mouseChildren = false;
+
 			//this is required in Flash Player because there will be an error
 			//for using removeChild() instead of removeElement()
 			var data:BitmapData = new BitmapData(this._selectedItem.width, this.selectedItem.height);
@@ -621,13 +691,16 @@
 			DragManager.doDrag(this, dragSource, event, dragImage,
 					dragOffsetX, dragOffsetY,
 					this.getStyle("dragImageAlpha"));
+
 			_hasChanged = true;
 		}
+
 		private function stage_mouseUpHandler(event:MouseEvent):void
 		{
 			this._selectedItem.removeEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
 			this._selectedItem.stage.removeEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
 		}
+
 		private function multiViewContainer_indexChangeHandler(event:IndexChangeEvent):void
 		{
 			var container:IMultiViewContainer = IMultiViewContainer(event.currentTarget);
@@ -636,45 +709,49 @@
 			var newView:SkinnableContainer = container.selectedView;
 			this.prepareContainer(newView);
 		}
+
 		public function addItem(item:IComponent):void
 		{
 			if (item is IFocusManagerComponent)
 			{
 				IFocusManagerComponent(item).focusEnabled = false;
 			}
+
 			(item as ISurfaceComponent).addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
 			(item as ISurfaceComponent).addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
+
 			var itemContainer:SkinnableContainer = null;
-			if (item is IMultiViewContainer)
-			{
-				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
-				multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
-				itemContainer = multiViewContainer.selectedView;
-			}
-			else if (item is PanelGrid)
-			{
-				this.prepareGridComponent((item as PanelGrid).body as GridBase);
-			}
-			else if (item is SkinnableContainer)
-			{
-				itemContainer = SkinnableContainer(item);
-			}
-			else if (item is Grid)
-			{
-				this.prepareGridComponent(item as Grid);
-				return;
-			}
-			else if (item is Navigator)
-			{
-				this.prepareContainer(item as SkinnableContainerBase);
-				return;
-			}
-			else if (item is IMainApplication)
-			{
-				this.prepareContainer(item as UIComponent);
-				return;
-			}
-			this.prepareContainer(itemContainer);
+			// if (item is IMultiViewContainer)
+			// {
+			// 	var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
+			// 	multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
+			// 	itemContainer = multiViewContainer.selectedView;
+			// }
+			// else if (item is PanelGrid)
+			// {
+			// 	this.prepareGridComponent((item as PanelGrid).body as GridBase);
+			// }
+			// else if (item is SkinnableContainer)
+			// {
+			// 	itemContainer = SkinnableContainer(item);
+			// }
+			// else if (item is Grid)
+			// {
+			// 	this.prepareGridComponent(item as Grid);
+			// 	return;
+			// }
+			// else if (item is Navigator)
+			// {
+			// 	this.prepareContainer(item as SkinnableContainerBase);
+			// 	return;
+			// }
+			// else if (item is IMainApplication)
+			// {
+			// 	this.prepareContainer(item as UIComponent);
+			// 	return;
+			// }
+
+			// this.prepareContainer(itemContainer);
 		}
 		]]></fx:Script>
 </s:Group>

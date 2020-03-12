@@ -16,7 +16,7 @@ package view.domino.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.interfaces.IDominoSurfaceComponent
+    import view.interfaces.IDominoSurfaceComponent;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IOutputLabel;

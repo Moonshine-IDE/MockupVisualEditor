@@ -89,6 +89,9 @@ package view.domino.surfaceComponents.components
 			this.minHeight = 20;
 			this.maxHeight = 30;
 
+            this.nameAttribute = "test" ;
+            this.type = "text" ;
+
             _propertiesChangedEvents = [
                 "widthChanged",
                 "heightChanged",

@@ -110,21 +110,18 @@
 			{
 				return;
 			}
-
 			if (this._selectedItem) this._selectedItem.isSelected = false;
-
 			this._selectedItem = value;
-			// if (this._selectedItem && !this.resizer.parent)
-			// {
-			// 	PopUpManager.addPopUp(this.resizer, this, false);
-			// }
-			// else if (!this._selectedItem && this.resizer.parent)
-			// {
-			// 	PopUpManager.removePopUp(this.resizer);
-			// }
-
+			if (this._selectedItem && !this.resizer.parent)
+			{
+				PopUpManager.addPopUp(this.resizer, this, false);
+			}
+			else if (!this._selectedItem && this.resizer.parent)
+			{
+				PopUpManager.removePopUp(this.resizer);
+			}
 			if (this._selectedItem) this._selectedItem.isSelected = true;
-			//this.resizer.target = this._selectedItem;
+			this.resizer.target = this._selectedItem;
 			this.dispatchEvent(new Event(Event.CHANGE));
 		}
 
@@ -140,7 +137,7 @@
 
 		public function setResizerVisible(value:Boolean):void
 		{
-			//if (this.resizer) this.resizer.visible = value;
+			if (this.resizer) this.resizer.visible = value;
 		}
 
 		public function toXML():XML

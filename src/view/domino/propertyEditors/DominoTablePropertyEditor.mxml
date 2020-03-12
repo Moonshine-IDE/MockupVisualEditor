@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+								  xmlns:s="library://ns.adobe.com/flex/spark"
+								  xmlns:suportclasses="view.suportClasses.*"
+								  xmlns:domino="view.domino.forms.*" xmlns:forms="view.forms.*">
+	<suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+	<domino:BasicsForm/>
+
+	<domino:GridForm id="gridForm"/>
+
+	<s:FormHeading label="Cell details" skinClass="skins.FormHeadingSkin"/>
+	<domino:DivLayoutForm selectedItem="{gridForm.selectedCell}"/>
+	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
+</suportclasses:BasePropertyEditor>

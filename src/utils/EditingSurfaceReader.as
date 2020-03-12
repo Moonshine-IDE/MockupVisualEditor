@@ -49,6 +49,7 @@ package utils
 
 	import view.domino.surfaceComponents.components.DominoInputText;
 	import view.domino.surfaceComponents.components.DominoLabel;
+	import view.domino.surfaceComponents.components.DominoTable;
     public class EditingSurfaceReader
 	{
         public static var CLASS_LOOKUP:Object;
@@ -75,7 +76,8 @@ package utils
             CLASS_LOOKUP = {};
 			if (visualEditorType == VisualEditorType.DOMINO){
 				CLASS_LOOKUP[DominoInputText.ELEMENT_NAME] = DominoInputText;
-				CLASS_LOOKUP[DominoLabel.ELEMENT_NAME] = DominoLabel
+				CLASS_LOOKUP[DominoLabel.ELEMENT_NAME] = DominoLabel;
+				CLASS_LOOKUP[DominoTable.ELEMENT_NAME] = DominoTable
 			}else if (visualEditorType == VisualEditorType.FLEX)
 			{
                 CLASS_LOOKUP[view.flex.surfaceComponents.components.MainApplication.ELEMENT_NAME] =

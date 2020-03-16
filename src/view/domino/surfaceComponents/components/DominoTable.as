@@ -62,7 +62,7 @@ package view.domino.surfaceComponents.components
 
     public class DominoTable extends GridBase implements IDominoSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
     {
-        public static const ELEMENT_NAME:String = "table";
+        public static const ELEMENT_NAME:String = "Grid";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
 		private var component:IDominoTable;
@@ -432,23 +432,20 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-
+ 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
-
+  
             var elementsXML:XMLList = xml.elements();
+           
             if (elementsXML.length() > 0)
             {
                 this.removeAllElements();
             }
 
-            Alert.show(xml);
 
-            if(component==null){
-                 Alert.show("component is null");
-            }
 
-			component.fromXML(xml, callback);
+			 component.fromXML(xml, callback);
 
             if (elementsXML.length() > 0)
             {

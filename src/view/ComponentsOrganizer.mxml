@@ -32,6 +32,8 @@
 			import view.primeFaces.surfaceComponents.components.PanelGrid;
 			import view.primeFaces.surfaceComponents.components.TabView;
 			import view.suportClasses.PropertyChangeReference;
+
+			import view.domino.surfaceComponents.components.DominoTable;
 			
 			public var editingSurface:EditingSurface;
 			public var isRefreshTree:Boolean = true;
@@ -169,7 +171,15 @@
 						case "addRowAt":
 							change.fieldClass["callLater"](function():void
 							{
-								if (change.fieldClass is Grid)
+								if(change.fieldClass is  DominoTable){
+									organizerItem = (change.fieldClass as IDominoSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
+									if (organizerItem)
+									{
+										tree.selectedItem.children.push(organizerItem.children[0]);
+										refreshItem(change.fieldClass as IVisualElement);
+									}
+
+								} else if (change.fieldClass is Grid)
 								{
 									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
 									if (organizerItem)
@@ -191,7 +201,7 @@
 							break;
 						case "removeRowAt":
 							tree.expandItem(tree.selectedItem, true);
-							if (change.fieldClass is PanelGrid || change.fieldClass is Grid)
+							if (change.fieldClass is PanelGrid || change.fieldClass is Grid  || change.fieldClass is DominoTable)
 							{
 								var rowItem:GridRow = (change.fieldClass is PanelGrid) ? change.fieldLastValue[0].object : change.fieldLastValue.object;
 								for (i = 0; i < rowItem.numElements; i++)
@@ -225,7 +235,7 @@
 						case "addColumnAt":
 							change.fieldClass["callLater"](function():void
 							{
-								if (change.fieldClass is Grid)
+								if (change.fieldClass is Grid || change.fieldClass is DominoTable)
 								{
 									organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue.object,
 										change.fieldLastValue.rowIndex, change.fieldLastValue.colIndex);
@@ -289,7 +299,7 @@
 								updateCellLabels(tree.selectedItem as OrganizerItem);
 								refreshItem(change.fieldClass as IVisualElement);
 							}
-							else if (change.fieldClass is Grid)
+							else if (change.fieldClass is Grid || change.fieldClass is DominoTable)
 							{
 								surfaceComponent = change.fieldLastValue.object.getElementAt(0) as IPrimeFacesSurfaceComponent;
 								tree.selectedItem.children.some(function(item:*, index:int, array:Array):Boolean
@@ -318,7 +328,7 @@
 				findItemInDepth(components.source, change.fieldClass as IVisualElement);
 				this.callLater(function():void
 				{
-					if (foundIndepthItem && ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid)))
+					if (foundIndepthItem && ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid) || (change.fieldClass is DominoTable)))
 					{
 						organizerItem = (change.fieldClass as IPrimeFacesSurfaceComponent).getComponentsChildren();
 						
@@ -335,7 +345,7 @@
 				var cellIndex:int;
 				var gridBase:GridBase;
 				
-				if (component.item is Grid) gridBase = component.item as GridBase;
+				if (component.item is Grid || component.item is DominoTable) gridBase = component.item as GridBase;
 				else if (component.item is PanelGrid) gridBase = (component.item as PanelGrid).body;
 				
 				numRows = gridBase.getNumRows();

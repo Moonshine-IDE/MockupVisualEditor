@@ -6,6 +6,8 @@ package utils
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
 
+    import mx.controls.Alert;
+
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
@@ -67,6 +69,7 @@ package utils
                     elementCount = container.numElements;
                 }
 
+
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
@@ -98,6 +101,7 @@ package utils
              */
             public static function toDominoCode(surface:EditingSurface):XML
             {
+                //Alert.show("toDominoCode EditingSurfaceWriter");
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 if(surface.numChildren>0){

@@ -16,6 +16,7 @@
 			import mx.core.IVisualElementContainer;
 			import mx.events.FlexEvent;
 			import mx.events.ListEvent;
+			import mx.controls.Alert;
 			
 			import spark.components.Image;
 			
@@ -419,6 +420,7 @@
 						}
 						var domino_element:IDominoSurfaceComponent;
 						var primeface_element:IPrimeFacesSurfaceComponent;
+
 
 						if(editingSurface.isVisualEditorDomino){
 							domino_element = element as IDominoSurfaceComponent;

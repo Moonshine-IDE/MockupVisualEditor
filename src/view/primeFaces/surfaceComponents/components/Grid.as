@@ -9,6 +9,8 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
+
+    import mx.controls.Alert;
     
     import data.OrganizerItem;
     

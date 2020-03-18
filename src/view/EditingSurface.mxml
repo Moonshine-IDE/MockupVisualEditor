@@ -65,6 +65,8 @@
 		import view.suportClasses.events.PropertyEditorChangeEvent;
 		import view.suportClasses.events.SurfaceComponentEvent;
 
+		import view.domino.surfaceComponents.components.DominoTable;
+
 	
 		public var organizer:ComponentsOrganizer;
 
@@ -236,6 +238,10 @@
 				this.cleanupContainer(item as SkinnableContainerBase);
 			}
 			else if (item is Grid)
+			{
+				this.cleanupGridComponent(item as GridBase);
+			}
+			else if (item is DominoTable)
 			{
 				this.cleanupGridComponent(item as GridBase);
 			}
@@ -508,8 +514,8 @@
 
 		private function editingSurface_dragCompleteHandler(event:DragEvent):void
 		{
-			// this.resizer.mouseEnabled = true;
-			// this.resizer.mouseChildren = true;
+			this.resizer.mouseEnabled = true;
+			this.resizer.mouseChildren = true;
 			if (this._dropOverlay.isPopUp)
 			{
 				PopUpManager.removePopUp(this._dropOverlay);
@@ -636,7 +642,6 @@
 				//prevent the container from being dragged
 				return;
 			}
-
 			var target:DisplayObject = DisplayObject(event.target);
 			while (target !== event.currentTarget)
 			{
@@ -647,16 +652,13 @@
 				}
 				target = target.parent;
 			}
-
 			event.preventDefault();
-
 			var object:ISurfaceComponent = ISurfaceComponent(event.currentTarget);
 			if (isVisualEditorFlex)
 			{
 				object.addEventListener(MouseEvent.MOUSE_MOVE, object_mouseMoveHandler);
 				object.stage.addEventListener(MouseEvent.MOUSE_UP, stage_mouseUpHandler);
 			}
-
 			this.selectedItem = object;
 		}
 
@@ -668,9 +670,8 @@
 			dragSource.addData(this._selectedItem, ComponentListItemRenderer.COMPONENT_DRAG_FORMAT);
 			var offset:Point = new Point(this._selectedItem.mouseX, this._selectedItem.mouseY);
 			dragSource.addData(offset, ComponentListItemRenderer.OFFSET_DRAG_FORMAT);
-			// this.resizer.mouseEnabled = false;
-			// this.resizer.mouseChildren = false;
-
+			this.resizer.mouseEnabled = false;
+			this.resizer.mouseChildren = false;
 			//this is required in Flash Player because there will be an error
 			//for using removeChild() instead of removeElement()
 			var data:BitmapData = new BitmapData(this._selectedItem.width, this.selectedItem.height);
@@ -688,7 +689,6 @@
 			DragManager.doDrag(this, dragSource, event, dragImage,
 					dragOffsetX, dragOffsetY,
 					this.getStyle("dragImageAlpha"));
-
 			_hasChanged = true;
 		}
 
@@ -713,42 +713,44 @@
 			{
 				IFocusManagerComponent(item).focusEnabled = false;
 			}
-
 			(item as ISurfaceComponent).addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
 			(item as ISurfaceComponent).addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
-
 			var itemContainer:SkinnableContainer = null;
-			// if (item is IMultiViewContainer)
-			// {
-			// 	var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
-			// 	multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
-			// 	itemContainer = multiViewContainer.selectedView;
-			// }
-			// else if (item is PanelGrid)
-			// {
-			// 	this.prepareGridComponent((item as PanelGrid).body as GridBase);
-			// }
-			// else if (item is SkinnableContainer)
-			// {
-			// 	itemContainer = SkinnableContainer(item);
-			// }
-			// else if (item is Grid)
-			// {
-			// 	this.prepareGridComponent(item as Grid);
-			// 	return;
-			// }
-			// else if (item is Navigator)
-			// {
-			// 	this.prepareContainer(item as SkinnableContainerBase);
-			// 	return;
-			// }
-			// else if (item is IMainApplication)
-			// {
-			// 	this.prepareContainer(item as UIComponent);
-			// 	return;
-			// }
-
-			// this.prepareContainer(itemContainer);
+			if (item is IMultiViewContainer)
+			{
+				var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
+				multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
+				itemContainer = multiViewContainer.selectedView;
+			}
+			else if (item is PanelGrid)
+			{
+				this.prepareGridComponent((item as PanelGrid).body as GridBase);
+			}
+			else if (item is SkinnableContainer)
+			{
+				itemContainer = SkinnableContainer(item);
+			}
+			else if (item is DominoTable)
+			{
+				this.prepareGridComponent(item as DominoTable);
+				return;
+			}
+			else if (item is Grid)
+			{
+				this.prepareGridComponent(item as Grid);
+				return;
+			}
+			else if (item is Navigator)
+			{
+				this.prepareContainer(item as SkinnableContainerBase);
+				return;
+			}
+			else if (item is IMainApplication)
+			{
+				this.prepareContainer(item as UIComponent);
+				return;
+			}
+			this.prepareContainer(itemContainer);
 		}
 		]]></fx:Script>
 </s:Group>

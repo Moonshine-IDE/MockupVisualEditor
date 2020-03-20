@@ -2,6 +2,8 @@ package utils
 {
     import mx.core.UIComponent;
 
+	import mx.controls.Alert;
+
     import view.EditingSurface;
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
@@ -10,6 +12,7 @@ package utils
 
     public class MainApplicationCodeUtils
 	{
+
 
 		public static function appendXMLMainTag(surface:EditingSurface):XML
 		{
@@ -54,6 +57,106 @@ package utils
                 var itemName:String = item.name();
                 if (itemName.lastIndexOf("body") > -1)
                 {
+                    return item.children()[0];
+                }
+            }
+
+			return null;
+		}
+
+
+		public static function getDominMainContainerTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+            for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
+                {
+				
+                    return item.children()[0];
+                }
+            }
+
+			return null;
+		}
+
+
+		public static function fixDominField(xml:XML):XML
+		{
+			var mainFieldsContainer:XML=getDominMainFieldListContainerTag(xml);
+			var total_xml:XML=xml;
+            handleFleldOneNode(xml,mainFieldsContainer,total_xml);
+			return xml;
+		}
+
+
+		private static function handleFleldOneNode(xml:XML,mainFieldsContainer:XML,total_xml:XML):void {
+                var children:XMLList = xml.children();
+                if ( children.length() == 0 ) {
+					
+                    //Handle Leaf node -> Create ui object, or whatever 
+                } else {
+                    //Non terminal node, check children
+                    for each (var child:XML in children ) {
+						
+						var childName:String=child.name();
+                        if(childName=="field" || childName== "_moonshineSelected_field"){
+                             
+                            xml=handleDominoFleldNode(child,mainFieldsContainer,total_xml)
+                        }
+                        handleFleldOneNode(child,mainFieldsContainer,total_xml);
+                    }
+                }
+
+			
+            }
+
+
+			private static function handleDominoFleldNode(node:XML,mainFieldsContainer:XML,total_xml:XML):XML{
+
+						
+						var field_name:String = node.attribute("name").toString();
+						 //Alert.show("field name 212:"+field_name);
+						  if(mainFieldsContainer){
+                               mainFieldsContainer.appendChild(new XML("<text>"+field_name+"</text>"))
+                          }
+                         //2.
+						  var itemXML:XML = new XML("<item />");
+                           itemXML.@name=field_name;
+                           itemXML.@summary="false";
+                           itemXML.@sign="true";
+						   if(node.@type=="text"){
+                               var tyepTextXML:XML = new XML("<text>"+field_name+"</text>");
+                               itemXML.appendChild(tyepTextXML);
+							}else if(node.@type=="number"){
+								var tyepNumberXML:XML = new XML("<number>"+field_name+"</number>");
+								itemXML.appendChild(tyepNumberXML);
+							}
+
+							 total_xml.appendChild(itemXML);
+					
+
+					return total_xml
+			
+			}
+
+
+	
+
+
+
+
+
+		public static function getDominMainFieldListContainerTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+            for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Fields")
+                {
+				
                     return item.children()[0];
                 }
             }
@@ -179,61 +282,30 @@ package utils
 
 		private static function getDominoMainContainer(title:String):XML
 		{
-			var xml:XML = new XML("<form xmlns='http://www.lotus.com/dxl'  publicaccess='false'  renderpassthrough='true' />");
+				var dat:Date = new Date();
+				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+				xml_str=xml_str+"<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4' replicaid='4825808B00336E81'>";
+				xml_str=xml_str+"<!DOCTYPE note>";
+				xml_str=xml_str+"<noteinfo noteid='2116' unid='27C118EDE31483CB86256C6900644875' sequence='8'>";
+				xml_str=xml_str+"<created><datetime>"+dat+"</datetime></created> ";
+				xml_str=xml_str+"<modified><datetime>"+dat+"</datetime></modified> ";
+				xml_str=xml_str+"<revised dst=\"true\"><datetime>"+dat+"</datetime></revised>";
+				xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
+				xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
+				xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
+				xml_str=xml_str+"</noteinfo>"
+				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
+				xml_str=xml_str+"<item name='$Flags'><text/></item>"
+				xml_str=xml_str+"<item name='$TITLE'><text>NewVisualDominoProject</text></item>"
+				xml_str=xml_str+"<item name='$Fields'><textlist></textlist></item>"
+				xml_str=xml_str+"<item name='$Body' sign='true'><richtext></richtext></item>"
+				xml_str=xml_str+"</note>";
 
-            // var dxlNamespace:Namespace = new Namespace("", "http://www.lotus.com/dxl");
-            // xml.addNamespace(dxlNamespace);
-           
 
-			var noteinfoXml:XML = new XML("<noteinfo/>");
-			noteinfoXml.@noteid ="1eda";
-			noteinfoXml.@unid="4D129C5913A7BF5986256E51003F7C01";
-			noteinfoXml.@sequence="17";
-
-			var dat:Date = new Date();
-			var createdXml:XML = new XML("<created/>");
-			var datetimeXml:XML=new XML("<datetime>"+dat+"</datetime>");
+				var xml:XML = new XML(xml_str);
+				
 			
-			createdXml.appendChild(datetimeXml);
-			var modifiedXml:XML=new XML("<modified>"+"<datetime>"+dat+"</datetime>"+"</modified>");
-			modifiedXml.appendChild(datetimeXml);
-			var revisedXml:XML=new XML("<revised dst='true'>"+"<datetime>"+dat+"</datetime>"+"</revised>");
-			revisedXml.appendChild(datetimeXml);
-			var lastaccessedXml:XML=new XML("<lastaccessed>"+"<datetime>"+dat+"</datetime>"+"</lastaccessed>");
-			lastaccessedXml.appendChild(datetimeXml);
-			var addedtofileXml:XML=new XML("<addedtofile/>");
-			addedtofileXml.appendChild(datetimeXml);
-
-			noteinfoXml.appendChild(createdXml);
-			noteinfoXml.appendChild(modifiedXml);
-			noteinfoXml.appendChild(revisedXml);
-			noteinfoXml.appendChild(lastaccessedXml);
-			noteinfoXml.appendChild(addedtofileXml);
 			
-			xml.appendChild(noteinfoXml);
-
-			/**
-			 * For current simple demo ,it not useful.
-			 * But it must need add in later
-			 */
-
-			// var codeXml:XML = new XML("<code event='windowtitle'>"+"</code>");
-			// var formulaXml:XML = new XML("<formula>"+"</formula>");
-			// codeXml.appendChild(formulaXml);
-
-			//xml.appendChild(codeXml);
-
-
-			var actionbarXml:XML = new XML("<actionbar  bgcolor='#ece9d8' bordercolor='black'>"+"</actionbar>");
-
-			xml.appendChild(actionbarXml);
-
-			
-	
-			var bodyXml:XML = new XML("<body><richtext><par def='6'></par></richtext></body>");
-
-			
-			xml.appendChild(bodyXml);
 
 			return xml;
 		}

@@ -7,6 +7,7 @@ package utils
     import view.interfaces.ISurfaceComponent;
 
     import mx.controls.Alert;
+    import view.domino.surfaceComponents.components.DominoInputText
 
     public class EditingSurfaceWriter
 	{
@@ -101,7 +102,6 @@ package utils
              */
             public static function toDominoCode(surface:EditingSurface):XML
             {
-                //Alert.show("toDominoCode EditingSurfaceWriter");
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 if(surface.numChildren>0){
@@ -112,8 +112,7 @@ package utils
                 
                
                 var xml:XML = MainApplicationCodeUtils.getDominoParentContent(surface, title);
-                var mainContainer:XML = MainApplicationCodeUtils.getMainContainerTag(xml);
-
+                var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)
                 {
@@ -131,6 +130,11 @@ package utils
                     elementCount = container.numElements;
                 }
 
+                
+              //------------get all field ---------------
+            
+            
+
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
@@ -142,6 +146,10 @@ package utils
 
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
+                    
+                    //if element is field ,we need add it into textlist
+                    
+                    
 					// var commentOnlyXML:XMLList = (code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY).length() > 0) ?
 					// 	code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY) : null;
                     if (mainContainer)
@@ -154,8 +162,14 @@ package utils
                     }
                 }
 
+
+                MainApplicationCodeUtils.fixDominField(xml);
+
 				return xml;
             }
+
+
+            
         }
 	}
 }

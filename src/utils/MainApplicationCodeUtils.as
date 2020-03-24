@@ -296,7 +296,7 @@ package utils
 				xml_str=xml_str+"</noteinfo>"
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"
-				xml_str=xml_str+"<item name='$TITLE'><text>NewVisualDominoProject</text></item>"
+				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"
 				xml_str=xml_str+"<item name='$Fields'><textlist></textlist></item>"
 				xml_str=xml_str+"<item name='$Body' sign='true'><richtext></richtext></item>"
 				xml_str=xml_str+"</note>";

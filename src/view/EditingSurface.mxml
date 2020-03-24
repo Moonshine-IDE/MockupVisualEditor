@@ -162,10 +162,10 @@
 			 * Only domino project will call this method ,this will keep old method work fine.
 			 *
 			 */
-			public function toDominoCode():XML
+			public function toDominoCode(projectName:String):XML
 			{
 				_isDominoProject = true ;
-				return EditingSurfaceWriter.toDominoCode(this);
+				return EditingSurfaceWriter.toDominoCode(this,projectName);
 			}
 			
 		}

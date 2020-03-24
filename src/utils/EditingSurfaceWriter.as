@@ -100,7 +100,7 @@ package utils
              * Add the project_type parameter, so that the domino project type
              * can call this method 
              */
-            public static function toDominoCode(surface:EditingSurface):XML
+            public static function toDominoCode(surface:EditingSurface,projectName:String):XML
             {
                 var element:ISurfaceComponent ;
                 var title:String ="";
@@ -109,9 +109,11 @@ package utils
                     title = (element as UIComponent).hasOwnProperty("path") ? element["path"] : "";
                 
                 }
+
+              
                 
                
-                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(surface, title);
+                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(surface, projectName);
                 var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)

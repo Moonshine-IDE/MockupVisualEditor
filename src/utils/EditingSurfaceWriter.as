@@ -122,32 +122,35 @@ package utils
                 }
 
                 var elementCount:int = 0;
-                if (!container)
-                {
+                // if (!container )
+                // {
                     elementCount = surface.numElements;
                     container = surface;
-                }
-                else
-                {
-                    elementCount = container.numElements;
-                }
+                // } 
+                // else
+                // {
+                //     elementCount = container.numElements;
+                // }
 
                 
               //------------get all field ---------------
             
             
-
+                
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
-
-                    if (element === null)
-                    {
+                
+                   
+            
+                    if (element === null){
                         continue;
                     }
-
+                    
+                  
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
+                  
                     
                     //if element is field ,we need add it into textlist
                     

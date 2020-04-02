@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
   <output>
-    <movie disabled="False"/>
-    <movie platform="AIR"/>
-    <movie version="31"/>
-    <movie width="800"/>
     <movie fps="60"/>
     <movie height="600"/>
+    <movie disabled="False"/>
     <movie background="#0F00FF"/>
     <movie path="bin-debug/VisualEditorApplication.swf"/>
+    <movie width="800"/>
+    <movie platform="AIR"/>
+    <movie version="32"/>
     <movie input=""/>
   </output>
   &lt;!-- Other classes to be compiled into your SWF --&gt;
@@ -21,87 +21,82 @@
   <moonshineResourcePaths>
     <class path="assets"/>
   </moonshineResourcePaths>
-  <moonshineNativeExtensionPaths>
-    <!-- <empty/> -->
-  </moonshineNativeExtensionPaths>
+  <moonshineNativeExtensionPaths></moonshineNativeExtensionPaths>
   <build>
-    <option warnings="True"/>
-    <option staticLinkRSL="False"/>
     <option es="False"/>
-    <option showActionScriptWarnings="True"/>
-    <option customSDK=""/>
-    <option allowSourcePathOverlap="False"/>
-    <option showBindingWarnings="True"/>
-    <option optimize="False"/>
-    <option showDeprecationWarnings="True"/>
-    <option compilerConstants="CONFIG::MOONSHINE,false"/>
-    <option strict="True"/>
-    <option accessible="False"/>
-    <option locale=""/>
-    <option showUnusedTypeSelectorWarnings="True"/>
-    <option useResourceBundleMetadata="True"/>
-    <option benchmark="False"/>
-    <option additional="+configname=air -swf-version 39"/>
-    <option useNetwork="True"/>
     <option verboseStackTraces="False"/>
-    <option antBuildPath="build/build.xml"/>
     <option loadConfig=""/>
     <option linkReport=""/>
+    <option optimize="False"/>
+    <option staticLinkRSL="False"/>
+    <option showActionScriptWarnings="True"/>
+    <option compilerConstants="CONFIG::MOONSHINE,false"/>
+    <option customSDK=""/>
+    <option locale=""/>
+    <option sourceMap="False"/>
+    <option additional="+configname=air -swf-version 39"/>
+    <option showUnusedTypeSelectorWarnings="True"/>
+    <option showBindingWarnings="True"/>
+    <option strict="True"/>
+    <option antBuildPath="build.xml"/>
+    <option showDeprecationWarnings="True"/>
+    <option useNetwork="True"/>
+    <option allowSourcePathOverlap="False"/>
+    <option useResourceBundleMetadata="True"/>
+    <option benchmark="False"/>
+    <option warnings="True"/>
+    <option accessible="False"/>
   </build>
   <mavenBuild>
-    <option mavenBuildPath=""/>
     <option settingsFilePath=""/>
+    <option mavenBuildPath=""/>
     <option commandLine=""/>
     <actions>
-      <action actionName="Build" action="install"/>
-      <action actionName="Clean" action="clean"/>
-      <action actionName="Clean and Build" action="clean install"/>
-      <action actionName="Exploded" action="war:exploded"/>
+      <action action="install" actionName="Build"/>
+      <action action="clean" actionName="Clean"/>
+      <action action="clean install" actionName="Clean and Build"/>
+      <action action="war:exploded" actionName="Exploded"/>
     </actions>
   </mavenBuild>
-  <includeLibraries>
-    <!-- <empty/> -->
-  </includeLibraries>
+  <includeLibraries></includeLibraries>
   <libraryPaths>
     <element path="libs"/>
   </libraryPaths>
-  <externalLibraryPaths>
-    <!-- <empty/> -->
-  </externalLibraryPaths>
-  <rslPaths>
-    <!-- <empty/> -->
-  </rslPaths>
+  <externalLibraryPaths></externalLibraryPaths>
+  <rslPaths></rslPaths>
   <intrinsics>
     <element path="Library/AS3/frameworks/Flex4"/>
   </intrinsics>
   <library>
-    <!-- <empty/> -->
+    
+    
   </library>
   <compileTargets>
     <compile path="src/VisualEditorApplication.mxml"/>
   </compileTargets>
-  <hiddenPaths>
-    <!-- <empty/> -->
-  </hiddenPaths>
+  <hiddenPaths></hiddenPaths>
   <preBuildCommand>null</preBuildCommand>
   <postBuildCommand alwaysRun="False">null</postBuildCommand>
   <trustSVNCertificate>False</trustSVNCertificate>
   <options>
-    <option showHiddenPaths="False"/>
-    <option visualEditorExportPath=""/>
+    <option isRoyale="False"/>
     <option testMovie="AIR"/>
     <option testMovieCommand=""/>
-    <option isPrimeFacesVisualEditor="False"/>
-    <option defaultBuildTargets=""/>
     <option isExportedToExistingSource="False"/>
+    <option defaultBuildTargets=""/>
+    <option visualEditorExportPath=""/>
+    <option isPrimeFacesVisualEditor="False"/>
+    <option showHiddenPaths="False"/>
   </options>
   <moonshineRunCustomization>
     <option projectType="1"/>
-    <option launchMethod="Simulator"/>
-    <option targetPlatform="1"/>
-    <option deviceSimulator="null"/>
     <option urlToLaunch=""/>
+    <option targetPlatform="1"/>
     <option customUrlToLaunch=""/>
+    <option deviceConnectType="USB"/>
+    <option deviceSimulator="null"/>
+    <option launchMethod="Simulator"/>
+    <option webBrowser="null"/>
     <deviceSimulator>null</deviceSimulator>
     <certAndroid>null</certAndroid>
     <certIos>null</certIos>

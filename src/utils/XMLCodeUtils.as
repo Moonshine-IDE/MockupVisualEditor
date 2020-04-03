@@ -14,6 +14,7 @@ package utils
 
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.Div;
+    import view.domino.surfaceComponents.components.DominoParagraph;
 
     public class XMLCodeUtils
     {
@@ -189,6 +190,78 @@ package utils
         }
 
         public static function applyChildrenPositionFromXML(xml:XML, container:Div):void
+        {
+            if (container.cssClass)
+            {
+                var classes:Array = container.cssClass.split(" ");
+
+                for each (var className:String in classes)
+                {
+                    switch (className)
+                    {
+                        case "flexVerticalLayout":
+                            container.wrap = false;
+                            container.direction = ContainerDirection.VERTICAL_LAYOUT;
+                            break;
+                        case "flexHorizontalLayout":
+                            container.wrap = false;
+                            container.direction = ContainerDirection.HORIZONTAL_LAYOUT;
+                            break;
+                        case "flexVerticalLayoutWrap":
+                            container.wrap = true;
+                            break;
+                    }
+
+                    switch (className)
+                    {
+                        case "flexVerticalLayoutLeft":
+                        case "flexHorizontalLayoutLeft":
+                            container.horizontalAlign = HorizontalAlign.LEFT;
+                            break;
+                        case "flexVerticalLayoutRight":
+                        case "flexHorizontalLayoutRight":
+                            container.horizontalAlign = HorizontalAlign.RIGHT;
+                            break;
+                        case "flexCenter":
+                            if (container.direction == ContainerDirection.VERTICAL_LAYOUT)
+                            {
+                                container.verticalAlign = VerticalAlign.MIDDLE;
+                            }
+                            else
+                            {
+                                container.horizontalAlign = HorizontalAlign.CENTER;
+                            }
+                            break;
+                    }
+
+                    switch (className)
+                    {
+                        case "flexVerticalLayoutTop":
+                        case "flexHorizontalLayoutTop":
+                            container.verticalAlign = VerticalAlign.TOP;
+                            break;
+                        case "flexVerticalLayoutBottom":
+                        case "flexHorizontalLayoutBottom":
+                            container.verticalAlign = VerticalAlign.BOTTOM;
+                            break;
+                        case "flexMiddle":
+                            if (container.direction == ContainerDirection.VERTICAL_LAYOUT)
+                            {
+                                container.horizontalAlign = HorizontalAlign.CENTER;
+                            }
+                            else
+                            {
+                                container.verticalAlign = VerticalAlign.MIDDLE;
+                            }
+                            break;
+
+                    }
+                }
+            }
+        }
+
+
+        public static function applyChildrenPositionFromXMLParagraph(xml:XML, container:DominoParagraph):void
         {
             if (container.cssClass)
             {

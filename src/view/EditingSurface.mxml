@@ -67,6 +67,8 @@
 
 		import view.domino.surfaceComponents.components.DominoTable;
 
+		 import mx.controls.Alert;
+
 	
 		public var organizer:ComponentsOrganizer;
 
@@ -747,6 +749,7 @@
 			}
 			else if (item is IMainApplication)
 			{
+				Alert.show("item is IMainApplication")
 				this.prepareContainer(item as UIComponent);
 				return;
 			}

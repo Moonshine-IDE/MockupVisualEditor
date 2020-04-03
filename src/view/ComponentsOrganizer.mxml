@@ -345,18 +345,28 @@
 				var numRows:int;
 				var cellIndex:int;
 				var gridBase:GridBase;
+
+				if(component.item !=null){
 				
-				if (component.item is Grid || component.item is DominoTable) gridBase = component.item as GridBase;
-				else if (component.item is PanelGrid) gridBase = (component.item as PanelGrid).body;
-				
-				numRows = gridBase.getNumRows();
-				for (var i:int=0; i < numRows; i++)
-				{
-					var numCols:int = gridBase.getNumColumns(i);
-					for (var j:int=0; j < numCols; j++)
+					if (component.item is Grid || component.item is DominoTable) gridBase = component.item as GridBase;
+					else if (component.item is PanelGrid) gridBase = (component.item as PanelGrid).body;
+					
+					
+					numRows = gridBase.getNumRows();
+					for (var i:int=0; i < numRows; i++)
 					{
-						component.children[cellIndex].name = "R"+ (i+1) +":C"+ (j+1);
-						cellIndex++;
+						var numCols:int = gridBase.getNumColumns(i);	
+							for (var j:int=0; j < numCols; j++)
+							{
+								if(component.children!=null){
+									if(component.children[cellIndex]!=null){
+									
+										component.children[cellIndex].name = "R"+ (i+1) +":C"+ (j+1);
+										cellIndex++;
+									
+									}
+								}
+							}
 					}
 				}
 			}

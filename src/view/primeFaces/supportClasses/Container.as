@@ -52,6 +52,11 @@ package view.primeFaces.supportClasses
 
         private var _wrap:Boolean;
         private var wrapChanged:Boolean;
+
+
+        public function set borderWeight(value:int):void {
+           super.setStyle("borderWeight",0);
+        }
 		
 		[Bindable("wrapChanged")]
         public function get wrap():Boolean

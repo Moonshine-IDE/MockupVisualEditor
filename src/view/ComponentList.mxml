@@ -48,7 +48,7 @@
 			import view.domino.surfaceComponents.components.DominoInputText;
 			import view.domino.surfaceComponents.components.DominoLabel;
 			import view.domino.surfaceComponents.components.DominoTable;
-			
+			import view.domino.surfaceComponents.components.DominoParagraph;
 			public var visualEditorType:String;
 			
 			[Bindable] private var collection:ArrayCollection;
@@ -63,7 +63,10 @@
 					collection = new ArrayCollection([
 						new ComponentListItem("Input", DominoInputText),
 						new ComponentListItem("Label", DominoLabel),
-						new ComponentListItem("Table", DominoTable)
+						new ComponentListItem("Table", DominoTable),
+						new ComponentListItem("Div", Div),
+						new ComponentListItem("Paragraph", DominoParagraph)
+						
 					]);
 				} else if (VisualEditorType.FLEX == visualEditorType)
 				{

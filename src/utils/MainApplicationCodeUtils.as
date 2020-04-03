@@ -39,8 +39,10 @@ package utils
 			var element:ISurfaceComponent = surface.numElements > 0 ? surface.getElementAt(0) as ISurfaceComponent : null;
 			var isDominoMainApp:MainApplication = element as MainApplication;
 
+		
             if (element === null && !isDominoMainApp)
 			{
+				
 				var container:XML = new XML("<form />");
 
 				return container;

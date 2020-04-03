@@ -9,6 +9,8 @@ package view.primeFaces.surfaceComponents.components
 
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
+    import view.global.Globals;
+
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
     [Exclude(name="commitProperties", kind="method")]
@@ -61,6 +63,8 @@ package view.primeFaces.surfaceComponents.components
 			super();
 
 			this.setStyle("backgroundColor", "#FCFCFC");
+
+            Globals.MainApplicationWidth=super.width;
 		}
 
         override public function get propertyEditorClass():Class
@@ -132,6 +136,7 @@ package view.primeFaces.surfaceComponents.components
          */
         override public function get width():Number
         {
+            Globals.MainApplicationWidth=super.width;
             return super.width;
         }
 
@@ -221,6 +226,8 @@ package view.primeFaces.surfaceComponents.components
             mainXML.@title = this.title;
 
             mainXML = super.internalToXML();
+
+            Globals.MainApplicationWidth=super.width;
 
             if (isNaN(this.percentWidth) && !isNaN(this.widthPercent))
             {

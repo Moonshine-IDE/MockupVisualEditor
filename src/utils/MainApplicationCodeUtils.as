@@ -76,7 +76,7 @@ package utils
                 if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
                 {
 				
-                    return item.children()[0];
+                    return item;
                 }
             }
 
@@ -300,7 +300,7 @@ package utils
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"
 				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"
 				xml_str=xml_str+"<item name='$Fields'><textlist></textlist></item>"
-				xml_str=xml_str+"<item name='$Body' sign='true'><richtext></richtext></item>"
+				xml_str=xml_str+"<item name='$Body' sign='true'></item>"
 				xml_str=xml_str+"</note>";
 
 

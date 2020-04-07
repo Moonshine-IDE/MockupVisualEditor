@@ -10,6 +10,7 @@ package view.primeFaces.surfaceComponents.components
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
 
     import view.global.Globals;
+    import mx.controls.Alert;
 
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -57,6 +58,15 @@ package view.primeFaces.surfaceComponents.components
     public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication, IComponentPercentSizeOutput
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";
+
+
+       
+         public function setDominoProject(value:Boolean):void 
+        {
+            //super.isDomino= value;
+            Alert.show("setDomino:");
+        }
+        
 
 		public function MainApplication()
 		{

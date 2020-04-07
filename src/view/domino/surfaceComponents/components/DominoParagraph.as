@@ -12,15 +12,16 @@ package view.domino.surfaceComponents.components
 
 
     import view.interfaces.ICDATAInformation;
-    import view.interfaces.IDiv;
+    import view.interfaces.IDominoParagraph;
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
+    import view.domino.propertyEditors.PargraphPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IDiv;
+    import interfaces.components.IDominoParagraph
     import components.primeFaces.Div;
     import components.domino.DominoParagraph;
 
@@ -76,13 +77,13 @@ package view.domino.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class DominoParagraph extends Container implements IPrimeFacesSurfaceComponent, 
+    public class DominoParagraph extends Container implements IPrimeFacesSurfaceComponent, view.interfaces.IDominoParagraph,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "paragraph";
         public static var ELEMENT_NAME:String = "Paragraph";
 
-		private var component:interfaces.components.IDiv;
+		private var component:interfaces.components.IDominoParagraph;
 		
         protected var mainXML:XML;
 
@@ -160,6 +161,12 @@ package view.domino.surfaceComponents.components
                     this.invalidateProperties();
                 }
             }
+        }
+
+
+        public function get dominoParagraph():DominoParagraph
+        {
+            return this;
         }
 
         protected var _cdataXML:XML;
@@ -310,7 +317,7 @@ package view.domino.surfaceComponents.components
 
         public function get propertyEditorClass():Class
         {
-            return DivPropertyEditor;
+            return PargraphPropertyEditor;
         }
 		
 		private var _isUpdating:Boolean;
@@ -422,10 +429,17 @@ package view.domino.surfaceComponents.components
 		
             var xml:XML = component.toCode();
 	
-            xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
+            xml["@class"] = XMLCodeUtils.getChildrenPositionForXML(this);
 
             return xml;
         }
+
+    //    public function  toPerDefCode():XML
+    //     {
+	// 		component.isSelected = this.isSelected;
+    //         var xml:XML = (component as components.domino.DominoParagraph).toPerDefCode();
+    //         return xml;
+    //     }
 
         override protected function commitProperties():void
         {

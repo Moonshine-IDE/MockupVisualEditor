@@ -82,6 +82,8 @@ package view.primeFaces.surfaceComponents.components
 
         protected var contentChanged:Boolean;
 
+        public  var isDomino:Boolean =false;
+
         public function Div()
         {
             super();
@@ -410,9 +412,8 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.Div).height = this.width;
 			(component as components.primeFaces.Div).percentWidth = this.percentWidth;
 			(component as components.primeFaces.Div).percentHeight = this.percentHeight;
-			
+			(component as components.primeFaces.Div).isDomino=isDomino;
             var xml:XML = component.toCode();
-			
             xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
 
             return xml;

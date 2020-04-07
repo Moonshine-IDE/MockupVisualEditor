@@ -6,9 +6,13 @@ package utils
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
 
-    import mx.controls.Alert;
-    import view.domino.surfaceComponents.components.DominoInputText
+    import view.interfaces.IDominoParagraph;
 
+    import mx.controls.Alert;
+    import view.domino.surfaceComponents.components.DominoInputText;
+
+    import components.domino.DominoParagraph;
+    import view.primeFaces.surfaceComponents.components.MainApplication;
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
@@ -57,6 +61,10 @@ package utils
                 if (element is ISurfaceComponent)
                 {
                     container = element as IVisualElementContainer;
+                }
+
+                if(element is MainApplication){
+                   // (element as MainApplication).setDomino(false); 
                 }
 
                 var elementCount:int = 0;
@@ -120,6 +128,8 @@ package utils
                 {
                     container = element as IVisualElementContainer;
                 }
+                
+               
 
                 var elementCount:int = 0;
                 // if (!container )
@@ -150,6 +160,10 @@ package utils
                   
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
+
+                    //If it is IDominoParagraph node ,it need add other node
+                    
+                    
                   
                     
                     //if element is field ,we need add it into textlist
@@ -157,6 +171,12 @@ package utils
                     
 					// var commentOnlyXML:XMLList = (code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY).length() > 0) ?
 					// 	code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY) : null;
+                   if(code!=null && code !=undefined){
+                        if(code.name()=="div"){
+                             code.setName("richtext");
+                        }
+                   }
+                  
                     if (mainContainer)
                     {
                         mainContainer.appendChild(code);

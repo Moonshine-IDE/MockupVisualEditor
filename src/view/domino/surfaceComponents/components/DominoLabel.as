@@ -381,58 +381,58 @@ package view.domino.surfaceComponents.components
 
         public function toXML():XML
         {
-            var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
-            var par_xml:XML = new XML("<par/>");
-            var run_xml:XML = new XML("<run/>");
-			var font_xml:XML = new XML("<font>"+this.text+"</font>");
-            var cxml:XML = new XML()
-            XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+            var xml:XML = new XML("<" + ELEMENT_NAME +">"+escape(this.text)+"</"+ELEMENT_NAME+ ">");
+            // var par_xml:XML = new XML("<par/>");
+            // var run_xml:XML = new XML("<run/>");
+			// var font_xml:XML = new XML("<font>"+this.text+"</font>");
+            // var cxml:XML = new XML()
+            // XMLCodeUtils.setSizeFromComponentToXML(this, xml);
 
-            if (cdataXML)
-            {
-                xml.appendChild(cdataXML);
-            }
-            if(this.font!=null){
-                if(this.font.color){
-                    font_xml.@color=this.font.color
-                }
+            // if (cdataXML)
+            // {
+            //     xml.appendChild(cdataXML);
+            // }
+            // if(this.font!=null){
+            //     if(this.font.color){
+            //         font_xml.@color=this.font.color
+            //     }
 
-                if(this.font.size){
-                    font_xml.@size=this.font.size
-                }
+            //     if(this.font.size){
+            //         font_xml.@size=this.font.size
+            //     }
 
-                if(this.font.style){
-                    font_xml.@style=this.font.style
-                }
+            //     if(this.font.style){
+            //         font_xml.@style=this.font.style
+            //     }
 
-                if(this.font.name){
-                    font_xml.@name=this.font.name
-                }
+            //     if(this.font.name){
+            //         font_xml.@name=this.font.name
+            //     }
 
             
-                font_xml.@truetype=this.font.truetype
+            //     font_xml.@truetype=this.font.truetype
                 
                 
-                if(this.font.pitch){
-                    font_xml.@pitch=this.font.pitch
-                }
-            }
+            //     if(this.font.pitch){
+            //         font_xml.@pitch=this.font.pitch
+            //     }
+            // }
 
-			//CodeXMLUtils.addSizeHtmlStyleToXML(xml, this);
-			//font node must before the text node
-			run_xml.appendChild(font_xml);
-            //run_xml.appendChild(this.text);
-            //run_xml.text=this.text;
-            //run_xml.createTextNode(this.text);
+			// //CodeXMLUtils.addSizeHtmlStyleToXML(xml, this);
+			// //font node must before the text node
+			// run_xml.appendChild(font_xml);
+            // //run_xml.appendChild(this.text);
+            // //run_xml.text=this.text;
+            // //run_xml.createTextNode(this.text);
             
-            if(this.par!=null){
-                if(this.par.def)
-                par_xml.@def=this.par.def;
-            }
+            // if(this.par!=null){
+            //     if(this.par.def)
+            //     par_xml.@def=this.par.def;
+            // }
 			
-			par_xml.appendChild(run_xml);
+			// par_xml.appendChild(run_xml);
 
-            return par_xml;
+            return xml;
         }
 
         public function fromXML(xml:XML, callback:Function):void

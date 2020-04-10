@@ -391,7 +391,9 @@
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
 			{
-				
+				if(surface==null){
+					Alert.show("surface is null");
+				}
 				if(surface.numChildren>0){
 					var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
 					

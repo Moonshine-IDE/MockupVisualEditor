@@ -450,6 +450,7 @@ package view.domino.surfaceComponents.components
             if (elementsXML.length() > 0)
             {
                 var childCount:int = elementsXML.length();
+                //Alert.show("childCount:"+childCount);
                 for(var row:int = 0; row < childCount; row++)
                 {
                     var rowXML:XML = elementsXML[row];
@@ -461,12 +462,18 @@ package view.domino.surfaceComponents.components
                         var colXML:XML = colListXML[col];
                         if (colXML.length() > 0)
                         {
+                           
                             var div:Div = getDiv(row, col);
-                            div.percentWidth = div.percentHeight = 100;
-                            div.setStyle("borderColor", _columnBorderColor);
-                            div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
-                            div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
-                            div.addEventListener(MouseEvent.CLICK, onDivClick);
+                            if(div==null){
+                                //Alert.show("div is null 467");
+                            }else{
+                                div.percentWidth = div.percentHeight = 100;
+                                div.setStyle("borderColor", _columnBorderColor);
+                                div.addEventListener(MouseEvent.ROLL_OVER, onDivRollOver);
+                                div.addEventListener(MouseEvent.ROLL_OUT, onDivRollOut);
+                                div.addEventListener(MouseEvent.CLICK, onDivClick);
+                            }
+                            
                         }
                     }
                 }

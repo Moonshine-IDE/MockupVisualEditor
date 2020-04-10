@@ -12,6 +12,10 @@ package view.primeFaces.supportClasses
     import view.primeFaces.surfaceComponents.components.Div;
     import view.suportClasses.events.SurfaceComponentEvent;
 
+    import mx.controls.Alert;
+
+    import flash.utils.getQualifiedClassName;
+
     public class GridBase extends Grid
     {
         protected static const MIN_COLUMN_COUNT:int = 1;
@@ -238,31 +242,40 @@ package view.primeFaces.supportClasses
 
         override public function addElement(element:IVisualElement):IVisualElement
         {
-            if (element is GridRow)
-            {
-                return super.addElement(element);
-            }
-            else
-            {
-                var gridRow:GridRow = this.getElementAt(selectedRow) as GridRow;
-                var gridItem:GridItem = gridRow.getElementAt(selectedColumn) as GridItem;
-                if (gridItem.numElements > 0)
+         
+           
+             var className:String = getQualifiedClassName(element);
+            //Alert.show("addElement248:"+className);
+                if (element is GridRow)
                 {
-                    var div:Div = gridItem.getElementAt(0) as Div;
-                    if (div)
+                    //Alert.show("element is GridRow");
+                    return super.addElement(element);
+                }
+                else
+                {
+                    
+
+                    var gridRow:GridRow = this.getElementAt(selectedRow) as GridRow;
+                    var gridItem:GridItem = gridRow.getElementAt(selectedColumn) as GridItem;
+                  
+                    if (gridItem.numElements > 0)
                     {
-                        return div.addElement(element);
+                        var div:Div = gridItem.getElementAt(0) as Div;
+                        if (div)
+                        {
+                            return div.addElement(element);
+                        }
+                        else
+                        {
+                            return gridItem.addElement(element);
+                        }
                     }
                     else
                     {
                         return gridItem.addElement(element);
                     }
                 }
-                else
-                {
-                    return gridItem.addElement(element);
-                }
-            }
+            
         }
 
         protected function ensureCreateColumn(row:GridRow):GridItem

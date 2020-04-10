@@ -25,6 +25,8 @@ package view.domino.surfaceComponents.components
     import components.primeFaces.Div;
     import components.domino.DominoParagraph;
 
+    import view.interfaces.IDominoSurfaceComponent;
+
     import view.global.Globals;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -77,7 +79,7 @@ package view.domino.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class DominoParagraph extends Container implements IPrimeFacesSurfaceComponent, view.interfaces.IDominoParagraph,
+    public class DominoParagraph extends Container implements IDominoSurfaceComponent, view.interfaces.IDominoParagraph,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "paragraph";
@@ -101,7 +103,7 @@ package view.domino.surfaceComponents.components
             this.height = 40;
             this.minWidth = Globals.MainApplicationWidth-10;
             this.minHeight = 40;
-            super.borderWeight=0;
+            //super.borderWeight=0;
 
             _propertiesChangedEvents = [
                 "widthChanged",

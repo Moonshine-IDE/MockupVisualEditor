@@ -171,7 +171,7 @@ package utils
                     
 					// var commentOnlyXML:XMLList = (code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY).length() > 0) ?
 					// 	code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY) : null;
-                   if(code!=null && code !=undefined){
+                   if(code!=null ){
                         if(code.name()=="div"){
                              code.setName("richtext");
                         }

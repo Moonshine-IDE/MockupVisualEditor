@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*"
+                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			
+
+
+			private function getDominoFieldName(item:Object):String
+			{
+				return item.label;
+			}
+			
+			private function getDominoFieldTooltip(item:Object):String
+			{
+				return item.description;
+			}
+		]]>
+	</fx:Script>
+    <suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+	<primeFaces:BasicsForm/>
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
+    <forms:TextForm label="Value" textProperty="text"/>
+	<forms:TextForm label="Size" textProperty="size"
+					restrict="0-9"/>
+    	<forms:DropdownListForm id="ddl"
+                            label="Color" textProperty="color"
+                            collectionProperty="colors" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+    <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
+    <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
+</suportclasses:BasePropertyEditor>

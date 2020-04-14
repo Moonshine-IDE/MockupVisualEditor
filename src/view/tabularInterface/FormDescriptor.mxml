@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<supportClasses:TabularBasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009" 
+										  xmlns:s="library://ns.adobe.com/flex/spark" 
+										  xmlns:mx="library://ns.adobe.com/flex/mx"
+										  xmlns:supportClasses="view.tabularInterface.supportClasses.*" xmlns:layout="org.osmf.layout.*"
+										  creationComplete="onCreationCompletes(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.core.FlexGlobals;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.Group;
+			import spark.components.TitleWindow;
+			
+			import skins.TextInputSkin;
+			
+			import utils.MoonshineBridgeUtils;
+			
+			import view.suportClasses.events.ItemDeleteEvent;
+			import view.suportClasses.events.ItemEditEvent;
+			import view.tabularInterface.vo.DominoFormFieldVO;
+			
+			private function onCreationCompletes(event:FlexEvent):void
+			{
+				dgFields.addEventListener(ItemEditEvent.EDIT_ITEM, onItemEditRequest, false, 0, true);
+				dgFields.addEventListener(ItemDeleteEvent.DELETE_ITEM, onItemDeleteRequest, false, 0, true);
+			}
+			
+			private function onItemAddEdit(item:DominoFormFieldVO=null):void
+			{
+				var addEditPopup:TitleWindow = MoonshineBridgeUtils.moonshineBridgeTabularInterface.getNewMoonshinePopup();
+				addEditPopup.title = item ? "Edit Field" : "Add Field";
+				addEditPopup.width = FlexGlobals.topLevelApplication.stage.nativeWindow.width * .6;
+				addEditPopup.height = FlexGlobals.topLevelApplication.stage.nativeWindow.height * .6;
+				addEditPopup.controlBarVisible = true;
+				addEditPopup.controlBarGroup = new Group();
+				
+				var tmpAddEditForm:FormFieldDescriptor = new FormFieldDescriptor();
+				tmpAddEditForm.setControlBarContent = function(contents:Array):void
+				{
+					addEditPopup.controlBarContent = contents;
+				};
+				addEditPopup.addElement(tmpAddEditForm);
+				
+				//addEditPopup.addEventListener(CloseEvent.CLOSE, onGitCommitWindowClosed);
+				
+				PopUpManager.addPopUp(addEditPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
+				PopUpManager.centerPopUp(addEditPopup);
+			}
+			
+			private function onSaveDominoForm(event:MouseEvent):void
+			{
+				
+			}
+			
+			private function onGenerateDominoForm(event:MouseEvent):void
+			{
+				
+			}
+			
+			private function onItemEditRequest(event:ItemEditEvent):void
+			{
+				
+			}
+			
+			private function onItemDeleteRequest(event:ItemDeleteEvent):void
+			{
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%"
+			  gap="2"
+			  paddingLeft="22" paddingTop="24" paddingBottom="12" paddingRight="22">
+		<s:VGroup width="100%"
+				  paddingTop="10" paddingBottom="28">
+			<s:Label text="New Domino Form"
+					 fontSize="24" kerning="on" color="0xe252d3" />
+			<mx:Spacer height="10" />
+			<s:Label width="100%" paddingLeft="5"
+					 maxDisplayedLines="10"
+					 text="Some information on creating a Domino tabular form.." fontSize="14" color="0x252424"/>
+		</s:VGroup>
+		<mx:HRule width="100%" strokeWidth="2" strokeColor="0xdadada"/>
+		<s:Form width="100%">
+			<s:FormItem label="Form Name" required="true"
+						skinClass="skins.StackedFormItemSkinTabularInterface" width="100%">
+				<s:TextInput id="textFormName"
+							 width="100%"
+							 skinClass="skins.TextInputSkin" prompt="Domino form name"
+							 text="@{dominoForm.formName}"/>
+			</s:FormItem>
+			<s:FormItem label="View Name" required="true" 
+						skinClass="skins.StackedFormItemSkinTabularInterface" width="100%">
+				<s:TextInput id="textViewName"
+							 width="100%"
+							 skinClass="skins.TextInputSkin" prompt="Domino view name"
+							 text="@{dominoForm.viewName}"/>
+			</s:FormItem>
+			<s:FormItem label="Is this a web form?" skinClass="skins.StackedFormItemSkinTabularInterface" width="100%">
+				<s:CheckBox id="cbWebForm" label="Yes"/>
+			</s:FormItem>
+		</s:Form>
+		<s:DataGrid id="dgFields" 
+					dataProvider="{dominoForm.fields}"
+					width="100%" height="100%"
+					sortableColumns="false" variableRowHeight="true" borderVisible="true" borderColor="0x999999"
+					contentBackgroundColor="0xe0e0e0" selectionColor="0xf6f6f6">
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn headerText="Label" dataField="label" itemRenderer="components.renderers.GenericGridRenderer" 
+								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
+					<s:GridColumn headerText="Name" dataField="name" itemRenderer="components.renderers.GenericGridRenderer" 
+								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
+					<s:GridColumn headerText="Type" dataField="type" itemRenderer="components.renderers.GenericGridRenderer" 
+								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
+					<s:GridColumn headerText="" width="100" itemRenderer="components.renderers.EditGridItemRenderer"
+								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
+					<s:GridColumn headerText="" width="100" itemRenderer="components.renderers.DeleteGridItemRenderer"
+								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+	</s:VGroup>
+	
+	<s:BorderContainer id="buttonBar"
+					   width="100%" height="41"
+					   bottom="0" backgroundColor="0x444444">
+		<s:layout>
+			<s:HorizontalLayout paddingRight="10" paddingLeft="10" paddingTop="0"
+								horizontalAlign="right" verticalAlign="middle"/>
+		</s:layout>
+		<s:Button label="Add" skinClass="skins.DarkButtonSkin"
+				  click="onItemAddEdit()"/>
+		<s:Spacer width="100%"/>
+		<s:Button label="Save" skinClass="skins.DarkButtonSkin"
+				  click="onSaveDominoForm(event)"/>
+		<s:Button label="Generate" skinClass="skins.GreenButtonSkin"
+				  click="onGenerateDominoForm(event)"/>
+	</s:BorderContainer>
+</supportClasses:TabularBasePropertyEditor>

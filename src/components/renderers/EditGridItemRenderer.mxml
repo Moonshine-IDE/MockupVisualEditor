@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" height="100%">
+	<fx:Script>
+		<![CDATA[
+			import view.suportClasses.events.ItemEditEvent;
+			
+			override public function set data(value:Object):void
+			{
+				if (value) super.data = value;
+			}
+			
+			protected function onItemEdit(event:MouseEvent):void
+			{
+				dispatchEvent(new ItemEditEvent(ItemEditEvent.EDIT_ITEM, data, true));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Image source="@Embed('/assets/pencil.png')" horizontalCenter="0" verticalCenter="0"
+			 buttonMode="true" click="onItemEdit(event)"/>
+</s:GridItemRenderer>

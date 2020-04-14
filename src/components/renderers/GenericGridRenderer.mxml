@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					xmlns:s="library://ns.adobe.com/flex/spark" 
+					xmlns:mx="library://ns.adobe.com/flex/mx" height="100%" minHeight="34">
+	<fx:Script>
+		<![CDATA[
+			
+			/**
+			 * Set DATA
+			 */
+			override public function set data(value:Object):void {
+				
+				if ( value ) {
+					super.data = value;
+					
+					// priority to the labelFunction if any
+					lbl.text = (this.column.labelFunction != null) ? this.label : data[ this.column.dataField ];
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Label id="lbl"
+			 width="100%" verticalCenter="0"
+			 paddingLeft="6" paddingRight="6" maxDisplayedLines="6"/>
+</s:GridItemRenderer>

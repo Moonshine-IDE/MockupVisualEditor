@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="100%" height="100%"
+		  creationComplete="onCreationCompletes(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import skins.StackedFormItemSkin;
+			import skins.TextInputSkin;
+			
+			public var setControlBarContent:Function;
+			
+			private function onCreationCompletes(event:FlexEvent):void
+			{
+				setControlBarContent([controlBarButtons]);
+			}
+			
+			private function onSaveRequest(event:MouseEvent):void
+			{
+				
+			}
+			
+			private function onCancel(event:MouseEvent):void
+			{
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:HGroup id="controlBarButtons" width="100%" verticalAlign="middle" horizontalAlign="right">
+			<s:Button label="Save" styleName="darkButton" click="onSaveRequest(event)"/>
+			<s:Button label="Cancel" styleName="darkButton" click="onCancel(event)"/>
+		</s:HGroup>
+	</fx:Declarations>
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="0xf5f5f5"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup paddingLeft="12" paddingBottom="6" paddingTop="9" paddingRight="0"
+			  gap="10" width="100%" height="100%">
+		<s:Scroller width="100%" height="100%">
+			<s:Group width="100%">
+				<s:Form width="100%">
+					<s:FormHeading label="General Information"/>
+					<s:FormItem label="Name" required="true" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="textName"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Item name"/>
+					</s:FormItem>
+					<s:FormItem label="Label" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="textLabel"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Item label"/>
+					</s:FormItem>
+					<s:FormItem label="Description" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="textDescription"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Item description"/>
+					</s:FormItem>
+					<s:FormItem label="Type" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:DropDownList id="ddlType" width="100%" height="30"/>
+					</s:FormItem>
+					<s:FormItem label="Multivalue" 
+								skinClass="skins.FormItemSkin" width="100%">
+						<s:CheckBox id="cbMultivalue"/>
+					</s:FormItem>
+					<s:Spacer height="1"/>
+					<s:FormItem label="Editable" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:DropDownList id="ddlEditable" width="100%" height="30"/>
+					</s:FormItem>
+					<s:FormItem label="Formula" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="textFormula"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Enter formula"/>
+					</s:FormItem>
+					<s:Spacer height="10"/>
+					<s:FormHeading label="View Options"/>
+					<s:FormItem label="Include in View" 
+								skinClass="skins.FormItemSkin" width="100%">
+						<s:CheckBox id="cbInclude"/>
+					</s:FormItem>
+					<s:Spacer height="1"/>
+					<s:FormItem label="Sorting" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:DropDownList id="ddlSort" width="100%" height="30"/>
+					</s:FormItem>
+				</s:Form>
+			</s:Group>
+		</s:Scroller>
+	</s:VGroup>
+</s:Group>

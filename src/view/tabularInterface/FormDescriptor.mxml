@@ -37,13 +37,13 @@
 				addEditPopup.controlBarGroup = new Group();
 				
 				var tmpAddEditForm:FormFieldDescriptor = new FormFieldDescriptor();
+				tmpAddEditForm.editItem = item;
+				tmpAddEditForm.isItemEdit = item ? true : false;
 				tmpAddEditForm.setControlBarContent = function(contents:Array):void
 				{
 					addEditPopup.controlBarContent = contents;
 				};
 				addEditPopup.addElement(tmpAddEditForm);
-				
-				//addEditPopup.addEventListener(CloseEvent.CLOSE, onGitCommitWindowClosed);
 				
 				PopUpManager.addPopUp(addEditPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
 				PopUpManager.centerPopUp(addEditPopup);
@@ -61,7 +61,7 @@
 			
 			private function onItemEditRequest(event:ItemEditEvent):void
 			{
-				
+				onItemAddEdit(event.value as DominoFormFieldVO);
 			}
 			
 			private function onItemDeleteRequest(event:ItemDeleteEvent):void

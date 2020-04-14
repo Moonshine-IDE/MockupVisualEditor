@@ -3,19 +3,47 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  width="100%" height="100%"
-		  creationComplete="onCreationCompletes(event)">
+		  initialize="onInitialize(event)" creationComplete="onCreationCompletes(event)">
 	<fx:Script>
 		<![CDATA[
+			import flash.net.registerClassAlias;
+			
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.utils.ObjectUtil;
 			
 			import skins.StackedFormItemSkin;
 			import skins.TextInputSkin;
 			
+			import view.tabularInterface.vo.DominoFormFieldVO;
+			import view.tabularInterface.vo.TabularEditableType;
+			import view.tabularInterface.vo.TabularFieldType;
+			
+			[Bindable] protected var dominoFormField:DominoFormFieldVO;
+			
+			public var editItem:DominoFormFieldVO;
 			public var setControlBarContent:Function;
+			public var isItemEdit:Boolean;
+			
+			private function onInitialize(event:FlexEvent):void
+			{
+				if (isItemEdit)
+				{
+					// if item in edit use cloned object until save
+					registerClassAlias("view.tabularInterface.vo.DominoFormFieldVO", DominoFormFieldVO);
+					dominoFormField = ObjectUtil.clone(editItem) as DominoFormFieldVO;
+				}
+				else
+				{
+					dominoFormField = new DominoFormFieldVO();
+				}
+			}
 			
 			private function onCreationCompletes(event:FlexEvent):void
 			{
+				// set the content-bar buttons
 				setControlBarContent([controlBarButtons]);
+				setControlBarContent = null;
 			}
 			
 			private function onSaveRequest(event:MouseEvent):void
@@ -25,7 +53,7 @@
 			
 			private function onCancel(event:MouseEvent):void
 			{
-				
+				this.owner.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
 			}
 			
 		]]>
@@ -50,46 +78,56 @@
 					<s:FormHeading label="General Information"/>
 					<s:FormItem label="Name" required="true" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
-						<s:TextInput id="textName"
+						<s:TextInput id="txtName"
 									 width="100%"
-									 skinClass="skins.TextInputSkin" prompt="Item name"/>
+									 skinClass="skins.TextInputSkin" prompt="Item name"
+									 text="@{dominoFormField.name}"/>
 					</s:FormItem>
 					<s:FormItem label="Label" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:TextInput id="textLabel"
 									 width="100%"
-									 skinClass="skins.TextInputSkin" prompt="Item label"/>
+									 skinClass="skins.TextInputSkin" prompt="Item label"
+									 text="@{dominoFormField.label}"/>
 					</s:FormItem>
 					<s:FormItem label="Description" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:TextInput id="textDescription"
 									 width="100%"
-									 skinClass="skins.TextInputSkin" prompt="Item description"/>
+									 skinClass="skins.TextInputSkin" prompt="Item description"
+									 text="@{dominoFormField.description}"/>
 					</s:FormItem>
 					<s:FormItem label="Type" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
-						<s:DropDownList id="ddlType" width="100%" height="30"/>
+						<s:DropDownList id="ddlType" width="100%" height="30"
+										dataProvider="{TabularFieldType.FIELD_TYPES}" 
+										requireSelection="true"/>
 					</s:FormItem>
 					<s:FormItem label="Multivalue" 
 								skinClass="skins.FormItemSkin" width="100%">
-						<s:CheckBox id="cbMultivalue"/>
+						<s:CheckBox id="cbMultivalue"
+									selected="@{dominoFormField.isMultiValue}"/>
 					</s:FormItem>
 					<s:Spacer height="1"/>
 					<s:FormItem label="Editable" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
-						<s:DropDownList id="ddlEditable" width="100%" height="30"/>
+						<s:DropDownList id="ddlEditable" width="100%" height="30"
+										dataProvider="{TabularEditableType.EDITABLE_TYPES}"
+										requireSelection="true"/>
 					</s:FormItem>
 					<s:FormItem label="Formula" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:TextInput id="textFormula"
 									 width="100%"
-									 skinClass="skins.TextInputSkin" prompt="Enter formula"/>
+									 skinClass="skins.TextInputSkin" prompt="Enter formula"
+									 text="@{dominoFormField.formula}"/>
 					</s:FormItem>
 					<s:Spacer height="10"/>
 					<s:FormHeading label="View Options"/>
 					<s:FormItem label="Include in View" 
 								skinClass="skins.FormItemSkin" width="100%">
-						<s:CheckBox id="cbInclude"/>
+						<s:CheckBox id="cbInclude"
+									selected="@{dominoFormField.isIncludeInView}"/>
 					</s:FormItem>
 					<s:Spacer height="1"/>
 					<s:FormItem label="Sorting" 

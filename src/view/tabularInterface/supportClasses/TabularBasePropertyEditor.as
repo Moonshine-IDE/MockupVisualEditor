@@ -13,7 +13,6 @@ package view.tabularInterface.supportClasses
 	import view.tabularInterface.DominoTabularForm;
 	import view.tabularInterface.vo.DominoFormVO;
 	
-	[Event(name="notifyMoonshine", type="flash.events.Event")]
 	public class TabularBasePropertyEditor extends Group
 	{
 		public var tabularTab:DominoTabularForm;

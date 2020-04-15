@@ -7,6 +7,7 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.core.FlexGlobals;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
@@ -19,7 +20,10 @@
 			
 			import view.suportClasses.events.ItemDeleteEvent;
 			import view.suportClasses.events.ItemEditEvent;
+			import view.suportClasses.events.ItemEditedEvent;
 			import view.tabularInterface.vo.DominoFormFieldVO;
+			
+			private var addEditFormField:FormFieldDescriptor;
 			
 			private function onCreationCompletes(event:FlexEvent):void
 			{
@@ -36,14 +40,17 @@
 				addEditPopup.controlBarVisible = true;
 				addEditPopup.controlBarGroup = new Group();
 				
-				var tmpAddEditForm:FormFieldDescriptor = new FormFieldDescriptor();
-				tmpAddEditForm.editItem = item;
-				tmpAddEditForm.isItemEdit = item ? true : false;
-				tmpAddEditForm.setControlBarContent = function(contents:Array):void
+				addEditFormField = new FormFieldDescriptor();
+				addEditFormField.editItem = item;
+				addEditFormField.isItemEdit = item ? true : false;
+				addEditFormField.setControlBarContent = function(contents:Array):void
 				{
 					addEditPopup.controlBarContent = contents;
 				};
-				addEditPopup.addElement(tmpAddEditForm);
+				addEditPopup.addElement(addEditFormField);
+				
+				addEditFormField.addEventListener(ItemEditedEvent.ITEM_EDITED, onItemEdited, false, 0, true);
+				addEditPopup.addEventListener(CloseEvent.CLOSE, onFieldEditWindowClosed, false, 0, true);
 				
 				PopUpManager.addPopUp(addEditPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
 				PopUpManager.centerPopUp(addEditPopup);
@@ -51,7 +58,7 @@
 			
 			private function onSaveDominoForm(event:MouseEvent):void
 			{
-				
+				writeToFile();
 			}
 			
 			private function onGenerateDominoForm(event:MouseEvent):void
@@ -67,6 +74,29 @@
 			private function onItemDeleteRequest(event:ItemDeleteEvent):void
 			{
 				
+			}
+			
+			private function onItemEdited(event:ItemEditedEvent):void
+			{
+				if (event.oldValue)
+				{
+					var oldValueIndex:int = dominoForm.fields.getItemIndex(event.oldValue);
+					if (oldValueIndex != -1)
+					{
+						dominoForm.fields.setItemAt(event.newValue, oldValueIndex);
+					}
+				}
+				else
+				{
+					dominoForm.fields.addItem(event.newValue);
+				}
+			}
+			
+			private function onFieldEditWindowClosed(event:CloseEvent):void
+			{
+				event.target.removeEventListener(CloseEvent.CLOSE, onFieldEditWindowClosed);
+				addEditFormField.removeEventListener(ItemEditedEvent.ITEM_EDITED, onItemEdited);
+				addEditFormField = null;
 			}
 			
 		]]>
@@ -101,7 +131,8 @@
 							 text="@{dominoForm.viewName}"/>
 			</s:FormItem>
 			<s:FormItem label="Is this a web form?" skinClass="skins.StackedFormItemSkinTabularInterface" width="100%">
-				<s:CheckBox id="cbWebForm" label="Yes"/>
+				<s:CheckBox id="cbWebForm" label="Yes"
+							selected="@{dominoForm.hasWebAccess}"/>
 			</s:FormItem>
 		</s:Form>
 		<s:DataGrid id="dgFields" 

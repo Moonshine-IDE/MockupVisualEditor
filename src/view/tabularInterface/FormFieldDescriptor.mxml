@@ -4,6 +4,9 @@
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
 		  width="100%" height="100%"
 		  initialize="onInitialize(event)" creationComplete="onCreationCompletes(event)">
+	<fx:Metadata>
+		[Event(name="editedItem", type="view.suportClasses.events.ItemEditedEvent")]
+	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
 			import flash.net.registerClassAlias;
@@ -11,10 +14,12 @@
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.utils.ObjectUtil;
+			import mx.validators.Validator;
 			
 			import skins.StackedFormItemSkin;
 			import skins.TextInputSkin;
 			
+			import view.suportClasses.events.ItemEditedEvent;
 			import view.tabularInterface.vo.DominoFormFieldVO;
 			import view.tabularInterface.vo.TabularEditableType;
 			import view.tabularInterface.vo.TabularFieldType;
@@ -44,16 +49,48 @@
 				// set the content-bar buttons
 				setControlBarContent([controlBarButtons]);
 				setControlBarContent = null;
+				
+				// set edit fields or update
+				if (isItemEdit)
+				{
+					ddlType.selectedItem = dominoFormField.type;
+					ddlEditable.selectedItem = dominoFormField.editable;
+					ddlSort.selectedItem = dominoFormField.sortOption;
+				}
+				else
+				{
+					dominoFormField.type = ddlType.selectedItem;
+					dominoFormField.editable = ddlEditable.selectedItem;
+					dominoFormField.sortOption = ddlSort.selectedItem;
+				}
 			}
 			
 			private function onSaveRequest(event:MouseEvent):void
 			{
+				if (!validateThis()) return;
 				
+				dispatchEvent(new ItemEditedEvent(
+					ItemEditedEvent.ITEM_EDITED,
+					dominoFormField,
+					editItem
+					));
+				onCancel(null);
 			}
 			
 			private function onCancel(event:MouseEvent):void
 			{
 				this.owner.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function validateThis():Boolean
+			{
+				var tmpArr : Array = new Array(svName);
+				if (Validator.validateAll(tmpArr).length != 0) 
+				{
+					return false;
+				}
+				
+				return true;
 			}
 			
 		]]>
@@ -63,6 +100,14 @@
 			<s:Button label="Save" styleName="darkButton" click="onSaveRequest(event)"/>
 			<s:Button label="Cancel" styleName="darkButton" click="onCancel(event)"/>
 		</s:HGroup>
+		<s:ArrayList id="sortOptions">
+			<fx:String>No sorting</fx:String>
+			<fx:String>Ascending</fx:String>
+			<fx:String>Descending</fx:String>
+			<fx:String>Categorized(Ascending)</fx:String>
+			<fx:String>Categorized(Descending)</fx:String>
+		</s:ArrayList>
+		<mx:StringValidator id="svName" source="{txtName}" property="text"/>
 	</fx:Declarations>
 	<s:Rect left="0" right="0" top="0" bottom="0">
 		<s:fill>
@@ -101,7 +146,8 @@
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:DropDownList id="ddlType" width="100%" height="30"
 										dataProvider="{TabularFieldType.FIELD_TYPES}" 
-										requireSelection="true"/>
+										requireSelection="true" 
+										change="{dominoFormField.type=event.target.selectedItem}"/>
 					</s:FormItem>
 					<s:FormItem label="Multivalue" 
 								skinClass="skins.FormItemSkin" width="100%">
@@ -113,7 +159,8 @@
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:DropDownList id="ddlEditable" width="100%" height="30"
 										dataProvider="{TabularEditableType.EDITABLE_TYPES}"
-										requireSelection="true"/>
+										requireSelection="true"
+										change="{dominoFormField.editable=event.target.selectedItem}"/>
 					</s:FormItem>
 					<s:FormItem label="Formula" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
@@ -132,7 +179,9 @@
 					<s:Spacer height="1"/>
 					<s:FormItem label="Sorting" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
-						<s:DropDownList id="ddlSort" width="100%" height="30"/>
+						<s:DropDownList id="ddlSort" width="100%" height="30"
+										dataProvider="{sortOptions}" requireSelection="true"
+										change="{dominoFormField.sortOption=event.target.selectedItem}"/>
 					</s:FormItem>
 				</s:Form>
 			</s:Group>

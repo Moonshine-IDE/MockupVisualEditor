@@ -2,6 +2,8 @@ package view.tabularInterface.vo
 {
 	[Bindable] public class DominoFormFieldVO
 	{
+		public static const ELEMENT_NAME:String = "field";
+		
 		public var name:String;
 		public var label:String;
 		public var description:String;
@@ -29,7 +31,25 @@ package view.tabularInterface.vo
 		
 		public function toXML():XML
 		{
-			return null;
+			var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
+			
+			xml.@name = name;
+			xml.@type = type;
+			xml.@editable = editable;
+			xml.@formula = formula;
+			xml.@sortOption = sortOption;
+			xml.@isMultiValue = isMultiValue.toString();
+			xml.@isIncludeInView = isIncludeInView.toString();
+			
+			var tempXML:XML = <label/>;
+			tempXML.appendChild(new XML("\<![CDATA[" + label + "]]\>"));
+			xml.appendChild(tempXML);
+			
+			tempXML = <description/>;
+			tempXML.appendChild(new XML("\<![CDATA[" + description + "]]\>"));
+			xml.appendChild(tempXML);
+			
+			return xml;
 		}
 		
 		public function toCode():XML

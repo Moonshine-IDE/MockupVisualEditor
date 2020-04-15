@@ -1,6 +1,5 @@
 package view.tabularInterface.supportClasses
 {
-	import flash.events.Event;
 	import flash.filesystem.File;
 	
 	import mx.events.CollectionEvent;
@@ -11,6 +10,8 @@ package view.tabularInterface.supportClasses
 	
 	import view.suportClasses.events.PropertyEditorChangeEvent;
 	import view.tabularInterface.DominoTabularForm;
+	import view.tabularInterface.utils.TabularExporter;
+	import view.tabularInterface.utils.TabularImporter;
 	import view.tabularInterface.vo.DominoFormVO;
 	
 	public class TabularBasePropertyEditor extends Group
@@ -35,8 +36,11 @@ package view.tabularInterface.supportClasses
 		}
 		public function set filePath(value:File):void
 		{
-			_filePath = value;
-			retrieveFromFile();
+			if (!_filePath || (_filePath.nativePath != value.nativePath))
+			{
+				_filePath = value;
+				retrieveFromFile();
+			}
 		}
 		
 		public function TabularBasePropertyEditor()
@@ -45,15 +49,13 @@ package view.tabularInterface.supportClasses
 			layout = new VerticalLayout();
 			
 			dominoForm.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onFormPropertyChanged);
-			dominoForm.addEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
-			
-			dominoForm.tempGenerateFields();
+			dominoForm.fields.addEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
 		}
 		
 		public function dispose():void
 		{
 			dominoForm.removeEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onFormPropertyChanged);
-			dominoForm.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
+			dominoForm.fields.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
 		}
 		
 		//--------------------------------------------------------------------------
@@ -64,11 +66,12 @@ package view.tabularInterface.supportClasses
 		
 		protected function retrieveFromFile():void
 		{
-			if (filePath.exists)
-			{
-				// parse xml
-				// call dominoForm.fromXML(..)
-			}
+			TabularImporter.loadFromFile(filePath, dominoForm);
+		}
+		
+		protected function writeToFile():void
+		{
+			TabularExporter.writeToFile(filePath, dominoForm);
 		}
 		
 		//--------------------------------------------------------------------------

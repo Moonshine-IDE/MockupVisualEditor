@@ -31,7 +31,7 @@ package view.tabularInterface.vo
 		public function fromXML(value:XML, callback:Function=null):void
 		{
 			this.formName = value.form.@name;
-			this.hasWebAccess = (value.@hasWebAccess == "true") ? true : false;
+			this.hasWebAccess = (value.form.@hasWebAccess == "true") ? true : false;
 			this.viewName = value.form.viewName;
 			
 			for each (var field:XML in value.form.fields.field)

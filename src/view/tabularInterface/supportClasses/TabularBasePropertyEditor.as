@@ -9,6 +9,7 @@ package view.tabularInterface.supportClasses
 	import spark.layouts.VerticalLayout;
 	
 	import view.suportClasses.events.PropertyEditorChangeEvent;
+	import view.suportClasses.events.VisualEditorEvent;
 	import view.tabularInterface.DominoTabularForm;
 	import view.tabularInterface.utils.TabularExporter;
 	import view.tabularInterface.utils.TabularImporter;
@@ -72,6 +73,7 @@ package view.tabularInterface.supportClasses
 		protected function writeToFile():void
 		{
 			TabularExporter.writeToFile(filePath, dominoForm);
+			tabularTab.dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
 		}
 		
 		//--------------------------------------------------------------------------

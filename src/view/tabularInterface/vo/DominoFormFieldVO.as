@@ -26,7 +26,16 @@ package view.tabularInterface.vo
 		
 		public function fromXML(value:XML, callback:Function=null):void
 		{
+			this.name = value.@name;
+			this.type = value.@type;
+			this.editable = value.@editable;
+			this.formula = value.@formula;
+			this.sortOption = value.@sortOption;
+			this.isMultiValue = (value.@isMultiValue == "true") ? true : false;
+			this.isIncludeInView = (value.@isIncludeInView == "true") ? true : false;
 			
+			this.label = value.label;
+			this.description = value.description;
 		}
 		
 		public function toXML():XML

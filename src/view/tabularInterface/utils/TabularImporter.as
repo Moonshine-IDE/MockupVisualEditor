@@ -15,7 +15,7 @@ package view.tabularInterface.utils
 				var fileXML:XML;
 				var stream:FileStream = new FileStream();
 				stream.open(path, FileMode.READ);
-				fileXML = new XML(stream.readUTFBytes(stream.bytesAvailable));
+				fileXML = XML(stream.readUTFBytes(stream.bytesAvailable));
 				stream.close();
 				
 				toFormObject.fromXML(fileXML, onSuccess);

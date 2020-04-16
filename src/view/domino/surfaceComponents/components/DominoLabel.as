@@ -30,6 +30,8 @@ package view.domino.surfaceComponents.components
 
     import mx.collections.ArrayList;
 
+    import mx.controls.Alert;
+
     import interfaces.dominoComponents.IDominoLabel;
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -498,8 +500,9 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-
+           
 			component.fromXML(xml, callback);
+           
             this.text = component.text;
             this.color = component.color;
             this.size = component.size;

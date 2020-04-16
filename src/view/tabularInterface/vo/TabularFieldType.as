@@ -9,17 +9,17 @@ package view.tabularInterface.vo
 		public static const NUMBER:String = "Number";
 		public static const DATETIME:String = "Datetime";
 		
-		private static var _FIELD_TYPES:ArrayList;
-		public static function get FIELD_TYPES():ArrayList
+		private static var _fieldTypes:ArrayList;
+		public static function get fieldTypes():ArrayList
 		{
-			if (!_FIELD_TYPES)
+			if (!_fieldTypes)
 			{
-				_FIELD_TYPES = new ArrayList([
+				_fieldTypes = new ArrayList([
 					TEXT, RICH_TEXT, NUMBER, DATETIME
 				]);
 			}
 			
-			return _FIELD_TYPES;
+			return _fieldTypes;
 		}
 	}
 }

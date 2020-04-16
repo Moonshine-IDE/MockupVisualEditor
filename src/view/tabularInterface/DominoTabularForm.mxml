@@ -16,6 +16,11 @@
 				MoonshineBridgeUtils.moonshineBridgeTabularInterface = value;
 			}
 			
+			public function save():void
+			{
+				formDescriptor.saveDominoForm();
+			}
+			
 			public function dispose():void
 			{
 				MoonshineBridgeUtils.moonshineBridgeTabularInterface = null;

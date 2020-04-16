@@ -10,7 +10,9 @@
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
+			import mx.validators.Validator;
 			
+			import spark.components.Alert;
 			import spark.components.Group;
 			import spark.components.TitleWindow;
 			
@@ -25,6 +27,14 @@
 			
 			private var addEditFormField:FormFieldDescriptor;
 			
+			public function saveDominoForm():void
+			{
+				if (validateThis())
+				{
+					writeToFile();
+				}
+			}
+			
 			private function onCreationCompletes(event:FlexEvent):void
 			{
 				dgFields.addEventListener(ItemEditEvent.EDIT_ITEM, onItemEditRequest, false, 0, true);
@@ -36,7 +46,7 @@
 				var addEditPopup:TitleWindow = MoonshineBridgeUtils.moonshineBridgeTabularInterface.getNewMoonshinePopup();
 				addEditPopup.title = item ? "Edit Field" : "Add Field";
 				addEditPopup.width = FlexGlobals.topLevelApplication.stage.nativeWindow.width * .6;
-				addEditPopup.height = FlexGlobals.topLevelApplication.stage.nativeWindow.height * .6;
+				addEditPopup.height = FlexGlobals.topLevelApplication.stage.nativeWindow.height * .7;
 				addEditPopup.controlBarVisible = true;
 				addEditPopup.controlBarGroup = new Group();
 				
@@ -56,14 +66,15 @@
 				PopUpManager.centerPopUp(addEditPopup);
 			}
 			
-			private function onSaveDominoForm(event:MouseEvent):void
+			private function validateThis():Boolean
 			{
-				writeToFile();
-			}
-			
-			private function onGenerateDominoForm(event:MouseEvent):void
-			{
+				var tmpArr : Array = new Array(svFormName, svViewName);
+				if (Validator.validateAll(tmpArr).length != 0) 
+				{
+					return false;
+				}
 				
+				return true;
 			}
 			
 			private function onItemEditRequest(event:ItemEditEvent):void
@@ -73,7 +84,12 @@
 			
 			private function onItemDeleteRequest(event:ItemDeleteEvent):void
 			{
-				
+				Alert.show("Confirm delete field?", "Warning!", Alert.YES|Alert.NO, this, function(e:CloseEvent):void 
+				{
+					if (e.detail == Alert.YES) {
+						dominoForm.fields.removeItem(event.value);
+					}
+				});
 			}
 			
 			private function onItemEdited(event:ItemEditedEvent):void
@@ -99,8 +115,18 @@
 				addEditFormField = null;
 			}
 			
+			private function onItemDoubleClicked(event:MouseEvent):void
+			{
+				onItemAddEdit(dgFields.selectedItem as DominoFormFieldVO);
+			}
+			
 		]]>
 	</fx:Script>
+	<fx:Declarations>
+		<mx:StringValidator id="svFormName" source="{textFormName}" property="text"/>
+		<mx:StringValidator id="svViewName" source="{textViewName}" property="text"/>
+		<s:RadioButtonGroup id="rbgWebForm" selectedValue="@{dominoForm.hasWebAccess}"/>
+	</fx:Declarations>
 	
 	<s:VGroup width="100%" height="100%"
 			  gap="2"
@@ -121,7 +147,7 @@
 				<s:TextInput id="textFormName"
 							 width="100%"
 							 skinClass="skins.TextInputSkin" prompt="Domino form name"
-							 text="@{dominoForm.formName}"/>
+							 text="@{dominoForm.formName}" restrict="0-9A-Za-z_"/>
 			</s:FormItem>
 			<s:FormItem label="View Name" required="true" 
 						skinClass="skins.StackedFormItemSkinTabularInterface" width="100%">
@@ -131,15 +157,18 @@
 							 text="@{dominoForm.viewName}"/>
 			</s:FormItem>
 			<s:FormItem label="Is this a web form?" skinClass="skins.StackedFormItemSkinTabularInterface" width="100%">
-				<s:CheckBox id="cbWebForm" label="Yes"
-							selected="@{dominoForm.hasWebAccess}"/>
+				<s:HGroup width="100%" verticalAlign="middle">
+					<s:RadioButton label="Yes" value="true" group="{rbgWebForm}"/>
+					<s:RadioButton label="No" value="false" group="{rbgWebForm}"/>
+				</s:HGroup>
 			</s:FormItem>
 		</s:Form>
 		<s:DataGrid id="dgFields" 
 					dataProvider="{dominoForm.fields}"
 					width="100%" height="100%"
 					sortableColumns="false" variableRowHeight="true" borderVisible="true" borderColor="0x999999"
-					contentBackgroundColor="0xe0e0e0" selectionColor="0xf6f6f6">
+					contentBackgroundColor="0xe0e0e0" selectionColor="0xf6f6f6"
+					doubleClickEnabled="true" doubleClick="onItemDoubleClicked(event)">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn headerText="Label" dataField="label" itemRenderer="components.renderers.GenericGridRenderer" 
@@ -167,9 +196,7 @@
 		<s:Button label="Add" skinClass="skins.DarkButtonSkin"
 				  click="onItemAddEdit()"/>
 		<s:Spacer width="100%"/>
-		<s:Button label="Save" skinClass="skins.DarkButtonSkin"
-				  click="onSaveDominoForm(event)"/>
-		<s:Button label="Generate" skinClass="skins.GreenButtonSkin"
-				  click="onGenerateDominoForm(event)"/>
+		<s:Button label="Save &amp; Ganerate DXL" skinClass="skins.DarkButtonSkin"
+				  click="saveDominoForm()"/>
 	</s:BorderContainer>
 </supportClasses:TabularBasePropertyEditor>

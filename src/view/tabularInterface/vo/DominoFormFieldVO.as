@@ -5,11 +5,11 @@ package view.tabularInterface.vo
 		public static const ELEMENT_NAME:String = "field";
 		
 		public var name:String;
-		public var label:String;
-		public var description:String;
+		public var label:String = "";
+		public var description:String = "";
 		public var type:String;
 		public var editable:String;
-		public var formula:String;
+		public var formula:String = "";
 		public var sortOption:String;
 		public var isMultiValue:Boolean;
 		public var isIncludeInView:Boolean;
@@ -29,13 +29,13 @@ package view.tabularInterface.vo
 			this.name = value.@name;
 			this.type = value.@type;
 			this.editable = value.@editable;
-			this.formula = value.@formula;
 			this.sortOption = value.@sortOption;
 			this.isMultiValue = (value.@isMultiValue == "true") ? true : false;
 			this.isIncludeInView = (value.@isIncludeInView == "true") ? true : false;
 			
 			this.label = value.label;
 			this.description = value.description;
+			this.formula = value.formula;
 		}
 		
 		public function toXML():XML
@@ -45,7 +45,6 @@ package view.tabularInterface.vo
 			xml.@name = name;
 			xml.@type = type;
 			xml.@editable = editable;
-			xml.@formula = formula;
 			xml.@sortOption = sortOption;
 			xml.@isMultiValue = isMultiValue.toString();
 			xml.@isIncludeInView = isIncludeInView.toString();
@@ -56,6 +55,10 @@ package view.tabularInterface.vo
 			
 			tempXML = <description/>;
 			tempXML.appendChild(new XML("\<![CDATA[" + description + "]]\>"));
+			xml.appendChild(tempXML);
+			
+			tempXML = <formula/>;
+			tempXML.appendChild(new XML("\<![CDATA[" + formula + "]]\>"));
 			xml.appendChild(tempXML);
 			
 			return xml;

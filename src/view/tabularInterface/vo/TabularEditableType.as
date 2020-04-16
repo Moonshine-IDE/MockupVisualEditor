@@ -9,18 +9,18 @@ package view.tabularInterface.vo
 		public static const COMPUTE_ON_COMPOSE:String = "Compute on compose";
 		public static const COMPUTE_FOR_DISPLAY:String = "Compute for display";
 		
-		private static var _EDITABLE_TYPES:ArrayList;
-		public static function get EDITABLE_TYPES():ArrayList
+		private static var _editableTypes:ArrayList;
+		public static function get editableTypes():ArrayList
 		{
-			if (!_EDITABLE_TYPES)
+			if (!_editableTypes)
 			{
-				_EDITABLE_TYPES = new ArrayList([
+				_editableTypes = new ArrayList([
 					EDITABLE, COMPUTED, COMPUTE_ON_COMPOSE,
 					COMPUTE_FOR_DISPLAY
 				]);
 			}
 			
-			return _EDITABLE_TYPES;
+			return _editableTypes;
 		}
 	}
 }

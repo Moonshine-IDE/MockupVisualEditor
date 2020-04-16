@@ -15,3 +15,8 @@
 	fontSize: 14;
 	color: #252424;
 }
+
+.fixedWidthTexts
+{
+	fontFamily: Courier, "_typewriter";
+}

@@ -48,15 +48,11 @@ package view.tabularInterface.supportClasses
 		{
 			super();
 			layout = new VerticalLayout();
-			
-			dominoForm.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onFormPropertyChanged);
-			dominoForm.fields.addEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
 		}
 		
 		public function dispose():void
 		{
-			dominoForm.removeEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onFormPropertyChanged);
-			dominoForm.fields.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
+			removeChangeListeners();
 		}
 		
 		//--------------------------------------------------------------------------
@@ -67,7 +63,7 @@ package view.tabularInterface.supportClasses
 		
 		protected function retrieveFromFile():void
 		{
-			TabularImporter.loadFromFile(filePath, dominoForm);
+			TabularImporter.loadFromFile(filePath, dominoForm, addChangeListeners);
 		}
 		
 		protected function writeToFile():void
@@ -81,6 +77,20 @@ package view.tabularInterface.supportClasses
 		//  PRIVATE API
 		//
 		//--------------------------------------------------------------------------
+		
+		private function addChangeListeners():void
+		{
+			removeChangeListeners();
+			
+			dominoForm.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onFormPropertyChanged);
+			dominoForm.fields.addEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
+		}
+		
+		private function removeChangeListeners():void
+		{
+			dominoForm.removeEventListener(PropertyChangeEvent.PROPERTY_CHANGE, onFormPropertyChanged);
+			dominoForm.fields.removeEventListener(CollectionEvent.COLLECTION_CHANGE, onFormFieldsCollectionChanged);
+		}
 		
 		private function onFormPropertyChanged(event:PropertyChangeEvent):void
 		{

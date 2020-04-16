@@ -40,6 +40,11 @@ package view.tabularInterface.vo
 				tmpField.fromXML(field);
 				fields.addItem(tmpField);
 			}
+			
+			if (callback != null)
+			{
+				callback();
+			}
 		}
 		
 		public function toXML():XML

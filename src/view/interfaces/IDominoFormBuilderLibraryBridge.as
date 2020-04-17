@@ -2,9 +2,9 @@ package view.interfaces
 {
 	import spark.components.TitleWindow;
 	
-	import view.tabularInterface.DominoTabularForm;
+	import view.dominoFormBuilder.DominoTabularForm;
 
-	public interface ITabularInterfaceEditorLibraryBridge
+	public interface IDominoFormBuilderLibraryBridge
 	{
 		function getTabularEditorInterfaceWrapper():DominoTabularForm;
 		function getNewMoonshinePopup():TitleWindow;

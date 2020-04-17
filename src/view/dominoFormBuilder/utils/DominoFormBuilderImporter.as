@@ -1,12 +1,12 @@
-package view.tabularInterface.utils
+package view.dominoFormBuilder.utils
 {
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	
-	import view.tabularInterface.vo.DominoFormVO;
+	import view.dominoFormBuilder.vo.DominoFormVO;
 
-	public class TabularImporter
+	public class DominoFormBuilderImporter
 	{
 		public static function loadFromFile(path:File, toFormObject:DominoFormVO, onSuccess:Function=null):void
 		{

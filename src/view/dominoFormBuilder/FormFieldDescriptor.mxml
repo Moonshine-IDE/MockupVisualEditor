@@ -22,9 +22,9 @@
 			import skins.TextInputSkin;
 			
 			import view.suportClasses.events.ItemEditedEvent;
-			import view.tabularInterface.vo.DominoFormFieldVO;
-			import view.tabularInterface.vo.TabularEditableType;
-			import view.tabularInterface.vo.TabularFieldType;
+			import view.dominoFormBuilder.vo.DominoFormFieldVO;
+			import view.dominoFormBuilder.vo.FormBuilderEditableType;
+			import view.dominoFormBuilder.vo.FormBuilderFieldType;
 			
 			[Bindable] protected var dominoFormField:DominoFormFieldVO;
 			
@@ -37,7 +37,7 @@
 				if (isItemEdit)
 				{
 					// if item in edit use cloned object until save
-					registerClassAlias("view.tabularInterface.vo.DominoFormFieldVO", DominoFormFieldVO);
+					registerClassAlias("view.dominoFormBuilder.vo.DominoFormFieldVO", DominoFormFieldVO);
 					dominoFormField = ObjectUtil.clone(editItem) as DominoFormFieldVO;
 				}
 				else
@@ -88,7 +88,7 @@
 			private function validateThis():Boolean
 			{
 				var tmpArr : Array = new Array(svName);
-				if (dominoFormField.editable == TabularEditableType.EDITABLE)
+				if (dominoFormField.editable == FormBuilderEditableType.EDITABLE)
 				{
 					tmpArr.push(svFormula);
 				}
@@ -102,7 +102,7 @@
 			
 			private function updateFormulaState():void
 			{
-				fiFormula.required = (dominoFormField.editable != TabularEditableType.EDITABLE);
+				fiFormula.required = (dominoFormField.editable != FormBuilderEditableType.EDITABLE);
 			}
 			
 		]]>
@@ -160,7 +160,7 @@
 					<s:FormItem label="Type" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:DropDownList id="ddlType" width="100%" height="30"
-										dataProvider="{TabularFieldType.fieldTypes}" 
+										dataProvider="{FormBuilderFieldType.fieldTypes}" 
 										requireSelection="true" 
 										change="{dominoFormField.type=event.target.selectedItem}"/>
 					</s:FormItem>
@@ -174,7 +174,7 @@
 					<s:FormItem label="Editable" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:DropDownList id="ddlEditable" width="100%" height="30"
-										dataProvider="{TabularEditableType.editableTypes}"
+										dataProvider="{FormBuilderEditableType.editableTypes}"
 										requireSelection="true"
 										change="{dominoFormField.editable=event.target.selectedItem;updateFormulaState()}"/>
 					</s:FormItem>

@@ -26,5 +26,5 @@
 	
 	<s:Label id="lbl"
 			 width="100%" verticalCenter="0"
-			 paddingLeft="6" paddingRight="6" maxDisplayedLines="6"/>
+			 paddingLeft="6" paddingRight="6" paddingTop="6" paddingBottom="6" maxDisplayedLines="6"/>
 </s:GridItemRenderer>

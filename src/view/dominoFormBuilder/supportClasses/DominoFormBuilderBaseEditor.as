@@ -1,4 +1,4 @@
-package view.tabularInterface.supportClasses
+package view.dominoFormBuilder.supportClasses
 {
 	import flash.filesystem.File;
 	
@@ -10,12 +10,12 @@ package view.tabularInterface.supportClasses
 	
 	import view.suportClasses.events.PropertyEditorChangeEvent;
 	import view.suportClasses.events.VisualEditorEvent;
-	import view.tabularInterface.DominoTabularForm;
-	import view.tabularInterface.utils.TabularExporter;
-	import view.tabularInterface.utils.TabularImporter;
-	import view.tabularInterface.vo.DominoFormVO;
+	import view.dominoFormBuilder.DominoTabularForm;
+	import view.dominoFormBuilder.utils.DominoFormBuilderExporter;
+	import view.dominoFormBuilder.utils.DominoFormBuilderImporter;
+	import view.dominoFormBuilder.vo.DominoFormVO;
 	
-	public class TabularBasePropertyEditor extends Group
+	public class DominoFormBuilderBaseEditor extends Group
 	{
 		public var tabularTab:DominoTabularForm;
 		
@@ -44,7 +44,7 @@ package view.tabularInterface.supportClasses
 			}
 		}
 		
-		public function TabularBasePropertyEditor()
+		public function DominoFormBuilderBaseEditor()
 		{
 			super();
 			layout = new VerticalLayout();
@@ -63,12 +63,12 @@ package view.tabularInterface.supportClasses
 		
 		protected function retrieveFromFile():void
 		{
-			TabularImporter.loadFromFile(filePath, dominoForm, addChangeListeners);
+			DominoFormBuilderImporter.loadFromFile(filePath, dominoForm, addChangeListeners);
 		}
 		
 		protected function writeToFile():void
 		{
-			TabularExporter.writeToFile(filePath, dominoForm);
+			DominoFormBuilderExporter.writeToFile(filePath, dominoForm);
 			tabularTab.dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
 		}
 		

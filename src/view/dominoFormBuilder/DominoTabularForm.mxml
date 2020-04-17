@@ -2,16 +2,16 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx"
-		  creationComplete="onCreationCompletes()" xmlns:tabularInterface="view.tabularInterface.*">
+		  creationComplete="onCreationCompletes()" xmlns:dominoFormBuilder="view.dominoFormBuilder.*">
 	<fx:Script>
 		<![CDATA[
 			import utils.MoonshineBridgeUtils;
 			
-			import view.interfaces.ITabularInterfaceEditorLibraryBridge;
+			import view.interfaces.IDominoFormBuilderLibraryBridge;
 			
 			public var filePath:File;
 			
-			public function set moonshineBridge(value:ITabularInterfaceEditorLibraryBridge):void
+			public function set moonshineBridge(value:IDominoFormBuilderLibraryBridge):void
 			{
 				MoonshineBridgeUtils.moonshineBridgeTabularInterface = value;
 			}
@@ -41,7 +41,7 @@
 		</s:fill>
 	</s:Rect>
 	
-	<tabularInterface:FormDescriptor id="formDescriptor"
+	<dominoFormBuilder:FormDescriptor id="formDescriptor"
 									 tabularTab="{this}"
 									 width="100%" height="100%"/>
 </s:Group>

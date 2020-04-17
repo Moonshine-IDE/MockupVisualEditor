@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<supportClasses:TabularBasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<supportClasses:DominoFormBuilderBaseEditor xmlns:fx="http://ns.adobe.com/mxml/2009" 
 										  xmlns:s="library://ns.adobe.com/flex/spark" 
 										  xmlns:mx="library://ns.adobe.com/flex/mx"
-										  xmlns:supportClasses="view.tabularInterface.supportClasses.*" xmlns:layout="org.osmf.layout.*"
+										  xmlns:supportClasses="view.dominoFormBuilder.supportClasses.*" xmlns:layout="org.osmf.layout.*"
 										  creationComplete="onCreationCompletes(event)">
 	<fx:Script>
 		<![CDATA[
@@ -23,7 +23,7 @@
 			import view.suportClasses.events.ItemDeleteEvent;
 			import view.suportClasses.events.ItemEditEvent;
 			import view.suportClasses.events.ItemEditedEvent;
-			import view.tabularInterface.vo.DominoFormFieldVO;
+			import view.dominoFormBuilder.vo.DominoFormFieldVO;
 			
 			private var addEditFormField:FormFieldDescriptor;
 			
@@ -199,4 +199,4 @@
 		<s:Button label="Save &amp; Ganerate DXL" skinClass="skins.DarkButtonSkin"
 				  click="saveDominoForm()"/>
 	</s:BorderContainer>
-</supportClasses:TabularBasePropertyEditor>
+</supportClasses:DominoFormBuilderBaseEditor>

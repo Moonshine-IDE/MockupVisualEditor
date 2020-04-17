@@ -1,4 +1,4 @@
-package view.tabularInterface.vo
+package view.dominoFormBuilder.vo
 {
 	import flash.events.EventDispatcher;
 	

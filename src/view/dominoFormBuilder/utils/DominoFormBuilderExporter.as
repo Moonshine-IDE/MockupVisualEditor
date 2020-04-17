@@ -1,12 +1,12 @@
-package view.tabularInterface.utils
+package view.dominoFormBuilder.utils
 {
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	
-	import view.tabularInterface.vo.DominoFormVO;
+	import view.dominoFormBuilder.vo.DominoFormVO;
 
-	public class TabularExporter
+	public class DominoFormBuilderExporter
 	{
 		public static function writeToFile(file:File, formObject:DominoFormVO):void
 		{

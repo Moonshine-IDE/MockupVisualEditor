@@ -1,8 +1,8 @@
-package view.tabularInterface.vo
+package view.dominoFormBuilder.vo
 {
 	import org.apache.flex.collections.ArrayList;
 
-	[Bindable] public class TabularEditableType
+	[Bindable] public class FormBuilderEditableType
 	{
 		public static const EDITABLE:String = "Editable";
 		public static const COMPUTED:String = "Computed";

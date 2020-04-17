@@ -1,8 +1,8 @@
-package view.tabularInterface.vo
+package view.dominoFormBuilder.vo
 {
 	import org.apache.flex.collections.ArrayList;
 
-	[Bindable] public class TabularFieldType
+	[Bindable] public class FormBuilderFieldType
 	{
 		public static const TEXT:String = "Text";
 		public static const RICH_TEXT:String = "Richtext";

@@ -3,14 +3,14 @@ package utils
     import mx.collections.ArrayCollection;
     
     import view.VisualEditor;
-    import view.interfaces.ITabularInterfaceEditorLibraryBridge;
+    import view.interfaces.IDominoFormBuilderLibraryBridge;
     import view.interfaces.IVisualEditorLibraryBridge;
 
 	public class MoonshineBridgeUtils
 	{
 		public static var currentFilePath:String;
 		public static var moonshineBridge:IVisualEditorLibraryBridge;
-		public static var moonshineBridgeTabularInterface:ITabularInterfaceEditorLibraryBridge;
+		public static var moonshineBridgeTabularInterface:IDominoFormBuilderLibraryBridge;
 
         private static var _filesList:ArrayCollection;
 

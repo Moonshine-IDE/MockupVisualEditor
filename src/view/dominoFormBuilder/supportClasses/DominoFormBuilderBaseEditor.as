@@ -8,12 +8,10 @@ package view.dominoFormBuilder.supportClasses
 	import spark.components.Group;
 	import spark.layouts.VerticalLayout;
 	
-	import view.suportClasses.events.PropertyEditorChangeEvent;
-	import view.suportClasses.events.VisualEditorEvent;
 	import view.dominoFormBuilder.DominoTabularForm;
-	import view.dominoFormBuilder.utils.DominoFormBuilderExporter;
-	import view.dominoFormBuilder.utils.DominoFormBuilderImporter;
+	import view.dominoFormBuilder.utils.FormBuilderCodeUtils;
 	import view.dominoFormBuilder.vo.DominoFormVO;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
 	
 	public class DominoFormBuilderBaseEditor extends Group
 	{
@@ -44,6 +42,16 @@ package view.dominoFormBuilder.supportClasses
 			}
 		}
 		
+		public function get formXML():XML
+		{
+			return dominoForm.toXML();
+		}
+		
+		public function get formDXL():XML
+		{
+			return FormBuilderCodeUtils.toDominoCode(dominoForm);
+		}
+		
 		public function DominoFormBuilderBaseEditor()
 		{
 			super();
@@ -63,13 +71,7 @@ package view.dominoFormBuilder.supportClasses
 		
 		protected function retrieveFromFile():void
 		{
-			DominoFormBuilderImporter.loadFromFile(filePath, dominoForm, addChangeListeners);
-		}
-		
-		protected function writeToFile():void
-		{
-			DominoFormBuilderExporter.writeToFile(filePath, dominoForm);
-			tabularTab.dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
+			FormBuilderCodeUtils.loadFromFile(filePath, dominoForm, addChangeListeners);
 		}
 		
 		//--------------------------------------------------------------------------

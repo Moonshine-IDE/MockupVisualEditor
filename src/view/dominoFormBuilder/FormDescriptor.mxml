@@ -20,18 +20,30 @@
 			
 			import utils.MoonshineBridgeUtils;
 			
+			import view.dominoFormBuilder.vo.DominoFormFieldVO;
 			import view.suportClasses.events.ItemDeleteEvent;
 			import view.suportClasses.events.ItemEditEvent;
 			import view.suportClasses.events.ItemEditedEvent;
-			import view.dominoFormBuilder.vo.DominoFormFieldVO;
+			import view.suportClasses.events.VisualEditorEvent;
 			
 			private var addEditFormField:FormFieldDescriptor;
 			
-			public function saveDominoForm():void
+			public function validateForm():Boolean
 			{
-				if (validateThis())
+				var tmpArr : Array = new Array(svFormName, svViewName);
+				if (Validator.validateAll(tmpArr).length != 0) 
 				{
-					writeToFile();
+					return false;
+				}
+				
+				return true;
+			}
+			
+			private function saveDominoForm():void
+			{
+				if (validateForm())
+				{
+					tabularTab.dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
 				}
 			}
 			
@@ -43,7 +55,7 @@
 			
 			private function onItemAddEdit(item:DominoFormFieldVO=null):void
 			{
-				var addEditPopup:TitleWindow = MoonshineBridgeUtils.moonshineBridgeTabularInterface.getNewMoonshinePopup();
+				var addEditPopup:TitleWindow = MoonshineBridgeUtils.moonshineBridgeFormBuilderInterface.getNewMoonshinePopup();
 				addEditPopup.title = item ? "Edit Field" : "Add Field";
 				addEditPopup.width = FlexGlobals.topLevelApplication.stage.nativeWindow.width * .6;
 				addEditPopup.height = FlexGlobals.topLevelApplication.stage.nativeWindow.height * .7;
@@ -64,17 +76,6 @@
 				
 				PopUpManager.addPopUp(addEditPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
 				PopUpManager.centerPopUp(addEditPopup);
-			}
-			
-			private function validateThis():Boolean
-			{
-				var tmpArr : Array = new Array(svFormName, svViewName);
-				if (Validator.validateAll(tmpArr).length != 0) 
-				{
-					return false;
-				}
-				
-				return true;
 			}
 			
 			private function onItemEditRequest(event:ItemEditEvent):void

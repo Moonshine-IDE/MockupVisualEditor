@@ -10,7 +10,7 @@ package utils
 	{
 		public static var currentFilePath:String;
 		public static var moonshineBridge:IVisualEditorLibraryBridge;
-		public static var moonshineBridgeTabularInterface:IDominoFormBuilderLibraryBridge;
+		public static var moonshineBridgeFormBuilderInterface:IDominoFormBuilderLibraryBridge;
 
         private static var _filesList:ArrayCollection;
 

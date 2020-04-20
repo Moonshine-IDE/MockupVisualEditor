@@ -183,13 +183,9 @@ package utils
 		 * Overloaded this function, so that the domino project can call it
 		 */
 
-		public static function getDominoParentContent(surface:EditingSurface, title:String):XML
+		public static function getDominoParentContent(title:String):XML
 		{	   
-       
-
 			return getDominoMainContainer(title);	
-
-				
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML

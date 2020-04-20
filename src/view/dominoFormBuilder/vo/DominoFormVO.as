@@ -5,6 +5,13 @@ package view.dominoFormBuilder.vo
 	import mx.collections.ArrayCollection;
 	import mx.events.PropertyChangeEvent;
 	
+	import components.GridItem;
+	import components.GridRow;
+	import components.domino.DominoLabel;
+	import components.domino.DominoTable;
+	import components.domino.formBuilder.DominoFormField;
+	import components.primeFaces.Div;
+	
 	[Bindable] 
 	public class DominoFormVO extends EventDispatcher
 	{
@@ -69,7 +76,62 @@ package view.dominoFormBuilder.vo
 		
 		public function toCode():XML
 		{
-			return null;
+			var tmpDominoTable:DominoTable = new DominoTable();
+			var tmpRow:GridRow;
+			var tmpGridItem:GridItem;
+			
+			// generate rows/columns
+			for each (var field:DominoFormFieldVO in fields)
+			{
+				tmpRow = new GridRow();
+				
+				// 3 columns - 
+				// label, input, description
+				tmpGridItem = getLabelItem(field.label);
+				tmpRow.addElement(tmpGridItem);
+				
+				tmpGridItem = getInputItem(field);
+				tmpRow.addElement(tmpGridItem);
+				
+				tmpGridItem = getLabelItem(field.description);
+				tmpRow.addElement(tmpGridItem);
+
+				tmpDominoTable.addElement(tmpRow);
+			}
+			
+			// sigh.. 
+			var conversionTable:DominoTable = new DominoTable(tmpDominoTable);
+			
+			return conversionTable.toCode();
+		}
+		
+		private function getInputItem(field:DominoFormFieldVO):GridItem
+		{
+			var tmpColumn:GridItem = new GridItem();
+			var tmpDiv:Div = new Div();
+			
+			var tmpDominoField:DominoFormField = new DominoFormField();
+			tmpDominoField.allowmultivalues = field.isMultiValue;
+			tmpDominoField.kind = field.editable;
+			tmpDominoField.type = field.type;
+			tmpDominoField.nameAttribute = field.name;
+			tmpDiv.addElement(tmpDominoField);
+			
+			tmpColumn.addElement(tmpDiv);
+			return tmpColumn;
+		}
+		
+		private function getLabelItem(value:String):GridItem
+		{
+			var tmpColumn:GridItem = new GridItem();
+			var tmpDiv:Div = new Div();
+			
+			var tmpLabel:DominoLabel = new DominoLabel();
+			tmpLabel.text = value;
+			tmpDiv.addElement(tmpLabel);
+			
+			tmpColumn.addElement(tmpDiv);
+			return tmpColumn;
 		}
 	}
 }

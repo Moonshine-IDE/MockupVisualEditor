@@ -115,6 +115,7 @@ package view.dominoFormBuilder.vo
 			tmpDominoField.kind = field.editable;
 			tmpDominoField.type = field.type;
 			tmpDominoField.nameAttribute = field.name;
+			tmpDominoField.formula = field.formula;
 			tmpDiv.addElement(tmpDominoField);
 			
 			tmpColumn.addElement(tmpDiv);

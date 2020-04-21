@@ -7,8 +7,8 @@ package view.dominoFormBuilder.vo
 		public var name:String;
 		public var label:String = "";
 		public var description:String = "";
-		public var type:String;
-		public var editable:String;
+		public var type:String = FormBuilderFieldType.fieldTypes.getItemAt(0) as String;
+		public var editable:String = FormBuilderEditableType.editableTypes.getItemAt(0) as String;
 		public var formula:String = "";
 		public var sortOption:String;
 		public var isMultiValue:Boolean;

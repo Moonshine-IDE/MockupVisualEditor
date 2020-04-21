@@ -132,7 +132,7 @@ package utils
                                var tyepTextXML:XML = new XML("<text>"+field_name+"</text>");
                                itemXML.appendChild(tyepTextXML);
 							}else if(node.@type=="number"){
-								var tyepNumberXML:XML = new XML("<number>"+field_name+"</number>");
+								var tyepNumberXML:XML = new XML("<number>"+0+"</number>");
 								itemXML.appendChild(tyepNumberXML);
 							}
 

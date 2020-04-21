@@ -8,6 +8,22 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
+			import spark.events.IndexChangeEvent;
+			import mx.controls.Alert;
+
+			private var isNumber:Boolean = false;
+			private var inputType:String="";
+
+			protected function digits_changeHandler(event:Event):void
+			{
+				//Alert.show(event.target.text);
+
+			}
+
+			protected function  changeHandler(event:Event):void
+			{
+				
+			}
 			
 			protected function textform1_changeHandler(event:Event):void
 			{
@@ -17,6 +33,26 @@
 				}
 				else if (txtValue.maxChar != 0)
 					txtValue.maxChar = 0;
+			}
+			private function getDominoFieldTypeLabel(item:Object):String
+			{
+				
+
+				if(item.label=="number"){
+					if(txtValue.bindableText!=null){
+						if(!(txtValue.bindableText is Number)){
+							txtValue.bindableText="";
+						}
+					}
+					txtValue.restrict="0-9";
+					numberPanel.visible = numberPanel.includeInLayout = true;
+				}else{
+					txtValue.restrict=null
+					numberPanel.visible = numberPanel.includeInLayout = false;
+				}
+				inputType=item.label;
+				//Alert.show("visible:"+digits.visible);
+				return item.label;
 			}
 
 			private function getDominoFieldName(item:Object):String
@@ -28,6 +64,9 @@
 			{
 				return item.description;
 			}
+
+
+       
 		]]>
 	</fx:Script>
 	<suportclasses:layout>
@@ -38,8 +77,9 @@
 	<forms:DropdownListForm id="ddl"
                             label="Type" textProperty="type"
                             collectionProperty="types" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+							labelDisplayFunction="getDominoFieldTypeLabel" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"
+							/>
   
     <forms:DropdownListForm id="ddl2"
                             label="Kind" textProperty="kind"
@@ -48,11 +88,37 @@
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
  
     
-
+    <!-- for number fileld -->
+	<!-- digits,format,punctuated,parens,percent -->
 	<forms:TextForm id="txtValue" 
-					label="Value" textProperty="text"/>
-	<forms:TextForm label="Maximum Length" textProperty="maxLength"
-					restrict="0-9" change="textform1_changeHandler(event)"/>
+					label="Value" textProperty="text" bindableText="" change="changeHandler(event)"
+					restrict="null"/>
+	<!-- <forms:TextForm label="Maximum Length" textProperty="maxLength"
+					restrict="0-9" change="textform1_changeHandler(event)"/> -->
+ <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="numberPanel">
+	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" >
+       
+		<forms:DropdownListForm id="ddlformat"
+                            label="Format" textProperty="format"
+                            collectionProperty="formats" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+		 <forms:TextForm id="digits" label="Digits" restrict="0-9" textProperty="digits" 
+				bindableText=""/> 
+				<forms:ToggleButtonSelectedForm label="Parens" textProperty="parens"/>
+				<forms:ToggleButtonSelectedForm label="Percent" textProperty="percent"/>
+				<forms:ToggleButtonSelectedForm label="Punctuated" textProperty="punctuated"/> 
+				
+		
+	</s:VGroup>	
+	</s:BorderContainer>
+
+  
+				
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>

@@ -769,6 +769,12 @@ package view.domino.surfaceComponents.components
 
             if(this.type =="number"){
 
+                this.digits= parseInt(component.digits);
+                this.format=component.format  ;
+                this.punctuated=component.punctuated ;
+                this.parens=component.parens ;
+                this.percent=component.percent ;
+
             }
         }
 

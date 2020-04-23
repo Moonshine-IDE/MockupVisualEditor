@@ -102,7 +102,8 @@ package view.dominoFormBuilder.vo
 			// sigh.. 
 			var conversionTable:DominoTable = new DominoTable(tmpDominoTable);
 			
-			return conversionTable.toCode();
+			var tmpMainApplication:XML = (new Div()).toCode();
+			return (tmpMainApplication.appendChild(conversionTable.toCode()));
 		}
 		
 		private function getInputItem(field:DominoFormFieldVO):GridItem

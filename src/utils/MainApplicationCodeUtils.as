@@ -134,6 +134,9 @@ package utils
 							}else if(node.@type=="number"){
 								var tyepNumberXML:XML = new XML("<number>"+0+"</number>");
 								itemXML.appendChild(tyepNumberXML);
+							}else if(node.@type=="datetime"){
+								var rawXML:XML = new XML("<rawitemdata type='400'>AAAAAAAAAAA=</rawitemdata>");
+								itemXML.appendChild(rawXML);
 							}
 
 							 total_xml.appendChild(itemXML);

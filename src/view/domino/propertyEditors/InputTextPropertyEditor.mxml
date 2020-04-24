@@ -45,10 +45,18 @@
 						}
 					}
 					txtValue.restrict="0-9";
+					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = true;
-				}else{
+					allowmul.visible = allowmul.includeInLayout = false;
+				} else if(item.label=="datetime"){
+					txtValue.restrict=null
+					datePanel.visible = datePanel.includeInLayout = true;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = false;
+				} else {
 					txtValue.restrict=null
 					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
 				}
 				inputType=item.label;
 				//Alert.show("visible:"+digits.visible);
@@ -117,9 +125,42 @@
 	</s:VGroup>	
 	</s:BorderContainer>
 
+
+	 <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="datePanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingBottom="5" >
+			<forms:DropdownListForm id="showformat"
+                            label="Show" textProperty="show"
+                            collectionProperty="shows" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+			<forms:DropdownListForm id="dateSelect"
+                            label="Date" textProperty="date"
+                            collectionProperty="dates" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+			<forms:ToggleButtonSelectedForm label="Show Today When Appropriate" textProperty="showtodaywhenappropriate" id="showtoday"/>				
+			<forms:ToggleButtonSelectedForm label="Four Digit Year" textProperty="fourdigityear" id="fourdigityear"/>	
+			<forms:ToggleButtonSelectedForm label="Four Digit Year For 21st" textProperty="fourdigityearfor21stcentury" id="fourdigityear21st"/>	
+			<forms:ToggleButtonSelectedForm label="Omit This Year" textProperty="omitthisyear" id="omitthisyear"/>
+			<forms:DropdownListForm id="timeSelect"
+                            label="Time format" textProperty="time"
+                            collectionProperty="times" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
+			<forms:DropdownListForm id="zoneSelect"
+                            label="Zone format" textProperty="zone"
+                            collectionProperty="zones" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+			</s:VGroup>										
+  </s:BorderContainer>
   
 				
-	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues"/>
+	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

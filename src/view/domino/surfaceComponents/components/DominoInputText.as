@@ -19,6 +19,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.INameAttribute;
     import view.interfaces.IDominoSurfaceComponent;
     import view.domino.propertyEditors.InputTextPropertyEditor;
+    import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IInputText;
     import interfaces.dominoComponents.IDominoInputText;
@@ -98,12 +99,14 @@ package view.domino.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
+                "digitsChanged",
 				"maxLengthChanged",
                 "idAttributeChanged", 
                 "nameAttributeChanged", 
-                "kindAttributeChanged", 
+                "kindAttributeChanged",
+                "formatAttributeChanged", 
                 "typeAttributeChanged", 
-                "allowmultivaluesAttributeChanged", 
+                "allowmultivaluesAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -489,8 +492,139 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("kindAttributeChanged"))
             }
         }
-          //-----width-------------------------
-          //-----heigh-------------------------
+
+
+
+        /**
+         * Domino number field property list start***********************
+         */
+          //-----digits-------------------------
+          //Represents the number of decimal places (0 to 15) to display when displaying the number. 
+          //If the value is "varying," indicates that the number of decimal places to display may change.
+        private var _digits:Number=0;
+     
+        [Bindable(event="digitsChanged")]
+        public function get digits():Number
+        {
+            return _digits;
+        }
+
+        public function set digits(value:Number):void
+        {
+            if (_digits != value)
+            {
+                if(value>15){
+                    value=15;
+                }
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "digits", _digits, value);
+				
+                _digits = value;
+                dispatchEvent(new Event("digitsChanged"))
+            }
+        }
+          
+          
+          //-----format-------------------------
+        [Bindable]
+        private var _formats:ArrayList = new ArrayList([
+        {label: "general",description: "Displays numbers as they are entered; zeroes following the decimal point are suppressed. For example, 6.00 displays as 6."},
+        {label: "currency",description:"Displays values with a currency symbol and two digits after the decimal symbol; for example, $15.00."},
+        {label: "fixed",description:"Displays numbers with a fixed number of decimal places. For example, 6 displays as 6.00."}, 
+        {label: "scientific",description:"Displays numbers using exponential notation; for example, 10,000 displays as 1.00E+04."}
+        ]);
+
+        public function get formats():ArrayList
+        {
+            return _formats;
+        }
+    
+        private var _format:String = "general";
+		[Bindable(event="formatAttributeChanged")]
+        public function get format():String
+        {
+            return _format;
+        }
+		
+        public function set format(value:String):void
+        {
+            if (_format != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "format", _format, value);
+				
+                _format = value;
+                dispatchEvent(new Event("formatAttributeChanged"))
+            }
+        }
+          //-----punctuated-------------------------
+        private var _punctuated:Boolean;
+        private var punctuatedChanged:Boolean;
+
+        [Bindable(event="punctuatedChanged")]
+        public function get punctuated():Boolean
+        {
+            return _punctuated;
+        }
+
+        public function set punctuated(value:Boolean):void
+        {
+            if (_punctuated != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "punctuatedChanged", _punctuated, value);
+
+                _punctuated = value;
+                punctuatedChanged = true;
+
+                dispatchEvent(new Event("punctuatedChanged"));
+            }
+        }
+         
+          //-----parens-------------------------
+        private var _parens:Boolean;
+        private var parensChanged:Boolean;
+
+        [Bindable(event="parensChanged")]
+        public function get parens():Boolean
+        {
+            return _parens;
+        }
+
+        public function set parens(value:Boolean):void
+        {
+            if (_parens != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "parensChanged", _parens, value);
+
+                _parens = value;
+                parensChanged = true;
+
+                dispatchEvent(new Event("parensChanged"));
+            }
+        }
+          //-----percent-------------------------
+        private var _percent:Boolean;
+        private var percentChanged:Boolean;
+
+        [Bindable(event="percentChanged")]
+        public function get percent():Boolean
+        {
+            return _percent;
+        }
+
+        public function set percent(value:Boolean):void
+        {
+            if (_percent != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "percentChanged", _percent, value);
+
+                _percent = value;
+                percentChanged = true;
+
+                dispatchEvent(new Event("percentChanged"));
+            }
+        }
+
+
+          
          /**
          * Domino property list end***********************
          */
@@ -591,6 +725,13 @@ package view.domino.surfaceComponents.components
 
             if(this.type){
                 xml.@type = this.type;
+                if(this.type=="number"){
+                    xml.@digits = this.digits;
+                    xml.@format = this.format;
+                    xml.@parens = this.parens;
+                    xml.@percent = this.percent;
+                    xml.@punctuated = this.punctuated;
+                }
             }
 
             if(this.width){
@@ -625,6 +766,16 @@ package view.domino.surfaceComponents.components
             this.allowmultivalues = component.allowmultivalues;
             this.width = component.width;
             this.height = component.height;
+
+            if(this.type =="number"){
+
+                this.digits= parseInt(component.digits);
+                this.format=component.format  ;
+                this.punctuated=component.punctuated ;
+                this.parens=component.parens ;
+                this.percent=component.percent ;
+
+            }
         }
 
         public function toCode():XML
@@ -641,6 +792,14 @@ package view.domino.surfaceComponents.components
             component.height= this.height;
 				
 			component.isSelected = this.isSelected;
+
+            if(this.type=="number"){
+                component.digits = this.digits.toString();
+                component.format = this.format;
+                component.punctuated = this.punctuated;
+                component.parens = this.parens;
+                component.percent = this.percent;
+            }
 			// (component as components.domino.DominoInputText).width = this.width;
 			// (component as components.domino.DominoInputText).height = this.width;
 			(component as components.domino.DominoInputText).percentWidth = this.percentWidth;

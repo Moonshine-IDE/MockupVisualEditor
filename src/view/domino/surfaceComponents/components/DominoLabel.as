@@ -18,6 +18,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.IDominoSurfaceComponent;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
+    import view.domino.propertyEditors.DominoLabelPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IOutputLabel;
     import components.primeFaces.OutputLabel;
@@ -26,6 +27,10 @@ package view.domino.surfaceComponents.components
     import components.domino.DominoRun;
     import components.domino.DominoFont;
     import components.domino.DominoLabel;
+
+    import mx.collections.ArrayList;
+
+    import mx.controls.Alert;
 
     import interfaces.dominoComponents.IDominoLabel;
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -69,8 +74,10 @@ package view.domino.surfaceComponents.components
                 "explicitMinWidthChanged",
                 "explicitMinHeightChanged",
                 "textChanged",
+                "sizeChanged",
                 "forAttributeChanged",
-				"indicateRequiredChanged"
+				"indicateRequiredChanged",
+                "colorAttributeChanged"
             ];
         }
 
@@ -123,7 +130,7 @@ package view.domino.surfaceComponents.components
 
         public function get propertyEditorClass():Class
         {
-            return OutputLabelPropertyEditor;
+            return DominoLabelPropertyEditor;
         }
 
         private var _propertiesChangedEvents:Array;
@@ -211,6 +218,103 @@ package view.domino.surfaceComponents.components
 				dispatchEvent(new Event("indicateRequiredChanged"));
             }
         }
+
+      
+        /****************************************************************
+         * font color for lable
+         * https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_DEFINED_ENTITIES_XML.html
+         * aqua | black | blue | fuchsia | gray | green | lime | 
+         * maroon | navy | olive |purple | red | silver | teal |
+         * white | yellow | none | system " 
+         */
+        [Bindable]
+        private var _colors:ArrayList = new ArrayList([
+        {label: "aqua",description: "aqua color.",htmlcolor:"#00FFFF"},
+        {label: "black",description:"",htmlcolor:"#000000"},
+        {label: "blue",description:"",htmlcolor:"#0000FF"}, 
+        {label: "fuchsia",description:"",htmlcolor:"#FF00FF"},
+        {label: "gray",description:"",htmlcolor:"#808080"},
+        {label: "green",description:"",htmlcolor:"#008000"},
+        {label: "lime",description:"",htmlcolor:"#00FF00"},
+        {label: "maroon",description:"",htmlcolor:"#800000"},
+        {label: "navy",description:"",htmlcolor:"#000080"},
+        {label: "olive",description:"",htmlcolor:"#808000"},
+        {label: "purple",description:"",htmlcolor:"#800080"},
+        {label: "red",description:"",htmlcolor:"#FF0000"},
+        {label: "silver",description:"",htmlcolor:"#C0C0C0"},
+        {label: "teal",description:"",htmlcolor:"#008080"},
+        {label: "white",description:"",htmlcolor:"#ffffff"},
+        {label: "yellow",description:"",htmlcolor:"#FFFF00"},
+        {label: "none",description:"",htmlcolor:"#000000"},
+        {label: "system",description:"A preset color. For instance, the font color of a hotspot link is 'system' because it is determined by the %link.color.attrs; property settings for a form.",
+        htmlcolor:"#4B0082"}
+        ]);
+
+        public function get colors():ArrayList
+        {
+            return _colors;
+        }
+
+
+        private var _color:String = "system";
+		[Bindable(event="colorAttributeChanged")]
+        public function get color():String
+        {
+            return _color;
+        }
+		
+        public function set color(value:String):void
+        {
+            if (_color != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "color", _color, value);
+				
+                _color = value;
+                var html_color:String =null;
+                for(var i:int=0; i<_colors.length; i++)
+                {
+                 
+                  if(_colors.getItemAt(i).label==value){
+                      html_color=_colors.getItemAt(i).htmlcolor
+                  }
+                }
+
+                if(html_color!=null){
+                     super.setStyle("color",html_color);
+                }
+               
+                dispatchEvent(new Event("colorAttributeChanged"))
+            }
+        }
+
+        //------------color setting end------------------------------------------------
+        [Bindable("sizeChanged")]
+        /**
+         * <p>Domino: <strong>size</strong></p>
+         *
+         * @default "12"
+         *
+           */
+
+         private var _size:String = "12";
+         public function get size():String
+        {
+            return  this._size ;
+        }
+
+		 public function set size(value:String):void
+		{
+			if (this._size != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "size", this._size, value);
+				
+				this._size = value;
+               
+                super.setStyle("fontSize",value);
+				dispatchEvent(new Event("sizeChanged"));
+			}
+		}
+
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -382,55 +486,13 @@ package view.domino.surfaceComponents.components
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME +">"+escape(this.text)+"</"+ELEMENT_NAME+ ">");
-            // var par_xml:XML = new XML("<par/>");
-            // var run_xml:XML = new XML("<run/>");
-			// var font_xml:XML = new XML("<font>"+this.text+"</font>");
-            // var cxml:XML = new XML()
-            // XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+            if(this.size){
+                xml.@size = this.size;
+            }
 
-            // if (cdataXML)
-            // {
-            //     xml.appendChild(cdataXML);
-            // }
-            // if(this.font!=null){
-            //     if(this.font.color){
-            //         font_xml.@color=this.font.color
-            //     }
-
-            //     if(this.font.size){
-            //         font_xml.@size=this.font.size
-            //     }
-
-            //     if(this.font.style){
-            //         font_xml.@style=this.font.style
-            //     }
-
-            //     if(this.font.name){
-            //         font_xml.@name=this.font.name
-            //     }
-
-            
-            //     font_xml.@truetype=this.font.truetype
-                
-                
-            //     if(this.font.pitch){
-            //         font_xml.@pitch=this.font.pitch
-            //     }
-            // }
-
-			// //CodeXMLUtils.addSizeHtmlStyleToXML(xml, this);
-			// //font node must before the text node
-			// run_xml.appendChild(font_xml);
-            // //run_xml.appendChild(this.text);
-            // //run_xml.text=this.text;
-            // //run_xml.createTextNode(this.text);
-            
-            // if(this.par!=null){
-            //     if(this.par.def)
-            //     par_xml.@def=this.par.def;
-            // }
-			
-			// par_xml.appendChild(run_xml);
+            if(this.color){
+                xml.@color = this.color;
+            }
 
             return xml;
         }
@@ -438,23 +500,25 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-
+           
 			component.fromXML(xml, callback);
+           
             this.text = component.text;
+            this.color = component.color;
+            this.size = component.size;
+
         }
 
         public function toCode():XML
         {
 			component.text = this.text;
+            component.size = this.size;
+            component.color = this.color;
 			//component.forAttribute = this.forAttribute;
 			//component.indicateRequired = this.indicateRequired;
 			
 			component.isSelected = this.isSelected;
-			// (component as components.domino.DominoLabel).width = this.width;
-			// (component as components.domino.DominoLabel).height = this.width;
-			// (component as components.domino.DominoLabel).percentWidth = this.percentWidth;
-			// (component as components.domino.DominoLabel).percentHeight = this.percentHeight;
-			
+		
             return component.toCode();
         }
 		

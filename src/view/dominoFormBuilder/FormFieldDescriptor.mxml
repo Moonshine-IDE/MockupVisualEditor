@@ -90,7 +90,7 @@
 			private function validateThis():Boolean
 			{
 				var tmpArr : Array = new Array(svName);
-				if (dominoFormField.editable == FormBuilderEditableType.EDITABLE)
+				if (dominoFormField.editable != FormBuilderEditableType.EDITABLE)
 				{
 					tmpArr.push(svFormula);
 				}
@@ -105,7 +105,7 @@
 			private function updateFormulaState():void
 			{
 				svFormula.required = fiFormula.required = 
-					(dominoFormField.editable == FormBuilderEditableType.EDITABLE);
+					(dominoFormField.editable != FormBuilderEditableType.EDITABLE);
 				if (!fiFormula.required)
 				{
 					// remove validation error tip

@@ -106,7 +106,12 @@ package view.domino.surfaceComponents.components
                 "kindAttributeChanged",
                 "formatAttributeChanged", 
                 "typeAttributeChanged", 
-                "allowmultivaluesAttributeChanged"
+                "showAttributeChanged",
+                "dateAttributeChanged",
+                "allowmultivaluesAttributeChanged",
+                "timeAttributeChanged",
+                "zoneAttributeChanged",
+                "calendarAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -624,6 +629,271 @@ package view.domino.surfaceComponents.components
         }
 
 
+/**
+ * <field allowmultivalues="false" allowtabout="false" computeaftervalidation="false" dataconnectionfield="data" defaultfocus="false" kind="editable" name="%FieldName%" protected="false" showdelimiters="true" sign="false" storelocally="false" type="datetime" useappletinbrowser="false">
+<datetimeformat date="yearmonthday" dateformat="weekdaymonthdayyear" dateseparator1=" " dateseparator2="/" dateseparator3="/" dayformat="twodigitday" fourdigityear="false" fourdigityearfor21stcentury="true" monthformat="twodigitmonth" omitthisyear="false" preference="usersetting" show="date" showtodaywhenappropriate="false" timeformat24="false" timeseparator=":" weekdayformat="shortname" yearformat="fourdigityear" zone="never"/>
+</field>
+ */
+
+// -----------show-----------------------
+        [Bindable]
+        private var _shows:ArrayList = new ArrayList([
+        {label: "date",description: "Current date only."},
+        {label: "time",description:"Current time only."},
+        {label: "datetime",description:"Current date and time."}
+        ]);
+
+        public function get shows():ArrayList
+        {
+            return _shows;
+        }
+    
+        private var _show:String = "date";
+		[Bindable(event="showAttributeChanged")]
+        public function get show():String
+        {
+            return _show;
+        }
+		
+        public function set show(value:String):void
+        {
+            if (_show != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "show", _show, value);
+				
+                _show = value;
+                dispatchEvent(new Event("showAttributeChanged"))
+            }
+        }	
+// -----------date-----------------------
+// <!ENTITY % datetimeformat.date "yearmonthday | year4monthday | monthday | yearmonth | 
+// year4month | weekdaymonthdayyear | 
+// weekdaymonthday | weekday | month | day | year">
+        [Bindable]
+        private var _dates:ArrayList = new ArrayList([
+        {label: "yearmonthday",description: "Current date only."},
+        {label: "year4monthday",description:"Current time only."},
+        {label: "monthday",description:"Current date and time."},
+        {label: "yearmonth",description:"Current date and time."},
+        {label: "year4month",description:"Current date and time."},
+        {label: "weekdaymonthdayyear",description:"Current date and time."},
+        {label: "weekdaymonthday",description:"Current date and time."},
+        {label: "weekday",description:"Current date and time."},
+        {label: "month",description:"Current date and time."},
+        {label: "day",description:"Current date and time."},
+         {label: "year",description:"Current date and time."}
+         
+        ]);
+
+        public function get dates():ArrayList
+        {
+            return _dates;
+        }
+    
+        private var _date:String = "yearmonthday";
+		[Bindable(event="dateAttributeChanged")]
+        public function get date():String
+        {
+            return _date;
+        }
+		
+        public function set date(value:String):void
+        {
+            if (_date != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "date", _date, value);
+				
+                _date = value;
+                dispatchEvent(new Event("dateAttributeChanged"))
+            }
+        }
+        // -----------showtodaywhenappropriate-----------------------
+        private var _showtodaywhenappropriate:Boolean;
+        private var showtodaywhenappropriateChanged:Boolean;
+
+        [Bindable(event="showtodaywhenappropriateChanged")]
+        public function get showtodaywhenappropriate():Boolean
+        {
+            return _showtodaywhenappropriate;
+        }
+
+        public function set showtodaywhenappropriate(value:Boolean):void
+        {
+            if (_showtodaywhenappropriate != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "showtodaywhenappropriateChanged", _showtodaywhenappropriate, value);
+
+                _showtodaywhenappropriate = value;
+                showtodaywhenappropriateChanged = true;
+
+                dispatchEvent(new Event("showtodaywhenappropriateChanged"));
+            }
+        }
+
+// -----------fourdigityear-----------------------
+      private var _fourdigityear:Boolean;
+        private var fourdigityearChanged:Boolean;
+
+        [Bindable(event="fourdigityearChanged")]
+        public function get fourdigityear():Boolean
+        {
+            return _fourdigityear;
+        }
+
+        public function set fourdigityear(value:Boolean):void
+        {
+            if (_fourdigityear != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "fourdigityearChanged", _fourdigityear, value);
+
+                _fourdigityear = value;
+                fourdigityearChanged = true;
+
+                dispatchEvent(new Event("fourdigityearChanged"));
+            }
+        }
+
+// -----------fourdigityearfor21stcentury-----------------------
+        private var _fourdigityearfor21stcentury:Boolean;
+        private var f21stChanged:Boolean;
+
+        [Bindable(event="f21stChanged")]
+        public function get fourdigityearfor21stcentury():Boolean
+        {
+            return _fourdigityearfor21stcentury;
+        }
+
+        public function set fourdigityearfor21stcentury(value:Boolean):void
+        {
+            if (_fourdigityearfor21stcentury != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "f21stChanged", _fourdigityearfor21stcentury, value);
+
+                _fourdigityearfor21stcentury = value;
+                f21stChanged = true;
+
+                dispatchEvent(new Event("f21stChanged"));
+            }
+        }
+
+// -----------omitthisyear-----------------------	
+private var _omitthisyear:Boolean;
+        private var omitthisyearChanged:Boolean;
+
+        [Bindable(event="omitthisyearChanged")]
+        public function get omitthisyear():Boolean
+        {
+            return _omitthisyear;
+        }
+
+        public function set omitthisyear(value:Boolean):void
+        {
+            if (_omitthisyear != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "omitthisyearChanged", _omitthisyear, value);
+
+                _omitthisyear = value;
+                omitthisyearChanged = true;
+
+                dispatchEvent(new Event("omitthisyearChanged"));
+            }
+        }
+// -----------time-----------------------
+// <!ENTITY % datetimeformat.time "hourminutesecondhundredths | 
+// hourminutesecond | hourminute | hour">	
+        [Bindable]
+        private var _times:ArrayList = new ArrayList([
+        {label: "hourminutesecondhundredths",description: "Current date only."},
+        {label: "hourminutesecond",description:"Current time only."},
+        {label: "hourminute",description:"Current date and time."},
+        {label: "hour",description:"Current date and time."}
+        
+        ]);
+
+        public function get times():ArrayList
+        {
+            return _times;
+        }
+    
+        private var _time:String = "hourminutesecond";
+		[Bindable(event="timeAttributeChanged")]
+        public function get time():String
+        {
+            return _time;
+        }
+		
+        public function set time(value:String):void
+        {
+            if (_time != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "time", _time, value);
+				
+                _time = value;
+                dispatchEvent(new Event("timeAttributeChanged"))
+            }
+        }
+// -----------zone-----------------------	
+// <!ENTITY % datetimeformat.zone "never | sometimes | always">
+        [Bindable]
+        private var _zones:ArrayList = new ArrayList([
+        {label: "never",description: "never."},
+        {label: "sometimes",description:"sometimes."},
+        {label: "always",description:"always."}
+        ]);
+
+        public function get zones():ArrayList
+        {
+            return _zones;
+        }
+    
+        private var _zone:String = "never";
+		[Bindable(event="zoneAttributeChanged")]
+        public function get zone():String
+        {
+            return _zone;
+        }
+		
+        public function set zone(value:String):void
+        {
+            if (_zone != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "zone", _zone, value);
+				
+                _zone = value;
+                dispatchEvent(new Event("zoneAttributeChanged"))
+            }
+        }
+    // -----------calendar-----------------------	
+	// <!ENTITY % datetimeformat.calendar "gregorian | hijri">
+        [Bindable]
+        private var _calendars:ArrayList = new ArrayList([
+        {label: "gregorian",description: "Christian calendar which is a revised version of the Julian calendar that incorporated leap years to keep sync with the lunar cycle."},
+        {label: "hijri",description:"Islamic calendar based on twelve lunar months.."}
+        ]);
+
+        public function get calendars():ArrayList
+        {
+            return _calendars;
+        }
+    
+        private var _calendar:String = "hijri";
+		[Bindable(event="calendarAttributeChanged")]
+        public function get calendar():String
+        {
+            return _calendar;
+        }
+		
+        public function set calendar(value:String):void
+        {
+            if (_calendar != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "calendar", _calendar, value);
+				
+                _calendar = value;
+                dispatchEvent(new Event("calendarAttributeChanged"))
+            }
+        }
+
           
          /**
          * Domino property list end***********************
@@ -731,6 +1001,35 @@ package view.domino.surfaceComponents.components
                     xml.@parens = this.parens;
                     xml.@percent = this.percent;
                     xml.@punctuated = this.punctuated;
+                }else{
+                    delete xml.@digits
+                    delete xml.@format
+                    delete xml.@parens
+                    delete xml.@percent
+                    delete xml.@punctuated
+
+                }
+                if(this.type=="datetiem"){
+                    xml.@show = this.show;
+                    xml.@date = this.date;
+                    xml.@showtodaywhenappropriate = this.showtodaywhenappropriate;
+                    xml.@fourdigityear = this.fourdigityear;
+                    xml.@fourdigityearfor21stcentury = this.fourdigityearfor21stcentury;
+
+                    xml.@omitthisyear = this.omitthisyear;
+                    xml.@time = this.time;
+                    xml.@zone = this.zone;
+                    xml.@calendars = this.calendars;
+                }else{
+                    delete xml.@show
+                    delete xml.@date
+                    delete xml.@showtodaywhenappropriate
+                    delete xml.@fourdigityear
+                    delete xml.@fourdigityearfor21stcentury
+                    delete xml.@omitthisyear
+                    delete xml.@time
+                    delete xml.@zone
+                    delete xml.@calendars
                 }
             }
 
@@ -776,6 +1075,20 @@ package view.domino.surfaceComponents.components
                 this.percent=component.percent ;
 
             }
+
+             if(this.type =="datetime"){
+                 this.show=component.show ;
+                 this.date = component.date;
+                 this.showtodaywhenappropriate = component.showtodaywhenappropriate;
+                 this.fourdigityear = component.fourdigityear;
+                 this.fourdigityearfor21stcentury = component.fourdigityearfor21stcentury;
+                 this.omitthisyear = component.omitthisyear;
+                 this.time = component.time;
+                 this.zone = component.zone;
+                 this.calendar = component.calendar;
+             }
+
+
         }
 
         public function toCode():XML
@@ -799,6 +1112,17 @@ package view.domino.surfaceComponents.components
                 component.punctuated = this.punctuated;
                 component.parens = this.parens;
                 component.percent = this.percent;
+            }
+             if(this.type=="datetime"){
+                component.show = this.show.toString();
+                component.date = this.date;
+                component.showtodaywhenappropriate = this.showtodaywhenappropriate;
+                component.fourdigityear = this.fourdigityear;
+                component.fourdigityearfor21stcentury = this.fourdigityearfor21stcentury;
+                component.omitthisyear = this.omitthisyear;
+                component.time = this.time;
+                component.zone = this.zone;
+                component.calendar = this.calendar;
             }
 			// (component as components.domino.DominoInputText).width = this.width;
 			// (component as components.domino.DominoInputText).height = this.width;

@@ -638,9 +638,12 @@ package view.domino.surfaceComponents.components
 // -----------show-----------------------
         [Bindable]
         private var _shows:ArrayList = new ArrayList([
-        {label: "date",description: "Current date only."},
-        {label: "time",description:"Current time only."},
-        {label: "datetime",description:"Current date and time."}
+        {label: "Current date only.",value:"date",
+        description: "Current date only."},
+        {label: "Current time only.",value:"time",
+        description:"Current time only."},
+        {label: "Current date and time.",value:"datetime",
+        description:"Current date and time."}
         ]);
 
         public function get shows():ArrayList
@@ -648,7 +651,7 @@ package view.domino.surfaceComponents.components
             return _shows;
         }
     
-        private var _show:String = "date";
+        private var _show:String = "datetime";
 		[Bindable(event="showAttributeChanged")]
         public function get show():String
         {
@@ -671,17 +674,17 @@ package view.domino.surfaceComponents.components
 // weekdaymonthday | weekday | month | day | year">
         [Bindable]
         private var _dates:ArrayList = new ArrayList([
-        {label: "yearmonthday",description: "Current date only."},
-        {label: "year4monthday",description:"Current time only."},
-        {label: "monthday",description:"Current date and time."},
-        {label: "yearmonth",description:"Current date and time."},
-        {label: "year4month",description:"Current date and time."},
-        {label: "weekdaymonthdayyear",description:"Current date and time."},
-        {label: "weekdaymonthday",description:"Current date and time."},
-        {label: "weekday",description:"Current date and time."},
-        {label: "month",description:"Current date and time."},
-        {label: "day",description:"Current date and time."},
-         {label: "year",description:"Current date and time."}
+        {label:"Only year month and day, where the year is in 2 digits.",value: "yearmonthday",description: "Current date only."},
+        {label:"Only year and month, where the year is in 4 digits.",value: "year4monthday",description:"Current time only."},
+        {label:"Only month and day",value: "monthday",description:"Current date and time."},
+        {label:"Only month and year",value: "yearmonth",description:"Current date and time."},
+        {label:"Only year and month, where the year is in 4 digits.",value: "year4month",description:"Current date and time."},
+        {label:"Only weekday,month and year",value: "weekdaymonthdayyear",description:"Current date and time."},
+        {label:"Only weekday,month and day",value: "weekdaymonthday",description:"Current date and time."},
+        {label:"Only weekday",value: "weekday",description:"Current date and time."},
+        {label:"Only month",value: "month",description:"Current date and time."},
+        {label:"Only day",value: "day",description:"Current date and time."},
+         {label:"Only year",value: "year",description:"Current date and time."}
          
         ]);
 
@@ -803,10 +806,10 @@ private var _omitthisyear:Boolean;
 // hourminutesecond | hourminute | hour">	
         [Bindable]
         private var _times:ArrayList = new ArrayList([
-        {label: "hourminutesecondhundredths",description: "Current date only."},
-        {label: "hourminutesecond",description:"Current time only."},
-        {label: "hourminute",description:"Current date and time."},
-        {label: "hour",description:"Current date and time."}
+        {label:"All",value: "hourminutesecondhundredths",description: "Current date only."},
+        {label:"Hours,minutes,and seconds",value: "hourminutesecond",description:"Current time only."},
+        {label:"Hours and minutes",value: "hourminute",description:"Current date and time."},
+        {label:"Hours only",value: "hour",description:"Current date and time."}
         
         ]);
 
@@ -836,9 +839,9 @@ private var _omitthisyear:Boolean;
 // <!ENTITY % datetimeformat.zone "never | sometimes | always">
         [Bindable]
         private var _zones:ArrayList = new ArrayList([
-        {label: "never",description: "never."},
-        {label: "sometimes",description:"sometimes."},
-        {label: "always",description:"always."}
+        {label:"Adjust time to local time",value: "never",description: "never."},
+        {label:"Show only if zone not local",value: "sometimes",description:"sometimes."},
+        {label:"Always show time zone",value: "always",description:"always."}
         ]);
 
         public function get zones():ArrayList
@@ -876,7 +879,7 @@ private var _omitthisyear:Boolean;
             return _calendars;
         }
     
-        private var _calendar:String = "hijri";
+        private var _calendar:String = "gregorian";
 		[Bindable(event="calendarAttributeChanged")]
         public function get calendar():String
         {

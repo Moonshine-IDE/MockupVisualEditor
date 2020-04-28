@@ -114,6 +114,19 @@
 				}
 			}
 			
+			private function onFieldTypeChanged():void
+			{
+				if (dominoFormField.type == FormBuilderFieldType.RICH_TEXT)
+				{
+					rbgMultivalue.selectedIndex = 1;
+					rbMultiYes.enabled = false;
+				}
+				else if (!rbMultiYes.enabled)
+				{
+					rbMultiYes.enabled = true;
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -171,13 +184,13 @@
 						<s:DropDownList id="ddlType" width="100%" height="30"
 										dataProvider="{FormBuilderFieldType.fieldTypes}" 
 										requireSelection="true" 
-										change="{dominoFormField.type=event.target.selectedItem}"/>
+										change="{dominoFormField.type=event.target.selectedItem;onFieldTypeChanged()}"/>
 					</s:FormItem>
 					<s:FormItem label="Multivalue" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:HGroup width="100%" verticalAlign="middle">
-							<s:RadioButton label="Yes" value="true" group="{rbgMultivalue}"/>
-							<s:RadioButton label="No" value="false" group="{rbgMultivalue}"/>
+							<s:RadioButton id="rbMultiYes" label="Yes" value="true" group="{rbgMultivalue}"/>
+							<s:RadioButton id="rbMultiNo" label="No" value="false" group="{rbgMultivalue}"/>
 						</s:HGroup>
 					</s:FormItem>
 					<s:FormItem label="Editable" 

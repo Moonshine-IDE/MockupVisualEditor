@@ -129,34 +129,61 @@
 	 <s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
-            left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="datePanel">
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="datePanel">
+		
+			
+		   
 			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
-		   paddingLeft="5" paddingBottom="5" >
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		   <s:Label id="datelabelDisplay"
+			 textAlign="start"
+			 verticalAlign="middle"
+			 fontWeight="bold"
+			 maxDisplayedLines="1" fontSize="13"
+			 left="5" right="0" verticalCenter="0" 
+			 text="Display Date"/>
 			<forms:DropdownListForm id="showformat"
                             label="Show" textProperty="show"
-                            collectionProperty="shows" labelField="label"
+                            collectionProperty="shows" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 			<forms:DropdownListForm id="dateSelect"
                             label="Date" textProperty="date"
-                            collectionProperty="dates" labelField="label"
+                            collectionProperty="dates" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
-			<forms:ToggleButtonSelectedForm label="Show Today When Appropriate" textProperty="showtodaywhenappropriate" id="showtoday"/>				
-			<forms:ToggleButtonSelectedForm label="Four Digit Year" textProperty="fourdigityear" id="fourdigityear"/>	
-			<forms:ToggleButtonSelectedForm label="Four Digit Year For 21st" textProperty="fourdigityearfor21stcentury" id="fourdigityear21st"/>	
+			<forms:ToggleButtonSelectedForm label="Show today when appropriate" textProperty="showtodaywhenappropriate" id="showtoday"/>				
+			<forms:ToggleButtonSelectedForm label="Alway show four digit year" textProperty="fourdigityear" id="fourdigityear"/>	
+			<forms:ToggleButtonSelectedForm label="Show 4 Digit Year For 21st" textProperty="fourdigityearfor21stcentury" id="fourdigityear21st"/>	
 			<forms:ToggleButtonSelectedForm label="Omit This Year" textProperty="omitthisyear" id="omitthisyear"/>
+			<forms:DropdownListForm id="calendearSelect"
+                            label="Calendar" textProperty="calendar"
+                            collectionProperty="calendars" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+	
+		
+
+			   <s:Label id="timelabelDisplay"
+			 textAlign="start"
+			 verticalAlign="middle"
+			 fontWeight="bold"
+			 maxDisplayedLines="1" fontSize="13"
+			 left="5" right="0" verticalCenter="0" 
+			 text="Display Time"/>
 			<forms:DropdownListForm id="timeSelect"
                             label="Time format" textProperty="time"
-                            collectionProperty="times" labelField="label"
+                            collectionProperty="times" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
 			<forms:DropdownListForm id="zoneSelect"
                             label="Zone format" textProperty="zone"
-                            collectionProperty="zones" labelField="label"
+                            collectionProperty="zones" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
-			</s:VGroup>										
+		</s:VGroup>	
+	
+									
   </s:BorderContainer>
   
 				

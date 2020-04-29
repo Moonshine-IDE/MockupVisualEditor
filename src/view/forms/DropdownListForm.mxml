@@ -36,10 +36,16 @@
         private var _bindingCollection:ChangeWatcher;
         private var _bindingSurfaceProperty:ChangeWatcher;
         private var _labelField:String;
+        private var _valueField:String;
 
         public function set labelField(value:String):void
         {
             _labelField = value;
+        }
+
+        public function set valueField(value:String):void
+        {
+            _valueField = value;
         }
 
         private var _label:String = "Text";
@@ -131,7 +137,9 @@
 
         protected function onSelectionChange(event:IndexChangeEvent):void
         {
-            if (_labelField)
+            if(_valueField){
+                   selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
+            }else if (_labelField)
             {
                 selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
             }

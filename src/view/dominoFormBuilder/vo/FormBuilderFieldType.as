@@ -1,6 +1,6 @@
 package view.dominoFormBuilder.vo
 {
-	import org.apache.flex.collections.ArrayList;
+	import mx.collections.ArrayList;
 
 	[Bindable] public class FormBuilderFieldType
 	{

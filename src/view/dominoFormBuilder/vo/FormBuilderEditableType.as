@@ -1,6 +1,6 @@
 package view.dominoFormBuilder.vo
 {
-	import org.apache.flex.collections.ArrayList;
+	import mx.collections.ArrayList;
 
 	[Bindable] public class FormBuilderEditableType
 	{
@@ -21,6 +21,19 @@ package view.dominoFormBuilder.vo
 			}
 			
 			return _editableTypes;
+		}
+		
+		private static var _editableTypesRichtext:ArrayList;
+		public static function get editableTypesRichtext():ArrayList
+		{
+			if (!_editableTypesRichtext)
+			{
+				_editableTypesRichtext = new ArrayList([
+					EDITABLE, COMPUTED
+				]);
+			}
+			
+			return _editableTypesRichtext;
 		}
 	}
 }

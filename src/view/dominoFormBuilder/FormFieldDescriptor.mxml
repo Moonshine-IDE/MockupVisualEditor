@@ -120,10 +120,24 @@
 				{
 					rbgMultivalue.selectedIndex = 1;
 					rbMultiYes.enabled = false;
+					updateEditableProvider(FormBuilderEditableType.editableTypesRichtext);
 				}
 				else if (!rbMultiYes.enabled)
 				{
 					rbMultiYes.enabled = true;
+					updateEditableProvider(FormBuilderEditableType.editableTypes);
+				}
+				
+				/*
+				 @local
+				 */
+				function updateEditableProvider(value:ArrayList):void
+				{
+					ddlEditable.dataProvider = value;
+					ddlEditable.callLater(function():void
+					{
+						ddlEditable.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE));
+					});
 				}
 			}
 			

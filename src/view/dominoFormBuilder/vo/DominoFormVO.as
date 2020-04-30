@@ -21,6 +21,7 @@ package view.dominoFormBuilder.vo
 		public var viewName:String;
 		public var hasWebAccess:Boolean;
 		public var fields:ArrayCollection = new ArrayCollection();
+		public var dxlGeneratedOn:Date;
 		
 		/**
 		 * CONSTRUCTOR
@@ -40,6 +41,12 @@ package view.dominoFormBuilder.vo
 			this.formName = value.form.@name;
 			this.hasWebAccess = (value.form.@hasWebAccess == "true") ? true : false;
 			this.viewName = value.form.viewName;
+			if ("@dxlGeneratedOn" in value.form)
+			{
+				this.dxlGeneratedOn = new Date(Date.parse(
+					String(value.form.@dxlGeneratedOn)
+				));
+			}
 			
 			for each (var field:XML in value.form.fields.field)
 			{
@@ -71,6 +78,8 @@ package view.dominoFormBuilder.vo
 			}
 			xml.appendChild(tempXML);
 			
+			if (!dxlGeneratedOn) dxlGeneratedOn = new Date();
+			xml.@dxlGeneratedOn = dxlGeneratedOn.toUTCString();
 			return xml;
 		}
 		

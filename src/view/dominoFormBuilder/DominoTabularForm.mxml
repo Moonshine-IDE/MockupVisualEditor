@@ -19,18 +19,33 @@
 				ConverterUtils.converterToVisualEditorBridge = new IConverterLibraryBridgeImp();
 			}
 			
+			public function get isFormValid():Boolean
+			{
+				return formDescriptor.validateForm();
+			}
+			
 			public function get formXML():XML
 			{
-				if (formDescriptor.validateForm())
-				{
-					return formDescriptor.formXML;
-				}
-				return null;
+				return formDescriptor.formXML;
 			}
 			
 			public function get formDXL():XML
 			{
 				return formDescriptor.formDXL;
+			}
+			
+			public function get formName():String
+			{
+				return formDescriptor.dominoForm.formName;
+			}
+			
+			public function get dxlGeneratedOn():Date
+			{
+				return formDescriptor.dominoForm.dxlGeneratedOn;
+			}
+			public function set dxlGeneratedOn(value:Date):void
+			{
+				formDescriptor.dominoForm.dxlGeneratedOn = value;
 			}
 			
 			public function dispose():void

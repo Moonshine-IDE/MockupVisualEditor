@@ -44,19 +44,37 @@
 							txtValue.bindableText="";
 						}
 					}
+					txtValue.visible = txtValue.includeInLayout = true;
+					allowmul.bindableText = false;
 					txtValue.restrict="0-9";
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = true;
 					allowmul.visible = allowmul.includeInLayout = false;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 				} else if(item.label=="datetime"){
 					txtValue.restrict=null
 					datePanel.visible = datePanel.includeInLayout = true;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = false;
-				} else {
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					allowmul.bindableText = false;
+					txtValue.visible = txtValue.includeInLayout = true;
+				} else if(item.label=="keyword"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.bindableText = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
+					
+				}else {
+					txtValue.visible = txtValue.includeInLayout = true;
+					allowmul.bindableText = false;
 					txtValue.restrict=null
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 				}
 				inputType=item.label;
 				//Alert.show("visible:"+digits.visible);
@@ -126,7 +144,7 @@
 	</s:BorderContainer>
 
 
-	 <s:BorderContainer 
+	<s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
             left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="datePanel">
@@ -184,8 +202,24 @@
 		</s:VGroup>	
 	
 									
-  </s:BorderContainer>
-  
+  	</s:BorderContainer>
+
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="checkboxPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+			<forms:DropdownListForm id="keywordui"
+                            label="Keyword UI Type:" textProperty="keywordui"
+                            collectionProperty="keyworduis" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value"/>
+       </s:VGroup>
+		
+	</s:BorderContainer>	
+	
 				
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>

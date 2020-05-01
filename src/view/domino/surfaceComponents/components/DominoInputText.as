@@ -25,6 +25,9 @@ package view.domino.surfaceComponents.components
     import interfaces.dominoComponents.IDominoInputText;
     import components.domino.DominoInputText;
 
+    import mx.controls.Alert;
+    import utils.StringHelper;
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -39,6 +42,8 @@ package view.domino.surfaceComponents.components
     /**domino exclude property */
     [Exclude(name="kinds", kind="property")]
     [Exclude(name="types", kind="property")]
+    // [Exclude(name="keywords", kind="property")]
+    
 
 
     /**
@@ -111,7 +116,9 @@ package view.domino.surfaceComponents.components
                 "allowmultivaluesAttributeChanged",
                 "timeAttributeChanged",
                 "zoneAttributeChanged",
-                "calendarAttributeChanged"
+                "calendarAttributeChanged",
+                "keywordsChanged",
+                "checkboxAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -897,6 +904,60 @@ private var _omitthisyear:Boolean;
             }
         }
 
+
+        private var _keywords:String;
+
+        public function get keywords():String
+        {
+            return _keywords;
+        }
+
+         public function set keywords(value:String):void
+        {
+            if (_keywords != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "keywords", _keywords, value);
+				
+                _keywords = value;
+                dispatchEvent(new Event("keywordsChanged"))
+            }
+        }
+
+        /*************
+         * Domino keywords
+         */
+           [Bindable]
+        private var _keyworduis:ArrayList = new ArrayList([
+        {label:"checkbox",value: "checkbox",description: "Displays options in a list with checkboxes to the left of each option. Users click the checkbox to make a selection. Users can select more than one option."},
+        {label:"combobox",value: "combobox",description:"Displays a drop-down list box. Users click the down-arrow button of the drop-down list box to display the available options, then click an option to make a selection. Users can select only one option."},
+        {label:"dialoglist",value: "dialoglist",description:"Displays an empty field with a down-arrow button beside it. When users click the down-arrow button, a Select Keywords dialog box displays listing the options. A Notes dialoglist field can be set to enable users to select only one or more than one option."},
+        {label:"listbox",value: "listbox",description:"Displays a single row of a list and up and down arrows that a user can click to view the other rows in the list. Users can select only one option."},
+        {label:"radiobutton",value: "radiobutton",description:"Displays options in a list with circles to the left of each option. Users click the circle to make a selection. Users can select only one option. Selecting a second option deselects the first option automatically."}
+         
+        ]);
+
+         public function get keyworduis():ArrayList
+        {
+            return _keyworduis;
+        }
+    
+        private var _keywordui:String = "checkbox";
+		[Bindable(event="checkboxAttributeChanged")]
+        public function get keywordui():String
+        {
+            return _keywordui;
+        }
+		
+        public function set keywordui(value:String):void
+        {
+            if (_keywordui != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "keywordui", _keywordui, value);
+				
+                _keywordui = value;
+                dispatchEvent(new Event("checkboxAttributeChanged"))
+            }
+        }
           
          /**
          * Domino property list end***********************
@@ -967,6 +1028,8 @@ private var _omitthisyear:Boolean;
 
         public function toXML():XML
         {
+            
+           
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
@@ -1034,6 +1097,23 @@ private var _omitthisyear:Boolean;
                     delete xml.@zone
                     delete xml.@calendars
                 }
+         
+
+                if(this.type=="keyword"){
+                     //Alert.show("key:"+this.keywords);
+                     if(this.keywords){
+                        var encodeStr:String= StringHelper.base64Encode(this.keywords)
+                      
+                         xml.@keywords = encodeStr;
+                     }
+
+                     if(this.keywordui){
+                         xml.@keywordui=this.keywordui
+                     }
+                }else{
+                    delete xml.@keywords
+                    delete xml.@keywordui
+                }
             }
 
             if(this.width){
@@ -1091,6 +1171,14 @@ private var _omitthisyear:Boolean;
                  this.calendar = component.calendar;
              }
 
+                if(this.type =="keyword"){
+                    if(component.keywords){
+                          this.keywords=StringHelper.base64Decode(component.keywords)
+                    }
+                  
+                    this.keywordui=component.keywordui
+                }
+
 
         }
 
@@ -1127,6 +1215,12 @@ private var _omitthisyear:Boolean;
                 component.zone = this.zone;
                 component.calendar = this.calendar;
             }
+             if(this.type=="keyword"){
+                
+                    component.keywords=this.keywords
+                  
+                    component.keywordui=this.keywordui
+             }
 			// (component as components.domino.DominoInputText).width = this.width;
 			// (component as components.domino.DominoInputText).height = this.width;
 			(component as components.domino.DominoInputText).percentWidth = this.percentWidth;

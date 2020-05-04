@@ -87,9 +87,12 @@ package view.dominoFormBuilder.vo
 				tmpAllColumns = cell.replace(/%cellbody%/i, label);
 				
 				tmpField = DominoTemplatesManager.getFieldTemplate(type, isMultiValue, editable);
-				tmpField = tmpField.replace(/%fieldname%/i, name);
-				tmpField = tmpField.replace(/%computedvalue%/i, formula);
-				tmpAllColumns += cell.replace(/%cellbody%/i, tmpField);
+				if (tmpField)
+				{
+					tmpField = tmpField.replace(/%fieldname%/i, name);
+					tmpField = tmpField.replace(/%computedvalue%/i, formula);
+				}
+				tmpAllColumns += cell.replace(/%cellbody%/i, tmpField ? tmpField : '');
 				
 				tmpAllColumns += cell.replace(/%cellbody%/i, description);
 			}

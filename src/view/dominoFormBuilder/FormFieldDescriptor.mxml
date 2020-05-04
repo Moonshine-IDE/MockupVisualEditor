@@ -61,6 +61,7 @@
 					ddlEditable.selectedItem = dominoFormField.editable;
 					ddlSort.selectedItem = dominoFormField.sortOption;
 					updateFormulaState();
+					onFieldTypeChanged();
 				}
 				else
 				{

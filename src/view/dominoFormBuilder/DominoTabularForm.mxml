@@ -5,10 +5,9 @@
 		  creationComplete="onCreationCompletes()" xmlns:dominoFormBuilder="view.dominoFormBuilder.*">
 	<fx:Script>
 		<![CDATA[
-			import utils.ConverterUtils;
 			import utils.MoonshineBridgeUtils;
 			
-			import view.dominoFormBuilder.impl.IConverterLibraryBridgeImp;
+			import view.dominoFormBuilder.vo.DominoFormVO;
 			import view.interfaces.IDominoFormBuilderLibraryBridge;
 			
 			public var filePath:File;
@@ -16,7 +15,6 @@
 			public function set moonshineBridge(value:IDominoFormBuilderLibraryBridge):void
 			{
 				MoonshineBridgeUtils.moonshineBridgeFormBuilderInterface = value;
-				ConverterUtils.converterToVisualEditorBridge = new IConverterLibraryBridgeImp();
 			}
 			
 			public function get isFormValid():Boolean
@@ -34,18 +32,14 @@
 				return formDescriptor.formDXL;
 			}
 			
-			public function get formName():String
+			public function get viewDXL():XML
 			{
-				return formDescriptor.dominoForm.formName;
+				return formDescriptor.viewDXL;
 			}
 			
-			public function get dxlGeneratedOn():Date
+			public function get formObject():DominoFormVO
 			{
-				return formDescriptor.dominoForm.dxlGeneratedOn;
-			}
-			public function set dxlGeneratedOn(value:Date):void
-			{
-				formDescriptor.dominoForm.dxlGeneratedOn = value;
+				return formDescriptor.dominoForm;
 			}
 			
 			public function dispose():void

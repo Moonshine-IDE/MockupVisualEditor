@@ -5,12 +5,7 @@ package view.dominoFormBuilder.vo
 	import mx.collections.ArrayCollection;
 	import mx.events.PropertyChangeEvent;
 	
-	import components.GridItem;
-	import components.GridRow;
-	import components.domino.DominoLabel;
-	import components.domino.DominoTable;
-	import components.domino.formBuilder.DominoFormField;
-	import components.primeFaces.Div;
+	import view.dominoFormBuilder.utils.DominoTemplatesManager;
 	
 	[Bindable] 
 	public class DominoFormVO extends EventDispatcher
@@ -83,66 +78,45 @@ package view.dominoFormBuilder.vo
 			return xml;
 		}
 		
-		public function toCode():XML
+		//--------------------------------------------------------------------------
+		//
+		//  DXL/XML
+		//
+		//--------------------------------------------------------------------------
+		
+		public function toCode():String
 		{
-			var tmpDominoTable:DominoTable = new DominoTable();
-			var tmpRow:GridRow;
-			var tmpGridItem:GridItem;
+			var table:String = DominoTemplatesManager.getTableTemplate();
 			
 			// generate rows/columns
+			var tmpRows:String = "";
 			for each (var field:DominoFormFieldVO in fields)
 			{
-				tmpRow = new GridRow();
-				
-				// 3 columns - 
-				// label, input, description
-				tmpGridItem = getLabelItem(field.label);
-				tmpRow.addElement(tmpGridItem);
-				
-				tmpGridItem = getInputItem(field);
-				tmpRow.addElement(tmpGridItem);
-				
-				tmpGridItem = getLabelItem(field.description);
-				tmpRow.addElement(tmpGridItem);
-
-				tmpDominoTable.addElement(tmpRow);
+				tmpRows += field.toCode();
 			}
 			
-			// sigh.. 
-			var conversionTable:DominoTable = new DominoTable(tmpDominoTable);
-			
-			var tmpMainApplication:XML = (new Div()).toCode();
-			return (tmpMainApplication.appendChild(conversionTable.toCode()));
+			table = table.replace(/%rows%/i, tmpRows);
+			return table;
 		}
 		
-		private function getInputItem(field:DominoFormFieldVO):GridItem
+		public function toViewColumnsCode():String
 		{
-			var tmpColumn:GridItem = new GridItem();
-			var tmpDiv:Div = new Div();
+			var column:String = DominoTemplatesManager.getViewColumn();
 			
-			var tmpDominoField:DominoFormField = new DominoFormField();
-			tmpDominoField.allowmultivalues = field.isMultiValue;
-			tmpDominoField.kind = field.editable;
-			tmpDominoField.type = field.type;
-			tmpDominoField.nameAttribute = field.name;
-			tmpDominoField.formula = field.formula;
-			tmpDiv.addElement(tmpDominoField);
+			// generate rows/columns
+			var tmpColumns:String = "";
+			var tmpColumn:String = "";
+			for each (var field:DominoFormFieldVO in fields)
+			{
+				tmpColumn = column.replace(/%fieldname%/i, field.name);
+				tmpColumn = tmpColumn.replace(/%sort%/i, field.sortOption);
+				tmpColumn = tmpColumn.replace(/%categorized%/i, 'false');
+				tmpColumn = tmpColumn.replace(/%label%/i, field.label);
+				
+				tmpColumns += tmpColumn;
+			}
 			
-			tmpColumn.addElement(tmpDiv);
-			return tmpColumn;
-		}
-		
-		private function getLabelItem(value:String):GridItem
-		{
-			var tmpColumn:GridItem = new GridItem();
-			var tmpDiv:Div = new Div();
-			
-			var tmpLabel:DominoLabel = new DominoLabel();
-			tmpLabel.text = value;
-			tmpDiv.addElement(tmpLabel);
-			
-			tmpColumn.addElement(tmpDiv);
-			return tmpColumn;
+			return tmpColumns;
 		}
 	}
 }

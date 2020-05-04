@@ -52,6 +52,11 @@ package view.dominoFormBuilder.supportClasses
 			return FormBuilderCodeUtils.toDominoCode(dominoForm);
 		}
 		
+		public function get viewDXL():XML
+		{
+			return FormBuilderCodeUtils.toViewCode(dominoForm);
+		}
+		
 		public function DominoFormBuilderBaseEditor()
 		{
 			super();

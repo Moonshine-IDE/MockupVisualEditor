@@ -2,7 +2,6 @@ package view.dominoFormBuilder.utils
 {
 	import flash.filesystem.File;
 	
-	import utils.MainApplicationCodeUtils;
 	import utils.MoonshineBridgeUtils;
 	
 	import view.dominoFormBuilder.vo.DominoFormVO;
@@ -24,30 +23,30 @@ package view.dominoFormBuilder.utils
 		
 		public static function toDominoCode(formObject:DominoFormVO):XML
 		{
-			// @note
-			// conversion logic as per EditingSurfaceWriter
-			var xml:XML = MainApplicationCodeUtils.getDominoParentContent(formObject.formName);
-			var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+			XML.ignoreWhitespace = true;
 			
-			XML.ignoreComments = false;
-			var code:XML = formObject.toCode();
+			var form:String = DominoTemplatesManager.getFormTemplate();
+			var par:String = DominoTemplatesManager.getFormParTemplate();
 			
-			// patch-fix?
-			if (code.name() == "div")
-			{
-				code.setName("richtext");
-			}
+			var formBody:String = par.replace(/%value%/i, formObject.viewName);
+			formBody += formObject.toCode();
 			
-			if (mainContainer)
-			{
-				mainContainer.appendChild(code); // What 'mainContainer' does finally!?
-			}
-			else
-			{
-				xml.appendChild(code);
-			}
+			form = form.replace(/%formname%/i, formObject.formName);
+			form = form.replace(/%frombody%/i, formBody);
 			
-			return MainApplicationCodeUtils.fixDominField(xml);
+			return XML(form);
+		}
+		
+		public static function toViewCode(formObject:DominoFormVO):XML
+		{
+			XML.ignoreWhitespace = true;
+			
+			var view:String = DominoTemplatesManager.getViewTemplate();
+			view = view.replace(/%viewname%/i, formObject.viewName);
+			view = view.replace(/%formname%/i, formObject.formName);
+			view = view.replace(/%columns%/i, formObject.toViewColumnsCode());
+			
+			return XML(view);
 		}
 	}
 }

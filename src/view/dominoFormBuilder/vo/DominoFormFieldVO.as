@@ -1,5 +1,7 @@
 package view.dominoFormBuilder.vo
 {
+	import view.dominoFormBuilder.utils.DominoTemplatesManager;
+
 	[Bindable] public class DominoFormFieldVO
 	{
 		public static const ELEMENT_NAME:String = "field";
@@ -64,9 +66,36 @@ package view.dominoFormBuilder.vo
 			return xml;
 		}
 		
-		public function toCode():XML
+		//--------------------------------------------------------------------------
+		//
+		//  DXL/XML
+		//
+		//--------------------------------------------------------------------------
+		
+		public function toCode():String
 		{
-			return null;
+			var row:String = DominoTemplatesManager.getTableRowTemplate();
+			var cell:String = DominoTemplatesManager.getTableCellTemplate();
+			
+			// for now until Dmytro provides
+			// template of table-row having predefined
+			// table-column/cell, we'll generate manual 3
+			var tmpAllColumns:String = "";
+			var tmpField:String;
+			for (var i:int; i < 3; i++)
+			{
+				tmpAllColumns = cell.replace(/%cellbody%/i, label);
+				
+				tmpField = DominoTemplatesManager.getFieldTemplate(type, isMultiValue, editable);
+				tmpField = tmpField.replace(/%fieldname%/i, name);
+				tmpField = tmpField.replace(/%computedvalue%/i, formula);
+				tmpAllColumns += cell.replace(/%cellbody%/i, tmpField);
+				
+				tmpAllColumns += cell.replace(/%cellbody%/i, description);
+			}
+			
+			row = row.replace(/%cells%/i, tmpAllColumns);
+			return row;
 		}
 	}
 }

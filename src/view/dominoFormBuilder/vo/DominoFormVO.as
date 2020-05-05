@@ -92,7 +92,10 @@ package view.dominoFormBuilder.vo
 			var tmpRows:String = "";
 			for each (var field:DominoFormFieldVO in fields)
 			{
-				tmpRows += field.toCode();
+				if (field.isIncludeInView)
+				{
+					tmpRows += field.toCode();
+				}
 			}
 			
 			table = table.replace(/%rows%/i, tmpRows);
@@ -108,12 +111,15 @@ package view.dominoFormBuilder.vo
 			var tmpColumn:String = "";
 			for each (var field:DominoFormFieldVO in fields)
 			{
-				tmpColumn = column.replace(/%fieldname%/i, field.name);
-				tmpColumn = tmpColumn.replace(/%sort%/i, field.sortOption);
-				tmpColumn = tmpColumn.replace(/%categorized%/i, 'false');
-				tmpColumn = tmpColumn.replace(/%label%/i, field.label);
-				
-				tmpColumns += tmpColumn;
+				if (field.isIncludeInView)
+				{
+					tmpColumn = column.replace(/%fieldname%/i, field.name);
+					tmpColumn = tmpColumn.replace(/%sort%/i, field.sortOption.value);
+					tmpColumn = tmpColumn.replace(/%categorized%/i, field.sortOption.isCategorized.toString());
+					tmpColumn = tmpColumn.replace(/%label%/i, field.label);
+					
+					tmpColumns += tmpColumn;
+				}
 			}
 			
 			return tmpColumns;

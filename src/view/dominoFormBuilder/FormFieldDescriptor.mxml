@@ -11,6 +11,7 @@
 		<![CDATA[
 			import flash.net.registerClassAlias;
 			
+			import mx.collections.ArrayList;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ValidationResultEvent;
@@ -25,6 +26,7 @@
 			import view.dominoFormBuilder.vo.DominoFormFieldVO;
 			import view.dominoFormBuilder.vo.FormBuilderEditableType;
 			import view.dominoFormBuilder.vo.FormBuilderFieldType;
+			import view.dominoFormBuilder.vo.FormBuilderSortingType;
 			import view.suportClasses.events.ItemEditedEvent;
 			
 			[Bindable] protected var dominoFormField:DominoFormFieldVO;
@@ -44,7 +46,6 @@
 				else
 				{
 					dominoFormField = new DominoFormFieldVO();
-					dominoFormField.sortOption = sortOptions.getItemAt(0) as String;
 				}
 			}
 			
@@ -59,7 +60,7 @@
 				{
 					ddlType.selectedItem = dominoFormField.type;
 					ddlEditable.selectedItem = dominoFormField.editable;
-					ddlSort.selectedItem = dominoFormField.sortOption;
+					updateSortingSelection();
 					updateFormulaState();
 					onFieldTypeChanged();
 				}
@@ -101,6 +102,18 @@
 				}
 				
 				return true;
+			}
+			
+			private function updateSortingSelection():void
+			{
+				for each (var sortType:Object in FormBuilderSortingType.sortTypes.source)
+				{
+					if (dominoFormField.sortOption.label == sortType.label)
+					{
+						ddlSort.selectedItem = sortType;
+						break;
+					}
+				}
 			}
 			
 			private function updateFormulaState():void
@@ -149,13 +162,6 @@
 			<s:Button label="Save" styleName="darkButton" click="onSaveRequest(event)"/>
 			<s:Button label="Cancel" styleName="darkButton" click="onCancel(event)"/>
 		</s:HGroup>
-		<s:ArrayList id="sortOptions">
-			<fx:String>No sorting</fx:String>
-			<fx:String>Ascending</fx:String>
-			<fx:String>Descending</fx:String>
-			<fx:String>Categorized(Ascending)</fx:String>
-			<fx:String>Categorized(Descending)</fx:String>
-		</s:ArrayList>
 		<mx:StringValidator id="svName" source="{txtName}" property="text"/>
 		<mx:StringValidator id="svFormula" source="{textFormula}" property="text"/>
 		<s:RadioButtonGroup id="rbgMultivalue" selectedValue="@{dominoFormField.isMultiValue}"/>
@@ -234,7 +240,7 @@
 					<s:FormItem label="Sorting" 
 								skinClass="skins.StackedFormItemSkin" width="100%">
 						<s:DropDownList id="ddlSort" width="100%" height="30"
-										dataProvider="{sortOptions}" requireSelection="true"
+										dataProvider="{FormBuilderSortingType.sortTypes}" requireSelection="true"
 										change="{dominoFormField.sortOption=event.target.selectedItem}"/>
 					</s:FormItem>
 				</s:Form>

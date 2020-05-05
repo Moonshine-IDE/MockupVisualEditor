@@ -169,7 +169,8 @@
 					width="100%" height="100%"
 					sortableColumns="false" variableRowHeight="true" borderVisible="true" borderColor="0x999999"
 					contentBackgroundColor="0xe0e0e0" selectionColor="0xf6f6f6"
-					doubleClickEnabled="true" doubleClick="onItemDoubleClicked(event)">
+					doubleClickEnabled="true" doubleClick="onItemDoubleClicked(event)"
+					dragMoveEnabled="true" dragEnabled="true" dropEnabled="true">
 			<s:columns>
 				<s:ArrayList>
 					<s:GridColumn headerText="Label" dataField="label" itemRenderer="components.renderers.GenericGridRenderer" 

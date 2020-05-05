@@ -13,8 +13,11 @@
 				if ( value ) {
 					super.data = value;
 					
-					// priority to the labelFunction if any
-					lbl.text = (this.column.labelFunction != null) ? this.label : data[ this.column.dataField ];
+					if (this.column)
+					{
+						// priority to the labelFunction if any
+						lbl.text = (this.column.labelFunction != null) ? this.label : data[ this.column.dataField ];
+					}
 				}
 			}
 			

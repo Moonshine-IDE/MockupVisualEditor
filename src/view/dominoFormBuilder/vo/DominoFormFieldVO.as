@@ -12,9 +12,9 @@ package view.dominoFormBuilder.vo
 		public var type:String = FormBuilderFieldType.fieldTypes.getItemAt(0) as String;
 		public var editable:String = FormBuilderEditableType.editableTypes.getItemAt(0) as String;
 		public var formula:String = "";
-		public var sortOption:String;
+		public var sortOption:Object = FormBuilderSortingType.sortTypes.getItemAt(0);
 		public var isMultiValue:Boolean;
-		public var isIncludeInView:Boolean;
+		public var isIncludeInView:Boolean = true;
 		
 		public function DominoFormFieldVO()
 		{
@@ -31,9 +31,17 @@ package view.dominoFormBuilder.vo
 			this.name = value.@name;
 			this.type = value.@type;
 			this.editable = value.@editable;
-			this.sortOption = value.@sortOption;
 			this.isMultiValue = (value.@isMultiValue == "true") ? true : false;
 			this.isIncludeInView = (value.@isIncludeInView == "true") ? true : false;
+			
+			for each (var sortType:Object in FormBuilderSortingType.sortTypes.source)
+			{
+				if (value.@sortOption == sortType.label)
+				{
+					this.sortOption = sortType;
+					break;
+				}
+			}
 			
 			this.label = value.label;
 			this.description = value.description;
@@ -47,7 +55,7 @@ package view.dominoFormBuilder.vo
 			xml.@name = name;
 			xml.@type = type;
 			xml.@editable = editable;
-			xml.@sortOption = sortOption;
+			xml.@sortOption = sortOption.label;
 			xml.@isMultiValue = isMultiValue.toString();
 			xml.@isIncludeInView = isIncludeInView.toString();
 			

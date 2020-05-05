@@ -92,10 +92,7 @@ package view.dominoFormBuilder.vo
 			var tmpRows:String = "";
 			for each (var field:DominoFormFieldVO in fields)
 			{
-				if (field.isIncludeInView)
-				{
-					tmpRows += field.toCode();
-				}
+				tmpRows += field.toCode();
 			}
 			
 			table = table.replace(/%rows%/i, tmpRows);

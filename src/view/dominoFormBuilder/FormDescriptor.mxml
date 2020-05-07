@@ -186,6 +186,7 @@
 				</s:ArrayList>
 			</s:columns>
 		</s:DataGrid>
+		<s:Label text="* Drag an item to reorder." fontStyle="italic" color="0x666666"/>
 	</s:VGroup>
 	
 	<s:BorderContainer id="buttonBar"
@@ -198,7 +199,7 @@
 		<s:Button label="Add" skinClass="skins.DarkButtonSkin"
 				  click="onItemAddEdit()"/>
 		<s:Spacer width="100%"/>
-		<s:Button label="Save &amp; Ganerate DXL" skinClass="skins.DarkButtonSkin"
+		<s:Button label="Save &amp; Generate DXL" skinClass="skins.DarkButtonSkin"
 				  click="saveDominoForm()"/>
 	</s:BorderContainer>
 </supportClasses:DominoFormBuilderBaseEditor>

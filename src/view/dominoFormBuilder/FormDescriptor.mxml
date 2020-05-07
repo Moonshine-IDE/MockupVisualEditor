@@ -173,6 +173,8 @@
 					dragMoveEnabled="true" dragEnabled="true" dropEnabled="true">
 			<s:columns>
 				<s:ArrayList>
+					<s:GridColumn width="60" itemRenderer="components.renderers.FieldIncludeInGridItemRenderer" 
+								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
 					<s:GridColumn headerText="Label" dataField="label" itemRenderer="components.renderers.GenericGridRenderer" 
 								  headerRenderer="components.renderers.TabularFormHeaderRenderer"/>
 					<s:GridColumn headerText="Name" dataField="name" itemRenderer="components.renderers.GenericGridRenderer" 

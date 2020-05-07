@@ -31,7 +31,7 @@ package view.dominoFormBuilder.utils
 			var formBody:String = par.replace(/%value%/i, formObject.viewName);
 			formBody += formObject.toCode();
 			
-			form = form.replace(/%formname%/i, formObject.formName);
+			form = form.replace(/%formname%/ig, formObject.formName);
 			form = form.replace(/%frombody%/i, formBody);
 			
 			return XML(form);
@@ -42,8 +42,8 @@ package view.dominoFormBuilder.utils
 			XML.ignoreWhitespace = true;
 			
 			var view:String = DominoTemplatesManager.getViewTemplate();
-			view = view.replace(/%viewname%/i, formObject.viewName);
-			view = view.replace(/%formname%/i, formObject.formName);
+			view = view.replace(/%viewname%/ig, formObject.viewName);
+			view = view.replace(/%formname%/ig, formObject.formName);
 			view = view.replace(/%columns%/i, formObject.toViewColumnsCode());
 			
 			return XML(view);

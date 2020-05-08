@@ -95,7 +95,7 @@ package view.dominoFormBuilder.vo
 				tmpRows += field.toCode();
 			}
 			
-			table = table.replace(/%rows%/i, tmpRows);
+			table = table.replace(/%rows%/ig, tmpRows);
 			return table;
 		}
 		
@@ -110,10 +110,10 @@ package view.dominoFormBuilder.vo
 			{
 				if (field.isIncludeInView)
 				{
-					tmpColumn = column.replace(/%fieldname%/i, field.name);
-					tmpColumn = tmpColumn.replace(/%sort%/i, field.sortOption.value);
-					tmpColumn = tmpColumn.replace(/%categorized%/i, field.sortOption.isCategorized.toString());
-					tmpColumn = tmpColumn.replace(/%label%/i, field.label);
+					tmpColumn = column.replace(/%fieldname%/ig, field.name);
+					tmpColumn = tmpColumn.replace(/%sort%/ig, field.sortOption.value);
+					tmpColumn = tmpColumn.replace(/%categorized%/ig, field.sortOption.isCategorized.toString());
+					tmpColumn = tmpColumn.replace(/%label%/ig, field.label);
 					
 					tmpColumns += tmpColumn;
 				}

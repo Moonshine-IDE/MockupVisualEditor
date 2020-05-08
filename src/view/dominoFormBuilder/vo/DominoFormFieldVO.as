@@ -92,20 +92,20 @@ package view.dominoFormBuilder.vo
 			var tmpField:String;
 			for (var i:int; i < 3; i++)
 			{
-				tmpAllColumns = cell.replace(/%cellbody%/i, label);
+				tmpAllColumns = cell.replace(/%cellbody%/ig, label);
 				
 				tmpField = DominoTemplatesManager.getFieldTemplate(type, isMultiValue, editable);
 				if (tmpField)
 				{
-					tmpField = tmpField.replace(/%fieldname%/i, name);
-					tmpField = tmpField.replace(/%computedvalue%/i, formula);
+					tmpField = tmpField.replace(/%fieldname%/ig, name);
+					tmpField = tmpField.replace(/%computedvalue%/ig, formula);
 				}
-				tmpAllColumns += cell.replace(/%cellbody%/i, tmpField ? tmpField : '');
+				tmpAllColumns += cell.replace(/%cellbody%/ig, tmpField ? tmpField : '');
 				
-				tmpAllColumns += cell.replace(/%cellbody%/i, description);
+				tmpAllColumns += cell.replace(/%cellbody%/ig, description);
 			}
 			
-			row = row.replace(/%cells%/i, tmpAllColumns);
+			row = row.replace(/%cells%/ig, tmpAllColumns);
 			return row;
 		}
 	}

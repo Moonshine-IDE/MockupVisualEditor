@@ -28,11 +28,11 @@ package view.dominoFormBuilder.utils
 			var form:String = DominoTemplatesManager.getFormTemplate();
 			var par:String = DominoTemplatesManager.getFormParTemplate();
 			
-			var formBody:String = par.replace(/%value%/i, formObject.viewName);
+			var formBody:String = par.replace(/%value%/ig, formObject.viewName);
 			formBody += formObject.toCode();
 			
 			form = form.replace(/%formname%/ig, formObject.formName);
-			form = form.replace(/%frombody%/i, formBody);
+			form = form.replace(/%frombody%/ig, formBody);
 			
 			return XML(form);
 		}
@@ -44,7 +44,7 @@ package view.dominoFormBuilder.utils
 			var view:String = DominoTemplatesManager.getViewTemplate();
 			view = view.replace(/%viewname%/ig, formObject.viewName);
 			view = view.replace(/%formname%/ig, formObject.formName);
-			view = view.replace(/%columns%/i, formObject.toViewColumnsCode());
+			view = view.replace(/%columns%/ig, formObject.toViewColumnsCode());
 			
 			return XML(view);
 		}

@@ -81,6 +81,19 @@
 				return item.label;
 			}
 
+
+			private function getDominoFieldKeyWordUISytle(item:Object):String
+			{
+				if(item.label=="radiobutton"){
+					allowmul.visible = allowmul.includeInLayout = false;
+				}else{
+					allowmul.visible = allowmul.includeInLayout = true;
+				}
+				return item.label;
+			}
+
+
+
 			private function getDominoFieldName(item:Object):String
 			{
 				return item.label;
@@ -213,7 +226,7 @@
 			<forms:DropdownListForm id="keywordui"
                             label="Keyword UI Type:" textProperty="keywordui"
                             collectionProperty="keyworduis" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+							labelDisplayFunction="getDominoFieldKeyWordUISytle" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value"/>
        </s:VGroup>

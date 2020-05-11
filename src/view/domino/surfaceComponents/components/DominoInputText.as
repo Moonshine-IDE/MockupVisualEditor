@@ -93,7 +93,7 @@ package view.domino.surfaceComponents.components
 			this.height = 30;
 			this.minWidth = 20;
 			this.minHeight = 20;
-			this.maxHeight = 30;
+			//this.maxHeight = 30;
 
             this.nameAttribute = "test" ;
             this.type = "text" ;

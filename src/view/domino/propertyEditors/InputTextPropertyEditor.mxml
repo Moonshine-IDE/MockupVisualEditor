@@ -51,6 +51,7 @@
 					numberPanel.visible = numberPanel.includeInLayout = true;
 					allowmul.visible = allowmul.includeInLayout = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
 				} else if(item.label=="datetime"){
 					txtValue.restrict=null
 					datePanel.visible = datePanel.includeInLayout = true;
@@ -59,6 +60,7 @@
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					allowmul.bindableText = false;
 					txtValue.visible = txtValue.includeInLayout = true;
+					namespanel.visible = namespanel.includeInLayout = false;
 				} else if(item.label=="keyword"){
 					txtValue.restrict=null
 					txtValue.visible = txtValue.includeInLayout = false;
@@ -67,7 +69,16 @@
 					allowmul.visible = allowmul.includeInLayout = true;
 					allowmul.bindableText = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
-					
+					namespanel.visible = namespanel.includeInLayout = false;
+				}else if(item.label=="names"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.bindableText = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = true;
 				}else {
 					txtValue.visible = txtValue.includeInLayout = true;
 					allowmul.bindableText = false;
@@ -75,6 +86,7 @@
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
 				}
 				inputType=item.label;
 				//Alert.show("visible:"+digits.visible);
@@ -231,7 +243,34 @@
 		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value"/>
        </s:VGroup>
 		
-	</s:BorderContainer>	
+	</s:BorderContainer>
+
+
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="namespanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		   		<forms:DropdownListForm id="fieldChoicesdialogs"
+                            label="Defining where generating a list:" textProperty="choicesdialog"
+                            collectionProperty="choicesdialogs" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+				<!-- <forms:DropdownListForm id="fieldlistinput"
+                            label="Input separators:" textProperty="listinputseparators"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/> -->
+
+				<!-- <forms:DropdownListForm id="fieldlistdisplay"
+                            label="Display separator:" textProperty="listdisplayseparator"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
+		   </s:VGroup>	
+	</s:BorderContainer>			
 	
 				
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>

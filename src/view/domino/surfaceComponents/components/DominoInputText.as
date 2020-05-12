@@ -118,7 +118,10 @@ package view.domino.surfaceComponents.components
                 "zoneAttributeChanged",
                 "calendarAttributeChanged",
                 "keywordsChanged",
-                "checkboxAttributeChanged"
+                "checkboxAttributeChanged",
+                "choicesdialogAttributeChanged",
+                "listinputseparatorsAttributeChanged",
+                "listdisplayseparatorAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -958,6 +961,97 @@ private var _omitthisyear:Boolean;
                 dispatchEvent(new Event("checkboxAttributeChanged"))
             }
         }
+
+
+        /**
+         * names list field
+         */
+
+         [Bindable]
+        private var _choicesdialogs:ArrayList = new ArrayList([
+        {label:"none",value: "none",description: "Generates no choice list for Names and Readers fields, supplies the name of the form author for an Authors field, and displays a list of choices or a formula entered by the designer for a dialog list field."},
+        {label:"acl",value: "acl",description:"Displays names from a list of people, servers, groups, and roles in the Access Control List of a database."},
+        {label:"addressbook",value: "addressbook",description:"Displays a list of names from a Personal Address Book or Domino Directory Names dialog box."},
+        {label:"view",value: "view",description:"Displays names from a dialog box containing entries from a column in a view."}
+        
+        ]);
+
+        public function get choicesdialogs():ArrayList
+        {
+            return _choicesdialogs;
+        }
+    
+        private var _choicesdialog:String = "none";
+		[Bindable(event="choicesdialogAttributeChanged")]
+        public function get choicesdialog():String
+        {
+            return _choicesdialog;
+        }
+		
+        public function set choicesdialog(value:String):void
+        {
+            if (_choicesdialog != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "choicesdialog", _choicesdialog, value);
+				
+                _choicesdialog = value;
+                dispatchEvent(new Event("choicesdialogAttributeChanged"))
+            }
+        }
+
+
+        /**
+         * <!ENTITY % list.separators "space | comma | semicolon | newline | blankline | none">
+         */
+         [Bindable]
+        private var _separators:ArrayList = new ArrayList([
+        {label:"space",value: "space",description: "space"},
+        {label:"comma",value: "comma",description:"comma."},
+        {label:"semicolon",value: "semicolon",description:"semicolon"},
+        {label:"newline",value: "newline",description:"newline"},
+        {label:"blankline",value: "blankline",description:"blankline"},
+        {label:"none",value: "none",description:"none"}
+        ]);
+
+        private var _listinputseparators:String = "comma semicolon newline";
+		[Bindable(event="listinputseparatorsAttributeChanged")]
+        public function get listinputseparators():String
+        {
+            return _listinputseparators;
+        }
+		
+        public function set listinputseparators(value:String):void
+        {
+            if (_listinputseparators != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "listinputseparators", _listinputseparators, value);
+				
+                _listinputseparators = value;
+                dispatchEvent(new Event("listinputseparatorsAttributeChanged"))
+            }
+        }
+
+        private var _listdisplayseparator:String = "newline";
+		[Bindable(event="listdisplayseparatorAttributeChanged")]
+        public function get listdisplayseparator():String
+        {
+            return _listdisplayseparator;
+        }
+		
+        public function set listdisplayseparator(value:String):void
+        {
+            if (_listdisplayseparator != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "listdisplayseparator", _listdisplayseparator, value);
+				
+                _listdisplayseparator = value;
+                dispatchEvent(new Event("listdisplayseparatorAttributeChanged"))
+            }
+        }
+
+        
+
+
           
          /**
          * Domino property list end***********************
@@ -1114,6 +1208,29 @@ private var _omitthisyear:Boolean;
                     delete xml.@keywords
                     delete xml.@keywordui
                 }
+
+                if(this.type=="names"){
+                     if(this.choicesdialog){
+                        xml.@choicesdialog=this.choicesdialog
+                     }else{
+                        xml.@choicesdialog="none"
+                     }
+
+                     if(this.listdisplayseparator){
+                         xml.@listdisplayseparator=this.listdisplayseparator
+                     }
+
+                     if(this.listinputseparators){
+                         xml.@listinputseparators=this.listinputseparators
+                     }
+                  
+                }else{
+                     delete xml.@choicesdialog
+
+                     //delete xml.@listdisplayseparator
+
+                    // delete xml.@listinputseparators
+                }
             }
 
             if(this.width){
@@ -1178,6 +1295,20 @@ private var _omitthisyear:Boolean;
                   
                     this.keywordui=component.keywordui
                 }
+
+                 if(this.type =="names"){
+                     if(component.choicesdialog){
+                         this.choicesdialog=component.choicesdialog
+                     }
+
+                      if(component.listinputseparators){
+                          this.listinputseparators=component.listinputseparators;
+                      }
+
+                      if(component.listdisplayseparator){
+                          this.listdisplayseparator=component.listdisplayseparator;
+                      }
+                 }
 
 
         }

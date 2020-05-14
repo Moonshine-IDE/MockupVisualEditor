@@ -61,6 +61,8 @@ package utils
 			var byteArray:ByteArray = base64.toByteArray();
 			return byteArray.readMultiByte(byteArray.length, charset);;
 		}
+
+     
 	
 
     }

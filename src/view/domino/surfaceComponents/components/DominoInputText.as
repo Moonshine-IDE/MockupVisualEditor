@@ -1199,6 +1199,7 @@ private var _omitthisyear:Boolean;
                         var encodeStr:String= StringHelper.base64Encode(this.keywords)
                       
                          xml.@keywords = encodeStr;
+                         //this.keywords = encodeStr;
                      }
 
                      if(this.keywordui){
@@ -1290,7 +1291,7 @@ private var _omitthisyear:Boolean;
 
                 if(this.type =="keyword"){
                     if(component.keywords){
-                          this.keywords=StringHelper.base64Decode(component.keywords)
+                          this.keywords=StringHelper.base64Decode(component.keywords);
                     }
                   
                     this.keywordui=component.keywordui
@@ -1351,6 +1352,11 @@ private var _omitthisyear:Boolean;
                     component.keywords=this.keywords
                   
                     component.keywordui=this.keywordui
+             }
+
+             if(this.type=="names"){
+                 component.choicesdialog=this.choicesdialog
+
              }
 			// (component as components.domino.DominoInputText).width = this.width;
 			// (component as components.domino.DominoInputText).height = this.width;

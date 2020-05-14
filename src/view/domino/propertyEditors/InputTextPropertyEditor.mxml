@@ -254,7 +254,7 @@
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
 		   		<forms:DropdownListForm id="fieldChoicesdialogs"
                             label="Defining where generating a list:" textProperty="choicesdialog"
-                            collectionProperty="choicesdialogs" labelField="label" valueField="value"
+                            collectionProperty="choicesdialogs" labelField="label" 
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 

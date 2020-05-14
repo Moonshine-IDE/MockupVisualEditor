@@ -18,6 +18,7 @@
                     prompt="{prompt}"
                     textInput="textInput_changeHandler(event)"
                     focusOut="textInput_changeHandler(event)"
+                    change="textInput_changeHandler(event)"
                     	
 
   />

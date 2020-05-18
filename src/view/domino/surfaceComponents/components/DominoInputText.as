@@ -121,7 +121,10 @@ package view.domino.surfaceComponents.components
                 "checkboxAttributeChanged",
                 "choicesdialogAttributeChanged",
                 "listinputseparatorsAttributeChanged",
-                "listdisplayseparatorAttributeChanged"
+                "listdisplayseparatorAttributeChanged",
+                "formulaChanged",
+                "firstdisplayAttributeChanged",
+                "onlyallowAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -909,7 +912,7 @@ private var _omitthisyear:Boolean;
 
 
         private var _keywords:String;
-
+        [Bindable(event="keywordsChanged")]
         public function get keywords():String
         {
             return _keywords;
@@ -1052,7 +1055,85 @@ private var _omitthisyear:Boolean;
         
 
 
-          
+        //formula
+        private var _formula:String;
+        [Bindable(event="formulaChanged")]
+        public function get formula():String
+        {
+            return _formula;
+        }
+
+         public function set formula(value:String):void
+        {
+            if (_formula != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "formula", _formula, value);
+				
+                _formula = value;
+                dispatchEvent(new Event("formulaChanged"))
+            }
+        }  
+
+        //richtitile
+        //<!ENTITY % field.limitinput.kinds "picture | sharedimage | attachment | view | datepicker |
+        // sharedapplet | text | object | calendar | inbox ">
+        [Bindable]
+        private var _limitinputKinds:ArrayList = new ArrayList([
+        {label:"picture",value: "picture",description: "picture"},
+        {label:"sharedimage",value: "sharedimage",description: "sharedimage"},
+        {label:"attachment",value: "attachment",description: "attachment"},
+        {label:"view",value: "view",description: "view"},
+        {label:"sharedapplet",value: "sharedapplet",description: "sharedapplet"},
+        {label:"text",value: "text",description: "text"},
+        {label:"object",value: "object",description: "object"},
+        {label:"calendar",value: "calendar",description: "calendar"},
+        {label:"inbox",value: "inbox",description: "inbox"},
+        {label:"datepicker",value: "datepicker",datepicker: "datepicker"}
+        ]);
+
+        public function get limitinputKinds():ArrayList
+        {
+            return _limitinputKinds;
+        }
+    
+        private var _onlyallow:String = "attachment";
+		[Bindable(event="onlyallowAttributeChanged")]
+        public function get onlyallow():String
+        {
+            return _onlyallow;
+        }
+		
+        public function set onlyallow(value:String):void
+        {
+            if (_onlyallow != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "onlyallow", _onlyallow, value);
+				
+                _onlyallow = value;
+                dispatchEvent(new Event("onlyallowAttributeChanged"))
+            }
+        }
+
+
+
+        private var _firstdisplay:String = "attachment";
+		[Bindable(event="firstdisplayAttributeChanged")]
+        public function get firstdisplay():String
+        {
+            return _firstdisplay;
+        }
+		
+        public function set firstdisplay(value:String):void
+        {
+            if (_firstdisplay != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "firstdisplay", _firstdisplay, value);
+				
+                _firstdisplay = value;
+                dispatchEvent(new Event("firstdisplayAttributeChanged"))
+            }
+        }
+
          /**
          * Domino property list end***********************
          */
@@ -1232,6 +1313,20 @@ private var _omitthisyear:Boolean;
 
                     // delete xml.@listinputseparators
                 }
+
+
+                 if(this.type=="datetiem"){
+                    if(this.onlyallow){
+                        xml.@onlyallow=this.onlyallow
+                    }
+                    if(this.firstdisplay){
+                        xml.@firstdisplay=this.firstdisplay
+                    }
+
+                 }else{
+                    delete xml.@onlyallow
+                    delete xml.@firstdisplay
+                 }
             }
 
             if(this.width){
@@ -1311,6 +1406,15 @@ private var _omitthisyear:Boolean;
                       }
                  }
 
+                 if(this.type =="richtextlite"){
+                     if(component.onlyallow){
+                         this.onlyallow=component.onlyallow
+                     }
+                     if(component.firstdisplay){
+                         this.firstdisplay=component.firstdisplay
+                     }
+                 }
+
 
         }
 
@@ -1356,6 +1460,11 @@ private var _omitthisyear:Boolean;
 
              if(this.type=="names"){
                  component.choicesdialog=this.choicesdialog
+
+             }
+             if(this.type=="richtextlite"){
+                 component.onlyallow=this.onlyallow
+                 component.firstdisplay=this.firstdisplay
 
              }
 			// (component as components.domino.DominoInputText).width = this.width;

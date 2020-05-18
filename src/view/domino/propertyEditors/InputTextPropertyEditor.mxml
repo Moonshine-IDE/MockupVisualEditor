@@ -52,6 +52,8 @@
 					allowmul.visible = allowmul.includeInLayout = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
+					formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				} else if(item.label=="datetime"){
 					txtValue.restrict=null
 					datePanel.visible = datePanel.includeInLayout = true;
@@ -61,6 +63,8 @@
 					allowmul.bindableText = false;
 					txtValue.visible = txtValue.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
+					formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				} else if(item.label=="keyword"){
 					txtValue.restrict=null
 					txtValue.visible = txtValue.includeInLayout = false;
@@ -70,6 +74,8 @@
 					allowmul.bindableText = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
+					formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}else if(item.label=="names"){
 					txtValue.restrict=null
 					txtValue.visible = txtValue.includeInLayout = false;
@@ -79,6 +85,30 @@
 					allowmul.bindableText = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = true;
+					formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				}else if(item.label=="formula"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = false;
+					allowmul.bindableText = false;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					formualPanel.visible = formualPanel.includeInLayout = true;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				}else if(item.label=="richtextlite"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = false;
+					allowmul.bindableText = false;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = true;
 				}else {
 					txtValue.visible = txtValue.includeInLayout = true;
 					allowmul.bindableText = false;
@@ -87,6 +117,8 @@
 					allowmul.visible = allowmul.includeInLayout = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
+					formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}
 				inputType=item.label;
 				//Alert.show("visible:"+digits.visible);
@@ -173,9 +205,6 @@
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
             left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="datePanel">
-		
-			
-		   
 			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
 		   <s:Label id="datelabelDisplay"
@@ -249,6 +278,19 @@
 	<s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="formualPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+			
+		<forms:DominoTextInformationForm label="Formula:" textProperty="formula" prompt=""/>
+       </s:VGroup>
+		
+	</s:BorderContainer>
+
+
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
             left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="namespanel">
 			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
@@ -270,7 +312,27 @@
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
 		   </s:VGroup>	
-	</s:BorderContainer>			
+	</s:BorderContainer>
+
+
+		<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="richtitlePanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		   <forms:DropdownListForm id="onlyallow"
+                            label="which constructs/actions are allowed:" textProperty="onlyallow"
+                            collectionProperty="limitinputKinds" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+			<forms:DropdownListForm id="firstdisplay"
+                            label="Display icon:" textProperty="firstdisplay"
+                            collectionProperty="limitinputKinds" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>				
+		   </s:VGroup>	
+		</s:BorderContainer>   		
 	
 				
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>

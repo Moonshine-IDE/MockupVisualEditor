@@ -1079,16 +1079,16 @@ private var _omitthisyear:Boolean;
         // sharedapplet | text | object | calendar | inbox ">
         [Bindable]
         private var _limitinputKinds:ArrayList = new ArrayList([
-        {label:"picture",value: "picture",description: "picture"},
-        {label:"sharedimage",value: "sharedimage",description: "sharedimage"},
-        {label:"attachment",value: "attachment",description: "attachment"},
-        {label:"view",value: "view",description: "view"},
-        {label:"sharedapplet",value: "sharedapplet",description: "sharedapplet"},
-        {label:"text",value: "text",description: "text"},
-        {label:"object",value: "object",description: "object"},
-        {label:"calendar",value: "calendar",description: "calendar"},
-        {label:"inbox",value: "inbox",description: "inbox"},
-        {label:"datepicker",value: "datepicker",datepicker: "datepicker"}
+        {label:"picture",value: "picture",description: "picture", "selected": false},
+        {label:"sharedimage",value: "sharedimage",description: "sharedimage", "selected": false},
+        {label:"attachment",value: "attachment",description: "attachment", "selected": false},
+        {label:"view",value: "view",description: "view", "selected": false},
+        {label:"sharedapplet",value: "sharedapplet",description: "sharedapplet", "selected": false},
+        {label:"text",value: "text",description: "text", "selected": false},
+        {label:"object",value: "object",description: "object", "selected": false},
+        {label:"calendar",value: "calendar",description: "calendar", "selected": false},
+        {label:"inbox",value: "inbox",description: "inbox", "selected": false},
+        {label:"datepicker",value: "datepicker",description: "datepicker", "selected": false}
         ]);
 
         public function get limitinputKinds():ArrayList
@@ -1096,7 +1096,7 @@ private var _omitthisyear:Boolean;
             return _limitinputKinds;
         }
     
-        private var _onlyallow:String = "attachment";
+        private var _onlyallow:String ="picture sharedimage attachment view sharedapplet text object calendar datepicker";
 		[Bindable(event="onlyallowAttributeChanged")]
         public function get onlyallow():String
         {
@@ -1116,7 +1116,7 @@ private var _omitthisyear:Boolean;
 
 
 
-        private var _firstdisplay:String = "attachment";
+        private var _firstdisplay:String
 		[Bindable(event="firstdisplayAttributeChanged")]
         public function get firstdisplay():String
         {
@@ -1315,7 +1315,7 @@ private var _omitthisyear:Boolean;
                 }
 
 
-                 if(this.type=="datetiem"){
+                 if(this.type=="richtextlite"){
                     if(this.onlyallow){
                         xml.@onlyallow=this.onlyallow
                     }

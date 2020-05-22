@@ -321,16 +321,17 @@
             left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="richtitlePanel">
 			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
-		   <forms:DropdownListForm id="onlyallow"
-                            label="which constructs/actions are allowed:" textProperty="onlyallow"
+		  <domino:MultipleCheckbox label="which constructs/actions are allowed:" collectionProperty="limitinputKinds" textProperty="onlyallow"/>	
+		 
+		 	<forms:DropdownListForm id="firstDisplay"
+                            label="First Display:" textProperty="firstdisplay"
                             collectionProperty="limitinputKinds" labelField="label" 
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-			<forms:DropdownListForm id="firstdisplay"
-                            label="Display icon:" textProperty="firstdisplay"
-                            collectionProperty="limitinputKinds" labelField="label" 
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>				
+
+		 	
+		
+			
 		   </s:VGroup>	
 		</s:BorderContainer>   		
 	

@@ -77,7 +77,8 @@ package view.domino.surfaceComponents.components
                 "sizeChanged",
                 "forAttributeChanged",
 				"indicateRequiredChanged",
-                "colorAttributeChanged"
+                "colorAttributeChanged",
+                "fontStyleAttributeChanged"
             ];
         }
 
@@ -282,6 +283,50 @@ package view.domino.surfaceComponents.components
                 if(html_color!=null){
                      super.setStyle("color",html_color);
                 }
+               
+                dispatchEvent(new Event("colorAttributeChanged"))
+            }
+        }
+
+        //------------font style--------------------------------------------
+
+        //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
+        [Bindable]
+        private var _fontStyles:ArrayList = new ArrayList([
+              {label: "normal",description: "normal",value:"normal"},
+              {label: "bold",description: "bold",value:"bold"},
+              {label: "italic",description: "italic",value:"italic"},
+              {label: "underline",description: "underline",value:"underline"},
+              {label: "strikethrough",description: "strikethrough",value:"strikethrough"},
+              {label: "superscript",description: "superscript",value:"superscript"},
+              {label: "shadow",description: "shadow",value:"shadow"},
+              {label: "emboss",description: "emboss",value:"emboss"},
+              {label: "extrude",description: "extrude",value:"extrude"}
+        ])
+
+
+         public function get fontStyles():ArrayList
+        {
+            return _fontStyles;
+        }
+
+
+
+        private var _fontStyle:String = "normal";
+		[Bindable(event="fontStyleAttributeChanged")]
+        public function get fontStyle():String
+        {
+            return _fontStyle;
+        }
+		
+        public function set fontStyle(value:String):void
+        {
+            if (_fontStyle != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "fontStyle", _fontStyle, value);
+				
+                _fontStyle = value;
+                
                
                 dispatchEvent(new Event("colorAttributeChanged"))
             }
@@ -494,6 +539,10 @@ package view.domino.surfaceComponents.components
                 xml.@color = this.color;
             }
 
+            if(this.fontStyle){
+                xml.@style = this.fontStyle;
+            }
+
             return xml;
         }
 
@@ -506,6 +555,7 @@ package view.domino.surfaceComponents.components
             this.text = component.text;
             this.color = component.color;
             this.size = component.size;
+            this.fontStyle=component.fontStyle;
 
         }
 
@@ -514,6 +564,7 @@ package view.domino.surfaceComponents.components
 			component.text = this.text;
             component.size = this.size;
             component.color = this.color;
+            component.fontStyle = this.fontStyle;
 			//component.forAttribute = this.forAttribute;
 			//component.indicateRequired = this.indicateRequired;
 			

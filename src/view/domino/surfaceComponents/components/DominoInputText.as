@@ -1116,7 +1116,7 @@ private var _omitthisyear:Boolean;
 
 
 
-        private var _firstdisplay:String
+        private var _firstdisplay:String = "picture";
 		[Bindable(event="firstdisplayAttributeChanged")]
         public function get firstdisplay():String
         {

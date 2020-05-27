@@ -2,7 +2,8 @@
 <suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*"
-                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*"
+								  xmlns:domino="view.domino.forms.*" >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
@@ -34,7 +35,9 @@
                             collectionProperty="colors" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-
+		
+		<domino:MultipleCheckbox label="Style:" collectionProperty="fontStyles" textProperty="fontStyle"/>	
+		 
     <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>

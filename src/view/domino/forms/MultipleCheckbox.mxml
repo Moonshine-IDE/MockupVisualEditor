@@ -28,6 +28,9 @@
         [Bindable]
         public var showTooltipFunction:Function;
 
+        [Bindable]
+        public var optionExculdeFunction:Function;
+
         public var listItemRenderer:Class;
 
         private var _bindingCollection:ChangeWatcher;
@@ -162,6 +165,15 @@
            
 
             _selectItemList=new ArrayList()
+            for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
+            {
+                var item:Object = multCheckList.getChildAt(checkNum);
+                 if(item is ListBaseContentHolder){
+                    if(optionExculdeFunction){
+                         optionExculdeFunction(item);
+                     }
+                 }
+            }
             //Alert.show("Child:"+multCheckList.numChildren);
             for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
             {
@@ -169,6 +181,8 @@
                //trace(myList.getChildAt(btnNum);
                  var item:Object = multCheckList.getChildAt(checkNum);
                  if(item is ListBaseContentHolder){
+                   
+
                       for (var i:int = 0; i < item.numChildren; i++){
                           var checkitem:Object = item.getChildAt(i);
                            //Alert.show("checkitem:"+checkitem.toString());
@@ -295,6 +309,7 @@
                                                 {
                                                     super.label = value.label;
                                                     super.selected = value.selected;
+                                                    super.enabled= value.enabled
                                                     
                                                 }
                                             }

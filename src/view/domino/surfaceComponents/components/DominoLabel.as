@@ -293,15 +293,17 @@ package view.domino.surfaceComponents.components
         //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
         private var _fontStyles:ArrayList = new ArrayList([
-              {label: "normal",description: "normal",value:"normal"},
-              {label: "bold",description: "bold",value:"bold"},
-              {label: "italic",description: "italic",value:"italic"},
-              {label: "underline",description: "underline",value:"underline"},
-              {label: "strikethrough",description: "strikethrough",value:"strikethrough"},
-              {label: "superscript",description: "superscript",value:"superscript"},
-              {label: "shadow",description: "shadow",value:"shadow"},
-              {label: "emboss",description: "emboss",value:"emboss"},
-              {label: "extrude",description: "extrude",value:"extrude"}
+              {label: "normal",description: "normal",value:"normal",enabled:true},
+              {label: "bold",description: "bold",value:"bold",enabled:true},
+              {label: "italic",description: "italic",value:"italic",enabled:true},
+              {label: "underline",description: "underline",value:"underline",enabled:true},
+              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true},
+              {label: "superscript",description: "superscript",value:"superscript",enabled:true},
+              {label: "shadow",description: "shadow",value:"shadow",enabled:true},
+              {label: "emboss",description: "emboss",value:"emboss",enabled:true},
+              {label: "extrude",description: "extrude",value:"extrude",enabled:true},
+              {label: "subscript",description: "subscript",value:"subscript",enabled:true},
+              
         ])
 
 

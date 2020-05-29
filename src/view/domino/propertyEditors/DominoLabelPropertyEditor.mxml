@@ -7,7 +7,8 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-			
+			import mx.controls.listClasses.ListBaseContentHolder;
+			import mx.controls.Alert;
 
 
 			private function getDominoFieldName(item:Object):String
@@ -18,6 +19,91 @@
 			private function getDominoFieldTooltip(item:Object):String
 			{
 				return item.description;
+			}
+
+			private function excludeMultipleSelect(item:ListBaseContentHolder):void
+			{
+				var normal_flag:Boolean = false;
+				var execute_array:Array=null;
+				//<!ENTITY % font.styles "normal | bold | italic | underline | 
+				//strikethrough | superscript | subscript | shadow | emboss | extrude">
+				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
+				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
+				if(item){
+						//Alert.show("execute_array0:");
+					for (var i:int = 0; i < item.numChildren; i++){
+							var checkitem:Object = item.getChildAt(i);
+							if(checkitem){
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+								//	Alert.show("checkitem.label:"+checkitem.label);
+									if(checkitem.label=="normal"){
+										execute_array=exclusions_normal;
+										//break;
+									}
+									
+									
+								}
+							}
+							
+					}
+						//Alert.show("execute_array1:");
+
+					for (var i:int = 0; i < item.numChildren; i++){
+							var checkitem:Object = item.getChildAt(i);
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+								//Alert.show("checkitem:"+checkitem.label);
+								if(checkitem.label=="superscript"){
+										if(execute_array==null)
+										execute_array=["subscript","shadow","emboss","extrude"];
+										//break;
+									}
+									if(checkitem.label=="subscript"){
+										if(execute_array==null)
+										execute_array=["superscript","shadow","emboss","extrude"];
+										//break;
+									}
+									if(checkitem.label=="shadow"){
+										if(execute_array==null)
+										execute_array=["superscript","subscript","emboss","extrude"];
+										//break;
+									}
+									if(checkitem.label=="emboss"){
+										if(execute_array==null)
+										execute_array=["superscript","subscript","shadow","extrude"];
+										//break;
+									}
+									if(checkitem.label=="extrude"){
+										if(execute_array==null)
+										execute_array=["superscript","subscript","shadow","emboss"];
+										//break;
+									}
+							}
+					}		
+					
+						//Alert.show("execute_array2:");
+
+					
+				
+
+					for (var j:int = 0; j < item.numChildren; j++){
+						var checkitem_child:Object = item.getChildAt(j);
+							if(checkitem_child.hasOwnProperty("selected") ){
+								if(execute_array!=null && execute_array.length>0){
+									if(execute_array.indexOf(checkitem_child.label)>=0){
+										checkitem_child.selected=false;
+										checkitem_child.enabled=false;
+									}else{
+										//checkitem_child.selected=true;
+										checkitem_child.enabled=true;
+									}
+								}else{
+									checkitem_child.enabled=true;
+								}
+							}
+					}
+				}
 			}
 		]]>
 	</fx:Script>
@@ -36,7 +122,9 @@
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 		
-		<domino:MultipleCheckbox label="Style:" collectionProperty="fontStyles" textProperty="fontStyle"/>	
+		<domino:MultipleCheckbox label="Style:" 
+		optionExculdeFunction="excludeMultipleSelect"
+		collectionProperty="fontStyles" textProperty="fontStyle"/>	
 		 
     <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>

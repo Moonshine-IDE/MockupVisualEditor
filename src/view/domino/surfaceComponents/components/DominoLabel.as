@@ -314,7 +314,7 @@ package view.domino.surfaceComponents.components
 
 
 
-        private var _fontStyle:String = "normal";
+        private var _fontStyle:String = "";
 		[Bindable(event="fontStyleAttributeChanged")]
         public function get fontStyle():String
         {

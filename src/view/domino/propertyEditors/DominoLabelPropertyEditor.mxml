@@ -10,6 +10,8 @@
 			import mx.controls.listClasses.ListBaseContentHolder;
 			import mx.controls.Alert;
 
+			private var pre_label_var:String=null;
+
 
 			private function getDominoFieldName(item:Object):String
 			{
@@ -25,20 +27,47 @@
 			{
 				var normal_flag:Boolean = false;
 				var execute_array:Array=null;
+				var normalSelect:Boolean=false;
 				//<!ENTITY % font.styles "normal | bold | italic | underline | 
 				//strikethrough | superscript | subscript | shadow | emboss | extrude">
 				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
 				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
 				if(item){
-						//Alert.show("execute_array0:");
+					if(pre_label_var!=null){
+						for (var i:int = 0; i < item.numChildren; i++){
+							var checkitem:Object = item.getChildAt(i);
+							if(checkitem){
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkitem.hasOwnProperty("selected") ){
+								//	Alert.show("checkitem.label:"+checkitem.label);
+									if(pre_label_var=="normal"&&checkitem.label==pre_label_var){
+										checkitem.enabled=false;
+										checkitem.selected=false;
+										pre_label_var=null;
+									}
+									
+									
+								}
+							}
+							
+						}
+
+					}
+
+					
+
+					
+					//Alert.show("execute_array0:");
 					for (var i:int = 0; i < item.numChildren; i++){
 							var checkitem:Object = item.getChildAt(i);
 							if(checkitem){
 							//Alert.show("checkitem:"+checkitem.toString());
 							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
-								//	Alert.show("checkitem.label:"+checkitem.label);
+									//Alert.show("checkitem.label:"+checkitem.label);
 									if(checkitem.label=="normal"){
 										execute_array=exclusions_normal;
+										normalSelect=true;
+										pre_label_var="normal";
 										//break;
 									}
 									
@@ -55,30 +84,35 @@
 							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
 								//Alert.show("checkitem:"+checkitem.label);
 								if(checkitem.label=="superscript"){
-										if(execute_array==null)
-										execute_array=["subscript","shadow","emboss","extrude"];
+									pre_label_var="superscript"
+									if(execute_array==null)
+									execute_array=["subscript","shadow","emboss","extrude"];
 										//break;
-									}
-									if(checkitem.label=="subscript"){
-										if(execute_array==null)
-										execute_array=["superscript","shadow","emboss","extrude"];
-										//break;
-									}
-									if(checkitem.label=="shadow"){
-										if(execute_array==null)
-										execute_array=["superscript","subscript","emboss","extrude"];
-										//break;
-									}
-									if(checkitem.label=="emboss"){
-										if(execute_array==null)
-										execute_array=["superscript","subscript","shadow","extrude"];
-										//break;
-									}
-									if(checkitem.label=="extrude"){
-										if(execute_array==null)
-										execute_array=["superscript","subscript","shadow","emboss"];
-										//break;
-									}
+								}
+								if(checkitem.label=="subscript"){
+									pre_label_var="subscript"
+									if(execute_array==null)
+									execute_array=["superscript","shadow","emboss","extrude"];
+									//break;
+								}
+								if(checkitem.label=="shadow"){
+									pre_label_var="shadow"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","emboss","extrude"];
+									//break;
+								}
+								if(checkitem.label=="emboss"){
+									pre_label_var="emboss"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","shadow","extrude"];
+									//break;
+								}
+								if(checkitem.label=="extrude"){
+									pre_label_var="extrude"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","shadow","emboss"];
+									//break;
+								}
 							}
 					}		
 					
@@ -93,13 +127,24 @@
 								if(execute_array!=null && execute_array.length>0){
 									if(execute_array.indexOf(checkitem_child.label)>=0){
 										checkitem_child.selected=false;
-										checkitem_child.enabled=false;
+										if(normalSelect==false){
+											checkitem_child.enabled=false;
+										}else{
+											checkitem_child.enabled=true;
+										}
+									
 									}else{
 										//checkitem_child.selected=true;
 										checkitem_child.enabled=true;
 									}
 								}else{
 									checkitem_child.enabled=true;
+								}
+
+								if(normalSelect==false){
+									if(checkitem_child.label=="normal"){
+										checkitem_child.selected=false;
+									}
 								}
 							}
 					}

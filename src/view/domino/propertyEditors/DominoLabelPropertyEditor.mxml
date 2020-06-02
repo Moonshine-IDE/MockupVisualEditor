@@ -10,7 +10,7 @@
 			import mx.controls.listClasses.ListBaseContentHolder;
 			import mx.controls.Alert;
 
-			private var pre_label_var:String=null;
+			private var pre_label_var:String="normal";
 
 
 			private function getDominoFieldName(item:Object):String
@@ -40,31 +40,33 @@
 							//Alert.show("checkitem:"+checkitem.toString());
 							if(checkitem.hasOwnProperty("selected") ){
 								//	Alert.show("checkitem.label:"+checkitem.label);
-									if(pre_label_var=="normal"&&checkitem.label==pre_label_var){
-										checkitem.enabled=false;
+									if(checkitem.label==pre_label_var){
+										//checkitem.enabled=false;
 										checkitem.selected=false;
-										pre_label_var=null;
-									}
-									
+										
+									}		
 									
 								}
 							}
 							
 						}
+						//Alert.show("pre_label_var:"+pre_label_var);
+						pre_label_var=null;
 
 					}
 
 					
 
 					
-					//Alert.show("execute_array0:");
+					
 					for (var i:int = 0; i < item.numChildren; i++){
 							var checkitem:Object = item.getChildAt(i);
 							if(checkitem){
 							//Alert.show("checkitem:"+checkitem.toString());
 							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
-									//Alert.show("checkitem.label:"+checkitem.label);
+								
 									if(checkitem.label=="normal"){
+										//Alert.show("checkitem.label:"+checkitem.label);
 										execute_array=exclusions_normal;
 										normalSelect=true;
 										pre_label_var="normal";
@@ -84,30 +86,35 @@
 							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
 								//Alert.show("checkitem:"+checkitem.label);
 								if(checkitem.label=="superscript"){
+									if(normalSelect==false)
 									pre_label_var="superscript"
 									if(execute_array==null)
 									execute_array=["subscript","shadow","emboss","extrude"];
 										//break;
 								}
 								if(checkitem.label=="subscript"){
+									if(normalSelect==false)
 									pre_label_var="subscript"
 									if(execute_array==null)
 									execute_array=["superscript","shadow","emboss","extrude"];
 									//break;
 								}
 								if(checkitem.label=="shadow"){
+									if(normalSelect==false)
 									pre_label_var="shadow"
 									if(execute_array==null)
 									execute_array=["superscript","subscript","emboss","extrude"];
 									//break;
 								}
 								if(checkitem.label=="emboss"){
+									if(normalSelect==false)
 									pre_label_var="emboss"
 									if(execute_array==null)
 									execute_array=["superscript","subscript","shadow","extrude"];
 									//break;
 								}
 								if(checkitem.label=="extrude"){
+									if(normalSelect==false)
 									pre_label_var="extrude"
 									if(execute_array==null)
 									execute_array=["superscript","subscript","shadow","emboss"];
@@ -127,11 +134,7 @@
 								if(execute_array!=null && execute_array.length>0){
 									if(execute_array.indexOf(checkitem_child.label)>=0){
 										checkitem_child.selected=false;
-										if(normalSelect==false){
-											checkitem_child.enabled=false;
-										}else{
-											checkitem_child.enabled=true;
-										}
+										checkitem_child.enabled=true;
 									
 									}else{
 										//checkitem_child.selected=true;

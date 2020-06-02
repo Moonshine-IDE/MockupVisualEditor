@@ -1,4 +1,4 @@
-package view.primeFaces.surfaceComponents.components
+package view.domino.surfaceComponents.components
 {
     import interfaces.IComponentSizeOutput;
 
@@ -47,7 +47,7 @@ package view.primeFaces.surfaceComponents.components
     [Exclude(name="contentChanged", kind="property")]
 
     
-    public class DominoSection extends Container implements IDominoSurfaceComponent, view.interfaces.IDiv,
+    public class DominoSection extends Container implements IDominoSurfaceComponent, 
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "section";
@@ -273,10 +273,10 @@ package view.primeFaces.surfaceComponents.components
             super.height = value;
         }
 
-        public function get div():Div
-        {
-            return this;
-        }
+        // public function get Div():Div
+        // {
+        //     return this;
+        // }
 
         public function get propertyEditorClass():Class
         {
@@ -376,7 +376,7 @@ package view.primeFaces.surfaceComponents.components
 			wrap = component.wrap;
 			
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-            XMLCodeUtils.applyChildrenPositionFromXML(xml, this);
+            //XMLCodeUtils.applyChildrenPositionFromXML(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);

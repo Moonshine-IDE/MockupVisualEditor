@@ -435,6 +435,7 @@
 
 
 						if(editingSurface.isVisualEditorDomino){
+							Alert.show("getComponentsChildren:438");
 							domino_element = element as IDominoSurfaceComponent;
 							organizerItem = domino_element.getComponentsChildren();
 						}else{

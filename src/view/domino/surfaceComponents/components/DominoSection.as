@@ -70,7 +70,7 @@ package view.domino.surfaceComponents.components
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
 			var element:IPrimeFacesSurfaceComponent;
-            Alert.show("getComponentsChildren:"+this.numElements);
+            //Alert.show("getComponentsChildren:"+this.numElements);
 			for(var i:int = 0; i < this.numElements; i++)
 			{
 				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;

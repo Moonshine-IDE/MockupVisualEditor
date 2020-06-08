@@ -32,7 +32,35 @@
 				//strikethrough | superscript | subscript | shadow | emboss | extrude">
 				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
 				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
+				var exclusions_exclude_option:Array=["normal","superscript","subscript","shadow","emboss","extrude"];
+				var selected_array:Array=[];
+				var hasExlude:Boolean=false;
+				var hasExludeNum:Number=0;
 				if(item){
+					for (var i:int = 0; i < item.numChildren; i++){
+						var checkitem:Object = item.getChildAt(i);
+							if(checkitem){
+								//Alert.show("checkitem:"+checkitem.toString());
+								if(checkitem.hasOwnProperty("selected")&&checkitem.selected==true  ){
+									selected_array.push(checkitem.label);
+								}
+							}
+					}
+
+					//Alert.show("selected_array:"+selected_array.toString());
+					if(selected_array&& selected_array.length>0){
+						for (var i:int = 0; i < selected_array.length; i++){
+							if(selected_array[i].toString()=="normal"){
+								hasExlude=true;
+							}else if(exclusions_exclude_option.indexOf(selected_array[i].toString())>=0){
+								hasExludeNum++;
+							}
+						}
+						if(hasExludeNum>1){
+							hasExlude=true;
+						}
+					}
+					//Alert.show("hasExlude:"+hasExlude);
 					if(pre_label_var!=null){
 						for (var i:int = 0; i < item.numChildren; i++){
 							var checkitem:Object = item.getChildAt(i);
@@ -40,7 +68,7 @@
 							//Alert.show("checkitem:"+checkitem.toString());
 							if(checkitem.hasOwnProperty("selected") ){
 								//	Alert.show("checkitem.label:"+checkitem.label);
-									if(checkitem.label==pre_label_var){
+									if(checkitem.label==pre_label_var&& hasExlude==true){
 										//checkitem.enabled=false;
 										checkitem.selected=false;
 										

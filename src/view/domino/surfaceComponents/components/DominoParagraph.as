@@ -410,7 +410,7 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             
-            //Alert.show("413 xml:"+xml);
+            
             component.fromXML(xml, callback);
 
 			_cssClass = component.cssClass;

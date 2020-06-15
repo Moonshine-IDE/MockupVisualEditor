@@ -63,6 +63,7 @@ package view.domino.surfaceComponents.components
             {
                 super();
                 component = new components.domino.DominoSection(this);
+                super.width = 300;
                 open = isOpen;
                 _propertiesChangedEvents = [
                     "titleChanged",
@@ -646,7 +647,7 @@ package view.domino.surfaceComponents.components
 		}
 
 
-		private var _expanded:Boolean;
+		private var _expanded:Boolean=true;
 		public function set expanded(t:Boolean):void
 		{
             if (_expanded != t)
@@ -767,12 +768,19 @@ package view.domino.surfaceComponents.components
 
         public function fromXML(xml:XML, callback:Function):void
         {
-            super.title = component.title;
+            //Alert.show("xml:"+xml);
+            if(xml.@title)
+            super.title = xml.@title;
 
-            this.color = component.titleColor;
-            this.size = component.titleSize;
-            this.fontStyle=component.titleFontStyle;
-			
+            if(xml.@titleColor)
+            this.color = xml.@titleColor;
+            if(xml.@titleSize)
+            this.size = xml.@titleSize;
+
+            if(xml.@titleFontStyle)
+            this.fontStyle = xml.@titleFontStyle;
+
+           
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();

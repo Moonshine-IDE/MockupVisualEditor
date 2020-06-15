@@ -5,6 +5,7 @@ package view.suportClasses.events
     public class VisualEditorEvent extends Event
     {
         public static const SAVE_CODE:String = "saveCode";
+		public static const GENERATE_ROYALE_CRUD:String = "generateRoyaleCRUDApplication";
 
         public function VisualEditorEvent(type:String)
         {

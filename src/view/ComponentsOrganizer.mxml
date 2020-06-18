@@ -54,7 +54,6 @@
 				var tmpArr:Array = getComponentsChildren(surface);
 				tree.rootContainer = (tmpArr[0] as OrganizerItem).item as IVisualElementContainer;
 				components = new ArrayCollection(tmpArr);
-				
 				tmpArr = null;
 				tree.callLater(function():void
 				{
@@ -373,6 +372,7 @@
 			
 			private function onInitialized():void
 			{
+				//Alert.show("onInitialized");
 				var tmpRefreshButton:Image = new Image();
 				tmpRefreshButton.source = new sourceRefreshIcon();
 				header.rightButtons = [{icon: tmpRefreshButton, handle: this.onRefreshRequest}];
@@ -386,7 +386,8 @@
 			
 			private function onComplete(event:FlexEvent):void
 			{
-				if (!editingSurface.isVisualEditorFlex) editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
+				if (!editingSurface.isVisualEditorFlex) 
+				editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
 			}
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
@@ -445,7 +446,7 @@
 
 						if (organizerItem) componentsArray.push(organizerItem);
 					}
-				
+					//Alert.show("new stage:"+componentsArray.length);
 					return [new OrganizerItem(container, "Stage", componentsArray)];
 				}else{
 					return [new OrganizerItem(surface, "Stage", [])];	

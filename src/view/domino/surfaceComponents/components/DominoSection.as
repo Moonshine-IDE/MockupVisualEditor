@@ -6,6 +6,7 @@ package view.domino.surfaceComponents.components
         import mx.effects.AnimateProperty;
         import mx.events.EffectEvent;
         import mx.events.FlexEvent;
+        import mx.core.IVisualElement;
         import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
         import view.domino.propertyEditors.DominoSectionPropertyEditor;
         import view.suportClasses.PropertyChangeReference;
@@ -22,6 +23,7 @@ package view.domino.surfaceComponents.components
         import interfaces.dominoComponents.IDominoSection; 
         import mx.controls.Alert; 
         import mx.collections.ArrayList;
+        import view.interfaces.IDropAcceptableComponent;
 
 
         [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -39,7 +41,7 @@ package view.domino.surfaceComponents.components
         [Exclude(name="cdataInformation", kind="property")]
         [Exclude(name="updatePropertyChangeReference", kind="method")]
 
-        public class DominoSection extends Panel implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
+        public class DominoSection extends Panel implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput,IDropAcceptableComponent
         {
             private var _open:Boolean = true;
             private var openChanged:Boolean;
@@ -743,6 +745,15 @@ package view.domino.surfaceComponents.components
                 super.setStyle("fontSize",value);
 				dispatchEvent(new Event("sizeChanged"));
 			}
+		}
+
+
+
+
+
+        public function dropElementAt(element:IVisualElement, index:int):void
+		{
+			this.addElementAt(element, index);
 		}
 
              public function toXML():XML

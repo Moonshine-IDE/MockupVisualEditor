@@ -47,14 +47,6 @@
 				}
 			}
 			
-			private function generateRoyaleCRUDApplication():void
-			{
-				if (validateForm())
-				{
-					tabularTab.dispatchEvent(new VisualEditorEvent(VisualEditorEvent.GENERATE_ROYALE_CRUD));
-				}
-			}
-			
 			private function onCreationCompletes(event:FlexEvent):void
 			{
 				dgFields.addEventListener(ItemEditEvent.EDIT_ITEM, onItemEditRequest, false, 0, true);
@@ -211,7 +203,5 @@
 		<s:Spacer width="100%"/>
 		<s:Button label="Save &amp; Generate DXL" skinClass="skins.DarkButtonSkin"
 				  click="saveDominoForm()"/>
-		<s:Button label="Generate Royale CRUD" skinClass="skins.DarkButtonSkin"
-				  click="generateRoyaleCRUDApplication()"/>
 	</s:BorderContainer>
 </supportClasses:DominoFormBuilderBaseEditor>

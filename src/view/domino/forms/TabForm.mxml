@@ -20,7 +20,7 @@
 
 		import view.interfaces.ISelectableItemsComponent;
 		import view.interfaces.ISurfaceComponent;
-		import view.primeFaces.surfaceComponents.components.TabView;
+		import view.domino.surfaceComponents.components.DominoTabView;
 
 		[Bindable]
 		private var itemsListDataProvider:ArrayList;
@@ -45,9 +45,9 @@
 		}
 
 		[Bindable("change")]
-		protected function get selectedTabView():TabView
+		protected function get selectedTabView():DominoTabView
 		{
-			return selectedItem as TabView;
+			return selectedItem as DominoTabView;
 		}
 
 		private function editSelectedItem():void
@@ -93,10 +93,10 @@
 
 		override public function set selectedItem(value:ISurfaceComponent):void
 		{
-			if (selectedItem) selectedItem.removeEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated);
+			if (selectedItem) selectedItem.removeEventListener(DominoTabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated);
 			
 			super.selectedItem = value;
-			if (value) selectedItem.addEventListener(TabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
+			if (value) selectedItem.addEventListener(DominoTabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
 		}
 
 		private function editItemButton_clickHandler(event:MouseEvent):void

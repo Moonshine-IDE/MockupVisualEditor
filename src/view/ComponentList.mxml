@@ -50,6 +50,7 @@
 			import view.domino.surfaceComponents.components.DominoTable;
 			import view.domino.surfaceComponents.components.DominoParagraph;
 			import view.domino.surfaceComponents.components.DominoSection;
+			import view.domino.surfaceComponents.components.DominoTabView;
 			public var visualEditorType:String;
 			
 			[Bindable] private var collection:ArrayCollection;
@@ -67,7 +68,9 @@
 						new ComponentListItem("Table", DominoTable),
 						new ComponentListItem("Div", Div),
 						new ComponentListItem("Paragraph", DominoParagraph),
-						new ComponentListItem("Section", DominoSection)
+						new ComponentListItem("Section", DominoSection),
+						new ComponentListItem("TabView", DominoTabView)
+						
 						
 						
 					]);

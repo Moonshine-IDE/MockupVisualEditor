@@ -52,6 +52,7 @@ package utils
 	import view.domino.surfaceComponents.components.DominoTable;
 	import view.domino.surfaceComponents.components.DominoSection;
 	import view.domino.surfaceComponents.components.DominoParagraph;
+	import view.domino.surfaceComponents.components.DominoTabView
     public class EditingSurfaceReader
 	{
         public static var CLASS_LOOKUP:Object;
@@ -80,10 +81,14 @@ package utils
 				CLASS_LOOKUP[DominoInputText.ELEMENT_NAME] = DominoInputText;
 				CLASS_LOOKUP[DominoLabel.ELEMENT_NAME] = DominoLabel;
 				CLASS_LOOKUP[DominoTable.ELEMENT_NAME] = DominoTable;
+				CLASS_LOOKUP[DominoTabView.ELEMENT_NAME] = DominoTabView;
+				CLASS_LOOKUP[NavigatorContent.ELEMENT_NAME] = NavigatorContent;
 				CLASS_LOOKUP[DominoSection.ELEMENT_NAME] = DominoSection;
 				CLASS_LOOKUP[GridItem.ELEMENT_NAME] = GridItem;
 				CLASS_LOOKUP[GridRow.ELEMENT_NAME] = GridRow;
 				CLASS_LOOKUP[Div.ELEMENT_NAME] = Div;
+				CLASS_LOOKUP[view.primeFaces.supportClasses.Container.ELEMENT_NAME] = view.primeFaces.supportClasses.Container;
+				
 				CLASS_LOOKUP[DominoParagraph.ELEMENT_NAME] =DominoParagraph;
 				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
                         view.primeFaces.surfaceComponents.components.MainApplication;

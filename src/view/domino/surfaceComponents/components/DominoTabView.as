@@ -107,8 +107,8 @@ package view.domino.surfaceComponents.components
 			
             this.selectedIndex = 0;
 
-            this.minWidth = 120;
-            this.minHeight = 120;
+            this.minWidth = 300;
+            this.minHeight = 170;
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -581,7 +581,7 @@ package view.domino.surfaceComponents.components
 
             if (this.widthOutputChanged)
             {
-                this.percentWidth = 100;
+                this.percentWidth = 200;
                 this.width = Number.NaN;
                 this.widthOutputChanged = false;
             }

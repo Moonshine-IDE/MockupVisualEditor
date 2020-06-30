@@ -14,6 +14,7 @@ package view.domino.surfaceComponents.components
     import mx.core.IVisualElementContainer;
     import mx.events.CollectionEvent;
     import mx.utils.StringUtil;
+    import mx.controls.Alert;
     //import components.primeFaces.Div;
 
     import spark.events.ElementExistenceEvent;
@@ -135,12 +136,24 @@ package view.domino.surfaceComponents.components
         private var _div:Div;
         public function get div():Div
         {
-            if (selectedItem)
+             //Alert.show("get div is divContent:"+super.selectedIndex);
+            if (super.selectedItem)
             {
-                var navContent:NavigatorContent = (selectedItem as NavigatorContent);
+                var navContent:NavigatorContent = (super.selectedItem as NavigatorContent);
+                //Alert.show("navContent.numElements:"+navContent.numElements);
                 if (navContent.numElements > 0)
                 {
-                    _div = (selectedItem as NavigatorContent).getElementAt(0) as Div;
+                  
+                    if((super.selectedItem as NavigatorContent).getElementAt(0) is Div){
+                        //Alert.show("select is div");
+                         _div =  (super.selectedItem as NavigatorContent).getElementAt(0) as Div;
+                    }else{
+                        //Alert.show("select not is div");
+                        _div = null;
+                    }
+                   
+                }else{
+                    _div = null;
                 }
             }
             return _div;
@@ -408,19 +421,24 @@ package view.domino.surfaceComponents.components
         {
 			_propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, "addItemAt", element, element);
 
+            //Alert.show("addElement");
             if (element is NavigatorContent)
             {
+                 //Alert.show("element is NavigatorContent");
                 return super.addElement(element);
+
             }
             else
             {
                 var divContent:Div = this.div;
                 if (divContent)
                 {
+                     
                     return divContent.addElement(element);
                 }
                 else
                 {
+                     // Alert.show("element not is divContent");
                     return (this.selectedItem as NavigatorContent).addElement(element);
                 }
             }

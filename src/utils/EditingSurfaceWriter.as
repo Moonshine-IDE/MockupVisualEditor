@@ -160,6 +160,7 @@ package utils
                   
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
+                    //Alert.show("code:"+code);
 
                     //If it is IDominoParagraph node ,it need add other node
                     
@@ -172,7 +173,7 @@ package utils
 					// var commentOnlyXML:XMLList = (code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY).length() > 0) ?
 					// 	code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY) : null;
                    if(code!=null ){
-                        if(code.name()=="div"){
+                        if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
                              code.setName("richtext");
                         }
                    }

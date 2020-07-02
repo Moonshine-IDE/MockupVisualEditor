@@ -153,7 +153,17 @@ package view.domino.surfaceComponents.components
                     }
                    
                 }else{
-                    _div = null;
+
+                    if(super.selectedIndex==0){
+                         navContent.addElement(getNewDiv());
+                         _div=navContent.getElementAt(0) as Div;
+                    }else{
+                         _div = null;
+                    }
+
+
+                   
+                   
                 }
             }
             return _div;

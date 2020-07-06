@@ -484,6 +484,10 @@ package view.domino.surfaceComponents.components
 
             xml.@orientation = this.orientation;
             xml.@scrollable = this.scrollable;
+           
+            //  if(div.direction){
+            //     xml.@direction=div.direction;
+            // }
 
             var tabCount:int = this.numElements;
             for (var i:int = 0; i < tabCount; i++)

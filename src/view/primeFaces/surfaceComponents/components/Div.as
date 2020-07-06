@@ -413,6 +413,7 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.Div).percentWidth = this.percentWidth;
 			(component as components.primeFaces.Div).percentHeight = this.percentHeight;
 			(component as components.primeFaces.Div).isDomino=isDomino;
+            (component as components.primeFaces.Div).direction=direction;
             var xml:XML = component.toCode();
             xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
 
@@ -444,6 +445,7 @@ package view.primeFaces.surfaceComponents.components
 
             mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
             mainXML.@wrap = this.wrap;
+            mainXML.@direction=direction;
 
             if (cdataXML)
             {

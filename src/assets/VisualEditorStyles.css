@@ -1,0 +1,22 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+.uiTextSettingsLabel
+{
+	paddingTop: 3;
+	fontSize: 14;
+	color: #686868;
+}
+
+.uiTextSettingsValue
+{
+	paddingTop: 3;
+	fontSize: 14;
+	color: #252424;
+}
+
+.fixedWidthTexts
+{
+	fontFamily: Courier, "_typewriter";
+}

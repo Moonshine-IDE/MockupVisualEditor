@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  width="100%" height="100%"
+		  initialize="onInitialize(event)" creationComplete="onCreationCompletes(event)">
+	<fx:Metadata>
+		[Event(name="editedItem", type="view.suportClasses.events.ItemEditedEvent")]
+	</fx:Metadata>
+	<fx:Script>
+		<![CDATA[
+			import flash.net.registerClassAlias;
+			
+			import mx.collections.ArrayList;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ValidationResultEvent;
+			import mx.utils.ObjectUtil;
+			import mx.validators.Validator;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import skins.StackedFormItemSkin;
+			import skins.TextInputSkin;
+			
+			import view.dominoFormBuilder.vo.DominoFormFieldVO;
+			import view.dominoFormBuilder.vo.FormBuilderEditableType;
+			import view.dominoFormBuilder.vo.FormBuilderFieldType;
+			import view.dominoFormBuilder.vo.FormBuilderSortingType;
+			import view.suportClasses.events.ItemEditedEvent;
+			
+			[Bindable] protected var dominoFormField:DominoFormFieldVO;
+			
+			public var editItem:DominoFormFieldVO;
+			public var setControlBarContent:Function;
+			public var isItemEdit:Boolean;
+			
+			private function onInitialize(event:FlexEvent):void
+			{
+				if (isItemEdit)
+				{
+					// if item in edit use cloned object until save
+					registerClassAlias("view.dominoFormBuilder.vo.DominoFormFieldVO", DominoFormFieldVO);
+					dominoFormField = ObjectUtil.clone(editItem) as DominoFormFieldVO;
+				}
+				else
+				{
+					dominoFormField = new DominoFormFieldVO();
+				}
+			}
+			
+			private function onCreationCompletes(event:FlexEvent):void
+			{
+				// set the content-bar buttons
+				setControlBarContent([controlBarButtons]);
+				setControlBarContent = null;
+				
+				// set edit fields or update
+				if (isItemEdit)
+				{
+					ddlType.selectedItem = dominoFormField.type;
+					ddlEditable.selectedItem = dominoFormField.editable;
+					updateSortingSelection();
+					updateFormulaState();
+					onFieldTypeChanged();
+				}
+				else
+				{
+					dominoFormField.type = ddlType.selectedItem;
+					dominoFormField.editable = ddlEditable.selectedItem;
+					dominoFormField.sortOption = ddlSort.selectedItem;
+				}
+			}
+			
+			private function onSaveRequest(event:MouseEvent):void
+			{
+				if (!validateThis()) return;
+				
+				dispatchEvent(new ItemEditedEvent(
+					ItemEditedEvent.ITEM_EDITED,
+					dominoFormField,
+					editItem
+					));
+				onCancel(null);
+			}
+			
+			private function onCancel(event:MouseEvent):void
+			{
+				this.owner.dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+			private function validateThis():Boolean
+			{
+				var tmpArr : Array = new Array(svName);
+				if (dominoFormField.editable != FormBuilderEditableType.EDITABLE)
+				{
+					tmpArr.push(svFormula);
+				}
+				if (Validator.validateAll(tmpArr).length != 0) 
+				{
+					return false;
+				}
+				
+				return true;
+			}
+			
+			private function updateSortingSelection():void
+			{
+				for each (var sortType:Object in FormBuilderSortingType.sortTypes.source)
+				{
+					if (dominoFormField.sortOption.label == sortType.label)
+					{
+						ddlSort.selectedItem = sortType;
+						break;
+					}
+				}
+			}
+			
+			private function updateFormulaState():void
+			{
+				svFormula.required = fiFormula.required = 
+					(dominoFormField.editable != FormBuilderEditableType.EDITABLE);
+				if (!fiFormula.required)
+				{
+					// remove validation error tip
+					var tmpValidation:ValidationResultEvent = new ValidationResultEvent(ValidationResultEvent.VALID);
+					svFormula.dispatchEvent(tmpValidation);
+				}
+			}
+			
+			private function onFieldTypeChanged():void
+			{
+				if (dominoFormField.type == FormBuilderFieldType.RICH_TEXT)
+				{
+					rbgMultivalue.selectedIndex = 1;
+					rbMultiYes.enabled = false;
+					updateEditableProvider(FormBuilderEditableType.editableTypesRichtext);
+				}
+				else if (!rbMultiYes.enabled)
+				{
+					rbMultiYes.enabled = true;
+					updateEditableProvider(FormBuilderEditableType.editableTypes);
+				}
+				
+				/*
+				 @local
+				 */
+				function updateEditableProvider(value:ArrayList):void
+				{
+					ddlEditable.dataProvider = value;
+					ddlEditable.callLater(function():void
+					{
+						ddlEditable.dispatchEvent(new IndexChangeEvent(IndexChangeEvent.CHANGE));
+					});
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:HGroup id="controlBarButtons" width="100%" verticalAlign="middle" horizontalAlign="right">
+			<s:Button label="Save" styleName="darkButton" click="onSaveRequest(event)"/>
+			<s:Button label="Cancel" styleName="darkButton" click="onCancel(event)"/>
+		</s:HGroup>
+		<mx:StringValidator id="svName" source="{txtName}" property="text"/>
+		<mx:StringValidator id="svFormula" source="{textFormula}" property="text"/>
+		<s:RadioButtonGroup id="rbgMultivalue" selectedValue="@{dominoFormField.isMultiValue}"/>
+		<s:RadioButtonGroup id="rbgInclude" selectedValue="@{dominoFormField.isIncludeInView}"/>
+	</fx:Declarations>
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:fill>
+			<s:SolidColor color="0xf5f5f5"/>
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup paddingLeft="12" paddingBottom="6" paddingTop="9" paddingRight="0"
+			  gap="10" width="100%" height="100%">
+		<s:Scroller width="100%" height="100%">
+			<s:Group width="100%">
+				<s:Form width="100%">
+					<s:FormHeading label="General Information"/>
+					<s:FormItem label="Name" required="true" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="txtName"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Item name"
+									 text="@{dominoFormField.name}" restrict="0-9A-Za-z_"/>
+					</s:FormItem>
+					<s:FormItem label="Label" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="textLabel"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Item label"
+									 text="@{dominoFormField.label}"/>
+					</s:FormItem>
+					<s:FormItem label="Description" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextInput id="textDescription"
+									 width="100%"
+									 skinClass="skins.TextInputSkin" prompt="Item description"
+									 text="@{dominoFormField.description}"/>
+					</s:FormItem>
+					<s:FormItem label="Type" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:DropDownList id="ddlType" width="100%" height="30"
+										dataProvider="{FormBuilderFieldType.fieldTypes}" 
+										requireSelection="true" 
+										change="{dominoFormField.type=event.target.selectedItem;onFieldTypeChanged()}"/>
+					</s:FormItem>
+					<s:FormItem label="Multivalue" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:RadioButton id="rbMultiYes" label="Yes" value="true" group="{rbgMultivalue}"/>
+							<s:RadioButton id="rbMultiNo" label="No" value="false" group="{rbgMultivalue}"/>
+						</s:HGroup>
+					</s:FormItem>
+					<s:FormItem label="Editable" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:DropDownList id="ddlEditable" width="100%" height="30"
+										dataProvider="{FormBuilderEditableType.editableTypes}"
+										requireSelection="true"
+										change="{dominoFormField.editable=event.target.selectedItem;updateFormulaState()}"/>
+					</s:FormItem>
+					<s:FormItem id="fiFormula" 
+								label="Formula" skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:TextArea id="textFormula"
+									width="100%" heightInLines="3" prompt="Enter formula"
+									styleName="fixedWidthTexts"
+									text="@{dominoFormField.formula}"/>
+					</s:FormItem>
+					<s:Spacer height="10"/>
+					<s:FormHeading label="View Options"/>
+					<s:FormItem label="Include in View" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:HGroup width="100%" verticalAlign="middle">
+							<s:RadioButton label="Yes" value="true" group="{rbgInclude}"/>
+							<s:RadioButton label="No" value="false" group="{rbgInclude}"/>
+						</s:HGroup>
+					</s:FormItem>
+					<s:FormItem label="Sorting" 
+								skinClass="skins.StackedFormItemSkin" width="100%">
+						<s:DropDownList id="ddlSort" width="100%" height="30"
+										dataProvider="{FormBuilderSortingType.sortTypes}" requireSelection="true"
+										change="{dominoFormField.sortOption=event.target.selectedItem}"/>
+					</s:FormItem>
+				</s:Form>
+			</s:Group>
+		</s:Scroller>
+	</s:VGroup>
+</s:Group>

@@ -121,7 +121,7 @@ package utils
               
                 
                
-                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(surface, projectName);
+                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(projectName);
                 var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)

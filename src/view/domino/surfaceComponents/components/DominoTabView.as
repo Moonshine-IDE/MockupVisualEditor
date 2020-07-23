@@ -533,8 +533,8 @@ package view.domino.surfaceComponents.components
             component.scrollable = this.scrollable;
 			
 			component.isSelected = this.isSelected;
-			(component as components.domino.DominoTabView).width = this.width;
-			(component as components.domino.DominoTabView).height = this.width;
+			(component as components.domino.DominoTabView).width = super.width;
+			(component as components.domino.DominoTabView).height = super.height;
 			(component as components.domino.DominoTabView).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTabView).percentHeight = this.percentHeight;
 			

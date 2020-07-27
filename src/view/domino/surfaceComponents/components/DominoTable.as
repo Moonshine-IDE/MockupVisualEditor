@@ -153,6 +153,37 @@ package view.domino.surfaceComponents.components
 		{
 			_propertyChangeFieldReference = value;
 		}
+
+        private var _widthtype:String;
+		public function get widthtype():String
+		{
+			return _widthtype;
+		}
+		public function set widthtype(value:String):void
+		{
+			_widthtype = value;
+		}
+
+
+        private var _leftmargin:String;
+		public function get leftmargin():String
+		{
+			return _leftmargin;
+		}
+		public function set leftmargin(value:String):void
+		{
+			_leftmargin = value;
+		}
+
+        private var _rightmargin:String;
+		public function get rightmargin():String
+		{
+			return _rightmargin;
+		}
+		public function set rightmargin(value:String):void
+		{
+			_rightmargin = value;
+		}
 		
 		private var _isUpdating:Boolean;
 		public function get isUpdating():Boolean
@@ -483,6 +514,9 @@ package view.domino.surfaceComponents.components
         public function toCode():XML
         {
             component.isSelected = this.isSelected;
+            (component as components.domino.DominoTable).leftmargin = this.leftmargin;
+            (component as components.domino.DominoTable).rightmargin = this.rightmargin;
+            (component as components.domino.DominoTable).widthtype = this.widthtype;
 			(component as components.domino.DominoTable).width = this.width;
 			(component as components.domino.DominoTable).height = this.width;
 			(component as components.domino.DominoTable).percentWidth = this.percentWidth;

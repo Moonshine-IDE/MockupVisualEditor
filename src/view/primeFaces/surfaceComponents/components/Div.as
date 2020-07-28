@@ -452,6 +452,33 @@ package view.primeFaces.surfaceComponents.components
                 mainXML.appendChild(cdataXML);
             }
 
+            //setting the postion for horizontal and Vertical
+			//Alert.show("_cssClass:"+_cssClass);
+			if(_cssClass){
+				if(_cssClass.indexOf("flexCenter")>=0){
+					mainXML.@hpostion="center"
+				}
+				if(_cssClass.indexOf("flexHorizontalLayoutLeft")>=0){
+					mainXML.@hpostion="left"
+				}
+				if(_cssClass.indexOf("flexHorizontalLayoutRight")>=0){
+					mainXML.@hpostion="right"
+				}
+
+
+				if(_cssClass.indexOf("flexVerticalLayoutRight")>=0){
+					mainXML.@vpostion="right"
+				}
+				if(_cssClass.indexOf("flexMiddle")>=0){
+					mainXML.@vpostion="center"
+				}
+
+				if(_cssClass.indexOf("flexVerticalLayoutLeft")>=0){
+					mainXML.@vpostion="left"
+				}
+			}
+
+
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {

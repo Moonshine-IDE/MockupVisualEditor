@@ -19,6 +19,7 @@ package utils
 		{
 			var xml:XML = <mockup/>;
             var container:XML = null;
+           
             if (visualEditorType == VisualEditorType.PRIME_FACES)
             {
                 container = surface.numElements == 0 ? MainApplicationCodeUtils.appendXMLMainTag(surface) : null;
@@ -115,12 +116,11 @@ package utils
                 if(surface.numChildren>0){
                     element = surface.getElementAt(0) as ISurfaceComponent;
                     title = (element as UIComponent).hasOwnProperty("path") ? element["path"] : "";
-                
                 }
 
-              
+  
                 
-               
+                
                 var xml:XML = MainApplicationCodeUtils.getDominoParentContent(projectName);
                 var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 var container:IVisualElementContainer = surface;
@@ -132,17 +132,11 @@ package utils
                
 
                 var elementCount:int = 0;
-                // if (!container )
-                // {
-                    elementCount = surface.numElements;
-                    container = surface;
-                // } 
-                // else
-                // {
-                //     elementCount = container.numElements;
-                // }
+    
+                elementCount = surface.numElements;
+                container = surface;
+ 
 
-                
               //------------get all field ---------------
             
             
@@ -157,42 +151,55 @@ package utils
                         continue;
                     }
                     
-                  
+                   var hasRichText:Boolean=false;
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
-                    //Alert.show("code:"+code);
-
-                    //If it is IDominoParagraph node ,it need add other node
-                    
-                    
-                  
-                    
-                    //if element is field ,we need add it into textlist
-                    
-                    
-					// var commentOnlyXML:XMLList = (code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY).length() > 0) ?
-					// 	code.elements(VisualEditorGlobalTags.PRIME_FACES_XML_COMMENT_ONLY) : null;
-                   if(code!=null ){
+                    if(code!=null ){
                         if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
                              code.setName("richtext");
+                             hasRichText=true;
                         }
                    }
+
+               
+               
+
+              
+                
+                if(hasRichText==false){
+                    //add new richtext node
+                    var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
+                    mainContainer.appendChild(richtext);
+                    mainContainer=richtext;
+                }
+                  
                   
                     if (mainContainer)
                     {
-                        mainContainer.appendChild(code);
+                        mainContainer.appendChild(code);               
                     }
                     else
                     {
-                        xml.appendChild(code);
+                       xml.appendChild(code);
                     }
                 }
+
+                
+
+                
 
 
                 MainApplicationCodeUtils.fixDominField(xml);
 
 				return xml;
             }
+            /**
+             * we need make sure the form body must contain a richtext
+             */
+            
+            // public  function checkRichTextNode(mainContainer:XML):Boolean{
+               
+            // }
 
 
             

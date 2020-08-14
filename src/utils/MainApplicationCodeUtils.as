@@ -43,7 +43,7 @@ package utils
             if (element === null && !isDominoMainApp)
 			{
 				
-				var container:XML = new XML("<form />");
+				var container:XML = new XML("<MainApplication id='mainApplicationWindow' x='0' y='0' width='700' height='450'  />");
 
 				return container;
 			}
@@ -57,7 +57,7 @@ package utils
             for each (var item:XML in body)
             {
                 var itemName:String = item.name();
-                if (itemName.lastIndexOf("body") > -1)
+                if (itemName.lastIndexOf("body") > -1||itemName.lastIndexOf("Body") > -1)
                 {
                     return item.children()[0];
                 }
@@ -73,6 +73,7 @@ package utils
             for each (var item:XML in body)
             {
                 var itemName:String = item.name();
+				
                 if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
                 {
 				

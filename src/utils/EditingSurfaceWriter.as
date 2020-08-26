@@ -118,7 +118,7 @@ package utils
                     title = (element as UIComponent).hasOwnProperty("path") ? element["path"] : "";
                 }
 
-  
+                //Alert.show("title:"+title);
                 
                 
                 var xml:XML = MainApplicationCodeUtils.getDominoParentContent(projectName);

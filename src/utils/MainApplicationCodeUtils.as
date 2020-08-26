@@ -85,6 +85,24 @@ package utils
 		}
 
 
+		public static function getDominTitleTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+            for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+				
+                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$TITLE")
+                {
+				
+                    return item;
+                }
+            }
+
+			return null;
+		}
+
+
 		public static function fixDominField(xml:XML):XML
 		{
 			var mainFieldsContainer:XML=getDominMainFieldListContainerTag(xml);

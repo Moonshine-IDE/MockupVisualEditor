@@ -140,6 +140,11 @@
 
 			private function getDominoFieldName(item:Object):String
 			{
+				if(item.label=="computed"||item.label=="computedfordisplay"||item.label=="computedwhencomposed"){
+					formualPanel.visible = formualPanel.includeInLayout = true;
+				}else{
+					formualPanel.visible = formualPanel.includeInLayout = false;
+				}
 				return item.label;
 			}
 			
@@ -282,7 +287,7 @@
 		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
 			
-		<forms:DominoTextInformationForm label="Formula:" textProperty="formula" prompt=""/>
+		<forms:DominoFormulaForm label="Formula:" textProperty="formula" prompt=""/>
        </s:VGroup>
 		
 	</s:BorderContainer>

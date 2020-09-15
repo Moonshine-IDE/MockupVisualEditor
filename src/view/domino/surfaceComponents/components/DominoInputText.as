@@ -1430,6 +1430,9 @@ private var _omitthisyear:Boolean;
             component.allowmultivalues = this.allowmultivalues;
             component.width= this.width;
             component.height= this.height;
+            if(this.formula)
+            component.formula= this.formula;
+
 				
 			component.isSelected = this.isSelected;
 

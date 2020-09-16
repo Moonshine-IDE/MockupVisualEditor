@@ -4,7 +4,8 @@
                                   xmlns:suportclasses="view.suportClasses.*"
                                   xmlns:domino="view.domino.forms.*" 
 								  xmlns:forms="view.forms.*"
-								  xmlns:primeFaces="view.primeFaces.forms.*">
+								  xmlns:primeFaces="view.primeFaces.forms.*"
+								 >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
@@ -13,6 +14,8 @@
 
 			private var isNumber:Boolean = false;
 			private var inputType:String="";
+
+			
 
 			protected function digits_changeHandler(event:Event):void
 			{
@@ -109,10 +112,33 @@
 					namespanel.visible = namespanel.includeInLayout = false;
 					formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = true;
+				}else if(item.label=="text"){
+					var selectItemText:String=ddl2.getDdlSelectionSelectedItemText();
+					if(selectItemText){
+			
+						if(selectItemText=="computed"||selectItemText=="computedfordisplay"||selectItemText=="computedwhencomposed"){
+							//Alert.show(":"+selectItemText);
+							formualPanel.visible = formualPanel.includeInLayout = true;
+							txtValue.visible =txtValue.includeInLayout = false;
+						}else{
+							formualPanel.visible = formualPanel.includeInLayout = false;
+							txtValue.visible =txtValue.includeInLayout = true;
+						}
+					}
+					allowmul.bindableText = false;
+					txtValue.restrict=null;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+					//Alert.show("142:"+formualPanel.visible);
+				
 				}else {
 					txtValue.visible = txtValue.includeInLayout = true;
 					allowmul.bindableText = false;
-					txtValue.restrict=null
+					txtValue.restrict=null;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
@@ -120,6 +146,7 @@
 					formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}
+				//Alert.show("155:"+formualPanel.visible);
 				inputType=item.label;
 				//Alert.show("visible:"+digits.visible);
 				return item.label;
@@ -137,14 +164,20 @@
 			}
 
 
-
 			private function getDominoFieldName(item:Object):String
+			{
+				return item.label;
+			}
+			private function getDominoFieldKindName(item:Object):String
 			{
 				if(item.label=="computed"||item.label=="computedfordisplay"||item.label=="computedwhencomposed"){
 					formualPanel.visible = formualPanel.includeInLayout = true;
+					txtValue.visible =txtValue.includeInLayout = false;
 				}else{
 					formualPanel.visible = formualPanel.includeInLayout = false;
+					txtValue.visible =txtValue.includeInLayout = true;
 				}
+				//Alert.show("192:"+formualPanel.visible+":"+item.label);
 				return item.label;
 			}
 			
@@ -172,7 +205,7 @@
     <forms:DropdownListForm id="ddl2"
                             label="Kind" textProperty="kind"
                             collectionProperty="kinds" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+							labelDisplayFunction="getDominoFieldKindName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
  
     

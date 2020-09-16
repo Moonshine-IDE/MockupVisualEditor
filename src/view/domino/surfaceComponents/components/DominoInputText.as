@@ -1217,6 +1217,11 @@ private var _omitthisyear:Boolean;
             xml.@value = this.text;
             xml.@required = this.required;
 
+            if(this.formula){
+                 var encodeFormulaStr:String= StringHelper.base64Encode(this.formula);
+                 xml.@formula = encodeFormulaStr;
+            }
+
             if (this.idAttribute)
             {
                 xml.@id = this.idAttribute;
@@ -1361,6 +1366,11 @@ private var _omitthisyear:Boolean;
             this.allowmultivalues = component.allowmultivalues;
             this.width = component.width;
             this.height = component.height;
+
+            if(component.formula){
+                
+               this.formula=  StringHelper.base64Decode(component.formula);
+            }
 
             if(this.type =="number"){
 

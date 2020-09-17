@@ -1237,6 +1237,16 @@ private var _omitthisyear:Boolean;
 
             if(this.kind){
                 xml.@kind = this.kind;
+                //remove the formula if the kind not is computed
+                if(this.kind=="computed"||this.kind=="computedfordisplay"||this.kind=="computedwhencomposed"){
+                }else{
+                    if(this.type!="formula"){
+                        this.formula="";
+                        delete xml.@formula
+                    }
+                   
+                }
+                
             }
 
             if(this.type){

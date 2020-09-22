@@ -124,7 +124,8 @@ package view.domino.surfaceComponents.components
                 "listdisplayseparatorAttributeChanged",
                 "formulaChanged",
                 "firstdisplayAttributeChanged",
-                "onlyallowAttributeChanged"
+                "onlyallowAttributeChanged",
+                "objectAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -929,6 +930,64 @@ private var _omitthisyear:Boolean;
             }
         }
 
+        /******
+         *Client: Default value,Input Translation, Input Validation, Input Enabled,HTML attribute
+         *(option),(Declarations),Entering,Exiting,Initialize,Terminate
+         * <!ENTITY % code.formula.events "defaultvalue | inputtranslation | inputvalidation | windowtitle | 
+           webqueryopen | webquerysave | hidewhen | value | selection | htmlattributes | htmlhead | htmlbody | 
+           targetframe | helprequest | form | alternatehtml | showsinglecategory | label | displayvalue ">
+         */
+          [Bindable]
+        private var _objects:ArrayList = new ArrayList([
+        {label:"Default value",value: "defaultvalue",description: "Provides an initial value for a field."},
+        {label:"Input Translation",value: "inputtranslation",description:"Converts the data entered in the field to make the field conform to a specified format."},
+        {label:"Input Validation",value: "inputvalidation",description:"Checks the data entered in the field against criteria that you specify."},
+        // {label:"Windows Title",value: "windowtitle",description:"Generates the text that appears in the title bar of documents using the form."},
+        // {label:"Web QueryOpen",value: "webqueryopen",description:"Executes before a Web document is displayed."},
+        // {label:"Web Querysave",value: "webquerysave",description:"Executes before a Web document is saved."},
+        {label:"Hide When",value: "hidewhen",description:"Hides the object if the formula you provide is true."},
+        //{label:"Value",value: "value",description:"Specifies the contents of a computed field."},
+        // {label:"Selection",value: "selection",description:"selects the documents that appear in a view."},
+        // {label:"Html Attributes",value: "htmlattributes",description:"Specifies characteristics for the associated HTML object. Applies to fields."},
+        // {label:"Html Head",value: "htmlhead",description:"Information that resides in the HTML Head tag for an object. Applies to forms and pages."},
+        // {label:"Html Body",value: "htmlbody",description:"Information that resides in the HTML Body tag for an object. Applies to forms and pages."},
+        // {label:"Target Frame",value: "targetframe",description:"Defines which frame in a frameset the result of a command should display in."},
+        // {label:"Help Request",value: "helprequest",description:"Executes when Help is selected."},
+        // {label:"Form",value: "form",description:"Defines which form to open from a view."},
+        // {label:"Alternate Html",value: "alternatehtml",description:"Alternate text to display if the user's browser cannot execute the code. For example, if a Java applet cannot be run by the user's browser, this text would describe the applet and inform the user that their browser's capabilities do not support it."},
+        // {label:"Form",value: "form",description:"Defines which form to open from a view."},
+        // {label:"Showsinglecategory",value: "showsinglecategory",description:"In embedded views, limits the documents displayed in the view to those contained in one category. The category is defined by a formula or text."},
+        // {label:"Label",value: "label",description:"Specifies the label to display on an action button."},
+        {label:"Displayvalue",value: "displayvalue",description:"Determines the value that displays for an action checkbox."},
+
+
+           
+
+         
+        ]);
+
+        public function get objects():ArrayList
+        {
+            return _objects;
+        }
+
+        private var _object:String = "defaultvalue";
+		[Bindable(event="objectAttributeChanged")]
+        public function get object():String
+        {
+            return _object;
+        }
+		
+        public function set object(value:String):void
+        {
+            if (_object != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "object", _object, value);
+				
+                _object = value;
+                dispatchEvent(new Event("objectAttributeChanged"))
+            }
+        }
         /*************
          * Domino keywords
          */
@@ -1222,6 +1281,10 @@ private var _omitthisyear:Boolean;
                  xml.@formula = encodeFormulaStr;
             }
 
+            if(this.object){
+                xml.@object = this.object;
+            }
+
             if (this.idAttribute)
             {
                 xml.@id = this.idAttribute;
@@ -1241,8 +1304,8 @@ private var _omitthisyear:Boolean;
                 if(this.kind=="computed"||this.kind=="computedfordisplay"||this.kind=="computedwhencomposed"){
                 }else{
                     if(this.type!="formula"){
-                        this.formula="";
-                        delete xml.@formula
+                       // this.formula="";
+                        //delete xml.@formula
                     }
                    
                 }
@@ -1376,6 +1439,7 @@ private var _omitthisyear:Boolean;
             this.allowmultivalues = component.allowmultivalues;
             this.width = component.width;
             this.height = component.height;
+            this.object = component.object;
 
             if(component.formula){
                 
@@ -1450,8 +1514,11 @@ private var _omitthisyear:Boolean;
             component.allowmultivalues = this.allowmultivalues;
             component.width= this.width;
             component.height= this.height;
-            if(this.formula)
-            component.formula= this.formula;
+            component.object= this.object;
+            if(this.formula){
+                component.formula= this.formula;
+            }
+           //Alert.show("formula:"+formula);
 
 				
 			component.isSelected = this.isSelected;

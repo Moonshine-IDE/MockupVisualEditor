@@ -55,7 +55,7 @@
 					allowmul.visible = allowmul.includeInLayout = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				} else if(item.label=="datetime"){
 					txtValue.restrict=null
@@ -66,7 +66,7 @@
 					allowmul.bindableText = false;
 					txtValue.visible = txtValue.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				} else if(item.label=="keyword"){
 					txtValue.restrict=null
@@ -77,7 +77,7 @@
 					allowmul.bindableText = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}else if(item.label=="names"){
 					txtValue.restrict=null
@@ -88,7 +88,7 @@
 					allowmul.bindableText = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = true;
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}else if(item.label=="formula"){
 					txtValue.restrict=null
@@ -99,7 +99,7 @@
 					allowmul.bindableText = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
-					formualPanel.visible = formualPanel.includeInLayout = true;
+					//formualPanel.visible = formualPanel.includeInLayout = true;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}else if(item.label=="richtextlite"){
 					txtValue.restrict=null
@@ -110,7 +110,7 @@
 					allowmul.bindableText = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = true;
 				}else if(item.label=="text"){
 					var selectItemText:String=ddl2.getDdlSelectionSelectedItemText();
@@ -118,11 +118,13 @@
 			
 						if(selectItemText=="computed"||selectItemText=="computedfordisplay"||selectItemText=="computedwhencomposed"){
 							//Alert.show(":"+selectItemText);
-							formualPanel.visible = formualPanel.includeInLayout = true;
+							//formualPanel.visible = formualPanel.includeInLayout = true;
 							txtValue.visible =txtValue.includeInLayout = false;
+							editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
 						}else{
-							formualPanel.visible = formualPanel.includeInLayout = false;
+							//formualPanel.visible = formualPanel.includeInLayout = false;
 							txtValue.visible =txtValue.includeInLayout = true;
+							editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
 						}
 					}
 					allowmul.bindableText = false;
@@ -143,7 +145,7 @@
 					allowmul.visible = allowmul.includeInLayout = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}
 				//Alert.show("155:"+formualPanel.visible);
@@ -163,6 +165,13 @@
 				return item.label;
 			}
 
+			private function getDominoFieldObject(item:Object):String
+			{
+				return item.value;
+			}
+			
+				
+
 
 			private function getDominoFieldName(item:Object):String
 			{
@@ -171,11 +180,13 @@
 			private function getDominoFieldKindName(item:Object):String
 			{
 				if(item.label=="computed"||item.label=="computedfordisplay"||item.label=="computedwhencomposed"){
-					formualPanel.visible = formualPanel.includeInLayout = true;
+					//formualPanel.visible = formualPanel.includeInLayout = true;
 					txtValue.visible =txtValue.includeInLayout = false;
+					editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
 				}else{
-					formualPanel.visible = formualPanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
 					txtValue.visible =txtValue.includeInLayout = true;
+					editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
 				}
 				//Alert.show("192:"+formualPanel.visible+":"+item.label);
 				return item.label;
@@ -312,14 +323,28 @@
 		
 	</s:BorderContainer>
 
-
+	<!-- <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="editableFormualPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		
+		<forms:DominoFormulaForm label="Formula:" textProperty="formula" prompt=""/>
+       </s:VGroup>
+		
+	</s:BorderContainer> -->
 	<s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
-            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="formualPanel">
+            left="0" right="0" top="10" bottom="10" includeInLayout="true" visible="true" id="formualPanel">
 		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
-			
+		<forms:DropdownListForm id="editableFormualPanel"
+                            label="Client Objects:" textProperty="object"
+                            collectionProperty="objects" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldObject" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
 		<forms:DominoFormulaForm label="Formula:" textProperty="formula" prompt=""/>
        </s:VGroup>
 		

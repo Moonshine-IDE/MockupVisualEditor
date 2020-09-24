@@ -125,7 +125,11 @@ package view.domino.surfaceComponents.components
                 "formulaChanged",
                 "firstdisplayAttributeChanged",
                 "onlyallowAttributeChanged",
-                "objectAttributeChanged"
+                "objectAttributeChanged",
+                "defaultValueAttributeChanged",
+                "inputtranslationAttributeChanged",
+                "inputvalidationAttributeChanged",
+                "hidewhenAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -988,6 +992,80 @@ private var _omitthisyear:Boolean;
                 dispatchEvent(new Event("objectAttributeChanged"))
             }
         }
+
+    "defaultValueAttributeChanged",
+                "inputtranslationAttributeChanged",
+                "inputvalidationAttributeChanged",
+                "hidewhenAttributeChanged"
+
+        private var _defaultvalue:String;
+        [Bindable(event="defaultValueAttributeChanged")]
+		public function get defaultvalue():String
+		{
+			return _defaultvalue;
+		}
+		public function set defaultvalue(value:String):void
+		{
+			if (_defaultvalue != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "defaultvalue", _defaultvalue, value);
+				
+                _defaultvalue = value;
+                dispatchEvent(new Event("defaultValueAttributeChanged"))
+            }
+		}
+
+		private var _inputtranslation:String;
+        [Bindable(event="inputtranslationAttributeChanged")]
+		public function get inputtranslation():String
+		{
+			return _inputtranslation;
+		}
+		public function set inputtranslation(value:String):void
+		{
+			if (_inputtranslation != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "inputtranslation", _inputtranslation, value);
+				
+                _inputtranslation = value;
+                dispatchEvent(new Event("inputtranslationAttributeChanged"))
+            }
+		}
+
+
+		private var _inputvalidation:String;
+        [Bindable(event="inputvalidationAttributeChanged")]
+		public function get inputvalidation():String
+		{
+			return _inputvalidation;
+		}
+		public function set inputvalidation(value:String):void
+		{
+			if (_inputvalidation != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "inputvalidation", _inputvalidation, value);
+				
+                _inputvalidation = value;
+                dispatchEvent(new Event("inputvalidationAttributeChanged"))
+            }
+		}
+
+		private var _hidewhen:String;
+        [Bindable(event="hidewhenAttributeChanged")]
+		public function get hidewhen():String
+		{
+			return _hidewhen;
+		}
+		public function set hidewhen(value:String):void
+		{
+			if (_hidewhen != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "hidewhen", _hidewhen, value);
+				
+                _hidewhen = value;
+                dispatchEvent(new Event("hidewhenAttributeChanged"))
+            }
+		}
         /*************
          * Domino keywords
          */
@@ -1281,6 +1359,26 @@ private var _omitthisyear:Boolean;
                  xml.@formula = encodeFormulaStr;
             }
 
+            if(this.defaultvalue){
+                var encodeFormulaStr:String= StringHelper.base64Encode(this.defaultvalue);
+                 xml.@defaultvalue = encodeFormulaStr;
+            }
+
+            if(this.inputtranslation){
+                var encodeFormulaStr:String= StringHelper.base64Encode(this.inputtranslation);
+                 xml.@inputtranslation = encodeFormulaStr;
+            }
+            if(this.inputvalidation){
+                var encodeFormulaStr:String= StringHelper.base64Encode(this.inputvalidation);
+                 xml.@inputvalidation = encodeFormulaStr;
+            }
+
+            if(this.hidewhen){
+                var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
+                 xml.@hidewhen = encodeFormulaStr;
+            }
+
+
             if(this.object){
                 xml.@object = this.object;
             }
@@ -1445,6 +1543,22 @@ private var _omitthisyear:Boolean;
                 
                this.formula=  StringHelper.base64Decode(component.formula);
             }
+             if(component.defaultvalue){
+                
+               this.defaultvalue=  StringHelper.base64Decode(component.defaultvalue);
+            }
+             if(component.inputtranslation){
+                
+               this.inputtranslation=  StringHelper.base64Decode(component.inputtranslation);
+            }
+             if(component.inputvalidation){
+                
+               this.inputvalidation=  StringHelper.base64Decode(component.inputvalidation);
+            }
+             if(component.hidewhen){
+                
+               this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
+            }
 
             if(this.type =="number"){
 
@@ -1515,6 +1629,10 @@ private var _omitthisyear:Boolean;
             component.width= this.width;
             component.height= this.height;
             component.object= this.object;
+            component.defaultvalue= this.defaultvalue;
+            component.inputvalidation = this.inputvalidation;
+            component.inputtranslation = this.inputtranslation;
+            component.hidewhen = this.hidewhen;
             if(this.formula){
                 component.formula= this.formula;
             }

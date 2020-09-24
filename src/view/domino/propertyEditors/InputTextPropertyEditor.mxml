@@ -167,6 +167,32 @@
 
 			private function getDominoFieldObject(item:Object):String
 			{
+				//defaultvalue
+				//inputtranslation
+				//inputvalidation
+				//hidewhen
+				if(item.value=="inputtranslation"){
+					defaultvalue.visible = defaultvalue.includeInLayout = false;
+					inputtranslation.visible = inputtranslation.includeInLayout = true;
+					inputvalidation.visible = inputvalidation.includeInLayout = false;
+					hidewhen.visible = hidewhen.includeInLayout = false;
+				}else if(item.value=="inputvalidation"){
+					defaultvalue.visible = defaultvalue.includeInLayout = false;
+					inputtranslation.visible = inputtranslation.includeInLayout = false;
+					inputvalidation.visible = inputvalidation.includeInLayout = true;
+					hidewhen.visible = hidewhen.includeInLayout = false;
+				}else if(item.value=="hidewhen"){
+					defaultvalue.visible = defaultvalue.includeInLayout = false;
+					inputtranslation.visible = inputtranslation.includeInLayout = false;
+					inputvalidation.visible = inputvalidation.includeInLayout = false;
+					hidewhen.visible = hidewhen.includeInLayout = true;
+				}else{
+					defaultvalue.visible = defaultvalue.includeInLayout = true;
+					inputtranslation.visible = inputtranslation.includeInLayout = false;
+					inputvalidation.visible = inputvalidation.includeInLayout = false;
+					hidewhen.visible = hidewhen.includeInLayout = false;
+
+				}
 				return item.value;
 			}
 			
@@ -345,7 +371,10 @@
                             collectionProperty="objects" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldObject" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
-		<forms:DominoFormulaForm label="Formula:" textProperty="formula" prompt=""/>
+		<forms:DominoFormulaForm label="Formula:" textProperty="defaultvalue" prompt="" id="defaultvalue"  includeInLayout="true" visible="true" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="inputtranslation" prompt="" id="inputtranslation"  includeInLayout="false" visible="false" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="inputvalidation" prompt="" id="inputvalidation"  includeInLayout="false" visible="false" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="hidewhen" prompt="" id="hidewhen"  includeInLayout="false" visible="false" />
        </s:VGroup>
 		
 	</s:BorderContainer>

@@ -10,6 +10,22 @@
         <s:FormLayout />
     </suportclasses:layout>
 
+
+<fx:Style>
+    @namespace s "library://ns.adobe.com/flex/spark";
+    @namespace mx "library://ns.adobe.com/flex/mx";
+    @namespace local "*";
+
+    s|TextArea
+    {
+        color:#000000;
+        fontFamily: "ApexNew";
+        fontSize: 14pt;
+    }
+   
+</fx:Style>
+
+
     <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
     	<s:VGroup width="100%">

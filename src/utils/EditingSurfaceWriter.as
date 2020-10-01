@@ -115,13 +115,17 @@ package utils
                 var title:String ="";
                 if(surface.numChildren>0){
                     element = surface.getElementAt(0) as ISurfaceComponent;
-                    title = (element as UIComponent).hasOwnProperty("path") ? element["path"] : "";
+                    title = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
                 }
 
                 //Alert.show("title:"+title);
+
+                if(!title){
+                    title=projectName
+                }
                 
                 
-                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(projectName);
+                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(title);
                 var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)
@@ -150,10 +154,14 @@ package utils
                     if (element === null){
                         continue;
                     }
+
+                    var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
+                    
                     
                    var hasRichText:Boolean=false;
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
+                    //Alert.show("element_title:"+code.toXMLString());
                     if(code!=null ){
                         if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
                              code.setName("richtext");

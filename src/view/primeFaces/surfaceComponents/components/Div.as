@@ -19,6 +19,7 @@ package view.primeFaces.surfaceComponents.components
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IDiv;
     import components.primeFaces.Div;
+    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -154,6 +155,24 @@ package view.primeFaces.surfaceComponents.components
                 }
             }
         }
+
+
+        // private var _title:String = "";
+
+        
+        // public function get title():String
+        // {
+        //     return _title;
+        // }
+
+        // public function set title(value:String):void
+        // {
+        //     if (_title != value)
+        //     {
+        //         _title = value;
+        //         dispatchEvent(new Event("titleChanged"));
+        //     }
+        // }
 
         protected var _cdataXML:XML;
 
@@ -415,8 +434,12 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.Div).isDomino=isDomino;
             (component as components.primeFaces.Div).direction=direction;
             var xml:XML = component.toCode();
-            xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
 
+            xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
+           
+            // if(this.title){
+            //     xml["@title"]=this.title;
+            // }
             return xml;
         }
 

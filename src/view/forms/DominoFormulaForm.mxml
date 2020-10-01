@@ -11,27 +11,14 @@
     </suportclasses:layout>
 
 
-<fx:Style>
-    @namespace s "library://ns.adobe.com/flex/spark";
-    @namespace mx "library://ns.adobe.com/flex/mx";
-    @namespace local "*";
-
-    s|TextArea
-    {
-        color:#000000;
-        fontFamily: "ApexNew";
-        fontSize: 14pt;
-    }
-   
-</fx:Style>
-
-
+    <fx:Style source="assets/VisualEditorStyles.css"/>
     <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
     	<s:VGroup width="100%">
         <s:TextArea id="textInput"
                     text="{bindableText}" width="100%" minWidth="156" editable="true" selectable="true"
                     prompt="{prompt}"
+                    styleName="fixedWidthTexts"
                     textInput="textInput_changeHandler(event)"
                     focusOut="textInput_changeHandler(event)"
                     change="textInput_changeHandler(event)"
@@ -65,6 +52,8 @@
 
         import view.interfaces.ISurfaceComponent;
         import mx.controls.Alert; 
+
+        import flash.text.TextFormat;
 
         private var _binding:ChangeWatcher;
 
@@ -139,6 +128,7 @@
         {
             _childrenForFocus = [];
             _childrenForFocus.push(textInput.textDisplay);
+           
         }
 
 
@@ -153,6 +143,7 @@
             }
             this.textInput.errorString = "";
             this.selectedItem[this._textProperty] = this.textInput.text;
+
             this.dispatchEvent(new Event(Event.CHANGE));
             
         }

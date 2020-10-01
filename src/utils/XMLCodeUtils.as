@@ -400,6 +400,15 @@ package utils
             return className;
         }
 
+        // public static function getTitleForXML(container:Container):String
+        // {
+        //      var title:String="";
+        //       if (container.title){
+        //           title=container.title
+        //       }
+        //       return title;
+        // }
+
         public static function getCdataInformationFromXML(component:XML):String
         {
             var script:XML = getCdataXML(component);

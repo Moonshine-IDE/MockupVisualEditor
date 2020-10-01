@@ -52,7 +52,8 @@ package utils
 	import view.domino.surfaceComponents.components.DominoTable;
 	import view.domino.surfaceComponents.components.DominoSection;
 	import view.domino.surfaceComponents.components.DominoParagraph;
-	import view.domino.surfaceComponents.components.DominoTabView
+	import view.domino.surfaceComponents.components.DominoTabView;
+	import view.domino.surfaceComponents.components.MainApplication;
     public class EditingSurfaceReader
 	{
         public static var CLASS_LOOKUP:Object;
@@ -90,8 +91,8 @@ package utils
 				CLASS_LOOKUP[view.primeFaces.supportClasses.Container.ELEMENT_NAME] = view.primeFaces.supportClasses.Container;
 				
 				CLASS_LOOKUP[DominoParagraph.ELEMENT_NAME] =DominoParagraph;
-				CLASS_LOOKUP[view.primeFaces.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
-                        view.primeFaces.surfaceComponents.components.MainApplication;
+				CLASS_LOOKUP[view.domino.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
+                        view.domino.surfaceComponents.components.MainApplication;
 			}else if (visualEditorType == VisualEditorType.FLEX)
 			{
                 CLASS_LOOKUP[view.flex.surfaceComponents.components.MainApplication.ELEMENT_NAME] =

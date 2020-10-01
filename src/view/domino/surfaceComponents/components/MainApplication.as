@@ -1,4 +1,4 @@
-package view.primeFaces.surfaceComponents.components
+package view.domino.surfaceComponents.components
 {
     import flash.events.Event;
 
@@ -8,7 +8,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.INonDeletableSurfaceComponent;
 
     import view.primeFaces.propertyEditors.WindowPropertyEditor;
-
+    import view.primeFaces.surfaceComponents.components.Div;
     import view.global.Globals;
     import mx.controls.Alert;
 
@@ -215,12 +215,12 @@ package view.primeFaces.surfaceComponents.components
          * <strong>HTML:</strong>
          * <listing version="3.0">&lt;title&gt;&lt;/title&gt;</listing>
          */
-         public function get title():String
+        public function get title():String
         {
             return _title;
         }
 
-         public function set title(value:String):void
+        public function set title(value:String):void
         {
             if (_title != value)
             {
@@ -256,6 +256,10 @@ package view.primeFaces.surfaceComponents.components
 
         override public function fromXML(xml:XML, callback:Function):void
         {
+            //Alert.show("fromXML:"+xml.@title);
+            if(xml.@title){
+                this.title = xml.@title
+            }
             super.fromXML(xml, callback);
 
             contentChanged = true;

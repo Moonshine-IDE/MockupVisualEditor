@@ -4,6 +4,39 @@
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
 							      xmlns:forms="view.forms.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import spark.events.IndexChangeEvent;
+
+            private function getDominoFieldObject(item:Object):String
+			{
+				//defaultvalue
+				//inputtranslation
+				//inputvalidation
+				//hidewhen
+				if(item.value=="webqueryopen"){
+					webqueryopen.visible = webqueryopen.includeInLayout = true;
+					webquerysave.visible = webquerysave.includeInLayout = false;
+					
+				}else if(item.value=="webquerysave"){
+					webqueryopen.visible = webqueryopen.includeInLayout = false;
+					webquerysave.visible = webquerysave.includeInLayout = true;
+				
+				}else{
+					webqueryopen.visible = webqueryopen.includeInLayout = true;
+					webquerysave.visible = webquerysave.includeInLayout = false;
+
+				}
+				return item.value;
+			}
+            private function getDominoFieldTooltip(item:Object):String
+			{
+				return item.description;
+			}
+     ]]>
+	</fx:Script>
+
 
     <suportclasses:layout>
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
@@ -18,4 +51,20 @@
     <primeFaces:DivLayoutForm />
 
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
+    <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="true" visible="true" id="formProeprtyPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		<forms:DropdownListForm id="editableFormualPanel"
+                            label="Form formula:" textProperty="formproperty"
+                            collectionProperty="formpropertys" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldObject" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
+		<forms:DominoFormulaForm label="Formula:" textProperty="webqueryopen" prompt="" id="webqueryopen"  includeInLayout="true" visible="true" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="webquerysave" prompt="" id="webquerysave"  includeInLayout="false" visible="false" />
+	  </s:VGroup>
+		
+	</s:BorderContainer>
 </suportclasses:BasePropertyEditor>

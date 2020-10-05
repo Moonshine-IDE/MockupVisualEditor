@@ -7,10 +7,12 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
 
-    import view.primeFaces.propertyEditors.WindowPropertyEditor;
+    import view.domino.propertyEditors.WindowPropertyEditor;
     import view.primeFaces.surfaceComponents.components.Div;
     import view.global.Globals;
     import mx.controls.Alert;
+    import mx.collections.ArrayList;
+    import utils.StringHelper;
 
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -18,6 +20,10 @@ package view.domino.surfaceComponents.components
     [Exclude(name="updateDisplayList", kind="method")]
     [Exclude(name="widthPercent", kind="property")]
     [Exclude(name="heightPercent", kind="property")]
+    [Exclude(name="webqueryopenChanged", kind="property")]
+    [Exclude(name="webquerysaveChanged", kind="property")]
+    [Exclude(name="formpropertyChanged", kind="property")]
+    
 
     /**
      * <p>Representation of index.html file.</p>
@@ -184,6 +190,87 @@ package view.domino.surfaceComponents.components
             super.percentHeight = value;
         }
 
+
+        [Bindable]
+        private var _formpropertys:ArrayList = new ArrayList([
+       // {label:"Windows Title",value: "windowtitle",description:"Generates the text that appears in the title bar of documents using the form."},
+        {label:"Web QueryOpen",value: "webqueryopen",description:"Executes before a Web document is displayed."},
+        {label:"Web Querysave",value: "webquerysave",description:"Executes before a Web document is saved."},
+        //{label:"Hide When",value: "hidewhen",description:"Hides the object if the formula you provide is true."},
+        //{label:"Value",value: "value",description:"Specifies the contents of a computed field."},
+        // {label:"Selection",value: "selection",description:"selects the documents that appear in a view."},
+        // {label:"Html Attributes",value: "htmlattributes",description:"Specifies characteristics for the associated HTML object. Applies to fields."},
+        // {label:"Html Head",value: "htmlhead",description:"Information that resides in the HTML Head tag for an object. Applies to forms and pages."},
+        // {label:"Html Body",value: "htmlbody",description:"Information that resides in the HTML Body tag for an object. Applies to forms and pages."},
+        // {label:"Target Frame",value: "targetframe",description:"Defines which frame in a frameset the result of a command should display in."},
+        // {label:"Help Request",value: "helprequest",description:"Executes when Help is selected."},
+        // {label:"Form",value: "form",description:"Defines which form to open from a view."},
+        // {label:"Alternate Html",value: "alternatehtml",description:"Alternate text to display if the user's browser cannot execute the code. For example, if a Java applet cannot be run by the user's browser, this text would describe the applet and inform the user that their browser's capabilities do not support it."},
+        // {label:"Form",value: "form",description:"Defines which form to open from a view."},
+        // {label:"Showsinglecategory",value: "showsinglecategory",description:"In embedded views, limits the documents displayed in the view to those contained in one category. The category is defined by a formula or text."},
+        // {label:"Label",value: "label",description:"Specifies the label to display on an action button."},
+        //{label:"Displayvalue",value: "displayvalue",description:"Determines the value that displays for an action checkbox."},
+
+
+           
+
+         
+        ]);
+
+        public function get formpropertys():ArrayList
+        {
+            return _formpropertys;
+        }
+
+        private var _formproperty:String = "webqueryopen";
+        public function get formproperty():String
+        {
+            return _formproperty;
+        }
+
+        public function set formproperty(value:String):void
+        {
+            if (_formproperty != value)
+            {
+                _formproperty = value;
+                dispatchEvent(new Event("formpropertyChanged"));
+            }
+        }
+        
+
+        [Bindable("webqueryopenChanged")]
+        private var _webqueryopen:String = "";
+        public function get webqueryopen():String
+        {
+            return _webqueryopen;
+        }
+
+        public function set webqueryopen(value:String):void
+        {
+            if (_webqueryopen != value)
+            {
+                _webqueryopen = value;
+                dispatchEvent(new Event("webqueryopenChanged"));
+            }
+        }
+
+
+        [Bindable("webquerysaveChanged")]
+        private var _webquerysave:String = "";
+        public function get webquerysave():String
+        {
+            return _webquerysave;
+        }
+
+        public function set webquerysave(value:String):void
+        {
+            if (_webquerysave != value)
+            {
+                _webquerysave = value;
+                dispatchEvent(new Event("webquerysaveChanged"));
+            }
+        }
+
         [PercentProxy("percentHeight")]
         [Inspectable(category="General")]
         [Bindable("heightChanged")]
@@ -234,6 +321,15 @@ package view.domino.surfaceComponents.components
             mainXML = new XML("<MainApplication/>");
 
             mainXML.@title = this.title;
+            if(this.webquerysave){
+                 var encodeFormulaStr:String= StringHelper.base64Encode(this.webquerysave);
+                 mainXML.@webquerysave=encodeFormulaStr;
+            }
+
+            if(this.webqueryopen){
+                 var encodeFormulaStr:String= StringHelper.base64Encode(this.webqueryopen);
+                 mainXML.@webqueryopen=encodeFormulaStr
+            }
 
             mainXML = super.internalToXML();
 
@@ -259,6 +355,14 @@ package view.domino.surfaceComponents.components
             //Alert.show("fromXML:"+xml.@title);
             if(xml.@title){
                 this.title = xml.@title
+            }
+
+            if(xml.@webqueryopen){
+                this.webqueryopen=  StringHelper.base64Decode(xml.@webqueryopen);
+            }
+
+            if(xml.@webquerysave){
+                this.webquerysave= StringHelper.base64Decode(xml.@webquerysave);
             }
             super.fromXML(xml, callback);
 

@@ -314,12 +314,17 @@ package utils
 				xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
 				xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
 				xml_str=xml_str+"</noteinfo>"
+
+				xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+title+"</formula></item>"
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"
 				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"
 				xml_str=xml_str+"<item name='$Fields'><textlist></textlist></item>"
 				xml_str=xml_str+"<item name='$Body' sign='true'></item>"
+				
 				xml_str=xml_str+"</note>";
+			
+
 
 
 				var xml:XML = new XML(xml_str);

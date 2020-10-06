@@ -113,9 +113,11 @@ package utils
             {
                 var element:ISurfaceComponent ;
                 var title:String ="";
+                var windowsTitle:String = "";
                 if(surface.numChildren>0){
                     element = surface.getElementAt(0) as ISurfaceComponent;
                     title = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
+                    windowsTitle= (element as UIComponent).hasOwnProperty("windowsTitle") ? element["windowsTitle"] : "";
                 }
 
                 //Alert.show("title:"+title);
@@ -125,7 +127,7 @@ package utils
                 }
                 
                 
-                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(title);
+                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
                 var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)

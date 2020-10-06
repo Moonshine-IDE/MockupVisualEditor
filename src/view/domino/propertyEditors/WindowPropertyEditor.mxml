@@ -49,8 +49,10 @@
     <forms:TextForm label="Title" textProperty="title"/>
 
     <primeFaces:DivLayoutForm />
-
+	<forms:DominoFormulaForm label="Windows Title:" textProperty="windowsTitle" prompt="" id="windowstitle"  includeInLayout="true" visible="true" />
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
+   
+   
     <s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 

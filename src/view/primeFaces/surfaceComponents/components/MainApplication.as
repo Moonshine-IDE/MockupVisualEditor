@@ -203,6 +203,8 @@ package view.primeFaces.surfaceComponents.components
             return super.height;
         }
 
+        
+
         private var _title:String = "";
 
         /**

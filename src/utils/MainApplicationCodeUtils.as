@@ -205,9 +205,9 @@ package utils
 		 * Overloaded this function, so that the domino project can call it
 		 */
 
-		public static function getDominoParentContent(title:String):XML
+		public static function getDominoParentContent(title:String,windowsTitle:String):XML
 		{	   
-			return getDominoMainContainer(title);	
+			return getDominoMainContainer(title,windowsTitle);	
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
@@ -300,7 +300,7 @@ package utils
 		}
 
 
-		private static function getDominoMainContainer(title:String):XML
+		private static function getDominoMainContainer(title:String,windowsTitle:String):XML
 		{
 				var dat:Date = new Date();
 				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
@@ -315,7 +315,7 @@ package utils
 				xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
 				xml_str=xml_str+"</noteinfo>"
 
-				xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+title+"</formula></item>"
+				xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"
 				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"

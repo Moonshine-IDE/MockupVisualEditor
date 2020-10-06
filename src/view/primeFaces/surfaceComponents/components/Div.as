@@ -106,7 +106,8 @@ package view.primeFaces.surfaceComponents.components
                 "wrapChanged",
                 "gapChanged",
                 "verticalAlignChanged",
-                "horizontalAlignChanged"
+                "horizontalAlignChanged", 
+                "windowsTitleChanged"
             ];
         }
 

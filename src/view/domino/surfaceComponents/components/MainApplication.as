@@ -23,6 +23,10 @@ package view.domino.surfaceComponents.components
     [Exclude(name="webqueryopenChanged", kind="property")]
     [Exclude(name="webquerysaveChanged", kind="property")]
     [Exclude(name="formpropertyChanged", kind="property")]
+    [Exclude(name="windowsTitleChanged", kind="property")]
+    [Exclude(name="titleChanged", kind="property")]
+
+    
     
 
     /**
@@ -289,7 +293,7 @@ package view.domino.surfaceComponents.components
         {
             return super.height;
         }
-
+        [Bindable("titleChanged")]
         private var _title:String = "";
 
         /**
@@ -316,19 +320,42 @@ package view.domino.surfaceComponents.components
             }
         }
 
+        [Bindable("windowsTitleChanged")]
+        private var _windowsTitle:String="";
+        public function get windowsTitle():String
+        {
+            return _windowsTitle;
+        }
+
+        public function set windowsTitle(value:String):void
+        {
+            if (_windowsTitle != value)
+            {
+                _windowsTitle = value;
+                dispatchEvent(new Event("windowsTitleChanged"));
+            }
+        }
+
+
+
         override public function toXML():XML
         {
             mainXML = new XML("<MainApplication/>");
 
             mainXML.@title = this.title;
             if(this.webquerysave){
-                 var encodeFormulaStr:String= StringHelper.base64Encode(this.webquerysave);
-                 mainXML.@webquerysave=encodeFormulaStr;
+               
+                 mainXML.@webquerysave=StringHelper.base64Encode(this.webquerysave);
+            }
+
+            if(this.windowsTitle){
+           
+                 mainXML.@webquerysave=StringHelper.base64Encode(this.windowsTitle);
             }
 
             if(this.webqueryopen){
-                 var encodeFormulaStr:String= StringHelper.base64Encode(this.webqueryopen);
-                 mainXML.@webqueryopen=encodeFormulaStr
+             
+                 mainXML.@webqueryopen=StringHelper.base64Encode(this.webqueryopen)
             }
 
             mainXML = super.internalToXML();
@@ -363,6 +390,10 @@ package view.domino.surfaceComponents.components
 
             if(xml.@webquerysave){
                 this.webquerysave= StringHelper.base64Decode(xml.@webquerysave);
+            }
+
+            if(xml.@windowsTitle){
+                this.windowsTitle= StringHelper.base64Decode(xml.@windowsTitle);
             }
             super.fromXML(xml, callback);
 

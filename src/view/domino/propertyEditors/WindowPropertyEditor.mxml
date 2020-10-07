@@ -46,10 +46,10 @@
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
-    <forms:TextForm label="Title" textProperty="title"/>
+    <!-- <forms:TextForm label="Title" textProperty="title"/> -->
 
     <primeFaces:DivLayoutForm />
-	<forms:DominoFormulaForm label="Windows Title:" textProperty="windowsTitle" prompt="" id="windowstitle"  includeInLayout="true" visible="true" />
+	<forms:DominoFormulaForm label="Window Title:" textProperty="windowsTitle" prompt="" id="windowstitle"  includeInLayout="true" visible="true" />
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
    
    

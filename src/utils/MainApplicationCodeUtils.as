@@ -314,8 +314,9 @@ package utils
 				xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
 				xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
 				xml_str=xml_str+"</noteinfo>"
-
-				xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
+				if(windowsTitle!=null && windowsTitle!=undefined && windowsTitle!=""){
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
+				}
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"
 				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"

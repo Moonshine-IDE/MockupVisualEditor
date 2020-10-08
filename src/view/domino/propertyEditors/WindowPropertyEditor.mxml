@@ -8,6 +8,15 @@
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import spark.events.IndexChangeEvent;
+			//Domino form property list
+			/**
+			 *Notes client formula: htmlbody,htmlhead,targetframe
+			 *Web js:jsheader
+			 *Notes/Web client :onHelp,onLoad,onUnload,onClick,onDbClick ,onKeyDown,onKeyPress,onKeyUp,onKeyDown,onMouseDown,onMouseMove
+			 *onMouseOut,onMouseOver,onMouseUp,onRest,onSubmit,
+			 *Notes: QueryOpen,PostOpen,queryModeChange,PostmodeChange,Queryrecalc,Postrecalc,Querysave,Postsave
+			         QuerySend,Postsend,Queryclose,Initialize,Terminate  
+			 */
 
             private function getDominoFieldObject(item:Object):String
 			{

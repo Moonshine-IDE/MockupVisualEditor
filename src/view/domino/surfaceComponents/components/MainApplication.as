@@ -25,6 +25,8 @@ package view.domino.surfaceComponents.components
     [Exclude(name="formpropertyChanged", kind="property")]
     [Exclude(name="windowsTitleChanged", kind="property")]
     [Exclude(name="titleChanged", kind="property")]
+    [Exclude(name="initializeChanged", kind="property")]
+    [Exclude(name="terminateChanged", kind="property")]
 
     
     
@@ -200,6 +202,8 @@ package view.domino.surfaceComponents.components
        // {label:"Windows Title",value: "windowtitle",description:"Generates the text that appears in the title bar of documents using the form."},
         {label:"Web QueryOpen",value: "webqueryopen",description:"Executes before a Web document is displayed."},
         {label:"Web Querysave",value: "webquerysave",description:"Executes before a Web document is saved."},
+        {label:"Initialize",value: "initialize",description:"Executes before a Web document is displayed."},
+        {label:"Terminate",value: "terminate",description:"Executes before a Web document is displayed."},
         //{label:"Hide When",value: "hidewhen",description:"Hides the object if the formula you provide is true."},
         //{label:"Value",value: "value",description:"Specifies the contents of a computed field."},
         // {label:"Selection",value: "selection",description:"selects the documents that appear in a view."},
@@ -240,7 +244,40 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("formpropertyChanged"));
             }
         }
+
         
+        // [Bindable("initializeChanged")]
+        // private var _initialize:String = "";
+        // public function get initialize():String
+        // {
+        //     return _initialize;
+        // }
+
+        // public function set initialize(value:String):void
+        // {
+        //     if (_initialize != value)
+        //     {
+        //         _initialize = value;
+        //         dispatchEvent(new Event("initializeChanged"));
+        //     }
+        // }
+
+
+        [Bindable("terminateChanged")]
+        private var _terminate:String = "";
+        public function get terminate():String
+        {
+            return _terminate;
+        }
+
+        public function set terminate(value:String):void
+        {
+            if (_terminate != value)
+            {
+                _terminate = value;
+                dispatchEvent(new Event("terminateChanged"));
+            }
+        }
 
         [Bindable("webqueryopenChanged")]
         private var _webqueryopen:String = "";

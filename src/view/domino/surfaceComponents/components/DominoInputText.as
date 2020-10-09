@@ -129,7 +129,10 @@ package view.domino.surfaceComponents.components
                 "defaultValueAttributeChanged",
                 "inputtranslationAttributeChanged",
                 "inputvalidationAttributeChanged",
-                "hidewhenAttributeChanged"
+                "hidewhenAttributeChanged",
+                "numberColumnsChanged",
+                "recalcchoicesChanged",
+                "recalonchangeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -228,6 +231,26 @@ package view.domino.surfaceComponents.components
         {
             return _cdataInformation;
         }
+
+       
+        private var _numberColumns:Number=1;
+        [Bindable(event="numberColumnsChanged")]
+        public function get numberColumns():Number
+        {
+            return _numberColumns;
+        }
+		
+        public function set numberColumns(value:Number):void
+        {
+            if (_numberColumns != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "numberColumns", _numberColumns, value);
+				
+                _numberColumns = value;
+                dispatchEvent(new Event("numberColumnsChanged"))
+            }
+        }
+
 
         private var _idAttribute:String;
 		[Bindable(event="idAttributeChanged")]
@@ -1083,6 +1106,42 @@ private var _omitthisyear:Boolean;
         {
             return _keyworduis;
         }
+
+        private var _recalonchange:Boolean=false;
+        [Bindable(event="recalonchangeChanged")]
+		public function get recalonchange():Boolean
+		{
+			return _recalonchange;
+		}
+		public function set recalonchange(value:Boolean):void
+		{
+			 if (_recalonchange != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "recalonchange", _recalonchange, value);
+				
+                _recalonchange = value;
+                dispatchEvent(new Event("recalonchangeChanged"))
+            }
+		}
+
+
+
+		private var _recalcchoices:Boolean=false;
+        [Bindable(event="recalcchoicesChanged")]
+		public function get recalcchoices():Boolean
+		{
+			return _recalcchoices;
+		}
+		public function set recalcchoices(value:Boolean):void
+		{
+			 if (_recalcchoices != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "recalcchoices", _recalcchoices, value);
+				
+                _recalcchoices = value;
+                dispatchEvent(new Event("recalcchoicesChanged"))
+            }
+		}
     
         private var _keywordui:String = "checkbox";
 		[Bindable(event="checkboxAttributeChanged")]
@@ -1353,6 +1412,13 @@ private var _omitthisyear:Boolean;
 
             xml.@value = this.text;
             xml.@required = this.required;
+            xml.@recalonchange=this.recalonchange.toString();
+            xml.@recalcchoices=this.recalcchoices.toString();
+
+
+           
+            xml.@numberColumns = this.numberColumns;
+            
 
             if(this.formula){
                  var encodeFormulaStr:String= StringHelper.base64Encode(this.formula);
@@ -1530,6 +1596,7 @@ private var _omitthisyear:Boolean;
 			this.maxLength = component.maxLength;
             this.idAttribute = component.idAttribute;
             this.required = component.required;
+          //  this.numberColumns = component.numberColumns;
 
             this.nameAttribute=component.nameAttribute;
             this.kind = component.kind;
@@ -1538,6 +1605,8 @@ private var _omitthisyear:Boolean;
             this.width = component.width;
             this.height = component.height;
             this.object = component.object;
+            this.recalcchoices = component.recalcchoices;
+            this.recalonchange = component.recalonchange;
 
             if(component.formula){
                 
@@ -1587,7 +1656,8 @@ private var _omitthisyear:Boolean;
                           this.keywords=StringHelper.base64Decode(component.keywords);
                     }
                   
-                    this.keywordui=component.keywordui
+                    this.keywordui=component.keywordui;
+                    this.numberColumns = component.numberColumns;
                 }
 
                  if(this.type =="names"){
@@ -1661,9 +1731,13 @@ private var _omitthisyear:Boolean;
             }
              if(this.type=="keyword"){
                 
-                    component.keywords=this.keywords
-                  
-                    component.keywordui=this.keywordui
+                    component.keywords=this.keywords;
+                    //Alert.show("numberColumns:"+this.numberColumns);
+                    component.keywordui=this.keywordui;
+                    component.numberColumns=this.numberColumns;
+                    component.recalonchange = this.recalonchange;
+                    component.recalcchoices = this.recalcchoices;
+
              }
 
              if(this.type=="names"){

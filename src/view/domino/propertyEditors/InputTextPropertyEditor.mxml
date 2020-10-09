@@ -344,6 +344,11 @@
                             collectionProperty="keyworduis" labelField="label"
 							labelDisplayFunction="getDominoFieldKeyWordUISytle" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+							
+					 <forms:TextForm id="numberColumns" label="Number of columns:" restrict="0-9" textProperty="numberColumns" 
+				bindableText=""/> 
+		<forms:ToggleButtonSelectedForm label="Refresh fields on keywoed change" textProperty="recalonchange" id="recalonchange"/>
+		<forms:ToggleButtonSelectedForm label="Refresh choices on document refresh" textProperty="recalcchoices" id="recalcchoices"/>			
 		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value"/>
        </s:VGroup>
 		

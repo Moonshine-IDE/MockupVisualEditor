@@ -1657,7 +1657,9 @@ private var _omitthisyear:Boolean;
                     }
                   
                     this.keywordui=component.keywordui;
+
                     this.numberColumns = component.numberColumns;
+                    //Alert.show("numberColumns:"+this.numberColumns);
                 }
 
                  if(this.type =="names"){
@@ -1729,12 +1731,13 @@ private var _omitthisyear:Boolean;
                 component.zone = this.zone;
                 component.calendar = this.calendar;
             }
+            component.numberColumns=this.numberColumns;
              if(this.type=="keyword"){
                 
                     component.keywords=this.keywords;
                     //Alert.show("numberColumns:"+this.numberColumns);
                     component.keywordui=this.keywordui;
-                    component.numberColumns=this.numberColumns;
+                 
                     component.recalonchange = this.recalonchange;
                     component.recalcchoices = this.recalcchoices;
 

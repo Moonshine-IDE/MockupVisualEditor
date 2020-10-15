@@ -31,6 +31,7 @@ package view.domino.surfaceComponents.components
     import mx.collections.ArrayList;
 
     import mx.controls.Alert;
+    import utils.StringHelper;
 
     import interfaces.dominoComponents.IDominoLabel;
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -78,9 +79,28 @@ package view.domino.surfaceComponents.components
                 "forAttributeChanged",
 				"indicateRequiredChanged",
                 "colorAttributeChanged",
-                "fontStyleAttributeChanged"
+                "fontStyleAttributeChanged",
+                "hidewhenAttributeChanged"
             ];
         }
+
+
+        private var _hidewhen:String;
+        [Bindable(event="hidewhenAttributeChanged")]
+		public function get hidewhen():String
+		{
+			return _hidewhen;
+		}
+		public function set hidewhen(value:String):void
+		{
+			if (_hidewhen != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "hidewhen", _hidewhen, value);
+				
+                _hidewhen = value;
+                dispatchEvent(new Event("hidewhenAttributeChanged"))
+            }
+		}
 
 
         private var _widthOutput:Boolean = true;
@@ -544,6 +564,11 @@ package view.domino.surfaceComponents.components
             if(this.fontStyle){
                 xml.@style = this.fontStyle;
             }
+            
+            if(this.hidewhen){
+                var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
+                 xml.@hidewhen = encodeFormulaStr;
+            }
 
             return xml;
         }
@@ -558,6 +583,11 @@ package view.domino.surfaceComponents.components
             this.color = component.color;
             this.size = component.size;
             this.fontStyle=component.fontStyle;
+            if(component.hidewhen){
+                
+               this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
+            }
+
 
         }
 
@@ -571,6 +601,7 @@ package view.domino.surfaceComponents.components
 			//component.indicateRequired = this.indicateRequired;
 			
 			component.isSelected = this.isSelected;
+            component.hidewhen = this.hidewhen;
 		
             return component.toCode();
         }

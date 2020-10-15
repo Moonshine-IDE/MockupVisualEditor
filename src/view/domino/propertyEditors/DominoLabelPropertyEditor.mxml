@@ -203,6 +203,7 @@
 		collectionProperty="fontStyles" textProperty="fontStyle"/>	
 		 
     <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
+	<forms:DominoFormulaForm label="Hide Formula:" textProperty="hidewhen" prompt="" id="hidewhen"  includeInLayout="true" visible="true" />
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

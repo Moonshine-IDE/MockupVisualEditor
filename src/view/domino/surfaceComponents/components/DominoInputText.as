@@ -1016,10 +1016,7 @@ private var _omitthisyear:Boolean;
             }
         }
 
-    "defaultValueAttributeChanged",
-                "inputtranslationAttributeChanged",
-                "inputvalidationAttributeChanged",
-                "hidewhenAttributeChanged"
+
 
         private var _defaultvalue:String;
         [Bindable(event="defaultValueAttributeChanged")]

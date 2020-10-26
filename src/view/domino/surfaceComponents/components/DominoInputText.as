@@ -132,7 +132,10 @@ package view.domino.surfaceComponents.components
                 "hidewhenAttributeChanged",
                 "numberColumnsChanged",
                 "recalcchoicesChanged",
-                "recalonchangeChanged"
+                "recalonchangeChanged",
+                "keyformulachoicesChanged",
+                "keyformulavalueAttributeChanged",
+                "keywordsformulaChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -957,6 +960,26 @@ private var _omitthisyear:Boolean;
             }
         }
 
+
+
+        private var _keywordsformula:String;
+        [Bindable(event="keywordsformulaChanged")]
+        public function get keywordsformula():String
+        {
+            return _keywordsformula;
+        }
+
+         public function set keywordsformula(value:String):void
+        {
+            if (_keywordsformula != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "keywordsformula", _keywordsformula, value);
+				
+                _keywordsformula = value;
+                dispatchEvent(new Event("keywordsformulaChanged"))
+            }
+        }
+
         /******
          *Client: Default value,Input Translation, Input Validation, Input Enabled,HTML attribute
          *(option),(Declarations),Entering,Exiting,Initialize,Terminate
@@ -1086,6 +1109,24 @@ private var _omitthisyear:Boolean;
                 dispatchEvent(new Event("hidewhenAttributeChanged"))
             }
 		}
+
+
+        private var _keyformulavalue:String;
+        [Bindable(event="keyformulavalueAttributeChanged")]
+		public function get keyformulavalue():String
+		{
+			return _keyformulavalue;
+		}
+		public function set keyformulavalue(value:String):void
+		{
+			if (_keyformulavalue != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "keyformulavalue", _keyformulavalue, value);
+				
+                _keyformulavalue = value;
+                dispatchEvent(new Event("keyformulavalueAttributeChanged"))
+            }
+		}
         /*************
          * Domino keywords
          */
@@ -1118,6 +1159,23 @@ private var _omitthisyear:Boolean;
 				
                 _recalonchange = value;
                 dispatchEvent(new Event("recalonchangeChanged"))
+            }
+		}
+
+        private var _keyformulachoices:Boolean=false;
+        [Bindable(event="keyformulachoicesChanged")]
+		public function get keyformulachoices():Boolean
+		{
+			return _keyformulachoices;
+		}
+		public function set keyformulachoices(value:Boolean):void
+		{
+			 if (_keyformulachoices != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "keyformulachoices", _keyformulachoices, value);
+				
+                _keyformulachoices = value;
+                dispatchEvent(new Event("keyformulachoicesChanged"))
             }
 		}
 
@@ -1411,6 +1469,7 @@ private var _omitthisyear:Boolean;
             xml.@required = this.required;
             xml.@recalonchange=this.recalonchange.toString();
             xml.@recalcchoices=this.recalcchoices.toString();
+            xml.@keyformulachoices=this.keyformulachoices.toString();
 
 
            
@@ -1418,27 +1477,26 @@ private var _omitthisyear:Boolean;
             
 
             if(this.formula){
-                 var encodeFormulaStr:String= StringHelper.base64Encode(this.formula);
-                 xml.@formula = encodeFormulaStr;
+                 xml.@formula =  StringHelper.base64Encode(this.formula);;
+            }
+
+            if(this.keywordsformula){
+                xml.@keywordsformula=StringHelper.base64Encode(this.keywordsformula);
             }
 
             if(this.defaultvalue){
-                var encodeFormulaStr:String= StringHelper.base64Encode(this.defaultvalue);
-                 xml.@defaultvalue = encodeFormulaStr;
+                 xml.@defaultvalue = StringHelper.base64Encode(this.defaultvalue);;
             }
 
             if(this.inputtranslation){
-                var encodeFormulaStr:String= StringHelper.base64Encode(this.inputtranslation);
-                 xml.@inputtranslation = encodeFormulaStr;
+                 xml.@inputtranslation =  StringHelper.base64Encode(this.inputtranslation);;
             }
             if(this.inputvalidation){
-                var encodeFormulaStr:String= StringHelper.base64Encode(this.inputvalidation);
-                 xml.@inputvalidation = encodeFormulaStr;
+                 xml.@inputvalidation = StringHelper.base64Encode(this.inputvalidation);;
             }
 
             if(this.hidewhen){
-                var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
-                 xml.@hidewhen = encodeFormulaStr;
+                 xml.@hidewhen = StringHelper.base64Encode(this.hidewhen);;
             }
 
 
@@ -1516,10 +1574,8 @@ private var _omitthisyear:Boolean;
                 if(this.type=="keyword"){
                      //Alert.show("key:"+this.keywords);
                      if(this.keywords){
-                        var encodeStr:String= StringHelper.base64Encode(this.keywords)
-                      
-                         xml.@keywords = encodeStr;
-                         //this.keywords = encodeStr;
+                        xml.@keywords = StringHelper.base64Encode(this.keywords)
+                   
                      }
 
                      if(this.keywordui){
@@ -1604,10 +1660,14 @@ private var _omitthisyear:Boolean;
             this.object = component.object;
             this.recalcchoices = component.recalcchoices;
             this.recalonchange = component.recalonchange;
+            this.keyformulachoices = component.keyformulachoices;
 
             if(component.formula){
                 
                this.formula=  StringHelper.base64Decode(component.formula);
+            }
+            if(component.keywordsformula){
+                this.keywordsformula= StringHelper.base64Decode(component.keywordsformula);
             }
              if(component.defaultvalue){
                 
@@ -1702,6 +1762,8 @@ private var _omitthisyear:Boolean;
             component.inputvalidation = this.inputvalidation;
             component.inputtranslation = this.inputtranslation;
             component.hidewhen = this.hidewhen;
+            component.keywordsformula=this.keywordsformula;
+            component.keyformulachoices=this.keyformulachoices;
             if(this.formula){
                 component.formula= this.formula;
             }
@@ -1737,6 +1799,7 @@ private var _omitthisyear:Boolean;
                  
                     component.recalonchange = this.recalonchange;
                     component.recalcchoices = this.recalcchoices;
+                    component.keyformulachoices = this.keyformulachoices;
 
              }
 

@@ -5,17 +5,31 @@
                                   xmlns:domino="view.domino.forms.*" 
 								  xmlns:forms="view.forms.*"
 								  xmlns:primeFaces="view.primeFaces.forms.*"
+								   creationComplete="onInputCreationComplete(event)"
 								 >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import spark.events.IndexChangeEvent;
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
 
 			private var isNumber:Boolean = false;
 			private var inputType:String="";
+			[Bindable]
+        	public var keywordsFlag:Boolean = false;
 
-			
+			private function onInputCreationComplete(event:FlexEvent):void
+        	{
+				 keywordsFlag = Object(selectedItem).keyformulachoices;
+				 if(keywordsFlag==true){
+					keywords.visible =keywords.includeInLayout = false;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
+				 }else{
+					keywords.visible =keywords.includeInLayout = true;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
+				 }
+			}
 
 			protected function digits_changeHandler(event:Event):void
 			{
@@ -222,6 +236,21 @@
 			{
 				return item.description;
 			}
+			//change="togCheck_changeHandler(event)"
+			private function togCheck_changeHandler(event:Event)
+			{
+				//Alert.show(":"+this.keyformulachoices.selected);
+				if(this.keyformulachoices.selected==true){
+					keywords.visible =keywords.includeInLayout = false;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
+				}else{
+					keywords.visible =keywords.includeInLayout = true;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
+				}
+				 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
+			}
+
+		
 
 
        
@@ -348,8 +377,10 @@
 					 <forms:TextForm id="numberColumnsinput" label="Number of columns:" restrict="0-9" textProperty="numberColumns" 
 				bindableText="" /> 
 		<forms:ToggleButtonSelectedForm label="Refresh fields on keywoed change" textProperty="recalonchange" id="recalonchange"/>
-		<forms:ToggleButtonSelectedForm label="Refresh choices on document refresh" textProperty="recalcchoices" id="recalcchoices"/>			
-		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value"/>
+		<forms:ToggleButtonSelectedForm label="Refresh choices on document refresh" textProperty="recalcchoices" id="recalcchoices"/>
+		<s:CheckBox label="Use formula for choices"  id="keyformulachoices" selected="{keywordsFlag}" change="togCheck_changeHandler(event)"/>				
+		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value" id="keywords" includeInLayout="true" visible="true" />
+		<forms:DominoFormulaForm label="Key Formula:" textProperty="keywordsformula" prompt="" id="keyformulavalue"  includeInLayout="false" visible="false" />
        </s:VGroup>
 		
 	</s:BorderContainer>

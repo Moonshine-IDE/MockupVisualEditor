@@ -47,6 +47,7 @@
 			
 			import view.domino.surfaceComponents.components.DominoInputText;
 			import view.domino.surfaceComponents.components.DominoLabel;
+			import view.domino.surfaceComponents.components.DominoComputedText;
 			import view.domino.surfaceComponents.components.DominoTable;
 			import view.domino.surfaceComponents.components.DominoParagraph;
 			import view.domino.surfaceComponents.components.DominoSection;
@@ -67,6 +68,7 @@
 						new ComponentListItem("Label", DominoLabel),
 						new ComponentListItem("Table", DominoTable),
 						new ComponentListItem("Div", Div),
+						new ComponentListItem("ComputedText", DominoComputedText),
 						new ComponentListItem("Paragraph", DominoParagraph),
 						new ComponentListItem("Section", DominoSection),
 						new ComponentListItem("TabView", DominoTabView)

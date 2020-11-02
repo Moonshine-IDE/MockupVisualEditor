@@ -49,6 +49,7 @@ package utils
 
 	import view.domino.surfaceComponents.components.DominoInputText;
 	import view.domino.surfaceComponents.components.DominoLabel;
+	import view.domino.surfaceComponents.components.DominoComputedText;
 	import view.domino.surfaceComponents.components.DominoTable;
 	import view.domino.surfaceComponents.components.DominoSection;
 	import view.domino.surfaceComponents.components.DominoParagraph;
@@ -81,6 +82,7 @@ package utils
 			if (visualEditorType == VisualEditorType.DOMINO){
 				CLASS_LOOKUP[DominoInputText.ELEMENT_NAME] = DominoInputText;
 				CLASS_LOOKUP[DominoLabel.ELEMENT_NAME] = DominoLabel;
+				CLASS_LOOKUP[DominoComputedText.ELEMENT_NAME] = DominoComputedText;
 				CLASS_LOOKUP[DominoTable.ELEMENT_NAME] = DominoTable;
 				CLASS_LOOKUP[DominoTabView.ELEMENT_NAME] = DominoTabView;
 				CLASS_LOOKUP[NavigatorContent.ELEMENT_NAME] = NavigatorContent;

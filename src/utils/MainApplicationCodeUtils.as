@@ -70,18 +70,50 @@ package utils
 		public static function getDominMainContainerTag(xml:XML):XML
 		{
             var body:XMLList = xml.children();
-            for each (var item:XML in body)
+			var mainItem:XML=null;
+			for each (var item:XML in body)
             {
                 var itemName:String = item.name();
 				
-                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
+                if (itemName=="http://www.lotus.com/dxl::richtext")
                 {
-				
-                    return item;
+					mainItem=item
+                   
                 }
             }
+			if(mainItem==null){
+				for each (var item:XML in body)
+				{
+					var itemName:String = item.name();
+					
+					if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
+					{
+						mainItem=item
+					
+					}
+				}
+			}
 
-			return null;
+			return mainItem;
+		}
+
+		public static function getDominMainContainerTagByRichtext(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+				
+                if (itemName=="http://www.lotus.com/dxl::richtext")
+                {
+					mainItem=item
+                   
+                }
+            }
+		
+
+			return mainItem;
 		}
 
 

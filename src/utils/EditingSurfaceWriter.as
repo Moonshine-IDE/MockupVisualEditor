@@ -146,7 +146,7 @@ package utils
               //------------get all field ---------------
             
             
-                
+                var hasRichText:Boolean=false;
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
@@ -160,7 +160,7 @@ package utils
                     var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
                     
                     
-                   var hasRichText:Boolean=false;
+                   
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
                     //Alert.show("element_title:"+code.toXMLString());
@@ -168,6 +168,7 @@ package utils
                         if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
                              code.setName("richtext");
                              hasRichText=true;
+                          
                         }
                    }
 
@@ -178,6 +179,7 @@ package utils
                 
                 if(hasRichText==false){
                     //add new richtext node
+                    //Alert.show("add rich:"+code.toXMLString());
                     var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
                     mainContainer.appendChild(richtext);
                     mainContainer=richtext;
@@ -186,7 +188,10 @@ package utils
                   
                     if (mainContainer)
                     {
-                        mainContainer.appendChild(code);               
+                        mainContainer.appendChild(code); 
+                        if(code.name()=="richtext"){
+                            mainContainer=code;
+                        }              
                     }
                     else
                     {

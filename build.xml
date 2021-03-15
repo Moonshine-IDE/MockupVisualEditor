@@ -6,7 +6,7 @@
 		copy-bin-to-moonshine won't be fired.
 	<property name="MOONSHINE_LIBS_PATH" value="../Moonshine-IDE/ide/MoonshineDESKTOPevolved/libs"/>-->
 	<property name="SWC_NAME" value="VisualEditor-${version}.swc"/>
-	<property name="IsDebug" value="false" />
+	<property name="IsDebug" value="true" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
 	<target name="main" depends="clean-up-bin, exclude-files, build, documentationPrimeFaces, clean-up-after-compilation, copy-bin-to-moonshine"/>
@@ -78,6 +78,15 @@
 		<asdoc output="${basedir}/bin/doc" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/primeFaces/surfaceComponents/components"/>
+		</asdoc>
+	</target>
+
+
+	<target name="documentationDomino">
+		<echo>Creating documentation for Domino Visual Editor components</echo>
+		<asdoc output="${basedir}/bin/doc" failonerror="true">
+			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
+			<doc-sources path-element="${basedir}/src/view/domino/surfaceComponents/components"/>
 		</asdoc>
 	</target>
 

@@ -55,6 +55,7 @@ package utils
 	import view.domino.surfaceComponents.components.DominoParagraph;
 	import view.domino.surfaceComponents.components.DominoTabView;
 	import view.domino.surfaceComponents.components.MainApplication;
+	import mx.controls.Alert;
     public class EditingSurfaceReader
 	{
         public static var CLASS_LOOKUP:Object;

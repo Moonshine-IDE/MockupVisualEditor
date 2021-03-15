@@ -275,9 +275,21 @@ package view.domino.surfaceComponents.components
                 
             }
 
-            /**
-             * the height that the component should be when open
-             */
+        /**
+         * <p>Domino:the height that the component should be when open</p>
+         * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
+         * <tr><td>Apache Royale</td><td>Planned</td></tr>
+         * <tr><td>PrimeFaces</td><td>Planned</td></tr>
+         * <tr><td>Flex</td><td>Supported</td></tr>
+         * <tr><td>GSP</td><td>Planned</td></tr>
+         * </table>
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;section openHeight=""/&gt;</listing>
+         * @example
+         * <strong>Domino:</strong>
+         * <listing version="3.0">&lt;section openHeight=""/&gt;</listing>
+         */
             protected function get openHeight():Number
             {
                 if(cachedHeight>0){
@@ -458,6 +470,21 @@ package view.domino.surfaceComponents.components
 
 
         private var _color:String = "system";
+        /**
+         * <p>Domino:the color of section</p>
+         * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
+         * <tr><td>Apache Royale</td><td>Planned</td></tr>
+         * <tr><td>PrimeFaces</td><td>Planned</td></tr>
+         * <tr><td>Flex</td><td>Supported</td></tr>
+         * <tr><td>GSP</td><td>Planned</td></tr>
+         * </table>
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;section color=""/&gt;</listing>
+         * @example
+         * <strong>Domino:</strong>
+         * <listing version="3.0">&lt;section color=""/&gt;</listing>
+         */
 		[Bindable(event="colorAttributeChanged")]
         public function get color():String
         {
@@ -515,6 +542,21 @@ package view.domino.surfaceComponents.components
 
 
         private var _fontStyle:String = "normal";
+        /**
+         * <p>Domino:the font style of section</p>
+         * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
+         * <tr><td>Apache Royale</td><td>Planned</td></tr>
+         * <tr><td>PrimeFaces</td><td>Planned</td></tr>
+         * <tr><td>Flex</td><td>Supported</td></tr>
+         * <tr><td>GSP</td><td>Planned</td></tr>
+         * </table>
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;sectiontitle&gt; &lt;font&gt;style=""  &lt;/font&gt; &lt;sectiontitle /&gt; </listing>
+         * @example
+         * <strong>Domino:</strong>
+         * <listing version="3.0">>&lt;sectiontitle&gt; &lt;font&gt;style=""  &lt;/font&gt; &lt;sectiontitle /&gt;</listing>
+         */
 		[Bindable(event="fontStyleAttributeChanged")]
         public function get fontStyle():String
         {
@@ -721,12 +763,21 @@ package view.domino.surfaceComponents.components
 		}
         
         [Bindable("sizeChanged")]
-        /**
-         * <p>Domino: <strong>size</strong></p>
-         *
-         * @default "12"
-         *
-           */
+         /**
+         * <p>Domino:the size style of section text</p>
+         * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
+         * <tr><td>Apache Royale</td><td>Planned</td></tr>
+         * <tr><td>PrimeFaces</td><td>Planned</td></tr>
+         * <tr><td>Flex</td><td>Supported</td></tr>
+         * <tr><td>GSP</td><td>Planned</td></tr>
+         * </table>
+         * @example
+         * <strong>Visual Editor XML:</strong>
+         * <listing version="3.0">&lt;sectiontitle&gt; &lt;font&gt;size=""  &lt;/font&gt; &lt;sectiontitle /&gt; </listing>
+         * @example
+         * <strong>Domino:</strong>
+         * <listing version="3.0">>&lt;sectiontitle&gt; &lt;font&gt;size=""  &lt;/font&gt; &lt;sectiontitle /&gt;</listing>
+         */
 
          private var _size:String = "12";
          public function get size():String

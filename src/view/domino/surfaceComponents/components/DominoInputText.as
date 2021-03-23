@@ -18,7 +18,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IIdAttribute;
     import view.interfaces.INameAttribute;
     import view.interfaces.IDominoSurfaceComponent;
-    import view.primeFaces.propertyEditors.InputTextPropertyEditor;
+    import view.domino.propertyEditors.InputTextPropertyEditor;
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IInputText;

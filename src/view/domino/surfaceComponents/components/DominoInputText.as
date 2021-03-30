@@ -2141,8 +2141,24 @@ package view.domino.surfaceComponents.components
                 if(this.type=="keyword"){
                      //Alert.show("key:"+this.keywords);
                      if(this.keywords){
-                        xml.@keywords = StringHelper.base64Encode(this.keywords)
-                   
+                        //if user input shift+enter ,it will brek the text list new line.
+                        //so we need filter the shift+enter in here----starting.
+                        var cache:String="";
+                        for(var i = 0; i < this.keywords.length; i++){
+                            var ascii:int=this.keywords.charCodeAt(i);
+                             if(ascii==8232){
+                                 ascii=10;
+                             }
+                             cache=cache+String.fromCharCode(ascii);
+                        }
+                        if(this.keywords!=cache){
+                            this.keywords=cache;
+                        }
+                        //filter shift+enter end-----------------------
+
+                        xml.@keywords = StringHelper.base64Encode(this.keywords);
+
+                                          
                      }
 
                      if(this.keywordui){

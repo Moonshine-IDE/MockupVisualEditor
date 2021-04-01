@@ -22,10 +22,14 @@
 			private function onInputCreationComplete(event:FlexEvent):void
         	{
 				 keywordsFlag = Object(selectedItem).keyformulachoices;
+				
+				 // Alert.show("name:"+Object(selectedItem).name);
 				 if(keywordsFlag==true){
+					 this.keyformulachoices.selected=true;
 					keywords.visible =keywords.includeInLayout = false;
 					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
 				 }else{
+					this.keyformulachoices.selected=false;
 					keywords.visible =keywords.includeInLayout = true;
 					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
 				 }

@@ -2225,6 +2225,7 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+            //Alert.show("xml:"+xml.toXMLString());
 
 			component.fromXML(xml, callback);
 			
@@ -2243,8 +2244,9 @@ package view.domino.surfaceComponents.components
             this.object = component.object;
             this.recalcchoices = component.recalcchoices;
             this.recalonchange = component.recalonchange;
+           
             this.keyformulachoices = component.keyformulachoices;
-
+            
             if(component.formula){
                 
                this.formula=  StringHelper.base64Decode(component.formula);

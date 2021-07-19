@@ -2144,7 +2144,7 @@ package view.domino.surfaceComponents.components
                         //if user input shift+enter ,it will brek the text list new line.
                         //so we need filter the shift+enter in here----starting.
                         var cache:String="";
-                        for(var i = 0; i < this.keywords.length; i++){
+                        for(var i:int = 0; i < this.keywords.length; i++){
                             var ascii:int=this.keywords.charCodeAt(i);
                              if(ascii==8232){
                                  ascii=10;

@@ -161,28 +161,23 @@
 
         private function selectCurrentItem():void
         {
-      
-           
-
-            _selectItemList=new ArrayList()
-            for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
+            _selectItemList = new ArrayList();
+            var checkNum:int = 0;
+            var item:Object = null;
+            for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
             {
-                var item:Object = multCheckList.getChildAt(checkNum);
+                 item = multCheckList.getChildAt(checkNum);
                  if(item is ListBaseContentHolder){
-                    if(optionExculdeFunction){
+                    if(optionExculdeFunction != null){
                          optionExculdeFunction(item);
                      }
                  }
             }
             //Alert.show("Child:"+multCheckList.numChildren);
-            for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
+            for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
             {
-                
-               //trace(myList.getChildAt(btnNum);
-                 var item:Object = multCheckList.getChildAt(checkNum);
+                 item = multCheckList.getChildAt(checkNum);
                  if(item is ListBaseContentHolder){
-                   
-
                       for (var i:int = 0; i < item.numChildren; i++){
                           var checkitem:Object = item.getChildAt(i);
                            //Alert.show("checkitem:"+checkitem.toString());
@@ -202,20 +197,15 @@
                            
                       }
                  }
-               
-                
-
             }
            
 
             //Alert.show("_selectItemList:"+_selectItemList.toString());
             if(_selectItemList.length>0){
                 var str:String = "";
-                for (var j:int = 0; j < _selectItemList.length; j++){
-                    str=str+_selectItemList.getItemAt(j).toString()+" "
+                for (var k:int = 0; j < _selectItemList.length; k++){
+                    str = str+_selectItemList.getItemAt(k).toString() + " ";
                 }
-                //Alert.show("_textProperty:"+_textProperty);
-
                 selectedItem[_textProperty] = str;
             }
             // else if (selectedItem[_textProperty])

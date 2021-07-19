@@ -17,7 +17,7 @@
 			{
 				return item.label;
 			}
-			
+
 			private function getDominoFieldTooltip(item:Object):String
 			{
 				return item.description;
@@ -28,7 +28,7 @@
 				var normal_flag:Boolean = false;
 				var execute_array:Array=null;
 				var normalSelect:Boolean=false;
-				//<!ENTITY % font.styles "normal | bold | italic | underline | 
+				//<!ENTITY % font.styles "normal | bold | italic | underline |
 				//strikethrough | superscript | subscript | shadow | emboss | extrude">
 				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
 				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
@@ -36,20 +36,22 @@
 				var selected_array:Array=[];
 				var hasExlude:Boolean=false;
 				var hasExludeNum:Number=0;
+				var i:int = 0;
+				var checkItem:Object = null;
 				if(item){
-					for (var i:int = 0; i < item.numChildren; i++){
-						var checkitem:Object = item.getChildAt(i);
-							if(checkitem){
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+							if(checkItem){
 								//Alert.show("checkitem:"+checkitem.toString());
-								if(checkitem.hasOwnProperty("selected")&&checkitem.selected==true  ){
-									selected_array.push(checkitem.label);
+								if(checkItem.hasOwnProperty("selected") && checkItem.selected==true  ){
+									selected_array.push(checkItem.label);
 								}
 							}
 					}
 
 					//Alert.show("selected_array:"+selected_array.toString());
 					if(selected_array&& selected_array.length>0){
-						for (var i:int = 0; i < selected_array.length; i++){
+						for (i = 0; i < selected_array.length; i++){
 							if(selected_array[i].toString()=="normal"){
 								hasExlude=true;
 							}else if(exclusions_exclude_option.indexOf(selected_array[i].toString())>=0){
@@ -62,86 +64,85 @@
 					}
 					//Alert.show("hasExlude:"+hasExlude);
 					if(pre_label_var!=null){
-						for (var i:int = 0; i < item.numChildren; i++){
-							var checkitem:Object = item.getChildAt(i);
-							if(checkitem){
+						for (i = 0; i < item.numChildren; i++){
+							checkItem = item.getChildAt(i);
+							if(checkItem){
 							//Alert.show("checkitem:"+checkitem.toString());
-							if(checkitem.hasOwnProperty("selected") ){
+							if(checkItem.hasOwnProperty("selected") ){
 								//	Alert.show("checkitem.label:"+checkitem.label);
-									if(checkitem.label==pre_label_var&& hasExlude==true){
+									if(checkItem.label==pre_label_var&& hasExlude==true){
 										//checkitem.enabled=false;
-										checkitem.selected=false;
-										
-									}		
-									
+										checkItem.selected=false;
+
+									}
+
 								}
 							}
-							
+
 						}
 						//Alert.show("pre_label_var:"+pre_label_var);
 						pre_label_var=null;
 
 					}
 
-					
 
-					
-					
-					for (var i:int = 0; i < item.numChildren; i++){
-							var checkitem:Object = item.getChildAt(i);
-							if(checkitem){
+
+
+
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+						if(checkItem){
 							//Alert.show("checkitem:"+checkitem.toString());
-							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
-								
-									if(checkitem.label=="normal"){
-										//Alert.show("checkitem.label:"+checkitem.label);
-										execute_array=exclusions_normal;
-										normalSelect=true;
-										pre_label_var="normal";
-										//break;
-									}
-									
-									
-								}
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+
+							if(checkItem.label=="normal"){
+								//Alert.show("checkitem.label:"+checkitem.label);
+								execute_array=exclusions_normal;
+								normalSelect=true;
+								pre_label_var="normal";
+								//break;
 							}
-							
+
+
+							}
+						}
 					}
 						//Alert.show("execute_array1:");
 
-					for (var i:int = 0; i < item.numChildren; i++){
-							var checkitem:Object = item.getChildAt(i);
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
 							//Alert.show("checkitem:"+checkitem.toString());
-							if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
 								//Alert.show("checkitem:"+checkitem.label);
-								if(checkitem.label=="superscript"){
+								if(checkItem.label=="superscript"){
 									if(normalSelect==false)
 									pre_label_var="superscript"
 									if(execute_array==null)
 									execute_array=["subscript","shadow","emboss","extrude"];
 										//break;
 								}
-								if(checkitem.label=="subscript"){
+								if(checkItem.label=="subscript"){
 									if(normalSelect==false)
 									pre_label_var="subscript"
 									if(execute_array==null)
 									execute_array=["superscript","shadow","emboss","extrude"];
 									//break;
 								}
-								if(checkitem.label=="shadow"){
+								if(checkItem.label=="shadow"){
 									if(normalSelect==false)
 									pre_label_var="shadow"
 									if(execute_array==null)
 									execute_array=["superscript","subscript","emboss","extrude"];
 									//break;
 								}
-								if(checkitem.label=="emboss"){
+								if(checkItem.label=="emboss"){
 									if(normalSelect==false)
 									pre_label_var="emboss"
 									if(execute_array==null)
 									execute_array=["superscript","subscript","shadow","extrude"];
 									//break;
 								}
-								if(checkitem.label=="extrude"){
+								if(checkItem.label=="extrude"){
 									if(normalSelect==false)
 									pre_label_var="extrude"
 									if(execute_array==null)
@@ -149,12 +150,12 @@
 									//break;
 								}
 							}
-					}		
-					
+					}
+
 						//Alert.show("execute_array2:");
 
-					
-				
+
+
 
 					for (var j:int = 0; j < item.numChildren; j++){
 						var checkitem_child:Object = item.getChildAt(j);
@@ -163,7 +164,7 @@
 									if(execute_array.indexOf(checkitem_child.label)>=0){
 										checkitem_child.selected=false;
 										checkitem_child.enabled=true;
-									
+
 									}else{
 										//checkitem_child.selected=true;
 										checkitem_child.enabled=true;

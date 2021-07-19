@@ -241,7 +241,7 @@
 				return item.description;
 			}
 			//change="togCheck_changeHandler(event)"
-			private function togCheck_changeHandler(event:Event)
+			private function togCheck_changeHandler(event:Event):void
 			{
 				//Alert.show(":"+this.keyformulachoices.selected);
 				if(this.keyformulachoices.selected==true){

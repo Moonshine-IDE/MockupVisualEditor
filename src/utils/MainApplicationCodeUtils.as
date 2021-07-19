@@ -71,25 +71,23 @@ package utils
 		{
             var body:XMLList = xml.children();
 			var mainItem:XML=null;
-			for each (var item:XML in body)
+			var item:XML = null;
+			var itemName:String = "";
+			for each (item in body)
             {
-                var itemName:String = item.name();
-				
+                itemName = item.name();
                 if (itemName=="http://www.lotus.com/dxl::richtext")
                 {
-					mainItem=item
-                   
+					mainItem = item;
                 }
             }
 			if(mainItem==null){
-				for each (var item:XML in body)
+				for each (item in body)
 				{
-					var itemName:String = item.name();
-					
+					itemName = item.name();
 					if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
 					{
-						mainItem=item
-					
+						mainItem = item;
 					}
 				}
 			}

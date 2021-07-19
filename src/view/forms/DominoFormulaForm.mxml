@@ -57,8 +57,11 @@
 
         private var _binding:ChangeWatcher;
 
-        public var _hasError:Boolean=false;
-        public var warningMessage:String="";
+        [Bindable]
+        private var _hasError:Boolean = false;
+
+        [Bindable]
+        public var warningMessage:String = "";
 
         [Bindable]
         public var prompt:String;

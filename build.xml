@@ -12,7 +12,7 @@
 	<target name="main" depends="clean-up-bin, exclude-files, build, documentationPrimeFaces, clean-up-after-compilation, copy-bin-to-moonshine"/>
 
 	<target name="clean-up-bin">
-		<delete>
+		<delete quiet="true">
 			<fileset dir="${basedir}/bin">
 				<include name="*"/>
 			</fileset>

@@ -2,8 +2,6 @@ package utils
 {
     import mx.core.UIComponent;
 
-	import mx.controls.Alert;
-
     import view.EditingSurface;
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
@@ -221,9 +219,7 @@ package utils
 		public static function getParentContent(surface:EditingSurface, title:String, component:UIComponent):XML
 		{
             var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
-            var isPrimeFacesMainApp:MainApplication = element as MainApplication;
-
-			if (!isPrimeFacesMainApp && element is IFlexSurfaceComponent)
+			if (surface.isVisualEditorFlex)
 			{
 				return getFlexMainContainer(title, element.width, element.height);
 			}

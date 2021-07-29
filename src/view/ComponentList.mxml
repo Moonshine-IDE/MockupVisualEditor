@@ -47,6 +47,7 @@
 			
 			import view.domino.surfaceComponents.components.DominoInputText;
 			import view.domino.surfaceComponents.components.DominoLabel;
+			import view.domino.surfaceComponents.components.DominoButton;
 			import view.domino.surfaceComponents.components.DominoComputedText;
 			import view.domino.surfaceComponents.components.DominoTable;
 			import view.domino.surfaceComponents.components.DominoParagraph;
@@ -64,6 +65,7 @@
 				if (VisualEditorType.DOMINO == visualEditorType)
 				{
 					collection = new ArrayCollection([
+						new ComponentListItem("Button", DominoButton),
 						new ComponentListItem("Input", DominoInputText),
 						new ComponentListItem("Label", DominoLabel),
 						new ComponentListItem("Table", DominoTable),

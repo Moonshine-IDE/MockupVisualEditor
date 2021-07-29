@@ -55,6 +55,7 @@ package utils
 	import view.domino.surfaceComponents.components.DominoParagraph;
 	import view.domino.surfaceComponents.components.DominoTabView;
 	import view.domino.surfaceComponents.components.MainApplication;
+	import view.domino.surfaceComponents.components.DominoButton;
 	import mx.controls.Alert;
     public class EditingSurfaceReader
 	{
@@ -83,6 +84,7 @@ package utils
 			if (visualEditorType == VisualEditorType.DOMINO){
 				CLASS_LOOKUP[DominoInputText.ELEMENT_NAME] = DominoInputText;
 				CLASS_LOOKUP[DominoLabel.ELEMENT_NAME] = DominoLabel;
+				CLASS_LOOKUP[DominoButton.ELEMENT_NAME] = DominoButton;
 				CLASS_LOOKUP[DominoComputedText.ELEMENT_NAME] = DominoComputedText;
 				CLASS_LOOKUP[DominoTable.ELEMENT_NAME] = DominoTable;
 				CLASS_LOOKUP[DominoTabView.ELEMENT_NAME] = DominoTabView;

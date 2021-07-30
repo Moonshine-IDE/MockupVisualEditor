@@ -11,6 +11,8 @@ package view.domino.surfaceComponents.components
     import data.OrganizerItem;
 
     import utils.XMLCodeUtils;
+
+    import mx.collections.ArrayList;
     
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IPrimeFacesSurfaceComponent;
@@ -18,9 +20,10 @@ package view.domino.surfaceComponents.components
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
     import view.suportClasses.PropertyChangeReference; 
 
+    import utils.StringHelper;
+
     [Exclude(name="propertyChangeFieldReference", kind="property")]
 	[Exclude(name="actionListener", kind="property")]
-	// [Exclude(name="isCommandButton", kind="property")]
     [Exclude(name="isUpdating", kind="property")]
 
 	[Exclude(name="propertiesChangedEvents", kind="property")]
@@ -87,11 +90,220 @@ package view.domino.surfaceComponents.components
 					"explicitMinHeightChanged",
 					"enabledChanged",
 					"labelChanged",
-					// "toolTipChanged",
-					// "isCommandButtonChanged",
-					// "actionListenerChanged"
+                    "sizeChanged",
+                    "colorAttributeChanged",
+                    "fontStyleAttributeChanged",
+                    "codeeventChanged",
+                    "codeChanged"
 			];
 		}
+        [Bindable("codeeventChanged")]
+        private var _codeevent:String = "click";
+		public function get codeEvent():String
+		{
+			return _codeevent;
+		}
+		public function set codeEvent(value:String):void
+		{
+			_codeevent = value;
+		}
+
+
+        [Bindable("codeChanged")]
+        private var _code:String;
+        public function get code():String
+		{
+			return _code;
+		}
+
+		public function set code(value:String):void
+		{
+			_code = value;
+		}
+         //------------font style--------------------------------------------
+
+        //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
+        [Bindable]
+        private var _fontStyles:ArrayList = new ArrayList([
+              {label: "normal",description: "normal",value:"normal",enabled:true},
+              {label: "bold",description: "bold",value:"bold",enabled:true},
+              {label: "italic",description: "italic",value:"italic",enabled:true},
+              {label: "underline",description: "underline",value:"underline",enabled:true},
+              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true},
+              {label: "superscript",description: "superscript",value:"superscript",enabled:true},
+              {label: "shadow",description: "shadow",value:"shadow",enabled:true},
+              {label: "emboss",description: "emboss",value:"emboss",enabled:true},
+              {label: "extrude",description: "extrude",value:"extrude",enabled:true},
+              {label: "subscript",description: "subscript",value:"subscript",enabled:true},
+              
+        ])
+
+
+         public function get fontStyles():ArrayList
+        {
+            return _fontStyles;
+        }
+    
+        private var _fontStyle:String = "normal";
+        [Bindable(event="fontStyleAttributeChanged")]
+        public function get fontStyle():String
+        {
+            return _fontStyle;
+        }
+		
+        public function set fontStyle(value:String):void
+        {
+            if (_fontStyle != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "fontStyle", _fontStyle, value);
+				
+                _fontStyle = value;
+                
+               
+                dispatchEvent(new Event("colorAttributeChanged"))
+            }
+        }
+
+         //------------color setting end------------------------------------------------
+        [Bindable("sizeChanged")]
+        /**
+         * <p>Domino: <strong>size</strong></p>
+         *
+         * @default "12"
+         *
+        */
+
+         private var _size:String = "12";
+
+         public function get size():String
+        {
+            return  this._size ;
+        }
+
+		 public function set size(value:String):void
+		{
+			if (this._size != value)
+			{
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "size", this._size, value);
+				
+				this._size = value;
+               
+                super.setStyle("fontSize",value);
+				dispatchEvent(new Event("sizeChanged"));
+			}
+		}
+
+
+         /****************************************************************
+         * font color for lable
+         * https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_DEFINED_ENTITIES_XML.html
+         * aqua | black | blue | fuchsia | gray | green | lime | 
+         * maroon | navy | olive |purple | red | silver | teal |
+         * white | yellow | none | system " 
+         */
+        [Bindable]
+        private var _colors:ArrayList = new ArrayList([
+        {label: "aqua",description: "aqua color.",htmlcolor:"#00FFFF"},
+        {label: "black",description:"",htmlcolor:"#000000"},
+        {label: "blue",description:"",htmlcolor:"#0000FF"}, 
+        {label: "fuchsia",description:"",htmlcolor:"#FF00FF"},
+        {label: "gray",description:"",htmlcolor:"#808080"},
+        {label: "green",description:"",htmlcolor:"#008000"},
+        {label: "lime",description:"",htmlcolor:"#00FF00"},
+        {label: "maroon",description:"",htmlcolor:"#800000"},
+        {label: "navy",description:"",htmlcolor:"#000080"},
+        {label: "olive",description:"",htmlcolor:"#808000"},
+        {label: "purple",description:"",htmlcolor:"#800080"},
+        {label: "red",description:"",htmlcolor:"#FF0000"},
+        {label: "silver",description:"",htmlcolor:"#C0C0C0"},
+        {label: "teal",description:"",htmlcolor:"#008080"},
+        {label: "white",description:"",htmlcolor:"#ffffff"},
+        {label: "yellow",description:"",htmlcolor:"#FFFF00"},
+        {label: "none",description:"",htmlcolor:"#000000"},
+        {label: "system",description:"A preset color. For instance, the font color of a hotspot link is 'system' because it is determined by the %link.color.attrs; property settings for a form.",
+        htmlcolor:"#4B0082"}
+        ]);
+
+        public function get colors():ArrayList
+        {
+            return _colors;
+        }
+
+
+        private var _color:String = "system";
+
+        [Bindable(event="colorAttributeChanged")]
+        public function get color():String
+        {
+            return _color;
+        }
+		
+        public function set color(value:String):void
+        {
+            if (_color != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "color", _color, value);
+				
+                _color = value;
+                var html_color:String =null;
+                for(var i:int=0; i<_colors.length; i++)
+                {
+                 
+                  if(_colors.getItemAt(i).label==value){
+                      html_color=_colors.getItemAt(i).htmlcolor
+                  }
+                }
+
+                if(html_color!=null){
+                     super.setStyle("color",html_color);
+                }
+               
+                dispatchEvent(new Event("colorAttributeChanged"))
+            }
+        }
+    /**
+     *action | onhelp | queryopen | queryrecalc | postopen | 
+     querymodechange | querysend | postsend | postmodechange | 
+     postrecalc | querysave | postsave | queryclose | click | 
+     regiondoubleclick | queryopendocument | queryaddtofolder | 
+     querydragdrop | querypaste | postdragdrop | postpaste | 
+     onload | onunload | onsubmit | queryentryresize | postentryresize 
+     */
+
+        [Bindable]
+        private var _codeEnventList:ArrayList = new ArrayList([
+        {label: "action",value:"action",description: "action"},
+        {label: "onhelp",value:"onhelp",description: "onhelp"},
+        {label: "queryopen",value:"queryopen",description: "queryopen"},
+        {label: "queryrecalc",value:"queryrecalc",description: "queryrecalc"},
+        {label: "postopen",value:"postopen",description: "postopen"},
+        {label: "querymodechange",value:"querymodechange",description: "querymodechange"},
+        {label: "querysend",value:"querysend",description: "querysend"},
+        {label: "postsend",value:"postsend",description: "postsend"},
+        {label: "postrecalc",value:"postrecalc",description: "postrecalc"},
+        {label: "querysave",value:"querysave",description: "querysave"},
+        {label: "queryclose",value:"queryclose",description: "queryclose"},
+        {label: "click",value:"click",description: "click"},
+        {label: "regiondoubleclick",value:"regiondoubleclick",description: "regiondoubleclick"},
+        {label: "queryopendocument",value:"queryopendocument",description: "queryopendocument"},
+        {label: "queryaddtofolder",value:"queryaddtofolder",description: "queryaddtofolder"},
+        {label: "querydragdrop",value:"querydragdrop",description: "querydragdrop"},
+        {label: "querypaste",value:"querypaste",description: "querypaste"},
+        {label: "postdragdrop",value:"postdragdrop",description: "postdragdrop"},
+        {label: "postpaste",value:"postpaste",description: "postpaste"},
+        {label: "onload",value:"onload",description: "onload"},
+        {label: "onunload",value:"onunload",description: "onunload"},
+        {label: "onsubmit",value:"onsubmit",description: "onsubmit"},
+        {label: "queryentryresize",value:"queryentryresize",description: "queryentryresize"},
+        {label: "postentryresize",value:"postentryresize",description: "postentryresize"}
+        ]);
+
+        public function get codeEnventList():ArrayList
+        {
+            return _codeEnventList;
+        }
+    
+       
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
@@ -140,25 +352,6 @@ package view.domino.surfaceComponents.components
         {
             return _cdataInformation;
         }
-
-		// private var _isCommandButton:Boolean;
-		
-		// [Bindable("isCommandButtonChanged")]
-		// public function get isCommandButton():Boolean
-		// {
-		// 	return _isCommandButton;
-		// }
-		
-		// public function set isCommandButton(value:Boolean):void
-		// {
-		// 	if (_isCommandButton != value)
-		// 	{
-		// 		_propertyChangeFieldReference = new PropertyChangeReference(this, "isCommandButton", _isCommandButton, value);
-				
-		// 		_isCommandButton = value;
-		// 		dispatchEvent(new Event("isCommandButtonChanged"));
-		// 	}
-		// }
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -294,47 +487,7 @@ package view.domino.surfaceComponents.components
 			}
 		}
 		
-		// [Bindable("toolTipChanged")]
-        // /**
-		//  * <p>Domino: <strong>title</strong></p>
-        //  *
-		//  * @example
-        //  * <strong>Visual Editor:</strong>
-        //  * <listing version="3.0">&lt;Button title=""/&gt;</listing>
-		//  *
-        //  * @example
-		//  * <strong>Domino:</strong>
-        //  * <listing version="3.0">&lt;p:button title=""/&gt;</listing>
-        //  */
-		// override public function set toolTip(value:String):void
-		// {
-		// 	if (super.toolTip != value)
-		// 	{
-		// 		_propertyChangeFieldReference = new PropertyChangeReference(this, "toolTip", super.toolTip, value);
-				
-		// 		super.toolTip = value;
-		// 		dispatchEvent(new Event("toolTipChanged"));
-		// 	}
-		// }
-		
-		// private var _actionListener:String;
-		
-		// [Bindable("actionListenerChanged")]
-		// public function get actionListener():String
-		// {
-		// 	return _actionListener;
-		// }
-		
-		// public function set actionListener(value:String):void
-		// {
-		// 	if (_actionListener != value)
-		// 	{
-		// 		_propertyChangeFieldReference = new PropertyChangeReference(this, "actionListener", _actionListener, value);
-				
-		// 		_actionListener = value;
-		// 		dispatchEvent(new Event("actionListenerChanged"));
-		// 	}
-		// }
+	
 
         public function get propertyEditorClass():Class
 		{
@@ -360,9 +513,17 @@ package view.domino.surfaceComponents.components
 
 			xml.@disabled = !this.enabled;
             xml.@label = this.label;
-			//xml.@title = this.toolTip;
-			//xml.@isCommandButton = this.isCommandButton.toString();
-			//xml.@actionListener = this.isCommandButton ? this.actionListener : "";
+            xml.@size = this.size;
+            xml.@color = this.color;
+            xml.@fontStyle = this.fontStyle;
+            
+            if(this.code){
+                 xml.@code =  StringHelper.base64Encode(this.code);
+                 if(this.codeEvent){
+                     xml.@codeEvent=this.codeEvent;
+                 }
+            }
+
 
 			return xml;
 		}
@@ -377,10 +538,20 @@ package view.domino.surfaceComponents.components
             component.fromXML(xml, childFromXMLCallback);
 
             this.enabled = component.enabled;
-			//this.isCommandButton = component.isCommandButton;
             this.label = component.label;
-            //this.toolTip = component.toolTip;
-			//this.actionListener = component.actionListener;
+            this.size= component.size;
+            this.color= component.color;
+            this.fontStyle = component.fontStyle;
+
+            if(component.code){
+               this.code=  StringHelper.base64Decode(component.code);
+            }
+
+            if(component.codeEvent){
+                this.codeEvent=component.codeEvent;
+            }
+
+
         }
 
 		public function toCode():XML
@@ -388,6 +559,13 @@ package view.domino.surfaceComponents.components
 			component.enabled = this.enabled;
 			component.label = this.label;
             component.isSelected = this.isSelected;
+
+            component.size = this.size;
+            component.color = this.color;
+            component.fontStyle = this.fontStyle;
+
+            component.code = this.code;
+            component.codeEvent = this.codeEvent;
 
             (component as components.domino.DominoButton).width = this.width;
             (component as components.domino.DominoButton).height = this.height;
@@ -399,10 +577,7 @@ package view.domino.surfaceComponents.components
 
 		public function getComponentsChildren(...params):OrganizerItem
 		{
-			// @note @return
-			// children = null (if not a drop acceptable component, i.e. text input, button etc.)
-			// children = [] (if drop acceptable component, i.e. div, tab etc.)
-			return (new OrganizerItem(this, ELEMENT_NAME, null));
+            return (new OrganizerItem(this, ELEMENT_NAME, null));
 		}
 	}
 }

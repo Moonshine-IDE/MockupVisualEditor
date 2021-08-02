@@ -9,23 +9,19 @@ package view.domino.surfaceComponents.components
     import spark.components.TextInput;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
     import mx.collections.ArrayList;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-    import view.interfaces.INameAttribute;
     import view.interfaces.IDominoSurfaceComponent;
     import view.domino.propertyEditors.InputTextPropertyEditor;
-    import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IInputText;
     import interfaces.dominoComponents.IDominoInputText;
     import components.domino.DominoInputText;
 
-    import mx.controls.Alert;
     import utils.StringHelper;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -42,8 +38,6 @@ package view.domino.surfaceComponents.components
     /**domino exclude property */
     [Exclude(name="kinds", kind="property")]
     [Exclude(name="types", kind="property")]
-    // [Exclude(name="keywords", kind="property")]
-    
 
 
     /**

@@ -14,8 +14,6 @@ package view.domino.surfaceComponents.components
     import mx.core.IVisualElementContainer;
     import mx.events.CollectionEvent;
     import mx.utils.StringUtil;
-    import mx.controls.Alert;
-    //import components.primeFaces.Div;
 
     import spark.events.ElementExistenceEvent;
     import spark.events.IndexChangeEvent;
@@ -30,7 +28,6 @@ package view.domino.surfaceComponents.components
     import view.domino.propertyEditors.TabViewPropertyEditor;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.primeFaces.supportClasses.NavigatorContent;
-    //import view.primeFaces.supportClasses.components.Div;
     import view.primeFaces.surfaceComponents.components.Div;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceTabView;

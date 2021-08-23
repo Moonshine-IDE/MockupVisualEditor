@@ -289,6 +289,11 @@ package view.domino.surfaceComponents.components
             return super.width;
         }
 
+        override public function set width(value:Number):void
+        {
+            super.width=value;
+        }
+
         [Inspectable(environment="none")]
         [Bindable("resize")]
         /**
@@ -463,6 +468,10 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
+
+            if(xml.@refwidth!=null){
+               delete xml.@refwidth;
+            }
  
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
@@ -517,8 +526,8 @@ package view.domino.surfaceComponents.components
             (component as components.domino.DominoTable).leftmargin = this.leftmargin;
             (component as components.domino.DominoTable).rightmargin = this.rightmargin;
             (component as components.domino.DominoTable).widthtype = this.widthtype;
-			(component as components.domino.DominoTable).width = this.width;
-			(component as components.domino.DominoTable).height = this.width;
+	        (component as components.domino.DominoTable).width = this.width;
+			(component as components.domino.DominoTable).height = this.height;
 			(component as components.domino.DominoTable).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTable).percentHeight = this.percentHeight;
 

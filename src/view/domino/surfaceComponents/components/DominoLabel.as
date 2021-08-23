@@ -608,6 +608,16 @@ package view.domino.surfaceComponents.components
 			return _run ;
 		}
 
+        private var _isNewLine:String;
+		public function get isNewLine():String
+		{
+			return _isNewLine;
+		}
+		public function set isNewLine(value:String):void
+		{
+			_isNewLine = value;
+		}
+
 		//-------------other componetn end-------------
 		
 		
@@ -632,6 +642,12 @@ package view.domino.surfaceComponents.components
                  xml.@hidewhen = encodeFormulaStr;
             }
 
+            if(this.isNewLine){
+                xml.@isNewLine= this.isNewLine;
+            }else{
+
+            }
+
             return xml;
         }
 
@@ -645,6 +661,7 @@ package view.domino.surfaceComponents.components
             this.color = component.color;
             this.size = component.size;
             this.fontStyle=component.fontStyle;
+            this.isNewLine = component.isNewLine;
             if(component.hidewhen){
                 
                this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
@@ -664,6 +681,7 @@ package view.domino.surfaceComponents.components
 			
 			component.isSelected = this.isSelected;
             component.hidewhen = this.hidewhen;
+            component.isNewLine = this.isNewLine;
 		
             return component.toCode();
         }

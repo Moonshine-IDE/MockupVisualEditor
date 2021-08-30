@@ -80,7 +80,8 @@ package view.domino.surfaceComponents.components
 				"indicateRequiredChanged",
                 "colorAttributeChanged",
                 "fontStyleAttributeChanged",
-                "hidewhenAttributeChanged"
+                "hidewhenAttributeChanged",
+                "fontNameAttributeChanged"
             ];
         }
 
@@ -397,9 +398,31 @@ package view.domino.surfaceComponents.components
                 _fontStyle = value;
                 
                
-                dispatchEvent(new Event("colorAttributeChanged"))
+                dispatchEvent(new Event ("fontStyleAttributeChanged"))
             }
         }
+
+
+        private var _fontName:String = "serif";
+        [Bindable(event="fontNameAttributeChanged")]
+        public function get fontName():String
+        {
+            return _fontName;
+        }
+        public function set fontName(value:String):void
+        {
+            if (_fontName != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "fontName", _fontName, value);
+				
+                _fontName = value;
+                
+               
+                dispatchEvent(new Event("fontNameAttributeChanged"))
+            }
+        }
+
+
 
         //------------color setting end------------------------------------------------
         [Bindable("sizeChanged")]
@@ -636,6 +659,9 @@ package view.domino.surfaceComponents.components
             if(this.fontStyle){
                 xml.@style = this.fontStyle;
             }
+             if(this.fontName){
+                xml.@name = this.fontName;
+            }
             
             if(this.hidewhen){
                 var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
@@ -661,6 +687,7 @@ package view.domino.surfaceComponents.components
             this.color = component.color;
             this.size = component.size;
             this.fontStyle=component.fontStyle;
+            this.fontName=component.fontName;
             this.isNewLine = component.isNewLine;
             if(component.hidewhen){
                 

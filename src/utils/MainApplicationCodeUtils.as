@@ -164,32 +164,12 @@ package utils
 
 			private static function handleDominoFleldNode(node:XML,mainFieldsContainer:XML,total_xml:XML):XML{
 
-						
 						var field_name:String = node.attribute("name").toString();
 						 //Alert.show("field name 212:"+field_name);
-						  if(mainFieldsContainer){
-                               mainFieldsContainer.appendChild(new XML("<text>"+field_name+"</text>"))
-                          }
-                         //2.
-						//   var itemXML:XML = new XML("<item />");
-                        //    itemXML.@name=field_name;
-                        //    itemXML.@summary="false";
-                        //    itemXML.@sign="true";
-						//    if(node.@type=="text"){
-                        //        var tyepTextXML:XML = new XML("<text>"+field_name+"</text>");
-                        //        itemXML.appendChild(tyepTextXML);
-						// 	}else if(node.@type=="number"){
-						// 		var tyepNumberXML:XML = new XML("<number>"+0+"</number>");
-						// 		itemXML.appendChild(tyepNumberXML);
-						// 	}else if(node.@type=="datetime"){
-						// 		var rawXML:XML = new XML("<rawitemdata type='400'>AAAAAAAAAAA=</rawitemdata>");
-						// 		itemXML.appendChild(rawXML);
-						// 	}
-
-						// 	 total_xml.appendChild(itemXML);
-					
-
-					return total_xml
+						if(mainFieldsContainer){
+							mainFieldsContainer.appendChild(new XML("<text>"+field_name+"</text>"))
+						}
+                       	return total_xml
 			
 			}
 

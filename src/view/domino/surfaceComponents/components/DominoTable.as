@@ -426,11 +426,26 @@ package view.domino.surfaceComponents.components
 			}
 		}
 
+
+        private var _columnProperties:String;
+		public function get columnProperties():String
+		{
+			return _columnProperties;
+		}
+		public function set columnProperties(value:String):void
+		{
+			_columnProperties = value;
+		}
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+            if(this.columnProperties){
+                xml.@columsProperty = this.columnProperties;
+            }
 
             if (cdataXML)
             {
@@ -472,7 +487,11 @@ package view.domino.surfaceComponents.components
             if(xml.@refwidth!=null){
                delete xml.@refwidth;
             }
- 
+
+            if(xml.@columsProperty!=null){
+                this.columnProperties=xml.@columsProperty;
+            }
+
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
   
@@ -530,6 +549,7 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoTable).height = this.height;
 			(component as components.domino.DominoTable).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTable).percentHeight = this.percentHeight;
+            (component as components.domino.DominoTable).columnProperties = this.columnProperties;
 
             return component.toCode();
         }

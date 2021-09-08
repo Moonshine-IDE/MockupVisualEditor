@@ -303,6 +303,18 @@
 				colItem.label = String(prefix + itemValue);
 			}
 		}
+
+
+		
+		public function get selectedComponentColunmnWidth():String
+		{
+			var grid:DominoTable = (selectedItem as DominoTable);
+			if(grid.columnProperties!=null){
+				return grid.columnProperties.toString();
+			}else{
+				return ""
+			}	
+		}
 		]]>
 	</fx:Script>
     <suportclasses:layout>
@@ -356,5 +368,15 @@
 					  enabled="{columnList.selectedIndex !== -1 &amp;&amp; columnsDataProvider.length > 1}"
 					  click="deleteColumnButton_clickHandler(event)"/>
 		</s:HGroup>
+
+		<s:FormItem label="Columns Width" skinClass="skins.StackedFormItemSkin">
+			<s:TextInput id="columnWidth" width="100%"
+						 text="{selectedComponentColunmnWidth}" skinClass="skins.TextInputSkin"
+					     height="25"
+						 enabled="true"
+						 />
+		</s:FormItem>
+
+		
 	</s:FormItem>
 </suportclasses:BasePropertyEditorForm>

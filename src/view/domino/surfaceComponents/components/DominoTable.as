@@ -90,7 +90,8 @@ package view.domino.surfaceComponents.components
                 "explicitMinHeightChanged",
 				"itemRemoved",
 				"removedAll",
-				"itemAdded"
+				"itemAdded",
+                "columnWidthAttributeChanged"
             ];
 
             this.ensureCreateInitialRowWithColumn();
@@ -428,13 +429,20 @@ package view.domino.surfaceComponents.components
 
 
         private var _columnProperties:String;
+        [Bindable(event="columnWidthAttributeChanged")]
 		public function get columnProperties():String
 		{
 			return _columnProperties;
 		}
 		public function set columnProperties(value:String):void
 		{
-			_columnProperties = value;
+            if (_columnProperties != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "columnProperties", _columnProperties, value);
+				_columnProperties = value;
+                dispatchEvent(new Event("columnWidthAttributeChanged"))
+            }
+			
 		}
 
         public function toXML():XML
@@ -445,6 +453,10 @@ package view.domino.surfaceComponents.components
 
             if(this.columnProperties){
                 xml.@columsProperty = this.columnProperties;
+            }
+
+            if(this.leftmargin){
+                xml.@leftmargin = this.leftmargin;
             }
 
             if (cdataXML)
@@ -486,6 +498,10 @@ package view.domino.surfaceComponents.components
 
             if(xml.@refwidth!=null){
                delete xml.@refwidth;
+            }
+
+            if(xml.@leftmargin!=null){
+                this.leftmargin=xml.@leftmargin;
             }
 
             if(xml.@columsProperty!=null){

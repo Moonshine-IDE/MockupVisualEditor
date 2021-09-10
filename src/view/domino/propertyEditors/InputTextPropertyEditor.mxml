@@ -298,7 +298,7 @@
                             collectionProperty="formats" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-		 <forms:TextForm id="digits" label="Digits" restrict="0-9" textProperty="digits" 
+		 <forms:TextForm id="digits" label="Digits" restrict="0-9" textProperty="digits" change="changeHandler(event)"
 				bindableText=""/> 
 				<forms:ToggleButtonSelectedForm label="Parens" textProperty="parens"/>
 				<forms:ToggleButtonSelectedForm label="Percent" textProperty="percent"/>

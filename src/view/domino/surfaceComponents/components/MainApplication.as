@@ -387,7 +387,7 @@ package view.domino.surfaceComponents.components
 
             if(this.windowsTitle){
            
-                 mainXML.@webquerysave=StringHelper.base64Encode(this.windowsTitle);
+                 mainXML.@windowsTitle=StringHelper.base64Encode(this.windowsTitle);
             }
 
             if(this.webqueryopen){

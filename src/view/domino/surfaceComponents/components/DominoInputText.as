@@ -24,6 +24,8 @@ package view.domino.surfaceComponents.components
 
     import utils.StringHelper;
 
+    import mx.controls.Alert;
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -2108,7 +2110,7 @@ package view.domino.surfaceComponents.components
                     delete xml.@punctuated
 
                 }
-                if(this.type=="datetiem"){
+                if(this.type=="datetime"){
                     xml.@show = this.show;
                     xml.@date = this.date;
                     xml.@showtodaywhenappropriate = this.showtodaywhenappropriate;
@@ -2118,7 +2120,7 @@ package view.domino.surfaceComponents.components
                     xml.@omitthisyear = this.omitthisyear;
                     xml.@time = this.time;
                     xml.@zone = this.zone;
-                    xml.@calendars = this.calendars;
+                    xml.@calendars = this.calendar;
                 }else{
                     delete xml.@show
                     delete xml.@date

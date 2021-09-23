@@ -33,6 +33,8 @@
 					keywords.visible =keywords.includeInLayout = true;
 					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
 				 }
+
+				
 			}
 
 			protected function digits_changeHandler(event:Event):void

@@ -56,6 +56,7 @@ package utils
 	import view.domino.surfaceComponents.components.DominoTabView;
 	import view.domino.surfaceComponents.components.MainApplication;
 	import view.domino.surfaceComponents.components.DominoButton;
+	import view.domino.surfaceComponents.components.DominoCalendar;
 	import mx.controls.Alert;
     public class EditingSurfaceReader
 	{
@@ -94,7 +95,7 @@ package utils
 				CLASS_LOOKUP[GridRow.ELEMENT_NAME] = GridRow;
 				CLASS_LOOKUP[Div.ELEMENT_NAME] = Div;
 				CLASS_LOOKUP[view.primeFaces.supportClasses.Container.ELEMENT_NAME] = view.primeFaces.supportClasses.Container;
-				
+				CLASS_LOOKUP[DominoCalendar.ELEMENT_NAME] =DominoCalendar;
 				CLASS_LOOKUP[DominoParagraph.ELEMENT_NAME] =DominoParagraph;
 				CLASS_LOOKUP[view.domino.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
                         view.domino.surfaceComponents.components.MainApplication;

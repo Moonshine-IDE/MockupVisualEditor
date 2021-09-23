@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*"
+                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+
+    <suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+    <primeFaces:BasicsForm/>
+
+    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
+    <forms:DateForm id="selectedDateForm" textProperty="selectedDate" label="Date"/>
+    <forms:TextForm id="datePatternForm" label="Pattern" textProperty="pattern" change="onTextFormChange(event)"/>
+    <forms:DropdownListForm id="ddl"
+                            label="Mode" textProperty="mode"
+                            collectionProperty="modes" labelField="label"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+    <forms:DateForm id="minDateForm" textProperty="minDate" label="Minimum Date"
+                    change="onMinMaxDateFormChange(event)"/>
+    <forms:DateForm id="maxDateForm" textProperty="maxDate" label="Maximum Date"
+                    change="onMinMaxDateFormChange(event)"/>
+    <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
+    <fx:Script><![CDATA[
+        private function onTextFormChange(event:Event):void
+        {
+            if (!datePatternForm.textInput || !selectedDateForm.dateField) return;
+
+            var pattern:String = datePatternForm.textInput.text;
+            if (pattern)
+            {
+                selectedDateForm.dateField.formatString = pattern.toUpperCase();
+            }
+        }
+
+        private function onMinMaxDateFormChange(event:Event):void
+        {
+            if (!minDateForm.dateField || !maxDateForm.dateField || !selectedDateForm.dateField) return;
+
+            var disabledRanges:Array = [
+                {rangeEnd: minDateForm.dateField.selectedDate},
+                {rangeStart: maxDateForm.dateField.selectedDate}];
+
+            selectedDateForm.dateField.disabledRanges = disabledRanges;
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditor>

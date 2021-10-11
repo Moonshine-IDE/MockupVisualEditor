@@ -647,7 +647,15 @@ package view.domino.surfaceComponents.components
 
         public function toXML():XML
         {
-            var xml:XML = new XML("<" + ELEMENT_NAME +">"+escape(this.text)+"</"+ELEMENT_NAME+ ">");
+            var escapeText:String = escape(this.text);
+           
+            //format fix, we need replace the tab to space.
+            // if(escapeText.indexOf("%09")>=0){
+            //     Alert.show("escapeText1:"+escapeText);
+            //   escapeText=escapeText.replace (/%09/g,"%20%20%20%20%20%20%20%20");
+            //     Alert.show("escapeText2:"+escapeText);
+            // }
+            var xml:XML = new XML("<" + ELEMENT_NAME +">"+escapeText+"</"+ELEMENT_NAME+ ">");
             if(this.size){
                 xml.@size = this.size;
             }

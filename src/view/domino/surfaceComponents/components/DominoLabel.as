@@ -641,6 +641,37 @@ package view.domino.surfaceComponents.components
 			_isNewLine = value;
 		}
 
+        private var _familyid:String;
+		public function get familyid():String
+		{
+			return _familyid;
+		}
+		public function set familyid(value:String):void
+		{
+			_familyid = value;
+		}
+
+
+		private var _pitch:String;
+		public function get pitch():String
+		{
+			return _pitch;
+		}
+		public function set pitch(value:String):void
+		{
+			_pitch = value;
+		}
+
+		private var _truetype:String;
+		public function get truetype():String
+		{
+			return _truetype;
+		}
+		public function set truetype(value:String):void
+		{
+			_truetype = value;
+		}
+
 		//-------------other componetn end-------------
 		
 		
@@ -682,6 +713,16 @@ package view.domino.surfaceComponents.components
 
             }
 
+            if(this.familyid){
+                xml.@familyid = this.familyid;
+            }
+            if(this.pitch){
+                xml.@pitch = this.pitch;
+            }
+            if(this.truetype){
+                xml.@truetype = this.truetype;
+            }
+
             return xml;
         }
 
@@ -697,6 +738,12 @@ package view.domino.surfaceComponents.components
             this.fontStyle=component.fontStyle;
             this.fontName=component.fontName;
             this.isNewLine = component.isNewLine;
+            this.familyid= component.familyid;
+            this.pitch = component.pitch;
+            if(component.truetype){
+                 this.truetype = component.truetype;
+            }
+           
             if(component.hidewhen){
                 
                this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
@@ -717,6 +764,9 @@ package view.domino.surfaceComponents.components
 			component.isSelected = this.isSelected;
             component.hidewhen = this.hidewhen;
             component.isNewLine = this.isNewLine;
+            component.familyid = this.familyid;
+            component.pitch = this.pitch ;
+            component.truetype = this.truetype ;
 		
             return component.toCode();
         }

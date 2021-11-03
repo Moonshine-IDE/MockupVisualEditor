@@ -54,12 +54,17 @@
 			import view.domino.surfaceComponents.components.DominoSection;
 			import view.domino.surfaceComponents.components.DominoTabView;
 			import view.domino.surfaceComponents.components.DominoCalendar;
+			import mx.controls.Alert;
+			
 			public var visualEditorType:String;
+			public var visualEditorFileType:String;
 			
 			[Bindable] private var collection:ArrayCollection;
 			
 			private function initializeComponents():void
 			{
+			
+
 				if (lstComponents.dataProvider || !visualEditorType) return;
 				
 				collection = new ArrayCollection();
@@ -73,13 +78,12 @@
 						new ComponentListItem("Div", Div),
 						new ComponentListItem("ComputedText", DominoComputedText),
 						new ComponentListItem("Paragraph", DominoParagraph),
-						new ComponentListItem("Section1", DominoSection),
-						new ComponentListItem("TabView1", DominoTabView),
+						new ComponentListItem("Section", DominoSection),
+						new ComponentListItem("TabView", DominoTabView),
 						new ComponentListItem("Calendar", DominoCalendar)
-						
-						
-						
-					]);
+							
+						]);
+					
 				} else if (VisualEditorType.FLEX == visualEditorType)
 				{
 					collection = new ArrayCollection([
@@ -125,6 +129,21 @@
 						new ComponentListItem("Calendar", view.primeFaces.surfaceComponents.components.Calendar)
 					]);
 				}
+			}
+
+			public function pageContrlList(){
+				collection = new ArrayCollection([
+						new ComponentListItem("Button", DominoButton),
+						new ComponentListItem("Label", DominoLabel),
+						new ComponentListItem("Table", DominoTable),
+						new ComponentListItem("Div", Div),
+						new ComponentListItem("ComputedText", DominoComputedText),
+						new ComponentListItem("Paragraph", DominoParagraph),
+						new ComponentListItem("Section", DominoSection),
+						new ComponentListItem("TabView", DominoTabView)
+							
+						]);
+				collection.refresh()
 			}
 
 			private function filterSearch():void

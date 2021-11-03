@@ -15,7 +15,7 @@
 	</s:BorderContainer>
 	<collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
 		<view:ComponentList id="componentList" percentWidth="20" percentHeight="100"
-							visualEditorType="{visualEditorType}" minWidth="150"/>
+							visualEditorType="{visualEditorType}" visualEditorFileType="{visualEditorFileType}" minWidth="150"/>
 		<s:Scroller percentWidth="70" percentHeight="100">
 			<s:Group>
 				<view:EditingSurface id="editingSurface" visualEditorType="{visualEditorType}"
@@ -61,6 +61,19 @@
 
 		private var _visualEditorType:String;
 
+		private var _visualEditorFileType:String;
+
+		[Bindable]
+		public function get visualEditorFileType():String
+		{
+			return _visualEditorFileType;
+		}
+
+		public function set visualEditorFileType(value:String):void
+		{
+			_visualEditorFileType = value;
+		}
+
 		[Bindable]
 		public function get visualEditorType():String
 		{
@@ -102,6 +115,10 @@
 
 			public function loadFile(filePath:String):void
 			{
+				
+
+				//Alert.show("this.visualEditorFileType:"+_visualEditorFileType);
+				
 				_fileMoonshine = createNewFileIfNotExists(filePath);
 				_fileStreamMoonshine = new FileStream();
 				_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
@@ -121,6 +138,12 @@
 						dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
 					}
 				}
+			
+				if(filePath.indexOf("pages")>0){
+					this.componentList.pageContrlList();
+				}
+
+				
 			}
 
 			private function createNewFileIfNotExists(filePath:String):File

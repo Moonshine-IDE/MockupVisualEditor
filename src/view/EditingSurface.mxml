@@ -67,7 +67,7 @@
 
 		import view.domino.surfaceComponents.components.DominoTable;
 
-		 import mx.controls.Alert;
+		import mx.controls.Alert;
 
 	
 		public var organizer:ComponentsOrganizer;
@@ -80,12 +80,18 @@
 		private var _wasLoaded:Boolean = false;
 		private var _hasChanged:Boolean = false;
 		private var _visualEditorType:String;
+		private var _visualEditorFileType:String;
 
 		private var _isDominoProject:Boolean = false;
 
 		public function set visualEditorType(value:String):void
 		{
 			_visualEditorType = value;
+		}
+
+		public function set visualEditorFileType(value:String):void
+		{
+			_visualEditorFileType = value;
 		}
 
 		public function get hasChanged():Boolean

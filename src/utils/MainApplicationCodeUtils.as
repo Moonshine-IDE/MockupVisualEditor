@@ -63,6 +63,23 @@ package utils
 
 			return null;
 		}
+		public static function getDominPageMainContainerTag(xml:XML):XML
+		{
+			var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			var item:XML = null;
+			var itemName:String = "";
+			for each (item in body)
+            {
+                itemName = item.name();
+                if (itemName=="http://www.lotus.com/dxl::body")
+                {
+					mainItem = item;
+                }
+            }
+
+			return mainItem;
+		}
 
 
 		public static function getDominMainContainerTag(xml:XML):XML
@@ -214,6 +231,23 @@ package utils
 		public static function getDominoParentContent(title:String,windowsTitle:String):XML
 		{	   
 			return getDominoMainContainer(title,windowsTitle);	
+		}
+		public static function getDominoPageMainContainer(pageName:String):XML
+		{
+			var dat:Date = new Date();
+			var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+			xml_str=xml_str+"<!DOCTYPE page>";
+			xml_str=xml_str+"<page name='"+pageName+"'";
+			xml_str=xml_str+" xmlns='http://www.lotus.com/dxl'";
+			xml_str=xml_str+" version='11.0' maintenanceversion='1.0' ";
+			xml_str=xml_str+"replicaid='85257C8A00383F9C' publicaccess='false' renderpassthrough='true'>";
+			xml_str=xml_str+"<body>" ;
+			xml_str=xml_str+"</body>";
+			xml_str=xml_str+"<item name='$$ScriptName' summary='false' sign='true'><text>"+pageName+"</text></item>";
+			xml_str=xml_str+"</page>";
+			var xml:XML = new XML(xml_str)
+			
+			return xml;
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML

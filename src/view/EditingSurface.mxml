@@ -81,6 +81,7 @@
 		private var _hasChanged:Boolean = false;
 		private var _visualEditorType:String;
 		private var _visualEditorFileType:String;
+		private var _visualEditorFileName:String;
 
 		private var _isDominoProject:Boolean = false;
 
@@ -92,6 +93,22 @@
 		public function set visualEditorFileType(value:String):void
 		{
 			_visualEditorFileType = value;
+		}
+
+		public function get visualEditorFileType():String
+		{
+			return _visualEditorFileType;
+		}
+
+
+		public function set visualEditorFileName(value:String):void
+		{
+			_visualEditorFileName = value;
+		}
+
+		public function get visualEditorFileName():String
+		{
+			return _visualEditorFileName;
 		}
 
 		public function get hasChanged():Boolean
@@ -173,6 +190,10 @@
 			 */
 			public function toDominoCode(projectName:String):XML
 			{
+				//Alert.show("EditingSurface:"+_visualEditorFileType);
+				if(projectName=="$ProjectName" && visualEditorFileName){
+					projectName=visualEditorFileName;
+				}
 				_isDominoProject = true ;
 				return EditingSurfaceWriter.toDominoCode(this,projectName);
 			}

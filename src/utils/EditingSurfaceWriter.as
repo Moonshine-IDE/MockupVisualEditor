@@ -111,6 +111,8 @@ package utils
              */
             public static function toDominoCode(surface:EditingSurface,projectName:String):XML
             {
+                
+                //Alert.show("surface:"+surface.visualEditorFileType);
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 var windowsTitle:String = "";
@@ -127,8 +129,17 @@ package utils
                 }
                 
                 
-                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
-                var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+                var xml:XML;
+                var mainContainer:XML;
+                if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
+                    xml= MainApplicationCodeUtils.getDominoPageMainContainer(title);
+                    mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
+                }else{
+                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                    mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+                }
+               
+                
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)
                 {

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      skinClass="skins.FormSkin"
+                                      creationComplete="onTextFormCreationComplete(event)"
+                                      xmlns:forms="view.forms.*">
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+
+    <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
+    	
+        <s:TextArea id="textInput"
+                    text="{bindableText}" width="100%" minWidth="156" editable="true" selectable="true"
+                    prompt="{prompt}"
+                    textInput="textInput_changeHandler(event)"
+                    focusOut="textInput_changeHandler(event)"
+                    change="textInput_changeHandler(event)"
+                    	
+
+  />
+       
+
+    </s:FormItem>
+
+    <fx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.FlexEvent;
+
+        import view.interfaces.ISurfaceComponent;
+
+        private var _binding:ChangeWatcher;
+
+        public var _hasError:Boolean=false;
+
+        [Bindable]
+        public var prompt:String;
+
+        [Bindable]
+        public var bindableText:String;
+
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        private var _textProperty:String = "text";
+
+        [Bindable("change")]
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+            this.updateBinding();
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            super.selectedItem = value;
+            this.updateBinding();
+          
+        }
+
+        private function updateBinding():void
+        {
+            if (this._binding)
+            {
+                this._binding.unwatch();
+                this._binding = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false, true);
+        }
+
+        private function onTextFormCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(textInput.textDisplay);
+        }
+
+
+           private function textInput_changeHandler(event:Event):void
+        {
+            if (!this.selectedItem) return;
+
+            if (!(this.textProperty in this.selectedItem))
+            {
+                this.textInput.errorString = "Field " + this._textProperty + " does not exist";
+                return;
+            }
+            this.textInput.errorString = "";
+            this.selectedItem[this._textProperty] = this.textInput.text;
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

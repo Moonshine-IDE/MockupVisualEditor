@@ -23,7 +23,7 @@ package components.renderers
 	
 	import mx.controls.treeClasses.TreeItemRenderer;
 	import mx.core.mx_internal;
-	
+	import mx.controls.Alert;
 	import spark.components.Label;
 	
 	use namespace mx_internal;
@@ -89,6 +89,8 @@ package components.renderers
 			label2.height = label.height;
 			label2.x = label.x;
 			label2.y = label.y+5;
+
+			//Alert.show("label.text:"+label.text);
 			
 			label2.text = label.text;
 			

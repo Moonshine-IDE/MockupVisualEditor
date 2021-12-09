@@ -51,10 +51,13 @@
 			
 			public function loadFirstData(surface:EditingSurface):void
 			{
+				if(surface==null){
+					Alert.show("surface is null");
+				}
 				var tmpArr:Array = getComponentsChildren(surface);
+				
 				tree.rootContainer = (tmpArr[0] as OrganizerItem).item as IVisualElementContainer;
 				components = new ArrayCollection(tmpArr);
-				
 				tmpArr = null;
 				tree.callLater(function():void
 				{
@@ -373,6 +376,7 @@
 			
 			private function onInitialized():void
 			{
+				//Alert.show("onInitialized");
 				var tmpRefreshButton:Image = new Image();
 				tmpRefreshButton.source = new sourceRefreshIcon();
 				header.rightButtons = [{icon: tmpRefreshButton, handle: this.onRefreshRequest}];
@@ -386,7 +390,8 @@
 			
 			private function onComplete(event:FlexEvent):void
 			{
-				if (!editingSurface.isVisualEditorFlex) editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
+				if (!editingSurface.isVisualEditorFlex) 
+				editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
 			}
 			
 			private function getComponentsChildren(surface:EditingSurface):Array
@@ -394,7 +399,10 @@
 				if(surface==null){
 					Alert.show("surface is null");
 				}
+				
+				
 				if(surface.numChildren>0){
+				
 					var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
 					
 			
@@ -424,8 +432,9 @@
 					
 					for (var i:int = 0; i < elementCount; i++)
 					{
-						element = container.getElementAt(i) as ISurfaceComponent;
 						
+						element = container.getElementAt(i) as ISurfaceComponent;
+					
 						if (element === null)
 						{
 							continue;
@@ -435,7 +444,9 @@
 
 
 						if(editingSurface.isVisualEditorDomino){
+							//Alert.show("getComponentsChildren:438");
 							domino_element = element as IDominoSurfaceComponent;
+							if(domino_element)
 							organizerItem = domino_element.getComponentsChildren();
 						}else{
 							primeface_element = element as IPrimeFacesSurfaceComponent;
@@ -444,11 +455,12 @@
 
 						if (organizerItem) componentsArray.push(organizerItem);
 					}
-				
+					//Alert.show("new stage:"+componentsArray.length);
 					return [new OrganizerItem(container, "Stage", componentsArray)];
 				}else{
 					return [new OrganizerItem(surface, "Stage", [])];	
 				}
+				
 			}
 			
 			private function findItemInDepth(items:Array, ownerComponent:IVisualElement, isRoot:Boolean=true, topParent:Object=null):void

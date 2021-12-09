@@ -303,6 +303,34 @@
 				colItem.label = String(prefix + itemValue);
 			}
 		}
+
+
+		
+		public function get selectedComponentColunmnWidth():String
+		{
+			var grid:DominoTable = (selectedItem as DominoTable);
+			if(grid.columnProperties!=null){
+				return grid.columnProperties.toString();
+			}else{
+				return ""
+			}	
+		}
+
+		[Bindable("propertyEditorChanged")]
+		private function columnWidthInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitWidth();
+            }
+        }
+
+
+		private function commitWidth():void
+        {
+			if (!selectedItem) return;
+			this.selectedItem["columnProperties"] = this.columnWidth.text;
+        }
 		]]>
 	</fx:Script>
     <suportclasses:layout>
@@ -356,5 +384,13 @@
 					  enabled="{columnList.selectedIndex !== -1 &amp;&amp; columnsDataProvider.length > 1}"
 					  click="deleteColumnButton_clickHandler(event)"/>
 		</s:HGroup>
+	</s:FormItem>
+	<s:FormItem label="Columns Width" skinClass="skins.StackedFormItemSkin">
+			<s:TextInput id="columnWidth" width="100%"
+						 text="{selectedComponentColunmnWidth}" skinClass="skins.TextInputSkin"
+					     height="25"
+						 keyDown="columnWidthInput_keyDownHandler(event)"
+						 enabled="true"
+						 />
 	</s:FormItem>
 </suportclasses:BasePropertyEditorForm>

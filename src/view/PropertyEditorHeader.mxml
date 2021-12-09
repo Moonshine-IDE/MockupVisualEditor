@@ -5,17 +5,20 @@
 	<fx:Script>
 		<![CDATA[
 			import spark.components.Image;
+			import mx.controls.Alert;
 			[Bindable] public var componentName:String;
 			
 			public var rightButtons:Array; // {icon: <Image/>, handle: Function}
 			
 			private function onCreationCompletes():void
 			{
+				//Alert.show("hear create completes");
 				for each (var i:Object in rightButtons)
 				{
 					if (i.hasOwnProperty("icon") && (i.icon is Image) &&
 						i.hasOwnProperty("handle") && (i.handle != null))
 					{
+						//Alert.show("add icon");
 						hgRightButtons.addElement(i.icon);
 						(i.icon as Image).buttonMode = true;
 						i.icon.addEventListener(MouseEvent.CLICK, i.handle, false, 0, true);

@@ -203,6 +203,8 @@ package view.primeFaces.surfaceComponents.components
             return super.height;
         }
 
+        
+
         private var _title:String = "";
 
         /**
@@ -215,12 +217,12 @@ package view.primeFaces.surfaceComponents.components
          * <strong>HTML:</strong>
          * <listing version="3.0">&lt;title&gt;&lt;/title&gt;</listing>
          */
-        public function get title():String
+         public function get title():String
         {
             return _title;
         }
 
-        public function set title(value:String):void
+         public function set title(value:String):void
         {
             if (_title != value)
             {

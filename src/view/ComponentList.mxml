@@ -47,8 +47,13 @@
 			
 			import view.domino.surfaceComponents.components.DominoInputText;
 			import view.domino.surfaceComponents.components.DominoLabel;
+			import view.domino.surfaceComponents.components.DominoButton;
+			import view.domino.surfaceComponents.components.DominoComputedText;
 			import view.domino.surfaceComponents.components.DominoTable;
 			import view.domino.surfaceComponents.components.DominoParagraph;
+			import view.domino.surfaceComponents.components.DominoSection;
+			import view.domino.surfaceComponents.components.DominoTabView;
+			import view.domino.surfaceComponents.components.DominoCalendar;
 			public var visualEditorType:String;
 			
 			[Bindable] private var collection:ArrayCollection;
@@ -61,11 +66,18 @@
 				if (VisualEditorType.DOMINO == visualEditorType)
 				{
 					collection = new ArrayCollection([
+						new ComponentListItem("Button", DominoButton),
 						new ComponentListItem("Input", DominoInputText),
 						new ComponentListItem("Label", DominoLabel),
 						new ComponentListItem("Table", DominoTable),
 						new ComponentListItem("Div", Div),
-						new ComponentListItem("Paragraph", DominoParagraph)
+						new ComponentListItem("ComputedText", DominoComputedText),
+						new ComponentListItem("Paragraph", DominoParagraph),
+						new ComponentListItem("Section1", DominoSection),
+						new ComponentListItem("TabView1", DominoTabView),
+						new ComponentListItem("Calendar", DominoCalendar)
+						
+						
 						
 					]);
 				} else if (VisualEditorType.FLEX == visualEditorType)

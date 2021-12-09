@@ -2,8 +2,6 @@ package utils
 {
     import mx.core.UIComponent;
 
-	import mx.controls.Alert;
-
     import view.EditingSurface;
     import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
@@ -43,7 +41,7 @@ package utils
             if (element === null && !isDominoMainApp)
 			{
 				
-				var container:XML = new XML("<form />");
+				var container:XML = new XML("<MainApplication id='mainApplicationWindow' x='0' y='0' width='700' height='450'  />");
 
 				return container;
 			}
@@ -57,7 +55,7 @@ package utils
             for each (var item:XML in body)
             {
                 var itemName:String = item.name();
-                if (itemName.lastIndexOf("body") > -1)
+                if (itemName.lastIndexOf("body") > -1||itemName.lastIndexOf("Body") > -1)
                 {
                     return item.children()[0];
                 }
@@ -70,10 +68,59 @@ package utils
 		public static function getDominMainContainerTag(xml:XML):XML
 		{
             var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			var item:XML = null;
+			var itemName:String = "";
+			for each (item in body)
+            {
+                itemName = item.name();
+                if (itemName=="http://www.lotus.com/dxl::richtext")
+                {
+					mainItem = item;
+                }
+            }
+			if(mainItem==null){
+				for each (item in body)
+				{
+					itemName = item.name();
+					if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
+					{
+						mainItem = item;
+					}
+				}
+			}
+
+			return mainItem;
+		}
+
+		public static function getDominMainContainerTagByRichtext(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+				
+                if (itemName=="http://www.lotus.com/dxl::richtext")
+                {
+					mainItem=item
+                   
+                }
+            }
+		
+
+			return mainItem;
+		}
+
+
+		public static function getDominTitleTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
             for each (var item:XML in body)
             {
                 var itemName:String = item.name();
-                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$Body")
+				
+                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$TITLE")
                 {
 				
                     return item;
@@ -117,32 +164,12 @@ package utils
 
 			private static function handleDominoFleldNode(node:XML,mainFieldsContainer:XML,total_xml:XML):XML{
 
-						
 						var field_name:String = node.attribute("name").toString();
 						 //Alert.show("field name 212:"+field_name);
-						  if(mainFieldsContainer){
-                               mainFieldsContainer.appendChild(new XML("<text>"+field_name+"</text>"))
-                          }
-                         //2.
-						//   var itemXML:XML = new XML("<item />");
-                        //    itemXML.@name=field_name;
-                        //    itemXML.@summary="false";
-                        //    itemXML.@sign="true";
-						//    if(node.@type=="text"){
-                        //        var tyepTextXML:XML = new XML("<text>"+field_name+"</text>");
-                        //        itemXML.appendChild(tyepTextXML);
-						// 	}else if(node.@type=="number"){
-						// 		var tyepNumberXML:XML = new XML("<number>"+0+"</number>");
-						// 		itemXML.appendChild(tyepNumberXML);
-						// 	}else if(node.@type=="datetime"){
-						// 		var rawXML:XML = new XML("<rawitemdata type='400'>AAAAAAAAAAA=</rawitemdata>");
-						// 		itemXML.appendChild(rawXML);
-						// 	}
-
-						// 	 total_xml.appendChild(itemXML);
-					
-
-					return total_xml
+						if(mainFieldsContainer){
+							mainFieldsContainer.appendChild(new XML("<text>"+field_name+"</text>"))
+						}
+                       	return total_xml
 			
 			}
 
@@ -172,9 +199,7 @@ package utils
 		public static function getParentContent(surface:EditingSurface, title:String, component:UIComponent):XML
 		{
             var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
-            var isPrimeFacesMainApp:MainApplication = element as MainApplication;
-
-			if (!isPrimeFacesMainApp && element is IFlexSurfaceComponent)
+			if (surface.isVisualEditorFlex)
 			{
 				return getFlexMainContainer(title, element.width, element.height);
 			}
@@ -186,9 +211,9 @@ package utils
 		 * Overloaded this function, so that the domino project can call it
 		 */
 
-		public static function getDominoParentContent(title:String):XML
+		public static function getDominoParentContent(title:String,windowsTitle:String):XML
 		{	   
-			return getDominoMainContainer(title);	
+			return getDominoMainContainer(title,windowsTitle);	
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
@@ -281,26 +306,32 @@ package utils
 		}
 
 
-		private static function getDominoMainContainer(title:String):XML
+		private static function getDominoMainContainer(title:String,windowsTitle:String):XML
 		{
 				var dat:Date = new Date();
 				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 				xml_str=xml_str+"<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4' replicaid='4825808B00336E81'>";
 				xml_str=xml_str+"<!DOCTYPE note>";
-				xml_str=xml_str+"<noteinfo noteid='2116' unid='27C118EDE31483CB86256C6900644875' sequence='8'>";
-				xml_str=xml_str+"<created><datetime>"+dat+"</datetime></created> ";
-				xml_str=xml_str+"<modified><datetime>"+dat+"</datetime></modified> ";
-				xml_str=xml_str+"<revised dst=\"true\"><datetime>"+dat+"</datetime></revised>";
-				xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
-				xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
-				xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
-				xml_str=xml_str+"</noteinfo>"
+				// xml_str=xml_str+"<noteinfo noteid='2116' unid='27C118EDE31483CB86256C6900644875' sequence='8'>";
+				// xml_str=xml_str+"<created><datetime>"+dat+"</datetime></created> ";
+				// xml_str=xml_str+"<modified><datetime>"+dat+"</datetime></modified> ";
+				// xml_str=xml_str+"<revised dst=\"true\"><datetime>"+dat+"</datetime></revised>";
+				// xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
+				// xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
+				// xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
+				// xml_str=xml_str+"</noteinfo>"
+				if(windowsTitle!=null  && windowsTitle!=""){
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
+				}
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"
 				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"
 				xml_str=xml_str+"<item name='$Fields'><textlist></textlist></item>"
 				xml_str=xml_str+"<item name='$Body' sign='true'></item>"
+				
 				xml_str=xml_str+"</note>";
+			
+
 
 
 				var xml:XML = new XML(xml_str);

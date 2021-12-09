@@ -18,6 +18,7 @@ package view.suportClasses
 	import view.primeFaces.surfaceComponents.components.PanelGrid;
 	import view.primeFaces.surfaceComponents.components.TabView;
 	import view.suportClasses.events.PropertyEditorChangeEvent;
+	import mx.controls.Alert; 
 	
 	use namespace mx_internal;
 	
@@ -35,6 +36,7 @@ package view.suportClasses
 			dragEnabled = dropEnabled = dragMoveEnabled = true;
 			this.setStyle("borderStyle", "none");
 			labelFunction = formattedValue;
+			//Alert.show("TreeOrganizer");
 		}
 		
 		override protected function dragDropHandler(event:DragEvent):void

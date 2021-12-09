@@ -16,6 +16,8 @@
 
 		import data.DataProviderListItem;
 
+		import mx.controls.Alert; 
+
 		import view.interfaces.ISelectableItemsComponent;
 		import view.interfaces.ISurfaceComponent;
 		import view.primeFaces.surfaceComponents.components.TabView;
@@ -120,23 +122,28 @@
 		{
 			dgTabs.columnHeaderGroup.visible = dgTabs.columnHeaderGroup.includeInLayout = false;
 
-			var navigatorNumElements:int = selectedTabView.numElements;
-			itemsListDataProvider = new ArrayList();
-
-			for (var i:int = 0; i < navigatorNumElements; i++)
-			{
-				var tabItem:NavigatorContent = selectedTabView.getElementAt(i) as NavigatorContent;
-				var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
-				itemsListDataProvider.addItem(listItem);
-			}
-
-			dgTabs.dataProvider = itemsListDataProvider;
-			dgTabs.selectedIndex = selectedTabView.selectedIndex;
+			if(selectedTabView==null){
+				Alert.show("selectedTabView is null");
+			}else{
+				var navigatorNumElements:int = selectedTabView.numElements;
+				itemsListDataProvider = new ArrayList();
+				
+				for (var i:int = 0; i < navigatorNumElements; i++)
+				{
+					var tabItem:NavigatorContent = selectedTabView.getElementAt(i) as NavigatorContent;
+					var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
+					itemsListDataProvider.addItem(listItem);
+				}
 			
-			_childrenForFocus = [];
-			_childrenForFocus.push(addTabBtn);
-			_childrenForFocus.push(editTabBtn);
-			_childrenForFocus.push(deleteTabBtn);
+
+				dgTabs.dataProvider = itemsListDataProvider;
+				dgTabs.selectedIndex = selectedTabView.selectedIndex;
+				
+				_childrenForFocus = [];
+				_childrenForFocus.push(addTabBtn);
+				_childrenForFocus.push(editTabBtn);
+				_childrenForFocus.push(deleteTabBtn);
+			}
 		}
 
 		private function onTabViewChildrenUpdated(event:Event):void

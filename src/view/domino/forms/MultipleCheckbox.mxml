@@ -1,0 +1,320 @@
+<?xml version="1.0"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      xmlns:mx="library://ns.adobe.com/flex/mx" 
+                                      skinClass="skins.FormSkin"
+                                      creationComplete="onCreationCompletes(event)">
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+    <fx:Script>
+        <![CDATA[
+            import mx.binding.utils.BindingUtils;
+            import mx.binding.utils.ChangeWatcher;
+            import mx.collections.IList;
+            import mx.events.FlexEvent;
+            import mx.collections.ArrayList;
+            import mx.controls.Alert;
+            
+            import spark.events.IndexChangeEvent;
+            import mx.collections.ArrayCollection;
+            import mx.controls.listClasses.ListBaseContentHolder;
+            [Bindable]
+        public var includeCollection:IList;
+        [Bindable]
+        public var labelDisplayFunction:Function;
+        [Bindable]
+        public var showTooltipFunction:Function;
+
+        [Bindable]
+        public var optionExculdeFunction:Function;
+
+        public var listItemRenderer:Class;
+
+        private var _bindingCollection:ChangeWatcher;
+        private var _bindingSurfaceProperty:ChangeWatcher;
+        private var _labelField:String;
+        private var _valueField:String;
+
+        private var _selectItemList:ArrayList = new ArrayList()
+
+        public function set labelField(value:String):void
+        {
+            _labelField = value;
+        }
+
+        public function set valueField(value:String):void
+        {
+            _valueField = value;
+        }
+
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        private var _textProperty:String = "text";
+
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+        }
+
+        private var _collectionHost:*;
+        public function set collectionHost(value:*):void
+        {
+            _collectionHost = value;
+            updateBinding();
+        }
+
+        private var _collectionProperty:String;
+        public function set collectionProperty(value:String):void
+        {
+            _collectionProperty = value;
+        }
+
+        protected function onCreationCompletes(event:FlexEvent):void
+        {
+           
+            updateBinding();
+           // initializeMultiSelect();
+            
+        }
+        
+        private function initializeMultiSelect():void {
+            var rex:RegExp = /[\s\r\n]+/gim;
+            if (includeCollection && selectedItem[_textProperty]){
+                 var str:String = selectedItem[_textProperty];
+                 if(str.length>0){
+                    var _iniList:Array=str.split(" ");
+                    for (var j:int = 0; j < _iniList.length; j++){
+                        if(_iniList[j]){
+                            var elementStr:String = _iniList[j].toString();
+                            if(elementStr){
+                                elementStr = elementStr.replace(rex,'');
+                                if(elementStr.length>0){
+                                    //Alert.show("elementStr:"+elementStr);
+                                    for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
+                                    {
+                                        var item:Object = multCheckList.getChildAt(checkNum);
+                                        // Alert.show("elementStr121:"+item.toString());
+                                        if(item is ListBaseContentHolder){
+                                            for (var i:int = 0; i < item.numChildren; i++){
+                                                var checkitem:Object = item.getChildAt(i);
+                                                //Alert.show("checkitem:"+checkitem.toString());
+                                                if(checkitem.hasOwnProperty("selected") ){
+                                                    if(checkitem.label==elementStr){
+                                                        checkitem.selected=true
+                                                    }
+                                                    
+                                                        var existing:Boolean = false;
+                                                        if(_selectItemList){
+                                                            for (var k:int = 0; k < _selectItemList.length; k++){
+                                                                if(_selectItemList.getItemAt(k).toString()==elementStr){
+                                                                    existing=true;
+                                                                }
+                                                            }
+                                                        }
+                                                        if(existing==false){
+                                                            _selectItemList.addItem(elementStr);
+                                                        }
+                                                        
+                                                        //Alert.show("selected:"+checkitem.label);
+                                                    }
+                                                
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                     }
+                 }
+
+            }
+        }
+
+        private function selectCurrentItem():void
+        {
+            _selectItemList = new ArrayList();
+            var checkNum:int = 0;
+            var item:Object = null;
+            for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
+            {
+                 item = multCheckList.getChildAt(checkNum);
+                 if(item is ListBaseContentHolder){
+                    if(optionExculdeFunction != null){
+                         optionExculdeFunction(item);
+                     }
+                 }
+            }
+            //Alert.show("Child:"+multCheckList.numChildren);
+            for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
+            {
+                 item = multCheckList.getChildAt(checkNum);
+                 if(item is ListBaseContentHolder){
+                      for (var i:int = 0; i < item.numChildren; i++){
+                          var checkitem:Object = item.getChildAt(i);
+                           //Alert.show("checkitem:"+checkitem.toString());
+                          if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+                                  var existing:Boolean = false;
+                                  for (var j:int = 0; j < _selectItemList.length; j++){
+                                      if(_selectItemList.getItemAt(j).toString()==checkitem.label){
+                                          existing=true;
+                                      }
+                                  }
+                                  if(existing==false){
+                                    _selectItemList.addItem(checkitem.label);
+                                  }
+                                
+                                //Alert.show("selected:"+checkitem.label);
+                            }
+                           
+                      }
+                 }
+            }
+           
+
+            //Alert.show("_selectItemList:"+_selectItemList.toString());
+            if(_selectItemList.length>0){
+                var str:String = "";
+                for (var k:int = 0; j < _selectItemList.length; k++){
+                    str = str+_selectItemList.getItemAt(k).toString() + " ";
+                }
+                selectedItem[_textProperty] = str;
+            }
+            // else if (selectedItem[_textProperty])
+            // {
+            //     ddlSelection.selectedItem = selectedItem[_textProperty];
+            // }
+
+            // if (ddlSelection.selectedItem)
+            // {
+            //     //ddlSelection.callLater(onSelectionChange, [null]);
+            // }
+        }
+
+
+
+        protected function onSelectionChange(event:IndexChangeEvent):void
+        {
+            // if(_valueField){
+            //        selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
+            // }else if (_labelField)
+            // {
+            //     selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+            // }
+            // else
+            // {
+            //     selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+            // }
+        }
+
+        private function updateBinding():void
+        {
+            _collectionHost ||= selectedItem;
+            if (!_collectionProperty || !(_collectionProperty in _collectionHost)) return;
+
+            if (this._bindingCollection)
+            {
+                this._bindingCollection.unwatch();
+                this._bindingSurfaceProperty.unwatch();
+                this._bindingCollection = null;
+                this._bindingSurfaceProperty = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._bindingCollection = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
+            //this._bindingSurfaceProperty = BindingUtils.bindSetter(onPropertyUpdated, selectedItem, _textProperty, false, true);
+        }
+
+        private function onPropertyUpdated(value:Object):void
+        {
+            // if (ddlSelection.selectedItem && selectedItem)
+            // {
+            //    // var previousValue:String = _labelField ? ddlSelection.selectedItem[_labelField].toString() : ddlSelection.selectedItem.toString();
+            //    // if (previousValue != selectedItem[_textProperty]) selectCurrentItem();
+            // }
+        }
+
+        protected function closeButtonClickHandler(event:MouseEvent):void {
+            testPopUp.close();
+        }
+        protected function changeCheckBox():void
+        {
+            selectCurrentItem();
+        }
+        ]]>
+    </fx:Script>
+
+           <mx:PopUpButton id="testPopUp"
+                width="150" label="{label}" >
+                <mx:popUp>
+                    <mx:VBox width="150" backgroundColor="0xffffff">
+                        <mx:List id="multCheckList"
+                                dataProvider="{includeCollection}"
+                                height="{includeCollection.length * 25}"
+                                width="100"
+                                borderStyle="none"
+                                click="changeCheckBox()"
+                                creationComplete="initializeMultiSelect()">
+                            <mx:itemRenderer>
+                                <fx:Component>
+                                    <mx:CheckBox height="20"  >
+                                        <fx:Script>
+                                            <![CDATA[
+                                            import mx.controls.Alert;
+                                           
+                                            override public function set data(value:Object):void
+                                            {
+                                                super.data = value;
+                                                if (value && value.label)
+                                                {
+                                                    super.label = value.label;
+                                                    super.selected = value.selected;
+                                                    super.enabled= value.enabled
+                                                    
+                                                }
+                                            }
+                                            ]]>
+                                        </fx:Script>
+                                    </mx:CheckBox>
+                                </fx:Component>
+                            </mx:itemRenderer>
+                        </mx:List>
+                        <mx:Button label="Close"
+                                click="closeButtonClickHandler(event)"/>
+                    </mx:VBox>
+                </mx:popUp>
+            </mx:PopUpButton> 
+      
+  
+
+</suportclasses:BasePropertyEditorForm>

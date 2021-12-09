@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                      xmlns:s="library://ns.adobe.com/flex/spark"
+                                      xmlns:suportclasses="view.suportClasses.*"
+                                      skinClass="skins.FormSkin"
+                                      creationComplete="onTextFormCreationComplete(event)"
+                                      xmlns:forms="view.forms.*">
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+
+
+    <fx:Style source="assets/VisualEditorStyles.css"/>
+    <s:FormHeading skinClass="skins.FormHeadingSkin" height="0"/>
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
+    	<s:VGroup width="100%">
+        <s:TextArea id="textInput"
+                    text="{bindableText}" width="100%" minWidth="156" editable="true" selectable="true"
+                    prompt="{prompt}"
+                    styleName="fixedWidthTexts"
+                    textInput="textInput_changeHandler(event)"
+                    focusOut="textInput_changeHandler(event)"
+                    change="textInput_changeHandler(event)"
+                    	
+
+  />
+        <s:HGroup id="hgExistingWarning"
+				  width="100%" verticalAlign="middle"
+				  visible="{_hasError}">
+			<s:Image source="@Embed('/assets/delete.png')"/>
+			<s:Label text="{warningMessage}" width="100%"/>
+		</s:HGroup>
+    </s:VGroup>
+    </s:FormItem>
+
+    <fx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.FlexEvent;
+
+        import flash.net.URLLoader;
+	    import flash.net.URLRequest;
+	    import flash.net.URLStream;
+        import flash.net.URLVariables;
+        import flash.net.URLRequestMethod;
+        import flash.events.Event;
+        import flash.events.NativeProcessExitEvent;
+        import flash.events.ProgressEvent;
+
+        import 	mx.utils.Base64Encoder;
+
+        import view.interfaces.ISurfaceComponent;
+        import mx.controls.Alert; 
+
+        import flash.text.TextFormat;
+
+        private var _binding:ChangeWatcher;
+
+        [Bindable]
+        private var _hasError:Boolean = false;
+
+        [Bindable]
+        public var warningMessage:String = "";
+
+        [Bindable]
+        public var prompt:String;
+
+        [Bindable]
+        public var bindableText:String;
+
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        private var _textProperty:String = "text";
+
+        [Bindable("change")]
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+            this.updateBinding();
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            super.selectedItem = value;
+            this.updateBinding();
+          
+        }
+
+        private function updateBinding():void
+        {
+            if (this._binding)
+            {
+                this._binding.unwatch();
+                this._binding = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._binding = BindingUtils.bindProperty(this, "bindableText", this.selectedItem, this._textProperty, false, true);
+        }
+
+        private function onTextFormCreationComplete(event:FlexEvent):void
+        {
+            _childrenForFocus = [];
+            _childrenForFocus.push(textInput.textDisplay);
+           
+        }
+
+
+           private function textInput_changeHandler(event:Event):void
+        {
+            if (!this.selectedItem) return;
+
+            if (!(this.textProperty in this.selectedItem))
+            {
+                this.textInput.errorString = "Field " + this._textProperty + " does not exist";
+                return;
+            }
+            this.textInput.errorString = "";
+            this.selectedItem[this._textProperty] = this.textInput.text;
+
+            this.dispatchEvent(new Event(Event.CHANGE));
+            
+        }
+        public var loader : URLLoader ;
+        public function checkFormula(formula:String) : void{
+            var req : URLRequest = new URLRequest("http://localhost:8080/dominoFormula/parse");
+            loader = new URLLoader();
+            var params : URLVariables = new URLVariables();
+            var encoder:Base64Encoder = new Base64Encoder();        
+            encoder.encode(formula);
+            params.formula = encoder.toString();
+            req.data = params;
+            req.method = URLRequestMethod.POST;
+            loader.addEventListener(ProgressEvent.PROGRESS,urlStream_progressHandler);
+            loader.addEventListener(Event.COMPLETE, urlLoader_complete);
+            loader.load(req);
+        }
+        protected function urlLoader_complete(evt:Event):void {
+            var dataSet:String  = loader.data;
+            Alert.show("dataSet:"+dataSet);
+            
+        }
+        protected function urlStream_progressHandler(event:ProgressEvent):void
+		{
+			dispatchEvent(event);
+		}
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

@@ -4,15 +4,38 @@
                                   xmlns:suportclasses="view.suportClasses.*"
                                   xmlns:domino="view.domino.forms.*" 
 								  xmlns:forms="view.forms.*"
-								  xmlns:primeFaces="view.primeFaces.forms.*">
+								  xmlns:primeFaces="view.primeFaces.forms.*"
+								   creationComplete="onInputCreationComplete(event)"
+								 >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import spark.events.IndexChangeEvent;
 			import mx.controls.Alert;
+			import mx.events.FlexEvent;
 
 			private var isNumber:Boolean = false;
 			private var inputType:String="";
+			[Bindable]
+        	public var keywordsFlag:Boolean = false;
+
+			private function onInputCreationComplete(event:FlexEvent):void
+        	{
+				 keywordsFlag = Object(selectedItem).keyformulachoices;
+				
+				 // Alert.show("name:"+Object(selectedItem).name);
+				 if(keywordsFlag==true){
+					 this.keyformulachoices.selected=true;
+					keywords.visible =keywords.includeInLayout = false;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
+				 }else{
+					this.keyformulachoices.selected=false;
+					keywords.visible =keywords.includeInLayout = true;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
+				 }
+
+				
+			}
 
 			protected function digits_changeHandler(event:Event):void
 			{
@@ -44,27 +67,174 @@
 							txtValue.bindableText="";
 						}
 					}
+					txtValue.visible = txtValue.includeInLayout = true;
+					allowmul.bindableText = false;
 					txtValue.restrict="0-9";
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = true;
 					allowmul.visible = allowmul.includeInLayout = false;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				} else if(item.label=="datetime"){
 					txtValue.restrict=null
 					datePanel.visible = datePanel.includeInLayout = true;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = false;
-				} else {
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					allowmul.bindableText = false;
+					txtValue.visible = txtValue.includeInLayout = true;
+					namespanel.visible = namespanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				} else if(item.label=="keyword"){
 					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.bindableText = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
+					namespanel.visible = namespanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				}else if(item.label=="names"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.bindableText = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = true;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				}else if(item.label=="formula"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = false;
+					allowmul.bindableText = false;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = true;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				}else if(item.label=="richtextlite"){
+					txtValue.restrict=null
+					txtValue.visible = txtValue.includeInLayout = false;
+					datePanel.visible = datePanel.includeInLayout = false;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = false;
+					allowmul.bindableText = false;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = true;
+				}else if(item.label=="text"){
+					var selectItemText:String=ddl2.getDdlSelectionSelectedItemText();
+					if(selectItemText){
+			
+						if(selectItemText=="computed"||selectItemText=="computedfordisplay"||selectItemText=="computedwhencomposed"){
+							//Alert.show(":"+selectItemText);
+							//formualPanel.visible = formualPanel.includeInLayout = true;
+							txtValue.visible =txtValue.includeInLayout = false;
+							editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
+						}else{
+							//formualPanel.visible = formualPanel.includeInLayout = false;
+							txtValue.visible =txtValue.includeInLayout = true;
+							editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
+						}
+					}
+					allowmul.bindableText = false;
+					txtValue.restrict=null;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+					//Alert.show("142:"+formualPanel.visible);
+				
+				}else {
+					txtValue.visible = txtValue.includeInLayout = true;
+					allowmul.bindableText = false;
+					txtValue.restrict=null;
+					numberPanel.visible = numberPanel.includeInLayout = false;
+					allowmul.visible = allowmul.includeInLayout = true;
+					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+					namespanel.visible = namespanel.includeInLayout = false;
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}
+				//Alert.show("155:"+formualPanel.visible);
 				inputType=item.label;
 				//Alert.show("visible:"+digits.visible);
 				return item.label;
 			}
 
+
+			private function getDominoFieldKeyWordUISytle(item:Object):String
+			{
+				if(item.label=="radiobutton"){
+					allowmul.visible = allowmul.includeInLayout = false;
+				}else{
+					allowmul.visible = allowmul.includeInLayout = true;
+				}
+				return item.label;
+			}
+
+			private function getDominoFieldObject(item:Object):String
+			{
+				//defaultvalue
+				//inputtranslation
+				//inputvalidation
+				//hidewhen
+				if(item.value=="inputtranslation"){
+					defaultvalue.visible = defaultvalue.includeInLayout = false;
+					inputtranslation.visible = inputtranslation.includeInLayout = true;
+					inputvalidation.visible = inputvalidation.includeInLayout = false;
+					hidewhen.visible = hidewhen.includeInLayout = false;
+				}else if(item.value=="inputvalidation"){
+					defaultvalue.visible = defaultvalue.includeInLayout = false;
+					inputtranslation.visible = inputtranslation.includeInLayout = false;
+					inputvalidation.visible = inputvalidation.includeInLayout = true;
+					hidewhen.visible = hidewhen.includeInLayout = false;
+				}else if(item.value=="hidewhen"){
+					defaultvalue.visible = defaultvalue.includeInLayout = false;
+					inputtranslation.visible = inputtranslation.includeInLayout = false;
+					inputvalidation.visible = inputvalidation.includeInLayout = false;
+					hidewhen.visible = hidewhen.includeInLayout = true;
+				}else{
+					defaultvalue.visible = defaultvalue.includeInLayout = true;
+					inputtranslation.visible = inputtranslation.includeInLayout = false;
+					inputvalidation.visible = inputvalidation.includeInLayout = false;
+					hidewhen.visible = hidewhen.includeInLayout = false;
+
+				}
+				return item.value;
+			}
+			
+				
+
+
 			private function getDominoFieldName(item:Object):String
 			{
+				return item.label;
+			}
+			private function getDominoFieldKindName(item:Object):String
+			{
+				if(item.label=="computed"||item.label=="computedfordisplay"||item.label=="computedwhencomposed"){
+					//formualPanel.visible = formualPanel.includeInLayout = true;
+					txtValue.visible =txtValue.includeInLayout = false;
+					editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
+				}else{
+					//formualPanel.visible = formualPanel.includeInLayout = false;
+					txtValue.visible =txtValue.includeInLayout = true;
+					editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
+				}
+				//Alert.show("192:"+formualPanel.visible+":"+item.label);
 				return item.label;
 			}
 			
@@ -72,6 +242,21 @@
 			{
 				return item.description;
 			}
+			//change="togCheck_changeHandler(event)"
+			private function togCheck_changeHandler(event:Event):void
+			{
+				//Alert.show(":"+this.keyformulachoices.selected);
+				if(this.keyformulachoices.selected==true){
+					keywords.visible =keywords.includeInLayout = false;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
+				}else{
+					keywords.visible =keywords.includeInLayout = true;
+					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
+				}
+				 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
+			}
+
+		
 
 
        
@@ -92,7 +277,7 @@
     <forms:DropdownListForm id="ddl2"
                             label="Kind" textProperty="kind"
                             collectionProperty="kinds" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+							labelDisplayFunction="getDominoFieldKindName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
  
     
@@ -115,7 +300,7 @@
                             collectionProperty="formats" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-		 <forms:TextForm id="digits" label="Digits" restrict="0-9" textProperty="digits" 
+		 <forms:TextForm id="digits" label="Digits" restrict="0-9" textProperty="digits" change="changeHandler(event)"
 				bindableText=""/> 
 				<forms:ToggleButtonSelectedForm label="Parens" textProperty="parens"/>
 				<forms:ToggleButtonSelectedForm label="Percent" textProperty="percent"/>
@@ -126,13 +311,10 @@
 	</s:BorderContainer>
 
 
-	 <s:BorderContainer 
+	<s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
             left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="datePanel">
-		
-			
-		   
 			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
 		   <s:Label id="datelabelDisplay"
@@ -184,8 +366,109 @@
 		</s:VGroup>	
 	
 									
-  </s:BorderContainer>
-  
+  	</s:BorderContainer>
+
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="checkboxPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+			<forms:DropdownListForm id="keywordui"
+                            label="Keyword UI Type:" textProperty="keywordui"
+                            collectionProperty="keyworduis" labelField="label"
+							labelDisplayFunction="getDominoFieldKeyWordUISytle" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+							
+					 <forms:TextForm id="numberColumnsinput" label="Number of columns:" restrict="0-9" textProperty="numberColumns" 
+				bindableText="" /> 
+		<forms:ToggleButtonSelectedForm label="Refresh fields on keywoed change" textProperty="recalonchange" id="recalonchange"/>
+		<forms:ToggleButtonSelectedForm label="Refresh choices on document refresh" textProperty="recalcchoices" id="recalcchoices"/>
+		<s:CheckBox label="Use formula for choices"  id="keyformulachoices" selected="{keywordsFlag}" change="togCheck_changeHandler(event)"/>				
+		<forms:DominoTextInformationForm label="Checkbox key" textProperty="keywords" prompt="Label|Value" id="keywords" includeInLayout="true" visible="true" />
+		<forms:DominoFormulaForm label="Key Formula:" textProperty="keywordsformula" prompt="" id="keyformulavalue"  includeInLayout="false" visible="false" />
+       </s:VGroup>
+		
+	</s:BorderContainer>
+
+	<!-- <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="editableFormualPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		
+		<forms:DominoFormulaForm label="Formula:" textProperty="formula" prompt=""/>
+       </s:VGroup>
+		
+	</s:BorderContainer> -->
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="true" visible="true" id="formualPanel">
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		<forms:DropdownListForm id="editableFormualPanel"
+                            label="Client Objects:" textProperty="object"
+                            collectionProperty="objects" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldObject" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
+		<forms:DominoFormulaForm label="Formula:" textProperty="defaultvalue" prompt="" id="defaultvalue"  includeInLayout="true" visible="true" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="inputtranslation" prompt="" id="inputtranslation"  includeInLayout="false" visible="false" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="inputvalidation" prompt="" id="inputvalidation"  includeInLayout="false" visible="false" />
+		<forms:DominoFormulaForm label="Formula:" textProperty="hidewhen" prompt="" id="hidewhen"  includeInLayout="false" visible="false" />
+       </s:VGroup>
+		
+	</s:BorderContainer>
+
+
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="namespanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		   		<forms:DropdownListForm id="fieldChoicesdialogs"
+                            label="Defining where generating a list:" textProperty="choicesdialog"
+                            collectionProperty="choicesdialogs" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+				<!-- <forms:DropdownListForm id="fieldlistinput"
+                            label="Input separators:" textProperty="listinputseparators"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/> -->
+
+				<!-- <forms:DropdownListForm id="fieldlistdisplay"
+                            label="Display separator:" textProperty="listdisplayseparator"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
+		   </s:VGroup>	
+	</s:BorderContainer>
+
+
+		<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="richtitlePanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+		  <domino:MultipleCheckbox label="which constructs/actions are allowed:" collectionProperty="limitinputKinds" textProperty="onlyallow"/>	
+		 
+		 	<forms:DropdownListForm id="firstDisplay"
+                            label="First Display:" textProperty="firstdisplay"
+                            collectionProperty="limitinputKinds" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+		 	
+		
+			
+		   </s:VGroup>	
+		</s:BorderContainer>   		
+	
 				
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>

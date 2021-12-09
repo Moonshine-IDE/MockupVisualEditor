@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:suportclasses="view.suportClasses.*"
+        skinClass="skins.FormSkin"
+        creationComplete="onTabFormCreationComplete(event)">
+	<fx:Script>
+		<![CDATA[
+		import mx.collections.ArrayList;
+		import mx.events.FlexEvent;
+
+		import view.primeFaces.supportClasses.NavigatorContent;
+		import spark.containers.Navigator;
+		import spark.events.GridItemEditorEvent;
+
+		import data.DataProviderListItem;
+
+		import mx.controls.Alert; 
+
+		import view.interfaces.ISelectableItemsComponent;
+		import view.interfaces.ISurfaceComponent;
+		import view.domino.surfaceComponents.components.DominoTabView;
+
+		[Bindable]
+		private var itemsListDataProvider:ArrayList;
+
+		private var _label:String = "Items";
+		private var itemAdded:Boolean;
+
+		[Bindable("labelChange")]
+		public function get label():String
+		{
+			return this._label;
+		}
+
+		public function set label(value:String):void
+		{
+			if (this._label === value)
+			{
+				return;
+			}
+			this._label = value;
+			this.dispatchEvent(new Event("labelChange"));
+		}
+
+		[Bindable("change")]
+		protected function get selectedTabView():DominoTabView
+		{
+			return selectedItem as DominoTabView;
+		}
+
+		private function editSelectedItem():void
+		{
+			dgTabs.ensureCellIsVisible(dgTabs.selectedIndex);
+			dgTabs.startItemEditorSession(dgTabs.selectedIndex, 0);
+		}
+
+		private function addItemButton_clickHandler(event:MouseEvent):void
+		{
+			var navContent:NavigatorContent = new NavigatorContent();
+			navContent.addElement(selectedTabView.getNewDiv());
+			navContent.label = "Title";
+
+			var navigator:Navigator = (selectedItem as Navigator);
+			navigator.addElement(navContent);
+			var navigatorNumElements:int = navigator.numElements;
+
+			var listItem:DataProviderListItem = new DataProviderListItem("Title");
+			itemsListDataProvider.addItem(listItem);
+
+			if (selectedItem is ISelectableItemsComponent)
+			{
+				ISelectableItemsComponent(selectedItem).selectedIndex = navigatorNumElements - 1;
+			}
+
+			this.itemAdded = true;
+			this.dgTabs.invalidateDisplayList();
+			this.invalidateDisplayList();
+		}
+
+		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+		{
+			super.updateDisplayList(unscaledWidth, unscaledHeight);
+
+			if (itemAdded)
+			{
+				dgTabs.setSelectedIndex(dgTabs.dataProvider.length - 1);
+				this.editSelectedItem();
+				this.itemAdded = false;
+			}
+		}
+
+		override public function set selectedItem(value:ISurfaceComponent):void
+		{
+			if (selectedItem) selectedItem.removeEventListener(DominoTabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated);
+			
+			super.selectedItem = value;
+			if (value) selectedItem.addEventListener(DominoTabView.EVENT_CHILDREN_UPDATED, onTabViewChildrenUpdated, false, 0, true);
+		}
+
+		private function editItemButton_clickHandler(event:MouseEvent):void
+		{
+			this.editSelectedItem();
+		}
+
+		private function deleteItemButton_clickHandler(event:MouseEvent):void
+		{
+			var deleteIndex:int = dgTabs.selectedIndex;
+
+			var navigator:Navigator = (selectedItem as Navigator);
+			if (navigator.numElements > 1)
+			{
+				navigator.removeItemAt(deleteIndex);
+				dgTabs.dataProvider.removeItemAt(dgTabs.selectedIndex);
+				dgTabs.selectedIndex = 0;
+				dgTabs.ensureCellIsVisible(0);
+			}
+		}
+
+		private function onTabFormCreationComplete(event:FlexEvent):void
+		{
+			dgTabs.columnHeaderGroup.visible = dgTabs.columnHeaderGroup.includeInLayout = false;
+
+			if(selectedTabView==null){
+				Alert.show("selectedTabView is null");
+			}else{
+				var navigatorNumElements:int = selectedTabView.numElements;
+				itemsListDataProvider = new ArrayList();
+				
+				for (var i:int = 0; i < navigatorNumElements; i++)
+				{
+					var tabItem:NavigatorContent = selectedTabView.getElementAt(i) as NavigatorContent;
+					var listItem:DataProviderListItem = new DataProviderListItem(tabItem.label);
+					itemsListDataProvider.addItem(listItem);
+				}
+			
+
+				dgTabs.dataProvider = itemsListDataProvider;
+				dgTabs.selectedIndex = selectedTabView.selectedIndex;
+				
+				_childrenForFocus = [];
+				_childrenForFocus.push(addTabBtn);
+				_childrenForFocus.push(editTabBtn);
+				_childrenForFocus.push(deleteTabBtn);
+			}
+		}
+
+		private function onTabViewChildrenUpdated(event:Event):void
+		{
+			onTabFormCreationComplete(null);
+		}
+
+		protected function onItemEditFinished(event:GridItemEditorEvent):void
+		{
+			var listItem:DataProviderListItem = dgTabs.dataProvider.getItemAt(event.rowIndex) as DataProviderListItem;
+			selectedTabView.setSelectedTabLabel(listItem.label);
+		}
+		]]>
+	</fx:Script>
+    <suportclasses:layout>
+        <s:FormLayout horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
+		<s:DataGrid id="dgTabs"
+					width="100%" requestedMinRowCount="4" height="130"
+					editable="true" sortableColumns="false" draggableColumns="false"
+					selectedIndex="@{selectedTabView.selectedIndex}"
+					gridItemEditorSessionSave="onItemEditFinished(event)"> <!-- one column header with grid doesn't looks great, so we'll keep this as listing only -->
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn dataField="label" headerText="Title"/>
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+        <s:HGroup>
+            <s:Button id="addTabBtn" width="100%" styleName="addDataProviderItemButton" toolTip="Add Item"
+                      click="addItemButton_clickHandler(event)"/>
+            <s:Button id="editTabBtn" styleName="editDataProviderItemButton" toolTip="Edit Item"
+                      enabled="{dgTabs.selectedIndex !== -1}"
+                      click="editItemButton_clickHandler(event)"/>
+            <s:Button id="deleteTabBtn" styleName="deleteDataProviderItemButton" toolTip="Delete Item"
+                      enabled="{dgTabs.selectedIndex !== -1 &amp;&amp; dgTabs.dataProvider.length > 1}"
+                      click="deleteItemButton_clickHandler(event)"/>
+        </s:HGroup>
+    </s:FormItem>
+</suportclasses:BasePropertyEditorForm>

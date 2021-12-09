@@ -177,5 +177,11 @@
                 if (previousValue != selectedItem[_textProperty]) selectCurrentItem();
             }
         }
+
+
+        public function getDdlSelectionSelectedItemText():String
+        {
+            return selectedItem[_textProperty] ;
+        }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

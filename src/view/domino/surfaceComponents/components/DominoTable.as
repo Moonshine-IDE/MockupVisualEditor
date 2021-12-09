@@ -90,7 +90,8 @@ package view.domino.surfaceComponents.components
                 "explicitMinHeightChanged",
 				"itemRemoved",
 				"removedAll",
-				"itemAdded"
+				"itemAdded",
+                "columnWidthAttributeChanged"
             ];
 
             this.ensureCreateInitialRowWithColumn();
@@ -152,6 +153,37 @@ package view.domino.surfaceComponents.components
 		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
 		{
 			_propertyChangeFieldReference = value;
+		}
+
+        private var _widthtype:String;
+		public function get widthtype():String
+		{
+			return _widthtype;
+		}
+		public function set widthtype(value:String):void
+		{
+			_widthtype = value;
+		}
+
+
+        private var _leftmargin:String;
+		public function get leftmargin():String
+		{
+			return _leftmargin;
+		}
+		public function set leftmargin(value:String):void
+		{
+			_leftmargin = value;
+		}
+
+        private var _rightmargin:String;
+		public function get rightmargin():String
+		{
+			return _rightmargin;
+		}
+		public function set rightmargin(value:String):void
+		{
+			_rightmargin = value;
 		}
 		
 		private var _isUpdating:Boolean;
@@ -256,6 +288,11 @@ package view.domino.surfaceComponents.components
         override public function get width():Number
         {
             return super.width;
+        }
+
+        override public function set width(value:Number):void
+        {
+            super.width=value;
         }
 
         [Inspectable(environment="none")]
@@ -390,11 +427,37 @@ package view.domino.surfaceComponents.components
 			}
 		}
 
+
+        private var _columnProperties:String;
+        [Bindable(event="columnWidthAttributeChanged")]
+		public function get columnProperties():String
+		{
+			return _columnProperties;
+		}
+		public function set columnProperties(value:String):void
+		{
+            if (_columnProperties != value)
+            {
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "columnProperties", _columnProperties, value);
+				_columnProperties = value;
+                dispatchEvent(new Event("columnWidthAttributeChanged"))
+            }
+			
+		}
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
+
+            if(this.columnProperties){
+                xml.@columsProperty = this.columnProperties;
+            }
+
+            if(this.leftmargin){
+                xml.@leftmargin = this.leftmargin;
+            }
 
             if (cdataXML)
             {
@@ -432,7 +495,19 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
- 
+
+            if(xml.@refwidth!=null){
+               delete xml.@refwidth;
+            }
+
+            if(xml.@leftmargin!=null){
+                this.leftmargin=xml.@leftmargin;
+            }
+
+            if(xml.@columsProperty!=null){
+                this.columnProperties=xml.@columsProperty;
+            }
+
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
   
@@ -483,10 +558,14 @@ package view.domino.surfaceComponents.components
         public function toCode():XML
         {
             component.isSelected = this.isSelected;
-			(component as components.domino.DominoTable).width = this.width;
-			(component as components.domino.DominoTable).height = this.width;
+            (component as components.domino.DominoTable).leftmargin = this.leftmargin;
+            (component as components.domino.DominoTable).rightmargin = this.rightmargin;
+            (component as components.domino.DominoTable).widthtype = this.widthtype;
+	        (component as components.domino.DominoTable).width = this.width;
+			(component as components.domino.DominoTable).height = this.height;
 			(component as components.domino.DominoTable).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTable).percentHeight = this.percentHeight;
+            (component as components.domino.DominoTable).columnProperties = this.columnProperties;
 
             return component.toCode();
         }

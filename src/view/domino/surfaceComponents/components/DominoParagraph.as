@@ -71,7 +71,7 @@ package view.domino.surfaceComponents.components
      * &lt;/Div&gt;
      * </pre>
      *
-     * <strong>PrimeFaces output:</strong>
+     * <strong>Domino output:</strong>
      * <pre>
      * &lt;div
      * <b>Attributes</b>
@@ -238,13 +238,13 @@ package view.domino.surfaceComponents.components
         [Inspectable(environment="none")]
         [Bindable("resize")]
         /**
-         * <p>PrimeFaces: <strong>style</strong></p>
+         * <p>Domino <strong>style</strong></p>
          *
          * @example
          * <strong>Visual Editor XML:</strong>
          * <listing version="3.0">&lt;Div percentWidth="80"/&gt;</listing>
          * @example
-         * <strong>PrimeFaces:</strong>
+         * <strong>Domino:</strong>
          * <listing version="3.0">&lt;div style="width:80%;"/&gt;</listing>
          */
         override public function get percentWidth():Number
@@ -256,14 +256,14 @@ package view.domino.surfaceComponents.components
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
         /**
-         * <p>PrimeFaces: <strong>style</strong></p>
+         * <p>Domino <strong>width</strong></p>
          *
          * @default "120"
          * @example
          * <strong>Visual Editor XML:</strong>
          * <listing version="3.0">&lt;Div width="120"/&gt;</listing>
          * @example
-         * <strong>PrimeFaces:</strong>
+         * <strong>Domino:</strong>
          * <listing version="3.0">&lt;div style="width:120px;"/&gt;</listing>
          */
         override public function get width():Number
@@ -274,13 +274,13 @@ package view.domino.surfaceComponents.components
         [Inspectable(environment="none")]
         [Bindable("resize")]
         /**
-         * <p>PrimeFaces: <strong>style</strong></p>
+         * <p>Domino <strong>percentHeight</strong></p>
          *
          * @example
          * <strong>Visual Editor XML:</strong>
          * <listing version="3.0">&lt;Div percentHeight="80"/&gt;</listing>
          * @example
-         * <strong>PrimeFaces:</strong>
+         * <strong>Domino:</strong>
          * <listing version="3.0">&lt;div style="height:80%;"/&gt;</listing>
          */
         override public function get percentHeight():Number
@@ -292,14 +292,14 @@ package view.domino.surfaceComponents.components
         [Inspectable(category="General")]
         [Bindable("heightChanged")]
         /**
-         * <p>PrimeFaces: <strong>style</strong></p>
+         * <p>Domino <strong>height</strong></p>
          *
          * @default "120"
          * @example
          * <strong>Visual Editor XML:</strong>
          * <listing version="3.0">&lt;Div height="120"/&gt;</listing>
          * @example
-         * <strong>PrimeFaces:</strong>
+         * <strong>Domino:</strong>
          * <listing version="3.0">&lt;div style="height:120px;"/&gt;</listing>
          */
         override public function get height():Number
@@ -410,7 +410,7 @@ package view.domino.surfaceComponents.components
         public function fromXML(xml:XML, callback:Function):void
         {
             
-            //Alert.show("413 xml:"+xml);
+            
             component.fromXML(xml, callback);
 
 			_cssClass = component.cssClass;

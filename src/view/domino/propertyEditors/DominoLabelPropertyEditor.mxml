@@ -2,21 +2,185 @@
 <suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*"
-                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*">
+                                  xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*"
+								  xmlns:domino="view.domino.forms.*" >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-			
+			import mx.controls.listClasses.ListBaseContentHolder;
+			import mx.controls.Alert;
+
+			private var pre_label_var:String="normal";
 
 
 			private function getDominoFieldName(item:Object):String
 			{
 				return item.label;
 			}
-			
+
 			private function getDominoFieldTooltip(item:Object):String
 			{
 				return item.description;
+			}
+
+			private function excludeMultipleSelect(item:ListBaseContentHolder):void
+			{
+				var normal_flag:Boolean = false;
+				var execute_array:Array=null;
+				var normalSelect:Boolean=false;
+				//<!ENTITY % font.styles "normal | bold | italic | underline |
+				//strikethrough | superscript | subscript | shadow | emboss | extrude">
+				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
+				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
+				var exclusions_exclude_option:Array=["normal","superscript","subscript","shadow","emboss","extrude"];
+				var selected_array:Array=[];
+				var hasExlude:Boolean=false;
+				var hasExludeNum:Number=0;
+				var i:int = 0;
+				var checkItem:Object = null;
+				if(item){
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+							if(checkItem){
+								//Alert.show("checkitem:"+checkitem.toString());
+								if(checkItem.hasOwnProperty("selected") && checkItem.selected==true  ){
+									selected_array.push(checkItem.label);
+								}
+							}
+					}
+
+					//Alert.show("selected_array:"+selected_array.toString());
+					if(selected_array&& selected_array.length>0){
+						for (i = 0; i < selected_array.length; i++){
+							if(selected_array[i].toString()=="normal"){
+								hasExlude=true;
+							}else if(exclusions_exclude_option.indexOf(selected_array[i].toString())>=0){
+								hasExludeNum++;
+							}
+						}
+						if(hasExludeNum>1){
+							hasExlude=true;
+						}
+					}
+					//Alert.show("hasExlude:"+hasExlude);
+					if(pre_label_var!=null){
+						for (i = 0; i < item.numChildren; i++){
+							checkItem = item.getChildAt(i);
+							if(checkItem){
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkItem.hasOwnProperty("selected") ){
+								//	Alert.show("checkitem.label:"+checkitem.label);
+									if(checkItem.label==pre_label_var&& hasExlude==true){
+										//checkitem.enabled=false;
+										checkItem.selected=false;
+
+									}
+
+								}
+							}
+
+						}
+						//Alert.show("pre_label_var:"+pre_label_var);
+						pre_label_var=null;
+
+					}
+
+
+
+
+
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+						if(checkItem){
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+
+							if(checkItem.label=="normal"){
+								//Alert.show("checkitem.label:"+checkitem.label);
+								execute_array=exclusions_normal;
+								normalSelect=true;
+								pre_label_var="normal";
+								//break;
+							}
+
+
+							}
+						}
+					}
+						//Alert.show("execute_array1:");
+
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+								//Alert.show("checkitem:"+checkitem.label);
+								if(checkItem.label=="superscript"){
+									if(normalSelect==false)
+									pre_label_var="superscript"
+									if(execute_array==null)
+									execute_array=["subscript","shadow","emboss","extrude"];
+										//break;
+								}
+								if(checkItem.label=="subscript"){
+									if(normalSelect==false)
+									pre_label_var="subscript"
+									if(execute_array==null)
+									execute_array=["superscript","shadow","emboss","extrude"];
+									//break;
+								}
+								if(checkItem.label=="shadow"){
+									if(normalSelect==false)
+									pre_label_var="shadow"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","emboss","extrude"];
+									//break;
+								}
+								if(checkItem.label=="emboss"){
+									if(normalSelect==false)
+									pre_label_var="emboss"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","shadow","extrude"];
+									//break;
+								}
+								if(checkItem.label=="extrude"){
+									if(normalSelect==false)
+									pre_label_var="extrude"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","shadow","emboss"];
+									//break;
+								}
+							}
+					}
+
+						//Alert.show("execute_array2:");
+
+
+
+
+					for (var j:int = 0; j < item.numChildren; j++){
+						var checkitem_child:Object = item.getChildAt(j);
+							if(checkitem_child.hasOwnProperty("selected") ){
+								if(execute_array!=null && execute_array.length>0){
+									if(execute_array.indexOf(checkitem_child.label)>=0){
+										checkitem_child.selected=false;
+										checkitem_child.enabled=true;
+
+									}else{
+										//checkitem_child.selected=true;
+										checkitem_child.enabled=true;
+									}
+								}else{
+									checkitem_child.enabled=true;
+								}
+
+								if(normalSelect==false){
+									if(checkitem_child.label=="normal"){
+										checkitem_child.selected=false;
+									}
+								}
+							}
+					}
+				}
 			}
 		]]>
 	</fx:Script>
@@ -34,8 +198,13 @@
                             collectionProperty="colors" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-
+		
+		<domino:MultipleCheckbox label="Style:" 
+		optionExculdeFunction="excludeMultipleSelect"
+		collectionProperty="fontStyles" textProperty="fontStyle"/>	
+		 
     <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
+	<forms:DominoFormulaForm label="Hide Formula:" textProperty="hidewhen" prompt="" id="hidewhen"  includeInLayout="true" visible="true" />
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

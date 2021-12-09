@@ -19,6 +19,7 @@ package view.primeFaces.surfaceComponents.components
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IDiv;
     import components.primeFaces.Div;
+    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -105,7 +106,8 @@ package view.primeFaces.surfaceComponents.components
                 "wrapChanged",
                 "gapChanged",
                 "verticalAlignChanged",
-                "horizontalAlignChanged"
+                "horizontalAlignChanged", 
+                "windowsTitleChanged"
             ];
         }
 
@@ -154,6 +156,24 @@ package view.primeFaces.surfaceComponents.components
                 }
             }
         }
+
+
+        // private var _title:String = "";
+
+        
+        // public function get title():String
+        // {
+        //     return _title;
+        // }
+
+        // public function set title(value:String):void
+        // {
+        //     if (_title != value)
+        //     {
+        //         _title = value;
+        //         dispatchEvent(new Event("titleChanged"));
+        //     }
+        // }
 
         protected var _cdataXML:XML;
 
@@ -413,9 +433,14 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.Div).percentWidth = this.percentWidth;
 			(component as components.primeFaces.Div).percentHeight = this.percentHeight;
 			(component as components.primeFaces.Div).isDomino=isDomino;
+            (component as components.primeFaces.Div).direction=direction;
             var xml:XML = component.toCode();
-            xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
 
+            xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
+           
+            // if(this.title){
+            //     xml["@title"]=this.title;
+            // }
             return xml;
         }
 
@@ -444,11 +469,39 @@ package view.primeFaces.surfaceComponents.components
 
             mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
             mainXML.@wrap = this.wrap;
+            mainXML.@direction=direction;
 
             if (cdataXML)
             {
                 mainXML.appendChild(cdataXML);
             }
+
+            //setting the postion for horizontal and Vertical
+			//Alert.show("_cssClass:"+_cssClass);
+			if(_cssClass){
+				if(_cssClass.indexOf("flexCenter")>=0){
+					mainXML.@hpostion="center"
+				}
+				if(_cssClass.indexOf("flexHorizontalLayoutLeft")>=0){
+					mainXML.@hpostion="left"
+				}
+				if(_cssClass.indexOf("flexHorizontalLayoutRight")>=0){
+					mainXML.@hpostion="right"
+				}
+
+
+				if(_cssClass.indexOf("flexVerticalLayoutRight")>=0){
+					mainXML.@vpostion="right"
+				}
+				if(_cssClass.indexOf("flexMiddle")>=0){
+					mainXML.@vpostion="center"
+				}
+
+				if(_cssClass.indexOf("flexVerticalLayoutLeft")>=0){
+					mainXML.@vpostion="left"
+				}
+			}
+
 
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)

@@ -7,7 +7,7 @@ package view.interfaces
 	import mx.core.IInvalidating;
 	import mx.core.IUIComponent;
 	
-	public interface ISurfaceComponent extends IUIComponent, IInvalidating, IChildList, IComponent
+	public interface ISurfaceDominoComponent extends IUIComponent, IInvalidating, IChildList, IDominoComponent
 	{
         /**
 		 * Represents UI reflection to the properties which user is allowed to modify in property editor

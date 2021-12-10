@@ -554,6 +554,27 @@ package view.domino.surfaceComponents.components
 
         }
 
+        public function  toRoyaleCode():XML
+        {
+            component.enabled = this.enabled;
+			component.label = this.label;
+            component.isSelected = this.isSelected;
+
+            component.size = this.size;
+            component.color = this.color;
+            component.fontStyle = this.fontStyle;
+
+            component.code = this.code;
+            component.codeEvent = this.codeEvent;
+
+            (component as components.domino.DominoButton).width = this.width;
+            (component as components.domino.DominoButton).height = this.height;
+            (component as components.domino.DominoButton).percentWidth = this.percentWidth;
+            (component as components.domino.DominoButton).percentHeight = this.percentHeight;
+
+			return component.toRoyaleCode();
+        }
+
 		public function toCode():XML
 		{
 			component.enabled = this.enabled;

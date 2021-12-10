@@ -5,6 +5,7 @@ package utils
     
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
+    import view.interfaces.ISurfaceDominoComponent;
 
     import view.interfaces.IDominoParagraph;
 
@@ -188,13 +189,13 @@ package utils
 
               
                 
-                if(hasRichText==false){
-                    //add new richtext node
-                    //Alert.show("add rich:"+code.toXMLString());
-                    var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
-                    mainContainer.appendChild(richtext);
-                    mainContainer=richtext;
-                }
+                    if(hasRichText==false){
+                        //add new richtext node
+                        //Alert.show("add rich:"+code.toXMLString());
+                        var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
+                        mainContainer.appendChild(richtext);
+                        mainContainer=richtext;
+                    }
                   
                   
                     if (mainContainer)
@@ -227,6 +228,82 @@ package utils
                
             // }
 
+
+            public static function toRoyaleCode(surface:EditingSurface,projectName:String):XML
+            {
+                var element:ISurfaceDominoComponent ;
+                var title:String ="";
+                var windowsTitle:String = "";
+           
+                //Alert.show("title:"+title);
+
+                if(!title){
+                    title=projectName
+                }
+                
+                
+                var xml:XML;
+                var mainContainer:XML;
+                xml  = MainApplicationCodeUtils.getRoyaleContainer();
+                mainContainer = MainApplicationCodeUtils.getRoyaleMainContainerTag(xml);
+
+
+                var container:IVisualElementContainer = surface;
+                if (element is ISurfaceComponent)
+                {
+                    container = element as IVisualElementContainer;
+                }
+                
+               
+
+                var elementCount:int = 0;
+    
+                elementCount = surface.numElements;
+                container = surface;
+                var hasRichText:Boolean=false;
+                for (var i:int = 0; i < elementCount; i++)
+                {
+                    element = container.getElementAt(i) as ISurfaceDominoComponent;
+                
+                   
+            
+                    if (element === null){
+                        continue;
+                    }
+
+                    var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
+                    
+                    
+                   
+					XML.ignoreComments = false;
+                    var code:XML = element.toRoyaleCode();
+                    //Alert.show("element_title:"+code.toXMLString());
+                    if(code!=null ){
+                        if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
+                             code.setName("richtext");
+                             hasRichText=true;
+                          
+                        }
+                   }
+
+                   
+                    
+                  
+                  
+                    if (mainContainer)
+                    {
+                        mainContainer.appendChild(code); 
+                                  
+                    }
+                    else
+                    {
+                       xml.appendChild(code);
+                    }
+                }
+
+
+				return xml;
+            }
 
             
         }

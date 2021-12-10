@@ -8,7 +8,7 @@ package view.domino.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
-    import interfaces.components.ITabView;
+    import interfaces.dominoComponents.IDominoTabView;
 
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
@@ -95,7 +95,7 @@ package view.domino.surfaceComponents.components
         public static const ELEMENT_NAME:String = "TabView";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
 
-		private var component:ITabView;
+		private var component:IDominoTabView;
 		
         public function DominoTabView()
         {

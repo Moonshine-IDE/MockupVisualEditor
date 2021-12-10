@@ -84,6 +84,7 @@
 		private var _visualEditorFileName:String;
 
 		private var _isDominoProject:Boolean = false;
+		private var _isRoyaleProject:Boolean = false;
 
 		public function set visualEditorType(value:String):void
 		{
@@ -196,6 +197,17 @@
 				}
 				_isDominoProject = true ;
 				return EditingSurfaceWriter.toDominoCode(this,projectName);
+			}
+
+
+			public function toRoyaleCode(projectName:String,surface:EditingSurface):XML
+			{
+				//Alert.show("EditingSurface:"+_visualEditorFileType);
+				if(projectName=="$ProjectName" && visualEditorFileName){
+					projectName=visualEditorFileName;
+				}
+				_isRoyaleProject = true ;
+				return EditingSurfaceWriter.toRoyaleCode(surface,projectName);
 			}
 			
 		}

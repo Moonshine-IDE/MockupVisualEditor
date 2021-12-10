@@ -110,6 +110,26 @@ package utils
 			return mainItem;
 		}
 
+
+		public static function getRoyaleMainContainerTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			var item:XML = null;
+			var itemName:String = "";
+			for each (item in body)
+            {
+                itemName = item.name();
+                if (itemName=="library://ns.apache.org/royale/jewel::ApplicationMainContent")
+                {
+					mainItem = item;
+                }
+            }
+			
+
+			return mainItem;
+		}
+
 		public static function getDominMainContainerTagByRichtext(xml:XML):XML
 		{
             var body:XMLList = xml.children();
@@ -223,6 +243,45 @@ package utils
 			
 			return getPrimeFacesMainContainer(title, component,
                     element as view.primeFaces.supportClasses.Container);
+		}
+		public static function  getRoyaleContainer():XML{
+				var dat:Date = new Date();
+				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+				xml_str=xml_str+"<j:ResponsiveView xmlns:fx=\"http://ns.adobe.com/mxml/2009\"";
+				xml_str=xml_str+"xmlns:j=\"library://ns.apache.org/royale/jewel\"";
+				xml_str=xml_str+"xmlns:js=\"library://ns.apache.org/royale/basic\"";
+				xml_str=xml_str+"xmlns:html=\"library://ns.apache.org/royale/html\"";
+				xml_str=xml_str+"xmlns:view=\"view.*\" xmlns:listing=\"view.listing.*\" xmlns:edit=\"view.edit.*\">";
+				xml_str=xml_str+"<fx:Script>";
+				xml_str=xml_str+"<![CDATA[";
+				xml_str=xml_str+"import classes.events.ScreenEvent";
+				xml_str=xml_str+"import view.edit.AddEditView;";
+				xml_str=xml_str+"	private function onNavigationChangeRequest(event:ScreenEvent):void";
+
+				xml_str=xml_str+"	{";
+				xml_str=xml_str+"	mainContent.selectedContent = event.screenName;";
+				xml_str=xml_str+"	}";
+				xml_str=xml_str+"	]]>";
+				
+				xml_str=xml_str+"</fx:Script>";
+
+				xml_str=xml_str+"<j:beads>";
+				xml_str=xml_str+"  <js:ContainerDataBinding/>";
+				xml_str=xml_str+"</j:beads>";
+
+				xml_str=xml_str+" <j:ApplicationMainContent id=\"mainContent\" hasTopAppBar=\"false\" hasFooterBar=\"false\" selectedContent=\"ItemsListing\">";
+
+				xml_str=xml_str+" </j:ApplicationMainContent>";
+				xml_str=xml_str+" </j:ResponsiveView>	";
+
+
+
+				var xml:XML = new XML(xml_str);
+				
+			
+			
+
+			return xml;
 		}
 		/**
 		 * Overloaded this function, so that the domino project can call it

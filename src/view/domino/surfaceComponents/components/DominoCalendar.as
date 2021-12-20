@@ -600,6 +600,17 @@ package view.domino.surfaceComponents.components
 
             return component.toCode();
         }
+         // <!-- TODO:  %Component% not implemented for Royale -->
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        // <!-- TODO:  %Component% not implemented for Royale -->
+        public function toRora():XML
+        {
+            return null;
+        }
 
         private function initializeStates():void
         {

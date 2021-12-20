@@ -35,6 +35,8 @@ package view.flex.surfaceComponents.components
 	import view.interfaces.IFlexSurfaceComponent;
 	import view.interfaces.ILayoutContainer;
 	import view.interfaces.ISurfaceComponent;
+	
+    import mx.controls.Alert;
 
 	public class Container extends BorderContainer implements ILayoutContainer, IFlexSurfaceComponent
 	{
@@ -276,6 +278,17 @@ package view.flex.surfaceComponents.components
             }
 
             return xml;
+        }
+
+		public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+		public function toRora():XML
+        {
+			Alert.show("Container to Royale");
+            return null;
         }
 
         private function setCommonXMLAttributes(xml:XML):void

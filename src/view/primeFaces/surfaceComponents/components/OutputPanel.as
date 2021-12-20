@@ -308,6 +308,16 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+
+        public function toRora():XML
+        {
+            return null;
+        }
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);

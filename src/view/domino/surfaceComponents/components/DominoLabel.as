@@ -770,6 +770,18 @@ package view.domino.surfaceComponents.components
 		
             return component.toCode();
         }
+        public	function toRoyaleConvertCode():XML
+		{
+             Alert.show("Mock toRoyaleConvertCode execute000");
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+             Alert.show("Mock toRoyaleConvertCode execute0");
+            var xml:XML = new XML("");
+			return xml;
+        }
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{

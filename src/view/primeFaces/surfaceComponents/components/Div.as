@@ -443,6 +443,15 @@ package view.primeFaces.surfaceComponents.components
             // }
             return xml;
         }
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
+        }
 
         override protected function commitProperties():void
         {

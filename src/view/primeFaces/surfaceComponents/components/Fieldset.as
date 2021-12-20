@@ -398,6 +398,15 @@ package view.primeFaces.surfaceComponents.components
 
             return component.toCode();
         }
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
+        }
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{

@@ -25,12 +25,14 @@ package view.interfaces
          * @return Visual Editor XML format
          */
 		function toXML():XML;
+		function toRora():XML;
 
 		/**
 		 * Help to determine if 'self' is currently selected on the stage 
 		 */
 		function get isSelected():Boolean;
 		function set isSelected(value:Boolean):void;
+	
 
 	}
 }

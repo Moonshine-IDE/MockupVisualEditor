@@ -438,6 +438,16 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
+        }
+
     //    public function  toPerDefCode():XML
     //     {
 	// 		component.isSelected = this.isSelected;

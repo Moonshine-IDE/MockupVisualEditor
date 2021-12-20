@@ -21,5 +21,13 @@ package view.primeFaces.supportClasses
 		{
 			return null;
 		}
+		public function toRoyaleConvertCode():XML
+		{
+			return null;
+		}
+		public function toRora():XML
+        {
+            return null;
+        }
 	}
 }

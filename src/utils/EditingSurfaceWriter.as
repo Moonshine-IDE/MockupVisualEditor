@@ -5,7 +5,7 @@ package utils
     
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
-    import view.interfaces.ISurfaceDominoComponent;
+    import view.interfaces.ISurfaceRoyaleComponent;
 
     import view.interfaces.IDominoParagraph;
 
@@ -14,6 +14,7 @@ package utils
 
     import components.domino.DominoParagraph;
     import view.primeFaces.surfaceComponents.components.MainApplication;
+    import view.domino.surfaceComponents.components.DominoButton;
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
@@ -154,7 +155,7 @@ package utils
                 elementCount = surface.numElements;
                 container = surface;
  
-
+            
               //------------get all field ---------------
             
             
@@ -231,7 +232,7 @@ package utils
 
             public static function toRoyaleCode(surface:EditingSurface,projectName:String):XML
             {
-                var element:ISurfaceDominoComponent ;
+                var element:ISurfaceComponent ;
                 var title:String ="";
                 var windowsTitle:String = "";
            
@@ -247,59 +248,58 @@ package utils
                 xml  = MainApplicationCodeUtils.getRoyaleContainer();
                 mainContainer = MainApplicationCodeUtils.getRoyaleMainContainerTag(xml);
 
-
-                var container:IVisualElementContainer = surface;
-                if (element is ISurfaceComponent)
-                {
-                    container = element as IVisualElementContainer;
-                }
-                
                
-
+                var container:IVisualElementContainer = surface;
+                
                 var elementCount:int = 0;
-    
-                elementCount = surface.numElements;
-                container = surface;
+                if (!container)
+                {
+                    elementCount = surface.numElements;
+                    container = surface;
+                }
+                else
+                {
+                    elementCount = container.numElements;
+                }
+              
+              
                 var hasRichText:Boolean=false;
+                Alert.show("element elementCount2:"+elementCount);
                 for (var i:int = 0; i < elementCount; i++)
                 {
-                    element = container.getElementAt(i) as ISurfaceDominoComponent;
-                
-                   
-            
-                    if (element === null){
-                        continue;
-                    }
-
+                    element = container.getElementAt(i) as ISurfaceComponent;
                     var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
-                    
-                    
+                	XML.ignoreComments = false;
+                   //toRoyaleConvertCode
+                    var code:XML = element.toRoyaleConvertCode();
+
+                    if(element==null){
+                        Alert.show("element Royale code22:element is null");
+                    }
                    
-					XML.ignoreComments = false;
-                    var code:XML = element.toRoyaleCode();
-                    //Alert.show("element_title:"+code.toXMLString());
+                   
                     if(code!=null ){
                         if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
-                             code.setName("richtext");
-                             hasRichText=true;
-                          
+                            code.setName("richtext");
+                            hasRichText=true;
+                        
                         }
-                   }
+                    }
 
-                   
                     
-                  
-                  
-                    if (mainContainer)
-                    {
-                        mainContainer.appendChild(code); 
-                                  
-                    }
-                    else
-                    {
-                       xml.appendChild(code);
-                    }
+                        if (mainContainer)
+                        {
+                            mainContainer.appendChild(code); 
+                                    
+                        }
+                        else
+                        {
+                        xml.appendChild(code);
+                        }
+                    
                 }
+
+                //xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+xml;
 
 
 				return xml;

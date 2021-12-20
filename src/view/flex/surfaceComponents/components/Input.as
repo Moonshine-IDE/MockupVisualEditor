@@ -112,6 +112,16 @@ package view.flex.surfaceComponents.components
             return xml;
         }
 
+		public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+		public function toRora():XML
+        {
+            return null;
+        }
+
 		public function toDominoCode():XML
         {
             var xml:XML = new XML("<" + MxmlCodeUtils.getMXMLTagNameWithSelection(this, DOMINO_ELEMENT_NAME) + "/>");

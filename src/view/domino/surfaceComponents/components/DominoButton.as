@@ -15,12 +15,14 @@ package view.domino.surfaceComponents.components
     import mx.collections.ArrayList;
     
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IDominoSurfaceComponent;
     import view.domino.propertyEditors.DominoButtonPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
     import view.suportClasses.PropertyChangeReference; 
 
+    import view.interfaces.ISurfaceComponent;
     import utils.StringHelper;
+    import mx.controls.Alert;
 
     [Exclude(name="propertyChangeFieldReference", kind="property")]
 	[Exclude(name="actionListener", kind="property")]
@@ -31,6 +33,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
+    [Exclude(name="toRoyaleConvertCode", kind="method")]
     [Exclude(name="isSelected", kind="property")]
 	[Exclude(name="PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
@@ -61,7 +64,7 @@ package view.domino.surfaceComponents.components
 	 * title=""/&gt;
      * </pre>
      */
-    public class DominoButton extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class DominoButton extends spark.components.Button implements IDominoSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const DOMINO_ELEMENT_NAME:String = "button";
 		public static const ELEMENT_NAME:String = "button";
@@ -528,6 +531,15 @@ package view.domino.surfaceComponents.components
 			return xml;
 		}
 
+        public function toRora():XML
+        {
+            Alert.show("Mock toRXML execute0");
+            var xml:XML=component.toRoyaleConvertCode();
+            return xml;
+        }
+
+        
+
         public function fromXML(xml:XML, childFromXMLCallback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -554,8 +566,9 @@ package view.domino.surfaceComponents.components
 
         }
 
-        public function  toRoyaleCode():XML
+        public function  toRoyaleConvertCode():XML
         {
+            Alert.show("Mock toRoyaleConvertCode execute0");
             component.enabled = this.enabled;
 			component.label = this.label;
             component.isSelected = this.isSelected;
@@ -566,13 +579,13 @@ package view.domino.surfaceComponents.components
 
             component.code = this.code;
             component.codeEvent = this.codeEvent;
-
+         
             (component as components.domino.DominoButton).width = this.width;
             (component as components.domino.DominoButton).height = this.height;
             (component as components.domino.DominoButton).percentWidth = this.percentWidth;
             (component as components.domino.DominoButton).percentHeight = this.percentHeight;
-
-			return component.toRoyaleCode();
+            Alert.show("Mock toRoyaleConvertCode execute1");
+			return component.toRoyaleConvertCode();
         }
 
 		public function toCode():XML
@@ -592,7 +605,7 @@ package view.domino.surfaceComponents.components
             (component as components.domino.DominoButton).height = this.height;
             (component as components.domino.DominoButton).percentWidth = this.percentWidth;
             (component as components.domino.DominoButton).percentHeight = this.percentHeight;
-
+             Alert.show("Mock toCode execute1");
 			return component.toCode();
         }
 

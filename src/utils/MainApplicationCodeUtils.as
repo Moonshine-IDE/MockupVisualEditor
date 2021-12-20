@@ -7,7 +7,7 @@ package utils
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
-
+	import mx.controls.Alert;
     public class MainApplicationCodeUtils
 	{
 
@@ -120,6 +120,8 @@ package utils
 			for each (item in body)
             {
                 itemName = item.name();
+				
+				//			   library://ns.apache.org/royale/jewel::ApplicationMainContent
                 if (itemName=="library://ns.apache.org/royale/jewel::ApplicationMainContent")
                 {
 					mainItem = item;
@@ -246,15 +248,15 @@ package utils
 		}
 		public static function  getRoyaleContainer():XML{
 				var dat:Date = new Date();
-				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-				xml_str=xml_str+"<j:ResponsiveView xmlns:fx=\"http://ns.adobe.com/mxml/2009\"";
-				xml_str=xml_str+"xmlns:j=\"library://ns.apache.org/royale/jewel\"";
-				xml_str=xml_str+"xmlns:js=\"library://ns.apache.org/royale/basic\"";
-				xml_str=xml_str+"xmlns:html=\"library://ns.apache.org/royale/html\"";
+				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?> \n";
+				xml_str=xml_str+"<j:ResponsiveView xmlns:fx=\"http://ns.adobe.com/mxml/2009\" \n";
+				xml_str=xml_str+"xmlns:j=\"library://ns.apache.org/royale/jewel\" \n";
+				xml_str=xml_str+"xmlns:js=\"library://ns.apache.org/royale/basic\" \n";
+				xml_str=xml_str+"xmlns:html=\"library://ns.apache.org/royale/html\" \n";
 				xml_str=xml_str+"xmlns:view=\"view.*\" xmlns:listing=\"view.listing.*\" xmlns:edit=\"view.edit.*\">";
-				xml_str=xml_str+"<fx:Script>";
-				xml_str=xml_str+"<![CDATA[";
-				xml_str=xml_str+"import classes.events.ScreenEvent";
+				xml_str=xml_str+"<fx:Script>\n";
+				xml_str=xml_str+"<![CDATA[ \n";
+				xml_str=xml_str+"import classes.events.ScreenEvent \n";
 				xml_str=xml_str+"import view.edit.AddEditView;";
 				xml_str=xml_str+"	private function onNavigationChangeRequest(event:ScreenEvent):void";
 

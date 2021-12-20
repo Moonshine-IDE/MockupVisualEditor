@@ -8,6 +8,7 @@ package view.flex.surfaceComponents.components
     
     import view.flex.propertyEditors.TextPropertyEditor;
     import view.interfaces.IFlexSurfaceComponent;
+	import mx.controls.Alert;
 
 	public class Text extends Label implements IFlexSurfaceComponent
 	{
@@ -94,6 +95,17 @@ package view.flex.surfaceComponents.components
             setCommonXMLAttributes(xml);
 
             return xml;
+        }
+
+		public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+		public function toRora():XML
+        {
+			Alert.show("Mock toRoyaleConvertCode execute2");
+            return null;
         }
 
         private function setCommonXMLAttributes(xml:XML):void

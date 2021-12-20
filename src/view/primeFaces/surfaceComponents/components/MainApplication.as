@@ -275,6 +275,8 @@ package view.primeFaces.surfaceComponents.components
             }
         }
 
+        
+
         override protected function commitProperties():void
         {
             var resetWidthPercent:Boolean = false;

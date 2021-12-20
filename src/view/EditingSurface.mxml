@@ -209,6 +209,11 @@
 				_isRoyaleProject = true ;
 				return EditingSurfaceWriter.toRoyaleCode(surface,projectName);
 			}
+
+			public function toRoyaleConvertCode():XML
+			{
+				return null;
+			}
 			
 		}
 

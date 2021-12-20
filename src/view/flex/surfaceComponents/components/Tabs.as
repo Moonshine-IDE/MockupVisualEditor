@@ -240,6 +240,16 @@ package view.flex.surfaceComponents.components
             return xml;
         }
 
+		public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+		public function toRora():XML
+        {
+            return null;
+        }
+
         private function tabToMXML(index:int):XML
         {
             var viewStack:XML = new XML("<NavigatorContent></NavigatorContent>");

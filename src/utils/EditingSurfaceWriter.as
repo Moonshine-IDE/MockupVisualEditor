@@ -264,7 +264,7 @@ package utils
               
               
                 var hasRichText:Boolean=false;
-                Alert.show("element elementCount2:"+elementCount);
+               
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
@@ -280,22 +280,27 @@ package utils
                    
                     if(code!=null ){
                         if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
-                            code.setName("richtext");
-                            hasRichText=true;
+                         
+                            var elementsXML:XMLList = code.elements();
+                            var childCount:int = elementsXML.length();
+                            for(var j:int = 0; j < childCount; j++)
+                            {
+                                var childXML:XML = elementsXML[i];
+                                if (mainContainer)
+                                {
+                                    mainContainer.appendChild(childXML);  }
+                                else
+                                {
+                                    xml.appendChild(childXML);
+                                }
+                             
+                            }
                         
                         }
                     }
 
                     
-                        if (mainContainer)
-                        {
-                            mainContainer.appendChild(code); 
-                                    
-                        }
-                        else
-                        {
-                        xml.appendChild(code);
-                        }
+                       
                     
                 }
 

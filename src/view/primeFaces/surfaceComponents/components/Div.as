@@ -445,7 +445,8 @@ package view.primeFaces.surfaceComponents.components
         }
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
+            Alert.show("This is Div conert");
+            var xml:XML = component.toRoyaleConvertCode();
 			return xml;
 		}
         public function toRora():XML

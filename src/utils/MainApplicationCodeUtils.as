@@ -271,9 +271,9 @@ package utils
 				xml_str=xml_str+"  <js:ContainerDataBinding/>";
 				xml_str=xml_str+"</j:beads>";
 
-				xml_str=xml_str+" <j:ApplicationMainContent id=\"mainContent\" hasTopAppBar=\"false\" hasFooterBar=\"false\" selectedContent=\"ItemsListing\">";
+				// xml_str=xml_str+" <j:ApplicationMainContent id=\"mainContent\" hasTopAppBar=\"false\" hasFooterBar=\"false\" selectedContent=\"ItemsListing\">";
 
-				xml_str=xml_str+" </j:ApplicationMainContent>";
+				// xml_str=xml_str+" </j:ApplicationMainContent>";
 				xml_str=xml_str+" </j:ResponsiveView>	";
 
 

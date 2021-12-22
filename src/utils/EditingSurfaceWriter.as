@@ -246,7 +246,7 @@ package utils
                 var xml:XML;
                 var mainContainer:XML;
                 xml  = MainApplicationCodeUtils.getRoyaleContainer();
-                mainContainer = MainApplicationCodeUtils.getRoyaleMainContainerTag(xml);
+                //mainContainer = MainApplicationCodeUtils.getRoyaleMainContainerTag(xml);
 
                
                 var container:IVisualElementContainer = surface;
@@ -261,9 +261,12 @@ package utils
                 {
                     elementCount = container.numElements;
                 }
+
+               
               
               
                 var hasRichText:Boolean=false;
+                //Alert.show("elementCount:"+elementCount);
                
                 for (var i:int = 0; i < elementCount; i++)
                 {
@@ -276,32 +279,8 @@ package utils
                     if(element==null){
                         Alert.show("element Royale code22:element is null");
                     }
-                   
-                   
-                    if(code!=null ){
-                        if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
-                         
-                            var elementsXML:XMLList = code.elements();
-                            var childCount:int = elementsXML.length();
-                            for(var j:int = 0; j < childCount; j++)
-                            {
-                                var childXML:XML = elementsXML[i];
-                                if (mainContainer)
-                                {
-                                    mainContainer.appendChild(childXML);  }
-                                else
-                                {
-                                    xml.appendChild(childXML);
-                                }
-                             
-                            }
+                    xml.appendChild(code);
                         
-                        }
-                    }
-
-                    
-                       
-                    
                 }
 
                 //xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+xml;

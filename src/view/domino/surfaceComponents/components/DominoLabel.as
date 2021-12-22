@@ -772,13 +772,13 @@ package view.domino.surfaceComponents.components
         }
         public	function toRoyaleConvertCode():XML
 		{
-             Alert.show("Mock toRoyaleConvertCode execute000");
-			var xml:XML = new XML("");
-			return xml;
+            component.text = this.text;
+            //  Alert.show("Mock label toRoyaleConvertCode execute0");
+			return component.toRoyaleConvertCode();
 		}
         public function toRora():XML
         {
-             Alert.show("Mock toRoyaleConvertCode execute0");
+            
             var xml:XML = new XML("");
 			return xml;
         }

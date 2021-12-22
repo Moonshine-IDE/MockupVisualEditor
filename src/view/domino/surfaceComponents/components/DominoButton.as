@@ -568,7 +568,7 @@ package view.domino.surfaceComponents.components
 
         public function  toRoyaleConvertCode():XML
         {
-            Alert.show("Mock toRoyaleConvertCode execute0");
+            //Alert.show("Mock toRoyaleConvertCode execute0");
             component.enabled = this.enabled;
 			component.label = this.label;
             component.isSelected = this.isSelected;
@@ -584,7 +584,7 @@ package view.domino.surfaceComponents.components
             (component as components.domino.DominoButton).height = this.height;
             (component as components.domino.DominoButton).percentWidth = this.percentWidth;
             (component as components.domino.DominoButton).percentHeight = this.percentHeight;
-            Alert.show("Mock toRoyaleConvertCode execute1");
+            //Alert.show("Mock toRoyaleConvertCode execute1");
 			return component.toRoyaleConvertCode();
         }
 

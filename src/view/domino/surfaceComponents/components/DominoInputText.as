@@ -2403,8 +2403,27 @@ package view.domino.surfaceComponents.components
 
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
-			return xml;
+            component.text = this.text;
+            component.required = this.required;
+			component.maxLength = this.maxLength;
+			component.idAttribute = this.idAttribute;
+            component.nameAttribute = this.nameAttribute;
+            component.type=this.type;
+            component.kind = this.kind;
+            if(this.type=="keyword"){
+                
+                    component.keywords=this.keywords;
+                    //Alert.show("numberColumns:"+this.numberColumns);
+                    component.keywordui=this.keywordui;
+                 
+                    component.recalonchange = this.recalonchange;
+                    component.recalcchoices = this.recalcchoices;
+                    component.keyformulachoices = this.keyformulachoices;
+
+             }
+			
+
+			  return component.toRoyaleConvertCode();
 		}
         public function toRora():XML
         {

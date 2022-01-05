@@ -256,8 +256,26 @@ package utils
 				xml_str=xml_str+"xmlns:view=\"view.*\" xmlns:listing=\"view.listing.*\" xmlns:edit=\"view.edit.*\">";
 				xml_str=xml_str+"<fx:Script>\n";
 				xml_str=xml_str+"<![CDATA[ \n";
-				xml_str=xml_str+"import classes.events.ScreenEvent \n";
-				xml_str=xml_str+"import view.edit.AddEditView;";
+				xml_str=xml_str+"import classes.events.ScreenEvent; \n";
+				xml_str=xml_str+"import view.edit.AddEditView; \n";
+				xml_str=xml_str+"import org.apache.royale.collections.ArrayList; \n";
+				xml_str=xml_str+"import view.vos.TabBarButtonVO; \n";
+				
+				
+
+
+				xml_str=xml_str+"	private var _tabBarData:ArrayList = new ArrayList([]) \n";
+				// xml_str=xml_str+"	[Bindable] \n";
+				xml_str=xml_str+"	public function get tabBarData():ArrayList \n";
+				xml_str=xml_str+"	{ \n";
+				xml_str=xml_str+"	 return _tabBarData;\n";
+				xml_str=xml_str+"	} \n";
+
+				xml_str=xml_str+"	public function set tabBarData(value:ArrayList):void \n";
+				xml_str=xml_str+"	{ \n";
+				xml_str=xml_str+"	 _tabBarData = value;\n";
+				xml_str=xml_str+"	} \n";
+
 				xml_str=xml_str+"	private function onNavigationChangeRequest(event:ScreenEvent):void";
 
 				xml_str=xml_str+"	{";

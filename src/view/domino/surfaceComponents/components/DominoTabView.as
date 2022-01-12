@@ -541,8 +541,16 @@ package view.domino.surfaceComponents.components
 
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
-			return xml;
+			//var xml:XML = new XML("");
+             component.orientation = this.orientation;
+            component.scrollable = this.scrollable;
+			
+			component.isSelected = this.isSelected;
+			(component as components.domino.DominoTabView).width = super.width;
+			(component as components.domino.DominoTabView).height = super.height;
+			(component as components.domino.DominoTabView).percentWidth = this.percentWidth;
+			(component as components.domino.DominoTabView).percentHeight = this.percentHeight;
+			return component.toRoyaleConvertCode();
 		}
         public function toRora():XML
         {

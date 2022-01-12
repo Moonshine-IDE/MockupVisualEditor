@@ -218,7 +218,7 @@ package utils
 
 
                 MainApplicationCodeUtils.fixDominField(xml);
-
+              
 				return xml;
             }
             /**
@@ -283,8 +283,10 @@ package utils
                         
                 }
 
-                //xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+xml;
+                //%tabViewDataProvider%
 
+                //xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+xml;
+                  xml=MainApplicationCodeUtils.fixRoyaleDataProvider(xml);
 
 				return xml;
             }

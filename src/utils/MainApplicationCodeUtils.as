@@ -178,6 +178,51 @@ package utils
 			return xml;
 		}
 
+		public static function fixRoyaleDataProvider(xml:XML):XML
+		{
+			var royaleNamespace:Namespace = new Namespace("j", "library://ns.apache.org/royale/jewel");
+			var tabsXML:XMLList = xml..royaleNamespace::TabBar;
+			var dataProvider:String = "";
+			
+			for each (var tab:XML in tabsXML ){
+
+				if(tab.@labelString&& tab.@royaleDataVarName){
+					var tabProviderList:Array = tab.@labelString.split(",");
+					var tabProviderListStr:String = " ";
+					for each (var tabStr:String in tabProviderList ){
+						tabProviderListStr=tabProviderListStr+"{label:\""+tabStr+"\"}, \n"
+					}
+					dataProvider=dataProvider+" [Bindable] \n"
+					dataProvider=dataProvider+"	public var "+tab.@royaleDataVarName+":ArrayList = new ArrayList([ \n"+tabProviderListStr+"\n ])  \n";
+			
+					// dataProvider=dataProvider+"	public function get "+tab.@royaleDataVarName+"():ArrayList \n";
+					// dataProvider=dataProvider+"	{ \n";
+					// dataProvider=dataProvider+"	 return _"+tab.@royaleDataVarName+";\n";
+					// dataProvider=dataProvider+"	} \n";
+
+					// dataProvider=dataProvider+"	public function set "+tab.@royaleDataVarName+"(value:ArrayList):void \n";
+					// dataProvider=dataProvider+"	{ \n";
+					// dataProvider=dataProvider+"	 _"+tab.@royaleDataVarName+" = value;\n";
+					// dataProvider=dataProvider+"	} \n";
+
+				}
+
+				delete tab.@labelString;
+				delete tab.@royaleDataVarName;
+				
+			}
+
+			var xmlString:String=xml.toString();
+			xmlString=xmlString.replace("%tabViewDataProvider%",dataProvider)
+			xml=new XML(xmlString);
+
+			Alert.show("tabsXMl :"+xml.toString());
+			Alert.show("tabsXMl len:"+tabsXML.length())
+			
+
+			return xml;
+		}
+
 
 		private static function handleFleldOneNode(xml:XML,mainFieldsContainer:XML,total_xml:XML):void {
                 var children:XMLList = xml.children();
@@ -264,17 +309,9 @@ package utils
 				
 
 
-				xml_str=xml_str+"	private var _tabBarData:ArrayList = new ArrayList([]) \n";
-				// xml_str=xml_str+"	[Bindable] \n";
-				xml_str=xml_str+"	public function get tabBarData():ArrayList \n";
-				xml_str=xml_str+"	{ \n";
-				xml_str=xml_str+"	 return _tabBarData;\n";
-				xml_str=xml_str+"	} \n";
+				
 
-				xml_str=xml_str+"	public function set tabBarData(value:ArrayList):void \n";
-				xml_str=xml_str+"	{ \n";
-				xml_str=xml_str+"	 _tabBarData = value;\n";
-				xml_str=xml_str+"	} \n";
+				xml_str=xml_str+"	%tabViewDataProvider% \n";
 
 				xml_str=xml_str+"	private function onNavigationChangeRequest(event:ScreenEvent):void";
 

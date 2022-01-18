@@ -200,6 +200,11 @@
 			}
 
 
+			/**
+			 * Convert the current opened domino visual project to Royale project.
+			 * - projectName: the name of the opend domino project.
+			 * - surface : the current visual surface.
+			 */
 			public function toRoyaleCode(projectName:String,surface:EditingSurface):XML
 			{
 				//Alert.show("EditingSurface:"+_visualEditorFileType);

@@ -205,14 +205,14 @@
 			 * - projectName: the name of the opend domino project.
 			 * - surface : the current visual surface.
 			 */
-			public function toRoyaleCode(projectName:String,surface:EditingSurface):XML
+			public function toRoyaleCode(projectName:String):XML
 			{
-				//Alert.show("EditingSurface:"+_visualEditorFileType);
 				if(projectName=="$ProjectName" && visualEditorFileName){
 					projectName=visualEditorFileName;
 				}
 				_isRoyaleProject = true ;
-				return EditingSurfaceWriter.toRoyaleCode(surface,projectName);
+
+				return EditingSurfaceWriter.toRoyaleCode(this, projectName);
 			}
 
 			public function toRoyaleConvertCode():XML

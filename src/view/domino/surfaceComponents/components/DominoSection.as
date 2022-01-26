@@ -22,9 +22,9 @@ package view.domino.surfaceComponents.components
         import flash.events.Event;
         import flash.events.MouseEvent;
         import interfaces.IComponentSizeOutput;
-    import interfaces.IRoyaleComponentConverter;
+        import interfaces.IRoyaleComponentConverter;
 
-    import mx.effects.AnimateProperty;
+        import mx.effects.AnimateProperty;
         import mx.events.EffectEvent;
         import mx.events.FlexEvent;
         import mx.core.IVisualElement;
@@ -885,57 +885,55 @@ package view.domino.surfaceComponents.components
         }
 
 
-            public	function toRoyaleConvertCode():XML
+        public	function toRoyaleConvertCode():XML
+        {
+            return new XML("");
+        }
+
+        //---------------------title-------------------------
+
+
+        override public function get title():String
+        {
+            return super.title;
+        }
+
+        override public function set title(value:String):void
+        {
+            if (super.title != value)
             {
-                return new XML("");
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
+
+                super.title = value;
+
+
+                dispatchEvent(new Event("titleChanged"))
+            }
+        }
+
+        protected function internalToXML():XML
+        {
+            XMLCodeUtils.setSizeFromComponentToXML(this, mainXML);
+
+         //   mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
+         //   mainXML.@wrap = this.wrap;
+
+            if (cdataXML)
+            {
+                mainXML.appendChild(cdataXML);
             }
 
-            //---------------------title-------------------------
-            
-           
-            override public function get title():String
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
             {
-                return super.title;
-            }
-            
-            override public function set title(value:String):void
-            {
-                if (super.title != value)
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
+                if(element === null)
                 {
-                    _propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
-				
-				    super.title = value;
-                    
-                
-                    dispatchEvent(new Event("titleChanged"))
+                    continue;
                 }
+                mainXML.appendChild(element.toXML());
             }
-
-
-
-            protected function internalToXML():XML
-            {
-                XMLCodeUtils.setSizeFromComponentToXML(this, mainXML);
-
-             //   mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
-             //   mainXML.@wrap = this.wrap;
-
-                if (cdataXML)
-                {
-                    mainXML.appendChild(cdataXML);
-                }
-
-                var elementCount:int = this.numElements;
-                for(var i:int = 0; i < elementCount; i++)
-                {
-                    var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
-                    if(element === null)
-                    {
-                        continue;
-                    }
-                    mainXML.appendChild(element.toXML());
-                }
-                return mainXML;
-            }
+            return mainXML;
+        }
     }
 }

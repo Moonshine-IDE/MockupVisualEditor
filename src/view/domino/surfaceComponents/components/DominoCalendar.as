@@ -34,7 +34,6 @@ package view.domino.surfaceComponents.components
 
     import spark.formatters.DateTimeFormatter;
 
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;

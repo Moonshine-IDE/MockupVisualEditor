@@ -2428,15 +2428,14 @@ package view.domino.surfaceComponents.components
             component.nameAttribute = this.nameAttribute;
             component.type=this.type;
             component.kind = this.kind;
-            if(this.type=="keyword"){
-                
-                    component.keywords=this.keywords;
-                    component.keywordui=this.keywordui;
-                 
-                    component.recalonchange = this.recalonchange;
-                    component.recalcchoices = this.recalcchoices;
-                    component.keyformulachoices = this.keyformulachoices;
+            if(this.type=="keyword")
+			{
+				component.keywords=this.keywords;
+				component.keywordui=this.keywordui;
 
+				component.recalonchange = this.recalonchange;
+				component.recalcchoices = this.recalcchoices;
+				component.keyformulachoices = this.keyformulachoices;
              }
 
 			return (component as IRoyaleComponentConverter).toRoyaleConvertCode();

@@ -573,8 +573,6 @@ package view.domino.surfaceComponents.components
             if(component.codeEvent){
                 this.codeEvent=component.codeEvent;
             }
-
-
         }
 
         public function  toRoyaleConvertCode():XML

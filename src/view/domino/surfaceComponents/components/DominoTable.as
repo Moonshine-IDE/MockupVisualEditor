@@ -537,7 +537,7 @@ package view.domino.surfaceComponents.components
             if (elementsXML.length() > 0)
             {
                 var childCount:int = elementsXML.length();
-                //Alert.show("childCount:"+childCount);
+
                 for(var row:int = 0; row < childCount; row++)
                 {
                     var rowXML:XML = elementsXML[row];

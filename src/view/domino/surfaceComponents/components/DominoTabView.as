@@ -558,11 +558,10 @@ package view.domino.surfaceComponents.components
             return component.toCode();
         }
 
-
         public	function toRoyaleConvertCode():XML
 		{
 			//var xml:XML = new XML("");
-             component.orientation = this.orientation;
+			component.orientation = this.orientation;
             component.scrollable = this.scrollable;
 			
 			component.isSelected = this.isSelected;

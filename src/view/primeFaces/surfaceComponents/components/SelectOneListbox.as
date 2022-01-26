@@ -19,7 +19,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.SelectOneListboxPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
@@ -69,7 +69,7 @@ package view.primeFaces.surfaceComponents.components
 	 * &lt;/p:selectOneListbox&gt;
      * </pre>
      */
-    public class SelectOneListbox extends List implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent,
+    public class SelectOneListbox extends List implements ISelectableItemsComponent, IGetChildrenSurfaceComponent,
             IHistorySurfaceCustomHandlerComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneListbox";

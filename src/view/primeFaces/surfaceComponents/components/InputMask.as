@@ -14,7 +14,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.InputMaskPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
@@ -57,7 +57,7 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputMask extends MaskedTextInput implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent,
+    public class InputMask extends MaskedTextInput implements IGetChildrenSurfaceComponent, IIdAttribute, IHistorySurfaceComponent,
             IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputMask";

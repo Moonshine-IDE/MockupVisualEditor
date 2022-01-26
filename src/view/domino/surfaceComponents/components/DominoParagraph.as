@@ -20,6 +20,7 @@
 package view.domino.surfaceComponents.components
 {
     import interfaces.IComponentSizeOutput;
+    import interfaces.IRoyaleComponentConverter;
 
     import mx.core.IVisualElement;
     
@@ -27,21 +28,16 @@ package view.domino.surfaceComponents.components
 
     import utils.XMLCodeUtils;
 
-    import mx.controls.Alert;
-
-
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IDominoParagraph;
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.DivPropertyEditor;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.domino.propertyEditors.PargraphPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IDominoParagraph
-    import components.primeFaces.Div;
     import components.domino.DominoParagraph;
 
     import view.interfaces.IDominoSurfaceComponent;
@@ -99,7 +95,7 @@ package view.domino.surfaceComponents.components
      * </pre>
      */
     public class DominoParagraph extends Container implements IDominoSurfaceComponent, view.interfaces.IDominoParagraph,
-            IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
+            IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "paragraph";
         public static var ELEMENT_NAME:String = "Paragraph";
@@ -114,15 +110,12 @@ package view.domino.surfaceComponents.components
         {
             super();
 
-           // Alert.show("main width:"+Globals.MainApplicationWidth);
-			
 			component = new components.domino.DominoParagraph(this);
 			
             this.width = Globals.MainApplicationWidth-10;
             this.height = 40;
             this.minWidth = Globals.MainApplicationWidth-10;
             this.minHeight = 40;
-            //super.borderWeight=0;
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -395,10 +388,10 @@ package view.domino.surfaceComponents.components
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent;
 			for(var i:int = 0; i < this.numElements; i++)
 			{
-				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				element = this.getElementAt(i) as IGetChildrenSurfaceComponent;
 				if (!element)
 				{
 					continue;
@@ -459,20 +452,8 @@ package view.domino.surfaceComponents.components
 
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
-			return xml;
+			return new XML("");
 		}
-        public function toRora():XML
-        {
-            return null;
-        }
-
-    //    public function  toPerDefCode():XML
-    //     {
-	// 		component.isSelected = this.isSelected;
-    //         var xml:XML = (component as components.domino.DominoParagraph).toPerDefCode();
-    //         return xml;
-    //     }
 
         override protected function commitProperties():void
         {
@@ -508,7 +489,7 @@ package view.domino.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;

@@ -23,7 +23,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.TextEditorPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.ITextEditor;
@@ -76,7 +76,7 @@ package view.primeFaces.surfaceComponents.components
      * /&gt;
      * </pre>
      */
-    public class TextEditor extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent,
+    public class TextEditor extends BorderContainer implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent,
 			IInitializeAfterAddedComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "textEditor";

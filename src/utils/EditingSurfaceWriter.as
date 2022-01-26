@@ -5,16 +5,9 @@ package utils
     
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
-    import view.interfaces.ISurfaceRoyaleComponent;
-
-    import view.interfaces.IDominoParagraph;
-
-    import mx.controls.Alert;
-    import view.domino.surfaceComponents.components.DominoInputText;
-
-    import components.domino.DominoParagraph;
     import view.primeFaces.surfaceComponents.components.MainApplication;
-    import view.domino.surfaceComponents.components.DominoButton;
+    import interfaces.IRoyaleComponentConverter;
+
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
@@ -243,12 +236,7 @@ package utils
                 }
                 
                 
-                var xml:XML;
-                var mainContainer:XML;
-                xml  = MainApplicationCodeUtils.getRoyaleContainer();
-                //mainContainer = MainApplicationCodeUtils.getRoyaleMainContainerTag(xml);
-
-               
+                var xml:XML = MainApplicationCodeUtils.getRoyaleContainer();
                 var container:IVisualElementContainer = surface;
                 
                 var elementCount:int = 0;
@@ -262,25 +250,19 @@ package utils
                     elementCount = container.numElements;
                 }
 
-               
-              
-              
-                var hasRichText:Boolean=false;
-                //Alert.show("elementCount:"+elementCount);
-               
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
-                    var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
                 	XML.ignoreComments = false;
-                   //toRoyaleConvertCode
-                    var code:XML = element.toRoyaleConvertCode();
 
-                    if(element==null){
-                        Alert.show("element Royale code22:element is null");
+                    var royaleElement:IRoyaleComponentConverter = (element as IRoyaleComponentConverter);
+
+                    if (royaleElement)
+                    {
+                        var code:XML = royaleElement.toRoyaleConvertCode();
+
+                        xml.appendChild(code);
                     }
-                    xml.appendChild(code);
-                        
                 }
 
                 //%tabViewDataProvider%

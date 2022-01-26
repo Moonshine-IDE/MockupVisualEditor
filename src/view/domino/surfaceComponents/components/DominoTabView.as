@@ -27,7 +27,8 @@ package view.domino.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
-    import interfaces.dominoComponents.IDominoTabView;
+	import interfaces.IRoyaleComponentConverter;
+	import interfaces.dominoComponents.IDominoTabView;
 
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
@@ -42,7 +43,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.domino.propertyEditors.TabViewPropertyEditor;
     import view.primeFaces.supportClasses.ContainerDirection;
@@ -108,7 +109,7 @@ package view.domino.surfaceComponents.components
      * </pre>
      */
     public class DominoTabView extends TabNavigatorWithOrientation implements IDominoSurfaceComponent, ISelectableItemsComponent,
-            IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv, ICDATAInformation
+            IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv, ICDATAInformation, IRoyaleComponentConverter
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
         public static const ELEMENT_NAME:String = "TabView";
@@ -569,17 +570,13 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoTabView).height = super.height;
 			(component as components.domino.DominoTabView).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTabView).percentHeight = this.percentHeight;
-			return component.toRoyaleConvertCode();
+			return (component as IRoyaleComponentConverter).toRoyaleConvertCode();
 		}
-        public function toRora():XML
-        {
-            return null;
-        }
-		
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var organizerItem:OrganizerItem;
-			var surfaceElement:IPrimeFacesSurfaceComponent;
+			var surfaceElement:IGetChildrenSurfaceComponent;
 			var navContent:NavigatorContent;
 			
 			// returning particular tab index item
@@ -588,8 +585,8 @@ package view.domino.surfaceComponents.components
 				if (params[0] == "addItemAt")
 				{
 					navContent = this.getElementAt(params[1]) as NavigatorContent;
-					surfaceElement = navContent.getElementAt(0) as IPrimeFacesSurfaceComponent;
-					organizerItem = (surfaceElement as IPrimeFacesSurfaceComponent).getComponentsChildren();
+					surfaceElement = navContent.getElementAt(0) as IGetChildrenSurfaceComponent;
+					organizerItem = (surfaceElement as IGetChildrenSurfaceComponent).getComponentsChildren();
 					if (organizerItem)
 					{
 						organizerItem.name = StringUtil.trim(navContent.label).length > 0 ? navContent.label : "Tab (Unlabelled)";
@@ -609,7 +606,7 @@ package view.domino.surfaceComponents.components
 				
 				for (var j:int = 0; j < navContentCount; j++)
 				{
-					surfaceElement = navContent.getElementAt(j) as IPrimeFacesSurfaceComponent;
+					surfaceElement = navContent.getElementAt(j) as IGetChildrenSurfaceComponent;
 					if (surfaceElement === null)
 					{
 						continue;
@@ -700,7 +697,7 @@ package view.domino.surfaceComponents.components
             var elementCount:int = tab.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = tab.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = tab.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;

@@ -23,7 +23,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.TabViewPropertyEditor;
     import view.primeFaces.supportClasses.ContainerDirection;
@@ -86,7 +86,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:tabView&gt;
      * </pre>
      */
-    public class TabView extends TabNavigatorWithOrientation implements IPrimeFacesSurfaceComponent, ISelectableItemsComponent,
+    public class TabView extends TabNavigatorWithOrientation implements IGetChildrenSurfaceComponent, ISelectableItemsComponent,
             IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tabView";
@@ -517,7 +517,7 @@ package view.primeFaces.surfaceComponents.components
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var organizerItem:OrganizerItem;
-			var surfaceElement:IPrimeFacesSurfaceComponent;
+			var surfaceElement:IGetChildrenSurfaceComponent;
 			var navContent:NavigatorContent;
 			
 			// returning particular tab index item
@@ -526,8 +526,8 @@ package view.primeFaces.surfaceComponents.components
 				if (params[0] == "addItemAt")
 				{
 					navContent = this.getElementAt(params[1]) as NavigatorContent;
-					surfaceElement = navContent.getElementAt(0) as IPrimeFacesSurfaceComponent;
-					organizerItem = (surfaceElement as IPrimeFacesSurfaceComponent).getComponentsChildren();
+					surfaceElement = navContent.getElementAt(0) as IGetChildrenSurfaceComponent;
+					organizerItem = (surfaceElement as IGetChildrenSurfaceComponent).getComponentsChildren();
 					if (organizerItem)
 					{
 						organizerItem.name = StringUtil.trim(navContent.label).length > 0 ? navContent.label : "Tab (Unlabelled)";
@@ -547,7 +547,7 @@ package view.primeFaces.surfaceComponents.components
 				
 				for (var j:int = 0; j < navContentCount; j++)
 				{
-					surfaceElement = navContent.getElementAt(j) as IPrimeFacesSurfaceComponent;
+					surfaceElement = navContent.getElementAt(j) as IGetChildrenSurfaceComponent;
 					if (surfaceElement === null)
 					{
 						continue;
@@ -638,7 +638,7 @@ package view.primeFaces.surfaceComponents.components
             var elementCount:int = tab.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = tab.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = tab.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;

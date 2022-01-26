@@ -21,7 +21,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IDataProviderComponent;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.DataTablePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
@@ -76,7 +76,7 @@ package view.primeFaces.surfaceComponents.components
 	 * &lt;/p:dataTable&gt;
      * </pre>
      */
-    public class DataTable extends DataGrid implements IPrimeFacesSurfaceComponent, IDataProviderComponent, IHistorySurfaceCustomHandlerComponent
+    public class DataTable extends DataGrid implements IGetChildrenSurfaceComponent, IDataProviderComponent, IHistorySurfaceCustomHandlerComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "dataTable";
         public static const ELEMENT_NAME:String = "DataTable";

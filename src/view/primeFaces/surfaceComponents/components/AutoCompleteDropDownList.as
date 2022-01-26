@@ -18,7 +18,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IDataProviderComponent;
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.AutoCompleteDropDownListPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.AutoCompleteDropDownListSkin;
@@ -67,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
      * dropDown="true"/&gt;
      * </pre>
      */
-    public class AutoCompleteDropDownList extends ComboBox implements IPrimeFacesSurfaceComponent,
+    public class AutoCompleteDropDownList extends ComboBox implements IGetChildrenSurfaceComponent,
             IDataProviderComponent, ISelectableItemsComponent, IHistorySurfaceComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "autoComplete";

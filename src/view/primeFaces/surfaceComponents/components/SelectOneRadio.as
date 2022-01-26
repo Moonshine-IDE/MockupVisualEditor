@@ -26,7 +26,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.SelectOneRadioPropertyEditor;
     import view.primeFaces.supportClasses.GridBase;
@@ -82,7 +82,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:selectOneRadio&gt;
      * </pre>
      */
-    public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent,
+    public class SelectOneRadio extends GridBase implements ISelectableItemsComponent, IGetChildrenSurfaceComponent,
 			IHistorySurfaceCustomHandlerComponent, IInitializeAfterAddedComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneRadio";

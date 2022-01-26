@@ -17,7 +17,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.CalendarPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.suportClasses.PropertyChangeReference;
@@ -71,7 +71,7 @@ package view.primeFaces.surfaceComponents.components
      * pattern="MM/dd/yyyy"/&gt;
      * </pre>
      */
-    public class Calendar extends Container implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class Calendar extends Container implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "calendar";
         public static const ELEMENT_NAME:String = "Calendar";

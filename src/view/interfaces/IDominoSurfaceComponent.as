@@ -2,7 +2,7 @@ package view.interfaces
 {
 	import data.OrganizerItem;
 
-	public interface IDominoSurfaceComponent extends IPrimeFacesSurfaceComponent
+	public interface IDominoSurfaceComponent extends IGetChildrenSurfaceComponent
 	{
 		//function getComponentsChildren(...params):OrganizerItem; // shall be use to generate component tree
       

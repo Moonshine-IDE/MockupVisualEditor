@@ -22,26 +22,21 @@ package view.domino.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
+    import interfaces.IRoyaleComponentConverter;
 
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
     import view.interfaces.IDominoSurfaceComponent;
-    import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.domino.propertyEditors.DominoLabelPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IOutputLabel;
-    import components.primeFaces.OutputLabel;
-
     import components.domino.DominoPar;
     import components.domino.DominoRun;
     import components.domino.DominoFont;
@@ -49,10 +44,10 @@ package view.domino.surfaceComponents.components
 
     import mx.collections.ArrayList;
 
-    import mx.controls.Alert;
     import utils.StringHelper;
 
     import interfaces.dominoComponents.IDominoLabel;
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -65,7 +60,8 @@ package view.domino.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
-    public class DominoLabel extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
+    public class DominoLabel extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent,
+            ICDATAInformation, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const DOMINO_ELEMENT_NAME:String = "label";
        
@@ -379,12 +375,10 @@ package view.domino.surfaceComponents.components
         ])
 
 
-         public function get fontStyles():ArrayList
+        public function get fontStyles():ArrayList
         {
             return _fontStyles;
         }
-
-
 
         private var _fontStyle:String = "normal";
         /**
@@ -435,13 +429,10 @@ package view.domino.surfaceComponents.components
 				_propertyChangeFieldReference = new PropertyChangeReference(this, "fontName", _fontName, value);
 				
                 _fontName = value;
-                
-               
+
                 dispatchEvent(new Event("fontNameAttributeChanged"))
             }
         }
-
-
 
         //------------color setting end------------------------------------------------
         [Bindable("sizeChanged")]
@@ -468,12 +459,12 @@ package view.domino.surfaceComponents.components
          * <strong>Domino:</strong>
          * <listing version="3.0">&lt;font size=""/&gt;</listing>
          */
-         public function get size():String
+        public function get size():String
         {
             return  this._size ;
         }
 
-		 public function set size(value:String):void
+        public function set size(value:String):void
 		{
 			if (this._size != value)
 			{
@@ -485,7 +476,6 @@ package view.domino.surfaceComponents.components
 				dispatchEvent(new Event("sizeChanged"));
 			}
 		}
-
 
         [Inspectable(environment="none")]
         [Bindable("resize")]
@@ -789,19 +779,14 @@ package view.domino.surfaceComponents.components
 		
             return component.toCode();
         }
+
         public	function toRoyaleConvertCode():XML
 		{
             component.text = this.text;
-            //  Alert.show("Mock label toRoyaleConvertCode execute0");
-			return component.toRoyaleConvertCode();
+
+			return (component as IRoyaleComponentConverter).toRoyaleConvertCode();
 		}
-        public function toRora():XML
-        {
-            
-            var xml:XML = new XML("");
-			return xml;
-        }
-		
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return

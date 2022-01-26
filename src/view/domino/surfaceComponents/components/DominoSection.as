@@ -22,28 +22,26 @@ package view.domino.surfaceComponents.components
         import flash.events.Event;
         import flash.events.MouseEvent;
         import interfaces.IComponentSizeOutput;
-        import mx.effects.AnimateProperty;
+    import interfaces.IRoyaleComponentConverter;
+
+    import mx.effects.AnimateProperty;
         import mx.events.EffectEvent;
         import mx.events.FlexEvent;
         import mx.core.IVisualElement;
-        import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
         import view.domino.propertyEditors.DominoSectionPropertyEditor;
         import view.suportClasses.PropertyChangeReference;
         import data.OrganizerItem;
         import view.interfaces.IHistorySurfaceComponent;
-        import view.interfaces.IPrimeFacesSurfaceComponent;
+        import view.interfaces.IGetChildrenSurfaceComponent;
         import view.interfaces.IDominoSurfaceComponent;
-        import utils.MxmlCodeUtils;
         import utils.XMLCodeUtils;
         import view.interfaces.ICDATAInformation;
         import spark.components.Label;
         import spark.components.Panel;
         import components.domino.DominoSection;
-        import interfaces.dominoComponents.IDominoSection; 
-        import mx.controls.Alert; 
+        import interfaces.dominoComponents.IDominoSection;
         import mx.collections.ArrayList;
         import view.interfaces.IDropAcceptableComponent;
-
 
         [Exclude(name="propertiesChangedEvents", kind="property")]
         [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -60,7 +58,8 @@ package view.domino.surfaceComponents.components
         [Exclude(name="cdataInformation", kind="property")]
         [Exclude(name="updatePropertyChangeReference", kind="method")]
 
-        public class DominoSection extends Panel implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput,IDropAcceptableComponent
+        public class DominoSection extends Panel implements IDominoSurfaceComponent, IHistorySurfaceComponent,
+                ICDATAInformation, IComponentSizeOutput,IDropAcceptableComponent, IRoyaleComponentConverter
         {
             private var _open:Boolean = true;
             private var openChanged:Boolean;
@@ -107,11 +106,11 @@ package view.domino.surfaceComponents.components
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
-            //Alert.show("getComponentsChildren:"+this.numElements);
+			var element:IGetChildrenSurfaceComponent;
+
 			for(var i:int = 0; i < this.numElements; i++)
 			{
-				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				element = this.getElementAt(i) as IGetChildrenSurfaceComponent;
 				if (!element)
 				{
 					continue;
@@ -289,9 +288,6 @@ package view.domino.surfaceComponents.components
 
                     dispatchEvent(new Event("heightChanged"))
                 }
-
-                
-                
             }
 
         /**
@@ -889,15 +885,10 @@ package view.domino.surfaceComponents.components
         }
 
 
-        public	function toRoyaleConvertCode():XML
-		{
-			var xml:XML = new XML("");
-			return xml;
-		}
-        public function toRora():XML
-        {
-            return null;
-        }
+            public	function toRoyaleConvertCode():XML
+            {
+                return new XML("");
+            }
 
             //---------------------title-------------------------
             
@@ -937,7 +928,7 @@ package view.domino.surfaceComponents.components
                 var elementCount:int = this.numElements;
                 for(var i:int = 0; i < elementCount; i++)
                 {
-                    var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                    var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
                     if(element === null)
                     {
                         continue;

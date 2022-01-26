@@ -23,6 +23,8 @@ package view.domino.surfaceComponents.components
 
     import flash.events.Event;
 
+    import interfaces.IRoyaleComponentConverter;
+
     import mx.collections.ArrayList;
 
     import mx.controls.DateChooser;
@@ -36,7 +38,7 @@ package view.domino.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.domino.propertyEditors.CalendarPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.suportClasses.PropertyChangeReference;
@@ -90,7 +92,7 @@ package view.domino.surfaceComponents.components
      * pattern="MM/dd/yyyy"/&gt;
      * </pre>
      */
-    public class DominoCalendar extends Container implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class DominoCalendar extends Container implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, IRoyaleComponentConverter
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "calendar";
         public static const ELEMENT_NAME:String = "Calendar";
@@ -619,17 +621,11 @@ package view.domino.surfaceComponents.components
 
             return component.toCode();
         }
-         // <!-- TODO:  %Component% not implemented for Royale -->
+
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
-			return xml;
+			return new XML("");
 		}
-        // <!-- TODO:  %Component% not implemented for Royale -->
-        public function toRora():XML
-        {
-            return null;
-        }
 
         private function initializeStates():void
         {

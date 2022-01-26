@@ -19,10 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
+    import interfaces.IRoyaleComponentConverter;
     import interfaces.dominoComponents.IDominoComputedText;
-    import view.interfaces.IDominoSurfaceComponent;
-    import view.interfaces.IHistorySurfaceComponent;
-    import interfaces.IComponentSizeOutput;
     import view.interfaces.ICDATAInformation;
     import flash.events.Event;
 
@@ -32,28 +30,17 @@ package view.domino.surfaceComponents.components
     import spark.components.Label;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IDominoSurfaceComponent;
-    import view.interfaces.IDominoSurfaceComponent;
-    import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.domino.propertyEditors.DominoComputedTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IOutputLabel;
-    //import components.Domino.OutputLabel;
 
     import components.domino.DominoPar;
-    import components.domino.DominoRun;
-    import components.domino.DominoFont;
-    import components.domino.DominoLabel;
-
     import mx.collections.ArrayList;
-
-    import mx.controls.Alert;
     import utils.StringHelper;
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -66,7 +53,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
-    public class DominoComputedText extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
+    public class DominoComputedText extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const DOMINO_ELEMENT_NAME:String = "ComputedText";
        
@@ -442,6 +429,7 @@ package view.domino.surfaceComponents.components
 		{
 			return _formula;
 		}
+
 		public function set formula(value:String):void
 		{
 			if (_formula != value)
@@ -471,13 +459,10 @@ package view.domino.surfaceComponents.components
               
         ])
 
-
-         public function get fontStyles():ArrayList
+        public function get fontStyles():ArrayList
         {
             return _fontStyles;
         }
-
-
 
         private var _fontStyle:String = "normal";
 		[Bindable(event="fontStyleAttributeChanged")]
@@ -517,8 +502,8 @@ package view.domino.surfaceComponents.components
          * <listing version="3.0">&lt;InputText size=""/&gt;</listing>
          */
 
-         private var _size:String = "12";
-         public function get size():String
+        private var _size:String = "12";
+        public function get size():String
         {
             return  this._size ;
         }
@@ -703,14 +688,9 @@ package view.domino.surfaceComponents.components
 
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
-			return xml;
+			return new XML("");
 		}
-        public function toRora():XML
-        {
-            return null;
-        }
-		
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return

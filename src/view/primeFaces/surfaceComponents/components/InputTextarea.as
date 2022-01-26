@@ -17,7 +17,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.InputTextareaPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
@@ -67,7 +67,7 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputTextarea extends TextArea implements IPrimeFacesSurfaceComponent, IIdAttribute, IHistorySurfaceComponent, ICDATAInformation
+    public class InputTextarea extends TextArea implements IGetChildrenSurfaceComponent, IIdAttribute, IHistorySurfaceComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputTextarea";
         public static const ELEMENT_NAME:String = "InputTextarea";

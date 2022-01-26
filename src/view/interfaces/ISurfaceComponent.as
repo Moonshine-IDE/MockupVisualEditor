@@ -25,7 +25,6 @@ package view.interfaces
          * @return Visual Editor XML format
          */
 		function toXML():XML;
-		function toRora():XML;
 
 		/**
 		 * Help to determine if 'self' is currently selected on the stage 

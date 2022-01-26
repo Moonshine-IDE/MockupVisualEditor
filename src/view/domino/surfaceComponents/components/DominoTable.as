@@ -23,32 +23,26 @@ package view.domino.surfaceComponents.components
     import flash.events.MouseEvent;
 
     import interfaces.IComponentSizeOutput;
+	import interfaces.IRoyaleComponentConverter;
 
-    import view.primeFaces.supportClasses.GridItem;
+	import view.primeFaces.supportClasses.GridItem;
     import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.GridPropertyEditor;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
-    //import interfaces.components.IDominoTable;
     import interfaces.dominoComponents.IDominoTable;
     import components.domino.DominoTable;
     import view.interfaces.IDominoSurfaceComponent;
     import view.primeFaces.surfaceComponents.components.Div;
 	import view.domino.propertyEditors.DominoTablePropertyEditor;
-    //import components.primeFaces.Grid;
-    import spark.components.Alert;
-    
 	
     [Exclude(name="selectedColumn", kind="property")]
     [Exclude(name="selectedRow", kind="property")]
@@ -79,7 +73,8 @@ package view.domino.surfaceComponents.components
     [Exclude(name="cdataInformation", kind="property")]
 
 
-    public class DominoTable extends GridBase implements IDominoSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
+    public class DominoTable extends GridBase implements IDominoSurfaceComponent,
+			IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const ELEMENT_NAME:String = "Grid";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
@@ -537,9 +532,7 @@ package view.domino.surfaceComponents.components
                 this.removeAllElements();
             }
 
-
-
-			 component.fromXML(xml, callback);
+			component.fromXML(xml, callback);
 
             if (elementsXML.length() > 0)
             {
@@ -589,22 +582,16 @@ package view.domino.surfaceComponents.components
             return component.toCode();
         }
 
-
         public	function toRoyaleConvertCode():XML
 		{
-			var xml:XML = new XML("");
-			return xml;
+			return new XML("");
 		}
-        public function toRora():XML
-        {
-            return null;
-        }
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent;
 			var tableRow:GridRow;
 			var gridCol:GridItem;
 			
@@ -618,7 +605,7 @@ package view.domino.surfaceComponents.components
 				else if (params[0] == "addColumnAt")
 				{
 					gridCol = params[1] as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					element = gridCol.getElementAt(0) as IGetChildrenSurfaceComponent;
 					organizerItem = element.getComponentsChildren();
 					
 					if (organizerItem) 
@@ -653,7 +640,7 @@ package view.domino.surfaceComponents.components
 				for (var col:int = 0; col < tableRow.numElements; col++)
 				{
 					gridCol = tableRow.getElementAt(col) as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					element = gridCol.getElementAt(0) as IGetChildrenSurfaceComponent;
 					
 					organizerItem = element.getComponentsChildren();
 					if (organizerItem) 

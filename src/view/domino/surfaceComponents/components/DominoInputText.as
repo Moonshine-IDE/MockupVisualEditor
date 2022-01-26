@@ -37,13 +37,12 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IDominoSurfaceComponent;
     import view.domino.propertyEditors.InputTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IInputText;
     import interfaces.dominoComponents.IDominoInputText;
+	import interfaces.IRoyaleComponentConverter;
+
     import components.domino.DominoInputText;
 
     import utils.StringHelper;
-
-    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -155,7 +154,7 @@ package view.domino.surfaceComponents.components
      * </pre>
      */
     public class DominoInputText extends TextInput implements IDominoSurfaceComponent,IIdAttribute,
-            IHistorySurfaceComponent, IComponentSizeOutput
+            IHistorySurfaceComponent, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const DOMINO_ELEMENT_NAME:String = "field";
        
@@ -2432,7 +2431,6 @@ package view.domino.surfaceComponents.components
             if(this.type=="keyword"){
                 
                     component.keywords=this.keywords;
-                    //Alert.show("numberColumns:"+this.numberColumns);
                     component.keywordui=this.keywordui;
                  
                     component.recalonchange = this.recalonchange;
@@ -2440,15 +2438,10 @@ package view.domino.surfaceComponents.components
                     component.keyformulachoices = this.keyformulachoices;
 
              }
-			
 
-			  return component.toRoyaleConvertCode();
+			return (component as IRoyaleComponentConverter).toRoyaleConvertCode();
 		}
-        public function toRora():XML
-        {
-            return null;
-        }
-		
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return

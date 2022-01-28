@@ -3,11 +3,10 @@ package utils
     import mx.core.UIComponent;
 
     import view.EditingSurface;
-    import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
-	import mx.controls.Alert;
+
     public class MainApplicationCodeUtils
 	{
 
@@ -186,24 +185,16 @@ package utils
 			
 			for each (var tab:XML in tabsXML ){
 
-				if(tab.@labelString&& tab.@royaleDataVarName){
+				if(tab.@labelString&& tab.@royaleDataVarName)
+				{
 					var tabProviderList:Array = tab.@labelString.split(",");
 					var tabProviderListStr:String = " ";
-					for each (var tabStr:String in tabProviderList ){
+					for each (var tabStr:String in tabProviderList )
+					{
 						tabProviderListStr=tabProviderListStr+"{label:\""+tabStr+"\"}, \n"
 					}
 					dataProvider=dataProvider+" [Bindable] \n"
 					dataProvider=dataProvider+"	public var "+tab.@royaleDataVarName+":ArrayList = new ArrayList([ \n"+tabProviderListStr+"\n ])  \n";
-			
-					// dataProvider=dataProvider+"	public function get "+tab.@royaleDataVarName+"():ArrayList \n";
-					// dataProvider=dataProvider+"	{ \n";
-					// dataProvider=dataProvider+"	 return _"+tab.@royaleDataVarName+";\n";
-					// dataProvider=dataProvider+"	} \n";
-
-					// dataProvider=dataProvider+"	public function set "+tab.@royaleDataVarName+"(value:ArrayList):void \n";
-					// dataProvider=dataProvider+"	{ \n";
-					// dataProvider=dataProvider+"	 _"+tab.@royaleDataVarName+" = value;\n";
-					// dataProvider=dataProvider+"	} \n";
 
 				}
 
@@ -215,10 +206,6 @@ package utils
 			var xmlString:String=xml.toString();
 			xmlString=xmlString.replace("%tabViewDataProvider%",dataProvider)
 			xml=new XML(xmlString);
-
-			Alert.show("tabsXMl :"+xml.toString());
-			Alert.show("tabsXMl len:"+tabsXML.length())
-			
 
 			return xml;
 		}

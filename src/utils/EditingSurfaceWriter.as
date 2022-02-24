@@ -8,6 +8,8 @@ package utils
     import view.primeFaces.surfaceComponents.components.MainApplication;
     import interfaces.IRoyaleComponentConverter;
 
+	import mx.controls.Alert;
+
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
@@ -214,6 +216,121 @@ package utils
               
 				return xml;
             }
+
+             public static function aottoDominoCodeCovert(surfaceContainer:IVisualElementContainer):XML
+             {
+                var element:ISurfaceComponent ;
+                var title:String ="";
+                var windowsTitle:String = "";
+                if(surfaceContainer==null){
+                    Alert.show("surfaceContainer is null");
+                }
+                if(surfaceContainer.numElements>0){
+                    element = surfaceContainer.getElementAt(0) as ISurfaceComponent;
+                    title = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
+                    windowsTitle= (element as UIComponent).hasOwnProperty("windowsTitle") ? element["windowsTitle"] : "";
+                }else{
+                      Alert.show("surfaceContainer child is 0");
+                }
+
+               
+
+                //Alert.show("title:"+title);
+
+                // if(!title){
+                //     title=projectName
+                // }
+                
+                
+                var xml:XML;
+                var mainContainer:XML;
+               
+                xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+              
+               
+                
+                var container:IVisualElementContainer;
+                if (element is ISurfaceComponent)
+                {
+                    container = element as IVisualElementContainer;
+                }else{
+                    container=surfaceContainer;
+                }
+                
+               
+
+                var elementCount:int = 0;
+    
+                elementCount = surfaceContainer.numElements;
+               
+ 
+            
+              //------------get all field ---------------
+            
+            
+                var hasRichText:Boolean=false;
+                for (var i:int = 0; i < elementCount; i++)
+                {
+                    element = container.getElementAt(i) as ISurfaceComponent;
+                
+                   
+            
+                    if (element === null){
+                        continue;
+                    }
+
+                    var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
+                    
+                    
+                   
+					XML.ignoreComments = false;
+                    var code:XML = element.toCode();
+                    //Alert.show("element_title:"+code.toXMLString());
+                    if(code!=null ){
+                        if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
+                             code.setName("richtext");
+                             hasRichText=true;
+                          
+                        }
+                   }
+
+               
+               
+
+              
+                
+                    if(hasRichText==false){
+                        //add new richtext node
+                        //Alert.show("add rich:"+code.toXMLString());
+                        var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
+                        mainContainer.appendChild(richtext);
+                        mainContainer=richtext;
+                    }
+                  
+                  
+                    if (mainContainer)
+                    {
+                        mainContainer.appendChild(code); 
+                        if(code.name()=="richtext"){
+                            mainContainer=code;
+                        }              
+                    }
+                    else
+                    {
+                       xml.appendChild(code);
+                    }
+                }
+
+                
+
+                
+
+
+                MainApplicationCodeUtils.fixDominField(xml);
+              
+				return xml;
+             }
             /**
              * we need make sure the form body must contain a richtext
              */

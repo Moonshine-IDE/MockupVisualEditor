@@ -69,6 +69,8 @@
 
 		import mx.controls.Alert;
 
+		import surface.SurfaceMockup;
+
 	
 		public var organizer:ComponentsOrganizer;
 
@@ -199,6 +201,19 @@
 				return EditingSurfaceWriter.toDominoCode(this,projectName);
 			}
 
+			public function autoConvertToDominoCode(file:File):void
+			{
+				//1. load xml to surface
+
+
+			}
+
+			// public function fromXMLAutoConvert(xml:XML):XML 
+			// {
+			// 	var code:XML=EditingSurfaceReader.fromXMLAutoConvert(xml);
+			// 	return code;
+			// }
+
 
 			/**
 			 * Convert the current opened domino visual project to Royale project.
@@ -229,6 +244,8 @@
 			_wasLoaded = true;
 			if (!isVisualEditorFlex) this.callLater(organizer.loadFirstData, [this]);
 		}
+
+		
 
 
 		public function deleteAll():void

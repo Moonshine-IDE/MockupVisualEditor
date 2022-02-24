@@ -58,6 +58,7 @@ package utils
 	import view.domino.surfaceComponents.components.DominoButton;
 	import view.domino.surfaceComponents.components.DominoCalendar;
 	import mx.controls.Alert;
+	import surface.SurfaceMockup;
     public class EditingSurfaceReader
 	{
         public static var CLASS_LOOKUP:Object;
@@ -75,6 +76,20 @@ package utils
             	conv.fromXML(surface, xml);
 			}
          
+		}
+
+		public static function fromXMLAutoConvert( xml:XML):SurfaceMockup 
+		{
+			initReader(VisualEditorType.DOMINO);
+			domino_conv = DominoConverter.getInstance(CLASS_LOOKUP);
+			var surfaceModel:SurfaceMockup =  domino_conv.fromXMLAutoConvert(xml);
+			if(surfaceModel==null){
+				Alert.show("surface is null 89:");
+			}else{
+				Alert.show("surface numElements 89:"+surfaceModel.numElements);
+			}
+			
+			return surfaceModel;
 		}
 
 	

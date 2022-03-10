@@ -131,7 +131,8 @@
 				}
 			}
 
-			public function pageContrlList(){
+			public function pageContrlList():void
+			{
 				collection = new ArrayCollection([
 						new ComponentListItem("Button", DominoButton),
 						new ComponentListItem("Label", DominoLabel),

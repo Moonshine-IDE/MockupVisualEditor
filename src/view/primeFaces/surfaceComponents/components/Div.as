@@ -1,8 +1,11 @@
 package view.primeFaces.surfaceComponents.components
 {
-    import interfaces.IComponentSizeOutput;
+	import components.common.Div;
 
-    import mx.core.IVisualElement;
+	import interfaces.IComponentSizeOutput;
+	import interfaces.IRoyaleComponentConverter;
+
+	import mx.core.IVisualElement;
     
     import data.OrganizerItem;
 
@@ -12,14 +15,12 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IDiv;
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.DivPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IDiv;
-    import components.primeFaces.Div;
-    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -71,7 +72,7 @@ package view.primeFaces.surfaceComponents.components
      * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
      * </pre>
      */
-    public class Div extends Container implements IPrimeFacesSurfaceComponent, view.interfaces.IDiv,
+    public class Div extends Container implements IGetChildrenSurfaceComponent, view.interfaces.IDiv,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "div";
@@ -89,7 +90,7 @@ package view.primeFaces.surfaceComponents.components
         {
             super();
 			
-			component = new components.primeFaces.Div(this);
+			component = new components.common.Div(this);
 			
             this.width = 120;
             this.height = 120;
@@ -380,10 +381,10 @@ package view.primeFaces.surfaceComponents.components
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent;
 			for(var i:int = 0; i < this.numElements; i++)
 			{
-				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				element = this.getElementAt(i) as IGetChildrenSurfaceComponent;
 				if (!element)
 				{
 					continue;
@@ -428,21 +429,23 @@ package view.primeFaces.surfaceComponents.components
         public function toCode():XML
         {
 			component.isSelected = this.isSelected;
-			(component as components.primeFaces.Div).width = this.width;
-			(component as components.primeFaces.Div).height = this.width;
-			(component as components.primeFaces.Div).percentWidth = this.percentWidth;
-			(component as components.primeFaces.Div).percentHeight = this.percentHeight;
-			(component as components.primeFaces.Div).isDomino=isDomino;
-            (component as components.primeFaces.Div).direction=direction;
+			(component as components.common.Div).width = this.width;
+			(component as components.common.Div).height = this.width;
+			(component as components.common.Div).percentWidth = this.percentWidth;
+			(component as components.common.Div).percentHeight = this.percentHeight;
+			(component as components.common.Div).isDomino=isDomino;
+            (component as components.common.Div).direction=direction;
             var xml:XML = component.toCode();
 
             xml["@class"] = component.cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
-           
-            // if(this.title){
-            //     xml["@title"]=this.title;
-            // }
+
             return xml;
         }
+        public	function toRoyaleConvertCode():XML
+		{
+            var xml:XML = (component as IRoyaleComponentConverter).toRoyaleConvertCode();
+			return xml;
+		}
 
         override protected function commitProperties():void
         {
@@ -506,7 +509,7 @@ package view.primeFaces.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;

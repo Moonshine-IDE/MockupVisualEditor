@@ -1,30 +1,47 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2022 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
         import flash.events.Event;
         import flash.events.MouseEvent;
         import interfaces.IComponentSizeOutput;
+        import interfaces.IRoyaleComponentConverter;
+
         import mx.effects.AnimateProperty;
         import mx.events.EffectEvent;
         import mx.events.FlexEvent;
         import mx.core.IVisualElement;
-        import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
         import view.domino.propertyEditors.DominoSectionPropertyEditor;
         import view.suportClasses.PropertyChangeReference;
         import data.OrganizerItem;
         import view.interfaces.IHistorySurfaceComponent;
-        import view.interfaces.IPrimeFacesSurfaceComponent;
+        import view.interfaces.IGetChildrenSurfaceComponent;
         import view.interfaces.IDominoSurfaceComponent;
-        import utils.MxmlCodeUtils;
         import utils.XMLCodeUtils;
         import view.interfaces.ICDATAInformation;
         import spark.components.Label;
         import spark.components.Panel;
         import components.domino.DominoSection;
-        import interfaces.dominoComponents.IDominoSection; 
-        import mx.controls.Alert; 
+        import interfaces.dominoComponents.IDominoSection;
         import mx.collections.ArrayList;
         import view.interfaces.IDropAcceptableComponent;
-
 
         [Exclude(name="propertiesChangedEvents", kind="property")]
         [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -41,7 +58,8 @@ package view.domino.surfaceComponents.components
         [Exclude(name="cdataInformation", kind="property")]
         [Exclude(name="updatePropertyChangeReference", kind="method")]
 
-        public class DominoSection extends Panel implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput,IDropAcceptableComponent
+        public class DominoSection extends Panel implements IDominoSurfaceComponent, IHistorySurfaceComponent,
+                ICDATAInformation, IComponentSizeOutput,IDropAcceptableComponent, IRoyaleComponentConverter
         {
             private var _open:Boolean = true;
             private var openChanged:Boolean;
@@ -88,11 +106,11 @@ package view.domino.surfaceComponents.components
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
-            //Alert.show("getComponentsChildren:"+this.numElements);
+			var element:IGetChildrenSurfaceComponent;
+
 			for(var i:int = 0; i < this.numElements; i++)
 			{
-				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				element = this.getElementAt(i) as IGetChildrenSurfaceComponent;
 				if (!element)
 				{
 					continue;
@@ -270,9 +288,6 @@ package view.domino.surfaceComponents.components
 
                     dispatchEvent(new Event("heightChanged"))
                 }
-
-                
-                
             }
 
         /**
@@ -869,52 +884,56 @@ package view.domino.surfaceComponents.components
             return component.toCode();
         }
 
-            //---------------------title-------------------------
-            
-           
-            override public function get title():String
+
+        public	function toRoyaleConvertCode():XML
+        {
+            return new XML("");
+        }
+
+        //---------------------title-------------------------
+
+
+        override public function get title():String
+        {
+            return super.title;
+        }
+
+        override public function set title(value:String):void
+        {
+            if (super.title != value)
             {
-                return super.title;
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
+
+                super.title = value;
+
+
+                dispatchEvent(new Event("titleChanged"))
             }
-            
-            override public function set title(value:String):void
+        }
+
+        protected function internalToXML():XML
+        {
+            XMLCodeUtils.setSizeFromComponentToXML(this, mainXML);
+
+         //   mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
+         //   mainXML.@wrap = this.wrap;
+
+            if (cdataXML)
             {
-                if (super.title != value)
-                {
-                    _propertyChangeFieldReference = new PropertyChangeReference(this, "title", super.title, value);
-				
-				    super.title = value;
-                    
-                
-                    dispatchEvent(new Event("titleChanged"))
-                }
+                mainXML.appendChild(cdataXML);
             }
 
-
-
-            protected function internalToXML():XML
+            var elementCount:int = this.numElements;
+            for(var i:int = 0; i < elementCount; i++)
             {
-                XMLCodeUtils.setSizeFromComponentToXML(this, mainXML);
-
-             //   mainXML["@class"] = _cssClass = XMLCodeUtils.getChildrenPositionForXML(this);
-             //   mainXML.@wrap = this.wrap;
-
-                if (cdataXML)
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
+                if(element === null)
                 {
-                    mainXML.appendChild(cdataXML);
+                    continue;
                 }
-
-                var elementCount:int = this.numElements;
-                for(var i:int = 0; i < elementCount; i++)
-                {
-                    var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
-                    if(element === null)
-                    {
-                        continue;
-                    }
-                    mainXML.appendChild(element.toXML());
-                }
-                return mainXML;
+                mainXML.appendChild(element.toXML());
             }
+            return mainXML;
+        }
     }
 }

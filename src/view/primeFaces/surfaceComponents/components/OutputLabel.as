@@ -15,7 +15,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.ICDATAInformation;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IOutputLabel;
@@ -57,7 +57,7 @@ package view.primeFaces.surfaceComponents.components
      * for=""/&gt;
      * </pre>
      */
-    public class OutputLabel extends Label implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
+    public class OutputLabel extends Label implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputLabel";
         public static const ELEMENT_NAME:String = "OutputLabel";
@@ -409,6 +409,16 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.OutputLabel).percentHeight = this.percentHeight;
 			
             return component.toCode();
+        }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

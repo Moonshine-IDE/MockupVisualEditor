@@ -24,7 +24,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.IncludePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
@@ -65,7 +65,7 @@ package view.primeFaces.surfaceComponents.components
      * src=""/&gt;
      * </pre>
      */
-    public class Include extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IInitializeAfterAddedComponent
+    public class Include extends BorderContainer implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, IInitializeAfterAddedComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "include";
         public static const ELEMENT_NAME:String = "Include";
@@ -326,6 +326,16 @@ package view.primeFaces.surfaceComponents.components
 			component.path = this.path;
 			
 			return component.toCode();
+        }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

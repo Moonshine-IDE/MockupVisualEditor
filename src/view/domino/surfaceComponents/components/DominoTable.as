@@ -1,35 +1,48 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2022 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.events.MouseEvent;
 
     import interfaces.IComponentSizeOutput;
+	import interfaces.IRoyaleComponentConverter;
 
-    import view.primeFaces.supportClasses.GridItem;
+	import view.primeFaces.supportClasses.GridItem;
     import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
-    import view.primeFaces.propertyEditors.GridPropertyEditor;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
-    //import interfaces.components.IDominoTable;
     import interfaces.dominoComponents.IDominoTable;
     import components.domino.DominoTable;
     import view.interfaces.IDominoSurfaceComponent;
     import view.primeFaces.surfaceComponents.components.Div;
 	import view.domino.propertyEditors.DominoTablePropertyEditor;
-    //import components.primeFaces.Grid;
-    import spark.components.Alert;
-    
 	
     [Exclude(name="selectedColumn", kind="property")]
     [Exclude(name="selectedRow", kind="property")]
@@ -60,7 +73,8 @@ package view.domino.surfaceComponents.components
     [Exclude(name="cdataInformation", kind="property")]
 
 
-    public class DominoTable extends GridBase implements IDominoSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
+    public class DominoTable extends GridBase implements IDominoSurfaceComponent,
+			IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const ELEMENT_NAME:String = "Grid";
 		public static const EVENT_CHILDREN_UPDATED:String = "eventChildrenUpdated";
@@ -518,14 +532,12 @@ package view.domino.surfaceComponents.components
                 this.removeAllElements();
             }
 
-
-
-			 component.fromXML(xml, callback);
+			component.fromXML(xml, callback);
 
             if (elementsXML.length() > 0)
             {
                 var childCount:int = elementsXML.length();
-                //Alert.show("childCount:"+childCount);
+
                 for(var row:int = 0; row < childCount; row++)
                 {
                     var rowXML:XML = elementsXML[row];
@@ -569,12 +581,17 @@ package view.domino.surfaceComponents.components
 
             return component.toCode();
         }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			return new XML("");
+		}
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent;
 			var tableRow:GridRow;
 			var gridCol:GridItem;
 			
@@ -588,7 +605,7 @@ package view.domino.surfaceComponents.components
 				else if (params[0] == "addColumnAt")
 				{
 					gridCol = params[1] as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					element = gridCol.getElementAt(0) as IGetChildrenSurfaceComponent;
 					organizerItem = element.getComponentsChildren();
 					
 					if (organizerItem) 
@@ -623,7 +640,7 @@ package view.domino.surfaceComponents.components
 				for (var col:int = 0; col < tableRow.numElements; col++)
 				{
 					gridCol = tableRow.getElementAt(col) as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					element = gridCol.getElementAt(0) as IGetChildrenSurfaceComponent;
 					
 					organizerItem = element.getComponentsChildren();
 					if (organizerItem) 

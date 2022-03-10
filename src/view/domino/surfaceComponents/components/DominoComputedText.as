@@ -1,9 +1,26 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2022 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
+    import interfaces.IRoyaleComponentConverter;
     import interfaces.dominoComponents.IDominoComputedText;
-    import view.interfaces.IDominoSurfaceComponent;
-    import view.interfaces.IHistorySurfaceComponent;
-    import interfaces.IComponentSizeOutput;
     import view.interfaces.ICDATAInformation;
     import flash.events.Event;
 
@@ -13,28 +30,17 @@ package view.domino.surfaceComponents.components
     import spark.components.Label;
     
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IDominoSurfaceComponent;
-    import view.interfaces.IDominoSurfaceComponent;
-    import view.primeFaces.propertyEditors.OutputLabelPropertyEditor;
     import view.domino.propertyEditors.DominoComputedTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IOutputLabel;
-    //import components.Domino.OutputLabel;
 
     import components.domino.DominoPar;
-    import components.domino.DominoRun;
-    import components.domino.DominoFont;
-    import components.domino.DominoLabel;
-
     import mx.collections.ArrayList;
-
-    import mx.controls.Alert;
     import utils.StringHelper;
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -47,7 +53,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
-    public class DominoComputedText extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput
+    public class DominoComputedText extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const DOMINO_ELEMENT_NAME:String = "ComputedText";
        
@@ -423,6 +429,7 @@ package view.domino.surfaceComponents.components
 		{
 			return _formula;
 		}
+
 		public function set formula(value:String):void
 		{
 			if (_formula != value)
@@ -452,13 +459,10 @@ package view.domino.surfaceComponents.components
               
         ])
 
-
-         public function get fontStyles():ArrayList
+        public function get fontStyles():ArrayList
         {
             return _fontStyles;
         }
-
-
 
         private var _fontStyle:String = "normal";
 		[Bindable(event="fontStyleAttributeChanged")]
@@ -498,8 +502,8 @@ package view.domino.surfaceComponents.components
          * <listing version="3.0">&lt;InputText size=""/&gt;</listing>
          */
 
-         private var _size:String = "12";
-         public function get size():String
+        private var _size:String = "12";
+        public function get size():String
         {
             return  this._size ;
         }
@@ -681,7 +685,12 @@ package view.domino.surfaceComponents.components
 		
             return component.toCode();
         }
-		
+
+        public	function toRoyaleConvertCode():XML
+		{
+			return new XML("");
+		}
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return

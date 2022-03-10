@@ -1,10 +1,31 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2022 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
     import components.domino.DominoButton;
 
     import flash.events.Event;
 
-    import interfaces.dominoComponents.IDominoButton;
+	import interfaces.IRoyaleComponentConverter;
+
+	import interfaces.dominoComponents.IDominoButton;
 
     import spark.components.Button;
     
@@ -15,7 +36,7 @@ package view.domino.surfaceComponents.components
     import mx.collections.ArrayList;
     
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IDominoSurfaceComponent;
     import view.domino.propertyEditors.DominoButtonPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
     import view.suportClasses.PropertyChangeReference; 
@@ -31,6 +52,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
+    [Exclude(name="toRoyaleConvertCode", kind="method")]
     [Exclude(name="isSelected", kind="property")]
 	[Exclude(name="PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON", kind="property")]
     [Exclude(name="getComponentsChildren", kind="method")]
@@ -38,6 +60,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="cdataInformation", kind="property")]
 
     /**
+     * The class work for domino visual buttong UI component in the Visual editor
      * <p>Representation of PrimeFaces button component</p>
      *
      * <strong>Visual Editor XML:</strong>
@@ -61,7 +84,7 @@ package view.domino.surfaceComponents.components
 	 * title=""/&gt;
      * </pre>
      */
-    public class DominoButton extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class DominoButton extends spark.components.Button implements IDominoSurfaceComponent, IHistorySurfaceComponent, IRoyaleComponentConverter
 	{
 		public static const DOMINO_ELEMENT_NAME:String = "button";
 		public static const ELEMENT_NAME:String = "button";
@@ -550,8 +573,27 @@ package view.domino.surfaceComponents.components
             if(component.codeEvent){
                 this.codeEvent=component.codeEvent;
             }
+        }
 
+        public function  toRoyaleConvertCode():XML
+        {
+            component.enabled = this.enabled;
+			component.label = this.label;
+            component.isSelected = this.isSelected;
 
+            component.size = this.size;
+            component.color = this.color;
+            component.fontStyle = this.fontStyle;
+
+            component.code = this.code;
+            component.codeEvent = this.codeEvent;
+         
+            (component as components.domino.DominoButton).width = this.width;
+            (component as components.domino.DominoButton).height = this.height;
+            (component as components.domino.DominoButton).percentWidth = this.percentWidth;
+            (component as components.domino.DominoButton).percentHeight = this.percentHeight;
+
+			return (component as IRoyaleComponentConverter).toRoyaleConvertCode();
         }
 
 		public function toCode():XML

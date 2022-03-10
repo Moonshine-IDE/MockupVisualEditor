@@ -3,7 +3,6 @@ package utils
     import mx.core.UIComponent;
 
     import view.EditingSurface;
-    import view.interfaces.IFlexSurfaceComponent;
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
@@ -63,6 +62,23 @@ package utils
 
 			return null;
 		}
+		public static function getDominPageMainContainerTag(xml:XML):XML
+		{
+			var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			var item:XML = null;
+			var itemName:String = "";
+			for each (item in body)
+            {
+                itemName = item.name();
+                if (itemName=="http://www.lotus.com/dxl::body")
+                {
+					mainItem = item;
+                }
+            }
+
+			return mainItem;
+		}
 
 
 		public static function getDominMainContainerTag(xml:XML):XML
@@ -89,6 +105,28 @@ package utils
 					}
 				}
 			}
+
+			return mainItem;
+		}
+
+
+		public static function getRoyaleMainContainerTag(xml:XML):XML
+		{
+            var body:XMLList = xml.children();
+			var mainItem:XML=null;
+			var item:XML = null;
+			var itemName:String = "";
+			for each (item in body)
+            {
+                itemName = item.name();
+				
+				//			   library://ns.apache.org/royale/jewel::ApplicationMainContent
+                if (itemName=="library://ns.apache.org/royale/jewel::ApplicationMainContent")
+                {
+					mainItem = item;
+                }
+            }
+			
 
 			return mainItem;
 		}
@@ -136,6 +174,39 @@ package utils
 			var mainFieldsContainer:XML=getDominMainFieldListContainerTag(xml);
 			var total_xml:XML=xml;
             handleFleldOneNode(xml,mainFieldsContainer,total_xml);
+			return xml;
+		}
+
+		public static function fixRoyaleDataProvider(xml:XML):XML
+		{
+			var royaleNamespace:Namespace = new Namespace("j", "library://ns.apache.org/royale/jewel");
+			var tabsXML:XMLList = xml..royaleNamespace::TabBar;
+			var dataProvider:String = "";
+			
+			for each (var tab:XML in tabsXML ){
+
+				if(tab.@labelString&& tab.@royaleDataVarName)
+				{
+					var tabProviderList:Array = tab.@labelString.split(",");
+					var tabProviderListStr:String = " ";
+					for each (var tabStr:String in tabProviderList )
+					{
+						tabProviderListStr=tabProviderListStr+"{label:\""+tabStr+"\"}, \n"
+					}
+					dataProvider=dataProvider+" [Bindable] \n"
+					dataProvider=dataProvider+"	public var "+tab.@royaleDataVarName+":ArrayList = new ArrayList([ \n"+tabProviderListStr+"\n ])  \n";
+
+				}
+
+				delete tab.@labelString;
+				delete tab.@royaleDataVarName;
+				
+			}
+
+			var xmlString:String=xml.toString();
+			xmlString=xmlString.replace("%tabViewDataProvider%",dataProvider)
+			xml=new XML(xmlString);
+
 			return xml;
 		}
 
@@ -207,6 +278,55 @@ package utils
 			return getPrimeFacesMainContainer(title, component,
                     element as view.primeFaces.supportClasses.Container);
 		}
+		public static function  getRoyaleContainer():XML{
+				var dat:Date = new Date();
+				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?> \n";
+				xml_str=xml_str+"<j:ResponsiveView xmlns:fx=\"http://ns.adobe.com/mxml/2009\" \n";
+				xml_str=xml_str+"xmlns:j=\"library://ns.apache.org/royale/jewel\" \n";
+				xml_str=xml_str+"xmlns:js=\"library://ns.apache.org/royale/basic\" \n";
+				xml_str=xml_str+"xmlns:html=\"library://ns.apache.org/royale/html\" \n";
+				xml_str=xml_str+"xmlns:view=\"view.*\" xmlns:listing=\"view.listing.*\" xmlns:edit=\"view.edit.*\">";
+				xml_str=xml_str+"<fx:Script>\n";
+				xml_str=xml_str+"<![CDATA[ \n";
+				xml_str=xml_str+"import classes.events.ScreenEvent; \n";
+				xml_str=xml_str+"import view.edit.AddEditView; \n";
+				xml_str=xml_str+"import org.apache.royale.collections.ArrayList; \n";
+				xml_str=xml_str+"import view.vos.TabBarButtonVO; \n";
+				
+				
+
+
+				
+
+				xml_str=xml_str+"	%tabViewDataProvider% \n";
+
+				xml_str=xml_str+"	private function onNavigationChangeRequest(event:ScreenEvent):void";
+
+				xml_str=xml_str+"	{";
+				xml_str=xml_str+"	mainContent.selectedContent = event.screenName;";
+				xml_str=xml_str+"	}";
+				xml_str=xml_str+"	]]>";
+				
+				xml_str=xml_str+"</fx:Script>";
+
+				xml_str=xml_str+"<j:beads>";
+				xml_str=xml_str+"  <js:ContainerDataBinding/>";
+				xml_str=xml_str+"</j:beads>";
+
+				// xml_str=xml_str+" <j:ApplicationMainContent id=\"mainContent\" hasTopAppBar=\"false\" hasFooterBar=\"false\" selectedContent=\"ItemsListing\">";
+
+				// xml_str=xml_str+" </j:ApplicationMainContent>";
+				xml_str=xml_str+" </j:ResponsiveView>	";
+
+
+
+				var xml:XML = new XML(xml_str);
+				
+			
+			
+
+			return xml;
+		}
 		/**
 		 * Overloaded this function, so that the domino project can call it
 		 */
@@ -214,6 +334,23 @@ package utils
 		public static function getDominoParentContent(title:String,windowsTitle:String):XML
 		{	   
 			return getDominoMainContainer(title,windowsTitle);	
+		}
+		public static function getDominoPageMainContainer(pageName:String):XML
+		{
+			var dat:Date = new Date();
+			var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+			xml_str=xml_str+"<!DOCTYPE page>";
+			xml_str=xml_str+"<page name='"+pageName+"'";
+			xml_str=xml_str+" xmlns='http://www.lotus.com/dxl'";
+			xml_str=xml_str+" version='11.0' maintenanceversion='1.0' ";
+			xml_str=xml_str+"replicaid='85257C8A00383F9C' publicaccess='false' renderpassthrough='true'>";
+			xml_str=xml_str+"<body>" ;
+			xml_str=xml_str+"</body>";
+			xml_str=xml_str+"<item name='$$ScriptName' summary='false' sign='true'><text>"+pageName+"</text></item>";
+			xml_str=xml_str+"</page>";
+			var xml:XML = new XML(xml_str)
+			
+			return xml;
 		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML

@@ -8,7 +8,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.BasicPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.suportClasses.PropertyChangeReference;
@@ -49,7 +49,7 @@ package view.primeFaces.surfaceComponents.components
      * style="width:120px;height:120px;"
      * </pre>
      */
-    public class OutputPanel extends Container implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, IComponentSizeOutput
+    public class OutputPanel extends Container implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputPanel";
         public static var ELEMENT_NAME:String = "OutputPanel";
@@ -268,10 +268,10 @@ package view.primeFaces.surfaceComponents.components
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent;
 			for(var i:int = 0; i < this.numElements; i++)
 			{
-				element = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+				element = this.getElementAt(i) as IGetChildrenSurfaceComponent;
 				if (!element)
 				{
 					continue;
@@ -296,7 +296,7 @@ package view.primeFaces.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;
@@ -308,6 +308,16 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+
+        public function toRora():XML
+        {
+            return null;
+        }
         public function fromXML(xml:XML, callback:Function):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -348,7 +358,7 @@ package view.primeFaces.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;

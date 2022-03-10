@@ -14,7 +14,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.TreePropertyEditor;
     import view.suportClasses.PropertyChangeReference;
 
@@ -58,7 +58,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:tree&gt;
      * </pre>
      */
-    public class Tree extends mx.controls.Tree implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
+    public class Tree extends mx.controls.Tree implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "tree";
         public static const ELEMENT_NAME:String = "Tree";
@@ -365,6 +365,15 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.Tree).percentHeight = this.percentHeight;
 			
             return component.toCode();
+        }
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

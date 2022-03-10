@@ -1,3 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2022 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
     import flash.events.Event;
@@ -18,13 +37,12 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IDominoSurfaceComponent;
     import view.domino.propertyEditors.InputTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IInputText;
     import interfaces.dominoComponents.IDominoInputText;
+	import interfaces.IRoyaleComponentConverter;
+
     import components.domino.DominoInputText;
 
     import utils.StringHelper;
-
-    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -136,7 +154,7 @@ package view.domino.surfaceComponents.components
      * </pre>
      */
     public class DominoInputText extends TextInput implements IDominoSurfaceComponent,IIdAttribute,
-            IHistorySurfaceComponent, IComponentSizeOutput
+            IHistorySurfaceComponent, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const DOMINO_ELEMENT_NAME:String = "field";
        
@@ -2400,7 +2418,29 @@ package view.domino.surfaceComponents.components
 			
             return component.toCode();
         }
-		
+
+        public	function toRoyaleConvertCode():XML
+		{
+            component.text = this.text;
+            component.required = this.required;
+			component.maxLength = this.maxLength;
+			component.idAttribute = this.idAttribute;
+            component.nameAttribute = this.nameAttribute;
+            component.type=this.type;
+            component.kind = this.kind;
+            if(this.type=="keyword")
+			{
+				component.keywords=this.keywords;
+				component.keywordui=this.keywordui;
+
+				component.recalonchange = this.recalonchange;
+				component.recalcchoices = this.recalcchoices;
+				component.keyformulachoices = this.keyformulachoices;
+             }
+
+			return (component as IRoyaleComponentConverter).toRoyaleConvertCode();
+		}
+
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			// @note @return

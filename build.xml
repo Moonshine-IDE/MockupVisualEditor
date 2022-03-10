@@ -6,10 +6,10 @@
 		copy-bin-to-moonshine won't be fired.
 	<property name="MOONSHINE_LIBS_PATH" value="../Moonshine-IDE/ide/MoonshineDESKTOPevolved/libs"/>-->
 	<property name="SWC_NAME" value="VisualEditor-${version}.swc"/>
-	<property name="IsDebug" value="true" />
+	<property name="IsDebug" value="false" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
-	<target name="main" depends="clean-up-bin, exclude-files, build, documentationPrimeFaces, clean-up-after-compilation, copy-bin-to-moonshine"/>
+	<target name="main" depends="clean-up-bin, exclude-files, build, documentationFlex, documentationPrimeFaces, documentationDomino, clean-up-after-compilation, copy-bin-to-moonshine"/>
 
 	<target name="clean-up-bin">
 		<delete quiet="true">
@@ -58,16 +58,17 @@
 
 	<target name="documentation">
 		<echo>Creating documentation for all Visual Editor components</echo>
-		<asdoc output="${basedir}/bin/doc" failonerror="true">
+		<asdoc output="${basedir}/bin/doc/all" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/flex/surfaceComponents/components"/>
 			<doc-sources path-element="${basedir}/src/view/primeFaces/surfaceComponents/components"/>
+			<doc-sources path-element="${basedir}/src/view/domino/surfaceComponents/components"/>
 		</asdoc>
 	</target>
 
 	<target name="documentationFlex">
 		<echo>Creating documentation for Visual Editor Flex components</echo>
-		<asdoc output="${basedir}/bin/doc" failonerror="true">
+		<asdoc output="${basedir}/bin/doc/flex" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/flex/surfaceComponents/components"/>
 		</asdoc>
@@ -75,7 +76,7 @@
 
 	<target name="documentationPrimeFaces">
 		<echo>Creating documentation for Visual Editor PrimeFaces components</echo>
-		<asdoc output="${basedir}/bin/doc" failonerror="true">
+		<asdoc output="${basedir}/bin/doc/primefaces" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/primeFaces/surfaceComponents/components"/>
 		</asdoc>
@@ -84,7 +85,7 @@
 
 	<target name="documentationDomino">
 		<echo>Creating documentation for Domino Visual Editor components</echo>
-		<asdoc output="${basedir}/bin/doc" failonerror="true">
+		<asdoc output="${basedir}/bin/doc/domino" failonerror="true">
 			<compiler.external-library-path file="${basedir}/bin/VisualEditor-0.2.0.swc"/>
 			<doc-sources path-element="${basedir}/src/view/domino/surfaceComponents/components"/>
 		</asdoc>

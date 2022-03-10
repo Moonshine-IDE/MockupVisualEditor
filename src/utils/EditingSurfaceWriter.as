@@ -5,14 +5,9 @@ package utils
     
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
-
-    import view.interfaces.IDominoParagraph;
-
-    import mx.controls.Alert;
-    import view.domino.surfaceComponents.components.DominoInputText;
-
-    import components.domino.DominoParagraph;
     import view.primeFaces.surfaceComponents.components.MainApplication;
+    import interfaces.IRoyaleComponentConverter;
+
     public class EditingSurfaceWriter
 	{
 		public static function toXML(surface:EditingSurface, visualEditorType:String):XML
@@ -111,6 +106,8 @@ package utils
              */
             public static function toDominoCode(surface:EditingSurface,projectName:String):XML
             {
+                
+                //Alert.show("surface:"+surface.visualEditorFileType);
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 var windowsTitle:String = "";
@@ -127,8 +124,17 @@ package utils
                 }
                 
                 
-                var xml:XML = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
-                var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+                var xml:XML;
+                var mainContainer:XML;
+                if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
+                    xml= MainApplicationCodeUtils.getDominoPageMainContainer(title);
+                    mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
+                }else{
+                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                    mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+                }
+               
+                
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)
                 {
@@ -142,7 +148,7 @@ package utils
                 elementCount = surface.numElements;
                 container = surface;
  
-
+            
               //------------get all field ---------------
             
             
@@ -177,13 +183,13 @@ package utils
 
               
                 
-                if(hasRichText==false){
-                    //add new richtext node
-                    //Alert.show("add rich:"+code.toXMLString());
-                    var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
-                    mainContainer.appendChild(richtext);
-                    mainContainer=richtext;
-                }
+                    if(hasRichText==false){
+                        //add new richtext node
+                        //Alert.show("add rich:"+code.toXMLString());
+                        var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
+                        mainContainer.appendChild(richtext);
+                        mainContainer=richtext;
+                    }
                   
                   
                     if (mainContainer)
@@ -205,7 +211,7 @@ package utils
 
 
                 MainApplicationCodeUtils.fixDominField(xml);
-
+              
 				return xml;
             }
             /**
@@ -216,6 +222,56 @@ package utils
                
             // }
 
+
+            public static function toRoyaleCode(surface:EditingSurface,projectName:String):XML
+            {
+                var element:ISurfaceComponent ;
+                var title:String ="";
+                var windowsTitle:String = "";
+           
+                //Alert.show("title:"+title);
+
+                if(!title){
+                    title=projectName
+                }
+                
+                
+                var xml:XML = MainApplicationCodeUtils.getRoyaleContainer();
+                var container:IVisualElementContainer = surface;
+                
+                var elementCount:int = 0;
+                if (!container)
+                {
+                    elementCount = surface.numElements;
+                    container = surface;
+                }
+                else
+                {
+                    elementCount = container.numElements;
+                }
+
+                for (var i:int = 0; i < elementCount; i++)
+                {
+                    element = container.getElementAt(i) as ISurfaceComponent;
+                	XML.ignoreComments = false;
+
+                    var royaleElement:IRoyaleComponentConverter = (element as IRoyaleComponentConverter);
+
+                    if (royaleElement)
+                    {
+                        var code:XML = royaleElement.toRoyaleConvertCode();
+
+                        xml.appendChild(code);
+                    }
+                }
+
+                //%tabViewDataProvider%
+
+                //xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+xml;
+                  xml=MainApplicationCodeUtils.fixRoyaleDataProvider(xml);
+
+				return xml;
+            }
 
             
         }

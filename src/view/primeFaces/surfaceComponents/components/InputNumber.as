@@ -16,7 +16,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IIdAttribute;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.InputNumberPropertyEditor;
     import view.primeFaces.supportClasses.InputNumberFormatter;
     import view.suportClasses.PropertyChangeReference;
@@ -69,7 +69,7 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputNumber extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute,
+    public class InputNumber extends TextInput implements IGetChildrenSurfaceComponent, IIdAttribute,
             IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "inputNumber";
@@ -570,6 +570,16 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.InputNumber).percentHeight = this.percentHeight;
 			
             return component.toCode();
+        }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

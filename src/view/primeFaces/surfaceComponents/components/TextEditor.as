@@ -23,11 +23,12 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.TextEditorPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.ITextEditor;
     import components.primeFaces.TextEditor;
+    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -75,7 +76,7 @@ package view.primeFaces.surfaceComponents.components
      * /&gt;
      * </pre>
      */
-    public class TextEditor extends BorderContainer implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent,
+    public class TextEditor extends BorderContainer implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent,
 			IInitializeAfterAddedComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "textEditor";
@@ -449,6 +450,17 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.TextEditor).percentHeight = this.percentHeight;
 			
 			return component.toCode();
+        }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {   
+            Alert.show("Mock toRoyaleConvertCode execute1");
+            return null;
         }
 		
         protected function setCommonXMLAttributes(xml:XML):void

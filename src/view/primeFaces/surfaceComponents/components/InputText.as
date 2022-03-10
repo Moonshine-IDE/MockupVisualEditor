@@ -15,7 +15,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IIdAttribute;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.InputTextPropertyEditor;
     import view.suportClasses.PropertyChangeReference;
     import interfaces.components.IInputText;
@@ -59,7 +59,7 @@ package view.primeFaces.surfaceComponents.components
      * required="false"/&gt;
      * </pre>
      */
-    public class InputText extends TextInput implements IPrimeFacesSurfaceComponent, IIdAttribute,
+    public class InputText extends TextInput implements IGetChildrenSurfaceComponent, IIdAttribute,
             IHistorySurfaceComponent, IComponentSizeOutput
     {
         public static const DOMINO_XML_ELEMENT_NAME:String = "field";
@@ -462,6 +462,16 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.InputText).percentHeight = this.percentHeight;
 			
             return component.toCode();
+        }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
         }
 		
 		public function getComponentsChildren(...params):OrganizerItem

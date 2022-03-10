@@ -1,6 +1,7 @@
 package view.interfaces
 {
     import interfaces.IComponent;
+	import interfaces.IDominoComponent;
 
     import mx.core.IChildList;
 	import mx.core.IInvalidating;
@@ -30,6 +31,7 @@ package view.interfaces
 		 */
 		function get isSelected():Boolean;
 		function set isSelected(value:Boolean):void;
+	
 
 	}
 }

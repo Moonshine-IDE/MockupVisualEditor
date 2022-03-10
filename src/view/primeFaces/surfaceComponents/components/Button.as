@@ -13,7 +13,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
     
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.ButtonPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.ButtonSkin;
     import view.suportClasses.PropertyChangeReference; 
@@ -58,7 +58,7 @@ package view.primeFaces.surfaceComponents.components
 	 * title=""/&gt;
      * </pre>
      */
-    public class Button extends spark.components.Button implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class Button extends spark.components.Button implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "button";
 		public static const PRIME_FACES_XML_ELEMENT_NAME_COMMAND_BUTTON:String = "commandButton";
@@ -399,6 +399,17 @@ package view.primeFaces.surfaceComponents.components
             (component as components.primeFaces.Button).percentHeight = this.percentHeight;
 
 			return component.toCode();
+        }
+
+
+		public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+		public function toRora():XML
+        {
+            return null;
         }
 
 		public function getComponentsChildren(...params):OrganizerItem

@@ -1,8 +1,29 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright 2022 Prominic.NET, Inc.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and 
+// limitations under the License
+// 
+// Author: Prominic.NET, Inc.
+// No warranty of merchantability or fitness of any kind. 
+// Use this software at your own risk.
+////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
     import data.OrganizerItem;
 
     import flash.events.Event;
+
+    import interfaces.IRoyaleComponentConverter;
 
     import mx.collections.ArrayList;
 
@@ -13,11 +34,10 @@ package view.domino.surfaceComponents.components
 
     import spark.formatters.DateTimeFormatter;
 
-    import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.domino.propertyEditors.CalendarPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.suportClasses.PropertyChangeReference;
@@ -71,7 +91,7 @@ package view.domino.surfaceComponents.components
      * pattern="MM/dd/yyyy"/&gt;
      * </pre>
      */
-    public class DominoCalendar extends Container implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent
+    public class DominoCalendar extends Container implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, IRoyaleComponentConverter
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "calendar";
         public static const ELEMENT_NAME:String = "Calendar";
@@ -600,6 +620,11 @@ package view.domino.surfaceComponents.components
 
             return component.toCode();
         }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			return new XML("");
+		}
 
         private function initializeStates():void
         {

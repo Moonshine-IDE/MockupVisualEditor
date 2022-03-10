@@ -12,7 +12,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.ICDATAInformation;
 
     import view.interfaces.IHistorySurfaceComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.CheckboxPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.CheckboxSkin;
     import view.suportClasses.PropertyChangeReference;
@@ -54,7 +54,7 @@ package view.primeFaces.surfaceComponents.components
 	 * value="null"/&gt;
      * </pre>
      */
-    public class SelectBooleanCheckbox extends CheckBox implements IPrimeFacesSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
+    public class SelectBooleanCheckbox extends CheckBox implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation
 	{
 		public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectBooleanCheckbox";
 		public static const ELEMENT_NAME:String = "CheckBox";
@@ -326,6 +326,15 @@ package view.primeFaces.surfaceComponents.components
 			
 			return component.toCode();
 		}
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
+        }
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{

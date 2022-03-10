@@ -19,7 +19,7 @@ package view.primeFaces.surfaceComponents.components
 
     import view.interfaces.ICDATAInformation;
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.SelectOneMenuPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.SelectOneMenuSkin;
@@ -72,7 +72,7 @@ package view.primeFaces.surfaceComponents.components
 	 * &lt;/p:selectOneMenu&gt;
      * </pre>
      */
-    public class SelectOneMenu extends DropDownList implements ISelectableItemsComponent, IPrimeFacesSurfaceComponent,
+    public class SelectOneMenu extends DropDownList implements ISelectableItemsComponent, IGetChildrenSurfaceComponent,
 			IHistorySurfaceCustomHandlerComponent, ICDATAInformation
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "selectOneMenu";
@@ -441,6 +441,15 @@ package view.primeFaces.surfaceComponents.components
 			(component as components.primeFaces.SelectOneMenu).percentHeight = this.percentHeight;
 			
             return component.toCode();
+        }
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
         }
     }
 }

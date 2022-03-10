@@ -20,7 +20,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IDiv;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IInitializeAfterAddedComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.FieldsetPropertyEditor;
     import view.primeFaces.surfaceComponents.skins.FieldsetSkin;
     import view.suportClasses.PropertyChangeReference;
@@ -92,7 +92,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:fieldset&gt;
      * </pre>
      */
-    public class Fieldset extends CollapsiblePanel implements IPrimeFacesSurfaceComponent, IDiv, IHistorySurfaceComponent, IInitializeAfterAddedComponent
+    public class Fieldset extends CollapsiblePanel implements IGetChildrenSurfaceComponent, IDiv, IHistorySurfaceComponent, IInitializeAfterAddedComponent
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "fieldset";
         public static const ELEMENT_NAME:String = "Fieldset";
@@ -354,7 +354,7 @@ package view.primeFaces.surfaceComponents.components
             var elementCount:int = this.numElements;
             for(var i:int = 0; i < elementCount; i++)
             {
-                var element:IPrimeFacesSurfaceComponent = this.getElementAt(i) as IPrimeFacesSurfaceComponent;
+                var element:IGetChildrenSurfaceComponent = this.getElementAt(i) as IGetChildrenSurfaceComponent;
                 if(element === null)
                 {
                     continue;
@@ -398,11 +398,20 @@ package view.primeFaces.surfaceComponents.components
 
             return component.toCode();
         }
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
+        }
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent = this.getElementAt(0) as IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent = this.getElementAt(0) as IGetChildrenSurfaceComponent;
 			
 			organizerItem = element.getComponentsChildren();
 			organizerItem.name = ELEMENT_NAME;

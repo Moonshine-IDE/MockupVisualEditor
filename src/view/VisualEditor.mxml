@@ -15,11 +15,11 @@
 	</s:BorderContainer>
 	<collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
 		<view:ComponentList id="componentList" percentWidth="20" percentHeight="100"
-							visualEditorType="{visualEditorType}" minWidth="150"/>
+							visualEditorType="{visualEditorType}"  visualEditorFileType="{visualEditorFileType}" minWidth="150"/>
 		<s:Scroller percentWidth="70" percentHeight="100">
 			<s:Group>
 				<view:EditingSurface id="editingSurface" visualEditorType="{visualEditorType}"
-									 organizer="{componentsOrganizer}" left="0" right="0" top="0" bottom="0"/>
+									 organizer="{componentsOrganizer}" visualEditorFileName="{visualEditorFileName}" visualEditorFileType="{visualEditorFileType}" left="0" right="0" top="0" bottom="0"/>
 			</s:Group>
 		</s:Scroller>
 		<s:Group width="10%" minWidth="250" height="100%">
@@ -60,6 +60,32 @@
 		private var _file:FileReference;
 
 		private var _visualEditorType:String;
+
+		private var _visualEditorFileType:String;
+
+		private var _visualEditorFileName:String;
+
+		[Bindable]
+		public function get visualEditorFileName():String
+		{
+			return _visualEditorFileName;
+		}
+
+		public function set visualEditorFileName(value:String):void
+		{
+			_visualEditorFileName = value;
+		}
+
+		[Bindable]
+		public function get visualEditorFileType():String
+		{
+			return _visualEditorFileType;
+		}
+
+		public function set visualEditorFileType(value:String):void
+		{
+			_visualEditorFileType = value;
+		}
 
 		[Bindable]
 		public function get visualEditorType():String
@@ -102,6 +128,10 @@
 
 			public function loadFile(filePath:String):void
 			{
+				
+
+				//Alert.show("this.visualEditorFileType:"+_visualEditorFileType);
+				
 				_fileMoonshine = createNewFileIfNotExists(filePath);
 				_fileStreamMoonshine = new FileStream();
 				_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
@@ -121,6 +151,15 @@
 						dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
 					}
 				}
+			
+				if(filePath.indexOf("pages")>0){
+					this.componentList.pageContrlList();
+					this.editingSurface.visualEditorFileType="page";
+					var loadFile:File = new File(filePath);
+					this.editingSurface.visualEditorFileName=loadFile.name.split(".")[0];
+				}
+
+				
 			}
 
 			private function createNewFileIfNotExists(filePath:String):File

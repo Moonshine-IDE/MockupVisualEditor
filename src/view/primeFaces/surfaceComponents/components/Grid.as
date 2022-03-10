@@ -18,7 +18,7 @@ package view.primeFaces.surfaceComponents.components
     import utils.XMLCodeUtils;
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
-    import view.interfaces.IPrimeFacesSurfaceComponent;
+    import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
     import view.primeFaces.supportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
@@ -85,7 +85,7 @@ package view.primeFaces.surfaceComponents.components
      * &lt;/p:outputPanel&gt;
      * </pre>
      */
-    public class Grid extends GridBase implements IPrimeFacesSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
+    public class Grid extends GridBase implements IGetChildrenSurfaceComponent, IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "outputPanel";
         public static const ELEMENT_NAME:String = "Grid";
@@ -506,12 +506,22 @@ package view.primeFaces.surfaceComponents.components
 
             return component.toCode();
         }
+
+        public	function toRoyaleConvertCode():XML
+		{
+			var xml:XML = new XML("");
+			return xml;
+		}
+        public function toRora():XML
+        {
+            return null;
+        }
 		
 		public function getComponentsChildren(...params):OrganizerItem
 		{
 			var componentsArray:Array = [];
 			var organizerItem:OrganizerItem;
-			var element:IPrimeFacesSurfaceComponent;
+			var element:IGetChildrenSurfaceComponent;
 			var gridRow:GridRow;
 			var gridCol:GridItem;
 			
@@ -525,7 +535,7 @@ package view.primeFaces.surfaceComponents.components
 				else if (params[0] == "addColumnAt")
 				{
 					gridCol = params[1] as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					element = gridCol.getElementAt(0) as IGetChildrenSurfaceComponent;
 					organizerItem = element.getComponentsChildren();
 					
 					if (organizerItem) 
@@ -560,7 +570,7 @@ package view.primeFaces.surfaceComponents.components
 				for (var col:int = 0; col < gridRow.numElements; col++)
 				{
 					gridCol = gridRow.getElementAt(col) as GridItem;
-					element = gridCol.getElementAt(0) as IPrimeFacesSurfaceComponent;
+					element = gridCol.getElementAt(0) as IGetChildrenSurfaceComponent;
 					
 					organizerItem = element.getComponentsChildren();
 					if (organizerItem) 

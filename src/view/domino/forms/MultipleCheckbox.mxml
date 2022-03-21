@@ -203,7 +203,7 @@
             //Alert.show("_selectItemList:"+_selectItemList.toString());
             if(_selectItemList.length>0){
                 var str:String = "";
-                for (var k:int = 0; j < _selectItemList.length; k++){
+                for (var k:int = 0; k < _selectItemList.length; k++){
                     str = str+_selectItemList.getItemAt(k).toString() + " ";
                 }
                 selectedItem[_textProperty] = str;

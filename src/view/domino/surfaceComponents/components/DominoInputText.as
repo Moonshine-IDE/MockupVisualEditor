@@ -550,7 +550,7 @@ package view.domino.surfaceComponents.components
         private var allowmultipleChanged:Boolean;
 
         [Bindable(event="allowmultipleChanged")]
-        
+        /** 
          * @example
          * <strong>Visual Editor XML:</strong>
          * <listing version="3.0">&lt;InputText allowmultivalues=""/&gt;</listing>

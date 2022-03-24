@@ -60,6 +60,34 @@ package view.domino.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
+    /**
+	 *  <p>Representation and converter for Visuale label  components </p>
+	 * 
+	 *  <p>This class work for  convert from Visuale label  components to target framework of domino format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  Partial</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoLabel</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 * &lt;par isNewLine=&quot;false&quot;&gt;
+	 * 	&lt;run&gt;
+	 *	 &lt;font color=&quot;system&quot; size=&quot;12pt&quot; style=&quot;normal&quot;/&gt;Label
+	 *	&lt;/run&gt;
+	 *	&lt;/par&gt;
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
+     * </pre>
+	 *
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_TEXT_ELEMENT_XML.html
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoLabel.as
+	 */
+    
     public class DominoLabel extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent,
             ICDATAInformation, IComponentSizeOutput, IRoyaleComponentConverter
     {

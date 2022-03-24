@@ -71,7 +71,87 @@ package view.domino.surfaceComponents.components
     [Exclude(name="heightOutput", kind="property")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
-
+    /**
+	 *  <p>Representation and converter from  Visuale table  components  </p>
+	 * 
+	 *  <p>This class work for  convert from Visuale table  components  to target framework of body format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  TODO</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoTable</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 *   &lt;table widthtype=&quot;fitmargins&quot; cellbordercolor=&quot;yellow&quot; 				leftmargin=&quot;1in&quot; cellborderstyle=&quot;ridge&quot; 						colorstyle=&quot;solid&quot; bgcolor=&quot;silver&quot; insidewrap=&quot;true&quot; insidewrapheight=&quot;1in&quot;&gt;
+	 *			&lt;border style=&quot;solid&quot; width=&quot;2px&quot; color=&quot;olive&quot; 	dropshadow=&quot;true&quot; /&gt;
+	 *			&lt;tablecolumn width=&quot;66.58%&quot; /&gt;
+	 *			&lt;tablecolumn width=&quot;33.42%&quot; /&gt;
+	 *			&lt;tablerow&gt;
+	 *				&lt;tablecell bgcolor=&quot;#e0ffbf&quot;&gt;
+	 *					&lt;pardef id=&quot;3&quot; align=&quot;center&quot; 									leftmargin=&quot;0.0313in&quot; keepwithnext=&quot;true&quot; 							keeptogether=&quot;true&quot; /&gt;
+	 *					&lt;par def=&quot;3&quot;&gt;
+	 *						&lt;picture height=&quot;341px&quot; width=&quot;218px&quot; 								alttext=&quot;caldesigns white two-piece 								dress&quot;&gt;
+	 *							&lt;imageref name=&quot;design1.jpg&quot; /&gt;
+	 *							&lt;caption&gt;CALDesigns&lt;/caption&gt;
+	 *						&lt;/picture&gt;
+	 *					&lt;/par&gt;
+	 *				&lt;/tablecell&gt;
+	 *				&lt;tablecell colorstyle=&quot;vgradient&quot; bgcolor=&quot;none&quot; 						altbgcolor=&quot;#a1e2ff&quot;&gt;
+	 *					&lt;pardef id=&quot;4&quot; align=&quot;center&quot; 									leftmargin=&quot;0.0313in&quot; keepwithnext=&quot;true&quot; 							keeptogether=&quot;true&quot; /&gt;
+	 *					&lt;par def=&quot;4&quot; /&gt;
+	 *					&lt;pardef id=&quot;5&quot; leftmargin=&quot;0.0313in&quot; 							keepwithnext=&quot;true&quot; keeptogether=&quot;true&quot; /&gt;
+	 *					&lt;par def=&quot;5&quot;&gt;
+	 *						&lt;run&gt;
+	 *							&lt;font size=&quot;24pt&quot; color=&quot;blue&quot; /&gt;
+	 *							$250
+	 *						&lt;/run&gt;
+	 *					&lt;/par&gt;
+	 *				&lt;/tablecell&gt;
+	 *			&lt;/tablerow&gt;
+	 *			&lt;tablerow&gt;
+	 *				&lt;tablecell bgcolor=&quot;#ffe1dc&quot;&gt;
+	 *					&lt;pardef id=&quot;6&quot; leftmargin=&quot;0.0313in&quot; 							keepwithnext=&quot;true&quot; keeptogether=&quot;true&quot; /&gt;
+	 *					&lt;par def=&quot;6&quot;&gt;
+	 *						&lt;imagemap lastdefaultid=&quot;8&quot; 									lastcircleid=&quot;1&quot; lastrectangleid=&quot;55&quot;&gt;
+	 *							&lt;picture height=&quot;341px&quot; width=&quot;219px&quot; 									alttext=&quot;PERDesigns pink two-piece 									sleeveless dress&quot;&gt;
+	 *								&lt;border style=&quot;dot&quot; width=&quot;1px&quot; 										color=&quot;#ff4040&quot; /&gt;
+	 *								&lt;imageref name=&quot;design2.jpg&quot; /&gt;
+	 *								&lt;caption&gt;PERDesigns&lt;/caption&gt;
+	 *							&lt;/picture&gt;
+	 *							&lt;area type=&quot;circle&quot; htmlid=&quot;bracelet&quot;&gt;
+	 *								&lt;point x=&quot;5&quot; y=&quot;82&quot; /&gt;
+	 *								&lt;point x=&quot;81&quot; y=&quot;158&quot; /&gt;
+	 *								&lt;urllink href=&quot;http://www.PERD
+	 *								esigns.com/jewelry&quot; /&gt;
+	 *							&lt;/area&gt;
+	 *						&lt;/imagemap&gt;
+	 *					&lt;/par&gt;
+	 *				&lt;/tablecell&gt;
+	 *				&lt;tablecell&gt;
+	 *					&lt;cellbackground repeat=&quot;hrepeat&quot;&gt;
+	 *						&lt;imageref name=&quot;graphic.gif&quot; /&gt;
+	 *					&lt;/cellbackground&gt;
+	 *					&lt;par def=&quot;5&quot; /&gt;
+	 *					&lt;par&gt;
+	 *						&lt;run&gt;
+	 *							&lt;font size=&quot;24pt&quot; color=&quot;blue&quot; /&gt;
+	 *							$300
+	 *						&lt;/run&gt;
+	 *					&lt;/par&gt;
+	 *				&lt;/tablecell&gt;
+	 *			&lt;/tablerow&gt;
+	 *		&lt;/table&gt;
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
+     * </pre>
+	 *
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_TABLE_ELEMENT_XML.html
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoTable.as
+	 */
 
     public class DominoTable extends GridBase implements IDominoSurfaceComponent,
 			IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IRoyaleComponentConverter

@@ -53,6 +53,31 @@ package view.domino.surfaceComponents.components
     [Exclude(name="getComponentsChildren", kind="method")]
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
+    
+   /**
+	 *  <p>Representation and converter for Visuale computed text  components </p>
+	 * 
+	 *  <p>This class work for  convert from Visuale input  components to target framework of body format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  TODO</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoComputedText</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 *  &lt;par def=&#39;6&#39;&gt;&lt;run&gt;&lt;font color=&#39;blue&#39;/&gt;example string .....&lt;/run&gt;&lt;/par&gt;
+     * </pre>
+	 * 
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
+     * </pre>
+	 *
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoComputedText.as
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_COMPUTEDTEXT_ELEMENT_XML.html
+	 */
+    
     public class DominoComputedText extends Label implements IDominoSurfaceComponent, IHistorySurfaceComponent, ICDATAInformation, IComponentSizeOutput, IRoyaleComponentConverter
     {
         public static const DOMINO_ELEMENT_NAME:String = "ComputedText";

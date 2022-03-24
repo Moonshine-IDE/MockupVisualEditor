@@ -59,39 +59,27 @@ package view.domino.surfaceComponents.components
     [Exclude(name="kinds", kind="property")]
     [Exclude(name="types", kind="property")]
 
-
     /**
-     * <p>Representation of Domino Visual inputText component.</p>
-     * <p><strong>Visual Editor XML:</strong></p>
-     * <pre>
-     * &lt;InputText
-     * <b>Attributes</b>
-     * id=""
-     * name=""
-     * width="100"
-     * height="30"
-     * value=""
-     * type=""
-         * digits="" format="" parent=""
-         * punctuated="" show="" date=""
-         * showtodaywhenappropriate=""
-         * fourdigityearfor21stcentury=""
-         * omitthisyear="" time="" zone=""
-         * calendars="" keywords=""
-         * keywordui=""
-         * choicesdialog="" 
-         * listdisplayseparator=""
-         * listinputseparators=""
-         * onlyallow="" 
-     * kind=""
-     * maxlength=""
-     * allowmultivalues="false"
-     * required="false"
-     * recalonchange="false"
-     * recalcchoices="false"/&gt;
+	 *  <p>Representation and converter for Visuale field  components </p>
+	 * 
+	 *  <p> This class work for  convert from Visuale field  components to target framework of domino format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  Partial</li>
+	 *  </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoInputText</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 *  &lt;field useappletinbrowser=&quot;false&quot; allowtabout=&quot;false&quot; defaultfocus=&quot;false&quot; protected=&quot;false&quot; sign=&quot;false&quot; storelocally=&quot;false&quot; type=&quot;text&quot; kind=&quot;editable&quot; computeaftervalidation=&quot;false&quot; allowmultivalues=&quot;false&quot; width=&quot;100pt&quot; height=&quot;30pt&quot; bgcolor=&quot;#ffffff&quot; name=&quot;test&quot;/&gt;
      * </pre>
-     *
-     * <strong>Domino Visual output:</strong>
+	 * <p>Domino event:</p>
+	 * <pre>
+	 * Client: Default value,Input Translation, Input Validation, Input Enabled,HTML attribute
+	 * Web: onBlur,onChange,onClick,onFocus,onKeyDown,onKeyPress,onKeyUp,onMouseDown,onMouseUp,onMouseMove,OnMouseOut,OnMouseOver,onSelect,
+	 * Client:(option),(Declarations),Entering,Exiting,Initialize,Terminate
+	 * </pre>
+    * <p>Domino Attributes:</p>
      * <pre>
      * &lt;inputText
      * <b>Attributes</b>
@@ -152,7 +140,15 @@ package view.domino.surfaceComponents.components
      * onlyallow=""
      * useappletinbrowser="false"/&gt;
      * </pre>
-     */
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
+     * </pre>
+	 *
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_FIELD_ELEMENT_XML.html
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoInputText.as
+	 */
+    
     public class DominoInputText extends TextInput implements IDominoSurfaceComponent,IIdAttribute,
             IHistorySurfaceComponent, IComponentSizeOutput, IRoyaleComponentConverter
     {

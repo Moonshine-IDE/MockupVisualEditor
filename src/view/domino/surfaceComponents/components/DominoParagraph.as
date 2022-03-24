@@ -69,31 +69,28 @@ package view.domino.surfaceComponents.components
     [Exclude(name="contentChanged", kind="property")]
 
     /**
-     * <p>Representation of div in HTML</p>
-     *
-     * <strong>Visual Editor XML:</strong>
-     * <pre>
-     * &lt;Div
-     * <b>Attributes</b>
-     * width="120"
-     * height="120"
-     * percentWidth="80"
-     * percentHeight="80"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
-     *  &lt;Script&gt;
-     *      &lt;![CDATA[ Some information ]]&gt;
- *      &lt;/Script&gt;
-     * &lt;/Div&gt;
+	 *  <p>Representation and converter from paragraph element  </p>
+	 * 
+	 *  <p>This class work for  convert from paragraph element of Visuale label/text/field  components  to target framework of body format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  TODO</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoParagraph</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 *  &lt;par def=&quot;1019&quot; paragraph=&quot;true&quot; dominotype=&quot;paragraph&quot; class=&quot;flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop&quot;/&gt;
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
      * </pre>
-     *
-     * <strong>Domino output:</strong>
-     * <pre>
-     * &lt;div
-     * <b>Attributes</b>
-     * style="width:120px;height:120px;"
-     * class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"/&gt;
-     * </pre>
-     */
+	 *
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_PARAGRAPH_ELEMENT_XML.html
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoParagraph.as
+	 */
     public class DominoParagraph extends Container implements IDominoSurfaceComponent, view.interfaces.IDominoParagraph,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter
     {

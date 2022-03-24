@@ -59,31 +59,33 @@ package view.domino.surfaceComponents.components
     [Exclude(name="cdataXML", kind="property")]
     [Exclude(name="cdataInformation", kind="property")]
 
-    /**
-     * The class work for domino visual buttong UI component in the Visual editor
-     * <p>Representation of PrimeFaces button component</p>
-     *
-     * <strong>Visual Editor XML:</strong>
-     * <pre>
-     * &lt;Button
-	 * <b>Attributes</b>
-	 * width="100"
-	 * height="30"
-	 * disabled="false"
-	 * value="Button"
-	 * title=""/&gt;
+   
+   /**
+	 *  <p> Representation of Domino button component </p>
+	 * 
+	 *  <p>The class work for domino visual buttong UI component in the Visual editor</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  Partial</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoButton</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 * &lt;run&gt;{other some domino element}&lt;/run&gt;
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 *  &lt;j:Button text=&quot;%ViewComponentLabel%&quot; click=&quot;{dispatchEvent(new ScreenEvent(ScreenEvent.EVENT_NAVIGATE_TO, %ViewComponentName%.NAME))}&quot;
+	 *	percentWidth=&quot;60&quot;/&gt;
+	 *	&lt;/table&gt;
      * </pre>
-     *
-     * <strong>PrimeFaces output:</strong>
-     * <pre>
-     * &lt;p:button
-	 * <b>Attributes</b>
-	 * style="width:100px;height:30px;"
-	 * disabled="false"
-	 * value="Button"
-	 * title=""/&gt;
-     * </pre>
-     */
+	 *
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_BUTTON_ELEMENT_XML.html
+     * @see https://github.com/Moonshine-IDE/MockupVisualEditor/blob/master/src/view/domino/surfaceComponents/components/DominoButton.as
+	 */
+    
     public class DominoButton extends spark.components.Button implements IDominoSurfaceComponent, IHistorySurfaceComponent, IRoyaleComponentConverter
 	{
 		public static const DOMINO_ELEMENT_NAME:String = "button";

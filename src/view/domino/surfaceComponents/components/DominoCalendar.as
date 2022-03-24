@@ -64,33 +64,34 @@ package view.domino.surfaceComponents.components
     [Exclude(name="cdataInformation", kind="property")]
 
     /**
-     * <p>Representation of Calendar in HTML</p>
-     *
-     * <strong>Visual Editor XML:</strong>
-     * <pre>
-     * &lt;Calendar
-     * <b>Attributes</b>
-     * selectedDate=""
-     * width="120"
-     * height="120"
-     * mode="popup"
-     * minDate=""
-     * maxDate=""
-     * pattern="MM/dd/yyyy"/&gt;
+	 *  <p>Representation of Calendar in  Domino  </p>
+	 * 
+	 *  <p>The class work for domino visual Calendar UI component in the Visual editor</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  TODO</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoButton</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 *&lt;Calendar date=&quot;yearmonthday&quot; dateformat=&quot;weekdaymonthdayyear&quot;
+	 *				dateseparator1=&quot; &quot; dateseparator2=&quot;/&quot; dateseparator3=&quot;/&quot;
+	 *				dayformat=&quot;twodigitday&quot; fourdigityearfor21stcentury=&quot;true&quot; height=&quot;30&quot;
+	 *				mode=&quot;popup&quot; monthformat=&quot;twodigitmonth&quot; pattern=&quot;MM/dd/yyyy&quot; preference=&quot;usersetting&quot;
+	 *				show=&quot;datetime&quot; time=&quot;hourminute&quot; timeseparator=&quot;:&quot; value=&quot;StartDate&quot; weekdayformat=&quot;shortname&quot;
+	 *				width=&quot;100&quot; yearformat=&quot;fourdigityear&quot; zone=&quot;never&quot;/&gt;
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
      * </pre>
-     *
-     * <strong>PrimeFaces output:</strong>
-     * <pre>
-     * &lt;p:calendar
-     * <b>Attributes</b>
-     * value=""
-     * style="width:120px;height:120px;"
-     * mode="popup"
-     * minDate=""
-     * maxDate""
-     * pattern="MM/dd/yyyy"/&gt;
-     * </pre>
-     */
+	 *
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoCalendar.as
+	 */
+    
+    
     public class DominoCalendar extends Container implements IGetChildrenSurfaceComponent, IHistorySurfaceComponent, IRoyaleComponentConverter
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "calendar";

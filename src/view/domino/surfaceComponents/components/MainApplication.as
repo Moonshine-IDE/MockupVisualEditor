@@ -46,42 +46,28 @@ package view.domino.surfaceComponents.components
     [Exclude(name="initializeChanged", kind="property")]
     [Exclude(name="terminateChanged", kind="property")]
 
-    /**
-     * <p>Representation of index.html file.</p>
-     *
-     * <strong>Visual Editor XML:</strong>
-     * <pre>
-     * &lt;MainApplication
-     * <b>Attributes</b>
-     * width="700"
-     * height="450"
-     * title=""
-     * wrap=""
-     * class="flexHorizontalLayoutWrap flexHorizontalLayoutLeft flexHorizontalLayoutTop"&gt;
-     *  &lt;Script&gt;
-     *      &lt;![CDATA[ Some information ]]&gt;
-     *  &lt;/Script&gt;
-     * &lt;/MainApplication&gt;
+   /**
+	 *  <p>Representation and converter from Visuale main container components </p>
+	 * 
+	 *  <p>This class work for  convert from Visuale main container components  to target framework of body format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  TODO</li>
+	 *   <li>Royale:  TODO</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.MainApplication</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 * TODO
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
      * </pre>
-     *
-     * <strong>HTML output:</strong>
-     * <pre>
-     *  &lt;?xml version="1.0" encoding="utf-8"?&gt;
-     *  &lt;html xmlns="http://www.w3.org/1999/xhtml"
-     *        xmlns:h="http://xmlns.jcp.org/jsf/html"
-     *        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-     *        xmlns:p="http://primefaces.org/ui"&gt;
-     *  &lt;h:head&gt;
-     *      &lt;link rel="stylesheet" type="text/css" href="resources/moonshine-layout-styles.css"/&gt;
-     *      &lt;title/&gt;
-     *  &lt;/h:head&gt;
-     *  &lt;h:body&gt;
-     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop"
-     *           style="width:700px;height:450px;"/&gt;
-     *  &lt;/h:body&gt;
-     *  &lt;/html&gt;
-     * </pre>
-     */
+	 *
+	 * @see https://github.com/Moonshine-IDE/MockupVisualEditor/blob/master/src/view/domino/surfaceComponents/components/MainApplication.as
+	 */
     public class MainApplication extends Div implements INonDeletableSurfaceComponent, IMainApplication, IComponentPercentSizeOutput
 	{
 		public static const ELEMENT_NAME:String = "MainApplication";

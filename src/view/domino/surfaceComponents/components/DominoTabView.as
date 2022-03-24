@@ -79,35 +79,34 @@ package view.domino.surfaceComponents.components
     [Exclude(name="cdataInformation", kind="property")]
 
     /**
-     * <p>Representation of PrimeFaces tabView component.</p>
-     *
-     * <strong>Visual Editor XML:</strong>
-     * <pre>
-     * &lt;TabView
-     * <b>Attributes</b>
-     * width="120"
-     * height="120"
-     * orientation="top"
-     * scrollable="false"&gt;
-     *  &lt;tab title="Tab"&gt;
-     *    &lt;Div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop" wrap="false"/&gt;
-     *  &lt;/tab&gt;
-     * &lt;/TabView&gt;
+	 *  <p>Representation and converter from  Visuale tabView  components </p>
+	 * 
+	 *  <p>This class work for  convert from  Visuale tabView  components  to target framework of body format.</p>
+	 *  Conversion status<ul>
+	 *   <li>Domino:  Complete</li>
+	 *   <li>Royale:  TODO</li>
+	 * </ul>
+	 * 
+	 * <p>Input:  view.domino.surfaceComponents.components.DominoTabView</p>
+	 * <p> Example Domino output:</p>
+	 * <pre>
+	 * &lt;table rowdisplay=&#39;tabs&#39; leftmargin=&#39;0.0104in&#39; widthtype=&#39;fixedleft&#39; refwidth=&#39;8.8528in&#39;&gt;
+	 *	&lt;tablecolumn width=&#39;8.8528in&#39;/&gt;
+	 *	&lt;tablerow tablabel=&#39;Company&#39;&gt;
+	 *	&lt;tablecell&gt;&lt;/tablecell&gt;
+	 *	&lt;/tablerow&gt;
+	 *  &lt;/tablecolumn&gt;
+	 *	&lt;/table&gt;
+	 * </pre> 
+	 *
+	 * <p> Example Royale output:</p>
+	 * <pre>
+	 * TODO
      * </pre>
-     *
-     * <strong>PrimeFaces output:</strong>
-     * <pre>
-     * &lt;p:tabView
-     * <b>Attributes</b>
-     * style="width:120px;height:120px;"
-     * orientation="top"
-     * scrollable="false"/&gt;
-     *  &lt;p:tab title="Tab"&gt;
-     *      &lt;div class="flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop" /&gt;
-     *  &lt;/p:tab&gt;
-     * &lt;/p:tabView&gt;
-     * </pre>
-     */
+	 *
+	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_TABLEROW_ELEMENT_XML.html
+	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoTabView.as
+	 */
     public class DominoTabView extends TabNavigatorWithOrientation implements IDominoSurfaceComponent, ISelectableItemsComponent,
             IHistorySurfaceCustomHandlerComponent, IComponentSizeOutput, IDiv, ICDATAInformation, IRoyaleComponentConverter
     {

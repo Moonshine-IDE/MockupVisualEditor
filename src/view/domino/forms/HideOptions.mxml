@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+									  xmlns:s="library://ns.adobe.com/flex/spark"
+									  xmlns:suportclasses="view.suportClasses.*"
+									  skinClass="skins.FormSkin"
+									  currentState="normal"
+                                      xmlns:forms="view.forms.*">
+
+	<suportclasses:layout>
+		<s:FormLayout />
+	</suportclasses:layout>
+    <s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
+        <s:CheckBox id="hideOption"
+                    selected="false"
+                    change="changeHideOption(event)"/>
+    </s:FormItem>
+    <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="hidePanel">
+	
+		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   >
+            <s:Label text="Hide paragraph form1"/>
+            <forms:ToggleButtonSelectedForm label="Notes R4.6 or later" textProperty="noteshide"/>
+            <forms:ToggleButtonSelectedForm label="Web browsers" textProperty="browserhide"/>
+            <forms:ToggleButtonSelectedForm label="Mobile" textProperty="mobile"/>   
+            <s:Label text="Hide paragraph when document is"/>
+           	<forms:ToggleButtonSelectedForm label="Previewed for reading" textProperty="prereadhide"/>
+            <forms:ToggleButtonSelectedForm label="Previewed for editing" textProperty="preedithide"/>
+            <forms:ToggleButtonSelectedForm label="Opened for reading" textProperty="openreadhide"/>  
+            <forms:ToggleButtonSelectedForm label="Opened for editing" textProperty="openedithide"/>  
+            <forms:ToggleButtonSelectedForm label="Printed" textProperty="printhide"/>  
+            <forms:ToggleButtonSelectedForm label="Copied to the clipboard" textProperty="copyhide"/>  
+            <forms:ToggleButtonSelectedForm label="Embedded" textProperty="embedhide"/>   
+        </s:VGroup> 
+    </s:BorderContainer>   
+
+
+	<fx:Script><![CDATA[
+		import interfaces.IComponentPercentSizeOutput;
+		import interfaces.IComponentSizeOutput;
+
+		import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.core.UIComponent;
+        import mx.events.FlexEvent;
+
+        import utils.GenericUtils;
+
+        import view.interfaces.IIdAttribute;
+        //import view.interfaces.INameAttribute;
+        import view.interfaces.ISurfaceComponent;
+
+
+        private function changeHideOption(event:Event):void
+        {
+            if(this.hideOption.selected){
+                 hidePanel.visible = hidePanel.includeInLayout = true;
+            }else{
+                 hidePanel.visible = hidePanel.includeInLayout = false;
+            }
+           
+        }
+
+
+
+        
+
+        private var _noteshide:String;
+        public function get noteshide():String
+        {
+           return  _noteshide;
+        }
+        public function set noteshide(value:String):void
+        {
+            this._noteshide =value;
+        }
+
+        private var _browserhide:String;
+        public function get browserhide():String
+        {
+            return _browserhide;
+        }
+        public function set browserhide(value:String):void
+        {
+            this._browserhide =value;
+        }
+
+        private var _mobile:String;
+        public function get mobile():String
+        {
+            return _mobile;
+        }
+        public function set mobile(value:String):void
+        {
+            this._mobile =value;
+        }
+
+        private var _prereadhide:String;
+        public function get prereadhide():String
+        {
+            return _prereadhide;
+        }
+        public function set prereadhide(value:String):void
+        {
+            this._prereadhide = value
+        }
+
+
+        private var _preedithide:String;
+        public function get preedithide():String
+        {
+            return _preedithide;
+        }
+        public function set preedithide(value:String):void
+        {
+            this._preedithide = value
+        }
+
+        private var _openreadhide:String;
+        public function get openreadhide():String
+        {
+            return _openreadhide;
+        }
+        public function set openreadhide(value:String):void
+        {
+            this._openreadhide = value
+        }
+
+        private var _openedithide:String;
+        public function get openedithide():String
+        {
+            return _openedithide;
+        }
+        public function set openedithide(value:String):void
+        {
+            this._openedithide= value;
+        }
+
+        private var _printhide:String;
+        public function get printhide():String
+        {
+            return _printhide;
+        }
+        public function set printhide(value:String):void
+        {
+            this._printhide=value;
+        }
+
+
+        private var _copyhide:String;
+        public function get copyhide():String
+        {
+            return _copyhide;
+        }
+        public function set copyhide(value:String):void
+        {
+            this._copyhide=value;
+        }
+
+        private var _embedhide:String;
+        public function get embedhide():String
+        {
+            return this._embedhide;
+        }
+        public function set embedhide(value:String):void
+        {
+            this._embedhide=value;
+        }
+       
+
+        
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

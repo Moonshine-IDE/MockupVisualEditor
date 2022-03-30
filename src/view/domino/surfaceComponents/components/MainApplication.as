@@ -373,6 +373,16 @@ package view.domino.surfaceComponents.components
             }
         }
 
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
         override public function toXML():XML
         {
             mainXML = new XML("<MainApplication/>");

@@ -365,6 +365,17 @@ package view.domino.surfaceComponents.components
 			_propertyChangeFieldReference = value;
 		}
 
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
         private var _propertiesChangedEvents:Array;
         public function get propertiesChangedEvents():Array
         {

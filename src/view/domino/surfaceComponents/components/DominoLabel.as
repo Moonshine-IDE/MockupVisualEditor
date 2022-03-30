@@ -709,6 +709,17 @@ package view.domino.surfaceComponents.components
 			_truetype = value;
 		}
 
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
 		//-------------other componetn end-------------
 		
 		
@@ -744,6 +755,11 @@ package view.domino.surfaceComponents.components
                  xml.@hidewhen = encodeFormulaStr;
             }
 
+            if(this.hide){
+              
+                 xml.@hide = hide;
+            }
+
             if(this.isNewLine){
                 xml.@isNewLine= this.isNewLine;
             }else{
@@ -777,6 +793,7 @@ package view.domino.surfaceComponents.components
             this.isNewLine = component.isNewLine;
             this.familyid= component.familyid;
             this.pitch = component.pitch;
+            this.hide=component.hide;
             if(component.truetype){
                  this.truetype = component.truetype;
             }
@@ -800,6 +817,7 @@ package view.domino.surfaceComponents.components
 			
 			component.isSelected = this.isSelected;
             component.hidewhen = this.hidewhen;
+            component.hide = this.hide;
             component.isNewLine = this.isNewLine;
             component.familyid = this.familyid;
             component.pitch = this.pitch ;

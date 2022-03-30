@@ -3,7 +3,7 @@
 									  xmlns:s="library://ns.adobe.com/flex/spark"
 									  xmlns:suportclasses="view.suportClasses.*"
 									  skinClass="skins.FormSkin"
-									  currentState="normal"
+								      creationComplete="onHideoptionsCreationComplete(event)"
                                       xmlns:forms="view.forms.*">
 
 	<suportclasses:layout>
@@ -19,20 +19,66 @@
             borderStyle="solid" borderWeight="1" 
             left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="hidePanel">
 	
-		<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
-		   >
-            <s:Label text="Hide paragraph form1"/>
-            <forms:ToggleButtonSelectedForm label="Notes R4.6 or later" textProperty="noteshide"/>
-            <forms:ToggleButtonSelectedForm label="Web browsers" textProperty="browserhide"/>
-            <forms:ToggleButtonSelectedForm label="Mobile" textProperty="mobile"/>   
+		<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" 
+		     padding="5">
+            <s:Label text="Hide paragraph form"/>
+            <s:FormItem label="Notes R4.6 or later" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="noteshide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true" />
+            </s:FormItem>
+             <s:FormItem label="Web browsers" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="browserhide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+            <s:FormItem label="Mobile" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="mobile"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+         
             <s:Label text="Hide paragraph when document is"/>
-           	<forms:ToggleButtonSelectedForm label="Previewed for reading" textProperty="prereadhide"/>
-            <forms:ToggleButtonSelectedForm label="Previewed for editing" textProperty="preedithide"/>
-            <forms:ToggleButtonSelectedForm label="Opened for reading" textProperty="openreadhide"/>  
-            <forms:ToggleButtonSelectedForm label="Opened for editing" textProperty="openedithide"/>  
-            <forms:ToggleButtonSelectedForm label="Printed" textProperty="printhide"/>  
-            <forms:ToggleButtonSelectedForm label="Copied to the clipboard" textProperty="copyhide"/>  
-            <forms:ToggleButtonSelectedForm label="Embedded" textProperty="embedhide"/>   
+             <s:FormItem label="Previewed for reading" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="prereadhide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+            <s:FormItem label="Previewed for editing" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="preedithide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+             <s:FormItem label="Opened for reading" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="openreadhide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+            <s:FormItem label="Opened for editing" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="openedithide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+
+            <s:FormItem label="Printed" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="printhide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+
+            <s:FormItem label="Copied to the clipboard" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="copyhide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+
+            <s:FormItem label="Embedded" skinClass="skins.FormItemSkin">
+             <s:CheckBox id="embedhide"
+                    selected="false"
+                    change="check_changeHandler(event)" enabled="true"/>
+            </s:FormItem>
+         
+           
         </s:VGroup> 
     </s:BorderContainer>   
 
@@ -51,6 +97,61 @@
         import view.interfaces.IIdAttribute;
         //import view.interfaces.INameAttribute;
         import view.interfaces.ISurfaceComponent;
+        import mx.controls.Alert;
+        import mx.collections.ArrayList;
+
+        private var _selectItemList:ArrayList = new ArrayList();
+        private var _hideStr:String="";
+        private var selectedDirty:Boolean;
+
+        private var _textProperty:String = "text";
+        private var _binding:ChangeWatcher;
+        [Bindable]
+        public var bindableText:Boolean;
+
+        [Bindable("change")]
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+            this.updateBinding();
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+				this.updateBinding();
+                if (value)
+                {
+                    this.selectedDirty = true;
+                }
+            }
+        }
+
+        private function updateBinding():void
+        {
+            if (this._binding)
+            {
+                this._binding.unwatch();
+                this._binding = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._binding = BindingUtils.bindProperty(this, "hideStr", this.selectedItem, this._textProperty, false, true);
+        }
 
 
         private function changeHideOption(event:Event):void
@@ -63,111 +164,205 @@
            
         }
 
+        
+        private function onHideoptionsCreationComplete(event:FlexEvent):void
+        {
+            if(_selectItemList==null){
+                _selectItemList=new ArrayList();
+            }
+        }
+
+        private function check_changeHandler(event:Event):void
+        {
+            _hideStr="";
+            if(event.target.selected){
+                if(event.target.id=="noteshide"){ 
+                    //disabled the other checkbox ,only allow Opened or reading,Opened for editing
+                    this.openreadhide.enabled = true;
+                    this.openedithide.enabled = true;
+
+                    this.prereadhide.enabled = false;
+                    this.preedithide.enabled = false;
+                    this.printhide.enabled = false;
+                    this.copyhide.enabled = false;
+                    this.embedhide.enabled = false;
+                    
+                }else{
+
+                    if(this.noteshide.selected==true){
+                        this.openreadhide.enabled = true;
+                        this.openedithide.enabled = true;
+
+                        this.prereadhide.enabled = false;
+                        this.preedithide.enabled = false;
+                        this.printhide.enabled = false;
+                        this.copyhide.enabled = false;
+                        this.embedhide.enabled = false;
+
+                    }else{
+                        this.openreadhide.enabled = true;
+                        this.openedithide.enabled = true;
+
+                        this.prereadhide.enabled = true;
+                        this.preedithide.enabled = true;
+                        this.printhide.enabled = true;
+                        this.copyhide.enabled = true;
+                        this.embedhide.enabled = true;
+
+                    }
+
+                  
+
+                }
+
+                var existing:Boolean = false;
+                if(_selectItemList){
+                    for (var k:int = 0; k < _selectItemList.length; k++){
+                        if(_selectItemList.getItemAt(k).toString()==event.target.id){
+                            existing=true;
+                        }
+                    }
+                }
+                if(existing==false){
+                    _selectItemList.addItem(event.target.id);
+                }
+
+            }else{
+                if(_selectItemList){
+                    for (var k:int = 0; k < _selectItemList.length; k++){
+                        if(_selectItemList.getItemAt(k).toString()==event.target.id){
+                           _selectItemList.removeItemAt(k);
+                        }
+                    }
+                }
+            }
+
+            for (var k:int = 0; k < _selectItemList.length; k++){
+                _hideStr=_hideStr+_selectItemList.getItemAt(k).toString()+" ";
+            }
+
+            if(_hideStr){
+                _hideStr=_hideStr.replace(/hide/g, "");
+            }
+            this.selectedItem[this._textProperty] = _hideStr;
+
+            Alert.show("_hideStr:"+_hideStr);
+            
+        }
 
 
+
+        public function get hideStr():String
+        {
+            return _hideStr;
+        }
+        public function set hideStr(value:String):void
+        {
+            this._hideStr =value;
+        }
         
 
-        private var _noteshide:String;
-        public function get noteshide():String
-        {
-           return  _noteshide;
-        }
-        public function set noteshide(value:String):void
-        {
-            this._noteshide =value;
-        }
+        // private var _noteshide:String;
+        // public function get noteshide():String
+        // {
+        //    return  _noteshide;
+        // }
+        // public function set noteshide(value:String):void
+        // {
+        //     this._noteshide =value;
+        // }
 
-        private var _browserhide:String;
-        public function get browserhide():String
-        {
-            return _browserhide;
-        }
-        public function set browserhide(value:String):void
-        {
-            this._browserhide =value;
-        }
+        // private var _browserhide:String;
+        // public function get browserhide():String
+        // {
+        //     return _browserhide;
+        // }
+        // public function set browserhide(value:String):void
+        // {
+        //     this._browserhide =value;
+        // }
 
-        private var _mobile:String;
-        public function get mobile():String
-        {
-            return _mobile;
-        }
-        public function set mobile(value:String):void
-        {
-            this._mobile =value;
-        }
+        // private var _mobile:String;
+        // public function get mobile():String
+        // {
+        //     return _mobile;
+        // }
+        // public function set mobile(value:String):void
+        // {
+        //     this._mobile =value;
+        // }
 
-        private var _prereadhide:String;
-        public function get prereadhide():String
-        {
-            return _prereadhide;
-        }
-        public function set prereadhide(value:String):void
-        {
-            this._prereadhide = value
-        }
-
-
-        private var _preedithide:String;
-        public function get preedithide():String
-        {
-            return _preedithide;
-        }
-        public function set preedithide(value:String):void
-        {
-            this._preedithide = value
-        }
-
-        private var _openreadhide:String;
-        public function get openreadhide():String
-        {
-            return _openreadhide;
-        }
-        public function set openreadhide(value:String):void
-        {
-            this._openreadhide = value
-        }
-
-        private var _openedithide:String;
-        public function get openedithide():String
-        {
-            return _openedithide;
-        }
-        public function set openedithide(value:String):void
-        {
-            this._openedithide= value;
-        }
-
-        private var _printhide:String;
-        public function get printhide():String
-        {
-            return _printhide;
-        }
-        public function set printhide(value:String):void
-        {
-            this._printhide=value;
-        }
+        // private var _prereadhide:String;
+        // public function get prereadhide():String
+        // {
+        //     return _prereadhide;
+        // }
+        // public function set prereadhide(value:String):void
+        // {
+        //     this._prereadhide = value
+        // }
 
 
-        private var _copyhide:String;
-        public function get copyhide():String
-        {
-            return _copyhide;
-        }
-        public function set copyhide(value:String):void
-        {
-            this._copyhide=value;
-        }
+        // private var _preedithide:String;
+        // public function get preedithide():String
+        // {
+        //     return _preedithide;
+        // }
+        // public function set preedithide(value:String):void
+        // {
+        //     this._preedithide = value
+        // }
 
-        private var _embedhide:String;
-        public function get embedhide():String
-        {
-            return this._embedhide;
-        }
-        public function set embedhide(value:String):void
-        {
-            this._embedhide=value;
-        }
+        // private var _openreadhide:String;
+        // public function get openreadhide():String
+        // {
+        //     return _openreadhide;
+        // }
+        // public function set openreadhide(value:String):void
+        // {
+        //     this._openreadhide = value
+        // }
+
+        // private var _openedithide:String;
+        // public function get openedithide():String
+        // {
+        //     return _openedithide;
+        // }
+        // public function set openedithide(value:String):void
+        // {
+        //     this._openedithide= value;
+        // }
+
+        // private var _printhide:String;
+        // public function get printhide():String
+        // {
+        //     return _printhide;
+        // }
+        // public function set printhide(value:String):void
+        // {
+        //     this._printhide=value;
+        // }
+
+
+        // private var _copyhide:String;
+        // public function get copyhide():String
+        // {
+        //     return _copyhide;
+        // }
+        // public function set copyhide(value:String):void
+        // {
+        //     this._copyhide=value;
+        // }
+
+        // private var _embedhide:String;
+        // public function get embedhide():String
+        // {
+        //     return this._embedhide;
+        // }
+        // public function set embedhide(value:String):void
+        // {
+        //     this._embedhide=value;
+        // }
        
 
         

@@ -401,6 +401,17 @@ package view.domino.surfaceComponents.components
             return super.scrollable;
         }
 
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
         override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
         {
             if (oldValue && (oldValue is Array)) _propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, fieldName, oldValue, newValue);

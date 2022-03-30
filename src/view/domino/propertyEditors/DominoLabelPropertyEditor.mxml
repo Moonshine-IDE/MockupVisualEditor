@@ -204,7 +204,7 @@
 		collectionProperty="fontStyles" textProperty="fontStyle"/>	
 
 	
-	<domino:HideOptions/>
+	<domino:HideOptions textProperty="hide"/>
 
 
     <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>

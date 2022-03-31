@@ -16,5 +16,6 @@
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <domino:ParagraphLayoutForm />
+    <domino:HideOptions textProperty="hide"/>
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

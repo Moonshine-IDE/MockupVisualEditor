@@ -246,7 +246,7 @@
             }
             this.selectedItem[this._textProperty] = _hideStr;
 
-            Alert.show("_hideStr:"+_hideStr);
+            
             
         }
 

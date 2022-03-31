@@ -450,6 +450,7 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoParagraph).height = this.width;
 			(component as components.domino.DominoParagraph).percentWidth = this.percentWidth;
 			(component as components.domino.DominoParagraph).percentHeight = this.percentHeight;
+            (component as components.domino.DominoParagraph).hide = this.hide;
 		
             var xml:XML = component.toCode();
 	

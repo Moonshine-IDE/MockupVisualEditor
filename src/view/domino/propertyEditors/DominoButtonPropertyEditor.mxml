@@ -203,7 +203,8 @@
 		
 	<domino:MultipleCheckbox label="Style:" 
 		optionExculdeFunction="excludeMultipleSelect"
-		collectionProperty="fontStyles" textProperty="fontStyle"/>	
+		collectionProperty="fontStyles" textProperty="fontStyle"/>
+	<domino:HideOptions textProperty="hide"/>	
 	<forms:DropdownListForm id="codeEnvent"
                             label="Code envent" textProperty="codeEvent"
                             collectionProperty="codeEnventList" labelField="label" valueField="value"

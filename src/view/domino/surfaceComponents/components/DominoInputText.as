@@ -2079,6 +2079,9 @@ package view.domino.surfaceComponents.components
             if(this.hidewhen){
                  xml.@hidewhen = StringHelper.base64Encode(this.hidewhen);;
             }
+            if(this.hide){
+                xml.@hide = this.hide;
+            }
 
 
             if(this.object){
@@ -2284,6 +2287,10 @@ package view.domino.surfaceComponents.components
                 
                this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
             }
+            if(component.hide){
+                this.hide = component.hide;
+            }
+
 
             if(this.type =="number"){
 
@@ -2361,6 +2368,7 @@ package view.domino.surfaceComponents.components
             component.inputvalidation = this.inputvalidation;
             component.inputtranslation = this.inputtranslation;
             component.hidewhen = this.hidewhen;
+            component.hide = this.hide;
             component.keywordsformula=this.keywordsformula;
             component.keyformulachoices=this.keyformulachoices;
             if(this.formula){

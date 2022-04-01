@@ -8,6 +8,7 @@
     </suportclasses:layout>
 
 	<domino:BasicsForm/>
+	<domino:HideOptions textProperty="hide"/>
 
 	<domino:GridForm id="gridForm"/>
 

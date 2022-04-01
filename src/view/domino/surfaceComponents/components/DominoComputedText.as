@@ -658,6 +658,8 @@ package view.domino.surfaceComponents.components
 			_hide = value;
 		}
 
+        
+
         	//-------------other componetn end-------------
 		
 		
@@ -683,6 +685,9 @@ package view.domino.surfaceComponents.components
             if(this.hidewhen){
                 var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
                  xml.@hidewhen = encodeFormulaStr;
+            }
+            if(this.hide){
+                 xml.@hide = this.hide;
             }
 
             return xml;
@@ -717,6 +722,7 @@ package view.domino.surfaceComponents.components
 			
 			component.isSelected = this.isSelected;
             component.hidewhen = this.hidewhen;
+            component.hide = this.hide;
 		
             return component.toCode();
         }

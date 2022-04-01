@@ -204,7 +204,7 @@
 		<domino:MultipleCheckbox label="Style:" 
 		optionExculdeFunction="excludeMultipleSelect"
 		collectionProperty="fontStyles" textProperty="fontStyle"/>	
-		 
+	<domino:HideOptions textProperty="hide"/>
     <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
 	<forms:DominoFormulaForm label="Computed Formula:" textProperty="formula" prompt="" id="formla"  includeInLayout="true" visible="true" />
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>

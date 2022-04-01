@@ -563,6 +563,10 @@ package view.domino.surfaceComponents.components
                 xml.@leftmargin = this.leftmargin;
             }
 
+            if(this.hide){
+                xml.@hide = this.hide;
+            }
+
             if (cdataXML)
             {
                 xml.appendChild(cdataXML);
@@ -606,6 +610,10 @@ package view.domino.surfaceComponents.components
 
             if(xml.@leftmargin!=null){
                 this.leftmargin=xml.@leftmargin;
+            }
+
+             if(xml.@hide!=null){
+                this.hide=xml.@hide;
             }
 
             if(xml.@columsProperty!=null){
@@ -668,6 +676,7 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoTable).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTable).percentHeight = this.percentHeight;
             (component as components.domino.DominoTable).columnProperties = this.columnProperties;
+            (component as components.domino.DominoTable).hide = this.hide;
 
             return component.toCode();
         }

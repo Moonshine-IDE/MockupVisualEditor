@@ -469,7 +469,7 @@
 		   </s:VGroup>	
 		</s:BorderContainer>   		
 	
-				
+	<domino:HideOptions textProperty="hide"/>	
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>

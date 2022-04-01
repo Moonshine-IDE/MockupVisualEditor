@@ -851,7 +851,7 @@ package view.domino.surfaceComponents.components
 
 
 
-
+       
 
         public function dropElementAt(element:IVisualElement, index:int):void
 		{
@@ -876,6 +876,10 @@ package view.domino.surfaceComponents.components
                     mainXML.@titleSize=this.size
                 }
 
+                if(this.hide){
+                     mainXML.@hide=this.hide
+                }
+
                 return this.internalToXML();
             }
 
@@ -892,6 +896,10 @@ package view.domino.surfaceComponents.components
 
             if(xml.@titleFontStyle)
             this.fontStyle = xml.@titleFontStyle;
+
+            if(xml.@hide){
+                this.hide=xml.@hide;
+            }
 
            
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -912,6 +920,7 @@ package view.domino.surfaceComponents.components
             component.titleSize = this.size;
             component.titleColor = this.color;
             component.titleFontStyle = this.fontStyle;
+            component.hide = this.hide;
 			//component.forAttribute = this.forAttribute;
 			//component.indicateRequired = this.indicateRequired;
 			

@@ -49,7 +49,6 @@
 
 		import utils.EditingSurfaceReader;
 		import utils.EditingSurfaceWriter;
-		import utils.GenericUtils;
 
 		import view.interfaces.IHistorySurfaceComponent;
 		import view.interfaces.IInitializeAfterAddedComponent;

@@ -108,8 +108,6 @@ package utils
              */
             public static function toDominoCode(surface:EditingSurface,projectName:String):XML
             {
-                
-                //Alert.show("surface:"+surface.visualEditorFileType);
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 var windowsTitle:String = "";
@@ -119,13 +117,11 @@ package utils
                     windowsTitle= (element as UIComponent).hasOwnProperty("windowsTitle") ? element["windowsTitle"] : "";
                 }
 
-                //Alert.show("title:"+title);
-
-                if(!title){
+                if(!title)
+                {
                     title=projectName
                 }
-                
-                
+
                 var xml:XML;
                 var mainContainer:XML;
                 if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
@@ -135,22 +131,19 @@ package utils
                     xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 }
-               
-                
+
+
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)
                 {
                     container = element as IVisualElementContainer;
                 }
-                
-               
 
                 var elementCount:int = 0;
     
                 elementCount = surface.numElements;
                 container = surface;
- 
-            
+
               //------------get all field ---------------
             
             
@@ -158,17 +151,11 @@ package utils
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
-                
-                   
-            
+
                     if (element === null){
                         continue;
                     }
 
-                    var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
-                    
-                    
-                   
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
                     //Alert.show("element_title:"+code.toXMLString());
@@ -180,12 +167,8 @@ package utils
                         }
                    }
 
-               
-               
-
-              
-                
-                    if(hasRichText==false){
+                    if(hasRichText==false)
+                    {
                         //add new richtext node
                         //Alert.show("add rich:"+code.toXMLString());
                         var richtext:XML = new XML("<richtext style='width:700px;height:700px;' class='flexHorizontalLayout flexHorizontalLayoutLeft flexHorizontalLayoutTop' direction='Horizontal' vdirection='Vertical'/>");
@@ -273,21 +256,16 @@ package utils
                 for (var i:int = 0; i < elementCount; i++)
                 {
                     element = container.getElementAt(i) as ISurfaceComponent;
-                
-                   
-            
+
                     if (element === null){
                         continue;
                     }
 
-                    var  element_title:String = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "no title";
-                    
-                    
-                   
 					XML.ignoreComments = false;
                     var code:XML = element.toCode();
                     //Alert.show("element_title:"+code.toXMLString());
-                    if(code!=null ){
+                    if(code != null)
+                    {
                         if(code.name()=="div" || code.name()=="_moonshineSelected_div"){
                              code.setName("richtext");
                              hasRichText=true;
@@ -295,11 +273,6 @@ package utils
                         }
                    }
 
-               
-               
-
-              
-                
                     if(hasRichText==false){
                         //add new richtext node
                         //Alert.show("add rich:"+code.toXMLString());
@@ -307,8 +280,7 @@ package utils
                         mainContainer.appendChild(richtext);
                         mainContainer=richtext;
                     }
-                  
-                  
+
                     if (mainContainer)
                     {
                         mainContainer.appendChild(code); 
@@ -321,11 +293,6 @@ package utils
                        xml.appendChild(code);
                     }
                 }
-
-                
-
-                
-
 
                 MainApplicationCodeUtils.fixDominField(xml);
               
@@ -342,16 +309,7 @@ package utils
 
             public static function toRoyaleCode(surface:EditingSurface,projectName:String):XML
             {
-                var element:ISurfaceComponent ;
-                var title:String ="";
-                var windowsTitle:String = "";
-           
-                //Alert.show("title:"+title);
-
-                if(!title){
-                    title=projectName
-                }
-                
+                var element:ISurfaceComponent;
                 
                 var xml:XML = MainApplicationCodeUtils.getRoyaleContainer();
                 var container:IVisualElementContainer = surface;
@@ -382,10 +340,7 @@ package utils
                     }
                 }
 
-                //%tabViewDataProvider%
-
-                //xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+xml;
-                  xml=MainApplicationCodeUtils.fixRoyaleDataProvider(xml);
+                xml = MainApplicationCodeUtils.fixRoyaleDataProvider(xml);
 
 				return xml;
             }

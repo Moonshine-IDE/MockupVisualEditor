@@ -23,12 +23,12 @@
 		     padding="5">
             <s:Label text="Hide paragraph form"/>
             <s:FormItem label="Notes R4.6 or later" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="noteshide"
+             <s:CheckBox id="notes"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true" />
             </s:FormItem>
              <s:FormItem label="Web browsers" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="browserhide"
+             <s:CheckBox id="web"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
@@ -40,40 +40,40 @@
          
             <s:Label text="Hide paragraph when document is"/>
              <s:FormItem label="Previewed for reading" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="prereadhide"
+             <s:CheckBox id="preview"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
             <s:FormItem label="Previewed for editing" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="preedithide"
+             <s:CheckBox id="previewedit"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
              <s:FormItem label="Opened for reading" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="openreadhide"
+             <s:CheckBox id="read"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
             <s:FormItem label="Opened for editing" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="openedithide"
+             <s:CheckBox id="edit"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
 
             <s:FormItem label="Printed" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="printhide"
+             <s:CheckBox id="print"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
 
             <s:FormItem label="Copied to the clipboard" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="copyhide"
+             <s:CheckBox id="copy"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
 
             <s:FormItem label="Embedded" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="embedhide"
+             <s:CheckBox id="embedded"
                     selected="false"
                     change="check_changeHandler(event)" enabled="true"/>
             </s:FormItem>
@@ -170,44 +170,87 @@
             if(_selectItemList==null){
                 _selectItemList=new ArrayList();
             }
+            //inital the hide otions 
+            if(this.selectedItem[this._textProperty]!=null){
+                this.hideOption.selected = true;
+                hidePanel.visible = hidePanel.includeInLayout = true;
+                var hideList:Array=this.selectedItem[this._textProperty].split(" ");
+                	for (var k:int = 0; k < hideList.length; k = k + 1)
+					{
+                        if(hideList[k]!=null && hideList[k].length > 0){
+                            if(hideList[k]=="notes"){
+                                this.notes.selected = true;
+                            }
+                            if(hideList[k]=="web"){
+                                this.web.selected = true;
+                            }
+                            if(hideList[k]=="mobile"){
+                                this.mobile.selected = true;
+                            }
+                            if(hideList[k]=="preview"){
+                                this.preview.selected = true;
+                            }
+                            if(hideList[k]=="previewedit"){
+                                this.previewedit.selected = true;
+                            }
+                            if(hideList[k]=="print"){
+                                this.print.selected = true;
+                            }
+                            if(hideList[k]=="copy"){
+                                this.copy.selected = true;
+                            }
+                            if(hideList[k]=="preview"){
+                                this.previewedit.selected = true;
+                            }
+                            if(hideList[k]=="embedded"){
+                                this.embedded.selected = true;
+                            }
+                        }
+                    }
+            }
+            //Alert.show("hide:"+ this.selectedItem[this._textProperty]); 
+
         }
+
+        //Domino hide token "preview | previewedit | print | copy | preview | previewedit | notes | web | embedded "
+
 
         private function check_changeHandler(event:Event):void
         {
             _hideStr="";
             if(event.target.selected){
-                if(event.target.id=="noteshide"){ 
+                if(event.target.id=="notes"){ 
                     //disabled the other checkbox ,only allow Opened or reading,Opened for editing
-                    this.openreadhide.enabled = true;
-                    this.openedithide.enabled = true;
+                    this.read.enabled = true;
+                    this.edit.enabled = true;
 
-                    this.prereadhide.enabled = false;
-                    this.preedithide.enabled = false;
-                    this.printhide.enabled = false;
-                    this.copyhide.enabled = false;
-                    this.embedhide.enabled = false;
+                    this.preview.enabled = false;
+                    this.previewedit.enabled = false;
+                    this.print.enabled = false;
+                    this.copy.enabled = false;
+                    this.embedded.enabled = false;
                     
                 }else{
 
-                    if(this.noteshide.selected==true){
-                        this.openreadhide.enabled = true;
-                        this.openedithide.enabled = true;
+                    if(this.notes.selected==true){
+                        this.read.enabled = true;
+                        this.edit.enabled = true;
 
-                        this.prereadhide.enabled = false;
-                        this.preedithide.enabled = false;
-                        this.printhide.enabled = false;
-                        this.copyhide.enabled = false;
-                        this.embedhide.enabled = false;
+                        this.preview.enabled = false;
+                        this.previewedit.enabled = false;
+                        this.print.enabled = false;
+                        this.copy.enabled = false;
+                        this.embedded.enabled = false;
 
                     }else{
-                        this.openreadhide.enabled = true;
-                        this.openedithide.enabled = true;
+                        this.read.enabled = true;
+                        this.edit.enabled = true;
 
-                        this.prereadhide.enabled = true;
-                        this.preedithide.enabled = true;
-                        this.printhide.enabled = true;
-                        this.copyhide.enabled = true;
-                        this.embedhide.enabled = true;
+                        this.preview.enabled = true;
+                        this.previewedit.enabled = true;
+                        this.print.enabled = true;
+                        this.copy.enabled = true;
+                        this.embedded.enabled = true;
 
                     }
 
@@ -237,6 +280,9 @@
                 }
             }
 
+            //fix the id to correct token
+            
+
             for (var k:int = 0; k < _selectItemList.length; k++){
                 _hideStr=_hideStr+_selectItemList.getItemAt(k).toString()+" ";
             }
@@ -263,21 +309,21 @@
         
 
         // private var _noteshide:String;
-        // public function get noteshide():String
+        // public function get notes():String
         // {
         //    return  _noteshide;
         // }
-        // public function set noteshide(value:String):void
+        // public function set notes(value:String):void
         // {
         //     this._noteshide =value;
         // }
 
         // private var _browserhide:String;
-        // public function get browserhide():String
+        // public function get web():String
         // {
         //     return _browserhide;
         // }
-        // public function set browserhide(value:String):void
+        // public function set web(value:String):void
         // {
         //     this._browserhide =value;
         // }
@@ -293,73 +339,73 @@
         // }
 
         // private var _prereadhide:String;
-        // public function get prereadhide():String
+        // public function get preview():String
         // {
         //     return _prereadhide;
         // }
-        // public function set prereadhide(value:String):void
+        // public function set preview(value:String):void
         // {
         //     this._prereadhide = value
         // }
 
 
         // private var _preedithide:String;
-        // public function get preedithide():String
+        // public function get previewedit():String
         // {
         //     return _preedithide;
         // }
-        // public function set preedithide(value:String):void
+        // public function set previewedit(value:String):void
         // {
         //     this._preedithide = value
         // }
 
         // private var _openreadhide:String;
-        // public function get openreadhide():String
+        // public function get read():String
         // {
         //     return _openreadhide;
         // }
-        // public function set openreadhide(value:String):void
+        // public function set read(value:String):void
         // {
         //     this._openreadhide = value
         // }
 
         // private var _openedithide:String;
-        // public function get openedithide():String
+        // public function get edit():String
         // {
         //     return _openedithide;
         // }
-        // public function set openedithide(value:String):void
+        // public function set edit(value:String):void
         // {
         //     this._openedithide= value;
         // }
 
         // private var _printhide:String;
-        // public function get printhide():String
+        // public function get print():String
         // {
         //     return _printhide;
         // }
-        // public function set printhide(value:String):void
+        // public function set print(value:String):void
         // {
         //     this._printhide=value;
         // }
 
 
         // private var _copyhide:String;
-        // public function get copyhide():String
+        // public function get copy():String
         // {
         //     return _copyhide;
         // }
-        // public function set copyhide(value:String):void
+        // public function set copy(value:String):void
         // {
         //     this._copyhide=value;
         // }
 
         // private var _embedhide:String;
-        // public function get embedhide():String
+        // public function get embedded():String
         // {
         //     return this._embedhide;
         // }
-        // public function set embedhide(value:String):void
+        // public function set embedded(value:String):void
         // {
         //     this._embedhide=value;
         // }

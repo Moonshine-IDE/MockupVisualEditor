@@ -90,7 +90,7 @@ package utils
 		{
 			initReader(VisualEditorType.DOMINO);
 			domino_conv = DominoConverter.getInstance(CLASS_LOOKUP);
-			var surfaceModel:SurfaceMockup =  domino_conv.fromXMLAutoConvert(xml);
+			var surfaceModel:SurfaceMockup =  domino_conv.fromXMLOnly(xml);
 
 			return surfaceModel;
 		}

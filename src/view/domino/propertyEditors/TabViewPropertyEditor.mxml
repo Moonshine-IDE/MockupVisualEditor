@@ -15,6 +15,6 @@
 	<domino:TabViewOrientationForm textProperty="orientation" label="Orientation"/>
 	<forms:ToggleButtonSelectedForm label="Scrollable" textProperty="scrollable"/>
 	<primeFaces:DivLayoutForm />
-	<domino:HideOptions textProperty="hide"/>
+	
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

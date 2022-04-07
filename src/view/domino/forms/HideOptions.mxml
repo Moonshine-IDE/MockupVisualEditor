@@ -172,6 +172,7 @@
             }
             //inital the hide otions 
             if(this.selectedItem[this._textProperty]!=null){
+                //Alert.show("hide:"+this.selectedItem[this._textProperty]);
                 this.hideOption.selected = true;
                 hidePanel.visible = hidePanel.includeInLayout = true;
                 var hideList:Array=this.selectedItem[this._textProperty].split(" ");
@@ -187,8 +188,11 @@
                             if(hideList[k]=="mobile"){
                                 this.mobile.selected = true;
                             }
-                            if(hideList[k]=="preview"){
-                                this.preview.selected = true;
+                            if(hideList[k]=="read"){
+                                this.read.selected = true;
+                            }
+                            if(hideList[k]=="edit"){
+                                this.edit.selected = true;
                             }
                             if(hideList[k]=="previewedit"){
                                 this.previewedit.selected = true;
@@ -200,11 +204,13 @@
                                 this.copy.selected = true;
                             }
                             if(hideList[k]=="preview"){
-                                this.previewedit.selected = true;
+                                this.preview.selected = true;
                             }
                             if(hideList[k]=="embedded"){
                                 this.embedded.selected = true;
                             }
+
+                            addIntoSelectList(hideList[k]);
                         }
                     }
             }
@@ -257,18 +263,9 @@
                   
 
                 }
-
-                var existing:Boolean = false;
-                if(_selectItemList){
-                    for (var k:int = 0; k < _selectItemList.length; k++){
-                        if(_selectItemList.getItemAt(k).toString()==event.target.id){
-                            existing=true;
-                        }
-                    }
-                }
-                if(existing==false){
-                    _selectItemList.addItem(event.target.id);
-                }
+                
+                addIntoSelectList(event.target.id);
+               
 
             }else{
                 if(_selectItemList){
@@ -281,6 +278,7 @@
             }
 
             //fix the id to correct token
+            //event.target.id
             
 
             for (var k:int = 0; k < _selectItemList.length; k++){
@@ -291,6 +289,7 @@
                 _hideStr=_hideStr.replace(/hide/g, "");
             }
             this.selectedItem[this._textProperty] = _hideStr;
+            
 
             
             
@@ -305,6 +304,21 @@
         public function set hideStr(value:String):void
         {
             this._hideStr =value;
+        }
+
+        private function addIntoSelectList(value:String):void 
+        {
+            var existing:Boolean = false;
+                if(_selectItemList){
+                    for (var k:int = 0; k < _selectItemList.length; k++){
+                        if(_selectItemList.getItemAt(k).toString()==value){
+                            existing=true;
+                        }
+                    }
+                }
+                if(existing==false){
+                    _selectItemList.addItem(value);
+                }
         }
         
 

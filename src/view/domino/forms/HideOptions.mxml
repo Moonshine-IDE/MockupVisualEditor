@@ -171,7 +171,7 @@
                 _selectItemList=new ArrayList();
             }
             //inital the hide otions 
-            if(this.selectedItem[this._textProperty]!=null){
+            if(this.selectedItem[this._textProperty]!=null && this.selectedItem[this._textProperty].length>0){
                 //Alert.show("hide:"+this.selectedItem[this._textProperty]);
                 this.hideOption.selected = true;
                 hidePanel.visible = hidePanel.includeInLayout = true;

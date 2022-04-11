@@ -1,6 +1,7 @@
 package lookup
 {
 	import components.DominoRow;
+	import components.GridRow;
 	import components.GridItem;
 	import components.NavigatorContent;
 	import components.common.Div;
@@ -42,6 +43,7 @@ package lookup
 
 			this.lookup[Div.ELEMENT_NAME] = Div;
 			this.lookup[GridItem.GRIDITEM_NAME] = GridItem;
+			this.lookup[GridRow.GRIDROW_NAME] = GridRow;
 			this.lookup[NavigatorContent.NAVIGATORCONTENT_NAME] = NavigatorContent;
 
 			this.lookup[DominoInputText.ELEMENT_NAME] = DominoInputText;

@@ -23,6 +23,8 @@ package view.domino.surfaceComponents.components
 
     import flash.events.Event;
 
+	import interfaces.ILookup;
+
 	import interfaces.IRoyaleComponentConverter;
 
 	import interfaces.dominoComponents.IDominoButton;
@@ -567,14 +569,14 @@ package view.domino.surfaceComponents.components
 			return xml;
 		}
 
-        public function fromXML(xml:XML, childFromXMLCallback:Function):void
+        public function fromXML(xml:XML, childFromXMLCallback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            component.fromXML(xml, childFromXMLCallback);
+            component.fromXML(xml, childFromXMLCallback, lookup);
 
             this.enabled = component.enabled;
             this.label = component.label;

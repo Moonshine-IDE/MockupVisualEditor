@@ -2,8 +2,10 @@ package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
     import flash.net.registerClassAlias;
-    
-    import mx.collections.ArrayCollection;
+
+	import interfaces.ILookup;
+
+	import mx.collections.ArrayCollection;
     import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElementContainer;
@@ -477,7 +479,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
 			componentAddedToEditor();
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -487,7 +489,7 @@ package view.primeFaces.surfaceComponents.components
 
             items.removeAll();
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
 			this.columns = component.columns;
 			this.value = component.value;

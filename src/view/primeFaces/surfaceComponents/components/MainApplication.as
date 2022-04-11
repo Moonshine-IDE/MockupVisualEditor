@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentPercentSizeOutput;
+    import interfaces.ILookup;
 
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
@@ -256,9 +257,9 @@ package view.primeFaces.surfaceComponents.components
             return mainXML;
         }
 
-        override public function fromXML(xml:XML, callback:Function):void
+        override public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
-            super.fromXML(xml, callback);
+            super.fromXML(xml, callback, lookup);
 
             contentChanged = true;
             this.invalidateDisplayList();

@@ -1,8 +1,10 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
-    import mx.controls.HRule;
+
+	import interfaces.ILookup;
+
+	import mx.controls.HRule;
     import mx.graphics.SolidColor;
     import mx.graphics.SolidColorStroke;
     import mx.utils.StringUtil;
@@ -421,14 +423,14 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
 			XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 			
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
 			this.widgetVar = component.widgetVar;
 			this.text = component.text;

@@ -18,6 +18,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package view.flex.surfaceComponents.components
 {
+	import interfaces.ILookup;
+
 	import spark.components.Button;
 	
 	import utils.MxmlCodeUtils;
@@ -88,7 +90,7 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
 		{
 			this.x = xml.@x;
 			this.y = xml.@y;

@@ -8,7 +8,9 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     import flash.events.MouseEvent;
 
-    import interfaces.components.IFieldset;
+	import interfaces.ILookup;
+
+	import interfaces.components.IFieldset;
 
     import mx.core.IVisualElement;
     import mx.events.FlexEvent;
@@ -365,7 +367,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
@@ -374,7 +376,7 @@ package view.primeFaces.surfaceComponents.components
 
             this.ensureInternalDivIsAdded();
 
-            component.fromXML(xml, callback);
+            component.fromXML(xml, callback, lookup);
 			
 			this.title = component.title;
 			this.toggleable = component.toggleable;

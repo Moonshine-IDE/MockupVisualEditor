@@ -18,6 +18,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package view.flex.surfaceComponents.components
 {
+    import interfaces.ILookup;
+
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
 
@@ -34,10 +36,10 @@ package view.flex.surfaceComponents.components
             this.title = "Main Window";
         }
 
-        override public function fromXML(xml:XML, callback:Function):void
+        override public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             this.id = xml.@id;
-            super.fromXML(xml, callback);
+            super.fromXML(xml, callback, lookup);
         }
     }
 }

@@ -20,7 +20,8 @@
 package view.domino.surfaceComponents.components
 {
     import interfaces.IComponentSizeOutput;
-    import interfaces.IRoyaleComponentConverter;
+	import interfaces.ILookup;
+	import interfaces.IRoyaleComponentConverter;
 
     import mx.core.IVisualElement;
     
@@ -427,11 +428,9 @@ package view.domino.surfaceComponents.components
             return this.internalToXML();
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
-            
-            
-            component.fromXML(xml, callback);
+            component.fromXML(xml, callback, lookup);
 
 			_cssClass = component.cssClass;
 			wrap = component.wrap;

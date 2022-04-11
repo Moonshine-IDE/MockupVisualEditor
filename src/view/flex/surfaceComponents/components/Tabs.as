@@ -1,5 +1,7 @@
 package view.flex.surfaceComponents.components
 {
+	import interfaces.ILookup;
+
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
 	import mx.containers.ViewStack;
@@ -173,7 +175,7 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
 		{
 			this.dataProvider.removeAll();
 			this.x = xml.@x;

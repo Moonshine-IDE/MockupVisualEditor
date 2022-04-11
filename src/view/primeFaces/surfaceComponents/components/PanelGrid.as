@@ -3,8 +3,9 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
+	import interfaces.ILookup;
 
-    import mx.containers.GridItem;
+	import mx.containers.GridItem;
     import mx.containers.GridRow;
     import mx.core.IVisualElement;
     
@@ -157,6 +158,8 @@ package view.primeFaces.surfaceComponents.components
         private var thisCallbackXML:Function;
 
         private var contentChanged:Boolean;
+
+		private var internalLookup:ILookup;
 
         public function PanelGrid()
         {
@@ -514,14 +517,16 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
+			this.internalLookup = lookup;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 			
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 					
 			this.thisCallbackXML = component.callbackXML;
 			this.bodyRowsXML = component.bodyRowsXML;
@@ -906,7 +911,7 @@ package view.primeFaces.surfaceComponents.components
                                 delete divXML.@percentHeight;
                             }
 
-                            container.fromXML(divXML, thisCallbackXML);
+                            container.fromXML(divXML, thisCallbackXML, this.internalLookup);
                         }
                     }
                     else
@@ -929,6 +934,7 @@ package view.primeFaces.surfaceComponents.components
             {
                 bodyRowsXML = null;
                 thisCallbackXML = null;
+				internalLookup = null;
             }
         }
 

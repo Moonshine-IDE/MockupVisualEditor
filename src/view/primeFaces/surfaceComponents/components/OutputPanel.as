@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import data.OrganizerItem;
 
     import interfaces.IComponentSizeOutput;
+    import interfaces.ILookup;
 
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
@@ -318,7 +319,7 @@ package view.primeFaces.surfaceComponents.components
         {
             return null;
         }
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 

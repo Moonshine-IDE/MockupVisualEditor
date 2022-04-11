@@ -22,7 +22,8 @@ package view.domino.surfaceComponents.components
         import flash.events.Event;
         import flash.events.MouseEvent;
         import interfaces.IComponentSizeOutput;
-        import interfaces.IRoyaleComponentConverter;
+    import interfaces.ILookup;
+    import interfaces.IRoyaleComponentConverter;
 
         import mx.effects.AnimateProperty;
         import mx.events.EffectEvent;
@@ -883,7 +884,7 @@ package view.domino.surfaceComponents.components
                 return this.internalToXML();
             }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             //Alert.show("xml:"+xml);
             if(xml.@title)
@@ -894,14 +895,13 @@ package view.domino.surfaceComponents.components
             if(xml.@titleSize)
             this.size = xml.@titleSize;
 
+            if(xml.@hide){
+                this.hide = xml.@hide;
+            }
+
             if(xml.@titleFontStyle)
             this.fontStyle = xml.@titleFontStyle;
 
-            if(xml.@hide){
-                this.hide=xml.@hide;
-            }
-
-           
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             var elementsXML:XMLList = xml.elements();
             var childCount:int = elementsXML.length();

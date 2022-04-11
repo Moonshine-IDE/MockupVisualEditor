@@ -102,11 +102,11 @@ package utils
         private function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
         {
             var name:String = itemXML.name();
-            if(!(name in EditingSurfaceReader.CLASS_LOOKUP))
+            if(!(name in EditingSurfaceReader.classLookup))
             {
                 throw new Error("Unknown item " + name);
             }
-            var type:Class = EditingSurfaceReader.CLASS_LOOKUP[name];
+            var type:Class = EditingSurfaceReader.classLookup[name];
             var item:ISurfaceComponent = new type() as ISurfaceComponent;
             if(item === null)
             {

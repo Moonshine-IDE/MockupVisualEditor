@@ -8,7 +8,9 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     import flash.net.registerClassAlias;
 
-    import interfaces.components.IDataTable;
+	import interfaces.ILookup;
+
+	import interfaces.components.IDataTable;
 
     import mx.collections.ArrayCollection;
     import mx.collections.ArrayList;
@@ -541,14 +543,14 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
             this.paginator = component.paginator;
             this.resizableColumns = component.resizableColumns;

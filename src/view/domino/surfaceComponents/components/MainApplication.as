@@ -22,6 +22,7 @@ package view.domino.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentPercentSizeOutput;
+    import interfaces.ILookup;
 
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
@@ -422,7 +423,7 @@ package view.domino.surfaceComponents.components
             return mainXML;
         }
 
-        override public function fromXML(xml:XML, callback:Function):void
+        override public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             if(xml.@title){
                 this.title = xml.@title
@@ -439,7 +440,7 @@ package view.domino.surfaceComponents.components
             if(xml.@windowsTitle){
                 this.windowsTitle= StringHelper.base64Decode(xml.@windowsTitle);
             }
-            super.fromXML(xml, callback);
+            super.fromXML(xml, callback, lookup);
 
             contentChanged = true;
             this.invalidateDisplayList();

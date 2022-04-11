@@ -1,6 +1,8 @@
 package view.primeFaces.supportClasses
 {
-    import spark.components.NavigatorContent;
+	import interfaces.ILookup;
+
+	import spark.components.NavigatorContent;
     import interfaces.IComponent;
 
 	public class NavigatorContent extends spark.components.NavigatorContent implements IComponent
@@ -12,7 +14,7 @@ package view.primeFaces.supportClasses
 			super();
 		}
 		
-		public function fromXML(xml:XML, childFromXMLCallback:Function):void
+		public function fromXML(xml:XML, childFromXMLCallback:Function, lookup:ILookup = null):void
 		{
 			
 		}

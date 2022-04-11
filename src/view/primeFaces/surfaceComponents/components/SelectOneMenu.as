@@ -8,7 +8,9 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
     import flash.net.registerClassAlias;
 
-    import interfaces.components.ISelectOneMenu;
+	import interfaces.ILookup;
+
+	import interfaces.components.ISelectOneMenu;
 
     import mx.collections.ArrayCollection;
     import mx.utils.ObjectUtil;
@@ -416,14 +418,14 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 			
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
 			this.value = component.value;
 			this.editable = component.editable;

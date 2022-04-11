@@ -1,8 +1,10 @@
 package view.primeFaces.surfaceComponents.components
 {
     import flash.events.Event;
-    
-    import spark.components.CheckBox;
+
+	import interfaces.ILookup;
+
+	import spark.components.CheckBox;
     
     import data.OrganizerItem;
     
@@ -300,14 +302,14 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
 		}
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
             this.label = component.label;
             this.selected = component.selected;

@@ -27,6 +27,7 @@ package view.domino.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
+	import interfaces.ILookup;
 	import interfaces.IRoyaleComponentConverter;
 	import interfaces.dominoComponents.IDominoTabView;
 
@@ -514,7 +515,7 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             this.removeAllElements();
 
@@ -523,7 +524,7 @@ package view.domino.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
 			this.orientation = component.orientation;
 			this.scrollable = component.scrollable;

@@ -6,7 +6,9 @@ package view.primeFaces.surfaceComponents.components
 
     import flash.events.Event;
 
-    import interfaces.components.IInputTextarea;
+	import interfaces.ILookup;
+
+	import interfaces.components.IInputTextarea;
 
     import mx.utils.StringUtil;
 
@@ -485,11 +487,11 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
             this.text = component.text;
             this.isAutoResize = component.isAutoResize;

@@ -4,8 +4,9 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.MouseEvent;
 
     import interfaces.IComponentSizeOutput;
+	import interfaces.ILookup;
 
-    import view.primeFaces.supportClasses.GridItem;
+	import view.primeFaces.supportClasses.GridItem;
     import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.ScrollPolicy;
@@ -455,7 +456,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
@@ -468,7 +469,7 @@ package view.primeFaces.surfaceComponents.components
                 this.removeAllElements();
             }
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 
             if (elementsXML.length() > 0)
             {

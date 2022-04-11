@@ -19,8 +19,10 @@
 package view.flex.surfaceComponents.components
 {
     import flash.events.Event;
-    
-    import mx.controls.DateChooser;
+
+	import interfaces.ILookup;
+
+	import mx.controls.DateChooser;
     import mx.formatters.DateFormatter;
     import mx.utils.ObjectUtil;
     
@@ -28,7 +30,6 @@ package view.flex.surfaceComponents.components
     
     import view.flex.propertyEditors.CalendarPropertyEditor;
     import view.interfaces.IFlexSurfaceComponent;
-    import view.interfaces.ISurfaceComponent;
 
 	public class Calendar extends DateChooser implements IFlexSurfaceComponent
 	{
@@ -94,7 +95,7 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
 		{
 			this.x = xml.@x;
 			this.y = xml.@y;

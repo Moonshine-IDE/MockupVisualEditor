@@ -22,8 +22,9 @@ package view.domino.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
+	import interfaces.ILookup;
 
-    import mx.utils.StringUtil;
+	import mx.utils.StringUtil;
     
     import spark.components.TextInput;
     
@@ -2224,12 +2225,12 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             //Alert.show("xml:"+xml.toXMLString());
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
             this.text = component.text;
 			this.maxLength = component.maxLength;

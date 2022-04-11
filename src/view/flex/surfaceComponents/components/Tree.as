@@ -1,5 +1,7 @@
 package view.flex.surfaceComponents.components
 {
+	import interfaces.ILookup;
+
 	import mx.collections.IList;
 	import mx.controls.Tree;
 	import mx.events.FlexEvent;
@@ -82,7 +84,7 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
 		{
 			this.x = xml.@x;
 			this.y = xml.@y;

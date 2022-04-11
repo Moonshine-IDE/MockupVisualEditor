@@ -8,7 +8,8 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
-    import interfaces.components.ITabView;
+	import interfaces.ILookup;
+	import interfaces.components.ITabView;
 
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
@@ -462,7 +463,7 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             this.removeAllElements();
 
@@ -471,7 +472,7 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
 			this.orientation = component.orientation;
 			this.scrollable = component.scrollable;

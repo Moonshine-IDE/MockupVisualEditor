@@ -1,7 +1,9 @@
 package view.primeFaces.supportClasses
 {
     import interfaces.IComponent;
-    import mx.containers.GridItem;
+	import interfaces.ILookup;
+
+	import mx.containers.GridItem;
 
 	public class GridItem extends mx.containers.GridItem implements IComponent
 	{
@@ -12,7 +14,7 @@ package view.primeFaces.supportClasses
 			super();
 		}
 		
-		public function fromXML(xml:XML, childFromXMLCallback:Function):void
+		public function fromXML(xml:XML, childFromXMLCallback:Function, lookup:ILookup = null):void
 		{
 			
 		}

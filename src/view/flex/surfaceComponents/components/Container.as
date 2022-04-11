@@ -19,7 +19,9 @@
 package view.flex.surfaceComponents.components
 {
 	import flash.utils.Dictionary;
-	
+
+	import interfaces.ILookup;
+
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
 	
@@ -233,7 +235,7 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function):void
+		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
 		{
 			this.x = xml.@x;
 			this.y = xml.@y;

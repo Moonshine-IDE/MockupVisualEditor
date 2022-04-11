@@ -6,7 +6,9 @@ package view.primeFaces.surfaceComponents.components
 
     import flash.events.Event;
 
-    import interfaces.components.ITree;
+	import interfaces.ILookup;
+
+	import interfaces.components.ITree;
 
     import mx.controls.Tree;
 
@@ -340,14 +342,14 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
             this.treeVar = component.treeVar;
             this.treeValue = component.treeValue;

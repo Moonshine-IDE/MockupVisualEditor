@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
     import interfaces.IComponentSizeOutput;
+    import interfaces.ILookup;
 
     import mx.formatters.NumberBaseRoundType;
     import mx.utils.StringUtil;
@@ -540,11 +541,11 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
 			
             this.thousandSeparator = component.thousandSeparator;
             this.decimalSeparator = component.decimalSeparator;

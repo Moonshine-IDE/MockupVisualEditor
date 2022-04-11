@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
-    import interfaces.IRoyaleComponentConverter;
+	import interfaces.ILookup;
+	import interfaces.IRoyaleComponentConverter;
     import interfaces.dominoComponents.IDominoComputedText;
     import view.interfaces.ICDATAInformation;
     import flash.events.Event;
@@ -678,11 +679,11 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function):void
+        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
         {
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
            
-			component.fromXML(xml, callback);
+			component.fromXML(xml, callback, lookup);
            
             this.formula = component.formula;
             this.color = component.color;

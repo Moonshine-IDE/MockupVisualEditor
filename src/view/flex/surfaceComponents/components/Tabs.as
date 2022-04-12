@@ -190,19 +190,19 @@ package view.flex.surfaceComponents.components
 				var label:String = tabXML.@text;
 				this._dataProvider.addItem(new DataProviderListItem(label));
 				var tab:NavigatorContent = NavigatorContent(this._stack.getItemAt(this._dataProvider.length - 1));
-				this.tabFromXML(tab, tabXML, callback);
+				this.tabFromXML(tab, tabXML, callback, lookup);
 			}
 			this.selectedIndex = xml.@selectedIndex;
 		}
 
-		public function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function):void
+		public function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function, lookup:ILookup):void
 		{
 			var elementsXML:XMLList = xml.elements();
 			var childCount:int = elementsXML.length();
 			for(var i:int = 0; i < childCount; i++)
 			{
 				var childXML:XML = elementsXML[i];
-				callback(tab, childXML);
+				callback(tab, lookup, childXML);
 			}
 		}
 

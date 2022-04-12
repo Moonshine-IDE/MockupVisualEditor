@@ -55,7 +55,7 @@ package lookup
 			this.lookup[DominoTabView.ELEMENT_NAME] = DominoTabView;
 			this.lookup[DominoSection.ELEMENT_NAME] = DominoSection;
 			this.lookup[DominoCalendar.ELEMENT_NAME] = DominoCalendar;
-			this.lookup[DominoParagraph.ELEMENT_NAME] =DominoParagraph;
+			this.lookup[DominoParagraph.ELEMENT_NAME] = DominoParagraph;
 			this.lookup[DominoRow.DOMINOROW_NAME] = DominoRow;
 		}
 	}

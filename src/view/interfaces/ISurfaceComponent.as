@@ -1,7 +1,6 @@
 package view.interfaces
 {
     import interfaces.IComponent;
-	import interfaces.IDominoComponent;
 
     import mx.core.IChildList;
 	import mx.core.IInvalidating;

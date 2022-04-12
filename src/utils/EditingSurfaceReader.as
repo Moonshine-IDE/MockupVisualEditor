@@ -16,42 +16,28 @@ package utils
 
 		public static function fromXML(surface:ISurface, xml:XML, visualEditorType:String):void
 		{
-			setCurrentLookup(visualEditorType);
 			if(visualEditorType == VisualEditorType.DOMINO)
 			{
+				classLookup = Lookup.DominoUILookup;
             	DominoConverter.fromXML(surface, Lookup.DominoUILookup, xml);
 			}
 			else if (visualEditorType == VisualEditorType.FLEX)
 			{
+				classLookup = Lookup.FlexUILookup;
 				PrimeFacesConverter.fromXML(surface, Lookup.FlexUILookup, xml);
 			}
          	else
 			{
+				classLookup = Lookup.PrimeFacesUILookup;
 				PrimeFacesConverter.fromXML(surface, Lookup.PrimeFacesUILookup, xml);
 			}
 		}
 
 		public static function fromXMLAutoConvert(xml:XML):SurfaceMockup
 		{
-			setCurrentLookup(VisualEditorType.DOMINO);
+			classLookup = Lookup.DominoNonUILookup;
 			var surfaceModel:SurfaceMockup =  DominoConverter.fromXMLOnly(Lookup.DominoNonUILookup, xml);
 			return surfaceModel;
-		}
-
-		private static function setCurrentLookup(visualEditorType:String):void
-		{
-			if (visualEditorType == VisualEditorType.DOMINO)
-			{
-				classLookup = Lookup.DominoUILookup;
-			}
-			else if (visualEditorType == VisualEditorType.FLEX)
-			{
-				classLookup = Lookup.FlexUILookup;
-            }
-			else
-            {
-				classLookup = Lookup.PrimeFacesUILookup;
-            }
 		}
 	}
 }

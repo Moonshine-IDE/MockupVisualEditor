@@ -908,7 +908,7 @@ package view.domino.surfaceComponents.components
             for(var i:int = 0; i < childCount; i++)
             {
                 var childXML:XML = elementsXML[i];
-                callback(this, childXML);
+                callback(this, lookup, childXML);
             }
 
         }

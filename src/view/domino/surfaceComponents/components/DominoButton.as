@@ -584,6 +584,7 @@ package view.domino.surfaceComponents.components
             this.color= component.color;
             this.fontStyle = component.fontStyle;
             this.hide = component.hide;
+           
 
             if(component.code){
                this.code=  StringHelper.base64Decode(component.code);

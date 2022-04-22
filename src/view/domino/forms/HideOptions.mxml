@@ -14,70 +14,101 @@
                     selected="false"
                     change="changeHideOption(event)"/>
     </s:FormItem>
+
     <s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
-            left="0" right="0" top="10" bottom="10" includeInLayout="false" visible="false" id="hidePanel">
+            left="0" right="0" width="400" top="10" bottom="10" includeInLayout="false" visible="false" id="hidePanel">
 	
 		<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" 
 		     padding="5">
             <s:Label text="Hide paragraph form"/>
-            <s:FormItem label="Notes R4.6 or later" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="notes"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true" />
-            </s:FormItem>
-             <s:FormItem label="Web browsers" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="web"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
-            <s:FormItem label="Mobile" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="mobile"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
-         
-            <s:Label text="Hide paragraph when document is"/>
-             <s:FormItem label="Previewed for reading" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="preview"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
-            <s:FormItem label="Previewed for editing" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="previewedit"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
-             <s:FormItem label="Opened for reading" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="read"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
-            <s:FormItem label="Opened for editing" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="edit"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
+                <s:Form>
+                <s:layout>
+                <s:TileLayout requestedColumnCount="3"
+                            verticalAlign="middle" />
+                </s:layout>
+                <s:HGroup width="100%">
+                   
+                    <s:CheckBox id="notes"
+                            selected="false"
+                            content="Notes R4.6 or later"
+                            change="check_changeHandler(event)" enabled="true" />
+                    
+                   
+               
+                    <s:CheckBox id="web"
+                            selected="false"
+                            content="Web browsers"
+                            change="check_changeHandler(event)" enabled="true"/>
+                  
+                   
+                    <s:CheckBox id="mobile"
+                            selected="false"
+                            content="Mobile"
+                            change="check_changeHandler(event)" enabled="true"/>
+                   
+                  
+                     
+                </s:HGroup>
+                 </s:Form>
+            
+                <s:Label text="Hide paragraph when document is"/>
+                 <s:Form>
+                <s:layout>
+                <s:TileLayout requestedColumnCount="2"
+                            verticalAlign="middle" />
+                </s:layout>
+              
+                   
+                    <s:CheckBox id="preview"
+                            selected="false"
+                            content="Previewed for reading"
+                            change="check_changeHandler(event)" enabled="true"/>
+                   
+                   
+                    <s:CheckBox id="previewedit"
+                            selected="false"
+                            content = "Previewed for editing"
+                            change="check_changeHandler(event)" enabled="true"/>
+                    
+              
+               
+                <s:CheckBox id="read"
+                        selected="false"
+                        content = "Opened for reading"
+                        change="check_changeHandler(event)" enabled="true"/>
+  
+              
+                <s:CheckBox id="edit"
+                        selected="false"
+                        content="Opened for editing"
+                        change="check_changeHandler(event)" enabled="true"/>
+              
+              
+             
+                <s:CheckBox id="print"
+                        selected="false"
+                        content="Printed"
+                        change="check_changeHandler(event)" enabled="true"/>
+              
 
-            <s:FormItem label="Printed" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="print"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
+               
+                <s:CheckBox id="copy"
+                        selected="false"
+                        content="Copied to the clipboard"
+                        change="check_changeHandler(event)" enabled="true"/>
+             
 
-            <s:FormItem label="Copied to the clipboard" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="copy"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
+               
+                <s:CheckBox id="embedded"
+                        selected="false"
+                        content="Embedded"
+                        change="check_changeHandler(event)" enabled="true"/>
+              
 
-            <s:FormItem label="Embedded" skinClass="skins.FormItemSkin">
-             <s:CheckBox id="embedded"
-                    selected="false"
-                    change="check_changeHandler(event)" enabled="true"/>
-            </s:FormItem>
-         
+                  </s:Form>
+          
            
         </s:VGroup> 
     </s:BorderContainer>   

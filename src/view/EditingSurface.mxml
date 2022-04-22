@@ -68,9 +68,6 @@
 
 		import mx.controls.Alert;
 
-		import surface.SurfaceMockup;
-
-	
 		public var organizer:ComponentsOrganizer;
 
 		private static const SMALL_NUDGE:int = 1;

@@ -3,22 +3,19 @@
 									  xmlns:s="library://ns.adobe.com/flex/spark"
 									  xmlns:suportclasses="view.suportClasses.*"
 									  skinClass="skins.FormSkin"
-								      creationComplete="onHideoptionsCreationComplete(event)"
-                                      xmlns:forms="view.forms.*">
+								      xmlns:forms="view.forms.*"
+                                      creationComplete="onHideoptionsCreationComplete(event)"
+                                       >
 
 	<suportclasses:layout>
 		<s:FormLayout />
 	</suportclasses:layout>
-    <s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
-        <s:CheckBox id="hideOption"
-                    selected="false"
-                    change="changeHideOption(event)"/>
-    </s:FormItem>
+   
 
     <s:BorderContainer 
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
-            left="0" right="0" width="400" top="10" bottom="10" includeInLayout="false" visible="false" id="hidePanel">
+            left="0" right="0" width="320" top="10" bottom="10" includeInLayout="true" visible="true" id="hidePanel">
 	
 		<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" 
 		     padding="5">
@@ -108,7 +105,8 @@
               
 
                   </s:Form>
-          
+
+                
            
         </s:VGroup> 
     </s:BorderContainer>   
@@ -185,15 +183,7 @@
         }
 
 
-        private function changeHideOption(event:Event):void
-        {
-            if(this.hideOption.selected){
-                 hidePanel.visible = hidePanel.includeInLayout = true;
-            }else{
-                 hidePanel.visible = hidePanel.includeInLayout = false;
-            }
-           
-        }
+       
 
         
         private function onHideoptionsCreationComplete(event:FlexEvent):void
@@ -204,7 +194,7 @@
             //inital the hide otions 
             if(this.selectedItem[this._textProperty]!=null && this.selectedItem[this._textProperty].length>0){
                 //Alert.show("hide:"+this.selectedItem[this._textProperty]);
-                this.hideOption.selected = true;
+                //this.hideOption.selected = true;
                 hidePanel.visible = hidePanel.includeInLayout = true;
                 var hideList:Array=this.selectedItem[this._textProperty].split(" ");
                 	for (var k:int = 0; k < hideList.length; k = k + 1)

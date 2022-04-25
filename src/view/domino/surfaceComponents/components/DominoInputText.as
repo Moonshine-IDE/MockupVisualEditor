@@ -1438,7 +1438,7 @@ package view.domino.surfaceComponents.components
         // {label:"Windows Title",value: "windowtitle",description:"Generates the text that appears in the title bar of documents using the form."},
         //{label:"Web QueryOpen",value: "webqueryopen",description:"Executes before a Web document is displayed."},
         //{label:"Web Querysave",value: "webquerysave",description:"Executes before a Web document is saved."},
-        {label:"Hide When",value: "hidewhen",description:"Hides the object if the formula you provide is true."},
+        //{label:"Hide When",value: "hidewhen",description:"Hides the object if the formula you provide is true."},
         //{label:"Value",value: "value",description:"Specifies the contents of a computed field."},
         // {label:"Selection",value: "selection",description:"selects the documents that appear in a view."},
         // {label:"Html Attributes",value: "htmlattributes",description:"Specifies characteristics for the associated HTML object. Applies to fields."},

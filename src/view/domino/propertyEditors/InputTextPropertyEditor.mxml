@@ -34,6 +34,16 @@
 					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
 				 }
 
+				 //inistal hide options
+				 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 || this.selectedItem["hidewhen"]!=null){
+					 this.hideOption.selected = true;
+					 if(this.hideOption.selected){
+						hidePanel.visible = hidePanel.includeInLayout = true;
+					 }else{
+						hidePanel.visible = hidePanel.includeInLayout = false;
+					 }
+				 }
+
 				
 			}
 
@@ -195,22 +205,22 @@
 					defaultvalue.visible = defaultvalue.includeInLayout = false;
 					inputtranslation.visible = inputtranslation.includeInLayout = true;
 					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					hidewhen.visible = hidewhen.includeInLayout = false;
+					//hidewhen.visible = hidewhen.includeInLayout = false;
 				}else if(item.value=="inputvalidation"){
 					defaultvalue.visible = defaultvalue.includeInLayout = false;
 					inputtranslation.visible = inputtranslation.includeInLayout = false;
 					inputvalidation.visible = inputvalidation.includeInLayout = true;
-					hidewhen.visible = hidewhen.includeInLayout = false;
+					//hidewhen.visible = hidewhen.includeInLayout = false;
 				}else if(item.value=="hidewhen"){
 					defaultvalue.visible = defaultvalue.includeInLayout = false;
 					inputtranslation.visible = inputtranslation.includeInLayout = false;
 					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					hidewhen.visible = hidewhen.includeInLayout = true;
+					//hidewhen.visible = hidewhen.includeInLayout = true;
 				}else{
 					defaultvalue.visible = defaultvalue.includeInLayout = true;
 					inputtranslation.visible = inputtranslation.includeInLayout = false;
 					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					hidewhen.visible = hidewhen.includeInLayout = false;
+					//hidewhen.visible = hidewhen.includeInLayout = false;
 
 				}
 				return item.value;
@@ -256,6 +266,16 @@
 				 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
 			}
 
+			 private function changeHideOption(event:Event):void
+			{
+				if(this.hideOption.selected){
+					hidePanel.visible = hidePanel.includeInLayout = true;
+				}else{
+					hidePanel.visible = hidePanel.includeInLayout = false;
+				}
+			
+			}
+
 		
 
 
@@ -290,7 +310,7 @@
 					restrict="0-9" change="textform1_changeHandler(event)"/> -->
  <s:BorderContainer 
              cornerRadius="0"
-            borderStyle="solid" borderWeight="1" 
+            borderStyle="solid" borderWeight="0" 
             left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="numberPanel">
 	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" >
@@ -416,7 +436,7 @@
 		<forms:DominoFormulaForm label="Formula:" textProperty="defaultvalue" prompt="" id="defaultvalue"  includeInLayout="true" visible="true" />
 		<forms:DominoFormulaForm label="Formula:" textProperty="inputtranslation" prompt="" id="inputtranslation"  includeInLayout="false" visible="false" />
 		<forms:DominoFormulaForm label="Formula:" textProperty="inputvalidation" prompt="" id="inputvalidation"  includeInLayout="false" visible="false" />
-		<forms:DominoFormulaForm label="Formula:" textProperty="hidewhen" prompt="" id="hidewhen"  includeInLayout="false" visible="false" />
+		
        </s:VGroup>
 		
 	</s:BorderContainer>
@@ -467,9 +487,31 @@
 		
 			
 		   </s:VGroup>	
-		</s:BorderContainer>   		
-	
+		</s:BorderContainer>  
+
+		<s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
+        <s:CheckBox id="hideOption"
+                    selected="false"
+                    change="changeHideOption(event)"/>
+    	</s:FormItem>
+
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" width="330" includeInLayout="false" visible="false" id="hidePanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
+
 	<domino:HideOptions textProperty="hide"/>	
+	<s:Label text="Hide paragraph if formual is true"/>
+            
+	<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
+              
+	 </s:VGroup> 
+	</s:BorderContainer>   
+
+	
+
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>

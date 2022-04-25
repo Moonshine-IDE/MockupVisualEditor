@@ -310,7 +310,7 @@
 					restrict="0-9" change="textform1_changeHandler(event)"/> -->
  <s:BorderContainer 
              cornerRadius="0"
-            borderStyle="solid" borderWeight="0" 
+            borderStyle="solid" borderWeight="1" 
             left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="numberPanel">
 	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" >
@@ -497,7 +497,7 @@
 
 	<s:BorderContainer 
              cornerRadius="0"
-            borderStyle="solid" borderWeight="1" 
+            borderStyle="solid" borderWeight="0" 
             left="0" right="0" top="10" bottom="10" width="330" includeInLayout="false" visible="false" id="hidePanel">
 			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		

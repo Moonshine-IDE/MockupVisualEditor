@@ -247,7 +247,7 @@
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
 
 	<domino:HideOptions textProperty="hide"/>	
-	<s:Label text="Hide paragraph if formual is true"/>
+	<s:Label text="Hide paragraph if formula is true"/>
 	 <forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
               
 	 </s:VGroup> 

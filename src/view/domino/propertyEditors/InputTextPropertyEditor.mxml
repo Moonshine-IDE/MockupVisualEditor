@@ -276,6 +276,16 @@
 			
 			}
 
+			private function changeHelpOption(event:Event):void
+			{
+				if(this.hideOption.selected){
+					helpDescription.visible = helpDescription.includeInLayout = true;
+				}else{
+					helpDescription.visible = helpDescription.includeInLayout = false;
+				}
+			
+			}
+
 		
 
 
@@ -508,9 +518,24 @@
 	<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
               
 	 </s:VGroup> 
-	</s:BorderContainer>   
+	</s:BorderContainer>  
 
-	
+
+<s:FormItem label="Help Description" skinClass="skins.FormItemSkin">
+        <s:CheckBox id="helpDescriptionCheckBox"
+                    selected="false"
+                    change="changeHelpOption(event)"/>
+    	</s:FormItem>
+	<s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" top="10" bottom="10" width="250" includeInLayout="false" visible="false" id="helpDescription">
+	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+	<domino:HelpDescription label="Help Description" textProperty="helpDescription" />	   
+	<domino:HelpDescription label="Field Hint" textProperty="fieldHint" />	
+	</s:VGroup> 
+	</s:BorderContainer>   	   	
 
 	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>

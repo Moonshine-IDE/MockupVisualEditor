@@ -2034,6 +2034,31 @@ package view.domino.surfaceComponents.components
 			_hide = value;
 		}
 
+        private var _helpDescription:String;
+
+		public function get helpDescription():String
+		{
+			return _helpDescription;
+		}
+
+		public function set helpDescription(value:String):void
+		{
+			_helpDescription = value;
+		}
+
+		private var _fieldHint:String;
+
+		public function get fieldHint():String
+		{
+			return _fieldHint;
+		}
+
+		public function set fieldHint(value:String):void
+		{
+			_fieldHint = value;
+		}
+
+
         public function toXML():XML
         {
             

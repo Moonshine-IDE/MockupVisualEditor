@@ -137,15 +137,22 @@
 
         protected function onSelectionChange(event:IndexChangeEvent):void
         {
-            if(_valueField){
-                   selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
-            }else if (_labelField)
-            {
-                selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
-            }
-            else
-            {
-                selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+            if(this.selectedItem && ddlSelection.selectedItem){
+                if(_valueField){
+                    if(ddlSelection.selectedItem[_valueField]){
+                        this.selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
+                    }
+                }else if (_labelField)
+                {
+                    if(ddlSelection.selectedItem[_labelField]){
+                        this.selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+                    }
+                
+                }
+                else
+                {
+                    this.selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+                }
             }
         }
 

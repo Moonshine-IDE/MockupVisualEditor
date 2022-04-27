@@ -464,17 +464,7 @@
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 
-				<!-- <forms:DropdownListForm id="fieldlistinput"
-                            label="Input separators:" textProperty="listinputseparators"
-                            collectionProperty="separators" labelField="label" valueField="value"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/> -->
-
-				<!-- <forms:DropdownListForm id="fieldlistdisplay"
-                            label="Display separator:" textProperty="listdisplayseparator"
-                            collectionProperty="separators" labelField="label" valueField="value"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
+				
 		   </s:VGroup>	
 	</s:BorderContainer>
 
@@ -519,7 +509,7 @@
               
 	 </s:VGroup> 
 	</s:BorderContainer>  
-
+<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
 
 <s:FormItem label="Help Description" skinClass="skins.FormItemSkin">
         <s:CheckBox id="helpDescriptionCheckBox"
@@ -534,10 +524,28 @@
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
 	<domino:HelpDescription label="Help Description" textProperty="helpDescription" />	   
 	<domino:HelpDescription label="Field Hint" textProperty="fieldHint" />	
+	<s:Label text="Multi-Value Options"/>
+	<forms:DropdownListForm id="fieldlistinput"
+                            label="Separate values when user enters" textProperty="listinputseparators"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/> 
+
+	<forms:DropdownListForm id="fieldlistdisplay"
+                            label="Display separate values with :" textProperty="listdisplayseparator"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						
+	<s:Label text="Security Options"/>
+	<forms:DropdownListForm id="securityOptionsList"
+                            label="Display separate values with :" textProperty="securityOptionsInput"
+                            collectionProperty="securityOptions" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						
 	</s:VGroup> 
 	</s:BorderContainer>   	   	
 
-	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
+	
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

@@ -1807,6 +1807,76 @@ package view.domino.surfaceComponents.components
         {label:"none",value: "none",description:"none"}
         ]);
 
+         public function get separators():ArrayList
+         {
+             return _separators;
+         }
+
+
+         [Bindable]
+        private var _securityOptions:ArrayList = new ArrayList([
+        {label:"Sign if mailed or saved in section",value: "sign",description: "sign"},
+        {label:"Enable encryption for this field",value: "seal",description:"seal"},
+        {label:"Must have at least Editor access to use",value: "protected",description:"protected"}
+       
+        ]);
+
+
+        public function get securityOptions():ArrayList
+        {
+            return _securityOptions;
+        }
+
+        private var _inputProtected:Boolean;
+
+		public function get inputProtected():Boolean
+		{
+			return _inputProtected;
+		}
+
+		public function set inputProtected(value:Boolean):void
+		{
+			_inputProtected = value;
+		}
+
+		private var _inputSeal:Boolean;
+
+		public function get inputSeal():Boolean
+		{
+			return _inputSeal;
+		}
+
+		public function set inputSeal(value:Boolean):void
+		{
+			_inputSeal = value;
+		}
+
+
+		private var _inputSign:Boolean;
+
+		public function get inputSign():Boolean
+		{
+			return _inputSign;
+		}
+
+		public function set inputSign(value:Boolean):void
+		{
+			_inputSign = value;
+		}
+
+
+        private var _securityOptionsInput:String;
+
+		public function get securityOptionsInput():String
+		{
+			return _securityOptionsInput;
+		}
+
+		public function set securityOptionsInput(value:String):void
+		{
+			_securityOptionsInput = value;
+		}
+
         private var _listinputseparators:String = "comma semicolon newline";
         /**
          * <p>Domino:The types of separators that can be used between list elements when a user enters multiple values. See the %list.separators; entity for a list of available options. NMTOKENS are name tokens that enable a user to make multiple choices.</p>

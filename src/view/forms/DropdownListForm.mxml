@@ -13,7 +13,8 @@
 		<forms:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
 						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}" showTooltipFunction="{showTooltipFunction}"
-						change="onSelectionChange(event)"/>
+						change="onSelectionChange(event)"
+                        enabled="{bindableEnabled}"/>
     </s:FormItem>
 
     <fx:Script><![CDATA[
@@ -23,6 +24,9 @@
         import mx.events.FlexEvent;
         
         import spark.events.IndexChangeEvent;
+
+        [Bindable]
+        public var bindableEnabled:Boolean = true;
 
         [Bindable]
         public var includeCollection:IList;

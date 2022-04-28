@@ -78,7 +78,7 @@
 						}
 					}
 					txtValue.visible = txtValue.includeInLayout = true;
-					allowmul.bindableText = false;
+					//allowmul.selected = false;
 					txtValue.restrict="0-9";
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = true;
@@ -93,7 +93,7 @@
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					allowmul.bindableText = false;
+					//allowmul.selected = false;
 					txtValue.visible = txtValue.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -104,7 +104,7 @@
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
-					allowmul.bindableText = true;
+					//allowmul.selected = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -115,7 +115,7 @@
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
-					allowmul.bindableText = true;
+					//allowmul.bindableText = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = true;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -126,7 +126,7 @@
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = false;
-					allowmul.bindableText = false;
+					allowmul.selected = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = true;
@@ -137,7 +137,7 @@
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = false;
-					allowmul.bindableText = false;
+					allowmul.selected = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -157,7 +157,7 @@
 							editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
 						}
 					}
-					allowmul.bindableText = false;
+					allowmul.selected = false;
 					txtValue.restrict=null;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
@@ -169,7 +169,7 @@
 				
 				}else {
 					txtValue.visible = txtValue.includeInLayout = true;
-					allowmul.bindableText = false;
+					allowmul.selected = false;
 					txtValue.restrict=null;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
@@ -266,6 +266,24 @@
 				 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
 			}
 
+			private function allowMultipleValues_changeHandler(event:Event):void
+			{
+				//Alert.show(":"+this.keyformulachoices.selected);
+				if(this.allowmul.selected==true){
+					if(helpDescription.visible==true && helpDescription.includeInLayout==true){
+						fieldlistinput.enabled = true;
+						fieldlistdisplay.enabled = true;
+					}
+				
+				}else{
+					if(helpDescription.visible==true && helpDescription.includeInLayout==true){
+						fieldlistinput.enabled = false;
+						fieldlistdisplay.enabled = false;
+					}
+				}
+				 this.selectedItem["allowmultivalues"] = this.allowmul.selected;
+			}
+
 			 private function changeHideOption(event:Event):void
 			{
 				if(this.hideOption.selected){
@@ -278,7 +296,7 @@
 
 			private function changeHelpOption(event:Event):void
 			{
-				if(this.hideOption.selected){
+				if(this.helpDescriptionCheckBox.selected){
 					helpDescription.visible = helpDescription.includeInLayout = true;
 				}else{
 					helpDescription.visible = helpDescription.includeInLayout = false;
@@ -286,9 +304,7 @@
 			
 			}
 
-		
-
-
+	
        
 		]]>
 	</fx:Script>
@@ -509,8 +525,8 @@
               
 	 </s:VGroup> 
 	</s:BorderContainer>  
-<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
-
+<!-- <forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues"/> -->
+<s:CheckBox label="Allowmultiple value"   selected="{keywordsFlag}"  id="allowmul" change="allowMultipleValues_changeHandler(event)"/>				
 <s:FormItem label="Help Description" skinClass="skins.FormItemSkin">
         <s:CheckBox id="helpDescriptionCheckBox"
                     selected="false"

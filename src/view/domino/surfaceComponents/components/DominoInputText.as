@@ -2281,6 +2281,13 @@ package view.domino.surfaceComponents.components
                     delete xml.@keywords
                     delete xml.@keywordui
                 }
+                if(this.listdisplayseparator){
+                    xml.@listdisplayseparator=this.listdisplayseparator
+                }
+
+                if(this.listinputseparators){
+                    xml.@listinputseparators=this.listinputseparators
+                }
 
                 if(this.type=="names"){
                      if(this.choicesdialog){
@@ -2289,13 +2296,7 @@ package view.domino.surfaceComponents.components
                         xml.@choicesdialog="none"
                      }
 
-                     if(this.listdisplayseparator){
-                         xml.@listdisplayseparator=this.listdisplayseparator
-                     }
-
-                     if(this.listinputseparators){
-                         xml.@listinputseparators=this.listinputseparators
-                     }
+                     
                   
                 }else{
                      delete xml.@choicesdialog
@@ -2426,14 +2427,15 @@ package view.domino.surfaceComponents.components
                          this.choicesdialog=component.choicesdialog
                      }
 
-                      if(component.listinputseparators){
-                          this.listinputseparators=component.listinputseparators;
-                      }
-
-                      if(component.listdisplayseparator){
-                          this.listdisplayseparator=component.listdisplayseparator;
-                      }
+                     
                  }
+                if(component.listinputseparators){
+                    this.listinputseparators=component.listinputseparators;
+                }
+
+                if(component.listdisplayseparator){
+                    this.listdisplayseparator=component.listdisplayseparator;
+                }
 
                  if(this.type =="richtextlite"){
                      if(component.onlyallow){
@@ -2469,6 +2471,12 @@ package view.domino.surfaceComponents.components
             component.keyformulachoices=this.keyformulachoices;
             if(this.formula){
                 component.formula= this.formula;
+            }
+            if(this.listdisplayseparator){
+                component.listdisplayseparator= this.listdisplayseparator;
+            }
+            if(this.listinputseparators){
+                component.listinputseparators = this.listinputseparators;
             }
            //Alert.show("formula:"+formula);
 

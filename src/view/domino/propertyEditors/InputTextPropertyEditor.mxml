@@ -82,7 +82,9 @@
 					txtValue.restrict="0-9";
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = true;
-					allowmul.visible = allowmul.includeInLayout = false;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -91,7 +93,10 @@
 					txtValue.restrict=null
 					datePanel.visible = datePanel.includeInLayout = true;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = false;
+					//allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					//allowmul.selected = false;
 					txtValue.visible = txtValue.includeInLayout = true;
@@ -103,8 +108,8 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = true;
-					//allowmul.selected = true;
+					//allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -114,8 +119,9 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = true;
-					//allowmul.bindableText = true;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = true;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -125,8 +131,9 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = false;
-					allowmul.selected = false;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = true;
@@ -136,8 +143,9 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = false;
-					allowmul.selected = false;
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -157,7 +165,10 @@
 							editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
 						}
 					}
-					allowmul.selected = false;
+					
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					txtValue.restrict=null;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
@@ -167,6 +178,30 @@
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 					//Alert.show("142:"+formualPanel.visible);
 				
+				}else if(item.label=="authors"){
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
+				}else if(item.label=="password"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="readers"){
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
+				}else if(item.label=="timezone"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="color"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="richtext"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
 				}else {
 					txtValue.visible = txtValue.includeInLayout = true;
 					allowmul.selected = false;
@@ -187,10 +222,23 @@
 
 			private function getDominoFieldKeyWordUISytle(item:Object):String
 			{
+				allowmul.visible = allowmul.includeInLayout = true;
 				if(item.label=="radiobutton"){
-					allowmul.visible = allowmul.includeInLayout = false;
-				}else{
-					allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.enabled = false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="combobox") {
+					allowmul.enabled = false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.enabled=="checkbox") {
+					allowmul.enabled = false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else  {
+					allowmul.enabled = true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 				}
 				return item.label;
 			}

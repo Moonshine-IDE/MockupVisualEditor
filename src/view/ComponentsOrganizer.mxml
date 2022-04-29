@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="view.*"
+		 xmlns:view="view.*"
 		 xmlns:suportClasses="view.suportClasses.*" gap="0"
 		 creationComplete="onComplete(event)" initialize="onInitialized()">
 	<fx:Metadata>
@@ -327,7 +327,6 @@
 		private function updateTreeByComponentChanges(change:PropertyChangeReference):void
 		{
 			var organizerItem:OrganizerItem;
-			var existingItem:OrganizerItem = tree.selectedItem as OrganizerItem;
 
 			findItemInDepth(components.source, change.fieldClass as IVisualElement);
 			this.callLater(function ():void
@@ -496,8 +495,6 @@
 			var tmpFoundItemInDepth:OrganizerItem = (tree.selectedItem && tree.selectedItem.item == item) ? tree.selectedItem as OrganizerItem : null;
 
 			var lastScrollPosition:Number = tree.verticalScrollPosition;
-			var lastSelectedItem:Object = tree.selectedItem;
-			var lastSelectedIndex:int = tree.selectedIndex;
 			var openItems:Object = tree.openItems;
 
 			tree.openItems = openItems;

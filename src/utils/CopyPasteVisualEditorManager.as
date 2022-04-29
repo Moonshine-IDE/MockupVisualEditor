@@ -101,6 +101,7 @@ package utils
 
         private function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
         {
+
             var name:String = itemXML.name();
             if(!(name in EditingSurfaceReader.classLookup))
             {
@@ -112,7 +113,7 @@ package utils
             {
                 throw new Error("Failed to create surface component: " + name);
             }
-            item.fromXML(itemXML, itemFromXML);
+            item.fromXML(itemXML, itemFromXML, null, null);
             parent.addElement(IVisualElement(item));
             this.visualEditor.editingSurface.addItem(item);
 			

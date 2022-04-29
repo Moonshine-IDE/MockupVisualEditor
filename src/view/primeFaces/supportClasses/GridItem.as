@@ -2,6 +2,7 @@ package view.primeFaces.supportClasses
 {
     import interfaces.IComponent;
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import mx.containers.GridItem;
 
@@ -14,7 +15,7 @@ package view.primeFaces.supportClasses
 			super();
 		}
 		
-		public function fromXML(xml:XML, childFromXMLCallback:Function, lookup:ILookup = null):void
+		public function fromXML(xml:XML, childFromXMLCallback:Function, surface:ISurface, lookup:ILookup):void
 		{
 			
 		}

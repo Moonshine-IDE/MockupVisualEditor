@@ -3,6 +3,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import mx.collections.ArrayList;
     import mx.events.CollectionEvent;
@@ -12,8 +13,7 @@ package view.primeFaces.surfaceComponents.components
     
     import data.DataProviderListItem;
     import data.OrganizerItem;
-    
-    import utils.MxmlCodeUtils;
+
     import utils.XMLCodeUtils;
 
     import view.interfaces.ICDATAInformation;
@@ -507,14 +507,16 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+			var localSurface:ISurface = surface;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 			
-			this.component.fromXML(xml, callback, lookup);
+			this.component.fromXML(xml, callback, localSurface, lookup);
 			
             this.value = component.value;
             this.fieldVar = component.fieldVar;

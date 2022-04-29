@@ -9,6 +9,8 @@ package view.primeFaces.surfaceComponents.components
     import flash.net.registerClassAlias;
 
 	import interfaces.ILookup;
+	import interfaces.ISurface;
+	import interfaces.ISurface;
 
 	import interfaces.components.ISelectOneListbox;
 
@@ -381,8 +383,10 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 		
-		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+		public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+			var localSurface:ISurface = surface;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
@@ -390,7 +394,7 @@ package view.primeFaces.surfaceComponents.components
 
 			this.dataProvider.removeAll();
 			
-			component.fromXML(xml, callback, lookup);
+			component.fromXML(xml, callback, localSurface, lookup);
 			
 			this.value = component.value;
         }

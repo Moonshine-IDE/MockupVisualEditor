@@ -23,6 +23,7 @@ package view.flex.surfaceComponents.components
     import flash.events.Event;
 
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import mx.collections.ArrayList;
     import mx.events.CollectionEvent;
@@ -116,7 +117,7 @@ package view.flex.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
             this.x = xml.@x;
             this.y = xml.@y;

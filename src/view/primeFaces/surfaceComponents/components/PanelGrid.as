@@ -4,6 +4,7 @@ package view.primeFaces.surfaceComponents.components
 
     import interfaces.IComponentSizeOutput;
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import mx.containers.GridItem;
     import mx.containers.GridRow;
@@ -517,8 +518,10 @@ package view.primeFaces.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+			var localSurface:ISurface = surface;
+
 			this.internalLookup = lookup;
 
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -526,7 +529,7 @@ package view.primeFaces.surfaceComponents.components
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 			
-			component.fromXML(xml, callback, lookup);
+			component.fromXML(xml, callback, localSurface, lookup);
 					
 			this.thisCallbackXML = component.callbackXML;
 			this.bodyRowsXML = component.bodyRowsXML;
@@ -881,6 +884,8 @@ package view.primeFaces.surfaceComponents.components
 
         private function createChildrenFromXML():void
         {
+			var localSurface:ISurface = null;
+
             if (!bodyRowsXML && thisCallbackXML == null) return;
 
             var bodyRowCount:int = this.body.numElements;
@@ -911,7 +916,7 @@ package view.primeFaces.surfaceComponents.components
                                 delete divXML.@percentHeight;
                             }
 
-                            container.fromXML(divXML, thisCallbackXML, this.internalLookup);
+                            container.fromXML(divXML, thisCallbackXML, localSurface, this.internalLookup);
                         }
                     }
                     else

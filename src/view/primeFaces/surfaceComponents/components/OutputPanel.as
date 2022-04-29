@@ -4,6 +4,7 @@ package view.primeFaces.surfaceComponents.components
 
     import interfaces.IComponentSizeOutput;
     import interfaces.ILookup;
+    import interfaces.ISurface;
 
     import utils.MxmlCodeUtils;
     import utils.XMLCodeUtils;
@@ -319,8 +320,10 @@ package view.primeFaces.surfaceComponents.components
         {
             return null;
         }
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+            var localSurface:ISurface = surface;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             var elementsXML:XMLList = xml.elements();
@@ -328,7 +331,7 @@ package view.primeFaces.surfaceComponents.components
             for(var i:int = 0; i < childCount; i++)
             {
                 var childXML:XML = elementsXML[i];
-                callback(this, lookup, childXML);
+                callback(this, lookup, childXML, localSurface);
             }
         }
 

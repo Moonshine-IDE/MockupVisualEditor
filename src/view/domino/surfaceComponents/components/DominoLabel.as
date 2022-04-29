@@ -24,6 +24,7 @@ package view.domino.surfaceComponents.components
     import interfaces.IComponentSizeOutput;
     import interfaces.ILookup;
     import interfaces.IRoyaleComponentConverter;
+    import interfaces.ISurface;
 
     import spark.components.Label;
     import spark.layouts.VerticalAlign;
@@ -780,11 +781,13 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+            var localSurface:ISurface = surface;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
            
-			component.fromXML(xml, callback, lookup);
+			component.fromXML(xml, callback, localSurface,lookup);
            
             this.text = component.text;
             this.color = component.color;

@@ -2,6 +2,7 @@ package view.primeFaces.surfaceComponents.components
 {
     import interfaces.IComponentPercentSizeOutput;
     import interfaces.ILookup;
+    import interfaces.ISurface;
 
     import view.interfaces.INonDeletableSurfaceComponent;
 
@@ -94,9 +95,11 @@ package view.primeFaces.surfaceComponents.components
             super.percentWidth = value;
         }
 
-        override public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        override public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
-            super.fromXML(xml, callback, lookup);
+            var localSurface:ISurface = surface;
+
+            super.fromXML(xml, callback, localSurface, lookup);
 
             contentChanged = true;
             this.invalidateDisplayList();

@@ -3,6 +3,7 @@ package view.flex.surfaceComponents.components
     import flash.events.Event;
 
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import spark.components.Panel;
     
@@ -93,8 +94,10 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+		public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
 		{
+			var localSurface:ISurface = surface;
+
 			this.x = xml.@x;
 			this.y = xml.@y;
 			this.width = xml.@width;
@@ -105,7 +108,7 @@ package view.flex.surfaceComponents.components
 			for(var i:int = 0; i < childCount; i++)
 			{
 				var childXML:XML = elementsXML[i];
-				callback(this, childXML);
+				callback(this, lookup, childXML, localSurface);
 			}
 		}
 

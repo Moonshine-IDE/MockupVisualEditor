@@ -24,8 +24,9 @@ package view.domino.surfaceComponents.components
         import interfaces.IComponentSizeOutput;
     import interfaces.ILookup;
     import interfaces.IRoyaleComponentConverter;
+    import interfaces.ISurface;
 
-        import mx.effects.AnimateProperty;
+    import mx.effects.AnimateProperty;
         import mx.events.EffectEvent;
         import mx.events.FlexEvent;
         import mx.core.IVisualElement;
@@ -870,8 +871,10 @@ package view.domino.surfaceComponents.components
                 return this.internalToXML();
             }
 
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+            var localSurface:ISurface = surface;
+
             //Alert.show("xml:"+xml);
             if(xml.@title)
             super.title = xml.@title;
@@ -890,7 +893,7 @@ package view.domino.surfaceComponents.components
             for(var i:int = 0; i < childCount; i++)
             {
                 var childXML:XML = elementsXML[i];
-                callback(this, lookup, childXML);
+                callback(this, lookup, childXML, localSurface);
             }
 
         }

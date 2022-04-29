@@ -26,6 +26,7 @@ package view.domino.surfaceComponents.components
     import interfaces.ILookup;
 
     import interfaces.IRoyaleComponentConverter;
+    import interfaces.ISurface;
 
     import mx.collections.ArrayList;
 
@@ -574,14 +575,16 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
-        public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+            var localSurface:ISurface = surface;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-			this.component.fromXML(xml, callback, lookup);
+			this.component.fromXML(xml, callback, localSurface, lookup);
 
             this.pattern = component.pattern;
 

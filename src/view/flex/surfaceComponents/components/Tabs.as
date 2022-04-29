@@ -1,6 +1,7 @@
 package view.flex.surfaceComponents.components
 {
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
@@ -175,8 +176,10 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+		public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
 		{
+			var localSurface:ISurface = surface;
+
 			this.dataProvider.removeAll();
 			this.x = xml.@x;
 			this.y = xml.@y;
@@ -190,19 +193,21 @@ package view.flex.surfaceComponents.components
 				var label:String = tabXML.@text;
 				this._dataProvider.addItem(new DataProviderListItem(label));
 				var tab:NavigatorContent = NavigatorContent(this._stack.getItemAt(this._dataProvider.length - 1));
-				this.tabFromXML(tab, tabXML, callback, lookup);
+				this.tabFromXML(tab, tabXML, callback, lookup, localSurface);
 			}
 			this.selectedIndex = xml.@selectedIndex;
 		}
 
-		public function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function, lookup:ILookup):void
+		public function tabFromXML(tab:NavigatorContent, xml:XML, callback:Function, lookup:ILookup, surface:ISurface):void
 		{
+			var localSurface:ISurface = surface;
+
 			var elementsXML:XMLList = xml.elements();
 			var childCount:int = elementsXML.length();
 			for(var i:int = 0; i < childCount; i++)
 			{
 				var childXML:XML = elementsXML[i];
-				callback(tab, lookup, childXML);
+				callback(tab, lookup, childXML, localSurface);
 			}
 		}
 

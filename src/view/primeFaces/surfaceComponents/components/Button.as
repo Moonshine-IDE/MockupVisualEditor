@@ -5,6 +5,7 @@ package view.primeFaces.surfaceComponents.components
     import flash.events.Event;
 
 	import interfaces.ILookup;
+	import interfaces.ISurface;
 
 	import interfaces.components.IButton;
 
@@ -370,14 +371,16 @@ package view.primeFaces.surfaceComponents.components
 			return xml;
 		}
 
-        public function fromXML(xml:XML, childFromXMLCallback:Function, lookup:ILookup = null):void
+        public function fromXML(xml:XML, childFromXMLCallback:Function, surface:ISurface, lookup:ILookup):void
         {
+			var localSurface:ISurface = surface;
+
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
 
-            component.fromXML(xml, childFromXMLCallback, lookup);
+            component.fromXML(xml, childFromXMLCallback, localSurface, lookup);
 
             this.enabled = component.enabled;
 			this.isCommandButton = component.isCommandButton;

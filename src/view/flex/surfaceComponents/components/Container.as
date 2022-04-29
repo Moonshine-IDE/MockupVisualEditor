@@ -21,6 +21,8 @@ package view.flex.surfaceComponents.components
 	import flash.utils.Dictionary;
 
 	import interfaces.ILookup;
+	import interfaces.ISurface;
+	import interfaces.ISurface;
 
 	import mx.collections.ArrayList;
 	import mx.events.FlexEvent;
@@ -235,8 +237,10 @@ package view.flex.surfaceComponents.components
 			return xml;
 		}
 
-		public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+		public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
 		{
+			var localSurface:ISurface = surface;
+
 			this.x = xml.@x;
 			this.y = xml.@y;
 			this.width = xml.@width;
@@ -250,7 +254,7 @@ package view.flex.surfaceComponents.components
 			for(var i:int = 0; i < childCount; i++)
 			{
 				var childXML:XML = elementsXML[i];
-				callback(this, lookup, childXML);
+				callback(this, lookup, childXML, localSurface);
 			}
 		}
 

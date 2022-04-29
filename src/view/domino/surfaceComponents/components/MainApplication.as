@@ -23,6 +23,7 @@ package view.domino.surfaceComponents.components
 
     import interfaces.IComponentPercentSizeOutput;
     import interfaces.ILookup;
+    import interfaces.ISurface;
 
     import view.interfaces.IMainApplication;
     import view.interfaces.INonDeletableSurfaceComponent;
@@ -413,8 +414,10 @@ package view.domino.surfaceComponents.components
             return mainXML;
         }
 
-        override public function fromXML(xml:XML, callback:Function, lookup:ILookup = null):void
+        override public function fromXML(xml:XML, callback:Function, surface:ISurface, lookup:ILookup):void
         {
+            var localSurface:ISurface = surface;
+
             if(xml.@title){
                 this.title = xml.@title
             }
@@ -430,7 +433,7 @@ package view.domino.surfaceComponents.components
             if(xml.@windowsTitle){
                 this.windowsTitle= StringHelper.base64Decode(xml.@windowsTitle);
             }
-            super.fromXML(xml, callback, lookup);
+            super.fromXML(xml, callback, localSurface, lookup);
 
             contentChanged = true;
             this.invalidateDisplayList();

@@ -43,7 +43,19 @@
 						hidePanel.visible = hidePanel.includeInLayout = false;
 					 }
 				 }
+				if(this.selectedItem["allowmultivalues"]){
+					 this.allowmul.selected=true;
+					 this.helpDescriptionCheckBox.selected=true;
+					 helpDescription.visible = helpDescription.includeInLayout = true;
+				 }else{
+					 this.allowmul.selected=false;
+					 this.helpDescriptionCheckBox.selected=false;
+					 helpDescription.visible = helpDescription.includeInLayout = false;
+				 }
 
+
+	
+				
 				
 			}
 
@@ -233,6 +245,7 @@
 					fieldlistdisplay.enabled = false;
 				}else if(item.enabled=="checkbox") {
 					allowmul.enabled = false;
+					allowmul.selected=true;
 					fieldlistinput.enabled = false;
 					fieldlistdisplay.enabled = false;
 				}else  {
@@ -574,7 +587,12 @@
 	 </s:VGroup> 
 	</s:BorderContainer>  
 <!-- <forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues"/> -->
-<s:CheckBox label="Allowmultiple value"   selected="{keywordsFlag}"  id="allowmul" change="allowMultipleValues_changeHandler(event)"/>				
+			
+<s:FormItem label="Allow multiple values" skinClass="skins.FormItemSkin">
+        <s:CheckBox selected="{keywordsFlag}"  id="allowmul" change="allowMultipleValues_changeHandler(event)"/>
+</s:FormItem>
+
+
 <s:FormItem label="Help Description" skinClass="skins.FormItemSkin">
         <s:CheckBox id="helpDescriptionCheckBox"
                     selected="false"

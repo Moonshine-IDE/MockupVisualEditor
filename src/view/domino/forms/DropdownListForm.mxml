@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm
+        xmlns:fx="http://ns.adobe.com/mxml/2009"
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:suportclasses="view.suportClasses.*"
+        creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin" xmlns:forms="view.forms.*">
+
+    <suportclasses:layout>
+        <s:FormLayout />
+    </suportclasses:layout>
+
+    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
+		<forms:CustomDropDownList id="ddlSelection"
+						requireSelection="true" width="100%"
+						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}" showTooltipFunction="{showTooltipFunction}"
+						change="onSelectionChange(event)"
+                        enabled="{bindableEnabled}"
+                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+    </s:FormItem>
+
+    <fx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.collections.IList;
+        import mx.events.FlexEvent;
+        
+        import spark.events.IndexChangeEvent;
+
+        [Bindable]
+        public var bindableEnabled:Boolean = true;
+
+        [Bindable]
+        public var includeCollection:IList;
+        [Bindable]
+        public var labelDisplayFunction:Function;
+        [Bindable]
+        public var showTooltipFunction:Function;
+
+        public var listItemRenderer:Class;
+
+        private var _bindingCollection:ChangeWatcher;
+        private var _bindingSurfaceProperty:ChangeWatcher;
+        private var _labelField:String;
+        private var _valueField:String;
+
+        public function set labelField(value:String):void
+        {
+            _labelField = value;
+        }
+
+        public function set valueField(value:String):void
+        {
+            _valueField = value;
+        }
+
+        private var _label:String = "Text";
+
+        [Bindable("labelChange")]
+        public function get label():String
+        {
+            return this._label;
+        }
+
+        public function set label(value:String):void
+        {
+            if (this._label === value)
+            {
+                return;
+            }
+            this._label = value;
+            this.dispatchEvent(new Event("labelChange"));
+        }
+
+        private var _textProperty:String = "text";
+
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+        }
+
+        private var _collectionHost:*;
+        public function set collectionHost(value:*):void
+        {
+            _collectionHost = value;
+            updateBinding();
+        }
+
+        private var _collectionProperty:String;
+        public function set collectionProperty(value:String):void
+        {
+            _collectionProperty = value;
+        }
+
+        protected function onCreationCompletes(event:FlexEvent):void
+        {
+            if (listItemRenderer) ddlSelection.itemRenderer = new ClassFactory(listItemRenderer);
+
+            if (_labelField)
+            {
+                ddlSelection.labelField = _labelField;
+            }
+
+            ddlSelection.callLater(selectCurrentItem);
+
+            updateBinding();
+        }
+
+        private function selectCurrentItem():void
+        {
+            if (includeCollection && selectedItem[_textProperty] && _labelField)
+            {
+                var dpCount:int = ddlSelection.dataProvider.length;
+                for (var i:int = 0; i < dpCount; i++)
+                {
+                    var item:Object = ddlSelection.dataProvider.getItemAt(i);
+                    if (item[_labelField] == selectedItem[_textProperty])
+                    {
+                        ddlSelection.selectedItem = item;
+                        break;
+                    }
+                }
+            }
+            else if (selectedItem[_textProperty])
+            {
+                ddlSelection.selectedItem = selectedItem[_textProperty];
+            }
+
+            if (ddlSelection.selectedItem)
+            {
+                ddlSelection.callLater(onSelectionChange, [null]);
+            }
+        }
+
+        protected function onSelectionChange(event:IndexChangeEvent):void
+        {
+            if(this.selectedItem && ddlSelection.selectedItem){
+                if(_valueField){
+                    if(ddlSelection.selectedItem[_valueField]){
+                        this.selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
+                    }
+                }else if (_labelField)
+                {
+                    if(ddlSelection.selectedItem[_labelField]){
+                        this.selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+                    }
+                
+                }
+                else
+                {
+                    this.selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
+                }
+            }
+        }
+
+        private function updateBinding():void
+        {
+            _collectionHost ||= selectedItem;
+            if (!_collectionProperty || !(_collectionProperty in _collectionHost)) return;
+
+            if (this._bindingCollection)
+            {
+                this._bindingCollection.unwatch();
+                this._bindingSurfaceProperty.unwatch();
+                this._bindingCollection = null;
+                this._bindingSurfaceProperty = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._bindingCollection = BindingUtils.bindProperty(this, "includeCollection", _collectionHost, _collectionProperty, false, true);
+            this._bindingSurfaceProperty = BindingUtils.bindSetter(onPropertyUpdated, selectedItem, _textProperty, false, true);
+        }
+
+        private function onPropertyUpdated(value:Object):void
+        {
+            if (ddlSelection.selectedItem && selectedItem)
+            {
+                var previousValue:String = _labelField ? ddlSelection.selectedItem[_labelField].toString() : ddlSelection.selectedItem.toString();
+                if (previousValue != selectedItem[_textProperty]) selectCurrentItem();
+            }
+        }
+
+
+        public function getDdlSelectionSelectedItemText():String
+        {
+            return selectedItem[_textProperty] ;
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

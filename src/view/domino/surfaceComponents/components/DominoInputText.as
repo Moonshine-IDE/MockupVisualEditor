@@ -1800,12 +1800,12 @@ package view.domino.surfaceComponents.components
          */
          [Bindable]
         private var _separators:ArrayList = new ArrayList([
-        {label:"space",value: "space",description: "space"},
-        {label:"comma",value: "comma",description:"comma."},
-        {label:"semicolon",value: "semicolon",description:"semicolon"},
-        {label:"newline",value: "newline",description:"newline"},
-        {label:"blankline",value: "blankline",description:"blankline"},
-        {label:"none",value: "none",description:"none"}
+        {label:"space",value: "space",description: "space","selected": false},
+        {label:"comma",value: "comma",description:"comma","selected": false},
+        {label:"semicolon",value: "semicolon",description:"semicolon","selected": false},
+        {label:"newline",value: "newline",description:"newline","selected": false},
+        {label:"blankline",value: "blankline",description:"blankline","selected": false},
+        {label:"none",value: "none",description:"none","selected": false}
         ]);
 
          public function get separators():ArrayList

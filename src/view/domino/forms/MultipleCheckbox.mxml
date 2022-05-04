@@ -31,6 +31,9 @@
         [Bindable]
         public var optionExculdeFunction:Function;
 
+        [Bindable]
+        public var dynamicLabel:String="false";
+
         public var listItemRenderer:Class;
 
         private var _bindingCollection:ChangeWatcher;
@@ -102,6 +105,11 @@
            
             updateBinding();
            // initializeMultiSelect();
+           if(selectedItem[_textProperty]!=null && selectedItem[_textProperty].length>0){
+               if(dynamicLabel==="true"){
+                    testPopUp.label=selectedItem[_textProperty];
+               }
+           }
             
         }
         
@@ -207,6 +215,9 @@
                     str = str+_selectItemList.getItemAt(k).toString() + " ";
                 }
                 selectedItem[_textProperty] = str;
+                if(dynamicLabel==="true"){
+                    testPopUp.label=str;
+                }
             }
             // else if (selectedItem[_textProperty])
             // {

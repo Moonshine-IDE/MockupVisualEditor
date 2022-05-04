@@ -607,17 +607,11 @@
 	<domino:HelpDescription label="Help Description" textProperty="helpDescription" />	   
 	<domino:HelpDescription label="Field Hint" textProperty="fieldHint" />	
 	<s:Label text="Multi-Value Options"/>
-	<forms:DropdownListForm id="fieldlistinput"
-                            label="Separate values when user enters" textProperty="listinputseparators"
-                            collectionProperty="separators" labelField="label" valueField="value"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/> 
-
-	<forms:DropdownListForm id="fieldlistdisplay"
-                            label="Display separate values with :" textProperty="listdisplayseparator"
-                            collectionProperty="separators" labelField="label" valueField="value"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						
+	<s:Label text="Separate values when user enters"/>
+	<domino:MultipleCheckbox id="fieldlistinput" label=""  dynamicLabel="true" collectionProperty="separators" textProperty="listinputseparators"/>
+	<s:Label text="Display separate values with :"/>
+	<domino:MultipleCheckbox id="fieldlistdisplay" label="" dynamicLabel="true" collectionProperty="separators" textProperty="listdisplayseparator"/>		
+				
 	<s:Label text="Security Options"/>
 	<forms:DropdownListForm id="securityOptionsList"
                             label="Display separate values with :" textProperty="securityOptionsInput"

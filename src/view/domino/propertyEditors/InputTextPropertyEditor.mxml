@@ -359,6 +359,13 @@
 			{
 				if(this.helpDescriptionCheckBox.selected){
 					helpDescription.visible = helpDescription.includeInLayout = true;
+					if(allowmul.selected==false){
+						fieldlistinput.enabled = false;
+						fieldlistdisplay.enabled = false;
+					}else{
+						fieldlistinput.enabled = true;
+						fieldlistdisplay.enabled = true;
+					}
 				}else{
 					helpDescription.visible = helpDescription.includeInLayout = false;
 				}

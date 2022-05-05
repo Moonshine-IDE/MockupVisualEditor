@@ -2334,6 +2334,10 @@ package view.domino.surfaceComponents.components
 				xml.@maxlength = this.maxLength;
 			}
 
+            //help description
+            xml.@fieldHint = this.fieldHint;
+            xml.@helpDescription = this.helpDescription;
+
             return xml;
         }
 
@@ -2363,7 +2367,8 @@ package view.domino.surfaceComponents.components
             this.recalonchange = component.recalonchange;
            
             this.keyformulachoices = component.keyformulachoices;
-            
+            this.helpDescription = component.helpDescription;
+            this.fieldHint = component.fieldHint;
             if(component.formula){
                 
                this.formula=  StringHelper.base64Decode(component.formula);
@@ -2472,6 +2477,8 @@ package view.domino.surfaceComponents.components
             component.hide = this.hide;
             component.keywordsformula=this.keywordsformula;
             component.keyformulachoices=this.keyformulachoices;
+            component.helpDescription = this.helpDescription;
+            component.fieldHint = this.fieldHint;
             if(this.formula){
                 component.formula= this.formula;
             }

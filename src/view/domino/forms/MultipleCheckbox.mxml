@@ -288,7 +288,7 @@
            <mx:PopUpButton id="testPopUp"
                 width="150" label="{label}" >
                 <mx:popUp>
-                    <mx:VBox width="150" backgroundColor="0xffffff">
+                    <mx:VBox width="150" backgroundColor="0xffffff" borderStyle="solid" borderColor="0x000000">
                         <mx:List id="multCheckList"
                                 dataProvider="{includeCollection}"
                                 height="{includeCollection.length * 25}"
@@ -321,7 +321,8 @@
                             </mx:itemRenderer>
                         </mx:List>
                         <mx:Button label="Close"
-                                click="closeButtonClickHandler(event)"/>
+                                click="closeButtonClickHandler(event)" paddingBottom="5"
+    paddingLeft="5"/>
                     </mx:VBox>
                 </mx:popUp>
             </mx:PopUpButton> 

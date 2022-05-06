@@ -219,13 +219,13 @@
     <forms:TextForm label="Value" textProperty="text"/>
 	<forms:TextForm label="Size" textProperty="size"
 					restrict="0-9"/>
-    	<forms:DropdownListForm id="ddl"
+	<forms:DropdownListForm id="ddl"
                             label="Color" textProperty="color"
                             collectionProperty="colors" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 		
-		<domino:MultipleCheckbox label="Style:" 
+	<domino:MultipleCheckbox label="Style:" 
 		optionExculdeFunction="excludeMultipleSelect"
 		collectionProperty="fontStyles" textProperty="fontStyle"/>	
 

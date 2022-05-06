@@ -214,7 +214,8 @@ package view.domino.surfaceComponents.components
                 "recalonchangeChanged",
                 "keyformulachoicesChanged",
                 "keyformulavalueAttributeChanged",
-                "keywordsformulaChanged"
+                "keywordsformulaChanged",
+                "securityOptionsInputAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -1793,7 +1794,55 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("choicesdialogAttributeChanged"))
             }
         }
+              [Bindable]
+        private var _colors:ArrayList = new ArrayList([
+        {label: "aqua",description: "aqua color.",htmlcolor:"#00FFFF"},
+        {label: "black",description:"",htmlcolor:"#000000"},
+        {label: "blue",description:"",htmlcolor:"#0000FF"}, 
+        {label: "fuchsia",description:"",htmlcolor:"#FF00FF"},
+        {label: "gray",description:"",htmlcolor:"#808080"},
+        {label: "green",description:"",htmlcolor:"#008000"},
+        {label: "lime",description:"",htmlcolor:"#00FF00"},
+        {label: "maroon",description:"",htmlcolor:"#800000"},
+        {label: "navy",description:"",htmlcolor:"#000080"},
+        {label: "olive",description:"",htmlcolor:"#808000"},
+        {label: "purple",description:"",htmlcolor:"#800080"},
+        {label: "red",description:"",htmlcolor:"#FF0000"},
+        {label: "silver",description:"",htmlcolor:"#C0C0C0"},
+        {label: "teal",description:"",htmlcolor:"#008080"},
+        {label: "white",description:"",htmlcolor:"#ffffff"},
+        {label: "yellow",description:"",htmlcolor:"#FFFF00"},
+        {label: "none",description:"",htmlcolor:"#000000"},
+        {label: "system",description:"A preset color. For instance, the font color of a hotspot link is 'system' because it is determined by the %link.color.attrs; property settings for a form.",
+        htmlcolor:"#4B0082"}
+        ]);
 
+        public function get colors():ArrayList
+        {
+            return _colors;
+        }
+
+         //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
+        [Bindable]
+        private var _fontStyles:ArrayList = new ArrayList([
+              {label: "normal",description: "normal",value:"normal",enabled:true},
+              {label: "bold",description: "bold",value:"bold",enabled:true},
+              {label: "italic",description: "italic",value:"italic",enabled:true},
+              {label: "underline",description: "underline",value:"underline",enabled:true},
+              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true},
+              {label: "superscript",description: "superscript",value:"superscript",enabled:true},
+              {label: "shadow",description: "shadow",value:"shadow",enabled:true},
+              {label: "emboss",description: "emboss",value:"emboss",enabled:true},
+              {label: "extrude",description: "extrude",value:"extrude",enabled:true},
+              {label: "subscript",description: "subscript",value:"subscript",enabled:true},
+              
+        ])
+
+
+        public function get fontStyles():ArrayList
+        {
+            return _fontStyles;
+        }
 
         /**
          * <!ENTITY % list.separators "space | comma | semicolon | newline | blankline | none">
@@ -1804,8 +1853,7 @@ package view.domino.surfaceComponents.components
         {label:"comma",value: "comma",description:"comma","selected": false},
         {label:"semicolon",value: "semicolon",description:"semicolon","selected": false},
         {label:"newline",value: "newline",description:"newline","selected": false},
-        {label:"blankline",value: "blankline",description:"blankline","selected": false},
-        {label:"none",value: "none",description:"none","selected": false}
+        {label:"blankline",value: "blankline",description:"blankline","selected": false}
         ]);
 
          public function get separators():ArrayList
@@ -1816,9 +1864,9 @@ package view.domino.surfaceComponents.components
 
          [Bindable]
         private var _securityOptions:ArrayList = new ArrayList([
-        {label:"Sign if mailed or saved in section",value: "sign",description: "sign"},
-        {label:"Enable encryption for this field",value: "seal",description:"seal"},
-        {label:"Must have at least Editor access to use",value: "protected",description:"protected"}
+        {label:"Sign if mailed or saved in section",value: "sign",description: "sign","selected":true},
+        {label:"Enable encryption for this field",value: "seal",description:"seal","selected":false},
+        {label:"Must have at least Editor access to use",value: "protected",description:"protected","selected":true}
        
         ]);
 
@@ -1865,7 +1913,7 @@ package view.domino.surfaceComponents.components
 			_inputSign = value;
 		}
 
-
+        [Bindable(event="securityOptionsInputAttributeChanged")]
         private var _securityOptionsInput:String;
 
 		public function get securityOptionsInput():String
@@ -1875,7 +1923,14 @@ package view.domino.surfaceComponents.components
 
 		public function set securityOptionsInput(value:String):void
 		{
-			_securityOptionsInput = value;
+			if (_keyformulavalue != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "securityOptionsInput", _securityOptionsInput, value);
+				
+                _securityOptionsInput = value;
+                dispatchEvent(new Event("securityOptionsInputAttributeChanged"))
+            }
+           
 		}
 
         private var _listinputseparators:String = "comma semicolon newline";
@@ -2130,6 +2185,56 @@ package view.domino.surfaceComponents.components
 		}
 
 
+        	//---------font /size  /color--------------------------------------------------------
+		private var _size:String;
+
+		public function get size():String
+		{
+			return _size;
+		}
+
+		public function set size(value:String):void
+		{
+			_size = value;
+		}
+
+		private var _color:String;
+
+		public function get color():String
+		{
+			return _color;
+		}
+
+		public function set color(value:String):void
+		{
+			_color = value;
+		}
+
+		private var _fontStyle:String;
+
+		public function get fontStyle():String
+		{
+			return _fontStyle;
+		}
+
+		public function set fontStyle(value:String):void
+		{
+			_fontStyle = value;
+		}
+
+		private var _fontName:String;
+
+		public function get fontName():String
+		{
+			return _fontName;
+		}
+
+		public function set fontName(value:String):void
+		{
+			_fontName = value;
+		}
+
+
         public function toXML():XML
         {
             
@@ -2148,7 +2253,7 @@ package view.domino.surfaceComponents.components
             xml.@recalonchange=this.recalonchange.toString();
             xml.@recalcchoices=this.recalcchoices.toString();
             xml.@keyformulachoices=this.keyformulachoices.toString();
-
+            xml.@securityOptionsInput = this.securityOptionsInput;
 
            
             xml.@numberColumns = this.numberColumns;
@@ -2365,7 +2470,7 @@ package view.domino.surfaceComponents.components
             this.object = component.object;
             this.recalcchoices = component.recalcchoices;
             this.recalonchange = component.recalonchange;
-           
+            this.securityOptionsInput = component.securityOptionsInput;
             this.keyformulachoices = component.keyformulachoices;
             this.helpDescription = component.helpDescription;
             this.fieldHint = component.fieldHint;
@@ -2479,6 +2584,7 @@ package view.domino.surfaceComponents.components
             component.keyformulachoices=this.keyformulachoices;
             component.helpDescription = this.helpDescription;
             component.fieldHint = this.fieldHint;
+            component.securityOptionsInput= this.securityOptionsInput;
             if(this.formula){
                 component.formula= this.formula;
             }

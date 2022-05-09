@@ -4,11 +4,9 @@
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
         creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin" xmlns:forms="view.forms.*">
-
     <suportclasses:layout>
         <s:FormLayout />
     </suportclasses:layout>
-
     <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
 		<forms:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"

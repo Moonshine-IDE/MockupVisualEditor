@@ -192,15 +192,15 @@
                           if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
                                   var existing:Boolean = false;
                                   for (var j:int = 0; j < _selectItemList.length; j++){
-                                      if(_selectItemList.getItemAt(j).toString()==checkitem.label){
+                                      if(_selectItemList.getItemAt(j).toString()==checkitem.automationName){
                                           existing=true;
                                       }
                                   }
                                   if(existing==false){
-                                    _selectItemList.addItem(checkitem.label);
+                                    _selectItemList.addItem(checkitem.automationName);
                                   }
                                 
-                                //Alert.show("selected:"+checkitem.label);
+                              
                             }
                            
                       }
@@ -303,14 +303,16 @@
                                             <![CDATA[
                                             import mx.controls.Alert;
                                            
-                                            override public function set data(value:Object):void
+                                            override public function set data(obj:Object):void
                                             {
-                                                super.data = value;
-                                                if (value && value.label)
+                                                super.data = obj;
+                                               
+                                                if (obj && obj.label)
                                                 {
-                                                    super.label = value.label;
-                                                    super.selected = value.selected;
-                                                    super.enabled= value.enabled
+                                                    super.label = obj.label;
+                                                    super.automationName = obj.value;
+                                                    super.selected = obj.selected;
+                                                    super.enabled= obj.enabled;
                                                     
                                                 }
                                             }

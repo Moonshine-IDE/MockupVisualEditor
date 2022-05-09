@@ -759,7 +759,7 @@
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
 
 	<domino:HideOptions textProperty="hide"/>	
-	<s:Label text="Hide paragraph if formual is true"/>
+	<s:Label text="Hide paragraph if formula is true"/>
             
 	<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
               
@@ -790,7 +790,7 @@
 	<s:Label text="Separate values when user enters" color="0xACA9A9"/>
 	<domino:MultipleCheckbox id="fieldlistinput" label=""  dynamicLabel="true" collectionProperty="separators" textProperty="listinputseparators"/>
 	<s:Label text="Display separate values with " color="0xACA9A9"/>	
-	<forms:DropdownListForm id="fieldlistdisplay"
+	<domino:DropdownListForm id="fieldlistdisplay"
                             label="" textProperty="listdisplayseparator"
                             collectionProperty="separators" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"

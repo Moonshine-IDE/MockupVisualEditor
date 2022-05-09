@@ -4,19 +4,13 @@
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
         creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin" xmlns:forms="view.forms.*">
-
-    <suportclasses:layout>
-        <s:FormLayout />
-    </suportclasses:layout>
-
-    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
 		<forms:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
 						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}" showTooltipFunction="{showTooltipFunction}"
 						change="onSelectionChange(event)"
                         enabled="{bindableEnabled}"
                         itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
-    </s:FormItem>
+
 
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;

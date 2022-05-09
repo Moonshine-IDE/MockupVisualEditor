@@ -437,7 +437,7 @@ package view.domino.surfaceComponents.components
         private var _formula:String;
         [Bindable(event="formulaAttributeChanged")]
          /**
-         * <p>Domino:A field that contains an function or command formula, the formual will calculation and show the result when it display.</p>
+         * <p>Domino:A field that contains an function or command formula, the formula will calculation and show the result when it display.</p>
          * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
          * <tr><td>Apache Royale</td><td>Planned</td></tr>
          * <tr><td>Domino</td><td>Planned</td></tr>

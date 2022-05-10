@@ -4,7 +4,8 @@
                                       xmlns:suportclasses="view.suportClasses.*"
                                       xmlns:mx="library://ns.adobe.com/flex/mx" 
                                       skinClass="skins.FormSkin"
-                                      creationComplete="onCreationCompletes(event)">
+                                      creationComplete="onCreationCompletes(event)"
+                                      >
 
     <suportclasses:layout>
         <s:FormLayout />
@@ -35,6 +36,9 @@
         public var dynamicLabel:String="false";
 
         public var listItemRenderer:Class;
+
+        private var widthOfContair:Number = 150;
+        private var widthOfList:Number = 100 ;
 
         private var _bindingCollection:ChangeWatcher;
         private var _bindingSurfaceProperty:ChangeWatcher;
@@ -110,10 +114,31 @@
                     testPopUp.label=selectedItem[_textProperty];
                }
            }
-            
+           
+            //auto calculate for width 
+           var listLen: Number= 0;
+            for(var checkNum:Number = 0; checkNum < includeCollection.length; checkNum++)
+            {
+                var item:Object = includeCollection.getItemAt(checkNum);
+                
+                if(item && item.label &&item.label.length>listLen)
+                {
+                    listLen=item.label.length;
+                }
+                
+            }
+
+            var finalWidth:Number = listLen * 8;
+            if(widthOfContair<finalWidth){
+                widthOfContair = finalWidth;
+            }
+            widthOfList = widthOfContair -50;
+
         }
+
         
         private function initializeMultiSelect():void {
+            
             var rex:RegExp = /[\s\r\n]+/gim;
             if (includeCollection && selectedItem[_textProperty]){
                  var str:String = selectedItem[_textProperty];
@@ -150,7 +175,7 @@
                                                         if(existing==false){
                                                             _selectItemList.addItem(elementStr);
                                                         }
-                                                        
+                                                      
                                                         //Alert.show("selected:"+checkitem.label);
                                                     }
                                                 
@@ -165,6 +190,10 @@
                  }
 
             }
+
+           
+
+                        
         }
 
         private function selectCurrentItem():void
@@ -286,13 +315,13 @@
     </fx:Script>
 
            <mx:PopUpButton id="testPopUp"
-                width="150" label="{label}" >
-                <mx:popUp>
-                    <mx:VBox width="150" backgroundColor="0xffffff" borderStyle="solid" borderColor="0x000000">
+                width="{widthOfContair}" label="{label}" >
+                <mx:popUp >
+                    <mx:VBox width="{widthOfContair}" backgroundColor="0xffffff" borderStyle="solid" borderColor="0x000000">
                         <mx:List id="multCheckList"
                                 dataProvider="{includeCollection}"
                                 height="{includeCollection.length * 25}"
-                                width="100"
+                                width="{widthOfList}"
                                 borderStyle="none"
                                 click="changeCheckBox()"
                                 creationComplete="initializeMultiSelect()">

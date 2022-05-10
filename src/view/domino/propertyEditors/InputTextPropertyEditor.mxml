@@ -816,6 +816,9 @@
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
             left="0" right="0" top="10" bottom="10" width="250" includeInLayout="false" visible="false" id="fontPanel">
+	
+	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
 	<forms:TextForm label="Size" textProperty="size"
 					restrict="0-9"/>
 	<forms:DropdownListForm id="ddlcolor"
@@ -825,8 +828,8 @@
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 		
 	<domino:MultipleCheckbox label="Style:" 
-		optionExculdeFunction="excludeMultipleSelect"
-		collectionProperty="fontStyles" textProperty="fontStyle"/>	
+		collectionProperty="fontStyles" textProperty="fontStyle"/>
+		</s:VGroup> 	
 	</s:BorderContainer>	
 
 

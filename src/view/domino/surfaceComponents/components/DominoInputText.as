@@ -1864,9 +1864,9 @@ package view.domino.surfaceComponents.components
 
          [Bindable]
         private var _securityOptions:ArrayList = new ArrayList([
-        {label:"Sign if mailed or saved in section",value: "sign",description: "sign","selected":true},
+        {label:"Sign if mailed or saved in section",value: "sign",description: "sign","selected":false},
         {label:"Enable encryption for this field",value: "seal",description:"seal","selected":false},
-        {label:"Must have at least Editor access to use",value: "protected",description:"protected","selected":true}
+        {label:"Must have at least Editor access to use",value: "protected",description:"protected","selected":false}
        
         ]);
 

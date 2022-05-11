@@ -1821,20 +1821,36 @@ package view.domino.surfaceComponents.components
         {
             return _colors;
         }
+        //<!ENTITY % font.names "monospace |  multilingual | sans-serif | serif | user-interface">
+        [Bindable]
+        private var _fontNames:ArrayList = new ArrayList([
+              {label: "monospace",description: "monospace",value:"monospace",enabled:true,"selected": false},
+              {label: "multilingual",description: "multilingual",value:"multilingual",enabled:true,"selected": false},
+              {label: "sans-serif",description: "sans-serif",value:"sans-serif",enabled:true,"selected": false},
+              {label: "serif",description: "serif",value:"serif",enabled:true,"selected": false},
+              {label: "user-interface",description: "user-interface",value:"strikeuser-interfacethrough",enabled:true,"selected": false}
+              
+        ])
+
+
+        public function get fontNames():ArrayList
+        {
+            return _fontNames;
+        }
 
          //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
         private var _fontStyles:ArrayList = new ArrayList([
-              {label: "normal",description: "normal",value:"normal",enabled:true},
-              {label: "bold",description: "bold",value:"bold",enabled:true},
-              {label: "italic",description: "italic",value:"italic",enabled:true},
-              {label: "underline",description: "underline",value:"underline",enabled:true},
-              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true},
-              {label: "superscript",description: "superscript",value:"superscript",enabled:true},
-              {label: "shadow",description: "shadow",value:"shadow",enabled:true},
-              {label: "emboss",description: "emboss",value:"emboss",enabled:true},
-              {label: "extrude",description: "extrude",value:"extrude",enabled:true},
-              {label: "subscript",description: "subscript",value:"subscript",enabled:true},
+              {label: "normal",description: "normal",value:"normal",enabled:true,"selected": false},
+              {label: "bold",description: "bold",value:"bold",enabled:true,"selected": false},
+              {label: "italic",description: "italic",value:"italic",enabled:true,"selected": false},
+              {label: "underline",description: "underline",value:"underline",enabled:true,"selected": false},
+              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true,"selected": false},
+              {label: "superscript",description: "superscript",value:"superscript",enabled:true,"selected": false},
+              {label: "shadow",description: "shadow",value:"shadow",enabled:true,"selected": false},
+              {label: "emboss",description: "emboss",value:"emboss",enabled:true,"selected": false},
+              {label: "extrude",description: "extrude",value:"extrude",enabled:true,"selected": false},
+              {label: "subscript",description: "subscript",value:"subscript",enabled:true,"selected": false},
               
         ])
 
@@ -2257,6 +2273,10 @@ package view.domino.surfaceComponents.components
 
            
             xml.@numberColumns = this.numberColumns;
+            xml.@color= this.color;
+            xml.@size = this.size;
+            xml.@fontStyle = this.fontStyle;
+            xml.@fonName =this.fontName;
             
 
             if(this.formula){
@@ -2474,6 +2494,10 @@ package view.domino.surfaceComponents.components
             this.keyformulachoices = component.keyformulachoices;
             this.helpDescription = component.helpDescription;
             this.fieldHint = component.fieldHint;
+            this.size = component.size;
+            this.color = component.color;
+            this.fontStyle = component.fontStyle;
+            this.fontName = component.fontName;
             if(component.formula){
                 
                this.formula=  StringHelper.base64Decode(component.formula);
@@ -2584,6 +2608,10 @@ package view.domino.surfaceComponents.components
             component.keyformulachoices=this.keyformulachoices;
             component.helpDescription = this.helpDescription;
             component.fieldHint = this.fieldHint;
+            component.color = this.color;
+            component.fontStyle = this.fontStyle;
+            component.size = this.size;
+            component.fontName = this.fontName;
             component.securityOptionsInput= this.securityOptionsInput;
             if(this.formula){
                 component.formula= this.formula;

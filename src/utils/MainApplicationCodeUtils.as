@@ -1,7 +1,6 @@
 package utils
 {
     import mx.core.UIComponent;
-
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;
@@ -174,6 +173,40 @@ package utils
 			var mainFieldsContainer:XML=getDominMainFieldListContainerTag(xml);
 			var total_xml:XML=xml;
             handleFleldOneNode(xml,mainFieldsContainer,total_xml);
+			return xml;
+		}
+
+		public static function fixPardefTableError(xml:XML):XML
+		{
+			var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+			if(mainContainer){
+				
+				if( mainContainer.children()[0] && mainContainer.children()[0].name()=="richtext"){
+						mainContainer=mainContainer.children()[0];
+				}
+				if(mainContainer.children().length()>0){
+					
+					var firstNode:XML = mainContainer.children()[0];
+				
+					if(firstNode){
+					
+						var sencodeNode:XML = mainContainer.children()[1];
+						if(sencodeNode){
+							
+							if(firstNode.name()=="pardef"){
+								if(sencodeNode.name()=="table"){
+								 	delete firstNode.parent().children()[firstNode.childIndex()];
+								}
+							}
+						}
+					}
+					
+				
+				}
+				
+				//var childName:String=child.name();
+
+			}
 			return xml;
 		}
 

@@ -2202,7 +2202,7 @@ package view.domino.surfaceComponents.components
 
 
         	//---------font /size  /color--------------------------------------------------------
-		private var _size:String;
+		private var _size:String = "0";
 
 		public function get size():String
 		{
@@ -2226,7 +2226,7 @@ package view.domino.surfaceComponents.components
 			_color = value;
 		}
 
-		private var _fontStyle:String;
+		private var _fontStyle:String = "normal";
 
 		public function get fontStyle():String
 		{
@@ -2273,10 +2273,22 @@ package view.domino.surfaceComponents.components
 
            
             xml.@numberColumns = this.numberColumns;
-            xml.@color= this.color;
-            xml.@size = this.size;
-            xml.@fontStyle = this.fontStyle;
-            xml.@fonName =this.fontName;
+            if(this.color){
+                xml.@color= this.color;
+            }
+            if(this.size){
+                xml.@size = this.size;
+            }
+            if(this.fontStyle){
+                xml.@fontStyle = this.fontStyle;
+            }
+            if(this.fontName){
+                xml.@fonName =this.fontName;
+            }
+           
+           
+           
+            
             
 
             if(this.formula){
@@ -2494,10 +2506,22 @@ package view.domino.surfaceComponents.components
             this.keyformulachoices = component.keyformulachoices;
             this.helpDescription = component.helpDescription;
             this.fieldHint = component.fieldHint;
-            this.size = component.size;
-            this.color = component.color;
-            this.fontStyle = component.fontStyle;
-            this.fontName = component.fontName;
+            if(component.size){
+                this.size = component.size;
+            }
+            if(component.color){
+                this.color = component.color;
+            }
+            if(component.fontStyle){
+                this.fontStyle = component.fontStyle;
+            }
+            if(component.fontName){
+                 this.fontName = component.fontName;
+            }
+            
+            
+            
+           
             if(component.formula){
                 
                this.formula=  StringHelper.base64Decode(component.formula);
@@ -2608,10 +2632,22 @@ package view.domino.surfaceComponents.components
             component.keyformulachoices=this.keyformulachoices;
             component.helpDescription = this.helpDescription;
             component.fieldHint = this.fieldHint;
-            component.color = this.color;
-            component.fontStyle = this.fontStyle;
-            component.size = this.size;
-            component.fontName = this.fontName;
+            if(this.color){
+                component.color = this.color;
+            }
+            if(this.size){
+                component.size = this.size;
+            }
+            if(this.fontName){
+                component.fontName = this.fontName;
+            }
+            if(this.fontStyle){
+                 component.fontStyle = this.fontStyle;
+            }
+            
+           
+           
+            
             component.securityOptionsInput= this.securityOptionsInput;
             if(this.formula){
                 component.formula= this.formula;

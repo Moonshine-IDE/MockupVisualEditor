@@ -196,6 +196,7 @@ package utils
 
 
                 MainApplicationCodeUtils.fixDominField(xml);
+                MainApplicationCodeUtils.fixPardefTableError(xml);
               
 				return xml;
             }
@@ -295,7 +296,7 @@ package utils
                 }
 
                 MainApplicationCodeUtils.fixDominField(xml);
-              
+                MainApplicationCodeUtils.fixPardefTableError(xml);
 				return xml;
              }
             /**

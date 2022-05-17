@@ -1841,16 +1841,16 @@ package view.domino.surfaceComponents.components
          //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
         private var _fontStyles:ArrayList = new ArrayList([
-              {label: "normal",description: "normal",value:"normal",enabled:true,"selected": false},
-              {label: "bold",description: "bold",value:"bold",enabled:true,"selected": false},
-              {label: "italic",description: "italic",value:"italic",enabled:true,"selected": false},
-              {label: "underline",description: "underline",value:"underline",enabled:true,"selected": false},
-              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true,"selected": false},
-              {label: "superscript",description: "superscript",value:"superscript",enabled:true,"selected": false},
-              {label: "shadow",description: "shadow",value:"shadow",enabled:true,"selected": false},
-              {label: "emboss",description: "emboss",value:"emboss",enabled:true,"selected": false},
-              {label: "extrude",description: "extrude",value:"extrude",enabled:true,"selected": false},
-              {label: "subscript",description: "subscript",value:"subscript",enabled:true,"selected": false},
+             {label: "Plain",description: "normal",value:"normal",enabled:true,"selected": false},
+              {label: "Bold",description: "bold",value:"bold",enabled:true,"selected": false},
+              {label: "Italic",description: "italic",value:"italic",enabled:true,"selected": false},
+              {label: "Underline",description: "underline",value:"underline",enabled:true,"selected": false},
+              {label: "Strikethrough",description: "strikethrough",value:"strikethrough",enabled:true,"selected": false},
+              {label: "Superscript",description: "superscript",value:"superscript",enabled:true,"selected": false},
+              {label: "Shadow",description: "shadow",value:"shadow",enabled:true,"selected": false},
+              {label: "Emboss",description: "emboss",value:"emboss",enabled:true,"selected": false},
+              {label: "Extrude",description: "extrude",value:"extrude",enabled:true,"selected": false},
+              {label: "Subscript",description: "subscript",value:"subscript",enabled:true,"selected": false},
               
         ])
 
@@ -2202,7 +2202,7 @@ package view.domino.surfaceComponents.components
 
 
         	//---------font /size  /color--------------------------------------------------------
-		private var _size:String = "0";
+		private var _size:String = "10";
 
 		public function get size():String
 		{
@@ -2214,7 +2214,7 @@ package view.domino.surfaceComponents.components
 			_size = value;
 		}
 
-		private var _color:String;
+		private var _color:String ="black";
 
 		public function get color():String
 		{

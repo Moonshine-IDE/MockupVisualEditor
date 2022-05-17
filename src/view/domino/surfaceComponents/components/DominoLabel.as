@@ -391,7 +391,7 @@ package view.domino.surfaceComponents.components
         //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
         private var _fontStyles:ArrayList = new ArrayList([
-              {label: "normal",description: "normal",value:"normal",enabled:true},
+              {label: "plain",description: "normal",value:"normal",enabled:true},
               {label: "bold",description: "bold",value:"bold",enabled:true},
               {label: "italic",description: "italic",value:"italic",enabled:true},
               {label: "underline",description: "underline",value:"underline",enabled:true},

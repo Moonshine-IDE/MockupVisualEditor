@@ -832,7 +832,7 @@
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 	<s:Label text="Style"/>
-	<domino:MultipleCheckbox label=""  dynamicLabel="true"
+	<domino:MultipleCheckbox label=""  dynamicLabel="true" singleSelectOption="normal"
 		collectionProperty="fontStyles" textProperty="fontStyle"/>
 		</s:VGroup> 	
 	</s:BorderContainer>	

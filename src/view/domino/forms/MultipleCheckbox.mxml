@@ -35,6 +35,9 @@
         [Bindable]
         public var dynamicLabel:String="false";
 
+        [Bindable]
+        public var singleSelectOption:String=null;
+
         public var listItemRenderer:Class;
 
         private var widthOfContair:Number = 150;
@@ -160,7 +163,7 @@
                                                 var checkitem:Object = item.getChildAt(i);
                                                 //Alert.show("checkitem:"+checkitem.toString());
                                                 if(checkitem.hasOwnProperty("selected") ){
-                                                    if(checkitem.label==elementStr){
+                                                    if(checkitem.automationName==elementStr){
                                                         checkitem.selected=true
                                                     }
                                                     
@@ -196,11 +199,22 @@
                         
         }
 
-        private function selectCurrentItem():void
+        private function selectCurrentItem(event:Event):void
         {
+            
             _selectItemList = new ArrayList();
             var checkNum:int = 0;
             var item:Object = null;
+            var signleOption:Boolean = false;
+            if(singleSelectOption!=null && singleSelectOption.length>0 ){
+                if(event.target.hasOwnProperty("selected") && event.target.selected==true){
+                    if(event.target.automationName==singleSelectOption){
+                        signleOption = true;
+                    }
+                }
+                
+                
+            }
             for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
             {
                  item = multCheckList.getChildAt(checkNum);
@@ -219,21 +233,53 @@
                           var checkitem:Object = item.getChildAt(i);
                            //Alert.show("checkitem:"+checkitem.toString());
                           if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
-                                  var existing:Boolean = false;
-                                  for (var j:int = 0; j < _selectItemList.length; j++){
-                                      if(_selectItemList.getItemAt(j).toString()==checkitem.automationName){
-                                          existing=true;
-                                      }
-                                  }
-                                  if(existing==false){
-                                    _selectItemList.addItem(checkitem.automationName);
-                                  }
+                                
+                                  
+                                var existing:Boolean = false;
+                                for (var j:int = 0; j < _selectItemList.length; j++){
+                                    if(_selectItemList.getItemAt(j).toString()==checkitem.automationName){
+                                        existing=true;
+                                    }
+                                }
+                                if(existing==false){
+                                _selectItemList.addItem(checkitem.automationName);
+                                }
                                 
                               
-                            }
+                          }
                            
                       }
                  }
+            }
+            if(singleSelectOption!=null && singleSelectOption.length>0 ){
+                for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
+                {
+                    item = multCheckList.getChildAt(checkNum);
+                    if(item is ListBaseContentHolder){
+                        for (var i:int = 0; i < item.numChildren; i++){
+                            var checkitem:Object = item.getChildAt(i);
+                            
+                            if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+                                if( signleOption ==true){
+                                
+                                    if(checkitem.automationName==singleSelectOption){
+                                            
+                                    }else{
+                                        checkitem.selected = false;
+                                        _selectItemList.removeItem(checkitem.automationName);
+                                    }
+                                    
+                                    
+                                }else{
+                                     if(checkitem.automationName==singleSelectOption){
+                                          checkitem.selected = false;
+                                          _selectItemList.removeItem(checkitem.automationName);
+                                     }
+                                }
+                            }
+                        }
+                    }
+                }
             }
            
 
@@ -248,15 +294,6 @@
                     testPopUp.label=str;
                 }
             }
-            // else if (selectedItem[_textProperty])
-            // {
-            //     ddlSelection.selectedItem = selectedItem[_textProperty];
-            // }
-
-            // if (ddlSelection.selectedItem)
-            // {
-            //     //ddlSelection.callLater(onSelectionChange, [null]);
-            // }
         }
 
 
@@ -307,9 +344,9 @@
         protected function closeButtonClickHandler(event:MouseEvent):void {
             testPopUp.close();
         }
-        protected function changeCheckBox():void
+        protected function changeCheckBox(event:Event):void
         {
-            selectCurrentItem();
+            selectCurrentItem(event);
         }
         ]]>
     </fx:Script>
@@ -323,7 +360,7 @@
                                 height="{includeCollection.length * 25}"
                                 width="{widthOfList}"
                                 borderStyle="none"
-                                click="changeCheckBox()"
+                                click="changeCheckBox(event)"
                                 creationComplete="initializeMultiSelect()">
                             <mx:itemRenderer>
                                 <fx:Component>

@@ -45,6 +45,7 @@ package view.domino.surfaceComponents.components
     import components.domino.DominoInputText;
 
     import utils.StringHelper;
+    import global.domino.DominoGlobalTokens;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -1794,28 +1795,8 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("choicesdialogAttributeChanged"))
             }
         }
-              [Bindable]
-        private var _colors:ArrayList = new ArrayList([
-        {label: "aqua",description: "aqua color.",htmlcolor:"#00FFFF"},
-        {label: "black",description:"",htmlcolor:"#000000"},
-        {label: "blue",description:"",htmlcolor:"#0000FF"}, 
-        {label: "fuchsia",description:"",htmlcolor:"#FF00FF"},
-        {label: "gray",description:"",htmlcolor:"#808080"},
-        {label: "green",description:"",htmlcolor:"#008000"},
-        {label: "lime",description:"",htmlcolor:"#00FF00"},
-        {label: "maroon",description:"",htmlcolor:"#800000"},
-        {label: "navy",description:"",htmlcolor:"#000080"},
-        {label: "olive",description:"",htmlcolor:"#808000"},
-        {label: "purple",description:"",htmlcolor:"#800080"},
-        {label: "red",description:"",htmlcolor:"#FF0000"},
-        {label: "silver",description:"",htmlcolor:"#C0C0C0"},
-        {label: "teal",description:"",htmlcolor:"#008080"},
-        {label: "white",description:"",htmlcolor:"#ffffff"},
-        {label: "yellow",description:"",htmlcolor:"#FFFF00"},
-        {label: "none",description:"",htmlcolor:"#000000"},
-        {label: "system",description:"A preset color. For instance, the font color of a hotspot link is 'system' because it is determined by the %link.color.attrs; property settings for a form.",
-        htmlcolor:"#4B0082"}
-        ]);
+        [Bindable]
+        private var _colors:ArrayList = DominoGlobalTokens.Colors;
 
         public function get colors():ArrayList
         {
@@ -1823,14 +1804,7 @@ package view.domino.surfaceComponents.components
         }
         //<!ENTITY % font.names "monospace |  multilingual | sans-serif | serif | user-interface">
         [Bindable]
-        private var _fontNames:ArrayList = new ArrayList([
-              {label: "monospace",description: "monospace",value:"monospace",enabled:true,"selected": false},
-              {label: "multilingual",description: "multilingual",value:"multilingual",enabled:true,"selected": false},
-              {label: "sans-serif",description: "sans-serif",value:"sans-serif",enabled:true,"selected": false},
-              {label: "serif",description: "serif",value:"serif",enabled:true,"selected": false},
-              {label: "user-interface",description: "user-interface",value:"strikeuser-interfacethrough",enabled:true,"selected": false}
-              
-        ])
+        private var _fontNames:ArrayList = DominoGlobalTokens.FontNames;
 
 
         public function get fontNames():ArrayList
@@ -1840,19 +1814,7 @@ package view.domino.surfaceComponents.components
 
          //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
-        private var _fontStyles:ArrayList = new ArrayList([
-             {label: "Plain",description: "normal",value:"normal",enabled:true,"selected": false},
-              {label: "Bold",description: "bold",value:"bold",enabled:true,"selected": false},
-              {label: "Italic",description: "italic",value:"italic",enabled:true,"selected": false},
-              {label: "Underline",description: "underline",value:"underline",enabled:true,"selected": false},
-              {label: "Strikethrough",description: "strikethrough",value:"strikethrough",enabled:true,"selected": false},
-              {label: "Superscript",description: "superscript",value:"superscript",enabled:true,"selected": false},
-              {label: "Shadow",description: "shadow",value:"shadow",enabled:true,"selected": false},
-              {label: "Emboss",description: "emboss",value:"emboss",enabled:true,"selected": false},
-              {label: "Extrude",description: "extrude",value:"extrude",enabled:true,"selected": false},
-              {label: "Subscript",description: "subscript",value:"subscript",enabled:true,"selected": false},
-              
-        ])
+        private var _fontStyles:ArrayList = DominoGlobalTokens.FontStyles;
 
 
         public function get fontStyles():ArrayList
@@ -2238,7 +2200,7 @@ package view.domino.surfaceComponents.components
 			_fontStyle = value;
 		}
 
-		private var _fontName:String;
+		private var _fontName:String = "sans-serif";
 
 		public function get fontName():String
 		{

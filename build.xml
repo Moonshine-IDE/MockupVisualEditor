@@ -9,7 +9,8 @@
 	<property name="IsDebug" value="false" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
-	<target name="main" depends="clean-up-bin, exclude-files, build, documentationFlex, documentationPrimeFaces, documentationDomino, clean-up-after-compilation, copy-bin-to-moonshine"/>
+	<target name="main" depends="clean-up-bin, exclude-files, buildSwc, documentationFlex, documentationPrimeFaces, documentationDomino, clean-up-after-compilation, copy-bin-to-moonshine"/>
+	<target name="mainBuildWithoutDoc" depends="clean-up-bin, exclude-files, buildSwc, clean-up-after-compilation, copy-bin-to-moonshine"/>
 
 	<target name="clean-up-bin">
 		<delete quiet="true">
@@ -39,7 +40,7 @@
 	</target>
 
 	<!-- Compile library project to SWC -->
-	<target name="build">
+	<target name="buildSwc">
 		<echo>Building Visual Editor swc</echo>
 		<compc debug="${IsDebug}" output="${basedir}/bin/${SWC_NAME}" fork="true"
 			   incremental="true">

@@ -1,6 +1,5 @@
 package lookup
 {
-	import components.DominoRow;
 	import components.GridRow;
 	import components.GridItem;
 	import components.NavigatorContent;
@@ -56,7 +55,6 @@ package lookup
 			this.lookup[DominoSection.ELEMENT_NAME] = DominoSection;
 			this.lookup[DominoCalendar.ELEMENT_NAME] = DominoCalendar;
 			this.lookup[DominoParagraph.ELEMENT_NAME] = DominoParagraph;
-			this.lookup[DominoRow.DOMINOROW_NAME] = DominoRow;
 		}
 	}
 }

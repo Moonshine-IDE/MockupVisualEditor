@@ -834,6 +834,19 @@
 	<s:Label text="Style"/>
 	<domino:MultipleCheckbox label=""  dynamicLabel="true" singleSelectOption="normal"
 		collectionProperty="fontStyles" textProperty="fontStyle"/>
+	
+	<forms:DropdownListForm id="ddlpitch"
+                            label="Pitches" textProperty="pitches"
+                            collectionProperty="pitchess" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+	<forms:DropdownListForm id="ddlfanilyid"
+                            label="Familyid" textProperty="familyid"
+                            collectionProperty="familyids" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						
+
+		
 		</s:VGroup> 	
 	</s:BorderContainer>	
 

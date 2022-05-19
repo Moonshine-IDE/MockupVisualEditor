@@ -49,6 +49,7 @@ package view.domino.surfaceComponents.components
     import utils.StringHelper;
 
     import interfaces.dominoComponents.IDominoLabel;
+    import global.domino.DominoGlobalTokens;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -312,27 +313,7 @@ package view.domino.surfaceComponents.components
          * white | yellow | none | system " 
          */
         [Bindable]
-        private var _colors:ArrayList = new ArrayList([
-        {label: "aqua",description: "aqua color.",htmlcolor:"#00FFFF"},
-        {label: "black",description:"",htmlcolor:"#000000"},
-        {label: "blue",description:"",htmlcolor:"#0000FF"}, 
-        {label: "fuchsia",description:"",htmlcolor:"#FF00FF"},
-        {label: "gray",description:"",htmlcolor:"#808080"},
-        {label: "green",description:"",htmlcolor:"#008000"},
-        {label: "lime",description:"",htmlcolor:"#00FF00"},
-        {label: "maroon",description:"",htmlcolor:"#800000"},
-        {label: "navy",description:"",htmlcolor:"#000080"},
-        {label: "olive",description:"",htmlcolor:"#808000"},
-        {label: "purple",description:"",htmlcolor:"#800080"},
-        {label: "red",description:"",htmlcolor:"#FF0000"},
-        {label: "silver",description:"",htmlcolor:"#C0C0C0"},
-        {label: "teal",description:"",htmlcolor:"#008080"},
-        {label: "white",description:"",htmlcolor:"#ffffff"},
-        {label: "yellow",description:"",htmlcolor:"#FFFF00"},
-        {label: "none",description:"",htmlcolor:"#000000"},
-        {label: "system",description:"A preset color. For instance, the font color of a hotspot link is 'system' because it is determined by the %link.color.attrs; property settings for a form.",
-        htmlcolor:"#4B0082"}
-        ]);
+        private var _colors:ArrayList =DominoGlobalTokens.Colors;
 
         public function get colors():ArrayList
         {
@@ -390,19 +371,7 @@ package view.domino.surfaceComponents.components
 
         //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
-        private var _fontStyles:ArrayList = new ArrayList([
-              {label: "plain",description: "normal",value:"normal",enabled:true},
-              {label: "bold",description: "bold",value:"bold",enabled:true},
-              {label: "italic",description: "italic",value:"italic",enabled:true},
-              {label: "underline",description: "underline",value:"underline",enabled:true},
-              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true},
-              {label: "superscript",description: "superscript",value:"superscript",enabled:true},
-              {label: "shadow",description: "shadow",value:"shadow",enabled:true},
-              {label: "emboss",description: "emboss",value:"emboss",enabled:true},
-              {label: "extrude",description: "extrude",value:"extrude",enabled:true},
-              {label: "subscript",description: "subscript",value:"subscript",enabled:true},
-              
-        ])
+        private var _fontStyles:ArrayList =DominoGlobalTokens.FontStyles;
 
 
         public function get fontStyles():ArrayList

@@ -2038,7 +2038,7 @@ package view.domino.surfaceComponents.components
 			_hide = value;
 		}
 
-        private var _helpDescription:String;
+        private var _helpDescription:String = "";
 
 		public function get helpDescription():String
 		{
@@ -2050,7 +2050,7 @@ package view.domino.surfaceComponents.components
 			_helpDescription = value;
 		}
 
-		private var _fieldHint:String;
+		private var _fieldHint:String = "";
 
 		public function get fieldHint():String
 		{

@@ -4,6 +4,7 @@
                                   xmlns:suportclasses="view.suportClasses.*"
                                   xmlns:domino="view.domino.forms.*" 
 								  xmlns:forms="view.forms.*"
+								  xmlns:mx="library://ns.adobe.com/flex/mx"
 								  xmlns:primeFaces="view.primeFaces.forms.*"
 								   creationComplete="onInputCreationComplete(event)"
 								 >
@@ -37,21 +38,14 @@
 
 				 //inistal hide options
 				 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 || this.selectedItem["hidewhen"]!=null){
-					 this.hideOption.selected = true;
-					 if(this.hideOption.selected){
-						hidePanel.visible = hidePanel.includeInLayout = true;
-					 }else{
-						hidePanel.visible = hidePanel.includeInLayout = false;
-					 }
+					
 				 }
 				if(this.selectedItem["allowmultivalues"]){
 					 this.allowmul.selected=true;
-					 this.helpDescriptionCheckBox.selected=true;
-					 helpDescription.visible = helpDescription.includeInLayout = true;
+					
 				 }else{
 					 this.allowmul.selected=false;
-					 this.helpDescriptionCheckBox.selected=false;
-					 helpDescription.visible = helpDescription.includeInLayout = false;
+					
 				 }
 
 
@@ -331,57 +325,14 @@
 			private function allowMultipleValues_changeHandler(event:Event):void
 			{
 				//Alert.show(":"+this.keyformulachoices.selected);
-				if(this.allowmul.selected==true){
-					if(helpDescription.visible==true && helpDescription.includeInLayout==true){
-						fieldlistinput.enabled = true;
-						fieldlistdisplay.enabled = true;
-					}
-				
-				}else{
-					if(helpDescription.visible==true && helpDescription.includeInLayout==true){
-						fieldlistinput.enabled = false;
-						fieldlistdisplay.enabled = false;
-					}
-				}
+	
 				 this.selectedItem["allowmultivalues"] = this.allowmul.selected;
 			}
 
-			 private function changeHideOption(event:Event):void
-			{
-				if(this.hideOption.selected){
-					hidePanel.visible = hidePanel.includeInLayout = true;
-				}else{
-					hidePanel.visible = hidePanel.includeInLayout = false;
-				}
-			
-			}
 
-			private function changeHelpOption(event:Event):void
-			{
-				if(this.helpDescriptionCheckBox.selected){
-					helpDescription.visible = helpDescription.includeInLayout = true;
-					if(allowmul.selected==false){
-						fieldlistinput.enabled = false;
-						fieldlistdisplay.enabled = false;
-					}else{
-						fieldlistinput.enabled = true;
-						fieldlistdisplay.enabled = true;
-					}
-				}else{
-					helpDescription.visible = helpDescription.includeInLayout = false;
-				}
-			
-			}
+		
 
-			private function changeFontColorOption(event:Event):void
-			{
-				//fontcolorcheck
-				if(this.fontcolorcheck.selected){
-					fontPanel.visible = fontPanel.includeInLayout = true;
-				}else{
-					fontPanel.visible = fontPanel.includeInLayout = false;
-				}
-			}
+		
 			private var pre_label_var:String="normal";
 
 				private function excludeMultipleSelect(item:ListBaseContentHolder):void
@@ -553,7 +504,19 @@
     </suportclasses:layout>
 
 	<domino:BasicsForm/>
-	<forms:DropdownListForm id="ddl"
+	
+
+
+
+
+
+
+
+
+	<mx:Accordion id="accordion" width="100%" height="100%">
+	<mx:VBox  horizontalAlign="left" label="Field Info" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+<forms:DropdownListForm id="ddl"
                             label="Type" textProperty="type"
                             collectionProperty="types" labelField="label"
 							labelDisplayFunction="getDominoFieldTypeLabel" showTooltipFunction="getDominoFieldTooltip"
@@ -578,7 +541,7 @@
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
             left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="numberPanel">
-	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+	<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" >
        
 		<forms:DropdownListForm id="ddlformat"
@@ -744,45 +707,19 @@
 			
 		   </s:VGroup>	
 		</s:BorderContainer>  
+		<s:FormItem label="Allow multiple values" skinClass="skins.FormItemSkin">
+        <s:CheckBox selected="{keywordsFlag}"  id="allowmul" change="allowMultipleValues_changeHandler(event)"/>
+		</s:FormItem>
 
-		<s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
-        <s:CheckBox id="hideOption"
-                    selected="false"
-                    change="changeHideOption(event)"/>
-    	</s:FormItem>
-
-	<s:BorderContainer 
-             cornerRadius="0"
-            borderStyle="solid" borderWeight="0" 
-            left="0" right="0" top="10" bottom="10" width="330" includeInLayout="false" visible="false" id="hidePanel">
-			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
-
-	<domino:HideOptions textProperty="hide"/>	
-	<s:Label text="Hide paragraph if formula is true"/>
-            
-	<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
-              
-	 </s:VGroup> 
-	</s:BorderContainer>  
+	
 <!-- <forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues"/> -->
 			
 
 
-
-<s:FormItem label="Help Description" skinClass="skins.FormItemSkin">
-        <s:CheckBox id="helpDescriptionCheckBox"
-                    selected="false"
-                    change="changeHelpOption(event)"/>
-</s:FormItem>
-<s:FormItem label="Allow multiple values" skinClass="skins.FormItemSkin">
-        <s:CheckBox selected="{keywordsFlag}"  id="allowmul" change="allowMultipleValues_changeHandler(event)"/>
-</s:FormItem>
-	<s:BorderContainer 
-             cornerRadius="0"
-            borderStyle="solid" borderWeight="1" 
-            left="0" right="0" top="10" bottom="10" width="250" includeInLayout="false" visible="false" id="helpDescription">
-	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   
+	</mx:VBox>
+            
+	<mx:VBox  horizontalAlign="left" label="Advanced" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
 	<domino:HelpDescription label="Help Description" textProperty="helpDescription" />	   
 	<domino:HelpDescription label="Field Hint" textProperty="fieldHint" />	
@@ -802,23 +739,12 @@
                             collectionProperty="securityOptions" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
-	</s:VGroup> 
-	</s:BorderContainer> 
+	</mx:VBox > 
+          
 
-
-	<s:FormItem label="Font/Color" skinClass="skins.FormItemSkin">
-        <s:CheckBox id="fontcolorcheck"
-                    selected="false"
-                    change="changeFontColorOption(event)"/>
-</s:FormItem>
-
-	<s:BorderContainer 
-             cornerRadius="0"
-            borderStyle="solid" borderWeight="1" 
-            left="0" right="0" top="10" bottom="10" width="250" includeInLayout="false" visible="false" id="fontPanel">
-	
-	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+            <mx:VBox  label="Font" horizontalAlign="left" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+                
 	<forms:TextForm label="Size" textProperty="size"
 					restrict="0-9"/>
 	<forms:DropdownListForm id="ddlcolor"
@@ -834,21 +760,24 @@
 	<s:Label text="Style"/>
 	<domino:MultipleCheckbox label=""  dynamicLabel="true" singleSelectOption="normal"
 		collectionProperty="fontStyles" textProperty="fontStyle"/>
-	
-	<forms:DropdownListForm id="ddlpitch"
-                            label="Pitches" textProperty="pitches"
-                            collectionProperty="pitchess" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-	<forms:DropdownListForm id="ddlfanilyid"
-                            label="Familyid" textProperty="familyid"
-                            collectionProperty="familyids" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						
+            </mx:VBox >
 
-		
-		</s:VGroup> 	
-	</s:BorderContainer>	
+            <mx:VBox  label="Paragraph Alignment">
+                <mx:Label text="Accordion container panel 3"/>
+            </mx:VBox >
+			 <mx:VBox  label="Paragraph Hide When" horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
+
+			<domino:HideOptions textProperty="hide"/>	
+			<s:Label text="Hide paragraph if formula is true"/>
+            
+			<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />        
+		 
+            </mx:VBox >
+			 <mx:VBox  label="Field Extra HTML">
+                <mx:Label text="Accordion container panel 3"/>
+            </mx:VBox >
+        </mx:Accordion>
 
 
 	

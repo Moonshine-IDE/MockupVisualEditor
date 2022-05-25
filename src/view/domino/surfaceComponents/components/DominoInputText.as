@@ -2150,6 +2150,57 @@ package view.domino.surfaceComponents.components
 			_truetype = value;
 		}
 
+        //-----Html core attrs-------
+        private var _htmlId:String;
+		public function get htmlId():String
+		{
+			return _htmlId;
+		}
+        public function set htmlId(value:String):void
+		{
+				_htmlId = value;
+		}
+
+		private var _htmlClass:String;
+		public function get htmlClass():String
+		{
+			return _htmlClass;
+		}
+        public function set htmlClass(value:String):void
+		{
+			_htmlClass = value;
+		}
+
+		private var _htmlStyle:String;
+		public function get htmlStyle():String
+		{
+			return _htmlStyle;
+		}
+        public function set htmlStyle(value:String):void
+		{
+			_htmlStyle=value;
+		}
+
+		private var _htmlTitle:String;
+		public function get htmlTitle():String
+		{
+			return _htmlTitle;
+		}
+        public function set htmlTitle(value:String):void
+		{
+			_htmlTitle=value;
+		}
+
+		private var _htmlOther:String;
+		public function get htmlOther():String
+		{
+			return _htmlOther;
+		}
+        public function set htmlOther(value:String):void
+		{
+			_htmlOther=value;
+		}
+
 
         public function toXML():XML
         {
@@ -2170,7 +2221,21 @@ package view.domino.surfaceComponents.components
             xml.@recalcchoices=this.recalcchoices.toString();
             xml.@keyformulachoices=this.keyformulachoices.toString();
             xml.@securityOptionsInput = this.securityOptionsInput;
-
+            if(this.htmlId){
+                xml.@htmlId = this.htmlId;
+            }
+            if(this.htmlClass){
+                xml.@htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                xml.@htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlTitle){
+                xml.@htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlOther){
+                xml.@htmlOther = this.htmlOther;
+            }
            
             xml.@numberColumns = this.numberColumns;
             if(this.color){
@@ -2422,6 +2487,22 @@ package view.domino.surfaceComponents.components
                 this.truetype = component.truetype;
             }
 
+            if(component.htmlId){
+                this.htmlId = component.htmlId;
+            }
+            if(component.htmlClass){
+                this.htmlClass = component.htmlClass;
+            }
+            if(component.htmlTitle){
+                this.htmlTitle = component.htmlTitle
+            }
+            if(component.htmlStyle){
+                this.htmlStyle = component.htmlStyle;
+            }
+            if(component.htmlOther){
+                this.htmlOther = component.htmlOther;
+            }
+
 
             if(component.fontStyle){
                 this.fontStyle = component.fontStyle;
@@ -2563,6 +2644,21 @@ package view.domino.surfaceComponents.components
             }
             if(this.fontStyle){
                  component.fontStyle = this.fontStyle;
+            }
+            if(this.htmlId){
+                component.htmlId = this.htmlId;
+            }
+            if(this.htmlTitle){
+                component.htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlClass){
+                component.htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                component.htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlOther){
+                component.htmlOther = this.htmlOther;
             }
             
            

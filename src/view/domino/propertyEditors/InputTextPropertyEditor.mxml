@@ -775,11 +775,11 @@
 		 
             </mx:VBox >
 			 <mx:VBox  label="HTML tags">
-			 	<domino:TextForm label="Id    :" textProperty="htmlId"/>
-				<domino:TextForm label="Class :" textProperty="htmlClass"/>
-			   	<domino:TextForm label="Style :" textProperty="htmlStyle"/>
-			    <domino:TextForm label="Title :" textProperty="htmlTitle"/>
-				<domino:TextForm label="Other:" textProperty="htmlOther"/>
+			 	<domino:TextForm label=":Id" textProperty="htmlId"/>
+				<domino:TextForm label=":Class" textProperty="htmlClass"/>
+			   	<domino:TextForm label=":Style" textProperty="htmlStyle"/>
+			    <domino:TextForm label=":Title" textProperty="htmlTitle"/>
+				<domino:TextForm label=":Other" textProperty="htmlOther"/>
               
             </mx:VBox >
         </mx:Accordion>

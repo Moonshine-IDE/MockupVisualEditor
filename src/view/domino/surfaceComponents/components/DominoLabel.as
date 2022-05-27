@@ -715,10 +715,10 @@ package view.domino.surfaceComponents.components
             }
 
             if(this.fontStyle){
-                xml.@style = this.fontStyle;
+                xml.@fontStyle = this.fontStyle;
             }
              if(this.fontName){
-                xml.@name = this.fontName;
+                xml.@fontName = this.fontName;
             }
             
             if(this.hidewhen){

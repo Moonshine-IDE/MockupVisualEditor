@@ -22,6 +22,7 @@ package utils
     import mx.utils.ObjectUtil;
     
     import view.interfaces.ISurfaceComponent;
+    import view.primeFaces.supportClasses.ContainerDirection;
 
     public class MxmlCodeUtils
     {
@@ -75,5 +76,22 @@ package utils
 		{
 			return (component.isSelected ? "_moonshineSelected_"+ rootElementName : rootElementName);
 		}
+
+        public static function getInfoContainerDirection(component:ISurfaceComponent):String
+        {
+            var directionInfo:String = "";
+            var direction:String = component["direction"];
+
+            if (direction == ContainerDirection.HORIZONTAL_LAYOUT)
+            {
+                directionInfo = "Container has horizontal direction";
+            }
+            else
+            {
+                directionInfo = "Container has vertical direction";
+            }
+
+            return directionInfo;
+        }
     }
 }

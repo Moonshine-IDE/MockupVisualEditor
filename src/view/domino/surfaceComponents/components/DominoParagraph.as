@@ -103,15 +103,15 @@ package view.domino.surfaceComponents.components
 		
         protected var mainXML:XML;
 
-        protected var contentChanged:Boolean;
-
         public function DominoParagraph()
         {
+			this._wrap = true;
+
             super();
 
 			component = new components.domino.DominoParagraph(this);
 			
-            this.width = Globals.MainApplicationWidth-10;
+            this.percentWidth = 100;
             this.height = 40;
             this.minWidth = Globals.MainApplicationWidth-10;
             this.minHeight = 40;
@@ -130,7 +130,7 @@ package view.domino.surfaceComponents.components
             ];
         }
 
-        private var _widthOutput:Boolean = true;
+        private var _widthOutput:Boolean;
         protected var widthOutputChanged:Boolean;
 
         [Bindable]
@@ -153,7 +153,7 @@ package view.domino.surfaceComponents.components
             }
         }
 
-        private var _heightOutput:Boolean = true;
+        private var _heightOutput:Boolean;
         protected var heightOutputChanged:Boolean;
 
         [Bindable]

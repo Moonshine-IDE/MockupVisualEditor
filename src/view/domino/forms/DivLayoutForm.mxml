@@ -10,19 +10,41 @@
     </suportclasses:layout>
 
     <s:FormItem label="Direction" skinClass="skins.StackedFormItemSkin">
-        <s:Label id="directionInfo"/>
-        <s:CheckBox id="wrapContent" label="wrap" change="onWrapContentChange(event)"/>
+        <s:HGroup gap="3" verticalAlign="middle" width="100%">
+            <s:DropDownList id="directionDropDownList" width="100%"
+                            requireSelection="true" labelField="direction"
+                            change="onDrectionChange(event)" enabled="{wrapContent.selected == false}"/>
+            <s:CheckBox id="wrapContent" label="wrap" change="onWrapContentChange(event)"/>
+        </s:HGroup>
     </s:FormItem>
-
+    <s:FormItem label="Horizontal align" skinClass="skins.StackedFormItemSkin">
+        <s:DropDownList id="horizontalDirection" width="100%" requireSelection="true"
+                        labelField="horizontalAlign"
+                        change="onDrectionChange(event)"/>
+    </s:FormItem>
+    <s:FormItem label="Vertical align" skinClass="skins.StackedFormItemSkin">
+        <s:DropDownList id="verticalDirection" width="100%" requireSelection="true"
+                        labelField="verticalAlign" enabled="{wrapContent.selected == false}"
+                        change="onDrectionChange(event)"/>
+    </s:FormItem>
     <fx:Script><![CDATA[
 		import mx.binding.utils.BindingUtils;
 		import mx.binding.utils.ChangeWatcher;
+		import mx.collections.ArrayList;
 		import mx.events.FlexEvent;
-
-        import utils.MxmlCodeUtils;
-
-        import view.interfaces.IDiv;
+		
+		import spark.events.IndexChangeEvent;
+		import spark.layouts.HorizontalAlign;
+		import spark.layouts.VerticalAlign;
+		
+		import view.interfaces.IDiv;
 		import view.interfaces.ISurfaceComponent;
+		import view.primeFaces.supportClasses.ContainerDirection;
+		import view.primeFaces.supportClasses.ContainerDirectionItem;
+		import view.primeFaces.supportClasses.ContainerHorizontalAlignItem;
+		import view.primeFaces.supportClasses.ContainerVerticalAlignItem;
+
+        private var verticalTopItem:ContainerVerticalAlignItem;
 
         private var _selectedItem:ISurfaceComponent;
 		private var _bindingDirection:ChangeWatcher;
@@ -72,13 +94,45 @@
             if (!this.selectedItem) return;
 
             this.wrapContent.selected = this.selectedItem["wrap"];
-            this.directionInfo.text = MxmlCodeUtils.getInfoContainerDirection(this.selectedItem);
-
+            selectCurrentItem(directionDropDownList);
+            selectCurrentItem(horizontalDirection);
+            selectCurrentItem(verticalDirection);
+			
 			updateBinding();
+        }
+
+        private function selectCurrentItem(dpList:DropDownList):void
+        {
+            if (this.selectedItem[dpList.labelField] && dpList.dataProvider)
+            {
+                var dpCount:int = dpList.dataProvider.length;
+                for (var i:int = 0; i < dpCount; i++)
+                {
+                    var item:Object = dpList.dataProvider.getItemAt(i);
+                    if (item[dpList.labelField] == this.selectedItem[dpList.labelField])
+                    {
+                        dpList.selectedItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+
+        protected function onDrectionChange(event:IndexChangeEvent):void
+        {
+            var dpList:DropDownList = event.target as DropDownList;
+            if (this.selectedItem[dpList.labelField])
+            {
+                this.selectedItem[dpList.labelField] = dpList.selectedItem[dpList.labelField];
+            }
         }
 
         private function onWrapContentChange(event:Event):void
         {
+            if (wrapContent.selected)
+            {
+                verticalDirection.selectedItem = verticalTopItem;
+            }
             this.selectedItem["wrap"] = wrapContent.selected;
         }
 		
@@ -97,10 +151,27 @@
 			{
 				return;
 			}
-
+			this._bindingDirection = BindingUtils.bindSetter(onDirectionUpdated, selectedItem, "direction", false, true);
 			this._bindingWrap = BindingUtils.bindSetter(onWrapUpdated, selectedItem, "wrap", false, true);
+			this._bindingHAlign = BindingUtils.bindSetter(onHAlignUpdated, selectedItem, "horizontalAlign", false, true);
+			this._bindingVAlign = BindingUtils.bindSetter(onVAlignUpdated, selectedItem, "verticalAlign", false, true);
 		}
-
+		
+		private function onDirectionUpdated(value:Object):void
+		{
+			if (directionDropDownList) selectCurrentItem(directionDropDownList);
+		}
+		
+		private function onHAlignUpdated(value:Object):void
+		{
+			if (horizontalDirection) selectCurrentItem(horizontalDirection);
+		}
+		
+		private function onVAlignUpdated(value:Object):void
+		{
+			if (verticalDirection) selectCurrentItem(verticalDirection);
+		}
+		
 		private function onWrapUpdated(value:Object):void
 		{
 			if (wrapContent) this.wrapContent.selected = value;
@@ -108,10 +179,31 @@
 
         protected function onDivLayoutFormCreationComplete(event:FlexEvent):void
         {
+            this.directionDropDownList.dataProvider = new ArrayList([
+                new ContainerDirectionItem(ContainerDirection.HORIZONTAL_LAYOUT),
+                new ContainerDirectionItem(ContainerDirection.VERTICAL_LAYOUT)
+            ]);
+
+            this.horizontalDirection.dataProvider = new ArrayList([
+                new ContainerHorizontalAlignItem(HorizontalAlign.LEFT),
+                new ContainerHorizontalAlignItem(HorizontalAlign.CENTER),
+                new ContainerHorizontalAlignItem(HorizontalAlign.RIGHT)
+            ]);
+
+            verticalTopItem = new ContainerVerticalAlignItem(VerticalAlign.TOP);
+            this.verticalDirection.dataProvider = new ArrayList([
+                verticalTopItem,
+                new ContainerVerticalAlignItem(VerticalAlign.MIDDLE),
+                new ContainerVerticalAlignItem(VerticalAlign.BOTTOM)
+            ])
+
             this.callLater(refreshSelection);
 
             _childrenForFocus = [];
+            _childrenForFocus.push(directionDropDownList);
             _childrenForFocus.push(wrapContent);
+            _childrenForFocus.push(horizontalDirection);
+            _childrenForFocus.push(verticalDirection);
         }
 
         ]]></fx:Script>

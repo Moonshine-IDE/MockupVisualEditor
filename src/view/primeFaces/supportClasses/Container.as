@@ -18,7 +18,14 @@ package view.primeFaces.supportClasses
         {
             super();
 
-            this.setHoriztonalLayout();
+            if (this.wrap)
+            {
+                this.setFlowLayout();
+            }
+            else
+            {
+                this.setHoriztonalLayout();
+            }
         }
 		
 		protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
@@ -50,7 +57,7 @@ package view.primeFaces.supportClasses
             }
         }
 
-        private var _wrap:Boolean;
+        protected var _wrap:Boolean;
         private var wrapChanged:Boolean;
 
 

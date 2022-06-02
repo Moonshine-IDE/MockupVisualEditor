@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
                                   xmlns:s="library://ns.adobe.com/flex/spark"
-                                  xmlns:suportclasses="view.suportClasses.*"
+                                    xmlns:mx="library://ns.adobe.com/flex/mx"
+								  xmlns:suportclasses="view.suportClasses.*"
                                   xmlns:primeFaces="view.primeFaces.forms.*" xmlns:forms="view.forms.*"
 								  xmlns:domino="view.domino.forms.*" 
-								  creationComplete="onInputCreationComplete(event)">
+								 >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
@@ -185,29 +186,8 @@
 				}
 			}
 
-			private function onInputCreationComplete(event:FlexEvent):void
-        	{
-				 //inistal hide options
-				 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 || this.selectedItem["hidewhen"]!=null){
-					 this.hideOption.selected = true;
-					 if(this.hideOption.selected){
-						hidePanel.visible = hidePanel.includeInLayout = true;
-					 }else{
-						hidePanel.visible = hidePanel.includeInLayout = false;
-					 }
-				 }
-
-				
-			}
-			 private function changeHideOption(event:Event):void
-			{
-				if(this.hideOption.selected){
-					hidePanel.visible = hidePanel.includeInLayout = true;
-				}else{
-					hidePanel.visible = hidePanel.includeInLayout = false;
-				}
 			
-			}
+			
 		]]>
 	</fx:Script>
     <suportclasses:layout>
@@ -215,8 +195,31 @@
     </suportclasses:layout>
 
 	<primeFaces:BasicsForm/>
-    <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
+
+	<mx:Accordion id="accordion" width="100%" height="100%" minHeight="500">
+	<mx:VBox  horizontalAlign="left" label="Label Info" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+
+  	<s:FormHeading label="Data" skinClass="skins.FormHeadingSkin" />
     <forms:TextForm label="Value" textProperty="text"/>
+		   
+	</mx:VBox>
+            
+	<mx:VBox  horizontalAlign="left" label="Advanced" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+					
+	</mx:VBox > 
+          
+
+            <mx:VBox  label="Font" horizontalAlign="left" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+                
+
+	
+	
+	
+	
+	
 	<forms:TextForm label="Size" textProperty="size"
 					restrict="0-9"/>
 	<forms:DropdownListForm id="ddl"
@@ -224,34 +227,50 @@
                             collectionProperty="colors" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-		
-	<domino:MultipleCheckbox label="Style:" 
-		optionExculdeFunction="excludeMultipleSelect"
-		collectionProperty="fontStyles" textProperty="fontStyle"/>	
+	<forms:DropdownListForm id="ddlfontName"
+                            label="Font" textProperty="fontName"
+                            collectionProperty="fontNames" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+	<s:Label text="Style"/>
+	<domino:MultipleCheckbox label=""  dynamicLabel="true" singleSelectOption="normal"
+		collectionProperty="fontStyles" textProperty="fontStyle"/>
+	
 
+	
+	</mx:VBox >
+
+            <mx:VBox  label="Paragraph Alignment">
+                <mx:Label text="Accordion container panel 3"/>
+            </mx:VBox >
+			<mx:VBox  label="Paragraph Hide When" horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
+
+			<domino:HideOptions textProperty="hide"/>	
+			<s:Label text="Hide paragraph if formula is true"/>
+            
+			<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />        
+		 
+            </mx:VBox >
+			 <mx:VBox  label="HTML tags">
+			 	<domino:TextForm label=":Id" textProperty="htmlId"/>
+				<domino:TextForm label=":Class" textProperty="htmlClass"/>
+			   	<domino:TextForm label=":Style" textProperty="htmlStyle"/>
+			    <domino:TextForm label=":Title" textProperty="htmlTitle"/>
+				<domino:TextForm label=":Other" textProperty="htmlOther"/>
+              
+            </mx:VBox >
+        </mx:Accordion>
+
+
+   
 	
 
 
 
-    <forms:TextForm id="txtFor" label="For" textProperty="forAttribute" prompt="Element id"/>
-	<s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
-	<s:CheckBox id="hideOption"
-				selected="false"
-				change="changeHideOption(event)"/>
-	</s:FormItem>
-	<s:BorderContainer 
-             cornerRadius="0"
-            borderStyle="solid" borderWeight="0" 
-            left="0" right="0" top="10" bottom="10" width="330" includeInLayout="false" visible="false" id="hidePanel">
-			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
-
-	<domino:HideOptions textProperty="hide"/>	
-	<s:Label text="Hide paragraph if formula is true"/>
-	 <forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
-              
-	 </s:VGroup> 
-	</s:BorderContainer>  
+   
+	
+	
 
     <forms:ToggleButtonSelectedForm label="Indicate required (Displays *)" textProperty="indicateRequired"/>
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>

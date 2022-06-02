@@ -47,6 +47,10 @@
 					 this.allowmul.selected=false;
 					
 				 }
+				 //inisatll font/color/size options 
+				 if(this.selectedItem["color"]!=null && this.selectedItem["color"].length>0){
+
+				 }
 
 
 	
@@ -747,11 +751,8 @@
                 
 	<forms:TextForm label="Size" textProperty="size"
 					restrict="0-9"/>
-	<forms:DropdownListForm id="ddlcolor"
-                            label="Color" textProperty="color"
-                            collectionProperty="colors" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+	<domino:ColorPicker id="ddlcolorPicker"  label="Color" textProperty="color"  />
+	
 	<forms:DropdownListForm id="ddlfontName"
                             label="Font" textProperty="fontName"
                             collectionProperty="fontNames" labelField="label"

@@ -691,6 +691,57 @@ package view.domino.surfaceComponents.components
 			_hide = value;
 		}
 
+         //-----Html core attrs-------
+        private var _htmlId:String;
+		public function get htmlId():String
+		{
+			return _htmlId;
+		}
+        public function set htmlId(value:String):void
+		{
+				_htmlId = value;
+		}
+
+		private var _htmlClass:String;
+		public function get htmlClass():String
+		{
+			return _htmlClass;
+		}
+        public function set htmlClass(value:String):void
+		{
+			_htmlClass = value;
+		}
+
+		private var _htmlStyle:String;
+		public function get htmlStyle():String
+		{
+			return _htmlStyle;
+		}
+        public function set htmlStyle(value:String):void
+		{
+			_htmlStyle=value;
+		}
+
+		private var _htmlTitle:String;
+		public function get htmlTitle():String
+		{
+			return _htmlTitle;
+		}
+        public function set htmlTitle(value:String):void
+		{
+			_htmlTitle=value;
+		}
+
+		private var _htmlOther:String;
+		public function get htmlOther():String
+		{
+			return _htmlOther;
+		}
+        public function set htmlOther(value:String):void
+		{
+			_htmlOther=value;
+		}
+
 		//-------------other componetn end-------------
 		
 		
@@ -747,6 +798,22 @@ package view.domino.surfaceComponents.components
                 xml.@truetype = this.truetype;
             }
 
+            if(this.htmlId){
+                xml.@htmlId = this.htmlId;
+            }
+            if(this.htmlClass){
+                xml.@htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                xml.@htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlTitle){
+                xml.@htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlOther){
+                xml.@htmlOther = this.htmlOther;
+            }
+
             return xml;
         }
 
@@ -776,6 +843,8 @@ package view.domino.surfaceComponents.components
                this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
             }
 
+            
+
 
         }
 
@@ -795,6 +864,22 @@ package view.domino.surfaceComponents.components
             component.familyid = this.familyid;
             component.pitch = this.pitch ;
             component.truetype = this.truetype ;
+
+             if(this.htmlId){
+                component.htmlId = this.htmlId;
+            }
+            if(this.htmlTitle){
+                component.htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlClass){
+                component.htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                component.htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlOther){
+                component.htmlOther = this.htmlOther;
+            }
 		
             return component.toCode();
         }

@@ -2150,6 +2150,16 @@ package view.domino.surfaceComponents.components
 			_truetype = value;
 		}
 
+        private var _alignPardef:String;
+		function get alignPardef():String
+		{
+			return _alignPardef;
+		}
+        function set alignPardef(value:String):void
+		{
+			_alignPardef=value;
+		}
+
         //-----Html core attrs-------
         private var _htmlId:String;
 		public function get htmlId():String

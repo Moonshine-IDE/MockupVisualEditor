@@ -222,11 +222,7 @@
 	
 	<forms:TextForm label="Size" textProperty="size"
 					restrict="0-9"/>
-	<forms:DropdownListForm id="ddl"
-                            label="Color" textProperty="color"
-                            collectionProperty="colors" labelField="label"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+		<domino:ColorPicker id="ddlcolorPicker"  label="Color" textProperty="color"  />
 	<forms:DropdownListForm id="ddlfontName"
                             label="Font" textProperty="fontName"
                             collectionProperty="fontNames" labelField="label"

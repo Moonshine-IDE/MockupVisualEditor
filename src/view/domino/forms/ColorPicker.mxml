@@ -12,10 +12,10 @@
     
 <s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 		<s:HGroup width="100%" verticalAlign="middle">
-        <s:Label text="{label}" width="40" direction="rtl"/>
+        <s:Label text="{label}" width="40"/>
 		<mx:ColorPicker id = "colorPicker" 
                showTextField = "true" change="color_changeHandler(event)" selectedColor = "0xFFFFFF" />
-         <s:Label text="selectedColor: #{colorPicker.selectedColor.toString(16)}"/> 
+         <s:Label text="Selected: #{colorstr}" id="colorLabel"/> 
         
       
 			
@@ -26,6 +26,7 @@
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.events.FlexEvent;
+        import mx.controls.Alert;
 
 	    
 
@@ -33,6 +34,7 @@
         import global.domino.DominoGlobalTokens;
 
         private var _binding:ChangeWatcher;
+        private var  colorstr:String ="ffffff";
 
         [Bindable]
         public var prompt:String;
@@ -102,10 +104,17 @@
         {
             if (!this.selectedItem) return;
 
-         
+              colorstr=colorPicker.selectedColor.toString(16);
            
-            this.selectedItem[this._textProperty] = "0x"+colorPicker.selectedColor.toString(16);
+            if(colorstr.length <6){
+                for(var i:int=colorstr.length;i<6;i++){
+                    colorstr="0"+colorstr;
+                }
+            }
+            this.selectedItem[this._textProperty] = "#"+colorstr;
             this.dispatchEvent(new Event(Event.CHANGE));
+            colorLabel.text= "Selected:"+colorstr;
+            
         }
 
         private function updateBinding():void
@@ -138,10 +147,13 @@
                          uint_color = uint("0x" + item["htmlcolor"].substr(1));
                     }
                 }
+              }else{
+                  //this is a hex value
+                  uint_color = uint("0x" + pre_color.substr(1)); 
               }
-
               
                colorPicker.selectedColor=uint_color;
+               colorLabel.text=this.selectedItem[this._textProperty];
            }
         }
         ]]></fx:Script>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+									  xmlns:s="library://ns.adobe.com/flex/spark"
+									  xmlns:suportclasses="view.suportClasses.*"
+									  skinClass="skins.FormSkin"
+									  creationComplete="onBasicFormCreationComplete(event)"
+									  stateChangeComplete="onBasicFormStateChangeComplete(event)"
+									  currentState="normal">
+	<suportclasses:states>
+		<s:State name="normal"/>
+		<s:State name="normalWithName"/>
+	</suportclasses:states>
+
+	<suportclasses:layout>
+		<s:FormLayout />
+	</suportclasses:layout>
+	<s:FormItem label="Name" skinClass="skins.FormItemSkin" includeIn="normalWithName">
+		<s:TextInput id="nameTextInput" width="100%" skinClass="skins.TextInputSkin"
+					 text="{selectedComponentNameAttributeChaged}" focusOut="commitName()"
+					 height="25" tabIndex="1" keyDown="nameInput_keyDownHandler(event)"/>
+	</s:FormItem>
+
+	<s:FormItem label="Width" skinClass="skins.FormItemSkin">
+		<s:HGroup width="100%">
+			<s:TextInput id="widthInput" width="100%"
+						 text="{selectedComponentComputedWidth}" skinClass="skins.TextInputSkin"
+						 keyDown="widthInput_keyDownHandler(event)" height="25"
+						 enabled="false"
+						 tabIndex="2" />
+			<s:CheckBox id="widthOutput" visible="{selectedItem is IComponentSizeOutput}"
+						includeInLayout="{selectedItem is IComponentSizeOutput}"
+						selected="true" enabled="false"
+						change="onWidthOutputChange(event)"/>
+		</s:HGroup>
+	</s:FormItem>
+	<s:FormItem label="Height" skinClass="skins.FormItemSkin">
+		<s:HGroup width="100%">
+			<s:TextInput id="heightInput" width="100%"
+						 text="{selectedComponentComputedHeight}" skinClass="skins.TextInputSkin"
+						 keyDown="heightInput_keyDownHandler(event)" height="25"
+						 enabled="false"
+						 tabIndex="3" />
+			<s:CheckBox id="heightOutput" visible="{selectedItem is IComponentSizeOutput}"
+						includeInLayout="{selectedItem is IComponentSizeOutput}"
+						selected="true" enabled="false"
+						change="onHeightOutputChange(event)"/>
+		</s:HGroup>
+	</s:FormItem>
+	<fx:Script><![CDATA[
+		import interfaces.IComponentPercentSizeOutput;
+		import interfaces.IComponentSizeOutput;
+
+		import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.core.UIComponent;
+        import mx.events.FlexEvent;
+
+        import utils.GenericUtils;
+
+        import view.interfaces.IIdAttribute;
+
+        import view.interfaces.ISurfaceComponent;
+
+        [Bindable]
+        public var widthOutputFlag:Boolean;
+        [Bindable]
+        public var heightOutputFlag:Boolean;
+
+        private var _bindingWidth:ChangeWatcher;
+        private var _bindingHeight:ChangeWatcher;
+        private var _bindingName:ChangeWatcher;
+        private var _widthOutput:ChangeWatcher;
+        private var _heightOutput:ChangeWatcher;
+
+        [Bindable("change")]
+        private function get selectedComponent():UIComponent
+        {
+            //x, y, width, and height aren't bindable on interfaces used by
+            //UIComponent, so we need to give the compiler a little hint here
+            return UIComponent(this.selectedItem);
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+                this.currentState = value is IIdAttribute ? "normalWithName" : "normal";
+                updateBinding();
+            }
+        }
+
+        [Bindable("propertyEditorChanged")]
+        public function get selectedComponentComputedWidth():String
+        {
+            var percentSizeComponent:IComponentPercentSizeOutput = selectedComponent as IComponentPercentSizeOutput;
+            if (!isNaN(selectedComponent.percentWidth) || percentSizeComponent)
+            {
+                if (percentSizeComponent && !isNaN(percentSizeComponent.widthPercent))
+                {
+                    return percentSizeComponent.widthPercent + "%";
+                }
+                else if (!isNaN(selectedComponent.percentWidth))
+                {
+                    return selectedComponent.percentWidth + "%";
+                }
+            }
+
+            return selectedComponent.width.toString();
+        }
+
+        [Bindable("propertyEditorChanged")]
+        public function get selectedComponentComputedHeight():String
+        {
+            var percentSizeComponent:IComponentPercentSizeOutput = selectedComponent as IComponentPercentSizeOutput;
+            if (!isNaN(selectedComponent.percentHeight) || percentSizeComponent)
+            {
+                if (percentSizeComponent && !isNaN(percentSizeComponent.heightPercent))
+                {
+                    return percentSizeComponent.heightPercent + "%";
+                }
+                else if (!isNaN(selectedComponent.percentHeight))
+                {
+                    return selectedComponent.percentHeight + "%";
+                }
+            }
+
+            return selectedComponent.height.toString();
+        }
+
+        [Bindable("propertyEditorChanged")]
+        public function get selectedComponentNameAttributeChaged():String
+        {
+            if (this.selectedItem is IIdAttribute)
+            {
+                return this.selectedItem["nameAttribute"];
+            }
+
+            return "";
+        }
+
+     
+
+        private function commitWidth():void
+        {
+            if (!this.selectedItem) return;
+
+            if (this.widthInput.text.indexOf("%") != -1)
+            {
+                GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, true);
+            }
+            else
+            {
+                var newWidth:Number = parseFloat(this.widthInput.text);
+                this.widthInput.text = GenericUtils.applyMinAndMaxWidth(this.selectedItem, newWidth);
+            }
+            this.widthInput.selectAll();
+        }
+
+        private function commitHeight():void
+        {
+            if (!this.selectedItem) return;
+
+            if (this.heightInput.text.indexOf("%") != -1)
+            {
+                GenericUtils.applyPercentageWidthHeight(this.selectedItem, this.widthInput.text, this.heightInput.text, false);
+            }
+            else
+            {
+                var newHeight:Number = parseFloat(this.heightInput.text);
+                this.heightInput.text = GenericUtils.applyMinAndMaxHeight(this.selectedItem, newHeight);
+            }
+            this.heightInput.selectAll();
+        }
+
+        private function commitName():void
+        {
+            if (!this.selectedItem) return;
+
+            this.selectedItem["nameAttribute"] = this.nameTextInput.text;
+        }
+
+        private function widthInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitWidth();
+            }
+        }
+
+        private function heightInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitHeight();
+            }
+        }
+
+        private function nameInput_keyDownHandler(event:KeyboardEvent):void
+        {
+            if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
+            {
+                commitName();
+            }
+        }
+
+        private function onBasicFormCreationComplete(event:FlexEvent):void
+        {
+            removeEventListener(FlexEvent.CREATION_COMPLETE, onBasicFormCreationComplete);
+
+            this.refreshChildrenForFocus();
+            this.refreshWidthInputEnabled(selectedItem);
+        }
+
+        private function updateBinding():void
+        {
+            if (this._bindingWidth)
+            {
+                this._bindingWidth.unwatch();
+                this._bindingHeight.unwatch();
+                this._bindingWidth = this._bindingHeight = null;
+
+                if (currentState == "normalWithName")
+                {
+                    this._bindingName.unwatch();
+                    this._bindingName = null;
+                }
+            }
+            if (this._widthOutput)
+            {
+                this._widthOutput.unwatch();
+                this._heightOutput.unwatch();
+                this._widthOutput = this._heightOutput = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._bindingWidth = BindingUtils.bindSetter(onWidthUpdated, selectedItem, "width", false, true);
+            this._bindingHeight = BindingUtils.bindSetter(onHeightUpdated, selectedItem, "height", false, true);
+            if (currentState == "normalWithName") this._bindingName = BindingUtils.bindSetter(onNameUpdated, selectedItem, "nameAttribute", false, true);
+
+            if (selectedItem is IComponentSizeOutput)
+            {
+                this._widthOutput = BindingUtils.bindProperty(this, "widthOutputFlag", this.selectedItem, "widthOutput", false, true);
+                this._heightOutput = BindingUtils.bindProperty(this, "heightOutputFlag", this.selectedItem, "heightOutput", false, true);
+            }
+        }
+
+        private function onWidthUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
+
+            if (this.widthInput)
+            {
+                this.widthInput.text = selectedComponentComputedWidth;
+            }
+        }
+
+        private function onHeightUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
+
+            if (this.heightInput)
+            {
+                this.heightInput.text = selectedComponentComputedHeight;
+            }
+        }
+
+   
+
+        private function onNameUpdated(value:Object):void
+        {
+            if (!this.selectedItem) return;
+
+            if (this.nameTextInput)
+            {
+                this.nameTextInput.text = this.selectedItem["nameAttribute"];
+            }
+        }
+
+        private function onBasicFormStateChangeComplete(event:FlexEvent):void
+        {
+            this.refreshChildrenForFocus();
+        }
+
+        private function refreshChildrenForFocus():void
+        {
+            if (currentState == "normal")
+            {
+                _childrenForFocus = [];
+                _childrenForFocus.push(widthInput.textDisplay);
+                _childrenForFocus.push(heightInput.textDisplay);
+            }
+            else if (currentState == "normalWithName")
+            {
+                _childrenForFocus = [];
+                _childrenForFocus.push(nameTextInput.textDisplay);
+                _childrenForFocus.push(widthInput.textDisplay);
+                _childrenForFocus.push(heightInput.textDisplay);
+            }
+        }
+
+        private function onWidthOutputChange(event:Event):void
+        {
+            //this.widthInput.enabled = this.widthOutput.selected;
+            this.selectedItem["widthOutput"] = this.widthOutput.selected;
+        }
+
+        private function onHeightOutputChange(event:Event):void
+        {
+            //this.heightInput.enabled = this.heightOutput.selected;
+            this.selectedItem["heightOutput"] = this.heightOutput.selected;
+        }
+
+        private function refreshWidthInputEnabled(value:ISurfaceComponent):void
+        {
+            if (!value) return;
+
+            if (value is IComponentSizeOutput)
+            {
+                var componentSize:IComponentSizeOutput = (value as IComponentSizeOutput);
+                widthOutputFlag = componentSize.widthOutput;
+                heightOutputFlag = componentSize.heightOutput;
+            }
+        }
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

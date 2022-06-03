@@ -13,8 +13,8 @@
         <s:HGroup gap="3" verticalAlign="middle" width="100%">
             <s:DropDownList id="directionDropDownList" width="100%"
                             requireSelection="true" labelField="direction"
-                            change="onDrectionChange(event)" enabled="{wrapContent.selected == false}"/>
-            <s:CheckBox id="wrapContent" label="wrap" change="onWrapContentChange(event)"/>
+                            change="onDrectionChange(event)" enabled="false"/>
+            <s:CheckBox id="wrapContent" label="wrap" change="onWrapContentChange(event)" enabled="false"/>
         </s:HGroup>
     </s:FormItem>
     <s:FormItem label="Horizontal align" skinClass="skins.StackedFormItemSkin">
@@ -24,7 +24,7 @@
     </s:FormItem>
     <s:FormItem label="Vertical align" skinClass="skins.StackedFormItemSkin">
         <s:DropDownList id="verticalDirection" width="100%" requireSelection="true"
-                        labelField="verticalAlign" enabled="{wrapContent.selected == false}"
+                        labelField="verticalAlign" enabled="false"
                         change="onDrectionChange(event)"/>
     </s:FormItem>
     <fx:Script><![CDATA[

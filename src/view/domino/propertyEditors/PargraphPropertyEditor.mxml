@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
                                   xmlns:s="library://ns.adobe.com/flex/spark"
-                                  xmlns:suportclasses="view.suportClasses.*" 
-							      xmlns:primeFaces="view.primeFaces.forms.*" 
+                                  xmlns:suportclasses="view.suportClasses.*"
 							      xmlns:forms="view.forms.*"
                                   xmlns:domino="view.domino.forms.*" 
                                   creationComplete="onInputCreationComplete(event)"
@@ -49,7 +48,7 @@
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
     </suportclasses:layout>
 
-    <primeFaces:BasicsForm/>
+    <domino:BasicsDisabledForm />
 
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 

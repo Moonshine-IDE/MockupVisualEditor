@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package view.domino.surfaceComponents.components
 {
-    import interfaces.IComponentSizeOutput;
+	import interfaces.IComponentPercentSizeOutput;
+	import interfaces.IComponentSizeOutput;
 	import interfaces.ILookup;
 	import interfaces.IRoyaleComponentConverter;
 	import interfaces.ISurface;
@@ -94,7 +95,7 @@ package view.domino.surfaceComponents.components
 	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoParagraph.as
 	 */
     public class DominoParagraph extends Container implements IDominoSurfaceComponent, view.interfaces.IDominoParagraph,
-            IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter
+            IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter, IComponentPercentSizeOutput
     {
         public static const PRIME_FACES_XML_ELEMENT_NAME:String = "paragraph";
         public static var ELEMENT_NAME:String = "Paragraph";
@@ -129,6 +130,20 @@ package view.domino.surfaceComponents.components
                 "horizontalAlignChanged"
             ];
         }
+
+		private var _widthPercent:Number;
+
+		public function get widthPercent():Number
+		{
+			return _widthPercent;
+		}
+
+		private var  _heightPercent:Number;
+
+		public function get heightPercent():Number
+		{
+			return _heightPercent;
+		}
 
         private var _widthOutput:Boolean;
         protected var widthOutputChanged:Boolean;
@@ -263,7 +278,24 @@ package view.domino.surfaceComponents.components
             return super.percentWidth;
         }
 
-        [PercentProxy("percentWidth")]
+		override public function set percentWidth(value:Number):void
+		{
+			if (isNaN(value))
+			{
+				if (super.percentWidth != value)
+				{
+					_widthPercent = super.percentWidth;
+				}
+			}
+			else
+			{
+				_widthPercent = Number.NaN;
+			}
+
+			super.percentWidth = value;
+		}
+
+		[PercentProxy("percentWidth")]
         [Inspectable(category="General")]
         [Bindable("widthChanged")]
         /**
@@ -298,6 +330,23 @@ package view.domino.surfaceComponents.components
         {
             return super.percentHeight;
         }
+
+		override public function set percentHeight(value:Number):void
+		{
+			if (isNaN(value))
+			{
+				if (super.percentHeight != value)
+				{
+					_heightPercent = super.percentHeight;
+				}
+			}
+			else
+			{
+				_heightPercent = Number.NaN;
+			}
+
+			super.percentHeight = value;
+		}
 
         [PercentProxy("percentHeight")]
         [Inspectable(category="General")]

@@ -29,6 +29,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.INonDeletableSurfaceComponent;
 
     import view.domino.propertyEditors.WindowPropertyEditor;
+    import view.primeFaces.supportClasses.ContainerDirection;
     import view.primeFaces.surfaceComponents.components.Div;
     import view.global.Globals;
     import mx.collections.ArrayList;
@@ -89,6 +90,8 @@ package view.domino.surfaceComponents.components
 			this.setStyle("backgroundColor", "#FCFCFC");
 
             Globals.MainApplicationWidth=super.width;
+
+            this.direction = ContainerDirection.VERTICAL_LAYOUT;
 		}
 
         override public function get propertyEditorClass():Class

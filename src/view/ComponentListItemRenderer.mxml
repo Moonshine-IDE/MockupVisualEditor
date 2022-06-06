@@ -68,6 +68,11 @@
 			{
 				var ComponentType:Class = this.componentData.type;
 				var newThumbnail:ISurfaceComponent = new ComponentType();
+				if (this.componentData.maxSize && this.componentData.hasOwnProperty("maxWidth"))
+				{
+					newThumbnail["maxWidth"] = this.componentData.maxSize.maxWidth;
+				}
+
 				newThumbnail.validateNow();
 				var scale:Number = Math.min(120 / newThumbnail.width, 120 / newThumbnail.height);
 				if(scale > 1)

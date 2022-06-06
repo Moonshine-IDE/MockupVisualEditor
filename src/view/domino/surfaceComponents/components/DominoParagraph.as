@@ -111,8 +111,8 @@ package view.domino.surfaceComponents.components
             super();
 
 			component = new components.domino.DominoParagraph(this);
-			
-            this.percentWidth = 100;
+
+			this.percentWidth = 100;
             this.height = 40;
             this.minWidth = Globals.MainApplicationWidth-10;
             this.minHeight = 40;

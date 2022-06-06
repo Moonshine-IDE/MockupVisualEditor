@@ -68,7 +68,7 @@
 			{
 				var ComponentType:Class = this.componentData.type;
 				var newThumbnail:ISurfaceComponent = new ComponentType();
-				if (this.componentData.maxSize && this.componentData.hasOwnProperty("maxWidth"))
+				if (this.componentData.maxSize && this.componentData.maxSize.hasOwnProperty("maxWidth"))
 				{
 					newThumbnail["maxWidth"] = this.componentData.maxSize.maxWidth;
 				}

@@ -114,7 +114,7 @@ package view.domino.surfaceComponents.components
 
 			this.percentWidth = 100;
             this.height = 40;
-            this.minWidth = Globals.MainApplicationWidth-10;
+            this.minWidth = Globals.MainApplicationWidth;
             this.minHeight = 40;
 
             _propertiesChangedEvents = [

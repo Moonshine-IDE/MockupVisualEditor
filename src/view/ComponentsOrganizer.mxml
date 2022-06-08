@@ -9,586 +9,586 @@
 	</fx:Metadata>
 	<fx:Script>
 		<![CDATA[
-		import mx.collections.ArrayCollection;
-		import mx.containers.GridItem;
-		import mx.containers.GridRow;
-		import mx.core.IVisualElement;
-		import mx.core.IVisualElementContainer;
-		import mx.events.FlexEvent;
-		import mx.events.ListEvent;
-		import mx.controls.Alert;
-
-		import spark.components.Image;
-
-		import components.renderers.OrganizerTreeRenderer;
-
-		import data.OrganizerItem;
-
-		import view.interfaces.IGetChildrenSurfaceComponent;
-		import view.interfaces.IDominoSurfaceComponent;
-		import view.interfaces.ISurfaceComponent;
-		import view.primeFaces.supportClasses.GridBase;
-		import view.primeFaces.surfaceComponents.components.Fieldset;
-		import view.primeFaces.surfaceComponents.components.Grid;
-		import view.primeFaces.surfaceComponents.components.PanelGrid;
-		import view.primeFaces.surfaceComponents.components.TabView;
-		import view.suportClasses.PropertyChangeReference;
-
-		import view.domino.surfaceComponents.components.DominoTable;
-
-		public var editingSurface:EditingSurface;
-		public var isRefreshTree:Boolean = true;
-
-		[Embed(source='/assets/icoRefresh.png')]
-		private var sourceRefreshIcon:Class;
-
-		[Bindable]
-		private var components:ArrayCollection;
-
-		private var foundIndepthItem:OrganizerItem;
-		private var lastTopParent:Object;
-		private var lastChange:PropertyChangeReference;
-		private var isProcessRunning:Boolean;
-
-		public function loadFirstData(surface:EditingSurface):void
-		{
-			if (surface == null)
-			{
-				Alert.show("surface is null");
-			}
-			var tmpArr:Array = getComponentsChildren(surface);
-
-			tree.rootContainer = (tmpArr[0] as OrganizerItem).item as IVisualElementContainer;
-			components = new ArrayCollection(tmpArr);
-			tmpArr = null;
-			tree.callLater(function ():void
-			{
-				for each (var i:Object in components)
-				{
-					tree.expandChildrenOf(i, true);
-				}
-			});
-		}
-
-		public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement, droppedIndex:int = -1):void
-		{
-			isProcessRunning = true;
-			findItemInDepth(components.source, isSubDivComponent(ownerComponent));
-			this.callLater(function ():void
-			{
-				if (foundIndepthItem)
-				{
-					if (droppedIndex == -1) foundIndepthItem.children.push((component as IGetChildrenSurfaceComponent).getComponentsChildren());
-					else foundIndepthItem.children.insertAt(droppedIndex, (component as IGetChildrenSurfaceComponent).getComponentsChildren());
-				} else
-				{
-					if (droppedIndex == -1) components.addItem((component as IGetChildrenSurfaceComponent).getComponentsChildren());
-					else components.addItemAt((component as IGetChildrenSurfaceComponent).getComponentsChildren(), droppedIndex);
-				}
-
-				refreshItem(component);
-				foundIndepthItem = null;
-				isProcessRunning = false;
-			});
-		}
-
-		public function removeDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
-		{
-			isProcessRunning = true;
-			findItemInDepth(components.source, isSubDivComponent(ownerComponent));
-			this.callLater(function ():void
-			{
-				var tmpItems:Array = foundIndepthItem ? foundIndepthItem.children : components.source;
-				for (var i:int = 0; i < tmpItems.length; i++)
-				{
-					if (tmpItems[i].item === component)
-					{
-						tmpItems.splice(i, 1);
-						tree.selectedIndex = -1;
-						break;
-					}
-				}
-
-				refreshItem(component);
-				foundIndepthItem = null;
-				isProcessRunning = false;
-			});
-		}
-
-		public function updateItemWithPropertyChanges(change:PropertyChangeReference, isUndoRedo:Boolean = false):void
-		{
-			if (isUndoRedo)
-			{
-				updateTreeByComponentChanges(change);
-				return;
-			}
-
-			if (!tree.selectedItem)
-			{
-				findItemInDepth(components.source, change.fieldClass as IVisualElement);
-				if (!foundIndepthItem) return;
-			}
-
-			if (change.fieldClass == tree.selectedItem.item)
-			{
-				if (lastChange && (change === lastChange || (change.eventType == lastChange.eventType && change.fieldClass === lastChange.fieldClass && change.fieldLastValue === lastChange.fieldLastValue && change.fieldName === lastChange.fieldName &&
-						change.fieldNewValue === lastChange.fieldNewValue))) return;
-
-				var organizerItem:OrganizerItem;
-				var surfaceComponent:IGetChildrenSurfaceComponent;
-				var i:int;
-				var cellIndex:int;
-
-				lastTopParent = foundIndepthItem = null;
-				lastChange = change;
-				switch (change.fieldName)
-				{
-					case "label":
-						if (change.fieldClass is TabView)
-						{
-							organizerItem = (tree.selectedItem as OrganizerItem).children[change.fieldLastValue[0].field];
-							organizerItem.name = change.fieldNewValue[0].value;
-							refreshItem(change.fieldClass as IVisualElement);
-						}
-						break;
-					case "addItemAt":
-						if (change.fieldClass is TabView)
-						{
-							change.fieldClass["callLater"](function ():void
-							{
-								organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldClass as TabView).numElements - 1);
-								if (organizerItem)
-								{
-									tree.selectedItem.children.push(organizerItem);
-									refreshItem(change.fieldClass as IVisualElement);
-								}
-							});
-						}
-						break;
-					case "removeItemAt":
-						tree.expandItem(tree.selectedItem, true);
-						if (tree.selectedItem.children)
-						{
-							tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
-						}
-						refreshItem(change.fieldClass as IVisualElement);
-						break;
-					case "addRowAt":
-						change.fieldClass["callLater"](function ():void
-						{
-							if (change.fieldClass is DominoTable)
-							{
-								organizerItem = (change.fieldClass as IDominoSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
-								if (organizerItem)
-								{
-									tree.selectedItem.children.push(organizerItem.children[0]);
-									refreshItem(change.fieldClass as IVisualElement);
-								}
-
-							} else if (change.fieldClass is Grid)
-							{
-								organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
-								if (organizerItem)
-								{
-									tree.selectedItem.children.push(organizerItem.children[0]);
-									refreshItem(change.fieldClass as IVisualElement);
-								}
-							} else if (change.fieldClass is PanelGrid)
-							{
-								organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue[change.fieldLastValue.length - 1].object);
-								if (organizerItem)
-								{
-									tree.selectedItem.children = tree.selectedItem.children.concat(organizerItem.children);
-									refreshItem(change.fieldClass as IVisualElement);
-								}
-							}
-						});
-						break;
-					case "removeRowAt":
-						tree.expandItem(tree.selectedItem, true);
-						if (change.fieldClass is PanelGrid || change.fieldClass is Grid || change.fieldClass is DominoTable)
-						{
-							var rowItem:GridRow = (change.fieldClass is PanelGrid) ? change.fieldLastValue[0].object : change.fieldLastValue.object;
-							for (i = 0; i < rowItem.numElements; i++)
-							{
-								surfaceComponent = (rowItem.getElementAt(i) as IVisualElementContainer).getElementAt(0) as IGetChildrenSurfaceComponent;
-								tree.selectedItem.children.some(function (item:*, index:int, array:Array):Boolean
-								{
-									if (surfaceComponent == item.item)
-									{
-										tree.selectedItem.children.splice(index, 1);
-										return true;
-									}
-									return false;
-								});
-							}
-
-							updateCellLabels(tree.selectedItem as OrganizerItem);
-							refreshItem(change.fieldClass as IVisualElement);
-						}
-						break;
-					case "removedAll":
-						tree.expandItem(tree.selectedItem, true);
-						tree.selectedItem.children = [];
-						change.fieldClass["callLater"](function ():void
-						{
-							organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren();
-							tree.selectedItem.children = organizerItem.children;
-							refreshItem(change.fieldClass as IVisualElement);
-						});
-						break;
-					case "addColumnAt":
-						change.fieldClass["callLater"](function ():void
-						{
-							if (change.fieldClass is Grid || change.fieldClass is DominoTable)
-							{
-								organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue.object,
-										change.fieldLastValue.rowIndex, change.fieldLastValue.colIndex);
-								if (organizerItem)
-								{
-									if (change.fieldLastValue.rowIndex == 0) cellIndex = change.fieldLastValue.colIndex;
-									else
-									{
-										i = 0;
-										while (i <= change.fieldLastValue.rowIndex)
-										{
-											cellIndex += (change.fieldClass as GridBase).getNumColumns(i);
-											i++;
-										}
-									}
-
-									tree.selectedItem.children.splice(cellIndex - 1, 0, organizerItem);
-									updateCellLabels(tree.selectedItem as OrganizerItem);
-									refreshItem(change.fieldClass as IVisualElement);
-								}
-							} else if (change.fieldClass is PanelGrid)
-							{
-								if (change.fieldLastValue && change.fieldLastValue.length > 0)
-								{
-									// get the column index first by parsing any
-									cellIndex = (change.fieldLastValue[0].parent as IVisualElementContainer).getElementIndex(change.fieldLastValue[0].object);
-									// get corresponding organizer items from the owner class
-									organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue, cellIndex);
-									// place newly received organizer by row and column index wise
-									for (i = 0; i < organizerItem.children.length; i++)
-									{
-										tree.selectedItem.children.splice(cellIndex, 0, organizerItem.children[i]);
-										cellIndex += (cellIndex + 1); // +1 is for 0th index count
-									}
-
-									// update tree label and hierarchy
-									updateCellLabels(tree.selectedItem as OrganizerItem);
-									refreshItem(change.fieldClass as IVisualElement);
-								}
-							}
-						});
-						break;
-					case "removeColumnAt":
-						tree.expandItem(tree.selectedItem, true);
-						if (change.fieldClass is PanelGrid)
-						{
-							for (i = 0; i < change.fieldLastValue.length; i++)
-							{
-								surfaceComponent = change.fieldLastValue[i].object.getElementAt(0) as IGetChildrenSurfaceComponent;
-								tree.selectedItem.children.some(function (item:*, index:int, array:Array):Boolean
-								{
-									if (surfaceComponent == item.item)
-									{
-										tree.selectedItem.children.splice(index, 1);
-										return true;
-									}
-									return false;
-								});
-							}
-
-							updateCellLabels(tree.selectedItem as OrganizerItem);
-							refreshItem(change.fieldClass as IVisualElement);
-						} else if (change.fieldClass is Grid || change.fieldClass is DominoTable)
-						{
-							surfaceComponent = change.fieldLastValue.object.getElementAt(0) as IGetChildrenSurfaceComponent;
-							tree.selectedItem.children.some(function (item:*, index:int, array:Array):Boolean
-							{
-								if (surfaceComponent == item.item)
-								{
-									tree.selectedItem.children.splice(index, 1);
-									return true;
-								}
-								return false;
-							});
-
-							updateCellLabels(tree.selectedItem as OrganizerItem);
-							refreshItem(change.fieldClass as IVisualElement);
-						}
-						break;
-				}
-			}
-		}
-
-		private function updateTreeByComponentChanges(change:PropertyChangeReference):void
-		{
-			var organizerItem:OrganizerItem;
-
-			findItemInDepth(components.source, change.fieldClass as IVisualElement);
-			this.callLater(function ():void
-			{
-				if (foundIndepthItem && ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid) || (change.fieldClass is DominoTable)))
-				{
-					organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren();
-
-					foundIndepthItem.setItemsWithAnother(organizerItem);
-					refreshItem(change.fieldClass as IVisualElement);
-					editingSurface.selectedItem = null;
-				}
-			});
-		}
-
-		private function updateCellLabels(component:OrganizerItem):void
-		{
-			var numRows:int;
-			var cellIndex:int;
-			var gridBase:GridBase;
-
-			if (component.item != null)
-			{
-
-				if (component.item is Grid || component.item is DominoTable) gridBase = component.item as GridBase;
-				else if (component.item is PanelGrid) gridBase = (component.item as PanelGrid).body;
-
-
-				numRows = gridBase.getNumRows();
-				for (var i:int = 0; i < numRows; i++)
-				{
-					var numCols:int = gridBase.getNumColumns(i);
-					for (var j:int = 0; j < numCols; j++)
-					{
-						if (component.children != null)
-						{
-							if (component.children[cellIndex] != null)
-							{
-
-								component.children[cellIndex].name = "R" + (i + 1) + ":C" + (j + 1);
-								cellIndex++;
-
-							}
-						}
-					}
-				}
-			}
-		}
-
-		private function onInitialized():void
-		{
-			//Alert.show("onInitialized");
-			var tmpRefreshButton:Image = new Image();
-			tmpRefreshButton.source = new sourceRefreshIcon();
-			header.rightButtons = [{icon: tmpRefreshButton, handle: this.onRefreshRequest}];
-		}
-
-		private function onRefreshRequest(event:MouseEvent):void
-		{
-			editingSurface.selectedItem = null;
-			loadFirstData(editingSurface);
-		}
-
-		private function onComplete(event:FlexEvent):void
-		{
-			if (!editingSurface.isVisualEditorFlex)
-				editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
-		}
-
-		private function getComponentsChildren(surface:EditingSurface):Array
-		{
-			if (surface == null)
-			{
-				Alert.show("surface is null");
-			}
-
-
-			if (surface.numChildren > 0)
-			{
-
-				var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
-
-
-				var componentsArray:Array = [];
-				var container:IVisualElementContainer = surface;
-				var organizerItem:OrganizerItem;
-				var elementCount:int = 0;
-
-
-				if (editingSurface.isVisualEditorDomino || editingSurface.isVisualEditorFlex)
-				{
-					container = element as IVisualElementContainer;
-				}
-
-
-				if (!container)
-				{
-					elementCount = surface.numElements;
-					container = surface;
-				} else
-				{
-					elementCount = container.numElements;
-				}
-
-				for (var i:int = 0; i < elementCount; i++)
-				{
-
-					element = container.getElementAt(i) as ISurfaceComponent;
-
-					if (element === null)
-					{
-						continue;
-					}
-					var domino_element:IDominoSurfaceComponent;
-					var primeface_element:IGetChildrenSurfaceComponent;
-
-
-					if (editingSurface.isVisualEditorDomino)
-					{
-						//Alert.show("getComponentsChildren:438");
-						domino_element = element as IDominoSurfaceComponent;
-						if (domino_element)
-							organizerItem = domino_element.getComponentsChildren();
-					} else
-					{
-						primeface_element = element as IGetChildrenSurfaceComponent;
-						organizerItem = primeface_element.getComponentsChildren();
-					}
-
-					if (organizerItem) componentsArray.push(organizerItem);
-				}
-				//Alert.show("new stage:"+componentsArray.length);
-				return [new OrganizerItem(container, "Stage", componentsArray)];
-			} else
-			{
-				return [new OrganizerItem(surface, "Stage", [])];
-			}
-
-		}
-
-		private function findItemInDepth(items:Array, ownerComponent:IVisualElement, isRoot:Boolean = true, topParent:Object = null):void
-		{
-			// probable termination
-			if (isRoot)
-			{
-				lastTopParent = foundIndepthItem = null;
-			} else if (foundIndepthItem) return;
-
-			for each (var oItem:OrganizerItem in items)
-			{
-				if (oItem.item === ownerComponent)
-				{
-					lastTopParent = topParent;
-					foundIndepthItem = oItem;
-					return;
-				} else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem)
-				{
-					if (items === components.source) topParent = oItem;
-					findItemInDepth(oItem.children, ownerComponent, false, topParent);
-				}
-			}
-		}
-
-		private function refreshItem(item:IVisualElement = null, invalidateEverything:Boolean = true):void
-		{
-			var tmpFoundItemInDepth:OrganizerItem = (tree.selectedItem && tree.selectedItem.item == item) ? tree.selectedItem as OrganizerItem : null;
-
-			var lastScrollPosition:Number = tree.verticalScrollPosition;
-			var openItems:Object = tree.openItems;
-
-			tree.openItems = openItems;
-			tree.invalidateList();
-
-			if (!isRefreshTree || !item) return;
-
-			this.callLater(function ():void
-			{
-				if (!tmpFoundItemInDepth) findItemInDepth(components.source, item);
-				else foundIndepthItem = tmpFoundItemInDepth;
-				if (foundIndepthItem)
-				{
-					if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
-
-					tree.callLater(function ():void
-					{
-						tree.selectedItem = foundIndepthItem;
-						tree.scrollToIndex(tree.selectedIndex);
-
-						foundIndepthItem = null;
-						lastTopParent = null;
-					});
-				} else
-				{
-					tree.selectedIndex = -1;
-					tree.verticalScrollPosition = lastScrollPosition;
-				}
-			});
-		}
-
-		private function isSubDivComponent(value:IVisualElement):IVisualElement
-		{
-			if (value is TabView) return (value as TabView).div;
-			else if (value is Fieldset) return (value as Fieldset).div;
-			else if ((value is Grid) || (value is PanelGrid))
-			{
-				var grid:GridBase = (value is GridBase) ? value as GridBase : (value as PanelGrid).body;
-				var gridRow:GridRow = grid.getElementAt(grid.selectedRow) as GridRow;
-				var gridItem:GridItem = gridRow.getElementAt(grid.selectedColumn) as GridItem;
-				return gridItem.getElementAt(0);
-			}
-			return value;
-		}
-
-		private function getIconForFile(object:Object):Class
-		{
-			return null;
-		}
-
-		private function onItemSelectionChanged(event:ListEvent):void
-		{
-			if (tree.selectedItem) editingSurface.selectedItem = tree.selectedItem.item;
-		}
-
-		private function onItemSelectedOnEditingSurface(event:Event):void
-		{
-			if (isProcessRunning || (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem)))
-				return;
-
-			findItemInDepth(components.source, editingSurface.selectedItem as IVisualElement);
-			this.callLater(function ():void
-			{
-				if (foundIndepthItem)
-				{
-					if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
-
-					tree.callLater(function ():void
-					{
-						tree.selectedItem = foundIndepthItem;
-						tree.scrollToIndex(tree.selectedIndex);
-
-						foundIndepthItem = null;
-						lastTopParent = null;
-					});
-				} else
-				{
-					tree.selectedIndex = -1;
-				}
-			});
-		}
-
-		private function onTreeItemKeyUp(event:KeyboardEvent):void
-		{
-			// Delete key-press
-			if (event.keyCode == 46 && tree.selectedItem)
-			{
-				if (tree.selectedItem.name.indexOf(":") != -1 ||
-						tree.selectedItem.type == OrganizerItem.TYPE_CELL ||
-						tree.selectedItem.type == OrganizerItem.TYPE_TAB) return;
-				editingSurface.deleteItem(tree.selectedItem.item);
-			}
-		}
-		]]>
+        import mx.collections.ArrayCollection;
+        import mx.containers.GridItem;
+        import mx.containers.GridRow;
+        import mx.core.IVisualElement;
+        import mx.core.IVisualElementContainer;
+        import mx.events.FlexEvent;
+        import mx.events.ListEvent;
+        import mx.controls.Alert;
+
+        import spark.components.Image;
+
+        import components.renderers.OrganizerTreeRenderer;
+
+        import data.OrganizerItem;
+
+        import view.interfaces.IGetChildrenSurfaceComponent;
+        import view.interfaces.IDominoSurfaceComponent;
+        import view.interfaces.ISurfaceComponent;
+        import view.suportClasses.GridBase;
+        import view.primeFaces.surfaceComponents.components.Fieldset;
+        import view.primeFaces.surfaceComponents.components.Grid;
+        import view.primeFaces.surfaceComponents.components.PanelGrid;
+        import view.primeFaces.surfaceComponents.components.TabView;
+        import view.suportClasses.PropertyChangeReference;
+
+        import view.domino.surfaceComponents.components.DominoTable;
+
+        public var editingSurface:EditingSurface;
+        public var isRefreshTree:Boolean = true;
+
+        [Embed(source='/assets/icoRefresh.png')]
+        private var sourceRefreshIcon:Class;
+
+        [Bindable]
+        private var components:ArrayCollection;
+
+        private var foundIndepthItem:OrganizerItem;
+        private var lastTopParent:Object;
+        private var lastChange:PropertyChangeReference;
+        private var isProcessRunning:Boolean;
+
+        public function loadFirstData(surface:EditingSurface):void
+        {
+            if (surface == null)
+            {
+                Alert.show("surface is null");
+            }
+            var tmpArr:Array = getComponentsChildren(surface);
+
+            tree.rootContainer = (tmpArr[0] as OrganizerItem).item as IVisualElementContainer;
+            components = new ArrayCollection(tmpArr);
+            tmpArr = null;
+            tree.callLater(function ():void
+            {
+                for each (var i:Object in components)
+                {
+                    tree.expandChildrenOf(i, true);
+                }
+            });
+        }
+
+        public function addDroppedElement(ownerComponent:IVisualElement, component:IVisualElement, droppedIndex:int = -1):void
+        {
+            isProcessRunning = true;
+            findItemInDepth(components.source, isSubDivComponent(ownerComponent));
+            this.callLater(function ():void
+            {
+                if (foundIndepthItem)
+                {
+                    if (droppedIndex == -1) foundIndepthItem.children.push((component as IGetChildrenSurfaceComponent).getComponentsChildren());
+                    else foundIndepthItem.children.insertAt(droppedIndex, (component as IGetChildrenSurfaceComponent).getComponentsChildren());
+                } else
+                {
+                    if (droppedIndex == -1) components.addItem((component as IGetChildrenSurfaceComponent).getComponentsChildren());
+                    else components.addItemAt((component as IGetChildrenSurfaceComponent).getComponentsChildren(), droppedIndex);
+                }
+
+                refreshItem(component);
+                foundIndepthItem = null;
+                isProcessRunning = false;
+            });
+        }
+
+        public function removeDroppedElement(ownerComponent:IVisualElement, component:IVisualElement):void
+        {
+            isProcessRunning = true;
+            findItemInDepth(components.source, isSubDivComponent(ownerComponent));
+            this.callLater(function ():void
+            {
+                var tmpItems:Array = foundIndepthItem ? foundIndepthItem.children : components.source;
+                for (var i:int = 0; i < tmpItems.length; i++)
+                {
+                    if (tmpItems[i].item === component)
+                    {
+                        tmpItems.splice(i, 1);
+                        tree.selectedIndex = -1;
+                        break;
+                    }
+                }
+
+                refreshItem(component);
+                foundIndepthItem = null;
+                isProcessRunning = false;
+            });
+        }
+
+        public function updateItemWithPropertyChanges(change:PropertyChangeReference, isUndoRedo:Boolean = false):void
+        {
+            if (isUndoRedo)
+            {
+                updateTreeByComponentChanges(change);
+                return;
+            }
+
+            if (!tree.selectedItem)
+            {
+                findItemInDepth(components.source, change.fieldClass as IVisualElement);
+                if (!foundIndepthItem) return;
+            }
+
+            if (change.fieldClass == tree.selectedItem.item)
+            {
+                if (lastChange && (change === lastChange || (change.eventType == lastChange.eventType && change.fieldClass === lastChange.fieldClass && change.fieldLastValue === lastChange.fieldLastValue && change.fieldName === lastChange.fieldName &&
+                        change.fieldNewValue === lastChange.fieldNewValue))) return;
+
+                var organizerItem:OrganizerItem;
+                var surfaceComponent:IGetChildrenSurfaceComponent;
+                var i:int;
+                var cellIndex:int;
+
+                lastTopParent = foundIndepthItem = null;
+                lastChange = change;
+                switch (change.fieldName)
+                {
+                    case "label":
+                        if (change.fieldClass is TabView)
+                        {
+                            organizerItem = (tree.selectedItem as OrganizerItem).children[change.fieldLastValue[0].field];
+                            organizerItem.name = change.fieldNewValue[0].value;
+                            refreshItem(change.fieldClass as IVisualElement);
+                        }
+                        break;
+                    case "addItemAt":
+                        if (change.fieldClass is TabView)
+                        {
+                            change.fieldClass["callLater"](function ():void
+                            {
+                                organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldClass as TabView).numElements - 1);
+                                if (organizerItem)
+                                {
+                                    tree.selectedItem.children.push(organizerItem);
+                                    refreshItem(change.fieldClass as IVisualElement);
+                                }
+                            });
+                        }
+                        break;
+                    case "removeItemAt":
+                        tree.expandItem(tree.selectedItem, true);
+                        if (tree.selectedItem.children)
+                        {
+                            tree.selectedItem.children.splice(change.fieldLastValue.index, 1);
+                        }
+                        refreshItem(change.fieldClass as IVisualElement);
+                        break;
+                    case "addRowAt":
+                        change.fieldClass["callLater"](function ():void
+                        {
+                            if (change.fieldClass is DominoTable)
+                            {
+                                organizerItem = (change.fieldClass as IDominoSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
+                                if (organizerItem)
+                                {
+                                    tree.selectedItem.children.push(organizerItem.children[0]);
+                                    refreshItem(change.fieldClass as IVisualElement);
+                                }
+
+                            } else if (change.fieldClass is Grid)
+                            {
+                                organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, (change.fieldLastValue as GridRow));
+                                if (organizerItem)
+                                {
+                                    tree.selectedItem.children.push(organizerItem.children[0]);
+                                    refreshItem(change.fieldClass as IVisualElement);
+                                }
+                            } else if (change.fieldClass is PanelGrid)
+                            {
+                                organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue[change.fieldLastValue.length - 1].object);
+                                if (organizerItem)
+                                {
+                                    tree.selectedItem.children = tree.selectedItem.children.concat(organizerItem.children);
+                                    refreshItem(change.fieldClass as IVisualElement);
+                                }
+                            }
+                        });
+                        break;
+                    case "removeRowAt":
+                        tree.expandItem(tree.selectedItem, true);
+                        if (change.fieldClass is PanelGrid || change.fieldClass is Grid || change.fieldClass is DominoTable)
+                        {
+                            var rowItem:GridRow = (change.fieldClass is PanelGrid) ? change.fieldLastValue[0].object : change.fieldLastValue.object;
+                            for (i = 0; i < rowItem.numElements; i++)
+                            {
+                                surfaceComponent = (rowItem.getElementAt(i) as IVisualElementContainer).getElementAt(0) as IGetChildrenSurfaceComponent;
+                                tree.selectedItem.children.some(function (item:*, index:int, array:Array):Boolean
+                                {
+                                    if (surfaceComponent == item.item)
+                                    {
+                                        tree.selectedItem.children.splice(index, 1);
+                                        return true;
+                                    }
+                                    return false;
+                                });
+                            }
+
+                            updateCellLabels(tree.selectedItem as OrganizerItem);
+                            refreshItem(change.fieldClass as IVisualElement);
+                        }
+                        break;
+                    case "removedAll":
+                        tree.expandItem(tree.selectedItem, true);
+                        tree.selectedItem.children = [];
+                        change.fieldClass["callLater"](function ():void
+                        {
+                            organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren();
+                            tree.selectedItem.children = organizerItem.children;
+                            refreshItem(change.fieldClass as IVisualElement);
+                        });
+                        break;
+                    case "addColumnAt":
+                        change.fieldClass["callLater"](function ():void
+                        {
+                            if (change.fieldClass is Grid || change.fieldClass is DominoTable)
+                            {
+                                organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue.object,
+                                        change.fieldLastValue.rowIndex, change.fieldLastValue.colIndex);
+                                if (organizerItem)
+                                {
+                                    if (change.fieldLastValue.rowIndex == 0) cellIndex = change.fieldLastValue.colIndex;
+                                    else
+                                    {
+                                        i = 0;
+                                        while (i <= change.fieldLastValue.rowIndex)
+                                        {
+                                            cellIndex += (change.fieldClass as GridBase).getNumColumns(i);
+                                            i++;
+                                        }
+                                    }
+
+                                    tree.selectedItem.children.splice(cellIndex - 1, 0, organizerItem);
+                                    updateCellLabels(tree.selectedItem as OrganizerItem);
+                                    refreshItem(change.fieldClass as IVisualElement);
+                                }
+                            } else if (change.fieldClass is PanelGrid)
+                            {
+                                if (change.fieldLastValue && change.fieldLastValue.length > 0)
+                                {
+                                    // get the column index first by parsing any
+                                    cellIndex = (change.fieldLastValue[0].parent as IVisualElementContainer).getElementIndex(change.fieldLastValue[0].object);
+                                    // get corresponding organizer items from the owner class
+                                    organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren(change.fieldName, change.fieldLastValue, cellIndex);
+                                    // place newly received organizer by row and column index wise
+                                    for (i = 0; i < organizerItem.children.length; i++)
+                                    {
+                                        tree.selectedItem.children.splice(cellIndex, 0, organizerItem.children[i]);
+                                        cellIndex += (cellIndex + 1); // +1 is for 0th index count
+                                    }
+
+                                    // update tree label and hierarchy
+                                    updateCellLabels(tree.selectedItem as OrganizerItem);
+                                    refreshItem(change.fieldClass as IVisualElement);
+                                }
+                            }
+                        });
+                        break;
+                    case "removeColumnAt":
+                        tree.expandItem(tree.selectedItem, true);
+                        if (change.fieldClass is PanelGrid)
+                        {
+                            for (i = 0; i < change.fieldLastValue.length; i++)
+                            {
+                                surfaceComponent = change.fieldLastValue[i].object.getElementAt(0) as IGetChildrenSurfaceComponent;
+                                tree.selectedItem.children.some(function (item:*, index:int, array:Array):Boolean
+                                {
+                                    if (surfaceComponent == item.item)
+                                    {
+                                        tree.selectedItem.children.splice(index, 1);
+                                        return true;
+                                    }
+                                    return false;
+                                });
+                            }
+
+                            updateCellLabels(tree.selectedItem as OrganizerItem);
+                            refreshItem(change.fieldClass as IVisualElement);
+                        } else if (change.fieldClass is Grid || change.fieldClass is DominoTable)
+                        {
+                            surfaceComponent = change.fieldLastValue.object.getElementAt(0) as IGetChildrenSurfaceComponent;
+                            tree.selectedItem.children.some(function (item:*, index:int, array:Array):Boolean
+                            {
+                                if (surfaceComponent == item.item)
+                                {
+                                    tree.selectedItem.children.splice(index, 1);
+                                    return true;
+                                }
+                                return false;
+                            });
+
+                            updateCellLabels(tree.selectedItem as OrganizerItem);
+                            refreshItem(change.fieldClass as IVisualElement);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private function updateTreeByComponentChanges(change:PropertyChangeReference):void
+        {
+            var organizerItem:OrganizerItem;
+
+            findItemInDepth(components.source, change.fieldClass as IVisualElement);
+            this.callLater(function ():void
+            {
+                if (foundIndepthItem && ((change.fieldClass is TabView) || (change.fieldClass is Grid) || (change.fieldClass is PanelGrid) || (change.fieldClass is DominoTable)))
+                {
+                    organizerItem = (change.fieldClass as IGetChildrenSurfaceComponent).getComponentsChildren();
+
+                    foundIndepthItem.setItemsWithAnother(organizerItem);
+                    refreshItem(change.fieldClass as IVisualElement);
+                    editingSurface.selectedItem = null;
+                }
+            });
+        }
+
+        private function updateCellLabels(component:OrganizerItem):void
+        {
+            var numRows:int;
+            var cellIndex:int;
+            var gridBase:GridBase;
+
+            if (component.item != null)
+            {
+
+                if (component.item is Grid || component.item is DominoTable) gridBase = component.item as GridBase;
+                else if (component.item is PanelGrid) gridBase = (component.item as PanelGrid).body;
+
+
+                numRows = gridBase.getNumRows();
+                for (var i:int = 0; i < numRows; i++)
+                {
+                    var numCols:int = gridBase.getNumColumns(i);
+                    for (var j:int = 0; j < numCols; j++)
+                    {
+                        if (component.children != null)
+                        {
+                            if (component.children[cellIndex] != null)
+                            {
+
+                                component.children[cellIndex].name = "R" + (i + 1) + ":C" + (j + 1);
+                                cellIndex++;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private function onInitialized():void
+        {
+            //Alert.show("onInitialized");
+            var tmpRefreshButton:Image = new Image();
+            tmpRefreshButton.source = new sourceRefreshIcon();
+            header.rightButtons = [{icon: tmpRefreshButton, handle: this.onRefreshRequest}];
+        }
+
+        private function onRefreshRequest(event:MouseEvent):void
+        {
+            editingSurface.selectedItem = null;
+            loadFirstData(editingSurface);
+        }
+
+        private function onComplete(event:FlexEvent):void
+        {
+            if (!editingSurface.isVisualEditorFlex)
+                editingSurface.addEventListener(Event.CHANGE, onItemSelectedOnEditingSurface, false, 0, true);
+        }
+
+        private function getComponentsChildren(surface:EditingSurface):Array
+        {
+            if (surface == null)
+            {
+                Alert.show("surface is null");
+            }
+
+
+            if (surface.numChildren > 0)
+            {
+
+                var element:ISurfaceComponent = surface.getElementAt(0) as ISurfaceComponent;
+
+
+                var componentsArray:Array = [];
+                var container:IVisualElementContainer = surface;
+                var organizerItem:OrganizerItem;
+                var elementCount:int = 0;
+
+
+                if (editingSurface.isVisualEditorDomino || editingSurface.isVisualEditorFlex)
+                {
+                    container = element as IVisualElementContainer;
+                }
+
+
+                if (!container)
+                {
+                    elementCount = surface.numElements;
+                    container = surface;
+                } else
+                {
+                    elementCount = container.numElements;
+                }
+
+                for (var i:int = 0; i < elementCount; i++)
+                {
+
+                    element = container.getElementAt(i) as ISurfaceComponent;
+
+                    if (element === null)
+                    {
+                        continue;
+                    }
+                    var domino_element:IDominoSurfaceComponent;
+                    var primeface_element:IGetChildrenSurfaceComponent;
+
+
+                    if (editingSurface.isVisualEditorDomino)
+                    {
+                        //Alert.show("getComponentsChildren:438");
+                        domino_element = element as IDominoSurfaceComponent;
+                        if (domino_element)
+                            organizerItem = domino_element.getComponentsChildren();
+                    } else
+                    {
+                        primeface_element = element as IGetChildrenSurfaceComponent;
+                        organizerItem = primeface_element.getComponentsChildren();
+                    }
+
+                    if (organizerItem) componentsArray.push(organizerItem);
+                }
+                //Alert.show("new stage:"+componentsArray.length);
+                return [new OrganizerItem(container, "Stage", componentsArray)];
+            } else
+            {
+                return [new OrganizerItem(surface, "Stage", [])];
+            }
+
+        }
+
+        private function findItemInDepth(items:Array, ownerComponent:IVisualElement, isRoot:Boolean = true, topParent:Object = null):void
+        {
+            // probable termination
+            if (isRoot)
+            {
+                lastTopParent = foundIndepthItem = null;
+            } else if (foundIndepthItem) return;
+
+            for each (var oItem:OrganizerItem in items)
+            {
+                if (oItem.item === ownerComponent)
+                {
+                    lastTopParent = topParent;
+                    foundIndepthItem = oItem;
+                    return;
+                } else if (oItem.children && (oItem.children.length > 0) && !foundIndepthItem)
+                {
+                    if (items === components.source) topParent = oItem;
+                    findItemInDepth(oItem.children, ownerComponent, false, topParent);
+                }
+            }
+        }
+
+        private function refreshItem(item:IVisualElement = null, invalidateEverything:Boolean = true):void
+        {
+            var tmpFoundItemInDepth:OrganizerItem = (tree.selectedItem && tree.selectedItem.item == item) ? tree.selectedItem as OrganizerItem : null;
+
+            var lastScrollPosition:Number = tree.verticalScrollPosition;
+            var openItems:Object = tree.openItems;
+
+            tree.openItems = openItems;
+            tree.invalidateList();
+
+            if (!isRefreshTree || !item) return;
+
+            this.callLater(function ():void
+            {
+                if (!tmpFoundItemInDepth) findItemInDepth(components.source, item);
+                else foundIndepthItem = tmpFoundItemInDepth;
+                if (foundIndepthItem)
+                {
+                    if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
+
+                    tree.callLater(function ():void
+                    {
+                        tree.selectedItem = foundIndepthItem;
+                        tree.scrollToIndex(tree.selectedIndex);
+
+                        foundIndepthItem = null;
+                        lastTopParent = null;
+                    });
+                } else
+                {
+                    tree.selectedIndex = -1;
+                    tree.verticalScrollPosition = lastScrollPosition;
+                }
+            });
+        }
+
+        private function isSubDivComponent(value:IVisualElement):IVisualElement
+        {
+            if (value is TabView) return (value as TabView).div;
+            else if (value is Fieldset) return (value as Fieldset).div;
+            else if ((value is Grid) || (value is PanelGrid))
+            {
+                var grid:GridBase = (value is GridBase) ? value as GridBase : (value as PanelGrid).body;
+                var gridRow:GridRow = grid.getElementAt(grid.selectedRow) as GridRow;
+                var gridItem:GridItem = gridRow.getElementAt(grid.selectedColumn) as GridItem;
+                return gridItem.getElementAt(0);
+            }
+            return value;
+        }
+
+        private function getIconForFile(object:Object):Class
+        {
+            return null;
+        }
+
+        private function onItemSelectionChanged(event:ListEvent):void
+        {
+            if (tree.selectedItem) editingSurface.selectedItem = tree.selectedItem.item;
+        }
+
+        private function onItemSelectedOnEditingSurface(event:Event):void
+        {
+            if (isProcessRunning || (tree.selectedItem && (tree.selectedItem.item == editingSurface.selectedItem)))
+                return;
+
+            findItemInDepth(components.source, editingSurface.selectedItem as IVisualElement);
+            this.callLater(function ():void
+            {
+                if (foundIndepthItem)
+                {
+                    if (!tree.getParentItem(foundIndepthItem)) tree.expandChildrenOf(lastTopParent, true);
+
+                    tree.callLater(function ():void
+                    {
+                        tree.selectedItem = foundIndepthItem;
+                        tree.scrollToIndex(tree.selectedIndex);
+
+                        foundIndepthItem = null;
+                        lastTopParent = null;
+                    });
+                } else
+                {
+                    tree.selectedIndex = -1;
+                }
+            });
+        }
+
+        private function onTreeItemKeyUp(event:KeyboardEvent):void
+        {
+            // Delete key-press
+            if (event.keyCode == 46 && tree.selectedItem)
+            {
+                if (tree.selectedItem.name.indexOf(":") != -1 ||
+                        tree.selectedItem.type == OrganizerItem.TYPE_CELL ||
+                        tree.selectedItem.type == OrganizerItem.TYPE_TAB) return;
+                editingSurface.deleteItem(tree.selectedItem.item);
+            }
+        }
+        ]]>
 	</fx:Script>
 	
 	<view:PropertyEditorHeader id="header" 

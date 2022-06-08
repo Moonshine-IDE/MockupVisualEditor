@@ -32,7 +32,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IGetChildrenSurfaceComponent;
     import view.interfaces.ISelectableItemsComponent;
     import view.primeFaces.propertyEditors.SelectOneRadioPropertyEditor;
-    import view.primeFaces.supportClasses.GridBase;
+    import view.suportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
     import interfaces.components.ISelectOneRadio;

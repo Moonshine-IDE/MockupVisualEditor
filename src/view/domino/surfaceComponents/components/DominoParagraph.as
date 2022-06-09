@@ -144,7 +144,7 @@ package view.domino.surfaceComponents.components
 			return _heightPercent;
 		}
 
-        private var _widthOutput:Boolean;
+        private var _widthOutput:Boolean = true;
         protected var widthOutputChanged:Boolean;
 
         [Bindable]
@@ -480,6 +480,8 @@ package view.domino.surfaceComponents.components
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
+
+			this.heightOutput = false;
         }
 
         public function toCode():XML

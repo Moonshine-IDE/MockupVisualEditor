@@ -47,6 +47,8 @@ package view.domino.surfaceComponents.components
     import utils.StringHelper;
     import global.domino.DominoGlobalTokens;
 
+    
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -2526,10 +2528,10 @@ package view.domino.surfaceComponents.components
            
             if(component.formula){
                 
-               this.formula=  StringHelper.base64Decode(component.formula);
+               this.formula= (component.formula);
             }
             if(component.keywordsformula){
-                this.keywordsformula= StringHelper.base64Decode(component.keywordsformula);
+                this.keywordsformula= (component.keywordsformula);
             }
              if(component.defaultvalue){
                 
@@ -2576,13 +2578,15 @@ package view.domino.surfaceComponents.components
 
                 if(this.type =="keyword"){
                     if(component.keywords){
-                          this.keywords=StringHelper.base64Decode(component.keywords);
+                         
+                          this.keywords=(component.keywords);
+                        
                     }
                   
                     this.keywordui=component.keywordui;
 
                     this.numberColumns = component.numberColumns;
-                    //Alert.show("numberColumns:"+this.numberColumns);
+                    
                 }
 
                  if(this.type =="names"){

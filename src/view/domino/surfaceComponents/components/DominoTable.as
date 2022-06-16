@@ -27,6 +27,8 @@ package view.domino.surfaceComponents.components
 	import interfaces.IRoyaleComponentConverter;
 	import interfaces.ISurface;
 
+	import view.primeFaces.supportClasses.ContainerDirection;
+
 	import view.primeFaces.supportClasses.GridItem;
     import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
@@ -37,7 +39,7 @@ package view.domino.surfaceComponents.components
 
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IGetChildrenSurfaceComponent;
-    import view.primeFaces.supportClasses.GridBase;
+    import view.suportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
     import interfaces.dominoComponents.IDominoTable;
@@ -819,6 +821,16 @@ package view.domino.surfaceComponents.components
             this._selectedRow = -1;
             this._selectedColumn = -1;
         }
+
+		override protected function ensureCreateColumn(row:GridRow):GridItem
+		{
+			var gridItem:GridItem = super.ensureCreateColumn(row);
+
+			var div:Div = gridItem.getElementAt(0) as Div;
+				div.direction = ContainerDirection.VERTICAL_LAYOUT;
+
+			return gridItem;
+		}
 
 		private function hookDivEventBypassing():void
 		{

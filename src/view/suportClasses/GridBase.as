@@ -1,18 +1,15 @@
-package view.primeFaces.supportClasses
+package view.suportClasses
 {
+    import view.primeFaces.supportClasses.*;
     import flash.events.Event;
     import flash.events.MouseEvent;
     
     import mx.containers.Grid;
-    import view.primeFaces.supportClasses.GridItem;
-    import view.primeFaces.supportClasses.GridRow;
     import mx.core.IVisualElement;
     import mx.core.IVisualElementContainer;
     
     import view.primeFaces.surfaceComponents.components.Div;
     import view.suportClasses.events.SurfaceComponentEvent;
-
-    import mx.controls.Alert;
 
     import flash.utils.getQualifiedClassName;
 
@@ -242,10 +239,7 @@ package view.primeFaces.supportClasses
 
         override public function addElement(element:IVisualElement):IVisualElement
         {
-         
-           
              var className:String = getQualifiedClassName(element);
-            //Alert.show("addElement248:"+className);
                 if (element is GridRow)
                 {
                     //Alert.show("element is GridRow");

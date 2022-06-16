@@ -29,7 +29,7 @@
 						 tabIndex="2" />
 			<s:CheckBox id="widthOutput" visible="{selectedItem is IComponentSizeOutput}"
 						includeInLayout="{selectedItem is IComponentSizeOutput}"
-						selected="true" enabled="false"
+						selected="{widthOutputFlag}" enabled="false"
 						change="onWidthOutputChange(event)"/>
 		</s:HGroup>
 	</s:FormItem>
@@ -42,7 +42,7 @@
 						 tabIndex="3" />
 			<s:CheckBox id="heightOutput" visible="{selectedItem is IComponentSizeOutput}"
 						includeInLayout="{selectedItem is IComponentSizeOutput}"
-						selected="true" enabled="false"
+						selected="{heightOutputFlag}" enabled="false"
 						change="onHeightOutputChange(event)"/>
 		</s:HGroup>
 	</s:FormItem>

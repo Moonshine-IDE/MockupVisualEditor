@@ -6,318 +6,318 @@
 		skinClass="skins.FormSkin" creationComplete="onGridFormCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayList;
-			import mx.containers.GridItem;
-			import mx.containers.GridRow;
-			import mx.events.CloseEvent;
-			import mx.events.FlexEvent;
-			
-			import spark.components.Alert;
-			
-			import data.GridListItem;
-			
-			import view.interfaces.ISurfaceComponent;
-			import view.primeFaces.supportClasses.GridBase;
-			import view.primeFaces.supportClasses.GridEvent;
-			import view.primeFaces.surfaceComponents.components.Div;
-			import view.primeFaces.surfaceComponents.components.Grid;
-			import view.domino.surfaceComponents.components.DominoTable;
-			import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
+        import mx.collections.ArrayList;
+        import mx.containers.GridItem;
+        import mx.containers.GridRow;
+        import mx.events.CloseEvent;
+        import mx.events.FlexEvent;
 
-		[Bindable]
-		private var rowsDataProvider:ArrayList = new ArrayList();
-		[Bindable]
-		private var columnsDataProvider:ArrayList;
+        import spark.components.Alert;
 
-		private var selectedCellDirty:Boolean;
+        import data.GridListItem;
 
-		private var _selectedCell:Div;
+        import view.interfaces.ISurfaceComponent;
+        import view.suportClasses.GridBase;
+        import view.primeFaces.supportClasses.GridEvent;
+        import view.primeFaces.surfaceComponents.components.Div;
+        import view.primeFaces.surfaceComponents.components.Grid;
+        import view.domino.surfaceComponents.components.DominoTable;
+        import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
 
-		[Bindable]
-		public function get selectedCell():Div
-		{
-			return _selectedCell;
-		}
+        [Bindable]
+        private var rowsDataProvider:ArrayList = new ArrayList();
+        [Bindable]
+        private var columnsDataProvider:ArrayList;
 
-		public function set selectedCell(value:Div):void
-		{
-			if (_selectedCell != value)
-			{
-				_selectedCell = value;
-			}
-		}
+        private var selectedCellDirty:Boolean;
 
-		[Bindable("change")]
-		protected function get selectedGrid():GridBase
-		{
-			return selectedItem as GridBase;
-		}
+        private var _selectedCell:Div;
 
-		override public function set selectedItem(value:ISurfaceComponent):void
-		{
-			if (selectedItem)
-			{
-				selectedItem.removeEventListener(DominoTable.EVENT_CHILDREN_UPDATED, onGridUpdated);
-				selectedItem.removeEventListener(GridEvent.SELECTED_COLUMN_CHANGED, onSelectedGridChanged);
-				selectedItem.removeEventListener(GridEvent.SELECTED_ROW_CHANGED, onSelectedGridChanged);
-			}
+        [Bindable]
+        public function get selectedCell():Div
+        {
+            return _selectedCell;
+        }
 
-			if (super.selectedItem != value)
-			{
-				super.selectedItem = value;
-				if (value)
-				{
-					selectedItem.addEventListener(DominoTable.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
-					selectedItem.addEventListener(GridEvent.SELECTED_COLUMN_CHANGED, onSelectedGridChanged);
-					selectedItem.addEventListener(GridEvent.SELECTED_ROW_CHANGED, onSelectedGridChanged);
-				}
-			}
-		}
+        public function set selectedCell(value:Div):void
+        {
+            if (_selectedCell != value)
+            {
+                _selectedCell = value;
+            }
+        }
 
-		override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
-		{
-			super.updateDisplayList(unscaledWidth, unscaledHeight);
+        [Bindable("change")]
+        protected function get selectedGrid():GridBase
+        {
+            return selectedItem as GridBase;
+        }
 
-			if (this.selectedCellDirty)
-			{
-				this.selectedCell = this.getSelectedCell();
-				this.selectedCellDirty = false;
-			}
-		}
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (selectedItem)
+            {
+                selectedItem.removeEventListener(DominoTable.EVENT_CHILDREN_UPDATED, onGridUpdated);
+                selectedItem.removeEventListener(GridEvent.SELECTED_COLUMN_CHANGED, onSelectedGridChanged);
+                selectedItem.removeEventListener(GridEvent.SELECTED_ROW_CHANGED, onSelectedGridChanged);
+            }
 
-		private function onGridUpdated(event:Event):void
-		{
-			onGridFormCreationComplete(null);
-		}
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+                if (value)
+                {
+                    selectedItem.addEventListener(DominoTable.EVENT_CHILDREN_UPDATED, onGridUpdated, false, 0, true);
+                    selectedItem.addEventListener(GridEvent.SELECTED_COLUMN_CHANGED, onSelectedGridChanged);
+                    selectedItem.addEventListener(GridEvent.SELECTED_ROW_CHANGED, onSelectedGridChanged);
+                }
+            }
+        }
 
-		private function addRowButton_clickHandler(event:MouseEvent):void
-		{
-			var itemValue:int = this.rowsDataProvider.length + 1;
-			var rowItem:GridListItem = new GridListItem("R" + String(itemValue), itemValue);
-			var columnItem:GridListItem = new GridListItem("C1", 1);
+        override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+        {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
 
-			rowItem.columns.addItem(columnItem);
-			this.rowsDataProvider.addItem(rowItem);
-			this.columnsDataProvider = rowItem.columns;
+            if (this.selectedCellDirty)
+            {
+                this.selectedCell = this.getSelectedCell();
+                this.selectedCellDirty = false;
+            }
+        }
 
-			var grid:DominoTable = (selectedItem as DominoTable);
-			grid.addRow();
+        private function onGridUpdated(event:Event):void
+        {
+            onGridFormCreationComplete(null);
+        }
 
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
-		}
+        private function addRowButton_clickHandler(event:MouseEvent):void
+        {
+            var itemValue:int = this.rowsDataProvider.length + 1;
+            var rowItem:GridListItem = new GridListItem("R" + String(itemValue), itemValue);
+            var columnItem:GridListItem = new GridListItem("C1", 1);
 
-		private function addColumnButton_clickHandler(event:MouseEvent):void
-		{
-			var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-			var colItemValue:int = rowItem.columns.length + 1;
-			var colItem:GridListItem = new GridListItem("C" + colItemValue, colItemValue);
+            rowItem.columns.addItem(columnItem);
+            this.rowsDataProvider.addItem(rowItem);
+            this.columnsDataProvider = rowItem.columns;
 
-			rowItem.columns.addItem(colItem);
-			this.columnsDataProvider = rowItem.columns;
+            var grid:DominoTable = (selectedItem as DominoTable);
+            grid.addRow();
 
-			selectedGrid.addColumn(dgRows.selectedIndex);
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
 
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
-		}
+        private function addColumnButton_clickHandler(event:MouseEvent):void
+        {
+            var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
+            var colItemValue:int = rowItem.columns.length + 1;
+            var colItem:GridListItem = new GridListItem("C" + colItemValue, colItemValue);
 
-		private function deleteItemButton_clickHandler(event:MouseEvent):void
-		{
-			if (this.rowsDataProvider.length > 1)
-			{
-				this.rowsDataProvider.removeItemAt(selectedGrid.selectedRow);
-				var grid:DominoTable = (selectedItem as DominoTable);
-				grid.removeRow(selectedGrid.selectedRow);
-				
-				this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
+            rowItem.columns.addItem(colItem);
+            this.columnsDataProvider = rowItem.columns;
 
-				// when a row deletes selectedCell suppose to be
-				// return to previous cell's 0th index
-				this.selectedGrid.selectedColumn = 0;
+            selectedGrid.addColumn(dgRows.selectedIndex);
 
-				this.selectedCellDirty = true;
-				this.invalidateDisplayList();
-				
-				refreshCellsNumeration(this.rowsDataProvider, "R");
-			}
-		}
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
+        }
 
-		private function deleteColumnButton_clickHandler(event:MouseEvent):void
-		{
-			if (!this.columnsDataProvider || this.columnsDataProvider.length < 1) return;
+        private function deleteItemButton_clickHandler(event:MouseEvent):void
+        {
+            if (this.rowsDataProvider.length > 1)
+            {
+                this.rowsDataProvider.removeItemAt(selectedGrid.selectedRow);
+                var grid:DominoTable = (selectedItem as DominoTable);
+                grid.removeRow(selectedGrid.selectedRow);
 
-			var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
-			if (rowItem.columns.length > selectedGrid.selectedColumn)
-			{
-				rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
-			}
+                this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
 
-			var grid:DominoTable = (selectedItem as DominoTable);
-			grid.removeColumn(selectedGrid.selectedRow, selectedGrid.selectedColumn);
+                // when a row deletes selectedCell suppose to be
+                // return to previous cell's 0th index
+                this.selectedGrid.selectedColumn = 0;
 
-			this.selectedCellDirty = true;
-			this.invalidateDisplayList();
+                this.selectedCellDirty = true;
+                this.invalidateDisplayList();
 
-			refreshCellsNumeration(this.columnsDataProvider, "C");
-		}
+                refreshCellsNumeration(this.rowsDataProvider, "R");
+            }
+        }
 
-		private function onGridFormCreationComplete(event:FlexEvent):void
-		{
-			dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
+        private function deleteColumnButton_clickHandler(event:MouseEvent):void
+        {
+            if (!this.columnsDataProvider || this.columnsDataProvider.length < 1) return;
 
-			rowsDataProvider.removeAll();
-			var grid:DominoTable = (selectedItem as DominoTable);
+            var rowItem:GridListItem = dgRows.selectedItem as GridListItem;
+            if (rowItem.columns.length > selectedGrid.selectedColumn)
+            {
+                rowItem.columns.removeItemAt(selectedGrid.selectedColumn);
+            }
 
-			var gridNumElements:int = grid.numElements;
-			for (var row:int = 0; row < gridNumElements; row++)
-			{
-				var itemValue:int = row + 1;
-				var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
-				var gridItem:GridRow = grid.getElementAt(row) as GridRow;
-				for (var col:int = 0; col < gridItem.numElements; col++)
-				{
-					itemValue = col + 1;
-					rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
-				}
-				this.rowsDataProvider.addItem(rowItem);
-			}
+            var grid:DominoTable = (selectedItem as DominoTable);
+            grid.removeColumn(selectedGrid.selectedRow, selectedGrid.selectedColumn);
 
-			if (selectedGrid.selectedRow == -1)
-			{
-				selectedGrid.selectedRow = 0;
-			}
+            this.selectedCellDirty = true;
+            this.invalidateDisplayList();
 
-			if (selectedGrid.selectedColumn == -1)
-			{
-				selectedGrid.selectedColumn = 0;
-			}
+            refreshCellsNumeration(this.columnsDataProvider, "C");
+        }
 
-			this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
-			this.selectedCell = this.getSelectedCell();
+        private function onGridFormCreationComplete(event:FlexEvent):void
+        {
+            dgRows.columnHeaderGroup.visible = dgRows.columnHeaderGroup.includeInLayout = false;
 
-			dispatchEvent(new Event(Event.CHANGE));
+            rowsDataProvider.removeAll();
+            var grid:DominoTable = (selectedItem as DominoTable);
 
-			_childrenForFocus = [];
-			_childrenForFocus.push(amountOfRows.textDisplay.textDisplay);
-			_childrenForFocus.push(amountOfColumns.textDisplay.textDisplay);
-			_childrenForFocus.push(createButton);
-			_childrenForFocus.push(addRowBtn);
-			_childrenForFocus.push(deleteRowBtn);
-			_childrenForFocus.push(addColumnBtn);
-			_childrenForFocus.push(deleteColumnBtn);
-		}
+            var gridNumElements:int = grid.numElements;
+            for (var row:int = 0; row < gridNumElements; row++)
+            {
+                var itemValue:int = row + 1;
+                var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
+                var gridItem:GridRow = grid.getElementAt(row) as GridRow;
+                for (var col:int = 0; col < gridItem.numElements; col++)
+                {
+                    itemValue = col + 1;
+                    rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
+                }
+                this.rowsDataProvider.addItem(rowItem);
+            }
 
-		private function onCreateClick(event:MouseEvent):void
-		{
-			if (!selectedGrid.isEmpty())
-			{
-				Alert.show("DominoTable contains some controls. This operation will remove all existing cells. Do you want to perform?",
-						"", Alert.YES | Alert.NO, null, onAlertClose);
-			}
-			else
-			{
-				createCells(amountOfRows.value, amountOfColumns.value);
-			}
-		}
+            if (selectedGrid.selectedRow == -1)
+            {
+                selectedGrid.selectedRow = 0;
+            }
 
-		private function onAlertClose(event:CloseEvent):void
-		{
-			if (event.detail == Alert.YES)
-			{
-				createCells(amountOfRows.value, amountOfColumns.value);
-			}
-		}
+            if (selectedGrid.selectedColumn == -1)
+            {
+                selectedGrid.selectedColumn = 0;
+            }
 
-		private function onSelectedGridChanged(event:GridEvent):void
-		{
-			if (!this.rowsDataProvider || this.rowsDataProvider.length == 0) return;
+            this.columnsDataProvider = this.rowsDataProvider.getItemAt(selectedGrid.selectedRow).columns;
+            this.selectedCell = this.getSelectedCell();
 
-			if (this.rowsDataProvider.length > event.selectedIndex)
-			{
-				if (event.type == GridEvent.SELECTED_ROW_CHANGED)
-				{
-					var gridListItem:GridListItem = this.dgRows.dataProvider.getItemAt(event.selectedIndex) as GridListItem;
-					this.columnsDataProvider = gridListItem.columns;
-					this.selectedGrid.selectedColumn = 0;
-				}
+            dispatchEvent(new Event(Event.CHANGE));
 
-				this.selectedCellDirty = true;
-				this.invalidateDisplayList();
-			}
-		}
+            _childrenForFocus = [];
+            _childrenForFocus.push(amountOfRows.textDisplay.textDisplay);
+            _childrenForFocus.push(amountOfColumns.textDisplay.textDisplay);
+            _childrenForFocus.push(createButton);
+            _childrenForFocus.push(addRowBtn);
+            _childrenForFocus.push(deleteRowBtn);
+            _childrenForFocus.push(addColumnBtn);
+            _childrenForFocus.push(deleteColumnBtn);
+        }
 
-		private function createCells(rowsCount:int, columnsCount:int):void
-		{
-			var grid:DominoTable = (selectedItem as DominoTable);
+        private function onCreateClick(event:MouseEvent):void
+        {
+            if (!selectedGrid.isEmpty())
+            {
+                Alert.show("DominoTable contains some controls. This operation will remove all existing cells. Do you want to perform?",
+                        "", Alert.YES | Alert.NO, null, onAlertClose);
+            } else
+            {
+                createCells(amountOfRows.value, amountOfColumns.value);
+            }
+        }
 
-			grid.removeAllElements();
-			rowsDataProvider.removeAll();
-			
-			grid.propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(grid, "removedAll", []);
-			grid.dispatchEvent(new Event("removedAll"));
-			grid.isUpdating = true;
-			
-			for (var row:int = 0; row < rowsCount; row++)
-			{
-				var itemValue:int = row + 1;
-				var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
-				grid.addRow();
+        private function onAlertClose(event:CloseEvent):void
+        {
+            if (event.detail == Alert.YES)
+            {
+                createCells(amountOfRows.value, amountOfColumns.value);
+            }
+        }
 
-				for (var col:int = 0; col < columnsCount; col++)
-				{
-					itemValue = col + 1;
-					rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
-					if (col > 0)
-					{
-						grid.addColumn(row);
-					}
-				}
-				this.rowsDataProvider.addItem(rowItem);
-			}
+        private function onSelectedGridChanged(event:GridEvent):void
+        {
+            if (!this.rowsDataProvider || this.rowsDataProvider.length == 0) return;
 
-			this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
+            if (this.rowsDataProvider.length > event.selectedIndex)
+            {
+                if (event.type == GridEvent.SELECTED_ROW_CHANGED)
+                {
+                    var gridListItem:GridListItem = this.dgRows.dataProvider.getItemAt(event.selectedIndex) as GridListItem;
+                    this.columnsDataProvider = gridListItem.columns;
+                    this.selectedGrid.selectedColumn = 0;
+                }
 
-			grid.selectedRow = grid.selectedColumn = 0;
-			this.selectedCell = this.getSelectedCell();
-			grid.isUpdating = false;
-		}
+                this.selectedCellDirty = true;
+                this.invalidateDisplayList();
+            }
+        }
 
-		private function getSelectedCell():Div
-		{
-			if (this.selectedGrid.selectedRow == -1 || this.selectedGrid.selectedColumn == -1) return null;
-			var gridRow:GridRow = selectedGrid.getElementAt(this.selectedGrid.selectedRow) as GridRow;
+        private function createCells(rowsCount:int, columnsCount:int):void
+        {
+            var grid:DominoTable = (selectedItem as DominoTable);
 
-			var gridItem:GridItem = gridRow.getElementAt(this.selectedGrid.selectedColumn) as GridItem;
+            grid.removeAllElements();
+            rowsDataProvider.removeAll();
 
-			return gridItem.getElementAt(0) as Div;
-		}
+            grid.propertyChangeFieldReference = new PropertyChangeReferenceCustomHandlerBasic(grid, "removedAll", []);
+            grid.dispatchEvent(new Event("removedAll"));
+            grid.isUpdating = true;
 
-		private function refreshCellsNumeration(dp:ArrayList, prefix:String):void
-		{
-			var dpEnum:int = dp.length;
-			for (var i:int = 0; i < dpEnum; i++)
-			{
-				var colItem:GridListItem = dp.getItemAt(i) as GridListItem;
-				var itemValue:int = i + 1;
-				colItem.label = String(prefix + itemValue);
-			}
-		}
+            for (var row:int = 0; row < rowsCount; row++)
+            {
+                var itemValue:int = row + 1;
+                var rowItem:GridListItem = new GridListItem("R" + itemValue, itemValue);
+                grid.addRow();
+
+                for (var col:int = 0; col < columnsCount; col++)
+                {
+                    itemValue = col + 1;
+                    rowItem.columns.addItem(new GridListItem(String("C" + itemValue), itemValue));
+                    if (col > 0)
+                    {
+                        grid.addColumn(row);
+                    }
+                }
+                this.rowsDataProvider.addItem(rowItem);
+            }
+
+            this.columnsDataProvider = this.rowsDataProvider.getItemAt(0).columns;
+
+            grid.selectedRow = grid.selectedColumn = 0;
+            this.selectedCell = this.getSelectedCell();
+            grid.isUpdating = false;
+        }
+
+        private function getSelectedCell():Div
+        {
+            if (this.selectedGrid.selectedRow == -1 || this.selectedGrid.selectedColumn == -1) return null;
+            var gridRow:GridRow = selectedGrid.getElementAt(this.selectedGrid.selectedRow) as GridRow;
+
+            var gridItem:GridItem = gridRow.getElementAt(this.selectedGrid.selectedColumn) as GridItem;
+
+            return gridItem.getElementAt(0) as Div;
+        }
+
+        private function refreshCellsNumeration(dp:ArrayList, prefix:String):void
+        {
+            var dpEnum:int = dp.length;
+            for (var i:int = 0; i < dpEnum; i++)
+            {
+                var colItem:GridListItem = dp.getItemAt(i) as GridListItem;
+                var itemValue:int = i + 1;
+                colItem.label = String(prefix + itemValue);
+            }
+        }
 
 
-		
-		public function get selectedComponentColunmnWidth():String
-		{
-			var grid:DominoTable = (selectedItem as DominoTable);
-			if(grid.columnProperties!=null){
-				return grid.columnProperties.toString();
-			}else{
-				return ""
-			}	
-		}
+        public function get selectedComponentColunmnWidth():String
+        {
+            var grid:DominoTable = (selectedItem as DominoTable);
+            if (grid.columnProperties != null)
+            {
+                return grid.columnProperties.toString();
+            } else
+            {
+                return ""
+            }
+        }
 
-		[Bindable("propertyEditorChanged")]
-		private function columnWidthInput_keyDownHandler(event:KeyboardEvent):void
+        [Bindable("propertyEditorChanged")]
+        private function columnWidthInput_keyDownHandler(event:KeyboardEvent):void
         {
             if (event.keyCode === Keyboard.ENTER || event.keyCode == Keyboard.TAB)
             {
@@ -326,12 +326,12 @@
         }
 
 
-		private function commitWidth():void
+        private function commitWidth():void
         {
-			if (!selectedItem) return;
-			this.selectedItem["columnProperties"] = this.columnWidth.text;
+            if (!selectedItem) return;
+            this.selectedItem["columnProperties"] = this.columnWidth.text;
         }
-		]]>
+        ]]>
 	</fx:Script>
     <suportclasses:layout>
         <s:FormLayout horizontalAlign="contentJustify"/>

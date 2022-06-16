@@ -22,7 +22,7 @@ package view.primeFaces.surfaceComponents.components
     import view.interfaces.IHistorySurfaceCustomHandlerComponent;
     import view.interfaces.IGetChildrenSurfaceComponent;
     import view.primeFaces.propertyEditors.GridPropertyEditor;
-    import view.primeFaces.supportClasses.GridBase;
+    import view.suportClasses.GridBase;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.PropertyChangeReferenceCustomHandlerBasic;
     import interfaces.components.IGrid;

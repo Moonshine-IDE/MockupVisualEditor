@@ -6,7 +6,7 @@ package view.primeFaces.supportClasses.table
 
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
-    import view.primeFaces.supportClasses.GridBase;
+    import view.suportClasses.GridBase;
     import view.primeFaces.supportClasses.skins.OneSideBorderContainerSkin;
     import view.primeFaces.surfaceComponents.components.Div;
 

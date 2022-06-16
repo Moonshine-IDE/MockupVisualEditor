@@ -6,7 +6,7 @@ package view.primeFaces.supportClasses.table
     
     import spark.components.Label;
     
-    import view.primeFaces.supportClasses.GridBase;
+    import view.suportClasses.GridBase;
     import view.primeFaces.surfaceComponents.components.Div;
 
     public class HeaderGrid extends GridBase

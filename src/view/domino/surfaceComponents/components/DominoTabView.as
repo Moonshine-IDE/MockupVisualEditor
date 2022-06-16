@@ -649,6 +649,7 @@ package view.domino.surfaceComponents.components
         public function getNewDiv():Div
         {
             var div:Div = new Div();
+			div.direction = ContainerDirection.VERTICAL_LAYOUT;
             div.percentWidth = div.percentHeight = 100;
             div.setStyle("borderVisible", false);
             div.addEventListener(ElementExistenceEvent.ELEMENT_ADD, onDivElementAddRemove);

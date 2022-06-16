@@ -14,7 +14,30 @@
 			import spark.events.IndexChangeEvent;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import view.domino.forms.imageClass.LoadImage;
 			import mx.controls.listClasses.ListBaseContentHolder;
+
+			import spark.components.Button;
+
+		[Embed(source='/assets/align-center-solid.png')]
+        [Bindable]
+        public  var ALIGN_CENTER:Class;
+
+        [Embed(source='/assets/align-justify-solid.png')]
+        [Bindable]
+        public  var ALIGN_JUSTIFY:Class;
+
+        [Embed(source='/assets/align-left-solid.png')]
+        [Bindable]
+        public  var ALIGN_LEFT:Class;
+
+        [Embed(source='/assets/align-right-solid.png')]
+        [Bindable]
+        public  var ALIGN_RIGHT:Class;
+        
+        [Bindable]
+        [Embed(source='/assets/ban-solid.png')]
+        public  var ALIGN_NONE:Class;
 
 			private var isNumber:Boolean = false;
 			private var inputType:String="";
@@ -52,9 +75,46 @@
 
 				 }
 
-
-	
+				 //inisatll align options
+				var leftButton:Button = new Button();
+				leftButton.width = 30
+				leftButton.height = 30 
+				var rightButton:Button = new Button();
+				rightButton.width = 30
+				rightButton.height = 30 
+				var centerButton:Button = new Button();
+				centerButton.width = 30
+				centerButton.height = 30 
+				var justifButton:Button = new Button();
+				justifButton.width = 30
+				justifButton.height = 30 
+				var noneButton:Button = new Button();
+				noneButton.width = 30
+				noneButton.height = 30 
 				
+				ALIGN_JUSTIFY.width=30
+				ALIGN_JUSTIFY.height=30
+				ALIGN_LEFT.width=30
+				ALIGN_LEFT.height=30
+				ALIGN_RIGHT.width=30
+				ALIGN_RIGHT.height=30
+				ALIGN_CENTER.width = 30
+				ALIGN_CENTER.height=30
+
+
+				leftButton.setStyle("icon",ALIGN_LEFT);
+				rightButton.setStyle("icon",ALIGN_RIGHT);
+				centerButton.setStyle("icon",ALIGN_CENTER);
+				justifButton.setStyle("icon",ALIGN_JUSTIFY);
+				noneButton.setStyle("icon",ALIGN_NONE);
+
+				// alignButtonLayout.addElement(leftButton);
+				// alignButtonLayout.addElement(centerButton);
+				// alignButtonLayout.addElement(rightButton);
+				
+				// alignButtonLayout.addElement(justifButton);
+				// alignButtonLayout.addElement(noneButton);
+
 				
 			}
 
@@ -764,7 +824,9 @@
             </mx:VBox >
 
             <mx:VBox  label="Paragraph Alignment">
-                <mx:Label text="Accordion container panel 3"/>
+               <s:HGroup id="alignButtonLayout" gap="3"
+			    
+			  verticalAlign="middle" horizontalAlign="center"/>
             </mx:VBox >
 			 <mx:VBox  label="Paragraph Hide When" horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		

@@ -2233,6 +2233,11 @@ package view.domino.surfaceComponents.components
             xml.@recalcchoices=this.recalcchoices.toString();
             xml.@keyformulachoices=this.keyformulachoices.toString();
             xml.@securityOptionsInput = this.securityOptionsInput;
+            
+            if(this.alignPardef){
+                xml.@alignPardef = this.alignPardef;
+            }
+            
             if(this.htmlId){
                 xml.@htmlId = this.htmlId;
             }
@@ -2483,6 +2488,9 @@ package view.domino.surfaceComponents.components
             this.keyformulachoices = component.keyformulachoices;
             this.helpDescription = component.helpDescription;
             this.fieldHint = component.fieldHint;
+            if(component.alignPardef){
+                this.alignPardef = component.alignPardef;
+            }
             if(component.size){
                 this.size = component.size;
             }
@@ -2638,6 +2646,9 @@ package view.domino.surfaceComponents.components
             component.keyformulachoices=this.keyformulachoices;
             component.helpDescription = this.helpDescription;
             component.fieldHint = this.fieldHint;
+            if(this.alignPardef){
+                component.alignPardef = this.alignPardef;
+            }
             if(this.color){
                 component.color = this.color;
             }

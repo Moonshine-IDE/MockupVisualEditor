@@ -581,6 +581,19 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("allowmultipleChanged"));
             }
         }
+        [Bindable]
+        private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        public function get lists():ArrayList
+        {
+            return _lists;
+        }
+
+        [Bindable]
+        private var _spaces:ArrayList = DominoGlobalTokens.Spaceing;
+        public function get spaces():ArrayList
+        {
+            return _spaces;
+        }
 
          //-----type-------------------------
         /**
@@ -2211,6 +2224,16 @@ package view.domino.surfaceComponents.components
         public function set htmlOther(value:String):void
 		{
 			_htmlOther=value;
+		}
+
+        private var _listPardef:String;
+		public function get listPardef():String
+		{
+			return _listPardef;
+		}
+        public function set listPardef(value:String):void
+		{
+			_listPardef=value;
 		}
 
 

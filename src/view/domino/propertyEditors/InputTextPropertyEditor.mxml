@@ -559,6 +559,11 @@
 				}
 			}
 
+
+			private function alignSetting(val:String){
+
+			}
+
 	
        
 		]]>
@@ -824,9 +829,66 @@
             </mx:VBox >
 
             <mx:VBox  label="Paragraph Alignment">
-               <s:HGroup id="alignButtonLayout" gap="3"
-			    
-			  verticalAlign="middle" horizontalAlign="center"/>
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+				
+				<s:Label text="Alignment" width="60" direction="rtl"/>
+					<s:Button id="leftUpdate" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="centerUpdate" label="" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="rightUpdate" label="" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="justifUpdate" label="" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="noneUpdate" label="" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('left')"/>
+					
+				</s:HGroup>
+			</s:FormItem>
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+					<s:Label text="First Line" width="60" direction="rtl"/>
+					<s:Button id="firstCenter" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="firstMiddle" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="firstOne" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+				</s:HGroup>
+			</s:FormItem>
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+				<s:Label text=": List" width="60" direction="rtl"/>
+				<forms:DropdownListForm id="pardeflistsSelect"
+                            label="" textProperty="listPardef"
+                            collectionProperty="lists" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+				</s:HGroup>
+			</s:FormItem>
+
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+				<s:Label text="Spacing" width="60" direction="rtl"/>
+				
+					
+						<forms:DropdownListForm id="spaceSelect"
+                            label="Interline" textProperty="listPardef"
+                            collectionProperty="spaces" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+
+					
+					
+						
+						<forms:DropdownListForm id="spaceSelect2"
+                            label="Above" textProperty="listPardef"
+                            collectionProperty="spaces" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+						
+						<forms:DropdownListForm id="spaceSelect3"
+                            label="Below" textProperty="listPardef"
+                            collectionProperty="spaces" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+
+				</s:HGroup>
+			</s:FormItem> 
+
             </mx:VBox >
 			 <mx:VBox  label="Paragraph Hide When" horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		

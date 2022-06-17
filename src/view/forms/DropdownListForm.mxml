@@ -134,6 +134,14 @@
             if (ddlSelection.selectedItem)
             {
                 ddlSelection.callLater(onSelectionChange, [null]);
+            }else{
+                //if not found the select options , let the selcted item default for other
+                if(_textProperty=="fontName"){
+                    ddlSelection.selectedItem={label: selectedItem[_textProperty],description: selectedItem[_textProperty],value:selectedItem[_textProperty],enabled:true,"selected": true};
+                }
+              
+                
+
             }
         }
 

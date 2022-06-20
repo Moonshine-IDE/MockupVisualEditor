@@ -22,6 +22,8 @@
         import mx.events.FlexEvent;
         
         import spark.events.IndexChangeEvent;
+        import utils.GenericUtils;
+        import mx.collections.ArrayCollection;
 
         [Bindable]
         public var bindableEnabled:Boolean = true;
@@ -137,12 +139,20 @@
             }else{
                 //if not found the select options , let the selcted item default for other
                 if(_textProperty=="fontName"){
-                    ddlSelection.selectedItem={label: selectedItem[_textProperty],description: selectedItem[_textProperty],value:selectedItem[_textProperty],enabled:true,"selected": true};
+                    var item:Object={label: selectedItem[_textProperty],description: selectedItem[_textProperty],value:selectedItem[_textProperty],enabled:true,"selected": true};
+                    includeCollection.addItem(item);
+                    ddlSelection.selectedItem=item;
                 }
               
                 
 
             }
+
+            var arry:ArrayCollection= new ArrayCollection(includeCollection.toArray());
+
+            arry=GenericUtils.arrayCollectionSort(arry,"label",false);
+            includeCollection=arry;
+
         }
 
         protected function onSelectionChange(event:IndexChangeEvent):void

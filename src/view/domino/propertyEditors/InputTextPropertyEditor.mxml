@@ -18,6 +18,7 @@
 			import mx.controls.listClasses.ListBaseContentHolder;
 
 			import spark.components.Button;
+			import spark.skins.spark.ButtonSkin;
 
 		[Embed(source='/assets/align-center-solid.png')]
         [Bindable]
@@ -559,8 +560,28 @@
 				}
 			}
 
-
+			private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","justifUpdate","noneUpdate"]);
 			private function alignSetting(val:String){
+				for (var i:int = 0; i < buttonsName.length; i++)
+                {
+                    var item:Object = buttonsName.getItemAt(i);
+					var elem:Button = this[item];
+					var skin:ButtonSkin=null;
+					if(elem!=null){
+						skin = ButtonSkin(elem.skin);
+							
+					}
+					if(item==val){
+						elem.skin.setCurrentState("down",true);
+					}else{
+						elem.skin.setCurrentState("up",true);
+					}
+
+					Alert.show("status:"+elem.skin.currentState);
+
+				}
+				
+			
 
 			}
 
@@ -833,11 +854,11 @@
 				<s:HGroup width="100%" verticalAlign="middle">
 				
 				<s:Label text="Alignment" width="60" direction="rtl"/>
-					<s:Button id="leftUpdate" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
-					<s:Button id="centerUpdate" label="" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('left')"/>
-					<s:Button id="rightUpdate" label="" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('left')"/>
-					<s:Button id="justifUpdate" label="" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('left')"/>
-					<s:Button id="noneUpdate" label="" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="leftUpdate" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
+					<s:Button id="centerUpdate" label="" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
+					<s:Button id="rightUpdate" label="" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
+					<s:Button id="justifUpdate" label="" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('justifUpdate')"/>
+					<s:Button id="noneUpdate" label="" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
 					
 				</s:HGroup>
 			</s:FormItem>

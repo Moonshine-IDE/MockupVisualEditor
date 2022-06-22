@@ -19,6 +19,7 @@
 
 			import spark.components.Button;
 			import spark.skins.spark.ButtonSkin;
+			import skins.DominoAlignButtonSkin;
 
 		[Embed(source='/assets/align-center-solid.png')]
         [Bindable]
@@ -108,13 +109,9 @@
 				centerButton.setStyle("icon",ALIGN_CENTER);
 				justifButton.setStyle("icon",ALIGN_JUSTIFY);
 				noneButton.setStyle("icon",ALIGN_NONE);
+				//initial align
+				initializeAlign();
 
-				// alignButtonLayout.addElement(leftButton);
-				// alignButtonLayout.addElement(centerButton);
-				// alignButtonLayout.addElement(rightButton);
-				
-				// alignButtonLayout.addElement(justifButton);
-				// alignButtonLayout.addElement(noneButton);
 
 				
 			}
@@ -566,23 +563,34 @@
                 {
                     var item:Object = buttonsName.getItemAt(i);
 					var elem:Button = this[item];
-					var skin:ButtonSkin=null;
+					var skin:DominoAlignButtonSkin=null;
 					if(elem!=null){
-						skin = ButtonSkin(elem.skin);
+						skin = DominoAlignButtonSkin(elem.skin);
 							
 					}
 					if(item==val){
-						elem.skin.setCurrentState("down",true);
+						skin.state= "down";
+						skin.setCurrentStateButton("down");
 					}else{
-						elem.skin.setCurrentState("up",true);
+						skin.state= "up";
+						skin.setCurrentStateButton("up");
 					}
 
-					Alert.show("status:"+elem.skin.currentState);
-
+				
 				}
 				
-			
+				//setting the align value into text property
+				 this.selectedItem["alignPardef"] = val.replace("Update","");
 
+			}
+
+			private function initializeAlign():void
+			{
+				if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
+					var button:String = this.selectedItem["alignPardef"]+"Update";
+					alignSetting(button);
+
+				}
 			}
 
 	
@@ -854,11 +862,11 @@
 				<s:HGroup width="100%" verticalAlign="middle">
 				
 				<s:Label text="Alignment" width="60" direction="rtl"/>
-					<s:Button id="leftUpdate" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
-					<s:Button id="centerUpdate" label="" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
-					<s:Button id="rightUpdate" label="" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
-					<s:Button id="justifUpdate" label="" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('justifUpdate')"/>
-					<s:Button id="noneUpdate" label="" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
+					<s:Button id="leftUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
+					<s:Button id="centerUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
+					<s:Button id="rightUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
+					<s:Button id="justifUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('justifUpdate')"/>
+					<s:Button id="noneUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
 					
 				</s:HGroup>
 			</s:FormItem>

@@ -218,7 +218,8 @@ package view.domino.surfaceComponents.components
                 "keyformulachoicesChanged",
                 "keyformulavalueAttributeChanged",
                 "keywordsformulaChanged",
-                "securityOptionsInputAttributeChanged"
+                "securityOptionsInputAttributeChanged",
+                "alignAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -2165,14 +2166,21 @@ package view.domino.surfaceComponents.components
 			_truetype = value;
 		}
 
-        private var _alignPardef:String;
-		function get alignPardef():String
+        private var _alignPardef:String ;
+        [Bindable(event="alignAttributeChanged")]
+		public function get alignPardef():String
 		{
 			return _alignPardef;
 		}
-        function set alignPardef(value:String):void
+        public function set alignPardef(value:String):void
 		{
-			_alignPardef=value;
+            if (_alignPardef != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "alignPardef", _alignPardef, value);
+				
+                _alignPardef = value;
+                dispatchEvent(new Event("alignAttributeChanged"))
+            }
 		}
 
         //-----Html core attrs-------

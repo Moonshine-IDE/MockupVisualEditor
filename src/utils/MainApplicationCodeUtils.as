@@ -5,7 +5,7 @@ package utils
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
-
+	import mx.controls.Alert;
     public class MainApplicationCodeUtils
 	{
 
@@ -208,6 +208,58 @@ package utils
 
 			}
 			return xml;
+		}
+
+		public static function fixPardefAlign(xml:XML):XML
+		{
+			
+			for each(var par:XML in xml..par) //no matter of depth Note here
+			{
+				
+				if(par.@alignPardef && par.@alignPardef.toString().length>0){
+				
+					var pardefId:String=par.@def;
+					if(pardefId!=null){
+						for each(var pardef:XML in xml..pardef)
+						{
+							var id:String = pardef.@id;
+							if(pardefId==id){
+							
+								var needFix:Boolean =false;
+								//fix the pardef in here
+								if(pardef.@alignPardef && pardef.@alignPardef.toString().length>0){
+									if(pardef.@alignPardef!=par.@alignPardef){
+										needFix= true;
+									}else{
+										needFix= false;
+									}
+								}else{
+									needFix= true;
+								}
+								
+
+								if(needFix==true){
+									
+									var newId:String=(parseInt(id)+100000).toString();
+									var pardefXml:XML = pardef.copy();
+									pardefXml.@id=newId
+									
+									pardefXml.@align=par.@alignPardef;
+									par.@def=newId;
+									pardef.parent().appendChild(pardefXml);
+								}
+								continue;
+								
+							}
+						} 
+								
+					}
+				}
+					
+			}
+
+			return xml;
+				
 		}
 
 		public static function fixRoyaleDataProvider(xml:XML):XML

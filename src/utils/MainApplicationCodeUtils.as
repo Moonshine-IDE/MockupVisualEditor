@@ -6,6 +6,7 @@ package utils
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
 	import mx.controls.Alert;
+	import global.domino.DominoGlobals;
     public class MainApplicationCodeUtils
 	{
 
@@ -216,7 +217,7 @@ package utils
 			for each(var par:XML in xml..par) //no matter of depth Note here
 			{
 				
-				if(par.@alignPardef && par.@alignPardef.toString().length>0){
+				if(par.@alignPardef && par.@alignPardef.toString().length>0 || par.@listPardef && par.@listPardef.toString().length>0 ){
 				
 					var pardefId:String=par.@def;
 					if(pardefId!=null){
@@ -227,8 +228,9 @@ package utils
 							
 								var needFix:Boolean =false;
 								//fix the pardef in here
-								if(pardef.@alignPardef && pardef.@alignPardef.toString().length>0){
-									if(pardef.@alignPardef!=par.@alignPardef){
+								if(pardef.@alignPardef && pardef.@alignPardef.toString().length>0 || 
+								pardef.@listPardef && pardef.@listPardef.toString().length>0){
+									if(pardef.@alignPardef!=par.@alignPardef || pardef.@listPardef!=par.@listPardef){
 										needFix= true;
 									}else{
 										needFix= false;
@@ -239,12 +241,17 @@ package utils
 								
 
 								if(needFix==true){
-									
-									var newId:String=(parseInt(id)+100000).toString();
+									DominoGlobals.PardefPardefAlignId++;
+									var newId:String=DominoGlobals.PardefPardefAlignId.toString();
 									var pardefXml:XML = pardef.copy();
 									pardefXml.@id=newId
+									if(par.@listPardef && par.@listPardef.toString().length>0){
+										pardefXml.@list=par.@listPardef;
+									}
+									if(par.@alignPardef && par.@alignPardef.toString().length>0){
+										pardefXml.@align=par.@alignPardef;
+									}
 									
-									pardefXml.@align=par.@alignPardef;
 									par.@def=newId;
 									pardef.parent().appendChild(pardefXml);
 								}

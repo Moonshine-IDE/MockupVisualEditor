@@ -2166,7 +2166,7 @@ package view.domino.surfaceComponents.components
 			_truetype = value;
 		}
 
-        private var _alignPardef:String ;
+        private var _alignPardef:String ="left";
         [Bindable(event="alignAttributeChanged")]
 		public function get alignPardef():String
 		{
@@ -2522,6 +2522,10 @@ package view.domino.surfaceComponents.components
             if(component.alignPardef){
                 this.alignPardef = component.alignPardef;
             }
+
+            if(component.listPardef){
+                this.listPardef=component.listPardef;
+            }
             if(component.size){
                 this.size = component.size;
             }
@@ -2679,6 +2683,9 @@ package view.domino.surfaceComponents.components
             component.fieldHint = this.fieldHint;
             if(this.alignPardef){
                 component.alignPardef = this.alignPardef;
+            }
+            if(this.listPardef){
+                component.listPardef = this.listPardef;
             }
             if(this.color){
                 component.color = this.color;

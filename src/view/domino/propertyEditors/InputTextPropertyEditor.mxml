@@ -78,40 +78,39 @@
 				 }
 
 				 //inisatll align options
-				// var leftButton:Button = new Button();
-				// leftButton.width = 30
-				// leftButton.height = 30 
-				// var rightButton:Button = new Button();
-				// rightButton.width = 30
-				// rightButton.height = 30 
-				// var centerButton:Button = new Button();
-				// centerButton.width = 30
-				// centerButton.height = 30 
-				// var justifButton:Button = new Button();
-				// justifButton.width = 30
-				// justifButton.height = 30 
-				// var noneButton:Button = new Button();
-				// noneButton.width = 30
-				// noneButton.height = 30 
+				var leftButton:Button = new Button();
+				leftButton.width = 30
+				leftButton.height = 30 
+				var rightButton:Button = new Button();
+				rightButton.width = 30
+				rightButton.height = 30 
+				var centerButton:Button = new Button();
+				centerButton.width = 30
+				centerButton.height = 30 
+				var justifButton:Button = new Button();
+				justifButton.width = 30
+				justifButton.height = 30 
+				var noneButton:Button = new Button();
+				noneButton.width = 30
+				noneButton.height = 30 
 				
-				// ALIGN_JUSTIFY.width=30
-				// ALIGN_JUSTIFY.height=30
-				// ALIGN_LEFT.width=30
-				// ALIGN_LEFT.height=30
-				// ALIGN_RIGHT.width=30
-				// ALIGN_RIGHT.height=30
-				// ALIGN_CENTER.width = 30
-				// ALIGN_CENTER.height=30
+				ALIGN_JUSTIFY.width=30
+				ALIGN_JUSTIFY.height=30
+				ALIGN_LEFT.width=30
+				ALIGN_LEFT.height=30
+				ALIGN_RIGHT.width=30
+				ALIGN_RIGHT.height=30
+				ALIGN_CENTER.width = 30
+				ALIGN_CENTER.height=30
 
 
-				// leftButton.setStyle("icon",ALIGN_LEFT);
-				// rightButton.setStyle("icon",ALIGN_RIGHT);
-				// centerButton.setStyle("icon",ALIGN_CENTER);
-				// justifButton.setStyle("icon",ALIGN_JUSTIFY);
-				// noneButton.setStyle("icon",ALIGN_NONE);
+				leftButton.setStyle("icon",ALIGN_LEFT);
+				rightButton.setStyle("icon",ALIGN_RIGHT);
+				centerButton.setStyle("icon",ALIGN_CENTER);
+				justifButton.setStyle("icon",ALIGN_JUSTIFY);
+				noneButton.setStyle("icon",ALIGN_NONE);
 				//initial align
-				//initializeAlign();
-				//alignPanel.visible = alignPanel.includeInLayout =false;
+				initializeAlign();
 
 
 				
@@ -585,14 +584,14 @@
 
 			}
 
-			// private function initializeAlign():void
-			// {
-			// 	if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
-			// 		var button:String = this.selectedItem["alignPardef"]+"Update";
-			// 		alignSetting(button);
+			private function initializeAlign():void
+			{
+				if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
+					var button:String = this.selectedItem["alignPardef"]+"Update";
+					alignSetting(button);
 
-			// 	}
-			// }
+				}
+			}
 
 	
        
@@ -858,7 +857,7 @@
 		collectionProperty="fontStyles" textProperty="fontStyle"/>
             </mx:VBox >
 
-            <!-- <mx:VBox  label="Paragraph Alignment" percentHeight="100" visible="false" includeInLayout="false" id="alignPanel">
+            <mx:VBox  label="Paragraph Alignment" percentHeight="100" visible="false" includeInLayout="false" id="alignPanel">
 			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 				<s:HGroup width="100%" verticalAlign="middle">
 				
@@ -919,7 +918,7 @@
 				</s:HGroup>
 			</s:FormItem> 
 
-            </mx:VBox > -->
+            </mx:VBox >
 			 <mx:VBox  label="Paragraph Hide When" horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
 

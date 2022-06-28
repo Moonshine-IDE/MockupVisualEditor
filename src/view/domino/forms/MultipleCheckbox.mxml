@@ -4,7 +4,8 @@
                                       xmlns:suportclasses="view.suportClasses.*"
                                       xmlns:mx="library://ns.adobe.com/flex/mx" 
                                       skinClass="skins.FormSkin"
-                                      creationComplete="onCreationCompletes(event)">
+                                      creationComplete="onCreationCompletes(event)"
+                                      >
 
     <suportclasses:layout>
         <s:FormLayout />
@@ -31,7 +32,16 @@
         [Bindable]
         public var optionExculdeFunction:Function;
 
+        [Bindable]
+        public var dynamicLabel:String="false";
+
+        [Bindable]
+        public var singleSelectOption:String=null;
+
         public var listItemRenderer:Class;
+
+        private var widthOfContair:Number = 150;
+        private var widthOfList:Number = 100 ;
 
         private var _bindingCollection:ChangeWatcher;
         private var _bindingSurfaceProperty:ChangeWatcher;
@@ -102,10 +112,36 @@
            
             updateBinding();
            // initializeMultiSelect();
-            
+           if(selectedItem[_textProperty]!=null && selectedItem[_textProperty].length>0){
+               if(dynamicLabel==="true"){
+                    testPopUp.label=selectedItem[_textProperty];
+               }
+           }
+           
+            //auto calculate for width 
+           var listLen: Number= 0;
+            for(var checkNum:Number = 0; checkNum < includeCollection.length; checkNum++)
+            {
+                var item:Object = includeCollection.getItemAt(checkNum);
+                
+                if(item && item.label &&item.label.length>listLen)
+                {
+                    listLen=item.label.length;
+                }
+                
+            }
+
+            var finalWidth:Number = listLen * 8;
+            if(widthOfContair<finalWidth){
+                widthOfContair = finalWidth;
+            }
+            widthOfList = widthOfContair -50;
+
         }
+
         
         private function initializeMultiSelect():void {
+            
             var rex:RegExp = /[\s\r\n]+/gim;
             if (includeCollection && selectedItem[_textProperty]){
                  var str:String = selectedItem[_textProperty];
@@ -127,7 +163,7 @@
                                                 var checkitem:Object = item.getChildAt(i);
                                                 //Alert.show("checkitem:"+checkitem.toString());
                                                 if(checkitem.hasOwnProperty("selected") ){
-                                                    if(checkitem.label==elementStr){
+                                                    if(checkitem.automationName==elementStr){
                                                         checkitem.selected=true
                                                     }
                                                     
@@ -142,7 +178,7 @@
                                                         if(existing==false){
                                                             _selectItemList.addItem(elementStr);
                                                         }
-                                                        
+                                                      
                                                         //Alert.show("selected:"+checkitem.label);
                                                     }
                                                 
@@ -157,13 +193,28 @@
                  }
 
             }
+
+           
+
+                        
         }
 
-        private function selectCurrentItem():void
+        private function selectCurrentItem(event:Event):void
         {
+            
             _selectItemList = new ArrayList();
             var checkNum:int = 0;
             var item:Object = null;
+            var signleOption:Boolean = false;
+            if(singleSelectOption!=null && singleSelectOption.length>0 ){
+                if(event.target.hasOwnProperty("selected") && event.target.selected==true){
+                    if(event.target.automationName==singleSelectOption){
+                        signleOption = true;
+                    }
+                }
+                
+                
+            }
             for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
             {
                  item = multCheckList.getChildAt(checkNum);
@@ -182,21 +233,53 @@
                           var checkitem:Object = item.getChildAt(i);
                            //Alert.show("checkitem:"+checkitem.toString());
                           if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
-                                  var existing:Boolean = false;
-                                  for (var j:int = 0; j < _selectItemList.length; j++){
-                                      if(_selectItemList.getItemAt(j).toString()==checkitem.label){
-                                          existing=true;
-                                      }
-                                  }
-                                  if(existing==false){
-                                    _selectItemList.addItem(checkitem.label);
-                                  }
                                 
-                                //Alert.show("selected:"+checkitem.label);
-                            }
+                                  
+                                var existing:Boolean = false;
+                                for (var j:int = 0; j < _selectItemList.length; j++){
+                                    if(_selectItemList.getItemAt(j).toString()==checkitem.automationName){
+                                        existing=true;
+                                    }
+                                }
+                                if(existing==false){
+                                _selectItemList.addItem(checkitem.automationName);
+                                }
+                                
+                              
+                          }
                            
                       }
                  }
+            }
+            if(singleSelectOption!=null && singleSelectOption.length>0 ){
+                for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
+                {
+                    item = multCheckList.getChildAt(checkNum);
+                    if(item is ListBaseContentHolder){
+                        for (var i:int = 0; i < item.numChildren; i++){
+                            var checkitem:Object = item.getChildAt(i);
+                            
+                            if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+                                if( signleOption ==true){
+                                
+                                    if(checkitem.automationName==singleSelectOption){
+                                            
+                                    }else{
+                                        checkitem.selected = false;
+                                        _selectItemList.removeItem(checkitem.automationName);
+                                    }
+                                    
+                                    
+                                }else{
+                                     if(checkitem.automationName==singleSelectOption){
+                                          checkitem.selected = false;
+                                          _selectItemList.removeItem(checkitem.automationName);
+                                     }
+                                }
+                            }
+                        }
+                    }
+                }
             }
            
 
@@ -207,16 +290,10 @@
                     str = str+_selectItemList.getItemAt(k).toString() + " ";
                 }
                 selectedItem[_textProperty] = str;
+                if(dynamicLabel==="true"){
+                    testPopUp.label=str;
+                }
             }
-            // else if (selectedItem[_textProperty])
-            // {
-            //     ddlSelection.selectedItem = selectedItem[_textProperty];
-            // }
-
-            // if (ddlSelection.selectedItem)
-            // {
-            //     //ddlSelection.callLater(onSelectionChange, [null]);
-            // }
         }
 
 
@@ -267,23 +344,23 @@
         protected function closeButtonClickHandler(event:MouseEvent):void {
             testPopUp.close();
         }
-        protected function changeCheckBox():void
+        protected function changeCheckBox(event:Event):void
         {
-            selectCurrentItem();
+            selectCurrentItem(event);
         }
         ]]>
     </fx:Script>
 
            <mx:PopUpButton id="testPopUp"
-                width="150" label="{label}" >
-                <mx:popUp>
-                    <mx:VBox width="150" backgroundColor="0xffffff">
+                width="{widthOfContair}" label="{label}" >
+                <mx:popUp >
+                    <mx:VBox width="{widthOfContair}" backgroundColor="0xffffff" borderStyle="solid" borderColor="0x000000">
                         <mx:List id="multCheckList"
                                 dataProvider="{includeCollection}"
                                 height="{includeCollection.length * 25}"
-                                width="100"
+                                width="{widthOfList}"
                                 borderStyle="none"
-                                click="changeCheckBox()"
+                                click="changeCheckBox(event)"
                                 creationComplete="initializeMultiSelect()">
                             <mx:itemRenderer>
                                 <fx:Component>
@@ -292,14 +369,16 @@
                                             <![CDATA[
                                             import mx.controls.Alert;
                                            
-                                            override public function set data(value:Object):void
+                                            override public function set data(obj:Object):void
                                             {
-                                                super.data = value;
-                                                if (value && value.label)
+                                                super.data = obj;
+                                               
+                                                if (obj && obj.label)
                                                 {
-                                                    super.label = value.label;
-                                                    super.selected = value.selected;
-                                                    super.enabled= value.enabled
+                                                    super.label = obj.label;
+                                                    super.automationName = obj.value;
+                                                    super.selected = obj.selected;
+                                                    super.enabled= obj.enabled;
                                                     
                                                 }
                                             }
@@ -310,7 +389,8 @@
                             </mx:itemRenderer>
                         </mx:List>
                         <mx:Button label="Close"
-                                click="closeButtonClickHandler(event)"/>
+                                click="closeButtonClickHandler(event)" paddingBottom="5"
+    paddingLeft="5"/>
                     </mx:VBox>
                 </mx:popUp>
             </mx:PopUpButton> 

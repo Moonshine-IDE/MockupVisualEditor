@@ -543,6 +543,16 @@ package view.domino.surfaceComponents.components
 			
 		}
 
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -555,6 +565,10 @@ package view.domino.surfaceComponents.components
 
             if(this.leftmargin){
                 xml.@leftmargin = this.leftmargin;
+            }
+
+            if(this.hide){
+                xml.@hide = this.hide;
             }
 
             if (cdataXML)
@@ -602,6 +616,10 @@ package view.domino.surfaceComponents.components
 
             if(xml.@leftmargin!=null){
                 this.leftmargin=xml.@leftmargin;
+            }
+
+             if(xml.@hide!=null){
+                this.hide=xml.@hide;
             }
 
             if(xml.@columsProperty!=null){
@@ -664,6 +682,7 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoTable).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTable).percentHeight = this.percentHeight;
             (component as components.domino.DominoTable).columnProperties = this.columnProperties;
+            (component as components.domino.DominoTable).hide = this.hide;
 
             return component.toCode();
         }

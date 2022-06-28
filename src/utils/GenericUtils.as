@@ -5,7 +5,10 @@ package utils
 	import view.interfaces.IHistorySurfaceComponent;
 	import view.interfaces.ISurfaceComponent;
 	import view.suportClasses.PropertyChangeReference;
-	
+	import 	mx.collections.SortField;
+	import 	mx.collections.Sort;
+	import mx.collections.ArrayCollection;
+
 	public class GenericUtils
 	{
 		public static function getWidth(value:InteractiveObject):String
@@ -109,6 +112,18 @@ package utils
 			var v:Number = 1 + Math.random() * (100 - 1);
 
 			return prefix + String(Math.round(v));
+		}
+
+		public static function arrayCollectionSort(ar:ArrayCollection, fieldName:String, isNumeric:Boolean):ArrayCollection 
+		{
+			var dataSortField:SortField = new SortField();
+			dataSortField.name = fieldName;
+			dataSortField.numeric = isNumeric;
+			var numericDataSort:Sort = new Sort();
+			numericDataSort.fields = [dataSortField];
+			ar.sort = numericDataSort;
+			ar.refresh();
+			return ar;
 		}
 	}
 }

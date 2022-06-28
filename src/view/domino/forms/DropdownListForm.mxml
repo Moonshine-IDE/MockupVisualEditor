@@ -4,16 +4,13 @@
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
         creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin" xmlns:forms="view.forms.*">
-    <suportclasses:layout>
-        <s:FormLayout />
-    </suportclasses:layout>
-    <s:FormItem label="{label}" skinClass="skins.StackedFormItemSkin">
 		<forms:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
 						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}" showTooltipFunction="{showTooltipFunction}"
 						change="onSelectionChange(event)"
-                        enabled="{bindableEnabled}"/>
-    </s:FormItem>
+                        enabled="{bindableEnabled}"
+                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+
 
     <fx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
@@ -22,8 +19,6 @@
         import mx.events.FlexEvent;
         
         import spark.events.IndexChangeEvent;
-        import utils.GenericUtils;
-        import mx.collections.ArrayCollection;
 
         [Bindable]
         public var bindableEnabled:Boolean = true;
@@ -136,23 +131,7 @@
             if (ddlSelection.selectedItem)
             {
                 ddlSelection.callLater(onSelectionChange, [null]);
-            }else{
-                //if not found the select options , let the selcted item default for other
-                if(_textProperty=="fontName"){
-                    var item:Object={label: selectedItem[_textProperty],description: selectedItem[_textProperty],value:selectedItem[_textProperty],enabled:true,"selected": true};
-                    includeCollection.addItem(item);
-                    ddlSelection.selectedItem=item;
-                }
-              
-                
-
             }
-
-            var arry:ArrayCollection= new ArrayCollection(includeCollection.toArray());
-
-            arry=GenericUtils.arrayCollectionSort(arry,"label",false);
-            includeCollection=arry;
-
         }
 
         protected function onSelectionChange(event:IndexChangeEvent):void

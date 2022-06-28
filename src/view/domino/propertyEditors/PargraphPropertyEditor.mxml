@@ -3,8 +3,47 @@
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*"
 							      xmlns:forms="view.forms.*"
-                                  xmlns:domino="view.domino.forms.*">
+                                  xmlns:domino="view.domino.forms.*" 
+                                  creationComplete="onInputCreationComplete(event)"
+                                  >
 
+    <fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import spark.events.IndexChangeEvent;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+
+
+            private function onInputCreationComplete(event:FlexEvent):void
+        	{
+
+				 //inistal hide options
+				 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 ){
+					 this.hideOption.selected = true;
+					 if(this.hideOption.selected){
+						hidePanel.visible = hidePanel.includeInLayout = true;
+					 }else{
+						hidePanel.visible = hidePanel.includeInLayout = false;
+					 }
+				 }
+
+				
+			}
+
+            private function changeHideOption(event:Event):void
+			{
+				if(this.hideOption.selected){
+					hidePanel.visible = hidePanel.includeInLayout = true;
+				}else{
+					hidePanel.visible = hidePanel.includeInLayout = false;
+				}
+			
+			}
+
+
+		]]>
+	</fx:Script>
     <suportclasses:layout>
         <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
     </suportclasses:layout>
@@ -14,5 +53,24 @@
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>
 
     <domino:ParagraphLayoutForm />
+    <s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
+    <s:CheckBox id="hideOption"
+                selected="false"
+                change="changeHideOption(event)"/>
+    </s:FormItem>
+    <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="0" 
+            left="0" right="0" top="10" bottom="10" width="330" includeInLayout="false" visible="false" id="hidePanel">
+			<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
+
+	<domino:HideOptions textProperty="hide"/>	
+	<!-- <s:Label text="Hide paragraph if formula is true"/>
+            
+	<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />
+               -->
+	 </s:VGroup> 
+	</s:BorderContainer>  
     <forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

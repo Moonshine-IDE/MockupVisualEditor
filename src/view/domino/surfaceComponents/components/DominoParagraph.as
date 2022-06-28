@@ -403,6 +403,16 @@ package view.domino.surfaceComponents.components
 		{
 			_isSelected = value;
 		}
+
+        private var _isNewLine:String;
+		public function get isNewLine():String
+		{
+			return _isNewLine;
+		}
+		public function set isNewLine(value:String):void
+		{
+			_isNewLine = value;
+		}
 		
 		private var _propertyChangeFieldReference:PropertyChangeReference;
 		public function get propertyChangeFieldReference():PropertyChangeReference
@@ -413,6 +423,17 @@ package view.domino.surfaceComponents.components
 		public function set propertyChangeFieldReference(value:PropertyChangeReference):void
 		{
 			_propertyChangeFieldReference = value;
+		}
+
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
 		}
 
         private var _propertiesChangedEvents:Array;
@@ -462,6 +483,11 @@ package view.domino.surfaceComponents.components
         public function toXML():XML
         {
             mainXML = new XML("<" + ELEMENT_NAME + "/>");
+            if(this.isNewLine){
+                mainXML.@isNewLine= this.isNewLine;
+            }else{
+
+            }
 
             return this.internalToXML();
         }
@@ -471,7 +497,7 @@ package view.domino.surfaceComponents.components
 			var localSurface:ISurface = surface;
 
             component.fromXML(xml, callback, localSurface, lookup);
-
+            this.isNewLine = component.isNewLine;
 			_cssClass = component.cssClass;
 			wrap = component.wrap;
 			
@@ -491,7 +517,8 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoParagraph).height = this.width;
 			(component as components.domino.DominoParagraph).percentWidth = this.percentWidth;
 			(component as components.domino.DominoParagraph).percentHeight = this.percentHeight;
-		
+            (component as components.domino.DominoParagraph).hide = this.hide;
+            (component as components.domino.DominoParagraph).isNewLine = this.isNewLine;
             var xml:XML = component.toCode();
 	
             xml["@class"] = XMLCodeUtils.getChildrenPositionForXML(this);

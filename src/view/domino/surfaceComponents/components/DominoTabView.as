@@ -403,6 +403,17 @@ package view.domino.surfaceComponents.components
             return super.scrollable;
         }
 
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
         override protected function updatePropertyChangeReference(fieldName:String, oldValue:*, newValue:*):void
         {
             if (oldValue && (oldValue is Array)) _propertyChangeFieldReference = new PropertyChangeReferenceTabView(this, fieldName, oldValue, newValue);
@@ -489,6 +500,8 @@ package view.domino.surfaceComponents.components
             return navigatorContent;
 		}
 
+        
+
         public function toXML():XML
         {
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
@@ -502,6 +515,7 @@ package view.domino.surfaceComponents.components
 
             xml.@orientation = this.orientation;
             xml.@scrollable = this.scrollable;
+            xml.@hide= this.hide;
            
             //  if(div.direction){
             //     xml.@direction=div.direction;
@@ -532,6 +546,7 @@ package view.domino.surfaceComponents.components
 			this.orientation = component.orientation;
 			this.scrollable = component.scrollable;
 			this.selectedIndex = component.selectedIndex;
+            this.hide = component.hide;
 			
 			var tabsXML:XMLList = xml.elements("tab");
             var tabsCount:int = tabsXML.length();
@@ -557,6 +572,7 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoTabView).height = super.height;
 			(component as components.domino.DominoTabView).percentWidth = this.percentWidth;
 			(component as components.domino.DominoTabView).percentHeight = this.percentHeight;
+            (component as components.domino.DominoTabView).hide = this.hide;
 			
             return component.toCode();
         }

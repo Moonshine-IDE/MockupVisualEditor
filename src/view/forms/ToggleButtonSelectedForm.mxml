@@ -28,6 +28,8 @@
         [Bindable]
         public var bindableText:Boolean;
 
+
+
         private var _label:String = "Text";
 
         [Bindable("labelChange")]

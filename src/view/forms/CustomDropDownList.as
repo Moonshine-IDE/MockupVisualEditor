@@ -14,6 +14,8 @@ package view.forms
 	{
 		public var labelDisplayFunction:Function;
 		public var showTooltipFunction:Function;
+
+
 		
 		public function CustomDropDownList()
 		{
@@ -24,6 +26,7 @@ package view.forms
 				this.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
 				this.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
 			}
+		
 			
 		}
 		

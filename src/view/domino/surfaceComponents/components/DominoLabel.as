@@ -49,6 +49,7 @@ package view.domino.surfaceComponents.components
     import utils.StringHelper;
 
     import interfaces.dominoComponents.IDominoLabel;
+    import global.domino.DominoGlobalTokens;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -312,27 +313,7 @@ package view.domino.surfaceComponents.components
          * white | yellow | none | system " 
          */
         [Bindable]
-        private var _colors:ArrayList = new ArrayList([
-        {label: "aqua",description: "aqua color.",htmlcolor:"#00FFFF"},
-        {label: "black",description:"",htmlcolor:"#000000"},
-        {label: "blue",description:"",htmlcolor:"#0000FF"}, 
-        {label: "fuchsia",description:"",htmlcolor:"#FF00FF"},
-        {label: "gray",description:"",htmlcolor:"#808080"},
-        {label: "green",description:"",htmlcolor:"#008000"},
-        {label: "lime",description:"",htmlcolor:"#00FF00"},
-        {label: "maroon",description:"",htmlcolor:"#800000"},
-        {label: "navy",description:"",htmlcolor:"#000080"},
-        {label: "olive",description:"",htmlcolor:"#808000"},
-        {label: "purple",description:"",htmlcolor:"#800080"},
-        {label: "red",description:"",htmlcolor:"#FF0000"},
-        {label: "silver",description:"",htmlcolor:"#C0C0C0"},
-        {label: "teal",description:"",htmlcolor:"#008080"},
-        {label: "white",description:"",htmlcolor:"#ffffff"},
-        {label: "yellow",description:"",htmlcolor:"#FFFF00"},
-        {label: "none",description:"",htmlcolor:"#000000"},
-        {label: "system",description:"A preset color. For instance, the font color of a hotspot link is 'system' because it is determined by the %link.color.attrs; property settings for a form.",
-        htmlcolor:"#4B0082"}
-        ]);
+        private var _colors:ArrayList =DominoGlobalTokens.Colors;
 
         public function get colors():ArrayList
         {
@@ -390,19 +371,7 @@ package view.domino.surfaceComponents.components
 
         //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
         [Bindable]
-        private var _fontStyles:ArrayList = new ArrayList([
-              {label: "normal",description: "normal",value:"normal",enabled:true},
-              {label: "bold",description: "bold",value:"bold",enabled:true},
-              {label: "italic",description: "italic",value:"italic",enabled:true},
-              {label: "underline",description: "underline",value:"underline",enabled:true},
-              {label: "strikethrough",description: "strikethrough",value:"strikethrough",enabled:true},
-              {label: "superscript",description: "superscript",value:"superscript",enabled:true},
-              {label: "shadow",description: "shadow",value:"shadow",enabled:true},
-              {label: "emboss",description: "emboss",value:"emboss",enabled:true},
-              {label: "extrude",description: "extrude",value:"extrude",enabled:true},
-              {label: "subscript",description: "subscript",value:"subscript",enabled:true},
-              
-        ])
+        private var _fontStyles:ArrayList =DominoGlobalTokens.FontStyles;
 
 
         public function get fontStyles():ArrayList
@@ -711,6 +680,68 @@ package view.domino.surfaceComponents.components
 			_truetype = value;
 		}
 
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
+         //-----Html core attrs-------
+        private var _htmlId:String;
+		public function get htmlId():String
+		{
+			return _htmlId;
+		}
+        public function set htmlId(value:String):void
+		{
+				_htmlId = value;
+		}
+
+		private var _htmlClass:String;
+		public function get htmlClass():String
+		{
+			return _htmlClass;
+		}
+        public function set htmlClass(value:String):void
+		{
+			_htmlClass = value;
+		}
+
+		private var _htmlStyle:String;
+		public function get htmlStyle():String
+		{
+			return _htmlStyle;
+		}
+        public function set htmlStyle(value:String):void
+		{
+			_htmlStyle=value;
+		}
+
+		private var _htmlTitle:String;
+		public function get htmlTitle():String
+		{
+			return _htmlTitle;
+		}
+        public function set htmlTitle(value:String):void
+		{
+			_htmlTitle=value;
+		}
+
+		private var _htmlOther:String;
+		public function get htmlOther():String
+		{
+			return _htmlOther;
+		}
+        public function set htmlOther(value:String):void
+		{
+			_htmlOther=value;
+		}
+
 		//-------------other componetn end-------------
 		
 		
@@ -735,15 +766,20 @@ package view.domino.surfaceComponents.components
             }
 
             if(this.fontStyle){
-                xml.@style = this.fontStyle;
+                xml.@fontStyle = this.fontStyle;
             }
              if(this.fontName){
-                xml.@name = this.fontName;
+                xml.@fontName = this.fontName;
             }
             
             if(this.hidewhen){
                 var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
                  xml.@hidewhen = encodeFormulaStr;
+            }
+
+            if(this.hide){
+              
+                 xml.@hide = hide;
             }
 
             if(this.isNewLine){
@@ -760,6 +796,22 @@ package view.domino.surfaceComponents.components
             }
             if(this.truetype){
                 xml.@truetype = this.truetype;
+            }
+
+            if(this.htmlId){
+                xml.@htmlId = this.htmlId;
+            }
+            if(this.htmlClass){
+                xml.@htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                xml.@htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlTitle){
+                xml.@htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlOther){
+                xml.@htmlOther = this.htmlOther;
             }
 
             return xml;
@@ -781,6 +833,7 @@ package view.domino.surfaceComponents.components
             this.isNewLine = component.isNewLine;
             this.familyid= component.familyid;
             this.pitch = component.pitch;
+            this.hide=component.hide;
             if(component.truetype){
                  this.truetype = component.truetype;
             }
@@ -789,6 +842,8 @@ package view.domino.surfaceComponents.components
                 
                this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
             }
+
+            
 
 
         }
@@ -804,10 +859,27 @@ package view.domino.surfaceComponents.components
 			
 			component.isSelected = this.isSelected;
             component.hidewhen = this.hidewhen;
+            component.hide = this.hide;
             component.isNewLine = this.isNewLine;
             component.familyid = this.familyid;
             component.pitch = this.pitch ;
             component.truetype = this.truetype ;
+
+             if(this.htmlId){
+                component.htmlId = this.htmlId;
+            }
+            if(this.htmlTitle){
+                component.htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlClass){
+                component.htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                component.htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlOther){
+                component.htmlOther = this.htmlOther;
+            }
 		
             return component.toCode();
         }

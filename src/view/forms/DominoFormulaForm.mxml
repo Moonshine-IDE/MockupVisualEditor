@@ -69,7 +69,7 @@
         [Bindable]
         public var bindableText:String;
 
-        private var _label:String = "Text";
+        private var _label:String = "";
 
         [Bindable("labelChange")]
         public function get label():String

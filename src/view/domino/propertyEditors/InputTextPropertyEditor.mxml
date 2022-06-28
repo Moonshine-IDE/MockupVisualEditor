@@ -4,6 +4,7 @@
                                   xmlns:suportclasses="view.suportClasses.*"
                                   xmlns:domino="view.domino.forms.*" 
 								  xmlns:forms="view.forms.*"
+								  xmlns:mx="library://ns.adobe.com/flex/mx"
 								  xmlns:primeFaces="view.primeFaces.forms.*"
 								   creationComplete="onInputCreationComplete(event)"
 								 >
@@ -13,6 +14,32 @@
 			import spark.events.IndexChangeEvent;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import view.domino.forms.imageClass.LoadImage;
+			import mx.controls.listClasses.ListBaseContentHolder;
+
+			import spark.components.Button;
+			import spark.skins.spark.ButtonSkin;
+			import skins.DominoAlignButtonSkin;
+
+		[Embed(source='/assets/align-center-solid.png')]
+        [Bindable]
+        public  var ALIGN_CENTER:Class;
+
+        [Embed(source='/assets/align-justify-solid.png')]
+        [Bindable]
+        public  var ALIGN_JUSTIFY:Class;
+
+        [Embed(source='/assets/align-left-solid.png')]
+        [Bindable]
+        public  var ALIGN_LEFT:Class;
+
+        [Embed(source='/assets/align-right-solid.png')]
+        [Bindable]
+        public  var ALIGN_RIGHT:Class;
+        
+        [Bindable]
+        [Embed(source='/assets/ban-solid.png')]
+        public  var ALIGN_NONE:Class;
 
 			private var isNumber:Boolean = false;
 			private var inputType:String="";
@@ -33,6 +60,59 @@
 					keywords.visible =keywords.includeInLayout = true;
 					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
 				 }
+
+				 //inistal hide options
+				 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 || this.selectedItem["hidewhen"]!=null){
+					
+				 }
+				if(this.selectedItem["allowmultivalues"]){
+					 this.allowmul.selected=true;
+					
+				 }else{
+					 this.allowmul.selected=false;
+					
+				 }
+				 //inisatll font/color/size options 
+				 if(this.selectedItem["color"]!=null && this.selectedItem["color"].length>0){
+
+				 }
+
+				 //inisatll align options
+				// var leftButton:Button = new Button();
+				// leftButton.width = 30
+				// leftButton.height = 30 
+				// var rightButton:Button = new Button();
+				// rightButton.width = 30
+				// rightButton.height = 30 
+				// var centerButton:Button = new Button();
+				// centerButton.width = 30
+				// centerButton.height = 30 
+				// var justifButton:Button = new Button();
+				// justifButton.width = 30
+				// justifButton.height = 30 
+				// var noneButton:Button = new Button();
+				// noneButton.width = 30
+				// noneButton.height = 30 
+				
+				// ALIGN_JUSTIFY.width=30
+				// ALIGN_JUSTIFY.height=30
+				// ALIGN_LEFT.width=30
+				// ALIGN_LEFT.height=30
+				// ALIGN_RIGHT.width=30
+				// ALIGN_RIGHT.height=30
+				// ALIGN_CENTER.width = 30
+				// ALIGN_CENTER.height=30
+
+
+				// leftButton.setStyle("icon",ALIGN_LEFT);
+				// rightButton.setStyle("icon",ALIGN_RIGHT);
+				// centerButton.setStyle("icon",ALIGN_CENTER);
+				// justifButton.setStyle("icon",ALIGN_JUSTIFY);
+				// noneButton.setStyle("icon",ALIGN_NONE);
+				//initial align
+				//initializeAlign();
+				//alignPanel.visible = alignPanel.includeInLayout =false;
+
 
 				
 			}
@@ -68,11 +148,13 @@
 						}
 					}
 					txtValue.visible = txtValue.includeInLayout = true;
-					allowmul.bindableText = false;
+					//allowmul.selected = false;
 					txtValue.restrict="0-9";
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = true;
-					allowmul.visible = allowmul.includeInLayout = false;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -81,9 +163,12 @@
 					txtValue.restrict=null
 					datePanel.visible = datePanel.includeInLayout = true;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = false;
+					//allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					allowmul.bindableText = false;
+					//allowmul.selected = false;
 					txtValue.visible = txtValue.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -93,8 +178,8 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = true;
-					allowmul.bindableText = true;
+					//allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -104,8 +189,9 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = true;
-					allowmul.bindableText = true;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = true;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -115,8 +201,9 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = false;
-					allowmul.bindableText = false;
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = true;
@@ -126,8 +213,9 @@
 					txtValue.visible = txtValue.includeInLayout = false;
 					datePanel.visible = datePanel.includeInLayout = false;
 					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = false;
-					allowmul.bindableText = false;
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
 					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
 					namespanel.visible = namespanel.includeInLayout = false;
 					//formualPanel.visible = formualPanel.includeInLayout = false;
@@ -147,7 +235,10 @@
 							editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
 						}
 					}
-					allowmul.bindableText = false;
+					
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 					txtValue.restrict=null;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
@@ -157,9 +248,33 @@
 					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 					//Alert.show("142:"+formualPanel.visible);
 				
+				}else if(item.label=="authors"){
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
+				}else if(item.label=="password"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="readers"){
+					allowmul.enabled=true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
+				}else if(item.label=="timezone"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="color"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="richtext"){
+					allowmul.enabled=false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
 				}else {
 					txtValue.visible = txtValue.includeInLayout = true;
-					allowmul.bindableText = false;
+					allowmul.selected = false;
 					txtValue.restrict=null;
 					numberPanel.visible = numberPanel.includeInLayout = false;
 					allowmul.visible = allowmul.includeInLayout = true;
@@ -177,10 +292,24 @@
 
 			private function getDominoFieldKeyWordUISytle(item:Object):String
 			{
+				allowmul.visible = allowmul.includeInLayout = true;
 				if(item.label=="radiobutton"){
-					allowmul.visible = allowmul.includeInLayout = false;
-				}else{
-					allowmul.visible = allowmul.includeInLayout = true;
+					allowmul.enabled = false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.label=="combobox") {
+					allowmul.enabled = false;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else if(item.enabled=="checkbox") {
+					allowmul.enabled = false;
+					allowmul.selected=true;
+					fieldlistinput.enabled = false;
+					fieldlistdisplay.enabled = false;
+				}else  {
+					allowmul.enabled = true;
+					fieldlistinput.enabled = true;
+					fieldlistdisplay.enabled = true;
 				}
 				return item.label;
 			}
@@ -195,22 +324,22 @@
 					defaultvalue.visible = defaultvalue.includeInLayout = false;
 					inputtranslation.visible = inputtranslation.includeInLayout = true;
 					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					hidewhen.visible = hidewhen.includeInLayout = false;
+					//hidewhen.visible = hidewhen.includeInLayout = false;
 				}else if(item.value=="inputvalidation"){
 					defaultvalue.visible = defaultvalue.includeInLayout = false;
 					inputtranslation.visible = inputtranslation.includeInLayout = false;
 					inputvalidation.visible = inputvalidation.includeInLayout = true;
-					hidewhen.visible = hidewhen.includeInLayout = false;
+					//hidewhen.visible = hidewhen.includeInLayout = false;
 				}else if(item.value=="hidewhen"){
 					defaultvalue.visible = defaultvalue.includeInLayout = false;
 					inputtranslation.visible = inputtranslation.includeInLayout = false;
 					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					hidewhen.visible = hidewhen.includeInLayout = true;
+					//hidewhen.visible = hidewhen.includeInLayout = true;
 				}else{
 					defaultvalue.visible = defaultvalue.includeInLayout = true;
 					inputtranslation.visible = inputtranslation.includeInLayout = false;
 					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					hidewhen.visible = hidewhen.includeInLayout = false;
+					//hidewhen.visible = hidewhen.includeInLayout = false;
 
 				}
 				return item.value;
@@ -256,9 +385,216 @@
 				 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
 			}
 
+			private function allowMultipleValues_changeHandler(event:Event):void
+			{
+				//Alert.show(":"+this.keyformulachoices.selected);
+	
+				 this.selectedItem["allowmultivalues"] = this.allowmul.selected;
+			}
+
+
 		
 
+		
+			private var pre_label_var:String="normal";
 
+				private function excludeMultipleSelect(item:ListBaseContentHolder):void
+			{
+				var normal_flag:Boolean = false;
+				var execute_array:Array=null;
+				var normalSelect:Boolean=false;
+				//<!ENTITY % font.styles "normal | bold | italic | underline |
+				//strikethrough | superscript | subscript | shadow | emboss | extrude">
+				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
+				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
+				var exclusions_exclude_option:Array=["normal","superscript","subscript","shadow","emboss","extrude"];
+				var selected_array:Array=[];
+				var hasExlude:Boolean=false;
+				var hasExludeNum:Number=0;
+				var i:int = 0;
+				var checkItem:Object = null;
+				if(item){
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+							if(checkItem){
+								//Alert.show("checkitem:"+checkitem.toString());
+								if(checkItem.hasOwnProperty("selected") && checkItem.selected==true  ){
+									selected_array.push(checkItem.label);
+								}
+							}
+					}
+
+					//Alert.show("selected_array:"+selected_array.toString());
+					if(selected_array&& selected_array.length>0){
+						for (i = 0; i < selected_array.length; i++){
+							if(selected_array[i].toString()=="normal"){
+								hasExlude=true;
+							}else if(exclusions_exclude_option.indexOf(selected_array[i].toString())>=0){
+								hasExludeNum++;
+							}
+						}
+						if(hasExludeNum>1){
+							hasExlude=true;
+						}
+					}
+					//Alert.show("hasExlude:"+hasExlude);
+					if(pre_label_var!=null){
+						for (i = 0; i < item.numChildren; i++){
+							checkItem = item.getChildAt(i);
+							if(checkItem){
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkItem.hasOwnProperty("selected") ){
+								//	Alert.show("checkitem.label:"+checkitem.label);
+									if(checkItem.label==pre_label_var&& hasExlude==true){
+										//checkitem.enabled=false;
+										checkItem.selected=false;
+
+									}
+
+								}
+							}
+
+						}
+						//Alert.show("pre_label_var:"+pre_label_var);
+						pre_label_var=null;
+
+					}
+
+
+
+
+
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+						if(checkItem){
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+
+							if(checkItem.label=="normal"){
+								//Alert.show("checkitem.label:"+checkitem.label);
+								execute_array=exclusions_normal;
+								normalSelect=true;
+								pre_label_var="normal";
+								//break;
+							}
+
+
+							}
+						}
+					}
+						//Alert.show("execute_array1:");
+
+					for (i = 0; i < item.numChildren; i++){
+						checkItem = item.getChildAt(i);
+							//Alert.show("checkitem:"+checkitem.toString());
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+								//Alert.show("checkitem:"+checkitem.label);
+								if(checkItem.label=="superscript"){
+									if(normalSelect==false)
+									pre_label_var="superscript"
+									if(execute_array==null)
+									execute_array=["subscript","shadow","emboss","extrude"];
+										//break;
+								}
+								if(checkItem.label=="subscript"){
+									if(normalSelect==false)
+									pre_label_var="subscript"
+									if(execute_array==null)
+									execute_array=["superscript","shadow","emboss","extrude"];
+									//break;
+								}
+								if(checkItem.label=="shadow"){
+									if(normalSelect==false)
+									pre_label_var="shadow"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","emboss","extrude"];
+									//break;
+								}
+								if(checkItem.label=="emboss"){
+									if(normalSelect==false)
+									pre_label_var="emboss"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","shadow","extrude"];
+									//break;
+								}
+								if(checkItem.label=="extrude"){
+									if(normalSelect==false)
+									pre_label_var="extrude"
+									if(execute_array==null)
+									execute_array=["superscript","subscript","shadow","emboss"];
+									//break;
+								}
+							}
+					}
+
+						//Alert.show("execute_array2:");
+
+
+
+
+					for (var j:int = 0; j < item.numChildren; j++){
+						var checkitem_child:Object = item.getChildAt(j);
+							if(checkitem_child.hasOwnProperty("selected") ){
+								if(execute_array!=null && execute_array.length>0){
+									if(execute_array.indexOf(checkitem_child.label)>=0){
+										checkitem_child.selected=false;
+										checkitem_child.enabled=true;
+
+									}else{
+										//checkitem_child.selected=true;
+										checkitem_child.enabled=true;
+									}
+								}else{
+									checkitem_child.enabled=true;
+								}
+
+								if(normalSelect==false){
+									if(checkitem_child.label=="normal"){
+										checkitem_child.selected=false;
+									}
+								}
+							}
+					}
+				}
+			}
+
+			private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","justifUpdate","noneUpdate"]);
+			private function alignSetting(val:String){
+				for (var i:int = 0; i < buttonsName.length; i++)
+                {
+                    var item:Object = buttonsName.getItemAt(i);
+					var elem:Button = this[item];
+					var skin:DominoAlignButtonSkin=null;
+					if(elem!=null){
+						skin = DominoAlignButtonSkin(elem.skin);
+							
+					}
+					if(item==val){
+						skin.state= "down";
+						skin.setCurrentStateButton("down");
+					}else{
+						skin.state= "up";
+						skin.setCurrentStateButton("up");
+					}
+
+				
+				}
+				
+				//setting the align value into text property
+				 this.selectedItem["alignPardef"] = val.replace("Update","");
+
+			}
+
+			// private function initializeAlign():void
+			// {
+			// 	if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
+			// 		var button:String = this.selectedItem["alignPardef"]+"Update";
+			// 		alignSetting(button);
+
+			// 	}
+			// }
+
+	
        
 		]]>
 	</fx:Script>
@@ -267,7 +603,19 @@
     </suportclasses:layout>
 
 	<domino:BasicsForm/>
-	<forms:DropdownListForm id="ddl"
+	
+
+
+
+
+
+
+
+
+	<mx:Accordion id="accordion" width="100%" height="100%">
+	<mx:VBox  horizontalAlign="left" label="Field Info" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+<forms:DropdownListForm id="ddl"
                             label="Type" textProperty="type"
                             collectionProperty="types" labelField="label"
 							labelDisplayFunction="getDominoFieldTypeLabel" showTooltipFunction="getDominoFieldTooltip"
@@ -292,7 +640,7 @@
              cornerRadius="0"
             borderStyle="solid" borderWeight="1" 
             left="10" right="10" top="10" bottom="10" includeInLayout="false" visible="false" id="numberPanel">
-	<s:VGroup horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+	<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" >
        
 		<forms:DropdownListForm id="ddlformat"
@@ -416,7 +764,7 @@
 		<forms:DominoFormulaForm label="Formula:" textProperty="defaultvalue" prompt="" id="defaultvalue"  includeInLayout="true" visible="true" />
 		<forms:DominoFormulaForm label="Formula:" textProperty="inputtranslation" prompt="" id="inputtranslation"  includeInLayout="false" visible="false" />
 		<forms:DominoFormulaForm label="Formula:" textProperty="inputvalidation" prompt="" id="inputvalidation"  includeInLayout="false" visible="false" />
-		<forms:DominoFormulaForm label="Formula:" textProperty="hidewhen" prompt="" id="hidewhen"  includeInLayout="false" visible="false" />
+		
        </s:VGroup>
 		
 	</s:BorderContainer>
@@ -434,17 +782,7 @@
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 
-				<!-- <forms:DropdownListForm id="fieldlistinput"
-                            label="Input separators:" textProperty="listinputseparators"
-                            collectionProperty="separators" labelField="label" valueField="value"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/> -->
-
-				<!-- <forms:DropdownListForm id="fieldlistdisplay"
-                            label="Display separator:" textProperty="listdisplayseparator"
-                            collectionProperty="separators" labelField="label" valueField="value"
-							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
+				
 		   </s:VGroup>	
 	</s:BorderContainer>
 
@@ -467,10 +805,142 @@
 		
 			
 		   </s:VGroup>	
-		</s:BorderContainer>   		
+		</s:BorderContainer>  
+		<s:FormItem label="Allow multiple values" skinClass="skins.FormItemSkin">
+        <s:CheckBox selected="{keywordsFlag}"  id="allowmul" change="allowMultipleValues_changeHandler(event)"/>
+		</s:FormItem>
+
 	
+<!-- <forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues"/> -->
+			
+
+
+		   
+	</mx:VBox>
+            
+	<mx:VBox  horizontalAlign="left" label="Advanced" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+	<domino:HelpDescription label="Help Description" textProperty="helpDescription" />	   
+	<domino:HelpDescription label="Field Hint" textProperty="fieldHint" />	
+	<s:Label text="Multi-Value Options"/>
+	<s:Label text="Separate values when user enters" color="0xACA9A9"/>
+	<domino:MultipleCheckbox id="fieldlistinput" label=""  dynamicLabel="true" collectionProperty="separators" textProperty="listinputseparators"/>
+	<s:Label text="Display separate values with " color="0xACA9A9"/>	
+	<domino:DropdownListForm id="fieldlistdisplay"
+                            label="" textProperty="listdisplayseparator"
+                            collectionProperty="separators" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>				
+	<s:Label text="Security Options"/>
+	<domino:MultipleCheckbox id="securityOptionsList" label=""  dynamicLabel="true" collectionProperty="securityOptions" textProperty="securityOptionsInput"/>
+	<!-- <forms:DropdownListForm id="securityOptionsList"
+                            label="Display separate values with :" textProperty="securityOptionsInput"
+                            collectionProperty="securityOptions" labelField="label" valueField="value"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>						 -->
+	</mx:VBox > 
+          
+
+            <mx:VBox  label="Font" horizontalAlign="left" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >
+                
+	<forms:TextForm label="Size" textProperty="size"
+					restrict="0-9"/>
+	<domino:ColorPicker id="ddlcolorPicker"  label="Color" textProperty="color"  />
+	
+	<forms:DropdownListForm id="ddlfontName"
+                            label="Font" textProperty="fontName"
+                            collectionProperty="fontNames" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+	<s:Label text="Style"/>
+	<domino:MultipleCheckbox label=""  dynamicLabel="true" singleSelectOption="normal"
+		collectionProperty="fontStyles" textProperty="fontStyle"/>
+            </mx:VBox >
+
+            <!-- <mx:VBox  label="Paragraph Alignment" percentHeight="100" visible="false" includeInLayout="false" id="alignPanel">
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
 				
-	<forms:ToggleButtonSelectedForm label="Allowmultiple value" textProperty="allowmultivalues" id="allowmul"/>
+				<s:Label text="Alignment" width="60" direction="rtl"/>
+					<s:Button id="leftUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
+					<s:Button id="centerUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
+					<s:Button id="rightUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
+					<s:Button id="justifUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('justifUpdate')"/>
+					<s:Button id="noneUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
+					
+				</s:HGroup>
+			</s:FormItem>
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+					<s:Label text="First Line" width="60" direction="rtl"/>
+					<s:Button id="firstCenter" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="firstMiddle" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="firstOne" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+				</s:HGroup>
+			</s:FormItem>
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+				<s:Label text=": List" width="60" direction="rtl"/>
+				<forms:DropdownListForm id="pardeflistsSelect"
+                            label="" textProperty="listPardef"
+                            collectionProperty="lists" labelField="label" 
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+				</s:HGroup>
+			</s:FormItem>
+
+			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+				<s:HGroup width="100%" verticalAlign="middle">
+				<s:Label text="Spacing" width="60" direction="rtl"/>
+				
+					
+						<forms:DropdownListForm id="spaceSelect"
+                            label="Interline" textProperty="listPardef"
+                            collectionProperty="spaces" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+
+					
+					
+						
+						<forms:DropdownListForm id="spaceSelect2"
+                            label="Above" textProperty="listPardef"
+                            collectionProperty="spaces" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+						
+						<forms:DropdownListForm id="spaceSelect3"
+                            label="Below" textProperty="listPardef"
+                            collectionProperty="spaces" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+
+				</s:HGroup>
+			</s:FormItem> 
+
+            </mx:VBox > -->
+			 <mx:VBox  label="Paragraph Hide When" horizontalAlign="left" verticalAlign="middle" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >		
+
+			<domino:HideOptions textProperty="hide"/>	
+			<s:Label text="Hide paragraph if formula is true"/>
+            
+			<forms:DominoFormulaForm  textProperty="hidewhen" prompt="" id="hidewhen"   />        
+		 
+            </mx:VBox >
+			 <mx:VBox  label="HTML tags">
+			 	<domino:TextForm label=":Id" textProperty="htmlId"/>
+				<domino:TextForm label=":Class" textProperty="htmlClass"/>
+			   	<domino:TextForm label=":Style" textProperty="htmlStyle"/>
+			    <domino:TextForm label=":Title" textProperty="htmlTitle"/>
+				<domino:TextForm label=":Other" textProperty="htmlOther"/>
+              
+            </mx:VBox >
+        </mx:Accordion>
+
+
+	
 	<forms:ToggleButtonSelectedForm label="Required" textProperty="required"/>
 	<forms:TextInformationForm label="Additional information" textProperty="cdataInformation"/>
 </suportclasses:BasePropertyEditor>

@@ -1,12 +1,12 @@
 package utils
 {
     import mx.core.UIComponent;
-
     import view.EditingSurface;
     import view.interfaces.ISurfaceComponent;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.surfaceComponents.components.MainApplication;
-
+	import mx.controls.Alert;
+	import global.domino.DominoGlobals;
     public class MainApplicationCodeUtils
 	{
 
@@ -175,6 +175,98 @@ package utils
 			var total_xml:XML=xml;
             handleFleldOneNode(xml,mainFieldsContainer,total_xml);
 			return xml;
+		}
+
+		public static function fixPardefTableError(xml:XML):XML
+		{
+			var mainContainer:XML = MainApplicationCodeUtils.getDominMainContainerTag(xml);
+			if(mainContainer){
+				
+				if( mainContainer.children()[0] && mainContainer.children()[0].name()=="richtext"){
+						mainContainer=mainContainer.children()[0];
+				}
+				if(mainContainer.children().length()>0){
+					
+					var firstNode:XML = mainContainer.children()[0];
+				
+					if(firstNode){
+					
+						var sencodeNode:XML = mainContainer.children()[1];
+						if(sencodeNode){
+							
+							if(firstNode.name()=="pardef"){
+								if(sencodeNode.name()=="table"){
+								 	delete firstNode.parent().children()[firstNode.childIndex()];
+								}
+							}
+						}
+					}
+					
+				
+				}
+				
+				//var childName:String=child.name();
+
+			}
+			return xml;
+		}
+
+		public static function fixPardefAlign(xml:XML):XML
+		{
+			
+			for each(var par:XML in xml..par) //no matter of depth Note here
+			{
+				
+				if(par.@alignPardef && par.@alignPardef.toString().length>0 || par.@listPardef && par.@listPardef.toString().length>0 ){
+				
+					var pardefId:String=par.@def;
+					if(pardefId!=null){
+						for each(var pardef:XML in xml..pardef)
+						{
+							var id:String = pardef.@id;
+							if(pardefId==id){
+							
+								var needFix:Boolean =false;
+								//fix the pardef in here
+								if(pardef.@alignPardef && pardef.@alignPardef.toString().length>0 || 
+								pardef.@listPardef && pardef.@listPardef.toString().length>0){
+									if(pardef.@alignPardef!=par.@alignPardef || pardef.@listPardef!=par.@listPardef){
+										needFix= true;
+									}else{
+										needFix= false;
+									}
+								}else{
+									needFix= true;
+								}
+								
+
+								if(needFix==true){
+									DominoGlobals.PardefPardefAlignId++;
+									var newId:String=DominoGlobals.PardefPardefAlignId.toString();
+									var pardefXml:XML = pardef.copy();
+									pardefXml.@id=newId
+									if(par.@listPardef && par.@listPardef.toString().length>0){
+										pardefXml.@list=par.@listPardef;
+									}
+									if(par.@alignPardef && par.@alignPardef.toString().length>0){
+										pardefXml.@align=par.@alignPardef;
+									}
+									
+									par.@def=newId;
+									pardef.parent().appendChild(pardefXml);
+								}
+								continue;
+								
+							}
+						} 
+								
+					}
+				}
+					
+			}
+
+			return xml;
+				
 		}
 
 		public static function fixRoyaleDataProvider(xml:XML):XML

@@ -45,6 +45,9 @@ package view.domino.surfaceComponents.components
     import components.domino.DominoInputText;
 
     import utils.StringHelper;
+    import global.domino.DominoGlobalTokens;
+
+    
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -214,7 +217,9 @@ package view.domino.surfaceComponents.components
                 "recalonchangeChanged",
                 "keyformulachoicesChanged",
                 "keyformulavalueAttributeChanged",
-                "keywordsformulaChanged"
+                "keywordsformulaChanged",
+                "securityOptionsInputAttributeChanged",
+                "alignAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -577,6 +582,19 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("allowmultipleChanged"));
             }
         }
+        [Bindable]
+        private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        public function get lists():ArrayList
+        {
+            return _lists;
+        }
+
+        [Bindable]
+        private var _spaces:ArrayList = DominoGlobalTokens.Spaceing;
+        public function get spaces():ArrayList
+        {
+            return _spaces;
+        }
 
          //-----type-------------------------
         /**
@@ -587,21 +605,7 @@ package view.domino.surfaceComponents.components
           * readers | password | formula | timezone | richtextlite | color ">
           */
         [Bindable]
-        private var _types:ArrayList = new ArrayList([
-            {label: "text",description:"A text field."}, 
-            {label: "number",description:"A number field."},
-            {label: "datetime",description:"A date/time field."}, 
-            {label: "richtext",description:"A rich text field."},
-            {label: "keyword",description:"Presents a list of keywords for entry into the field, as a result of a formula or a list of constants. The Dialog List field is a keyword field that can also display a list of choices from the address dialog, view dialog, or ACL."}, 
-            {label: "names",description:"A computed or editable field that lists usernames."}, 
-            {label: "authors",description:"Lists the users who can edit the documents that they created."},
-            {label: "password",description:"A text field that displays text characters as a string of asterisks (*) to hide the content of the field. This type is often used for field in which users enter their passwords."},
-            {label: "formula",description:"A field that contains an @function or @command formula."},
-            {label: "timezone",description:"A field that displays a drop-down list of all available world time zones."},
-            {label: "richtextlite",description:"A rich text field that a user can paste a limited number of objects into; a helper icon listing the available element types displays beside this field."},
-            {label: "readers",description:"Lists the users who can read the documents created from a form."},
-            {label: "color",description:"A field that displays a color picker."}
-        ]);
+        private var _types:ArrayList = DominoGlobalTokens.Types;
         public function get types():ArrayList
         {
             return _types;
@@ -651,12 +655,7 @@ package view.domino.surfaceComponents.components
          * 
          */
         [Bindable]
-        private var _kinds:ArrayList = new ArrayList([
-        {label: "editable",description: "A user can enter or change its value."},
-        {label: "computed",description:"A formula calculates its value each time a user creates, saves, or refreshes a document."},
-        {label: "computedfordisplay",description:"A formula recalculates its value each time a user opens or saves a document. "}, 
-        {label: "computedwhencomposed",description:"A formula calculates its value only once: when a user first creates the document."}
-        ]);
+        private var _kinds:ArrayList = DominoGlobalTokens.Kinds;
 
         public function get kinds():ArrayList
         {
@@ -744,12 +743,7 @@ package view.domino.surfaceComponents.components
           
           //-----format-------------------------
         [Bindable]
-        private var _formats:ArrayList = new ArrayList([
-        {label: "general",description: "Displays numbers as they are entered; zeroes following the decimal point are suppressed. For example, 6.00 displays as 6."},
-        {label: "currency",description:"Displays values with a currency symbol and two digits after the decimal symbol; for example, $15.00."},
-        {label: "fixed",description:"Displays numbers with a fixed number of decimal places. For example, 6 displays as 6.00."}, 
-        {label: "scientific",description:"Displays numbers using exponential notation; for example, 10,000 displays as 1.00E+04."}
-        ]);
+        private var _formats:ArrayList = DominoGlobalTokens.Formats;
 
         public function get formats():ArrayList
         {
@@ -919,14 +913,7 @@ package view.domino.surfaceComponents.components
 
 // -----------show-----------------------
         [Bindable]
-        private var _shows:ArrayList = new ArrayList([
-        {label: "Current date only.",value:"date",
-        description: "Current date only."},
-        {label: "Current time only.",value:"time",
-        description:"Current time only."},
-        {label: "Current date and time.",value:"datetime",
-        description:"Current date and time."}
-        ]);
+        private var _shows:ArrayList = DominoGlobalTokens.Shows;
 
         public function get shows():ArrayList
         {
@@ -973,20 +960,7 @@ package view.domino.surfaceComponents.components
 // year4month | weekdaymonthdayyear | 
 // weekdaymonthday | weekday | month | day | year">
         [Bindable]
-        private var _dates:ArrayList = new ArrayList([
-        {label:"Only year month and day, where the year is in 2 digits.",value: "yearmonthday",description: "Current date only."},
-        {label:"Only year and month, where the year is in 4 digits.",value: "year4monthday",description:"Current time only."},
-        {label:"Only month and day",value: "monthday",description:"Current date and time."},
-        {label:"Only month and year",value: "yearmonth",description:"Current date and time."},
-        {label:"Only year and month, where the year is in 4 digits.",value: "year4month",description:"Current date and time."},
-        {label:"Only weekday,month and year",value: "weekdaymonthdayyear",description:"Current date and time."},
-        {label:"Only weekday,month and day",value: "weekdaymonthday",description:"Current date and time."},
-        {label:"Only weekday",value: "weekday",description:"Current date and time."},
-        {label:"Only month",value: "month",description:"Current date and time."},
-        {label:"Only day",value: "day",description:"Current date and time."},
-         {label:"Only year",value: "year",description:"Current date and time."}
-         
-        ]);
+        private var _dates:ArrayList = DominoGlobalTokens.Dates;
 
         public function get dates():ArrayList
         {
@@ -1195,13 +1169,7 @@ package view.domino.surfaceComponents.components
 // <!ENTITY % datetimeformat.time "hourminutesecondhundredths | 
 // hourminutesecond | hourminute | hour">	
         [Bindable]
-        private var _times:ArrayList = new ArrayList([
-        {label:"All",value: "hourminutesecondhundredths",description: "Current date only."},
-        {label:"Hours,minutes,and seconds",value: "hourminutesecond",description:"Current time only."},
-        {label:"Hours and minutes",value: "hourminute",description:"Current date and time."},
-        {label:"Hours only",value: "hour",description:"Current date and time."}
-        
-        ]);
+        private var _times:ArrayList = DominoGlobalTokens.Times;
 
         public function get times():ArrayList
         {
@@ -1246,11 +1214,7 @@ package view.domino.surfaceComponents.components
 // -----------zone-----------------------	
 // <!ENTITY % datetimeformat.zone "never | sometimes | always">
         [Bindable]
-        private var _zones:ArrayList = new ArrayList([
-        {label:"Adjust time to local time",value: "never",description: "never."},
-        {label:"Show only if zone not local",value: "sometimes",description:"sometimes."},
-        {label:"Always show time zone",value: "always",description:"always."}
-        ]);
+        private var _zones:ArrayList = DominoGlobalTokens.Zones;
 
         public function get zones():ArrayList
         {
@@ -1295,10 +1259,7 @@ package view.domino.surfaceComponents.components
     // -----------calendar-----------------------	
 	// <!ENTITY % datetimeformat.calendar "gregorian | hijri">
         [Bindable]
-        private var _calendars:ArrayList = new ArrayList([
-        {label: "gregorian",description: "Christian calendar which is a revised version of the Julian calendar that incorporated leap years to keep sync with the lunar cycle."},
-        {label: "hijri",description:"Islamic calendar based on twelve lunar months.."}
-        ]);
+        private var _calendars:ArrayList = DominoGlobalTokens.Calendars;
 
         public function get calendars():ArrayList
         {
@@ -1432,33 +1393,7 @@ package view.domino.surfaceComponents.components
            targetframe | helprequest | form | alternatehtml | showsinglecategory | label | displayvalue ">
          */
           [Bindable]
-        private var _objects:ArrayList = new ArrayList([
-        {label:"Default value",value: "defaultvalue",description: "Provides an initial value for a field."},
-        {label:"Input Translation",value: "inputtranslation",description:"Converts the data entered in the field to make the field conform to a specified format."},
-        {label:"Input Validation",value: "inputvalidation",description:"Checks the data entered in the field against criteria that you specify."},
-        // {label:"Windows Title",value: "windowtitle",description:"Generates the text that appears in the title bar of documents using the form."},
-        //{label:"Web QueryOpen",value: "webqueryopen",description:"Executes before a Web document is displayed."},
-        //{label:"Web Querysave",value: "webquerysave",description:"Executes before a Web document is saved."},
-        {label:"Hide When",value: "hidewhen",description:"Hides the object if the formula you provide is true."},
-        //{label:"Value",value: "value",description:"Specifies the contents of a computed field."},
-        // {label:"Selection",value: "selection",description:"selects the documents that appear in a view."},
-        // {label:"Html Attributes",value: "htmlattributes",description:"Specifies characteristics for the associated HTML object. Applies to fields."},
-        // {label:"Html Head",value: "htmlhead",description:"Information that resides in the HTML Head tag for an object. Applies to forms and pages."},
-        // {label:"Html Body",value: "htmlbody",description:"Information that resides in the HTML Body tag for an object. Applies to forms and pages."},
-        // {label:"Target Frame",value: "targetframe",description:"Defines which frame in a frameset the result of a command should display in."},
-        // {label:"Help Request",value: "helprequest",description:"Executes when Help is selected."},
-        // {label:"Form",value: "form",description:"Defines which form to open from a view."},
-        // {label:"Alternate Html",value: "alternatehtml",description:"Alternate text to display if the user's browser cannot execute the code. For example, if a Java applet cannot be run by the user's browser, this text would describe the applet and inform the user that their browser's capabilities do not support it."},
-        // {label:"Form",value: "form",description:"Defines which form to open from a view."},
-        // {label:"Showsinglecategory",value: "showsinglecategory",description:"In embedded views, limits the documents displayed in the view to those contained in one category. The category is defined by a formula or text."},
-        // {label:"Label",value: "label",description:"Specifies the label to display on an action button."},
-        {label:"Displayvalue",value: "displayvalue",description:"Determines the value that displays for an action checkbox."},
-
-
-           
-
-         
-        ]);
+        private var _objects:ArrayList = DominoGlobalTokens.Objects;
 
         public function get objects():ArrayList
         {
@@ -1607,14 +1542,7 @@ package view.domino.surfaceComponents.components
          * Domino keywords
          */
            [Bindable]
-        private var _keyworduis:ArrayList = new ArrayList([
-        {label:"checkbox",value: "checkbox",description: "Displays options in a list with checkboxes to the left of each option. Users click the checkbox to make a selection. Users can select more than one option."},
-        {label:"combobox",value: "combobox",description:"Displays a drop-down list box. Users click the down-arrow button of the drop-down list box to display the available options, then click an option to make a selection. Users can select only one option."},
-        {label:"dialoglist",value: "dialoglist",description:"Displays an empty field with a down-arrow button beside it. When users click the down-arrow button, a Select Keywords dialog box displays listing the options. A Notes dialoglist field can be set to enable users to select only one or more than one option."},
-        {label:"listbox",value: "listbox",description:"Displays a single row of a list and up and down arrows that a user can click to view the other rows in the list. Users can select only one option."},
-        {label:"radiobutton",value: "radiobutton",description:"Displays options in a list with circles to the left of each option. Users click the circle to make a selection. Users can select only one option. Selecting a second option deselects the first option automatically."}
-         
-        ]);
+        private var _keyworduis:ArrayList = DominoGlobalTokens.Keyworduis;
 
          public function get keyworduis():ArrayList
         {
@@ -1747,13 +1675,7 @@ package view.domino.surfaceComponents.components
          */
 
          [Bindable]
-        private var _choicesdialogs:ArrayList = new ArrayList([
-        {label:"none",value: "none",description: "Generates no choice list for Names and Readers fields, supplies the name of the form author for an Authors field, and displays a list of choices or a formula entered by the designer for a dialog list field."},
-        {label:"acl",value: "acl",description:"Displays names from a list of people, servers, groups, and roles in the Access Control List of a database."},
-        {label:"addressbook",value: "addressbook",description:"Displays a list of names from a Personal Address Book or Domino Directory Names dialog box."},
-        {label:"view",value: "view",description:"Displays names from a dialog box containing entries from a column in a view."}
-        
-        ]);
+        private var _choicesdialogs:ArrayList = DominoGlobalTokens.Choicesdialogs;
 
         public function get choicesdialogs():ArrayList
         {
@@ -1793,20 +1715,128 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("choicesdialogAttributeChanged"))
             }
         }
+        [Bindable]
+        private var _colors:ArrayList = DominoGlobalTokens.Colors;
 
+        public function get colors():ArrayList
+        {
+            return _colors;
+        }
+
+        [Bindable]
+        private var _pitchess:ArrayList = DominoGlobalTokens.Ptiches;
+
+        public function get pitchess():ArrayList
+        {
+            return _pitchess;
+        }
+
+        [Bindable]
+        private var _familyids:ArrayList = DominoGlobalTokens.FontIds;
+
+        public function get familyids():ArrayList
+        {
+            return _familyids;
+        }
+
+        
+        //<!ENTITY % font.names "monospace |  multilingual | sans-serif | serif | user-interface">
+        [Bindable]
+        private var _fontNames:ArrayList = DominoGlobalTokens.FontNames;
+
+
+        public function get fontNames():ArrayList
+        {
+            return _fontNames;
+        }
+
+         //<!ENTITY % font.styles "normal | bold | italic | underline | strikethrough | superscript | subscript | shadow | emboss | extrude">
+        [Bindable]
+        private var _fontStyles:ArrayList = DominoGlobalTokens.FontStyles;
+
+
+        public function get fontStyles():ArrayList
+        {
+            return _fontStyles;
+        }
 
         /**
          * <!ENTITY % list.separators "space | comma | semicolon | newline | blankline | none">
          */
          [Bindable]
-        private var _separators:ArrayList = new ArrayList([
-        {label:"space",value: "space",description: "space"},
-        {label:"comma",value: "comma",description:"comma."},
-        {label:"semicolon",value: "semicolon",description:"semicolon"},
-        {label:"newline",value: "newline",description:"newline"},
-        {label:"blankline",value: "blankline",description:"blankline"},
-        {label:"none",value: "none",description:"none"}
-        ]);
+        private var _separators:ArrayList = DominoGlobalTokens.Separators;
+
+         public function get separators():ArrayList
+         {
+             return _separators;
+         }
+
+
+         [Bindable]
+        private var _securityOptions:ArrayList = DominoGlobalTokens.SecurityOptions;
+
+
+        public function get securityOptions():ArrayList
+        {
+            return _securityOptions;
+        }
+
+        private var _inputProtected:Boolean;
+
+		public function get inputProtected():Boolean
+		{
+			return _inputProtected;
+		}
+
+		public function set inputProtected(value:Boolean):void
+		{
+			_inputProtected = value;
+		}
+
+		private var _inputSeal:Boolean;
+
+		public function get inputSeal():Boolean
+		{
+			return _inputSeal;
+		}
+
+		public function set inputSeal(value:Boolean):void
+		{
+			_inputSeal = value;
+		}
+
+
+		private var _inputSign:Boolean;
+
+		public function get inputSign():Boolean
+		{
+			return _inputSign;
+		}
+
+		public function set inputSign(value:Boolean):void
+		{
+			_inputSign = value;
+		}
+
+        [Bindable(event="securityOptionsInputAttributeChanged")]
+        private var _securityOptionsInput:String;
+
+		public function get securityOptionsInput():String
+		{
+			return _securityOptionsInput;
+		}
+
+		public function set securityOptionsInput(value:String):void
+		{
+			if (_keyformulavalue != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "securityOptionsInput", _securityOptionsInput, value);
+				
+                _securityOptionsInput = value;
+                dispatchEvent(new Event("securityOptionsInputAttributeChanged"))
+            }
+           
+		}
 
         private var _listinputseparators:String = "comma semicolon newline";
         /**
@@ -1900,18 +1930,7 @@ package view.domino.surfaceComponents.components
         //<!ENTITY % field.limitinput.kinds "picture | sharedimage | attachment | view | datepicker |
         // sharedapplet | text | object | calendar | inbox ">
         [Bindable]
-        private var _limitinputKinds:ArrayList = new ArrayList([
-        {label:"picture",value: "picture",description: "picture", "selected": false},
-        {label:"sharedimage",value: "sharedimage",description: "sharedimage", "selected": false},
-        {label:"attachment",value: "attachment",description: "attachment", "selected": false},
-        {label:"view",value: "view",description: "view", "selected": false},
-        {label:"sharedapplet",value: "sharedapplet",description: "sharedapplet", "selected": false},
-        {label:"text",value: "text",description: "text", "selected": false},
-        {label:"object",value: "object",description: "object", "selected": false},
-        {label:"calendar",value: "calendar",description: "calendar", "selected": false},
-        {label:"inbox",value: "inbox",description: "inbox", "selected": false},
-        {label:"datepicker",value: "datepicker",description: "datepicker", "selected": false}
-        ]);
+        private var _limitinputKinds:ArrayList = DominoGlobalTokens.LimitinputKinds;
 
         public function get limitinputKinds():ArrayList
         {
@@ -2023,6 +2042,209 @@ package view.domino.surfaceComponents.components
             }
         }
 
+
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
+        private var _helpDescription:String = "";
+
+		public function get helpDescription():String
+		{
+			return _helpDescription;
+		}
+
+		public function set helpDescription(value:String):void
+		{
+			_helpDescription = value;
+		}
+
+		private var _fieldHint:String = "";
+
+		public function get fieldHint():String
+		{
+			return _fieldHint;
+		}
+
+		public function set fieldHint(value:String):void
+		{
+			_fieldHint = value;
+		}
+
+
+        	//---------font /size  /color--------------------------------------------------------
+		private var _size:String = "10";
+
+		public function get size():String
+		{
+			return _size;
+		}
+
+		public function set size(value:String):void
+		{
+			_size = value;
+		}
+
+		private var _color:String ="black";
+
+		public function get color():String
+		{
+			return _color;
+		}
+
+		public function set color(value:String):void
+		{
+			_color = value;
+		}
+
+		private var _fontStyle:String = "normal";
+
+		public function get fontStyle():String
+		{
+			return _fontStyle;
+		}
+
+		public function set fontStyle(value:String):void
+		{
+			_fontStyle = value;
+		}
+
+		private var _fontName:String = "sans-serif";
+
+		public function get fontName():String
+		{
+			return _fontName;
+		}
+
+		public function set fontName(value:String):void
+		{
+			_fontName = value;
+		}
+
+
+        private var _pitches:String = "variable";
+
+		public function get pitches():String
+		{
+			return _pitches;
+		}
+
+		public function set pitches(value:String):void
+		{
+			_pitches = value;
+		}
+
+		private var _familyid:String = "10";
+
+		public function get familyid():String
+		{
+			return _familyid;
+		}
+
+		public function set familyid(value:String):void
+		{
+			_familyid = value;
+		
+		}
+
+		private var _truetype:String = "true";
+
+		public function get truetype():String
+		{
+			return _truetype;
+		}
+
+		public function set truetype(value:String):void
+		{
+			_truetype = value;
+		}
+
+        private var _alignPardef:String ="left";
+        [Bindable(event="alignAttributeChanged")]
+		public function get alignPardef():String
+		{
+			return _alignPardef;
+		}
+        public function set alignPardef(value:String):void
+		{
+            if (_alignPardef != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "alignPardef", _alignPardef, value);
+				
+                _alignPardef = value;
+                dispatchEvent(new Event("alignAttributeChanged"))
+            }
+		}
+
+        //-----Html core attrs-------
+        private var _htmlId:String;
+		public function get htmlId():String
+		{
+			return _htmlId;
+		}
+        public function set htmlId(value:String):void
+		{
+				_htmlId = value;
+		}
+
+		private var _htmlClass:String;
+		public function get htmlClass():String
+		{
+			return _htmlClass;
+		}
+        public function set htmlClass(value:String):void
+		{
+			_htmlClass = value;
+		}
+
+		private var _htmlStyle:String;
+		public function get htmlStyle():String
+		{
+			return _htmlStyle;
+		}
+        public function set htmlStyle(value:String):void
+		{
+			_htmlStyle=value;
+		}
+
+		private var _htmlTitle:String;
+		public function get htmlTitle():String
+		{
+			return _htmlTitle;
+		}
+        public function set htmlTitle(value:String):void
+		{
+			_htmlTitle=value;
+		}
+
+		private var _htmlOther:String;
+		public function get htmlOther():String
+		{
+			return _htmlOther;
+		}
+        public function set htmlOther(value:String):void
+		{
+			_htmlOther=value;
+		}
+
+        private var _listPardef:String;
+		public function get listPardef():String
+		{
+			return _listPardef;
+		}
+        public function set listPardef(value:String):void
+		{
+			_listPardef=value;
+		}
+
+
         public function toXML():XML
         {
             
@@ -2041,10 +2263,45 @@ package view.domino.surfaceComponents.components
             xml.@recalonchange=this.recalonchange.toString();
             xml.@recalcchoices=this.recalcchoices.toString();
             xml.@keyformulachoices=this.keyformulachoices.toString();
-
-
+            xml.@securityOptionsInput = this.securityOptionsInput;
+            
+            if(this.alignPardef){
+                xml.@alignPardef = this.alignPardef;
+            }
+            
+            if(this.htmlId){
+                xml.@htmlId = this.htmlId;
+            }
+            if(this.htmlClass){
+                xml.@htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                xml.@htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlTitle){
+                xml.@htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlOther){
+                xml.@htmlOther = this.htmlOther;
+            }
            
             xml.@numberColumns = this.numberColumns;
+            if(this.color){
+                xml.@color= this.color;
+            }
+            if(this.size){
+                xml.@size = this.size;
+            }
+            if(this.fontStyle){
+                xml.@fontStyle = this.fontStyle;
+            }
+            if(this.fontName){
+                xml.@fonName =this.fontName;
+            }
+           
+           
+           
+            
             
 
             if(this.formula){
@@ -2068,6 +2325,9 @@ package view.domino.surfaceComponents.components
 
             if(this.hidewhen){
                  xml.@hidewhen = StringHelper.base64Encode(this.hidewhen);;
+            }
+            if(this.hide){
+                xml.@hide = this.hide;
             }
 
 
@@ -2172,6 +2432,13 @@ package view.domino.surfaceComponents.components
                     delete xml.@keywords
                     delete xml.@keywordui
                 }
+                if(this.listdisplayseparator){
+                    xml.@listdisplayseparator=this.listdisplayseparator
+                }
+
+                if(this.listinputseparators){
+                    xml.@listinputseparators=this.listinputseparators
+                }
 
                 if(this.type=="names"){
                      if(this.choicesdialog){
@@ -2180,13 +2447,7 @@ package view.domino.surfaceComponents.components
                         xml.@choicesdialog="none"
                      }
 
-                     if(this.listdisplayseparator){
-                         xml.@listdisplayseparator=this.listdisplayseparator
-                     }
-
-                     if(this.listinputseparators){
-                         xml.@listinputseparators=this.listinputseparators
-                     }
+                     
                   
                 }else{
                      delete xml.@choicesdialog
@@ -2223,6 +2484,10 @@ package view.domino.surfaceComponents.components
 				xml.@maxlength = this.maxLength;
 			}
 
+            //help description
+            xml.@fieldHint = this.fieldHint;
+            xml.@helpDescription = this.helpDescription;
+
             return xml;
         }
 
@@ -2250,15 +2515,66 @@ package view.domino.surfaceComponents.components
             this.object = component.object;
             this.recalcchoices = component.recalcchoices;
             this.recalonchange = component.recalonchange;
-           
+            this.securityOptionsInput = component.securityOptionsInput;
             this.keyformulachoices = component.keyformulachoices;
+            this.helpDescription = component.helpDescription;
+            this.fieldHint = component.fieldHint;
+            if(component.alignPardef){
+                this.alignPardef = component.alignPardef;
+            }
+
+            if(component.listPardef){
+                this.listPardef=component.listPardef;
+            }
+            if(component.size){
+                this.size = component.size;
+            }
+            if(component.color){
+                this.color = component.color;
+            }
+            if(component.familyid){
+                this.familyid = component.familyid;
+            }
+            if(component.pitches){
+                this.pitches = component.pitches;
+            }
+            if(component.truetype){
+                this.truetype = component.truetype;
+            }
+
+            if(component.htmlId){
+                this.htmlId = component.htmlId;
+            }
+            if(component.htmlClass){
+                this.htmlClass = component.htmlClass;
+            }
+            if(component.htmlTitle){
+                this.htmlTitle = component.htmlTitle
+            }
+            if(component.htmlStyle){
+                this.htmlStyle = component.htmlStyle;
+            }
+            if(component.htmlOther){
+                this.htmlOther = component.htmlOther;
+            }
+
+
+            if(component.fontStyle){
+                this.fontStyle = component.fontStyle;
+            }
+            if(component.fontName){
+                 this.fontName = component.fontName;
+            }
             
+            
+            
+           
             if(component.formula){
                 
-               this.formula=  StringHelper.base64Decode(component.formula);
+               this.formula= (component.formula);
             }
             if(component.keywordsformula){
-                this.keywordsformula= StringHelper.base64Decode(component.keywordsformula);
+                this.keywordsformula= (component.keywordsformula);
             }
              if(component.defaultvalue){
                 
@@ -2276,6 +2592,10 @@ package view.domino.surfaceComponents.components
                 
                this.hidewhen=  StringHelper.base64Decode(component.hidewhen);
             }
+            if(component.hide){
+                this.hide = component.hide;
+            }
+
 
             if(this.type =="number"){
 
@@ -2301,13 +2621,15 @@ package view.domino.surfaceComponents.components
 
                 if(this.type =="keyword"){
                     if(component.keywords){
-                          this.keywords=StringHelper.base64Decode(component.keywords);
+                         
+                          this.keywords=(component.keywords);
+                        
                     }
                   
                     this.keywordui=component.keywordui;
 
                     this.numberColumns = component.numberColumns;
-                    //Alert.show("numberColumns:"+this.numberColumns);
+                    
                 }
 
                  if(this.type =="names"){
@@ -2315,14 +2637,15 @@ package view.domino.surfaceComponents.components
                          this.choicesdialog=component.choicesdialog
                      }
 
-                      if(component.listinputseparators){
-                          this.listinputseparators=component.listinputseparators;
-                      }
-
-                      if(component.listdisplayseparator){
-                          this.listdisplayseparator=component.listdisplayseparator;
-                      }
+                     
                  }
+                if(component.listinputseparators){
+                    this.listinputseparators=component.listinputseparators;
+                }
+
+                if(component.listdisplayseparator){
+                    this.listdisplayseparator=component.listdisplayseparator;
+                }
 
                  if(this.type =="richtextlite"){
                      if(component.onlyallow){
@@ -2353,10 +2676,66 @@ package view.domino.surfaceComponents.components
             component.inputvalidation = this.inputvalidation;
             component.inputtranslation = this.inputtranslation;
             component.hidewhen = this.hidewhen;
+            component.hide = this.hide;
             component.keywordsformula=this.keywordsformula;
             component.keyformulachoices=this.keyformulachoices;
+            component.helpDescription = this.helpDescription;
+            component.fieldHint = this.fieldHint;
+            if(this.alignPardef){
+                component.alignPardef = this.alignPardef;
+            }
+            if(this.listPardef){
+                component.listPardef = this.listPardef;
+            }
+            if(this.color){
+                component.color = this.color;
+            }
+            if(this.pitches){
+                component.pitches = this.pitches;
+            }
+            if(this.familyid){
+                component.familyid = this.familyid;
+            }
+            if(this.truetype){
+                component.truetype = this.truetype;
+            }
+            if(this.size){
+                component.size = this.size;
+            }
+            if(this.fontName){
+                component.fontName = this.fontName;
+            }
+            if(this.fontStyle){
+                 component.fontStyle = this.fontStyle;
+            }
+            if(this.htmlId){
+                component.htmlId = this.htmlId;
+            }
+            if(this.htmlTitle){
+                component.htmlTitle = this.htmlTitle;
+            }
+            if(this.htmlClass){
+                component.htmlClass = this.htmlClass;
+            }
+            if(this.htmlStyle){
+                component.htmlStyle = this.htmlStyle;
+            }
+            if(this.htmlOther){
+                component.htmlOther = this.htmlOther;
+            }
+            
+           
+           
+            
+            component.securityOptionsInput= this.securityOptionsInput;
             if(this.formula){
                 component.formula= this.formula;
+            }
+            if(this.listdisplayseparator){
+                component.listdisplayseparator= this.listdisplayseparator;
+            }
+            if(this.listinputseparators){
+                component.listinputseparators = this.listinputseparators;
             }
            //Alert.show("formula:"+formula);
 

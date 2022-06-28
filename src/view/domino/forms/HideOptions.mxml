@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<suportclasses:BasePropertyEditorForm xmlns:fx="http://ns.adobe.com/mxml/2009"
+									  xmlns:s="library://ns.adobe.com/flex/spark"
+									  xmlns:suportclasses="view.suportClasses.*"
+									  skinClass="skins.FormSkin"
+								      xmlns:forms="view.forms.*"
+                                      creationComplete="onHideoptionsCreationComplete(event)"
+                                       >
+
+	<suportclasses:layout>
+		<s:FormLayout />
+	</suportclasses:layout>
+   
+
+    <s:BorderContainer 
+             cornerRadius="0"
+            borderStyle="solid" borderWeight="1" 
+            left="0" right="0" width="320" top="10" bottom="10" includeInLayout="true" visible="true" id="hidePanel">
+	
+		<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" 
+		     padding="5">
+            <s:Label text="Hide paragraph form"/>
+                <s:Form>
+                <s:layout>
+                <s:TileLayout requestedColumnCount="3"
+                            verticalAlign="middle" />
+                </s:layout>
+                <s:HGroup width="100%">
+                   
+                    <s:CheckBox id="notes"
+                            selected="false"
+                            content="Notes R4.6 or later"
+                            change="check_changeHandler(event)" enabled="true" />
+                    
+                   
+               
+                    <s:CheckBox id="web"
+                            selected="false"
+                            content="Web browsers"
+                            change="check_changeHandler(event)" enabled="true"/>
+                  
+                   
+                    <s:CheckBox id="mobile"
+                            selected="false"
+                            content="Mobile"
+                            change="check_changeHandler(event)" enabled="true"/>
+                   
+                  
+                     
+                </s:HGroup>
+                 </s:Form>
+            
+                <s:Label text="Hide paragraph when document is"/>
+                 <s:Form>
+                <s:layout>
+                <s:TileLayout requestedColumnCount="2"
+                            verticalAlign="middle" />
+                </s:layout>
+              
+                   
+                    <s:CheckBox id="preview"
+                            selected="false"
+                            content="Previewed for reading"
+                            change="check_changeHandler(event)" enabled="true"/>
+                   
+                   
+                    <s:CheckBox id="previewedit"
+                            selected="false"
+                            content = "Previewed for editing"
+                            change="check_changeHandler(event)" enabled="true"/>
+                    
+              
+               
+                <s:CheckBox id="read"
+                        selected="false"
+                        content = "Opened for reading"
+                        change="check_changeHandler(event)" enabled="true"/>
+  
+              
+                <s:CheckBox id="edit"
+                        selected="false"
+                        content="Opened for editing"
+                        change="check_changeHandler(event)" enabled="true"/>
+              
+              
+             
+                <s:CheckBox id="print"
+                        selected="false"
+                        content="Printed"
+                        change="check_changeHandler(event)" enabled="true"/>
+              
+
+               
+                <s:CheckBox id="copy"
+                        selected="false"
+                        content="Copied to the clipboard"
+                        change="check_changeHandler(event)" enabled="true"/>
+             
+
+               
+                <s:CheckBox id="embedded"
+                        selected="false"
+                        content="Embedded"
+                        change="check_changeHandler(event)" enabled="true"/>
+              
+
+                  </s:Form>
+
+                
+           
+        </s:VGroup> 
+    </s:BorderContainer>   
+
+
+	<fx:Script><![CDATA[
+		import interfaces.IComponentPercentSizeOutput;
+		import interfaces.IComponentSizeOutput;
+
+		import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.core.UIComponent;
+        import mx.events.FlexEvent;
+
+        import utils.GenericUtils;
+
+        import view.interfaces.IIdAttribute;
+        //import view.interfaces.INameAttribute;
+        import view.interfaces.ISurfaceComponent;
+        import mx.controls.Alert;
+        import mx.collections.ArrayList;
+
+        private var _selectItemList:ArrayList = new ArrayList();
+        private var _hideStr:String="";
+        private var selectedDirty:Boolean;
+
+        private var _textProperty:String = "text";
+        private var _binding:ChangeWatcher;
+        [Bindable]
+        public var bindableText:Boolean;
+
+        [Bindable("change")]
+        public function get textProperty():String
+        {
+            return this._textProperty;
+        }
+
+        public function set textProperty(value:String):void
+        {
+            if (this._textProperty === value)
+            {
+                return;
+            }
+            this._textProperty = value;
+            this.updateBinding();
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+
+        override public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (super.selectedItem != value)
+            {
+                super.selectedItem = value;
+				this.updateBinding();
+                if (value)
+                {
+                    this.selectedDirty = true;
+                }
+            }
+        }
+
+        private function updateBinding():void
+        {
+            if (this._binding)
+            {
+                this._binding.unwatch();
+                this._binding = null;
+            }
+            if (this.selectedItem === null)
+            {
+                return;
+            }
+            this._binding = BindingUtils.bindProperty(this, "hideStr", this.selectedItem, this._textProperty, false, true);
+        }
+
+
+       
+
+        
+        private function onHideoptionsCreationComplete(event:FlexEvent):void
+        {
+            if(_selectItemList==null){
+                _selectItemList=new ArrayList();
+            }
+            //inital the hide otions 
+            if(this.selectedItem[this._textProperty]!=null && this.selectedItem[this._textProperty].length>0){
+                //Alert.show("hide:"+this.selectedItem[this._textProperty]);
+                //this.hideOption.selected = true;
+                hidePanel.visible = hidePanel.includeInLayout = true;
+                var hideList:Array=this.selectedItem[this._textProperty].split(" ");
+                	for (var k:int = 0; k < hideList.length; k = k + 1)
+					{
+                        if(hideList[k]!=null && hideList[k].length > 0){
+                            if(hideList[k]=="notes"){
+                                this.notes.selected = true;
+                            }
+                            if(hideList[k]=="web"){
+                                this.web.selected = true;
+                            }
+                            if(hideList[k]=="mobile"){
+                                this.mobile.selected = true;
+                            }
+                            if(hideList[k]=="read"){
+                                this.read.selected = true;
+                            }
+                            if(hideList[k]=="edit"){
+                                this.edit.selected = true;
+                            }
+                            if(hideList[k]=="previewedit"){
+                                this.previewedit.selected = true;
+                            }
+                            if(hideList[k]=="print"){
+                                this.print.selected = true;
+                            }
+                            if(hideList[k]=="copy"){
+                                this.copy.selected = true;
+                            }
+                            if(hideList[k]=="preview"){
+                                this.preview.selected = true;
+                            }
+                            if(hideList[k]=="embedded"){
+                                this.embedded.selected = true;
+                            }
+
+                            addIntoSelectList(hideList[k]);
+                        }
+                    }
+            }
+            //Alert.show("hide:"+ this.selectedItem[this._textProperty]); 
+
+        }
+
+        //Domino hide token "preview | previewedit | print | copy | preview | previewedit | notes | web | embedded "
+
+
+        private function check_changeHandler(event:Event):void
+        {
+            _hideStr="";
+            if(event.target.selected){
+                if(event.target.id=="notes"){ 
+                    //disabled the other checkbox ,only allow Opened or reading,Opened for editing
+                    this.read.enabled = true;
+                    this.edit.enabled = true;
+
+                    this.preview.enabled = false;
+                    this.previewedit.enabled = false;
+                    this.print.enabled = false;
+                    this.copy.enabled = false;
+                    this.embedded.enabled = false;
+                    
+                }else{
+
+                    if(this.notes.selected==true){
+                        this.read.enabled = true;
+                        this.edit.enabled = true;
+
+                        this.preview.enabled = false;
+                        this.previewedit.enabled = false;
+                        this.print.enabled = false;
+                        this.copy.enabled = false;
+                        this.embedded.enabled = false;
+
+                    }else{
+                        this.read.enabled = true;
+                        this.edit.enabled = true;
+
+                        this.preview.enabled = true;
+                        this.previewedit.enabled = true;
+                        this.print.enabled = true;
+                        this.copy.enabled = true;
+                        this.embedded.enabled = true;
+
+                    }
+
+                  
+
+                }
+                
+                addIntoSelectList(event.target.id);
+               
+
+            }else{
+                if(_selectItemList){
+                    for (var k:int = 0; k < _selectItemList.length; k++){
+                        if(_selectItemList.getItemAt(k).toString()==event.target.id){
+                           _selectItemList.removeItemAt(k);
+                        }
+                    }
+                }
+            }
+
+            //fix the id to correct token
+            //event.target.id
+            
+
+            for (var k:int = 0; k < _selectItemList.length; k++){
+                _hideStr=_hideStr+_selectItemList.getItemAt(k).toString()+" ";
+            }
+
+            if(_hideStr){
+                _hideStr=_hideStr.replace(/hide/g, "");
+            }
+            this.selectedItem[this._textProperty] = _hideStr;
+            
+
+            
+            
+        }
+
+
+
+        public function get hideStr():String
+        {
+            return _hideStr;
+        }
+        public function set hideStr(value:String):void
+        {
+            this._hideStr =value;
+        }
+
+        private function addIntoSelectList(value:String):void 
+        {
+            var existing:Boolean = false;
+                if(_selectItemList){
+                    for (var k:int = 0; k < _selectItemList.length; k++){
+                        if(_selectItemList.getItemAt(k).toString()==value){
+                            existing=true;
+                        }
+                    }
+                }
+                if(existing==false){
+                    _selectItemList.addItem(value);
+                }
+        }
+        
+
+        // private var _noteshide:String;
+        // public function get notes():String
+        // {
+        //    return  _noteshide;
+        // }
+        // public function set notes(value:String):void
+        // {
+        //     this._noteshide =value;
+        // }
+
+        // private var _browserhide:String;
+        // public function get web():String
+        // {
+        //     return _browserhide;
+        // }
+        // public function set web(value:String):void
+        // {
+        //     this._browserhide =value;
+        // }
+
+        // private var _mobile:String;
+        // public function get mobile():String
+        // {
+        //     return _mobile;
+        // }
+        // public function set mobile(value:String):void
+        // {
+        //     this._mobile =value;
+        // }
+
+        // private var _prereadhide:String;
+        // public function get preview():String
+        // {
+        //     return _prereadhide;
+        // }
+        // public function set preview(value:String):void
+        // {
+        //     this._prereadhide = value
+        // }
+
+
+        // private var _preedithide:String;
+        // public function get previewedit():String
+        // {
+        //     return _preedithide;
+        // }
+        // public function set previewedit(value:String):void
+        // {
+        //     this._preedithide = value
+        // }
+
+        // private var _openreadhide:String;
+        // public function get read():String
+        // {
+        //     return _openreadhide;
+        // }
+        // public function set read(value:String):void
+        // {
+        //     this._openreadhide = value
+        // }
+
+        // private var _openedithide:String;
+        // public function get edit():String
+        // {
+        //     return _openedithide;
+        // }
+        // public function set edit(value:String):void
+        // {
+        //     this._openedithide= value;
+        // }
+
+        // private var _printhide:String;
+        // public function get print():String
+        // {
+        //     return _printhide;
+        // }
+        // public function set print(value:String):void
+        // {
+        //     this._printhide=value;
+        // }
+
+
+        // private var _copyhide:String;
+        // public function get copy():String
+        // {
+        //     return _copyhide;
+        // }
+        // public function set copy(value:String):void
+        // {
+        //     this._copyhide=value;
+        // }
+
+        // private var _embedhide:String;
+        // public function get embedded():String
+        // {
+        //     return this._embedhide;
+        // }
+        // public function set embedded(value:String):void
+        // {
+        //     this._embedhide=value;
+        // }
+       
+
+        
+        ]]></fx:Script>
+</suportclasses:BasePropertyEditorForm>

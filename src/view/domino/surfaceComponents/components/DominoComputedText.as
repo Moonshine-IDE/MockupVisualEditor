@@ -437,7 +437,7 @@ package view.domino.surfaceComponents.components
         private var _formula:String;
         [Bindable(event="formulaAttributeChanged")]
          /**
-         * <p>Domino:A field that contains an function or command formula, the formual will calculation and show the result when it display.</p>
+         * <p>Domino:A field that contains an function or command formula, the formula will calculation and show the result when it display.</p>
          * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
          * <tr><td>Apache Royale</td><td>Planned</td></tr>
          * <tr><td>Domino</td><td>Planned</td></tr>
@@ -650,6 +650,18 @@ package view.domino.surfaceComponents.components
             }
         }
 
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
+
+        
+
         	//-------------other componetn end-------------
 		
 		
@@ -675,6 +687,9 @@ package view.domino.surfaceComponents.components
             if(this.hidewhen){
                 var encodeFormulaStr:String= StringHelper.base64Encode(this.hidewhen);
                  xml.@hidewhen = encodeFormulaStr;
+            }
+            if(this.hide){
+                 xml.@hide = this.hide;
             }
 
             return xml;
@@ -711,6 +726,7 @@ package view.domino.surfaceComponents.components
 			
 			component.isSelected = this.isSelected;
             component.hidewhen = this.hidewhen;
+            component.hide = this.hide;
 		
             return component.toCode();
         }

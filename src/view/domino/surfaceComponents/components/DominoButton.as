@@ -330,6 +330,17 @@ package view.domino.surfaceComponents.components
         {
             return _codeEnventList;
         }
+
+
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
     
        
 		
@@ -527,6 +538,8 @@ package view.domino.surfaceComponents.components
 		{
 			return _propertiesChangedEvents;
 		}
+
+       
 		
 		public function toXML():XML
 		{
@@ -544,6 +557,7 @@ package view.domino.surfaceComponents.components
             xml.@size = this.size;
             xml.@color = this.color;
             xml.@fontStyle = this.fontStyle;
+            xml.@hide = this.hide;
             
             if(this.code){
                  xml.@code =  StringHelper.base64Encode(this.code);
@@ -572,6 +586,8 @@ package view.domino.surfaceComponents.components
             this.size= component.size;
             this.color= component.color;
             this.fontStyle = component.fontStyle;
+            this.hide = component.hide;
+           
 
             if(component.code){
                this.code=  StringHelper.base64Decode(component.code);
@@ -594,6 +610,7 @@ package view.domino.surfaceComponents.components
 
             component.code = this.code;
             component.codeEvent = this.codeEvent;
+            component.hide = this.hide;
          
             (component as components.domino.DominoButton).width = this.width;
             (component as components.domino.DominoButton).height = this.height;
@@ -615,6 +632,8 @@ package view.domino.surfaceComponents.components
 
             component.code = this.code;
             component.codeEvent = this.codeEvent;
+
+            component.hide = this.hide;
 
             (component as components.domino.DominoButton).width = this.width;
             (component as components.domino.DominoButton).height = this.height;

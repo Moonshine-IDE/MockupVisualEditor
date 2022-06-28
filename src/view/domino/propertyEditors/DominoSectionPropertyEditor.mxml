@@ -227,7 +227,7 @@
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	 
 <forms:ToggleButtonSelectedForm label="Expanded" textProperty="expanded"/>
-
+<domino:HideOptions textProperty="hide"/>
 <forms:ToggleButtonSelectedForm label="Show as text" textProperty="showastext"/>
                         
     <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/>

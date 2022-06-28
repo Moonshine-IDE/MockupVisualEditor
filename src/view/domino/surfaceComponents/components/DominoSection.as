@@ -841,9 +841,19 @@ package view.domino.surfaceComponents.components
 			}
 		}
 
+        private var _hide:String;
+		public function get hide():String
+		{
+			return _hide;
+		}
+		public function set hide(value:String):void
+		{
+			_hide = value;
+		}
 
 
 
+       
 
         public function dropElementAt(element:IVisualElement, index:int):void
 		{
@@ -868,6 +878,10 @@ package view.domino.surfaceComponents.components
                     mainXML.@titleSize=this.size
                 }
 
+                if(this.hide){
+                     mainXML.@hide=this.hide
+                }
+
                 return this.internalToXML();
             }
 
@@ -883,6 +897,10 @@ package view.domino.surfaceComponents.components
             this.color = xml.@titleColor;
             if(xml.@titleSize)
             this.size = xml.@titleSize;
+
+            if(xml.@hide){
+                this.hide = xml.@hide;
+            }
 
             if(xml.@titleFontStyle)
             this.fontStyle = xml.@titleFontStyle;
@@ -905,6 +923,7 @@ package view.domino.surfaceComponents.components
             component.titleSize = this.size;
             component.titleColor = this.color;
             component.titleFontStyle = this.fontStyle;
+            component.hide = this.hide;
 			//component.forAttribute = this.forAttribute;
 			//component.indicateRequired = this.indicateRequired;
 			

@@ -559,43 +559,6 @@
 			}
 
 			private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","justifUpdate","noneUpdate"]);
-			private function alignSetting(val:String){
-				for (var i:int = 0; i < buttonsName.length; i++)
-                {
-                    var item:Object = buttonsName.getItemAt(i);
-					var elem:Button = this[item];
-					var skin:DominoAlignButtonSkin=null;
-					if(elem!=null){
-						skin = DominoAlignButtonSkin(elem.skin);
-							
-					}
-					if(item==val){
-						skin.state= "down";
-						skin.setCurrentStateButton("down");
-					}else{
-						skin.state= "up";
-						skin.setCurrentStateButton("up");
-					}
-
-				
-				}
-				
-				//setting the align value into text property
-				 this.selectedItem["alignPardef"] = val.replace("Update","");
-
-			}
-
-			// private function initializeAlign():void
-			// {
-			// 	if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
-			// 		var button:String = this.selectedItem["alignPardef"]+"Update";
-			// 		alignSetting(button);
-
-			// 	}
-			// }
-
-	
-       
 		]]>
 	</fx:Script>
 	<suportclasses:layout>

@@ -115,20 +115,23 @@
 
         private function selectCurrentItem():void
         {
-            if (includeCollection && selectedItem[_textProperty] && _labelField)
+            if (includeCollection && selectedItem && selectedItem[_textProperty] && _labelField)
             {
                 var dpCount:int = ddlSelection.dataProvider.length;
                 for (var i:int = 0; i < dpCount; i++)
                 {
                     var item:Object = ddlSelection.dataProvider.getItemAt(i);
-                    if (item[_labelField] == selectedItem[_textProperty])
+                    if(_valueField&&item[_valueField] == selectedItem[_textProperty]){
+                        ddlSelection.selectedItem = item;
+                        break;
+                    }else if (item[_labelField] == selectedItem[_textProperty])
                     {
                         ddlSelection.selectedItem = item;
                         break;
                     }
                 }
             }
-            else if (selectedItem[_textProperty])
+            else if (selectedItem && selectedItem[_textProperty])
             {
                 ddlSelection.selectedItem = selectedItem[_textProperty];
             }
@@ -148,10 +151,12 @@
 
             }
 
-            var arry:ArrayCollection= new ArrayCollection(includeCollection.toArray());
+            if(includeCollection){
+                var arry:ArrayCollection= new ArrayCollection(includeCollection.toArray());
 
-            arry=GenericUtils.arrayCollectionSort(arry,"label",false);
-            includeCollection=arry;
+                arry=GenericUtils.arrayCollectionSort(arry,"label",false);
+                includeCollection=arry;
+            }
 
         }
 

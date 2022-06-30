@@ -894,9 +894,9 @@
 				<s:Label text="Spacing" width="60" direction="rtl"/>
 				
 					
-						<forms:DropdownListForm id="spaceSelect"
+						<!-- <forms:DropdownListForm id="spaceSelect"
                             label="Interline" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label"
+                            collectionProperty="spaces" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 
@@ -905,15 +905,15 @@
 						
 						<forms:DropdownListForm id="spaceSelect2"
                             label="Above" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label"
+                            collectionProperty="spaces" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 						
 						<forms:DropdownListForm id="spaceSelect3"
                             label="Below" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label"
+                            collectionProperty="spaces" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	 -->
 
 				</s:HGroup>
 			</s:FormItem> 

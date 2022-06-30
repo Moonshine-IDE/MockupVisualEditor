@@ -219,7 +219,8 @@ package view.domino.surfaceComponents.components
                 "keyformulavalueAttributeChanged",
                 "keywordsformulaChanged",
                 "securityOptionsInputAttributeChanged",
-                "alignAttributeChanged"
+                "alignAttributeChanged",
+                "listAlignAttributeChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -2235,13 +2236,50 @@ package view.domino.surfaceComponents.components
 		}
 
         private var _listPardef:String;
+        [Bindable(event="listAlignAttributeChanged")]
+        //listAlignAttributeChanged
 		public function get listPardef():String
 		{
 			return _listPardef;
 		}
         public function set listPardef(value:String):void
 		{
-			_listPardef=value;
+			if (_listPardef != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "listPardef", _listPardef, value);
+                _listPardef = value;
+                dispatchEvent(new Event("listAlignAttributeChanged"))
+            }
+		}
+
+        private var _spacingInterline:String ;
+		public function get spacingInterline():String
+		{
+			return _spacingInterline;
+		}
+        public function set spacingInterline(value:String):void
+		{
+			_spacingInterline=value;
+		}
+
+		private var _spacingAbove:String;
+		public function get spacingAbove():String
+		{
+			return _spacingAbove;
+		}
+        public function set spacingAbove(value:String):void
+		{
+			_spacingAbove=value;
+		}
+
+		private var _spacingBelow:String;
+		public function get spacingBelow():String
+		{
+			return _spacingBelow;
+		}
+        public function set spacingBelow(value:String):void
+		{
+			_spacingBelow=value;
 		}
 
 
@@ -2300,7 +2338,15 @@ package view.domino.surfaceComponents.components
             }
            
            
-           
+           if(this.spacingInterline){
+            xml.@spacingInterline =this.spacingInterline;
+           }
+           if(this.spacingAbove){
+            xml.@spacingAbove = this.spacingAbove;
+           }
+           if(this.spacingBelow){
+            xml.@spacingBelow = this.spacingBelow;
+           }
             
             
 
@@ -2566,7 +2612,17 @@ package view.domino.surfaceComponents.components
                  this.fontName = component.fontName;
             }
             
-            
+            if(component.spacingInterline){
+                this.spacingInterline = component.spacingInterline;
+            }
+
+            if(component.spacingBelow){
+                this.spacingBelow = component.spacingBelow;
+            }
+
+            if(component.spacingAbove){
+                this.spacingAbove = component.spacingAbove;
+            }
             
            
             if(component.formula){
@@ -2724,7 +2780,17 @@ package view.domino.surfaceComponents.components
                 component.htmlOther = this.htmlOther;
             }
             
-           
+           if(this.spacingInterline){
+                component.spacingInterline = this.spacingInterline;
+           }
+
+           if(this.spacingAbove){
+              component.spacingAbove = this.spacingAbove;
+           }
+
+           if(this.spacingBelow){
+              component.spacingBelow = this.spacingBelow;
+           }
            
             
             component.securityOptionsInput= this.securityOptionsInput;

@@ -557,7 +557,7 @@
 				}
 			}
 
-			private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","justifUpdate","noneUpdate"]);
+			private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","fullUpdate","noneUpdate"]);
 			private function alignSetting(val:String){
 				for (var i:int = 0; i < buttonsName.length; i++)
                 {
@@ -583,6 +583,44 @@
 				 this.selectedItem["alignPardef"] = val.replace("Update","");
 
 			}
+			private var firstLineButtonsName:ArrayList=new ArrayList(["firstCenter","firstLeft","firstRight"]);
+			private function firstLineSetting(val:String){
+				for (var i:int = 0; i < firstLineButtonsName.length; i++)
+                {
+                    var item:Object = firstLineButtonsName.getItemAt(i);
+					var elem:Button = this[item];
+					var skin:DominoAlignButtonSkin=null;
+					if(elem!=null){
+						skin = DominoAlignButtonSkin(elem.skin);
+							
+					}
+					if(item==val){
+						skin.state= "down";
+						skin.setCurrentStateButton("down");
+						
+					}else{
+						skin.state= "up";
+						skin.setCurrentStateButton("up");
+					}
+					
+
+				
+				}
+			
+				if(val=="firstRight"){
+						indentInput.visible = indentInput.includeInLayout = true;
+						outdentInput.visible = outdentInput.includeInLayout = false;
+			
+				}else if(val=="firstLeft"){
+					
+					indentInput.visible = indentInput.includeInLayout = false;
+					outdentInput.visible = outdentInput.includeInLayout = true;
+				}else{
+					indentInput.visible = indentInput.includeInLayout = false;
+					outdentInput.visible = outdentInput.includeInLayout = false;
+				}
+					
+			}
 
 			private function initializeAlign():void
 			{
@@ -591,6 +629,20 @@
 					alignSetting(button);
 
 				}
+				var setbutton:String;
+				
+				if(Object(selectedItem).hasOwnProperty("outdent")&& this.selectedItem["outdent"].toString().length>0){
+				  setbutton = "firstLeft";
+				}else if(Object(selectedItem).hasOwnProperty("indent")&& this.selectedItem["indent"].toString().length>0){
+				  setbutton = "firstRight";
+				}else{
+					setbutton = "firstCenter";
+				}
+		
+				firstLineSetting(setbutton);
+
+
+				//firstLineSetting
 			}
 
 	
@@ -865,7 +917,7 @@
 					<s:Button id="leftUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
 					<s:Button id="centerUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
 					<s:Button id="rightUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
-					<s:Button id="justifUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('justifUpdate')"/>
+					<s:Button id="fullUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('fullUpdate')"/>
 					<s:Button id="noneUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
 					
 				</s:HGroup>
@@ -873,9 +925,11 @@
 			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 				<s:HGroup width="100%" verticalAlign="middle">
 					<s:Label text="First Line" width="60" direction="rtl"/>
-					<s:Button id="firstCenter" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
-					<s:Button id="firstMiddle" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
-					<s:Button id="firstOne" label="" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('left')"/>
+					<s:Button id="firstCenter" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{ALIGN_CENTER}" height="25" width="30"  click="firstLineSetting('firstCenter')"/>
+					<s:Button id="firstRight" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{ALIGN_RIGHT}" height="25" width="30"  click="firstLineSetting('firstRight')"/>
+					<s:Button id="firstLeft" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{ALIGN_LEFT}" height="25" width="30"  click="firstLineSetting('firstLeft')"/>
+					<domino:TextForm label=":Indent" textProperty="indent" includeInLayout="false" visible="false"  id="indentInput" inputWidth="30"/>
+					<domino:TextForm label=":Outdent" textProperty="outdent" includeInLayout="false" visible="false" id="outdentInput" inputWidth="30"/>
 				</s:HGroup>
 			</s:FormItem>
 			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
@@ -896,7 +950,7 @@
 					
 						<!-- <forms:DropdownListForm id="spaceSelect"
                             label="Interline" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label" valueField="value"
+                            collectionProperty="spaces" labelField="label" 
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 
@@ -905,13 +959,13 @@
 						
 						<forms:DropdownListForm id="spaceSelect2"
                             label="Above" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label" valueField="value"
+                            collectionProperty="spaces" labelField="label"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 						
 						<forms:DropdownListForm id="spaceSelect3"
                             label="Below" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label" valueField="value"
+                            collectionProperty="spaces" labelField="label" 
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	 -->
 

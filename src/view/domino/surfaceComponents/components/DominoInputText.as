@@ -220,7 +220,9 @@ package view.domino.surfaceComponents.components
                 "keywordsformulaChanged",
                 "securityOptionsInputAttributeChanged",
                 "alignAttributeChanged",
-                "listAlignAttributeChanged"
+                "listAlignAttributeChanged",
+                "indentChanged",
+                "outdentChanged"
             ];
 			
 			this.prompt = "Input Text";
@@ -1819,6 +1821,44 @@ package view.domino.surfaceComponents.components
 			_inputSign = value;
 		}
 
+        private var _indent:String;
+        [Bindable(event="indentChanged")]
+        public function get indent():String
+        {
+            return _indent;
+        }
+
+        public function set indent(value:String):void
+        {
+            if (_indent != value)
+            {
+                
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "indent", _indent, value);
+				
+                _indent = value;
+                dispatchEvent(new Event("indentChanged"))
+            }
+        }
+
+
+        private var _outdent:String;
+        [Bindable(event="outdentChanged")]
+        public function get outdent():String
+        {
+            return _outdent;
+        }
+
+        public function set outdent(value:String):void
+        {
+            if (_outdent != value)
+            {   
+                _propertyChangeFieldReference = new PropertyChangeReference(this, "outdent", _outdent, value);
+				
+                _outdent = value;
+                dispatchEvent(new Event("outdentChanged"))
+            }
+        }
+
         [Bindable(event="securityOptionsInputAttributeChanged")]
         private var _securityOptionsInput:String;
 
@@ -2530,6 +2570,14 @@ package view.domino.surfaceComponents.components
 				xml.@maxlength = this.maxLength;
 			}
 
+            if(this.indent){
+                xml.@indent = this.indent;
+            }
+
+            if(this.outdent){
+                xml.@outdent = this.outdent;
+            }
+
             //help description
             xml.@fieldHint = this.fieldHint;
             xml.@helpDescription = this.helpDescription;
@@ -2712,6 +2760,14 @@ package view.domino.surfaceComponents.components
                      }
                  }
 
+                 if(component.outdent){
+                    this.outdent=component.outdent
+                 }
+
+                 if(component.indent){
+                    this.indent = component.indent;
+                 }
+
 
         }
 
@@ -2853,6 +2909,13 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoInputText).percentWidth = this.percentWidth;
 			(component as components.domino.DominoInputText).percentHeight = this.percentHeight;
 			
+            if(this.indent){
+                component.indent = this.indent;
+            }
+
+            if(this.outdent){
+                component.outdent = this.outdent;
+            }
             return component.toCode();
         }
 

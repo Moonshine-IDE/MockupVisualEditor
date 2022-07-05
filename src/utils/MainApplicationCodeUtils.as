@@ -216,8 +216,11 @@ package utils
 			
 			for each(var par:XML in xml..par) //no matter of depth Note here
 			{
+			
 				
-				if(par.@alignPardef && par.@alignPardef.toString().length>0 || par.@listPardef && par.@listPardef.toString().length>0 ){
+				if(par.@alignPardef && par.@alignPardef.toString().length>0 || par.@listPardef && par.@listPardef.toString().length>0 ||
+				par.@indent && par.@indent.toString().length>0 ||
+				par.@outdent && par.@outdent.toString().length>0){
 				
 					var pardefId:String=par.@def;
 					if(pardefId!=null){
@@ -227,10 +230,16 @@ package utils
 							if(pardefId==id){
 							
 								var needFix:Boolean =false;
+								var needFixFirstLine:Boolean =false;
+
 								//fix the pardef in here
 								if(pardef.@alignPardef && pardef.@alignPardef.toString().length>0 || 
-								pardef.@listPardef && pardef.@listPardef.toString().length>0){
-									if(pardef.@alignPardef!=par.@alignPardef || pardef.@listPardef!=par.@listPardef){
+								pardef.@listPardef && pardef.@listPardef.toString().length>0 || 
+								par.@indent && par.@indent.toString().length>0 ||
+								par.@outdent && par.@outdent.toString().length>0){
+									if(pardef.@alignPardef!=par.@alignPardef || pardef.@listPardef!=par.@listPardef || 
+									par.@indent && par.@indent.toString().length>0 ||  
+									par.@outdent && par.@outdent.toString().length>0){
 										needFix= true;
 									}else{
 										needFix= false;
@@ -251,6 +260,17 @@ package utils
 									if(par.@alignPardef && par.@alignPardef.toString().length>0){
 										pardefXml.@align=par.@alignPardef;
 									}
+	
+
+									if(par.@indent && par.@indent.toString().length>0){
+										pardefXml.@firstlineleftmargin= (Number(par.@indent)+1).toString()+"in";
+									}
+									
+									if(par.@outdent && par.@outdent.toString().length>0){
+										pardefXml.@leftmargin= (Number(par.@outdent)+1).toString()+"in";
+									}
+
+									
 									
 									par.@def=newId;
 									pardef.parent().appendChild(pardefXml);

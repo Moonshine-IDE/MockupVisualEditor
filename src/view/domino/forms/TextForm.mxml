@@ -12,9 +12,9 @@
 <s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 		<s:HGroup width="100%" verticalAlign="middle">
        
-        <s:Label text="{label}" width="40" direction="rtl"/>
+        <s:Label text="{label}" width="50" direction="rtl"/>
 		<s:TextInput id="textInput"
-                     text="{bindableText}" minWidth="100" maxChars="{_maxChar}" restrict="{restrict}"
+                     text="{bindableText}"  width="{inputWidth}" maxChars="{_maxChar}" restrict="{restrict}"
                      enter="textInput_changeHandler(event)" focusOut="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="{prompt}"/>
 			
 		</s:HGroup>
@@ -24,6 +24,7 @@
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.events.FlexEvent;
+        import mx.controls.Alert;
 
         import view.interfaces.ISurfaceComponent;
 
@@ -31,6 +32,19 @@
 
         [Bindable]
         public var prompt:String;
+
+        [Bindable]
+        public var _inputWidth:int=100;
+         public function set inputWidth(value:int):void
+        {
+            _inputWidth = value;
+        }
+
+        public function get inputWidth():int
+        {
+            return _inputWidth;
+        }
+
         [Bindable]
         public var restrict:String;
 
@@ -125,6 +139,7 @@
         {
             _childrenForFocus = [];
             _childrenForFocus.push(textInput.textDisplay);
+           
         }
         ]]></fx:Script>
 </suportclasses:BasePropertyEditorForm>

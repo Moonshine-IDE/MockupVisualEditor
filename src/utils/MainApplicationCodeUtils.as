@@ -264,16 +264,22 @@ package utils
 
 									if(par.@indent && par.@indent.toString().length>0){
 										pardefXml.@firstlineleftmargin= (Number(par.@indent)+1).toString()+"in";
+										if(par.@outdent==null || par.@outdent.toString() =="0"){
+											pardefXml.@leftmargin="1in";
+										}
 									}
 									
 									if(par.@outdent && par.@outdent.toString().length>0){
 										pardefXml.@leftmargin= (Number(par.@outdent)+1).toString()+"in";
+										if(par.@indent==null || par.@indent.toString() =="0"){
+											pardefXml.@firstlineleftmargin="1in";
+										}
 									}
 
 									
 									
 									par.@def=newId;
-									pardef.parent().appendChild(pardefXml);
+									par.parent().insertChildBefore(par,pardefXml);
 								}
 								continue;
 								

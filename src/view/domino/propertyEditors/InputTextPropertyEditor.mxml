@@ -624,22 +624,30 @@
 
 			private function initializeAlign():void
 			{
-				if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
-					var button:String = this.selectedItem["alignPardef"]+"Update";
-					alignSetting(button);
+				if(this.selectedItem!=null ){
+					if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
+						var button:String = this.selectedItem["alignPardef"]+"Update";
+						
+						alignSetting(button);
 
-				}
-				var setbutton:String;
+					}
+					var setbutton:String="firstCenter";
+					
+					if(this.selectedItem!=null){
+						if( Object(selectedItem).hasOwnProperty("outdent")&& this.selectedItem["outdent"]!=null && this.selectedItem["outdent"].toString()!="1"){
+							setbutton = "firstLeft";
+						}else if(Object(selectedItem).hasOwnProperty("indent")&& this.selectedItem["indent"]!=null && this.selectedItem["indent"].toString()!="1"){
+							setbutton = "firstRight";
+						}else{
+							setbutton = "firstCenter";
+						}
+					}
+					
+
+					//Alert.show("setbutton2:"+setbutton);
+					firstLineSetting(setbutton);
 				
-				if(Object(selectedItem).hasOwnProperty("outdent")&& this.selectedItem["outdent"].toString().length>0){
-				  setbutton = "firstLeft";
-				}else if(Object(selectedItem).hasOwnProperty("indent")&& this.selectedItem["indent"].toString().length>0){
-				  setbutton = "firstRight";
-				}else{
-					setbutton = "firstCenter";
 				}
-		
-				firstLineSetting(setbutton);
 
 
 				//firstLineSetting
@@ -948,8 +956,8 @@
 				<s:Label text="Spacing" width="60" direction="rtl"/>
 				
 					
-						<!-- <forms:DropdownListForm id="spaceSelect"
-                            label="Interline" textProperty="listPardef"
+						<forms:DropdownListForm id="spaceSelect"
+                            label="Interline" textProperty="spacingInterline"
                             collectionProperty="spaces" labelField="label" 
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
@@ -957,9 +965,9 @@
 					
 					
 						
-						<forms:DropdownListForm id="spaceSelect2"
+						<!-- <forms:DropdownListForm id="spaceSelect2"
                             label="Above" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label"
+                            collectionProperty="spaces" labelField="label" 
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 						

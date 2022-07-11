@@ -958,24 +958,24 @@
 					
 						<forms:DropdownListForm id="spaceSelect"
                             label="Interline" textProperty="spacingInterline"
-                            collectionProperty="spaces" labelField="label" 
+                            collectionProperty="spaces" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 
 					
 					
 						
-						<!-- <forms:DropdownListForm id="spaceSelect2"
-                            label="Above" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label" 
+						<forms:DropdownListForm id="spaceSelect2"
+                            label="Above" textProperty="spacingAbove"
+                            collectionProperty="spaces" labelField="label"  valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 						
 						<forms:DropdownListForm id="spaceSelect3"
-                            label="Below" textProperty="listPardef"
-                            collectionProperty="spaces" labelField="label" 
+                            label="Below" textProperty="spacingBelow"
+                            collectionProperty="spaces" labelField="label" valueField="value"
 							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
-                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	 -->
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 
 				</s:HGroup>
 			</s:FormItem> 

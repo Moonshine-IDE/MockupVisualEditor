@@ -24,6 +24,7 @@
         import spark.events.IndexChangeEvent;
         import utils.GenericUtils;
         import mx.collections.ArrayCollection;
+ 
 
         [Bindable]
         public var bindableEnabled:Boolean = true;
@@ -115,14 +116,16 @@
 
         private function selectCurrentItem():void
         {
+            
             if (includeCollection && selectedItem && selectedItem[_textProperty] && _labelField)
             {
                 var dpCount:int = ddlSelection.dataProvider.length;
                 for (var i:int = 0; i < dpCount; i++)
                 {
                     var item:Object = ddlSelection.dataProvider.getItemAt(i);
-                    if(_valueField&&item[_valueField] == selectedItem[_textProperty]){
+                    if(_valueField&&item[_valueField].toString() == selectedItem[_textProperty].toString()){
                         ddlSelection.selectedItem = item;
+                        
                         break;
                     }else if (item[_labelField] == selectedItem[_textProperty])
                     {
@@ -150,6 +153,8 @@
                 
 
             }
+            
+             var itemCache:Object =ddlSelection.selectedItem;
 
             if(includeCollection){
                 var arry:ArrayCollection= new ArrayCollection(includeCollection.toArray());
@@ -157,6 +162,8 @@
                 arry=GenericUtils.arrayCollectionSort(arry,"label",false);
                 includeCollection=arry;
             }
+            ddlSelection.selectedItem =itemCache;
+        
 
         }
 

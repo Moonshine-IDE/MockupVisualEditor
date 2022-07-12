@@ -220,7 +220,10 @@ package utils
 				
 				if(par.@alignPardef && par.@alignPardef.toString().length>0 || par.@listPardef && par.@listPardef.toString().length>0 ||
 				par.@indent && par.@indent.toString().length>0 ||
-				par.@outdent && par.@outdent.toString().length>0){
+				par.@outdent && par.@outdent.toString().length>0 ||
+				par.@spacingInterline && par.@spacingInterline.toString().length>0||
+				par.@spacingAbove && par.@spacingAbove.toString().length>0||
+				par.@spacingBelow && par.@spacingBelow.toString().length>0){
 				
 					var pardefId:String=par.@def;
 					if(pardefId!=null){
@@ -236,10 +239,18 @@ package utils
 								if(pardef.@alignPardef && pardef.@alignPardef.toString().length>0 || 
 								pardef.@listPardef && pardef.@listPardef.toString().length>0 || 
 								par.@indent && par.@indent.toString().length>0 ||
-								par.@outdent && par.@outdent.toString().length>0){
+								par.@outdent && par.@outdent.toString().length>0||
+								par.@spacingInterline && par.@spacingInterline.toString().length>0||
+								par.@spacingAbove && par.@spacingAbove.toString().length>0||
+								par.@spacingBelow && par.@spacingBelow.toString().length>0
+								){
 									if(pardef.@alignPardef!=par.@alignPardef || pardef.@listPardef!=par.@listPardef || 
 									par.@indent && par.@indent.toString().length>0 ||  
-									par.@outdent && par.@outdent.toString().length>0){
+									par.@outdent && par.@outdent.toString().length>0 ||
+									par.@spacingInterline && par.@spacingInterline.toString().length>0||
+									par.@spacingAbove && par.@spacingAbove.toString().length>0||
+									par.@spacingBelow && par.@spacingBelow.toString().length>0
+									){
 										needFix= true;
 									}else{
 										needFix= false;
@@ -274,6 +285,17 @@ package utils
 										if(par.@indent==null || par.@indent.toString() =="0"){
 											pardefXml.@firstlineleftmargin="1in";
 										}
+									}
+
+									if(par.@spacingInterline && par.@spacingInterline.toString().length>0){
+										pardefXml.@linespacing=par.@spacingInterline;
+									}
+
+									if(par.@spacingAbove && par.@spacingAbove.toString().length>0){
+										pardefXml.@spacebefore = par.@spacingAbove;
+									}
+									if(par.@spacingBelow && par.@spacingBelow.toString().length>0){
+										pardefXml.@spaceafter = par.@spacingBelow;
 									}
 
 									

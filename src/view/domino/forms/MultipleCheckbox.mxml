@@ -17,10 +17,8 @@
             import mx.collections.IList;
             import mx.events.FlexEvent;
             import mx.collections.ArrayList;
-            import mx.controls.Alert;
             
             import spark.events.IndexChangeEvent;
-            import mx.collections.ArrayCollection;
             import mx.controls.listClasses.ListBaseContentHolder;
             [Bindable]
         public var includeCollection:IList;
@@ -206,6 +204,8 @@
             var checkNum:int = 0;
             var item:Object = null;
             var signleOption:Boolean = false;
+            var checkItem:Object = null;
+
             if(singleSelectOption!=null && singleSelectOption.length>0 ){
                 if(event.target.hasOwnProperty("selected") && event.target.selected==true){
                     if(event.target.automationName==singleSelectOption){
@@ -230,22 +230,20 @@
                  item = multCheckList.getChildAt(checkNum);
                  if(item is ListBaseContentHolder){
                       for (var i:int = 0; i < item.numChildren; i++){
-                          var checkitem:Object = item.getChildAt(i);
-                           //Alert.show("checkitem:"+checkitem.toString());
-                          if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
-                                
-                                  
+                          checkItem = item.getChildAt(i);
+
+                          if(checkItem.hasOwnProperty("selected") && checkItem.selected==true)
+                          {
                                 var existing:Boolean = false;
                                 for (var j:int = 0; j < _selectItemList.length; j++){
-                                    if(_selectItemList.getItemAt(j).toString()==checkitem.automationName){
+                                    if(_selectItemList.getItemAt(j).toString() == checkItem.automationName){
                                         existing=true;
                                     }
                                 }
-                                if(existing==false){
-                                _selectItemList.addItem(checkitem.automationName);
+                                if(existing==false)
+                                {
+                                    _selectItemList.addItem(checkItem.automationName);
                                 }
-                                
-                              
                           }
                            
                       }
@@ -257,23 +255,23 @@
                     item = multCheckList.getChildAt(checkNum);
                     if(item is ListBaseContentHolder){
                         for (var i:int = 0; i < item.numChildren; i++){
-                            var checkitem:Object = item.getChildAt(i);
+                            checkItem = item.getChildAt(i);
                             
-                            if(checkitem.hasOwnProperty("selected") && checkitem.selected==true){
+                            if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
                                 if( signleOption ==true){
                                 
-                                    if(checkitem.automationName==singleSelectOption){
+                                    if(checkItem.automationName==singleSelectOption){
                                             
                                     }else{
-                                        checkitem.selected = false;
-                                        _selectItemList.removeItem(checkitem.automationName);
+                                        checkItem.selected = false;
+                                        _selectItemList.removeItem(checkItem.automationName);
                                     }
                                     
                                     
                                 }else{
-                                     if(checkitem.automationName==singleSelectOption){
-                                          checkitem.selected = false;
-                                          _selectItemList.removeItem(checkitem.automationName);
+                                     if(checkItem.automationName==singleSelectOption){
+                                         checkItem.selected = false;
+                                          _selectItemList.removeItem(checkItem.automationName);
                                      }
                                 }
                             }

@@ -84,6 +84,16 @@
            
         }
 
+		 /**
+         * @private
+         */
+        private static const focusExclusions:Array = ["textDisplay"];
+
+        /**
+         *  @private
+         */
+        override public function get focusSkinExclusions():Array { return focusExclusions;};
+
 
 		]]>        
     </fx:Script>

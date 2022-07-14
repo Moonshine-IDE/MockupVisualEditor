@@ -222,7 +222,10 @@ package view.domino.surfaceComponents.components
                 "alignAttributeChanged",
                 "listAlignAttributeChanged",
                 "indentChanged",
-                "outdentChanged"
+                "outdentChanged",
+                "spacingInterlineChange",
+                "spacingAboveChange",
+                "spacingBelowChange"
             ];
 			
 			this.prompt = "Input Text";
@@ -2277,7 +2280,6 @@ package view.domino.surfaceComponents.components
 
         private var _listPardef:String;
         [Bindable(event="listAlignAttributeChanged")]
-        //listAlignAttributeChanged
 		public function get listPardef():String
 		{
 			return _listPardef;
@@ -2286,40 +2288,60 @@ package view.domino.surfaceComponents.components
 		{
 			if (_listPardef != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "listPardef", _listPardef, value);
+				//_propertyChangeFieldReference = new PropertyChangeReference(this, "listPardef", _listPardef, value);
                 _listPardef = value;
-                dispatchEvent(new Event("listAlignAttributeChanged"))
+                //dispatchEvent(new Event("listAlignAttributeChanged"))
             }
 		}
 
         private var _spacingInterline:String ;
+        [Bindable(event="spacingInterlineChange")]
+        
 		public function get spacingInterline():String
 		{
 			return _spacingInterline;
 		}
         public function set spacingInterline(value:String):void
 		{
-			_spacingInterline=value;
+            if (_spacingInterline != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingInterline", _spacingInterline, value);
+                _spacingInterline = value;
+                dispatchEvent(new Event("spacingInterlineChange"))
+            }
 		}
 
 		private var _spacingAbove:String;
+        [Bindable(event="spacingAboveChange")]
+        
 		public function get spacingAbove():String
 		{
 			return _spacingAbove;
 		}
         public function set spacingAbove(value:String):void
 		{
-			_spacingAbove=value;
+             if (_spacingAbove != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingAbove", _spacingAbove, value);
+                _spacingAbove = value;
+                dispatchEvent(new Event("spacingAboveChange"))
+            }
 		}
 
 		private var _spacingBelow:String;
+        [Bindable(event="spacingBelowChange")]
 		public function get spacingBelow():String
 		{
 			return _spacingBelow;
 		}
         public function set spacingBelow(value:String):void
 		{
-			_spacingBelow=value;
+			 if (_spacingBelow != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingBelow", _spacingBelow, value);
+                _spacingBelow = value;
+                dispatchEvent(new Event("spacingBelowChange"))
+            }
 		}
 
 

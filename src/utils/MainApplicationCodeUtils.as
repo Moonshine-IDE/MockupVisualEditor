@@ -213,6 +213,8 @@ package utils
 
 		public static function fixPardefAlign(xml:XML):XML
 		{
+
+			
 			
 			for each(var par:XML in xml..par) //no matter of depth Note here
 			{
@@ -277,6 +279,11 @@ package utils
 										pardefXml.@firstlineleftmargin= (Number(par.@indent)+1).toString()+"in";
 										if(par.@outdent==null || par.@outdent.toString() =="0"){
 											pardefXml.@leftmargin="1in";
+										}else{
+											if(par.@leftmargin&&par.@leftmargin.toString().length>0){
+												pardefXml.@leftmargin=par.@leftmargin;
+											}
+											
 										}
 									}
 									
@@ -284,6 +291,11 @@ package utils
 										pardefXml.@leftmargin= (Number(par.@outdent)+1).toString()+"in";
 										if(par.@indent==null || par.@indent.toString() =="0"){
 											pardefXml.@firstlineleftmargin="1in";
+										}else{
+											if(par.@firstlineleftmargin){
+												pardefXml.@firstlineleftmargin=par.@firstlineleftmargin;
+											}
+											
 										}
 									}
 

@@ -130,6 +130,25 @@ package view.domino.surfaceComponents.components
             ];
         }
 
+        		private var _leftmargin:String;
+		public function get leftmargin():String{
+			return _leftmargin;
+		}
+        public function set leftmargin(value:String):void
+		{
+			_leftmargin = value;
+		}
+
+		private var _firstlineleftmargin:String;
+		public function get firstlineleftmargin():String
+		{
+			return _firstlineleftmargin;
+		}
+        public function set firstlineleftmargin(value:String):void
+		{
+			 _firstlineleftmargin= value;
+		}
+
 		private var _widthPercent:Number;
 
 		public function get widthPercent():Number
@@ -489,6 +508,15 @@ package view.domino.surfaceComponents.components
 
             }
 
+            if(this.leftmargin){
+                mainXML.@leftmargin= this.leftmargin;
+            }
+
+            if(this.firstlineleftmargin)
+            {
+                mainXML.@firstlineleftmargin= this.firstlineleftmargin;
+            }
+
             return this.internalToXML();
         }
 
@@ -500,6 +528,14 @@ package view.domino.surfaceComponents.components
             this.isNewLine = component.isNewLine;
 			_cssClass = component.cssClass;
 			wrap = component.wrap;
+
+            if(xml.@leftmargin){
+                this.leftmargin=xml.@leftmargin;
+            }
+
+            if(xml.@firstlineleftmargin){
+                this.firstlineleftmargin=xml.@firstlineleftmargin;
+            }
 			
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
             XMLCodeUtils.applyChildrenPositionFromXMLParagraph(xml, this);
@@ -519,6 +555,8 @@ package view.domino.surfaceComponents.components
 			(component as components.domino.DominoParagraph).percentHeight = this.percentHeight;
             (component as components.domino.DominoParagraph).hide = this.hide;
             (component as components.domino.DominoParagraph).isNewLine = this.isNewLine;
+            (component as components.domino.DominoParagraph).leftmargin = this.leftmargin;
+            (component as components.domino.DominoParagraph).firstlineleftmargin = this.firstlineleftmargin;
             var xml:XML = component.toCode();
 	
             xml["@class"] = XMLCodeUtils.getChildrenPositionForXML(this);

@@ -292,7 +292,7 @@ package utils
 										if(par.@indent==null || par.@indent.toString() =="0"){
 											pardefXml.@firstlineleftmargin="1in";
 										}else{
-											if(par.@firstlineleftmargin){
+											if(par.@firstlineleftmargin&&par.@firstlineleftmargin.toString().length>0){
 												pardefXml.@firstlineleftmargin=par.@firstlineleftmargin;
 											}
 											

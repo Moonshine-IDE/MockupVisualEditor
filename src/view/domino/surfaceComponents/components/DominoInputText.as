@@ -2220,10 +2220,10 @@ package view.domino.surfaceComponents.components
 		{
             if (_alignPardef != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "alignPardef", _alignPardef, value);
+				//_propertyChangeFieldReference = new PropertyChangeReference(this, "alignPardef", _alignPardef, value);
 				
                 _alignPardef = value;
-                dispatchEvent(new Event("alignAttributeChanged"))
+               // dispatchEvent(new Event("alignAttributeChanged"))
             }
 		}
 
@@ -2305,9 +2305,9 @@ package view.domino.surfaceComponents.components
 		{
             if (_spacingInterline != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingInterline", _spacingInterline, value);
+				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingInterline", _spacingInterline, value);
                 _spacingInterline = value;
-                dispatchEvent(new Event("spacingInterlineChange"))
+                //dispatchEvent(new Event("spacingInterlineChange"))
             }
 		}
 
@@ -2322,9 +2322,9 @@ package view.domino.surfaceComponents.components
 		{
              if (_spacingAbove != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingAbove", _spacingAbove, value);
+				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingAbove", _spacingAbove, value);
                 _spacingAbove = value;
-                dispatchEvent(new Event("spacingAboveChange"))
+                //dispatchEvent(new Event("spacingAboveChange"))
             }
 		}
 
@@ -2338,9 +2338,9 @@ package view.domino.surfaceComponents.components
 		{
 			 if (_spacingBelow != value)
             {
-				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingBelow", _spacingBelow, value);
+				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingBelow", _spacingBelow, value);
                 _spacingBelow = value;
-                dispatchEvent(new Event("spacingBelowChange"))
+                //dispatchEvent(new Event("spacingBelowChange"))
             }
 		}
 

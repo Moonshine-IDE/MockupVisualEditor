@@ -63,6 +63,14 @@ package view.domino.surfaceComponents.components
     /**domino exclude property */
     [Exclude(name="kinds", kind="property")]
     [Exclude(name="types", kind="property")]
+    [Exclude(name="spaces", kind="property")]
+    [Exclude(name="lists", kind="property")]
+    [Exclude(name="listPardef", kind="method")]
+    [Exclude(name="listPardef", kind="property")]
+    
+    
+   
+
 
     /**
 	 *  <p>Representation and converter for Visuale field  components </p>
@@ -220,7 +228,7 @@ package view.domino.surfaceComponents.components
                 "keywordsformulaChanged",
                 "securityOptionsInputAttributeChanged",
                 "alignAttributeChanged",
-                "listAlignAttributeChanged",
+                "listPardefAttributeChanged",
                 "indentChanged",
                 "outdentChanged",
                 "spacingInterlineChange",
@@ -588,12 +596,7 @@ package view.domino.surfaceComponents.components
                 dispatchEvent(new Event("allowmultipleChanged"));
             }
         }
-        [Bindable]
-        private var _lists:ArrayList = DominoGlobalTokens.Lists;
-        public function get lists():ArrayList
-        {
-            return _lists;
-        }
+        
 
         [Bindable]
         private var _spaces:ArrayList = DominoGlobalTokens.Spaceing;
@@ -2220,10 +2223,10 @@ package view.domino.surfaceComponents.components
 		{
             if (_alignPardef != value)
             {
-				//_propertyChangeFieldReference = new PropertyChangeReference(this, "alignPardef", _alignPardef, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "alignPardef", _alignPardef, value);
 				
                 _alignPardef = value;
-               // dispatchEvent(new Event("alignAttributeChanged"))
+                dispatchEvent(new Event("alignAttributeChanged"))
             }
 		}
 
@@ -2278,8 +2281,15 @@ package view.domino.surfaceComponents.components
 			_htmlOther=value;
 		}
 
+        [Bindable]
+        private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        public function get lists():ArrayList
+        {
+            return _lists;
+        }
+
         private var _listPardef:String;
-        [Bindable(event="listAlignAttributeChanged")]
+        [Bindable(event="listPardefAttributeChanged")]
 		public function get listPardef():String
 		{
 			return _listPardef;
@@ -2288,9 +2298,9 @@ package view.domino.surfaceComponents.components
 		{
 			if (_listPardef != value)
             {
-				//_propertyChangeFieldReference = new PropertyChangeReference(this, "listPardef", _listPardef, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "listPardef", _listPardef, value);
                 _listPardef = value;
-                //dispatchEvent(new Event("listAlignAttributeChanged"))
+                dispatchEvent(new Event("listPardefAttributeChanged"))
             }
 		}
 
@@ -2340,7 +2350,7 @@ package view.domino.surfaceComponents.components
             {
 				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingBelow", _spacingBelow, value);
                 _spacingBelow = value;
-                //dispatchEvent(new Event("spacingBelowChange"))
+               // dispatchEvent(new Event("spacingBelowChange"))
             }
 		}
 

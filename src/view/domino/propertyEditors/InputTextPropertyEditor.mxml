@@ -945,8 +945,8 @@
 				<s:Label text=": List" width="60" direction="rtl"/>
 				
 				<forms:DropdownListForm id="pardeflistsSelect"
-                            label="" textProperty="listPardef"
-                            collectionProperty="lists" labelField="label" valueField="value"
+                            label="" textProperty="type"
+                            collectionProperty="lists" labelField="label" valueField="value" 
 							labelDisplayFunction="getDominoFieldObject" showTooltipFunction="getDominoFieldTooltip"
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>	
 				

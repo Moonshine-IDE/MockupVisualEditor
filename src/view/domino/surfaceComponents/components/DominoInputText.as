@@ -229,6 +229,7 @@ package view.domino.surfaceComponents.components
                 "securityOptionsInputAttributeChanged",
                 "alignAttributeChanged",
                 "listPardefAttributeChanged",
+                "listAttributeChanged",
                 "indentChanged",
                 "outdentChanged",
                 "spacingInterlineChange",
@@ -2281,6 +2282,23 @@ package view.domino.surfaceComponents.components
 			_htmlOther=value;
 		}
 
+
+        private var _list:String;
+        [Bindable(event="listAttributeChanged")]
+		public function get list():String
+		{
+			return _list;
+		}
+        public function set list(value:String):void
+		{
+			if (_list != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "list", _list, value);
+                _list = value;
+                dispatchEvent(new Event("listAttributeChanged"))
+            }
+		}
+
         [Bindable]
         private var _lists:ArrayList = DominoGlobalTokens.Lists;
         public function get lists():ArrayList
@@ -2288,7 +2306,10 @@ package view.domino.surfaceComponents.components
             return _lists;
         }
 
-        private var _listPardef:String;
+
+
+
+        private var _listPardef:String = "none";
         [Bindable(event="listPardefAttributeChanged")]
 		public function get listPardef():String
 		{
@@ -2304,7 +2325,7 @@ package view.domino.surfaceComponents.components
             }
 		}
 
-        private var _spacingInterline:String ;
+        private var _spacingInterline:String ="1";
         [Bindable(event="spacingInterlineChange")]
         
 		public function get spacingInterline():String
@@ -2315,13 +2336,13 @@ package view.domino.surfaceComponents.components
 		{
             if (_spacingInterline != value)
             {
-				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingInterline", _spacingInterline, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingInterline", _spacingInterline, value);
                 _spacingInterline = value;
-                //dispatchEvent(new Event("spacingInterlineChange"))
+                dispatchEvent(new Event("spacingInterlineChange"))
             }
 		}
 
-		private var _spacingAbove:String;
+		private var _spacingAbove:String="1";
         [Bindable(event="spacingAboveChange")]
         
 		public function get spacingAbove():String
@@ -2332,13 +2353,13 @@ package view.domino.surfaceComponents.components
 		{
              if (_spacingAbove != value)
             {
-				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingAbove", _spacingAbove, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingAbove", _spacingAbove, value);
                 _spacingAbove = value;
-                //dispatchEvent(new Event("spacingAboveChange"))
+                dispatchEvent(new Event("spacingAboveChange"))
             }
 		}
 
-		private var _spacingBelow:String;
+		private var _spacingBelow:String = "1";
         [Bindable(event="spacingBelowChange")]
 		public function get spacingBelow():String
 		{
@@ -2348,9 +2369,9 @@ package view.domino.surfaceComponents.components
 		{
 			 if (_spacingBelow != value)
             {
-				//_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingBelow", _spacingBelow, value);
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "spacingBelow", _spacingBelow, value);
                 _spacingBelow = value;
-               // dispatchEvent(new Event("spacingBelowChange"))
+               dispatchEvent(new Event("spacingBelowChange"))
             }
 		}
 

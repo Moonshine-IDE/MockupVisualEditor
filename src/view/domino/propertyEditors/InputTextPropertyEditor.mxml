@@ -616,6 +616,11 @@
 					indentInput.visible = indentInput.includeInLayout = false;
 					outdentInput.visible = outdentInput.includeInLayout = true;
 				}else{
+					//this is center 
+					this.selectedItem["indent"]="0";
+					this.selectedItem["outdent"]="0";
+					//indentInput.value = outdentInput.value = "0";
+
 					indentInput.visible = indentInput.includeInLayout = false;
 					outdentInput.visible = outdentInput.includeInLayout = false;
 				}

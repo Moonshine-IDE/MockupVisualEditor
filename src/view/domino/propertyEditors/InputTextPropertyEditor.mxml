@@ -612,11 +612,17 @@
 				if(val=="firstRight"){
 						indentInput.visible = indentInput.includeInLayout = true;
 						outdentInput.visible = outdentInput.includeInLayout = false;
+						if(event=="click"){
+							this.selectedItem["indent"]="0.25";
+						}
 			
 				}else if(val=="firstLeft"){
 					
 					indentInput.visible = indentInput.includeInLayout = false;
 					outdentInput.visible = outdentInput.includeInLayout = true;
+					if(event=="click"){
+							this.selectedItem["outdent"]="0.25";
+						}
 				}else{
 					//this is center 
 					if(event=="click"){

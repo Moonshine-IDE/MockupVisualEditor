@@ -19,26 +19,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 package view.domino.forms.imageClass
 {
+	[Bindable]
     public class LoadImage 
 	{
         [Embed(source='/assets/align-right-solid.png')]
-        [Bindable]
-        public  var ALIGN_CENTER:Class;
+        public static const ALIGN_CENTER:Class;
 
         [Embed(source='/assets/align-justify-solid.png')]
-        [Bindable]
-        public  var ALIGN_JUSTIFY:Class;
+        public static const ALIGN_JUSTIFY:Class;
 
         [Embed(source='/assets/align-left-solid.png')]
-        [Bindable]
-        public  var ALIGN_LEFT:Class;
+        public static const ALIGN_LEFT:Class;
 
         [Embed(source='/assets/align-right-solid.png')]
-        [Bindable]
-        public  var ALIGN_RIGHT:Class;
+        public static const ALIGN_RIGHT:Class;
         
-        [Bindable]
         [Embed(source='/assets/ban-solid.png')]
-        public  var ALIGN_NONE:Class;
+        public static const ALIGN_NONE:Class;
+		
+		[Embed(source='/assets/firstLine_justify.png')]
+		public static const FIRST_LINE_JUSTIFY:Class;
+		
+		[Embed(source='/assets/firstLine_inside.png')]
+		public static const FIRST_LINE_INSIDE_FIRST:Class;
+		
+		[Embed(source='/assets/firstLine_outside.png')]
+		public static const FIRST_LINE_INSIDE_EXCEPT_FIRST:Class;
     }
 }

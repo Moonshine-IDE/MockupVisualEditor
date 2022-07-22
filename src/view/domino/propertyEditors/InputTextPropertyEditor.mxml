@@ -11,15 +11,17 @@
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-			import spark.events.IndexChangeEvent;
 			import mx.controls.Alert;
-			import mx.events.FlexEvent;
-			import view.domino.forms.imageClass.LoadImage;
 			import mx.controls.listClasses.ListBaseContentHolder;
-
+			import mx.events.FlexEvent;
+			
 			import spark.components.Button;
+			import spark.events.IndexChangeEvent;
 			import spark.skins.spark.ButtonSkin;
+			
 			import skins.DominoAlignButtonSkin;
+			
+			import view.domino.forms.imageClass.LoadImage;
 
 		[Embed(source='/assets/align-center-solid.png')]
         [Bindable]
@@ -930,20 +932,20 @@
 				<s:HGroup width="100%" verticalAlign="middle">
 				
 				<s:Label text="Alignment" width="60" direction="rtl"/>
-					<s:Button id="leftUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
-					<s:Button id="centerUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
-					<s:Button id="rightUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
-					<s:Button id="fullUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('fullUpdate')"/>
-					<s:Button id="noneUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
+					<s:Button id="leftUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{LoadImage.ALIGN_LEFT}" height="25" width="30"  click="alignSetting('leftUpdate')"/>
+					<s:Button id="centerUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{LoadImage.ALIGN_CENTER}" height="25" width="30"  click="alignSetting('centerUpdate')"/>
+					<s:Button id="rightUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{LoadImage.ALIGN_RIGHT}" height="25" width="30"  click="alignSetting('rightUpdate')"/>
+					<s:Button id="fullUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{LoadImage.ALIGN_JUSTIFY}" height="25" width="30"  click="alignSetting('fullUpdate')"/>
+					<s:Button id="noneUpdate" label="" skinClass="skins.DominoAlignButtonSkin" icon="{LoadImage.ALIGN_NONE}" height="25" width="30"  click="alignSetting('noneUpdate')"/>
 					
 				</s:HGroup>
 			</s:FormItem>
 			<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 				<s:HGroup width="100%" verticalAlign="middle">
 					<s:Label text="First Line" width="60" direction="rtl"/>
-					<s:Button id="firstCenter" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{ALIGN_CENTER}" height="25" width="30"  click="firstLineSetting('firstCenter','click')"/>
-					<s:Button id="firstRight" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{ALIGN_RIGHT}" height="25" width="30"  click="firstLineSetting('firstRight','click')"/>
-					<s:Button id="firstLeft" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{ALIGN_LEFT}" height="25" width="30"  click="firstLineSetting('firstLeft','click')"/>
+					<s:Button id="firstCenter" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{LoadImage.FIRST_LINE_JUSTIFY}" height="25" width="30"  click="firstLineSetting('firstCenter','click')"/>
+					<s:Button id="firstRight" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{LoadImage.FIRST_LINE_INSIDE_FIRST}" height="25" width="30"  click="firstLineSetting('firstRight','click')"/>
+					<s:Button id="firstLeft" label="" skinClass="skins.DominoAlignButtonSkin"  icon="{LoadImage.FIRST_LINE_INSIDE_EXCEPT_FIRST}" height="25" width="30"  click="firstLineSetting('firstLeft','click')"/>
 					<domino:TextForm label=":Indent" textProperty="indent" includeInLayout="false" visible="false"  id="indentInput" inputWidth="30"/>
 					<domino:TextForm label=":Outdent" textProperty="outdent" includeInLayout="false" visible="false" id="outdentInput" inputWidth="30"/>
 				</s:HGroup>

@@ -44,6 +44,7 @@ package lookup
 			this.lookup[DominoParagraph.ELEMENT_NAME] =DominoParagraph;
 			this.lookup[view.domino.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
 					view.domino.surfaceComponents.components.MainApplication;
+			this.lookup[DominoSubForm.ELEMENT_NAME] = DominoSubForm;
 		}
 	}
 }

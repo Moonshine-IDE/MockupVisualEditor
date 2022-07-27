@@ -15,6 +15,7 @@ package lookup
 	import components.domino.DominoTabView;
 	import components.domino.DominoTable;
 	import components.domino.MainApplication;
+	import components.domino.DominoSubForm;
 
 	import interfaces.ILookup;
 
@@ -55,6 +56,7 @@ package lookup
 			this.lookup[DominoSection.ELEMENT_NAME] = DominoSection;
 			this.lookup[DominoCalendar.ELEMENT_NAME] = DominoCalendar;
 			this.lookup[DominoParagraph.ELEMENT_NAME] = DominoParagraph;
+			this.lookup[DominoSubForm.ELEMENT_NAME] = DominoSubForm;
 		}
 	}
 }

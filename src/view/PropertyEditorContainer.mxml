@@ -26,8 +26,26 @@
 		import view.interfaces.IPropertyEditor;
 		import view.interfaces.ISurfaceComponent;
 		import view.interfaces.IVisualEditorLibraryBridge;
+		import mx.collections.ArrayList;
+		import mx.controls.Alert;
 		
         private var _editor:IPropertyEditor;
+
+		 private var _subformsProEditor:ArrayList = new ArrayList();
+
+        [Bindable("change")]
+        public function get subformsProEditor():ArrayList
+        {
+		
+
+            return this._subformsProEditor;
+        }
+
+        public function set subformsProEditor(value:ArrayList):void
+        {	
+			this._subformsProEditor = value;
+		}
+
 
         private var _selectedItem:ISurfaceComponent = null;
 
@@ -51,6 +69,9 @@
             }
             if (this._selectedItem !== null)
             {
+				if((this._selectedItem as Object).hasOwnProperty("subformsList")){
+						this._selectedItem["subformsList"] = this.subformsProEditor;
+				}
                 this.currentState = "selection";
                 var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;
                 if (PropertyEditorType === null)
@@ -63,7 +84,15 @@
                 this._editor.bottom = 0;
                 this._editor.left = 0;
                 this._editor.selectedItem = value;
+
+				
+				if(this._editor.selectedItem){
+					
+				}
+
 				editorHolder.addElement(this._editor);
+
+				
 
 				propertyEditorHeader.componentName = selectedItem["className"];
             }

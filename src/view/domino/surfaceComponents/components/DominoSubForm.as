@@ -48,6 +48,7 @@ package view.domino.surfaceComponents.components
     import view.global.Globals;
     import view.domino.surfaceComponents.components.DominoLabel;
     import interfaces.dominoComponents.IDominoLabel;
+    import mx.collections.ArrayList;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -137,7 +138,41 @@ package view.domino.surfaceComponents.components
             labelComponent.text= "None";
             this.addElement(labelComponent);
 
+            //loading the subfrom ;
+            
+
         }
+
+
+        // [Bindable]
+        // private var _sbuforms:ArrayList = new ArrayList();
+
+        // public function get sbuforms():ArrayList
+        // {
+        //     return _sbuforms;
+        // }
+        //  [Bindable]
+        // private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        // public function get lists():ArrayList
+        // {
+        //     return _lists;
+        // }
+        
+        [Bindable]
+        private var _subformsList:ArrayList = new ArrayList();
+
+        
+        public function get subformsList():ArrayList
+        {
+		
+
+            return this._subformsList;
+        }
+
+        public function set subformsList(value:ArrayList):void
+        {	
+			this._subformsList = value;
+		}
 
         private var _leftmargin:String;
 		public function get leftmargin():String{
@@ -513,7 +548,7 @@ package view.domino.surfaceComponents.components
 		}
 
 
-        private var _subFormName:String = "None";
+        private var _subFormName:String = "none";
         [Bindable(event="subFormNameChanged")]
         public function get subFormName():String
         {

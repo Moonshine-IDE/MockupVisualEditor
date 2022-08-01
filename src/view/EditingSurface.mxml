@@ -67,6 +67,7 @@
         import view.domino.surfaceComponents.components.DominoTable;
 
         import mx.controls.Alert;
+        import mx.collections.ArrayList;
 
         public var organizer:ComponentsOrganizer;
 
@@ -80,10 +81,21 @@
         private var _visualEditorType:String;
         private var _visualEditorFileType:String;
         private var _visualEditorFileName:String;
+        private var _subFormList:ArrayList = new ArrayList();
 
         private var _isDominoProject:Boolean = false;
         private var _isRoyaleProject:Boolean = false;
 
+       
+        public function set subFormList(subforms:ArrayList):void{
+           
+            _subFormList=subforms;
+        }
+        [Bindable("change")]
+        public function get subFormList():ArrayList{
+            
+            return _subFormList;
+        }
         public function set visualEditorType(value:String):void
         {
             _visualEditorType = value;
@@ -195,6 +207,8 @@
                     projectName = visualEditorFileName;
                 }
                 _isDominoProject = true;
+            
+                
                 return EditingSurfaceWriter.toDominoCode(this, projectName);
             }
 

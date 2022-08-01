@@ -3,8 +3,9 @@
         xmlns:fx="http://ns.adobe.com/mxml/2009"
         xmlns:s="library://ns.adobe.com/flex/spark"
         xmlns:suportclasses="view.suportClasses.*"
+        xmlns:domino="view.domino.forms.*"
         creationComplete="onCreationCompletes(event)" skinClass="skins.FormSkin" xmlns:forms="view.forms.*">
-		<forms:CustomDropDownList id="ddlSelection"
+		<domino:CustomDropDownList id="ddlSelection"
 						requireSelection="true" width="100%"
 						dataProvider="{includeCollection}" labelDisplayFunction="{labelDisplayFunction}" showTooltipFunction="{showTooltipFunction}"
 						change="onSelectionChange(event)"
@@ -17,8 +18,12 @@
         import mx.binding.utils.ChangeWatcher;
         import mx.collections.IList;
         import mx.events.FlexEvent;
+        import mx.controls.Alert;
+        import mx.collections.ArrayList;
         
         import spark.events.IndexChangeEvent;
+        import mx.events.CollectionEvent;
+        import mx.events.CollectionEventKind;
 
         [Bindable]
         public var bindableEnabled:Boolean = true;
@@ -36,6 +41,7 @@
         private var _bindingSurfaceProperty:ChangeWatcher;
         private var _labelField:String;
         private var _valueField:String;
+
 
         public function set labelField(value:String):void
         {
@@ -104,7 +110,6 @@
             }
 
             ddlSelection.callLater(selectCurrentItem);
-
             updateBinding();
         }
 
@@ -136,23 +141,26 @@
 
         protected function onSelectionChange(event:IndexChangeEvent):void
         {
-            if(this.selectedItem && ddlSelection.selectedItem){
-                if(_valueField){
-                    if(ddlSelection.selectedItem[_valueField]){
-                        this.selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
+            if(includeCollection&&ddlSelection.dataProvider){
+               if(this.selectedItem && ddlSelection.selectedItem){
+                    if(_valueField){
+                        if(ddlSelection.selectedItem[_valueField]){
+                            this.selectedItem[_textProperty] = ddlSelection.selectedItem[_valueField].toString();
+                        }
+                    }else if (_labelField)
+                    {
+                        if(ddlSelection.selectedItem[_labelField]){
+                            this.selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+                        }
+                    
                     }
-                }else if (_labelField)
-                {
-                    if(ddlSelection.selectedItem[_labelField]){
-                        this.selectedItem[_textProperty] = ddlSelection.selectedItem[_labelField].toString();
+                    else
+                    {
+                        this.selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
                     }
-                
-                }
-                else
-                {
-                    this.selectedItem[_textProperty] = ddlSelection.selectedItem.toString();
                 }
             }
+            
         }
 
         private function updateBinding():void

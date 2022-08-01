@@ -26,6 +26,8 @@
 			<view:PropertyEditorContainer id="propertyEditor"
 										  percentWidth="100" top="0" bottom="20"
 										  selectedItem="{editingSurface.selectedItem}"
+
+										  subformsProEditor="{editingSurface.subFormList}"
 										  visible="{bbPropertyPanel.selectedIndex==0}"/>
 			<view:ComponentsOrganizer id="componentsOrganizer"
 									  width="100%" top="0" bottom="20"

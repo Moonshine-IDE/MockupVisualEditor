@@ -13,6 +13,7 @@
 			import spark.events.IndexChangeEvent;
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.collections.IList;
 
 
             private function onInputCreationComplete(event:FlexEvent):void
@@ -27,7 +28,6 @@
 						hidePanel.visible = hidePanel.includeInLayout = false;
 					 }
 				 }
-
 				
 			}
 
@@ -41,6 +41,39 @@
 			
 			}
 
+			private function getDominoFieldName(item:Object):String
+			{
+				return item.label;
+			}
+			private function getDominoFieldTooltip(item:Object):String
+			{
+				return item.description;
+			}
+
+
+			private var _subforms:ArrayList = new ArrayList();
+
+			[Bindable("change")]
+			public function get subforms():ArrayList
+			{
+			
+
+				return this._subforms;
+			}
+
+			public function set subforms(value:ArrayList):void
+			{
+				this._subforms = value;
+				
+				
+			}
+
+			private function updateSelection(e:IndexChangeEvent):void
+            {
+			}
+
+			 
+
 
 		]]>
 	</fx:Script>
@@ -53,7 +86,15 @@
     <!-- <s:FormHeading label="Data" skinClass="skins.FormHeadingSkin"/> -->
 
     <!-- <domino:ParagraphLayoutForm /> -->
-	<domino:TextForm label=":SubForm" textProperty="subFormName"/>		   
+
+
+	<domino:DropdownListForm id="ddlSubformList"
+                            label="Subform" textProperty="subFormName"
+                            collectionProperty="subformsList" labelField="label"
+							labelDisplayFunction="getDominoFieldName" showTooltipFunction="getDominoFieldTooltip"
+                            listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+		   
     <s:FormItem label="Hide option" skinClass="skins.FormItemSkin">
     <s:CheckBox id="hideOption"
                 selected="false"

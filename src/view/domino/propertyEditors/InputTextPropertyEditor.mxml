@@ -113,6 +113,9 @@
 				noneButton.setStyle("icon",ALIGN_NONE);
 				//initial align
 				initializeAlign();
+				if(this.selectedItem["color"]){
+
+				}
 
 
 				

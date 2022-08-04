@@ -161,6 +161,10 @@
 					this.editingSurface.visualEditorFileName=loadFile.name.split(".")[0];
 				}
 
+				if(filePath.indexOf("subforms")>0){
+					this.editingSurface.visualEditorFileType="subform";
+				}
+
 				
 			}
 

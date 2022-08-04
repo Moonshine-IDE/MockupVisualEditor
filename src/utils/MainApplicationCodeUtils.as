@@ -504,6 +504,22 @@ package utils
 			
 			return xml;
 		}
+
+		public static function getDominoSubformMainContainer(subFormName:String):XML
+		{
+			var dat:Date = new Date();
+			var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+			xml_str=xml_str+"<!DOCTYPE subform>";
+			xml_str=xml_str+"<subform name='"+subFormName+"' version='11.0' maintenanceversion='1.4'  xmlns='http://www.lotus.com/dxl'> ";
+			xml_str=xml_str+"<body>" ;
+			// xml_str=xml_str+"<richtext>" ;
+			// xml_str=xml_str+"</richtext>" ;
+			xml_str=xml_str+"</body>";
+			xml_str=xml_str+"</subform>";
+			var xml:XML = new XML(xml_str);
+			
+			return xml;
+		}
 		
 		private static function getFlexMainContainer(title:String, width:Number, height:Number):XML
 		{

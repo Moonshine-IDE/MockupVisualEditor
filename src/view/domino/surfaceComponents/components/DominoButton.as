@@ -332,7 +332,7 @@ package view.domino.surfaceComponents.components
         }
 
 
-        private var _hide:String;
+        private var _hide:String="";
 		public function get hide():String
 		{
 			return _hide;

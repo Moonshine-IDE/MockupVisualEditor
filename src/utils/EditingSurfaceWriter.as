@@ -127,8 +127,11 @@ package utils
                 if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
                     xml= MainApplicationCodeUtils.getDominoPageMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
+                } if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){
+                    xml= MainApplicationCodeUtils.getDominoSubformMainContainer(title);
+                    mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
                 }else{
-                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                     xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 }
 

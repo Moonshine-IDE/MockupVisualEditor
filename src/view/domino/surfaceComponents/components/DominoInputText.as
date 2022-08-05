@@ -2800,6 +2800,7 @@ package view.domino.surfaceComponents.components
 		{
             component.text = this.text;
 			component.defaultvalue = this.defaultvalue;
+			component.formula = this.formula;
             component.required = this.required;
 			component.maxLength = this.maxLength;
 			component.idAttribute = this.idAttribute;

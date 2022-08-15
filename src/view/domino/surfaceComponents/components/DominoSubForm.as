@@ -49,6 +49,7 @@ package view.domino.surfaceComponents.components
     import view.domino.surfaceComponents.components.DominoLabel;
     import interfaces.dominoComponents.IDominoLabel;
     import mx.collections.ArrayList;
+    
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -101,7 +102,7 @@ package view.domino.surfaceComponents.components
     public class DominoSubForm extends Container implements IDominoSurfaceComponent,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter, IComponentPercentSizeOutput
     {
-        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "subformref";
+        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "Subformref";
         public static var ELEMENT_NAME:String = "Subformref";
 
 		private var component:interfaces.dominoComponents.IDominoSubForm;
@@ -601,7 +602,7 @@ package view.domino.surfaceComponents.components
            
 			
 		
-
+    
             if(xml.@subFormName){
                 this.subFormName=xml.@subFormName;
             }

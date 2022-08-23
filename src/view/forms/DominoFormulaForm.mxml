@@ -3,8 +3,7 @@
                                       xmlns:s="library://ns.adobe.com/flex/spark"
                                       xmlns:suportclasses="view.suportClasses.*"
                                       skinClass="skins.FormSkin"
-                                      creationComplete="onTextFormCreationComplete(event)"
-                                      xmlns:forms="view.forms.*">
+                                      creationComplete="onTextFormCreationComplete(event)">
 
     <suportclasses:layout>
         <s:FormLayout />
@@ -39,21 +38,9 @@
         import mx.binding.utils.ChangeWatcher;
         import mx.events.FlexEvent;
 
-        import flash.net.URLLoader;
-	    import flash.net.URLRequest;
-	    import flash.net.URLStream;
-        import flash.net.URLVariables;
-        import flash.net.URLRequestMethod;
-        import flash.events.Event;
-        import flash.events.NativeProcessExitEvent;
-        import flash.events.ProgressEvent;
-
         import 	mx.utils.Base64Encoder;
 
         import view.interfaces.ISurfaceComponent;
-        import mx.controls.Alert; 
-
-        import flash.text.TextFormat;
 
         private var _binding:ChangeWatcher;
 
@@ -166,8 +153,6 @@
         }
         protected function urlLoader_complete(evt:Event):void {
             var dataSet:String  = loader.data;
-            Alert.show("dataSet:"+dataSet);
-            
         }
         protected function urlStream_progressHandler(event:ProgressEvent):void
 		{

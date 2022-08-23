@@ -2378,8 +2378,6 @@ package view.domino.surfaceComponents.components
 
         public function toXML():XML
         {
-            
-           
             var xml:XML = new XML("<" + ELEMENT_NAME + "/>");
 
             XMLCodeUtils.setSizeFromComponentToXML(this, xml);
@@ -2429,8 +2427,9 @@ package view.domino.surfaceComponents.components
             if(this.fontName){
                 xml.@fonName =this.fontName;
             }
+
            
-           
+
            if(this.spacingInterline){
             xml.@spacingInterline =this.spacingInterline;
            }
@@ -2443,8 +2442,9 @@ package view.domino.surfaceComponents.components
             
             
 
-            if(this.formula){
-                 xml.@formula =  StringHelper.base64Encode(this.formula);;
+            if(this.formula)
+			{
+                 xml.@formula =  StringHelper.base64Encode(this.formula);
             }
 
             if(this.keywordsformula){
@@ -2456,19 +2456,19 @@ package view.domino.surfaceComponents.components
             }
 
             if(this.inputtranslation){
-                 xml.@inputtranslation =  StringHelper.base64Encode(this.inputtranslation);;
+                 xml.@inputtranslation =  StringHelper.base64Encode(this.inputtranslation);
             }
+
             if(this.inputvalidation){
-                 xml.@inputvalidation = StringHelper.base64Encode(this.inputvalidation);;
+                 xml.@inputvalidation = StringHelper.base64Encode(this.inputvalidation);
             }
 
             if(this.hidewhen){
-                 xml.@hidewhen = StringHelper.base64Encode(this.hidewhen);;
+                 xml.@hidewhen = StringHelper.base64Encode(this.hidewhen);
             }
             if(this.hide){
                 xml.@hide = this.hide;
             }
-
 
             if(this.object){
                 xml.@object = this.object;
@@ -2487,7 +2487,8 @@ package view.domino.surfaceComponents.components
                 xml.@allowmultivalues = this.allowmultivalues;
             }
 
-            if(this.kind){
+            if(this.kind)
+			{
                 xml.@kind = this.kind;
                 //remove the formula if the kind not is computed
                 if(this.kind=="computed"||this.kind=="computedfordisplay"||this.kind=="computedwhencomposed"){
@@ -2501,23 +2502,29 @@ package view.domino.surfaceComponents.components
                 
             }
 
-            if(this.type){
+            if(this.type)
+			{
                 xml.@type = this.type;
-                if(this.type=="number"){
+                if(this.type=="number")
+				{
                     xml.@digits = this.digits;
                     xml.@format = this.format;
                     xml.@parens = this.parens;
                     xml.@percent = this.percent;
                     xml.@punctuated = this.punctuated;
-                }else{
-                    delete xml.@digits
-                    delete xml.@format
-                    delete xml.@parens
-                    delete xml.@percent
-                    delete xml.@punctuated
+                }
+				else
+				{
+                    delete xml.@digits;
+                    delete xml.@format;
+                    delete xml.@parens;
+                    delete xml.@percent;
+                    delete xml.@punctuated;
 
                 }
-                if(this.type=="datetime"){
+
+                if(this.type=="datetime")
+				{
                     xml.@show = this.show;
                     xml.@date = this.date;
                     xml.@showtodaywhenappropriate = this.showtodaywhenappropriate;
@@ -2528,18 +2535,19 @@ package view.domino.surfaceComponents.components
                     xml.@time = this.time;
                     xml.@zone = this.zone;
                     xml.@calendars = this.calendar;
-                }else{
-                    delete xml.@show
-                    delete xml.@date
-                    delete xml.@showtodaywhenappropriate
-                    delete xml.@fourdigityear
-                    delete xml.@fourdigityearfor21stcentury
-                    delete xml.@omitthisyear
-                    delete xml.@time
-                    delete xml.@zone
-                    delete xml.@calendars
                 }
-         
+				else
+				{
+                    delete xml.@show;
+                    delete xml.@date;
+                    delete xml.@showtodaywhenappropriate;
+                    delete xml.@fourdigityear;
+                    delete xml.@fourdigityearfor21stcentury;
+                    delete xml.@omitthisyear;
+                    delete xml.@time;
+                    delete xml.@zone;
+                    delete xml.@calendars;
+                }
 
                 if(this.type=="keyword"){
                      //Alert.show("key:"+this.keywords);
@@ -2565,31 +2573,35 @@ package view.domino.surfaceComponents.components
                      }
 
                      if(this.keywordui){
-                         xml.@keywordui=this.keywordui
+                         xml.@keywordui=this.keywordui;
                      }
-                }else{
-                    delete xml.@keywords
-                    delete xml.@keywordui
                 }
-                if(this.listdisplayseparator){
-                    xml.@listdisplayseparator=this.listdisplayseparator
+				else
+				{
+                    delete xml.@keywords;
+                    delete xml.@keywordui;
+                }
+
+                if(this.listdisplayseparator)
+				{
+                    xml.@listdisplayseparator=this.listdisplayseparator;
                 }
 
                 if(this.listinputseparators){
-                    xml.@listinputseparators=this.listinputseparators
+                    xml.@listinputseparators=this.listinputseparators;
                 }
 
                 if(this.type=="names"){
                      if(this.choicesdialog){
-                        xml.@choicesdialog=this.choicesdialog
+                        xml.@choicesdialog=this.choicesdialog;
                      }else{
-                        xml.@choicesdialog="none"
+                        xml.@choicesdialog="none";
                      }
 
                      
                   
                 }else{
-                     delete xml.@choicesdialog
+                     delete xml.@choicesdialog;
 
                      //delete xml.@listdisplayseparator
 
@@ -2599,15 +2611,15 @@ package view.domino.surfaceComponents.components
 
                  if(this.type=="richtextlite"){
                     if(this.onlyallow){
-                        xml.@onlyallow=this.onlyallow
+                        xml.@onlyallow=this.onlyallow;
                     }
                     if(this.firstdisplay){
-                        xml.@firstdisplay=this.firstdisplay
+                        xml.@firstdisplay=this.firstdisplay;
                     }
 
                  }else{
-                    delete xml.@onlyallow
-                    delete xml.@firstdisplay
+                    delete xml.@onlyallow;
+                    delete xml.@firstdisplay;
                  }
             }
 
@@ -2949,12 +2961,12 @@ package view.domino.surfaceComponents.components
              }
 
              if(this.type=="names"){
-                 component.choicesdialog=this.choicesdialog
+                 component.choicesdialog=this.choicesdialog;
 
              }
              if(this.type=="richtextlite"){
-                 component.onlyallow=this.onlyallow
-                 component.firstdisplay=this.firstdisplay
+                 component.onlyallow=this.onlyallow;
+                 component.firstdisplay=this.firstdisplay;
 
              }
 			// (component as components.domino.DominoInputText).width = this.width;
@@ -2975,6 +2987,8 @@ package view.domino.surfaceComponents.components
         public	function toRoyaleConvertCode():XML
 		{
             component.text = this.text;
+			component.defaultvalue = this.defaultvalue;
+			component.formula = this.formula;
             component.required = this.required;
 			component.maxLength = this.maxLength;
 			component.idAttribute = this.idAttribute;

@@ -3,7 +3,6 @@ package view.dominoFormBuilder.vo
 	import flash.events.EventDispatcher;
 	
 	import mx.collections.ArrayCollection;
-	import mx.events.PropertyChangeEvent;
 	
 	import view.dominoFormBuilder.utils.DominoTemplatesManager;
 	

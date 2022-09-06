@@ -3,7 +3,6 @@ package view.dominoFormBuilder.vo
 	import flash.events.EventDispatcher;
 	
 	import mx.collections.ArrayCollection;
-	import mx.events.PropertyChangeEvent;
 	
 	import view.dominoFormBuilder.utils.DominoTemplatesManager;
 	
@@ -17,6 +16,7 @@ package view.dominoFormBuilder.vo
 		public var hasWebAccess:Boolean;
 		public var fields:ArrayCollection = new ArrayCollection();
 		public var dxlGeneratedOn:Date;
+		public var pageContent:XML;
 		
 		/**
 		 * CONSTRUCTOR

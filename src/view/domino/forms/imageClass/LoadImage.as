@@ -22,7 +22,7 @@ package view.domino.forms.imageClass
 	[Bindable]
     public class LoadImage 
 	{
-        [Embed(source='/assets/align-right-solid.png')]
+        [Embed(source='/assets/align-center-solid.png')]
         public static const ALIGN_CENTER:Class;
 
         [Embed(source='/assets/align-justify-solid.png')]

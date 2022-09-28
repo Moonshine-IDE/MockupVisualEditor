@@ -118,6 +118,11 @@
 				MoonshineBridgeUtils.currentFilePath = propertyEditor.visualEditorFilePath = value;
 			}
 
+			public function get visualEditorFilePath():String
+			{
+				return _fileMoonshine.nativePath;
+			}
+
 			public function saveEditedFile():void
 			{
 				if (!_fileStreamMoonshine) return;

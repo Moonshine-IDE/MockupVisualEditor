@@ -69,6 +69,8 @@
         import mx.controls.Alert;
         import mx.collections.ArrayList;
 
+        import utils.VisualEditorType;
+
         public var organizer:ComponentsOrganizer;
 
         private static const SMALL_NUDGE:int = 1;
@@ -249,6 +251,11 @@
 
         }
 
+        public function fromXMLByEditingSurface(xml:XML,editingSurface:ISurface):void
+        {
+            EditingSurfaceReader.fromXML(editingSurface, xml, VisualEditorType.DOMINO);
+        }
+
         public function fromXML(xml:XML):void
         {
             this.deleteAll();
@@ -271,6 +278,22 @@
                 this.deleteItem(element);
             }
             hasChanged = false;
+        }
+
+        public function deleteAllByEditingSureface(editingSurface:EditingSurface):void
+        {
+            var elementCount:int = editingSurface.numElements;
+            Alert.show("deleteAllByEditingSureface:"+elementCount.toString());
+            for (var i:int = elementCount - 1; i >= 0; i--)
+            {
+                var element:ISurfaceComponent = editingSurface.getElementAt(i) as ISurfaceComponent;
+                if (element === null)
+                {
+                    continue;
+                }
+                editingSurface.removeElementAt(i);
+            }
+           
         }
 
         /**

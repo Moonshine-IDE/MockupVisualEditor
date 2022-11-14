@@ -63,6 +63,7 @@ package view.domino.surfaceComponents.components
 
     import interfaces.dominoComponents.IDominoLabel;
     import global.domino.DominoGlobalTokens;
+    
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -201,6 +202,16 @@ package view.domino.surfaceComponents.components
                     this.invalidateProperties();
                 }
             }
+        }
+
+
+        [Bindable]
+        private var _fontNames:ArrayList = DominoGlobalTokens.FontNames;
+
+
+        public function get fontNames():ArrayList
+        {
+            return _fontNames;
         }
 
         private var _heightOutput:Boolean = true;

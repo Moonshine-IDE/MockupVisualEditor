@@ -38,20 +38,14 @@
                                   xmlns:domino="view.domino.forms.*" 
 								  xmlns:forms="view.forms.*"
 								  xmlns:mx="library://ns.adobe.com/flex/mx"
-								  xmlns:primeFaces="view.primeFaces.forms.*"
 								  creationComplete="onInputCreationComplete(event)"
 								 >
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
-			import mx.controls.Alert;
 			import mx.controls.listClasses.ListBaseContentHolder;
 			import mx.events.FlexEvent;
-			
 			import spark.components.Button;
-			import spark.events.IndexChangeEvent;
-			import spark.skins.spark.ButtonSkin;
-			
 			import skins.DominoAlignButtonSkin;
 			
 			import view.domino.forms.imageClass.LoadImage;
@@ -76,637 +70,629 @@
         [Embed(source='/assets/ban-solid.png')]
         public  var ALIGN_NONE:Class;
 
-			private var isNumber:Boolean = false;
-			private var inputType:String="";
-			[Bindable]
-        	public var keywordsFlag:Boolean = false;
+		private var inputType:String = "";
+		[Bindable]
+		public var keywordsFlag:Boolean = false;
 
-			private function onInputCreationComplete(event:FlexEvent):void
-        	{
-				 keywordsFlag = Object(selectedItem).keyformulachoices;
-				
-				 // Alert.show("name:"+Object(selectedItem).name);
-				 if(keywordsFlag==true){
-					 this.keyformulachoices.selected=true;
-					keywords.visible =keywords.includeInLayout = false;
-					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
-				 }else{
-					this.keyformulachoices.selected=false;
-					keywords.visible =keywords.includeInLayout = true;
-					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
-				 }
+		private function onInputCreationComplete(event:FlexEvent):void
+		{
+			 keywordsFlag = Object(selectedItem).keyformulachoices;
 
-				 //inistal hide options
-				 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 || this.selectedItem["hidewhen"]!=null){
-					
-				 }
-				if(this.selectedItem["allowmultivalues"]){
-					 this.allowmul.selected=true;
-					
-				 }else{
-					 this.allowmul.selected=false;
-					
-				 }
-				 //inisatll font/color/size options 
-				 if(this.selectedItem["color"]!=null && this.selectedItem["color"].length>0){
+			 // Alert.show("name:"+Object(selectedItem).name);
+			 if(keywordsFlag==true){
+				 this.keyformulachoices.selected=true;
+				keywords.visible =keywords.includeInLayout = false;
+				keyformulavalue.visible =keyformulavalue.includeInLayout = true;
+			 }else{
+				this.keyformulachoices.selected=false;
+				keywords.visible =keywords.includeInLayout = true;
+				keyformulavalue.visible =keyformulavalue.includeInLayout = false;
+			 }
 
-				 }
+			 //inistal hide options
+			 if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 || this.selectedItem["hidewhen"]!=null){
 
-				 //inisatll align options
-				var leftButton:Button = new Button();
-				leftButton.width = 30
-				leftButton.height = 30 
-				var rightButton:Button = new Button();
-				rightButton.width = 30
-				rightButton.height = 30 
-				var centerButton:Button = new Button();
-				centerButton.width = 30
-				centerButton.height = 30 
-				var justifButton:Button = new Button();
-				justifButton.width = 30
-				justifButton.height = 30 
-				var noneButton:Button = new Button();
-				noneButton.width = 30
-				noneButton.height = 30 
-				
-				ALIGN_JUSTIFY.width=30
-				ALIGN_JUSTIFY.height=30
-				ALIGN_LEFT.width=30
-				ALIGN_LEFT.height=30
-				ALIGN_RIGHT.width=30
-				ALIGN_RIGHT.height=30
-				ALIGN_CENTER.width = 30
-				ALIGN_CENTER.height=30
+			 }
+			if(this.selectedItem["allowmultivalues"]){
+				 this.allowmul.selected=true;
 
+			 }else{
+				 this.allowmul.selected=false;
 
-				leftButton.setStyle("icon",ALIGN_LEFT);
-				rightButton.setStyle("icon",ALIGN_RIGHT);
-				centerButton.setStyle("icon",ALIGN_CENTER);
-				justifButton.setStyle("icon",ALIGN_JUSTIFY);
-				noneButton.setStyle("icon",ALIGN_NONE);
-				//initial align
-				initializeAlign();
-				if(this.selectedItem["color"]){
+			 }
+			 //inisatll font/color/size options
+			 if(this.selectedItem["color"]!=null && this.selectedItem["color"].length>0){
 
-				}
+			 }
+
+			 //inisatll align options
+			var leftButton:Button = new Button();
+			leftButton.width = 30
+			leftButton.height = 30
+			var rightButton:Button = new Button();
+			rightButton.width = 30
+			rightButton.height = 30
+			var centerButton:Button = new Button();
+			centerButton.width = 30
+			centerButton.height = 30
+			var justifButton:Button = new Button();
+			justifButton.width = 30
+			justifButton.height = 30
+			var noneButton:Button = new Button();
+			noneButton.width = 30
+			noneButton.height = 30
+
+			ALIGN_JUSTIFY.width=30
+			ALIGN_JUSTIFY.height=30
+			ALIGN_LEFT.width=30
+			ALIGN_LEFT.height=30
+			ALIGN_RIGHT.width=30
+			ALIGN_RIGHT.height=30
+			ALIGN_CENTER.width = 30
+			ALIGN_CENTER.height=30
 
 
-				
-			}
-
-			protected function digits_changeHandler(event:Event):void
-			{
-				//Alert.show(event.target.text);
+			leftButton.setStyle("icon",ALIGN_LEFT);
+			rightButton.setStyle("icon",ALIGN_RIGHT);
+			centerButton.setStyle("icon",ALIGN_CENTER);
+			justifButton.setStyle("icon",ALIGN_JUSTIFY);
+			noneButton.setStyle("icon",ALIGN_NONE);
+			//initial align
+			initializeAlign();
+			if(this.selectedItem["color"]){
 
 			}
 
-			protected function  changeHandler(event:Event):void
-			{
-				
-			}
-			
-			protected function textform1_changeHandler(event:Event):void
-			{
-				if (Object(selectedItem).maxLength != "" && Object(selectedItem).maxLength != "0")
-				{
-					txtValue.maxChar = int(Object(selectedItem).maxLength);
-				}
-				else if (txtValue.maxChar != 0)
-					txtValue.maxChar = 0;
-			}
-			private function getDominoFieldTypeLabel(item:Object):String
-			{
-				
 
-				if(item.label=="number"){
-					if(txtValue.bindableText!=null){
-						if(!(txtValue.bindableText is Number)){
-							txtValue.bindableText="";
-						}
+
+		}
+
+		protected function digits_changeHandler(event:Event):void
+		{
+			//Alert.show(event.target.text);
+
+		}
+
+		protected function  changeHandler(event:Event):void
+		{
+
+		}
+
+		protected function textform1_changeHandler(event:Event):void
+		{
+			if (Object(selectedItem).maxLength != "" && Object(selectedItem).maxLength != "0")
+			{
+				txtValue.maxChar = int(Object(selectedItem).maxLength);
+			}
+			else if (txtValue.maxChar != 0)
+				txtValue.maxChar = 0;
+		}
+		private function getDominoFieldTypeLabel(item:Object):String
+		{
+
+
+			if(item.label=="number"){
+				if(txtValue.bindableText!=null){
+					if(!(txtValue.bindableText is Number)){
+						txtValue.bindableText="";
 					}
-					txtValue.visible = txtValue.includeInLayout = true;
-					//allowmul.selected = false;
-					txtValue.restrict="0-9";
-					datePanel.visible = datePanel.includeInLayout = false;
-					numberPanel.visible = numberPanel.includeInLayout = true;
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					namespanel.visible = namespanel.includeInLayout = false;
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
-				} else if(item.label=="datetime"){
-					txtValue.restrict=null
-					datePanel.visible = datePanel.includeInLayout = true;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					//allowmul.visible = allowmul.includeInLayout = true;
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					//allowmul.selected = false;
-					txtValue.visible = txtValue.includeInLayout = true;
-					namespanel.visible = namespanel.includeInLayout = false;
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
-				} else if(item.label=="keyword"){
-					txtValue.restrict=null
-					txtValue.visible = txtValue.includeInLayout = false;
-					datePanel.visible = datePanel.includeInLayout = false;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					//allowmul.visible = allowmul.includeInLayout = true;
-					allowmul.enabled = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = true;
-					namespanel.visible = namespanel.includeInLayout = false;
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
-				}else if(item.label=="names"){
-					txtValue.restrict=null
-					txtValue.visible = txtValue.includeInLayout = false;
-					datePanel.visible = datePanel.includeInLayout = false;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					namespanel.visible = namespanel.includeInLayout = true;
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
-				}else if(item.label=="formula"){
-					txtValue.restrict=null
-					txtValue.visible = txtValue.includeInLayout = false;
-					datePanel.visible = datePanel.includeInLayout = false;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					namespanel.visible = namespanel.includeInLayout = false;
-					//formualPanel.visible = formualPanel.includeInLayout = true;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
-				}else if(item.label=="richtextlite"){
-					txtValue.restrict=null
-					txtValue.visible = txtValue.includeInLayout = false;
-					datePanel.visible = datePanel.includeInLayout = false;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.enabled=false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					namespanel.visible = namespanel.includeInLayout = false;
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = true;
-				}else if(item.label=="text"){
-					var selectItemText:String=ddl2.getDdlSelectionSelectedItemText();
-					if(selectItemText){
-			
-						if(selectItemText=="computed"||selectItemText=="computedfordisplay"||selectItemText=="computedwhencomposed"){
-							//Alert.show(":"+selectItemText);
-							//formualPanel.visible = formualPanel.includeInLayout = true;
-							txtValue.visible =txtValue.includeInLayout = false;
-							editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
-						}else{
-							//formualPanel.visible = formualPanel.includeInLayout = false;
-							txtValue.visible =txtValue.includeInLayout = true;
-							editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
-						}
-					}
-					
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-					txtValue.restrict=null;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					namespanel.visible = namespanel.includeInLayout = false;
-					
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
-					//Alert.show("142:"+formualPanel.visible);
-				
-				}else if(item.label=="authors"){
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-				}else if(item.label=="password"){
-					allowmul.enabled=false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else if(item.label=="readers"){
-					allowmul.enabled=true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-				}else if(item.label=="timezone"){
-					allowmul.enabled=false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else if(item.label=="color"){
-					allowmul.enabled=false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else if(item.label=="richtext"){
-					allowmul.enabled=false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else {
-					txtValue.visible = txtValue.includeInLayout = true;
-					allowmul.selected = false;
-					txtValue.restrict=null;
-					numberPanel.visible = numberPanel.includeInLayout = false;
-					allowmul.visible = allowmul.includeInLayout = true;
-					checkboxPanel.visible = checkboxPanel.includeInLayout = false;
-					namespanel.visible = namespanel.includeInLayout = false;
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 				}
-				//Alert.show("155:"+formualPanel.visible);
-				inputType=item.label;
-				//Alert.show("visible:"+digits.visible);
-				return item.label;
-			}
+				txtValue.visible = txtValue.includeInLayout = true;
+				//allowmul.selected = false;
+				txtValue.restrict="0-9";
+				datePanel.visible = datePanel.includeInLayout = false;
+				numberPanel.visible = numberPanel.includeInLayout = true;
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				namespanel.visible = namespanel.includeInLayout = false;
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+			} else if(item.label=="datetime"){
+				txtValue.restrict=null
+				datePanel.visible = datePanel.includeInLayout = true;
+				numberPanel.visible = numberPanel.includeInLayout = false;
+				//allowmul.visible = allowmul.includeInLayout = true;
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				//allowmul.selected = false;
+				txtValue.visible = txtValue.includeInLayout = true;
+				namespanel.visible = namespanel.includeInLayout = false;
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+			} else if(item.label=="keyword"){
+				txtValue.restrict=null
+				txtValue.visible = txtValue.includeInLayout = false;
+				datePanel.visible = datePanel.includeInLayout = false;
+				numberPanel.visible = numberPanel.includeInLayout = false;
+				//allowmul.visible = allowmul.includeInLayout = true;
+				allowmul.enabled = true;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = true;
+				namespanel.visible = namespanel.includeInLayout = false;
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+			}else if(item.label=="names"){
+				txtValue.restrict=null
+				txtValue.visible = txtValue.includeInLayout = false;
+				datePanel.visible = datePanel.includeInLayout = false;
+				numberPanel.visible = numberPanel.includeInLayout = false;
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				namespanel.visible = namespanel.includeInLayout = true;
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+			}else if(item.label=="formula"){
+				txtValue.restrict=null
+				txtValue.visible = txtValue.includeInLayout = false;
+				datePanel.visible = datePanel.includeInLayout = false;
+				numberPanel.visible = numberPanel.includeInLayout = false;
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				namespanel.visible = namespanel.includeInLayout = false;
+				//formualPanel.visible = formualPanel.includeInLayout = true;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+			}else if(item.label=="richtextlite"){
+				txtValue.restrict=null
+				txtValue.visible = txtValue.includeInLayout = false;
+				datePanel.visible = datePanel.includeInLayout = false;
+				numberPanel.visible = numberPanel.includeInLayout = false;
+				allowmul.enabled=false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				namespanel.visible = namespanel.includeInLayout = false;
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = true;
+			}else if(item.label=="text"){
+				var selectItemText:String=ddl2.getDdlSelectionSelectedItemText();
+				if(selectItemText){
 
+					if(selectItemText=="computed"||selectItemText=="computedfordisplay"||selectItemText=="computedwhencomposed"){
+						//Alert.show(":"+selectItemText);
+						//formualPanel.visible = formualPanel.includeInLayout = true;
+						txtValue.visible =txtValue.includeInLayout = false;
+						editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
+					}else{
+						//formualPanel.visible = formualPanel.includeInLayout = false;
+						txtValue.visible =txtValue.includeInLayout = true;
+						editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
+					}
+				}
 
-			private function getDominoFieldKeyWordUISytle(item:Object):String
-			{
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+				txtValue.restrict=null;
+				numberPanel.visible = numberPanel.includeInLayout = false;
 				allowmul.visible = allowmul.includeInLayout = true;
-				if(item.label=="radiobutton"){
-					allowmul.enabled = false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else if(item.label=="combobox") {
-					allowmul.enabled = false;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else if(item.enabled=="checkbox") {
-					allowmul.enabled = false;
-					allowmul.selected=true;
-					fieldlistinput.enabled = false;
-					fieldlistdisplay.enabled = false;
-				}else  {
-					allowmul.enabled = true;
-					fieldlistinput.enabled = true;
-					fieldlistdisplay.enabled = true;
-				}
-				return item.label;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				namespanel.visible = namespanel.includeInLayout = false;
+
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
+				//Alert.show("142:"+formualPanel.visible);
+
+			}else if(item.label=="authors"){
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+			}else if(item.label=="password"){
+				allowmul.enabled=false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else if(item.label=="readers"){
+				allowmul.enabled=true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
+			}else if(item.label=="timezone"){
+				allowmul.enabled=false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else if(item.label=="color"){
+				allowmul.enabled=false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else if(item.label=="richtext"){
+				allowmul.enabled=false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else {
+				txtValue.visible = txtValue.includeInLayout = true;
+				allowmul.selected = false;
+				txtValue.restrict=null;
+				numberPanel.visible = numberPanel.includeInLayout = false;
+				allowmul.visible = allowmul.includeInLayout = true;
+				checkboxPanel.visible = checkboxPanel.includeInLayout = false;
+				namespanel.visible = namespanel.includeInLayout = false;
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				richtitlePanel.visible = richtitlePanel.includeInLayout = false;
 			}
+			//Alert.show("155:"+formualPanel.visible);
+			inputType=item.label;
+			//Alert.show("visible:"+digits.visible);
+			return item.label;
+		}
 
-			private function getDominoFieldObject(item:Object):String
-			{
-				//defaultvalue
-				//inputtranslation
-				//inputvalidation
-				//hidewhen
-				if(item.value=="inputtranslation"){
-					defaultvalue.visible = defaultvalue.includeInLayout = false;
-					inputtranslation.visible = inputtranslation.includeInLayout = true;
-					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					//hidewhen.visible = hidewhen.includeInLayout = false;
-				}else if(item.value=="inputvalidation"){
-					defaultvalue.visible = defaultvalue.includeInLayout = false;
-					inputtranslation.visible = inputtranslation.includeInLayout = false;
-					inputvalidation.visible = inputvalidation.includeInLayout = true;
-					//hidewhen.visible = hidewhen.includeInLayout = false;
-				}else if(item.value=="hidewhen"){
-					defaultvalue.visible = defaultvalue.includeInLayout = false;
-					inputtranslation.visible = inputtranslation.includeInLayout = false;
-					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					//hidewhen.visible = hidewhen.includeInLayout = true;
-				}else{
-					defaultvalue.visible = defaultvalue.includeInLayout = true;
-					inputtranslation.visible = inputtranslation.includeInLayout = false;
-					inputvalidation.visible = inputvalidation.includeInLayout = false;
-					//hidewhen.visible = hidewhen.includeInLayout = false;
 
-				}
-				return item.value;
+		private function getDominoFieldKeyWordUISytle(item:Object):String
+		{
+			allowmul.visible = allowmul.includeInLayout = true;
+			if(item.label=="radiobutton"){
+				allowmul.enabled = false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else if(item.label=="combobox") {
+				allowmul.enabled = false;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else if(item.enabled=="checkbox") {
+				allowmul.enabled = false;
+				allowmul.selected=true;
+				fieldlistinput.enabled = false;
+				fieldlistdisplay.enabled = false;
+			}else  {
+				allowmul.enabled = true;
+				fieldlistinput.enabled = true;
+				fieldlistdisplay.enabled = true;
 			}
-			
-				
+			return item.label;
+		}
 
+		private function getDominoFieldObject(item:Object):String
+		{
+			//defaultvalue
+			//inputtranslation
+			//inputvalidation
+			//hidewhen
+			if(item.value=="inputtranslation"){
+				defaultvalue.visible = defaultvalue.includeInLayout = false;
+				inputtranslation.visible = inputtranslation.includeInLayout = true;
+				inputvalidation.visible = inputvalidation.includeInLayout = false;
+				//hidewhen.visible = hidewhen.includeInLayout = false;
+			}else if(item.value=="inputvalidation"){
+				defaultvalue.visible = defaultvalue.includeInLayout = false;
+				inputtranslation.visible = inputtranslation.includeInLayout = false;
+				inputvalidation.visible = inputvalidation.includeInLayout = true;
+				//hidewhen.visible = hidewhen.includeInLayout = false;
+			}else if(item.value=="hidewhen"){
+				defaultvalue.visible = defaultvalue.includeInLayout = false;
+				inputtranslation.visible = inputtranslation.includeInLayout = false;
+				inputvalidation.visible = inputvalidation.includeInLayout = false;
+				//hidewhen.visible = hidewhen.includeInLayout = true;
+			}else{
+				defaultvalue.visible = defaultvalue.includeInLayout = true;
+				inputtranslation.visible = inputtranslation.includeInLayout = false;
+				inputvalidation.visible = inputvalidation.includeInLayout = false;
+				//hidewhen.visible = hidewhen.includeInLayout = false;
 
-			private function getDominoFieldName(item:Object):String
-			{
-				return item.label;
 			}
-			private function getDominoFieldKindName(item:Object):String
-			{
-				if(item.label=="computed"||item.label=="computedfordisplay"||item.label=="computedwhencomposed"){
-					//formualPanel.visible = formualPanel.includeInLayout = true;
-					txtValue.visible =txtValue.includeInLayout = false;
-					editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
-				}else{
-					//formualPanel.visible = formualPanel.includeInLayout = false;
-					txtValue.visible =txtValue.includeInLayout = true;
-					editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
-				}
-				//Alert.show("192:"+formualPanel.visible+":"+item.label);
-				return item.label;
+			return item.value;
+		}
+
+
+
+
+		private function getDominoFieldName(item:Object):String
+		{
+			return item.label;
+		}
+		private function getDominoFieldKindName(item:Object):String
+		{
+			if(item.label=="computed"||item.label=="computedfordisplay"||item.label=="computedwhencomposed"){
+				//formualPanel.visible = formualPanel.includeInLayout = true;
+				txtValue.visible =txtValue.includeInLayout = false;
+				editableFormualPanel.visible =editableFormualPanel.includeInLayout = false;
+			}else{
+				//formualPanel.visible = formualPanel.includeInLayout = false;
+				txtValue.visible =txtValue.includeInLayout = true;
+				editableFormualPanel.visible =editableFormualPanel.includeInLayout = true;
 			}
-			
-			private function getDominoFieldTooltip(item:Object):String
-			{
-				return item.description;
+			//Alert.show("192:"+formualPanel.visible+":"+item.label);
+			return item.label;
+		}
+
+		private function getDominoFieldTooltip(item:Object):String
+		{
+			return item.description;
+		}
+		//change="togCheck_changeHandler(event)"
+		private function togCheck_changeHandler(event:Event):void
+		{
+			//Alert.show(":"+this.keyformulachoices.selected);
+			if(this.keyformulachoices.selected==true){
+				keywords.visible =keywords.includeInLayout = false;
+				keyformulavalue.visible =keyformulavalue.includeInLayout = true;
+			}else{
+				keywords.visible =keywords.includeInLayout = true;
+				keyformulavalue.visible =keyformulavalue.includeInLayout = false;
 			}
-			//change="togCheck_changeHandler(event)"
-			private function togCheck_changeHandler(event:Event):void
-			{
-				//Alert.show(":"+this.keyformulachoices.selected);
-				if(this.keyformulachoices.selected==true){
-					keywords.visible =keywords.includeInLayout = false;
-					keyformulavalue.visible =keyformulavalue.includeInLayout = true;
-				}else{
-					keywords.visible =keywords.includeInLayout = true;
-					keyformulavalue.visible =keyformulavalue.includeInLayout = false;
-				}
-				 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
-			}
+			 this.selectedItem["keyformulachoices"] = this.keyformulachoices.selected;
+		}
 
-			private function allowMultipleValues_changeHandler(event:Event):void
-			{
-				//Alert.show(":"+this.keyformulachoices.selected);
-	
-				 this.selectedItem["allowmultivalues"] = this.allowmul.selected;
-			}
+		private function allowMultipleValues_changeHandler(event:Event):void
+		{
+			//Alert.show(":"+this.keyformulachoices.selected);
+
+			 this.selectedItem["allowmultivalues"] = this.allowmul.selected;
+		}
 
 
-		
 
-		
-			private var pre_label_var:String="normal";
 
-			private function excludeMultipleSelect(item:ListBaseContentHolder):void
-			{
-				var normal_flag:Boolean = false;
-				var execute_array:Array=null;
-				var normalSelect:Boolean=false;
-				//<!ENTITY % font.styles "normal | bold | italic | underline |
-				//strikethrough | superscript | subscript | shadow | emboss | extrude">
-				var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
-				var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
-				var exclusions_exclude_option:Array=["normal","superscript","subscript","shadow","emboss","extrude"];
-				var selected_array:Array=[];
-				var hasExlude:Boolean=false;
-				var hasExludeNum:Number=0;
-				var i:int = 0;
-				var checkItem:Object = null;
-				if(item){
-					for (i = 0; i < item.numChildren; i++){
-						checkItem = item.getChildAt(i);
-							if(checkItem){
-								//Alert.show("checkitem:"+checkitem.toString());
-								if(checkItem.hasOwnProperty("selected") && checkItem.selected==true  ){
-									selected_array.push(checkItem.label);
-								}
-							}
-					}
 
-					//Alert.show("selected_array:"+selected_array.toString());
-					if(selected_array&& selected_array.length>0){
-						for (i = 0; i < selected_array.length; i++){
-							if(selected_array[i].toString()=="normal"){
-								hasExlude=true;
-							}else if(exclusions_exclude_option.indexOf(selected_array[i].toString())>=0){
-								hasExludeNum++;
-							}
-						}
-						if(hasExludeNum>1){
-							hasExlude=true;
-						}
-					}
-					//Alert.show("hasExlude:"+hasExlude);
-					if(pre_label_var!=null){
-						for (i = 0; i < item.numChildren; i++){
-							checkItem = item.getChildAt(i);
-							if(checkItem){
+		private var pre_label_var:String="normal";
+
+		private function excludeMultipleSelect(item:ListBaseContentHolder):void
+		{
+			var normal_flag:Boolean = false;
+			var execute_array:Array=null;
+			var normalSelect:Boolean=false;
+			//<!ENTITY % font.styles "normal | bold | italic | underline |
+			//strikethrough | superscript | subscript | shadow | emboss | extrude">
+			var exclusions_normal:Array = ["bold","italic","underline","strikethrough","superscript","subscript","shadow","emboss","extrude"];
+			var exclusions_one_option:Array=["superscript","subscript","shadow","emboss","extrude"];
+			var exclusions_exclude_option:Array=["normal","superscript","subscript","shadow","emboss","extrude"];
+			var selected_array:Array=[];
+			var hasExlude:Boolean=false;
+			var hasExludeNum:Number=0;
+			var i:int = 0;
+			var checkItem:Object = null;
+			if(item){
+				for (i = 0; i < item.numChildren; i++){
+					checkItem = item.getChildAt(i);
+						if(checkItem){
 							//Alert.show("checkitem:"+checkitem.toString());
-							if(checkItem.hasOwnProperty("selected") ){
-								//	Alert.show("checkitem.label:"+checkitem.label);
-									if(checkItem.label==pre_label_var&& hasExlude==true){
-										//checkitem.enabled=false;
-										checkItem.selected=false;
-
-									}
-
-								}
+							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true  ){
+								selected_array.push(checkItem.label);
 							}
-
 						}
-						//Alert.show("pre_label_var:"+pre_label_var);
-						pre_label_var=null;
+				}
 
+				//Alert.show("selected_array:"+selected_array.toString());
+				if(selected_array&& selected_array.length>0){
+					for (i = 0; i < selected_array.length; i++){
+						if(selected_array[i].toString()=="normal"){
+							hasExlude=true;
+						}else if(exclusions_exclude_option.indexOf(selected_array[i].toString())>=0){
+							hasExludeNum++;
+						}
 					}
-
-
-
-
-
+					if(hasExludeNum>1){
+						hasExlude=true;
+					}
+				}
+				//Alert.show("hasExlude:"+hasExlude);
+				if(pre_label_var!=null){
 					for (i = 0; i < item.numChildren; i++){
 						checkItem = item.getChildAt(i);
 						if(checkItem){
-							//Alert.show("checkitem:"+checkitem.toString());
-							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+						//Alert.show("checkitem:"+checkitem.toString());
+						if(checkItem.hasOwnProperty("selected") ){
+							//	Alert.show("checkitem.label:"+checkitem.label);
+								if(checkItem.label==pre_label_var&& hasExlude==true){
+									//checkitem.enabled=false;
+									checkItem.selected=false;
 
-							if(checkItem.label=="normal"){
-								//Alert.show("checkitem.label:"+checkitem.label);
-								execute_array=exclusions_normal;
-								normalSelect=true;
-								pre_label_var="normal";
+								}
+
+							}
+						}
+
+					}
+					//Alert.show("pre_label_var:"+pre_label_var);
+					pre_label_var=null;
+
+				}
+
+
+
+
+
+				for (i = 0; i < item.numChildren; i++){
+					checkItem = item.getChildAt(i);
+					if(checkItem){
+						//Alert.show("checkitem:"+checkitem.toString());
+						if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+
+						if(checkItem.label=="normal"){
+							//Alert.show("checkitem.label:"+checkitem.label);
+							execute_array=exclusions_normal;
+							normalSelect=true;
+							pre_label_var="normal";
+							//break;
+						}
+
+
+						}
+					}
+				}
+					//Alert.show("execute_array1:");
+
+				for (i = 0; i < item.numChildren; i++){
+					checkItem = item.getChildAt(i);
+						//Alert.show("checkitem:"+checkitem.toString());
+						if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
+							//Alert.show("checkitem:"+checkitem.label);
+							if(checkItem.label=="superscript"){
+								if(normalSelect==false)
+								pre_label_var="superscript"
+								if(execute_array==null)
+								execute_array=["subscript","shadow","emboss","extrude"];
+									//break;
+							}
+							if(checkItem.label=="subscript"){
+								if(normalSelect==false)
+								pre_label_var="subscript"
+								if(execute_array==null)
+								execute_array=["superscript","shadow","emboss","extrude"];
 								//break;
 							}
-
-
+							if(checkItem.label=="shadow"){
+								if(normalSelect==false)
+								pre_label_var="shadow"
+								if(execute_array==null)
+								execute_array=["superscript","subscript","emboss","extrude"];
+								//break;
+							}
+							if(checkItem.label=="emboss"){
+								if(normalSelect==false)
+								pre_label_var="emboss"
+								if(execute_array==null)
+								execute_array=["superscript","subscript","shadow","extrude"];
+								//break;
+							}
+							if(checkItem.label=="extrude"){
+								if(normalSelect==false)
+								pre_label_var="extrude"
+								if(execute_array==null)
+								execute_array=["superscript","subscript","shadow","emboss"];
+								//break;
 							}
 						}
-					}
-						//Alert.show("execute_array1:");
+				}
 
-					for (i = 0; i < item.numChildren; i++){
-						checkItem = item.getChildAt(i);
-							//Alert.show("checkitem:"+checkitem.toString());
-							if(checkItem.hasOwnProperty("selected") && checkItem.selected==true){
-								//Alert.show("checkitem:"+checkitem.label);
-								if(checkItem.label=="superscript"){
-									if(normalSelect==false)
-									pre_label_var="superscript"
-									if(execute_array==null)
-									execute_array=["subscript","shadow","emboss","extrude"];
-										//break;
-								}
-								if(checkItem.label=="subscript"){
-									if(normalSelect==false)
-									pre_label_var="subscript"
-									if(execute_array==null)
-									execute_array=["superscript","shadow","emboss","extrude"];
-									//break;
-								}
-								if(checkItem.label=="shadow"){
-									if(normalSelect==false)
-									pre_label_var="shadow"
-									if(execute_array==null)
-									execute_array=["superscript","subscript","emboss","extrude"];
-									//break;
-								}
-								if(checkItem.label=="emboss"){
-									if(normalSelect==false)
-									pre_label_var="emboss"
-									if(execute_array==null)
-									execute_array=["superscript","subscript","shadow","extrude"];
-									//break;
-								}
-								if(checkItem.label=="extrude"){
-									if(normalSelect==false)
-									pre_label_var="extrude"
-									if(execute_array==null)
-									execute_array=["superscript","subscript","shadow","emboss"];
-									//break;
-								}
-							}
-					}
-
-						//Alert.show("execute_array2:");
+					//Alert.show("execute_array2:");
 
 
 
 
-					for (var j:int = 0; j < item.numChildren; j++){
-						var checkitem_child:Object = item.getChildAt(j);
-							if(checkitem_child.hasOwnProperty("selected") ){
-								if(execute_array!=null && execute_array.length>0){
-									if(execute_array.indexOf(checkitem_child.label)>=0){
-										checkitem_child.selected=false;
-										checkitem_child.enabled=true;
+				for (var j:int = 0; j < item.numChildren; j++){
+					var checkitem_child:Object = item.getChildAt(j);
+						if(checkitem_child.hasOwnProperty("selected") ){
+							if(execute_array!=null && execute_array.length>0){
+								if(execute_array.indexOf(checkitem_child.label)>=0){
+									checkitem_child.selected=false;
+									checkitem_child.enabled=true;
 
-									}else{
-										//checkitem_child.selected=true;
-										checkitem_child.enabled=true;
-									}
 								}else{
+									//checkitem_child.selected=true;
 									checkitem_child.enabled=true;
 								}
+							}else{
+								checkitem_child.enabled=true;
+							}
 
-								if(normalSelect==false){
-									if(checkitem_child.label=="normal"){
-										checkitem_child.selected=false;
-									}
+							if(normalSelect==false){
+								if(checkitem_child.label=="normal"){
+									checkitem_child.selected=false;
 								}
 							}
-					}
-				}
-			}
-
-			private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","fullUpdate","noneUpdate"]);
-			private function alignSetting(val:String){
-				for (var i:int = 0; i < buttonsName.length; i++)
-                {
-                    var item:Object = buttonsName.getItemAt(i);
-					var elem:Button = this[item];
-					var skin:DominoAlignButtonSkin=null;
-					if(elem!=null){
-						skin = DominoAlignButtonSkin(elem.skin);
-							
-					}
-					if(item==val){
-						skin.state= "down";
-						skin.setCurrentStateButton("down");
-					}else{
-						skin.state= "up";
-						skin.setCurrentStateButton("up");
-					}
-
-				
-				}
-				
-				//setting the align value into text property
-				 this.selectedItem["alignPardef"] = val.replace("Update","");
-
-			}
-			private var firstLineButtonsName:ArrayList=new ArrayList(["firstCenter","firstLeft","firstRight"]);
-			private function firstLineSetting(val:String,event:String){
-				for (var i:int = 0; i < firstLineButtonsName.length; i++)
-                {
-                    var item:Object = firstLineButtonsName.getItemAt(i);
-					var elem:Button = this[item];
-					var skin:DominoAlignButtonSkin=null;
-					if(elem!=null){
-						skin = DominoAlignButtonSkin(elem.skin);
-							
-					}
-					if(item==val){
-						skin.state= "down";
-						skin.setCurrentStateButton("down");
-						
-					}else{
-						skin.state= "up";
-						skin.setCurrentStateButton("up");
-					}
-					
-
-				
-				}
-			
-				if(val=="firstRight"){
-						indentInput.visible = indentInput.includeInLayout = true;
-						outdentInput.visible = outdentInput.includeInLayout = false;
-						if(event=="click"){
-							this.selectedItem["indent"]="0.25";
 						}
-			
-				}else if(val=="firstLeft"){
-					
-					indentInput.visible = indentInput.includeInLayout = false;
-					outdentInput.visible = outdentInput.includeInLayout = true;
-					if(event=="click"){
-							this.selectedItem["outdent"]="0.25";
-						}
-				}else{
-					//this is center 
-					if(event=="click"){
-						this.selectedItem["indent"]="0";
-						this.selectedItem["outdent"]="0";
-					}
-					
-					//indentInput.value = outdentInput.value = "0";
-
-					indentInput.visible = indentInput.includeInLayout = false;
-					outdentInput.visible = outdentInput.includeInLayout = false;
 				}
-					
 			}
+		}
 
-			private function initializeAlign():void
+		private var buttonsName:ArrayList=new ArrayList(["leftUpdate","rightUpdate","centerUpdate","fullUpdate","noneUpdate"]);
+		private function alignSetting(val:String):void
+		{
+			for (var i:int = 0; i < buttonsName.length; i++)
 			{
-				if(this.selectedItem!=null ){
-					if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
-						var button:String = this.selectedItem["alignPardef"]+"Update";
-						
-						alignSetting(button);
+				var item:Object = buttonsName.getItemAt(i);
+				var elem:Button = this[item];
+				var skin:DominoAlignButtonSkin=null;
+				if(elem!=null){
+					skin = DominoAlignButtonSkin(elem.skin);
 
-					}
-					var setbutton:String="firstCenter";
-					
-					if(this.selectedItem!=null){
-						if( Object(selectedItem).hasOwnProperty("outdent")&& this.selectedItem["outdent"]!=null && this.selectedItem["outdent"].toString()!="1"){
-							setbutton = "firstLeft";
-						}else if(Object(selectedItem).hasOwnProperty("indent")&& this.selectedItem["indent"]!=null && this.selectedItem["indent"].toString()!="1"){
-							setbutton = "firstRight";
-						}else{
-							setbutton = "firstCenter";
-						}
-					}
-					
-
-					//Alert.show("setbutton2:"+setbutton);
-					firstLineSetting(setbutton,"inital");
-				
+				}
+				if(item==val){
+					skin.state= "down";
+					skin.setCurrentStateButton("down");
+				}else{
+					skin.state= "up";
+					skin.setCurrentStateButton("up");
 				}
 
 
-				//firstLineSetting
 			}
 
-	
-       
+			//setting the align value into text property
+			 this.selectedItem["alignPardef"] = val.replace("Update","");
+
+		}
+		private var firstLineButtonsName:ArrayList = new ArrayList(["firstCenter","firstLeft","firstRight"]);
+		private function firstLineSetting(val:String, event:String):void
+		{
+			for (var i:int = 0; i < firstLineButtonsName.length; i++)
+			{
+				var item:Object = firstLineButtonsName.getItemAt(i);
+				var elem:Button = this[item];
+				var skin:DominoAlignButtonSkin=null;
+				if(elem!=null){
+					skin = DominoAlignButtonSkin(elem.skin);
+
+				}
+				if(item==val){
+					skin.state= "down";
+					skin.setCurrentStateButton("down");
+
+				}else{
+					skin.state= "up";
+					skin.setCurrentStateButton("up");
+				}
+			}
+
+			if(val=="firstRight"){
+					indentInput.visible = indentInput.includeInLayout = true;
+					outdentInput.visible = outdentInput.includeInLayout = false;
+					if(event=="click"){
+						this.selectedItem["indent"]="0.25";
+					}
+
+			}else if(val=="firstLeft"){
+
+				indentInput.visible = indentInput.includeInLayout = false;
+				outdentInput.visible = outdentInput.includeInLayout = true;
+				if(event=="click"){
+						this.selectedItem["outdent"]="0.25";
+					}
+			}else{
+				//this is center
+				if(event=="click"){
+					this.selectedItem["indent"]="0";
+					this.selectedItem["outdent"]="0";
+				}
+
+				//indentInput.value = outdentInput.value = "0";
+
+				indentInput.visible = indentInput.includeInLayout = false;
+				outdentInput.visible = outdentInput.includeInLayout = false;
+			}
+
+		}
+
+		private function initializeAlign():void
+		{
+			if(this.selectedItem!=null ){
+				if(Object(selectedItem).hasOwnProperty("alignPardef")&& this.selectedItem["alignPardef"]!=null){
+					var button:String = this.selectedItem["alignPardef"]+"Update";
+
+					alignSetting(button);
+
+				}
+				var setbutton:String="firstCenter";
+
+				if(this.selectedItem!=null){
+					if( Object(selectedItem).hasOwnProperty("outdent")&& this.selectedItem["outdent"]!=null && this.selectedItem["outdent"].toString()!="1"){
+						setbutton = "firstLeft";
+					}else if(Object(selectedItem).hasOwnProperty("indent")&& this.selectedItem["indent"]!=null && this.selectedItem["indent"].toString()!="1"){
+						setbutton = "firstRight";
+					}else{
+						setbutton = "firstCenter";
+					}
+				}
+
+
+				//Alert.show("setbutton2:"+setbutton);
+				firstLineSetting(setbutton,"inital");
+
+			}
+		}
 		]]>
 	</fx:Script>
 	<suportclasses:layout>

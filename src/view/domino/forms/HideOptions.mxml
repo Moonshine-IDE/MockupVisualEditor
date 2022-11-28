@@ -36,14 +36,10 @@
 									  xmlns:s="library://ns.adobe.com/flex/spark"
 									  xmlns:suportclasses="view.suportClasses.*"
 									  skinClass="skins.FormSkin"
-								      xmlns:forms="view.forms.*"
-                                      creationComplete="onHideoptionsCreationComplete(event)"
-                                       >
-
+                                      creationComplete="onHideoptionsCreationComplete(event)">
 	<suportclasses:layout>
 		<s:FormLayout />
 	</suportclasses:layout>
-   
 
     <s:BorderContainer 
              cornerRadius="0"
@@ -146,20 +142,11 @@
 
 
 	<fx:Script><![CDATA[
-		import interfaces.IComponentPercentSizeOutput;
-		import interfaces.IComponentSizeOutput;
-
 		import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
-        import mx.core.UIComponent;
         import mx.events.FlexEvent;
 
-        import utils.GenericUtils;
-
-        import view.interfaces.IIdAttribute;
-        //import view.interfaces.INameAttribute;
         import view.interfaces.ISurfaceComponent;
-        import mx.controls.Alert;
         import mx.collections.ArrayList;
 
         private var _selectItemList:ArrayList = new ArrayList();
@@ -322,10 +309,13 @@
                
 
             }else{
-                if(_selectItemList){
-                    for (var k:int = 0; k < _selectItemList.length; k++){
-                        if(_selectItemList.getItemAt(k).toString()==event.target.id){
-                           _selectItemList.removeItemAt(k);
+                if(_selectItemList)
+                {
+                    for (var i:int = 0; i < _selectItemList.length; i++)
+                    {
+                        if(_selectItemList.getItemAt(i).toString()==event.target.id)
+                        {
+                           _selectItemList.removeItemAt(i);
                         }
                     }
                 }
@@ -335,8 +325,8 @@
             //event.target.id
             
 
-            for (var k:int = 0; k < _selectItemList.length; k++){
-                _hideStr=_hideStr+_selectItemList.getItemAt(k).toString()+" ";
+            for (var j:int = 0; j < _selectItemList.length; j++){
+                _hideStr=_hideStr+_selectItemList.getItemAt(j).toString()+" ";
             }
 
             if(_hideStr){

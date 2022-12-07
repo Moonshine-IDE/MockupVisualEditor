@@ -34,7 +34,9 @@
 -->
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:s="library://ns.adobe.com/flex/spark"
-		 xmlns:view="view.*" xmlns:collapsiblehdivider="components.collapsibleHDivider.*"
+		 xmlns:view="view.*" 
+		 xmlns:dominoaction="view.domino.action.*"
+		 xmlns:collapsiblehdivider="components.collapsibleHDivider.*"
 		 creationComplete="onVisualEditorCreationComplete(event)">
 	<!--This style import is only for SWC ant compilation - remove it in case of app compilation -->
 	<fx:Style source="defaults.css"/>
@@ -67,6 +69,13 @@
 									  editingSurface="{editingSurface}"
 									  visible="{(visualEditorType == 'primeFaces'|| visualEditorType == 'domino')  &amp;&amp; bbPropertyPanel.selectedIndex==1 }"
 									  includeInLayout="{(visualEditorType == 'primeFaces'|| visualEditorType == 'domino')  &amp;&amp; bbPropertyPanel.selectedIndex==1}"/>
+
+
+			<dominoaction:DominoActionOrganizer id="dominoActionOrganizer"
+									  width="100%" top="0" bottom="20"
+									  editingSurface="{editingSurface}"
+									  visible="{(visualEditorType == 'domino')  &amp;&amp; bbPropertyPanel.selectedIndex==2 }"
+									  includeInLayout="{( visualEditorType == 'domino')  &amp;&amp; bbPropertyPanel.selectedIndex==2}"/>						  
 			<s:ButtonBar id="bbPropertyPanel" 
 						 bottom="0" right="0" selectedIndex="0"
 						 skinClass="skins.VisualEditorButtonBarSkin" requireSelection="true"
@@ -75,6 +84,8 @@
 				<s:ArrayList>
 					<fx:Object icon="@Embed('/assets/list.png')" label="" toolTip="Properties"/>
 					<fx:Object icon="@Embed('/assets/organize.png')" label="" toolTip="Organize"/>
+					<fx:Object icon="@Embed('/assets/cog-solid.png')" label="" toolTip="Actions"/>
+					
 				</s:ArrayList>
 			</s:ButtonBar>
 		</s:Group>

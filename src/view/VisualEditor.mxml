@@ -61,7 +61,7 @@
 			<view:PropertyEditorContainer id="propertyEditor"
 										  percentWidth="100" top="0" bottom="20"
 										  selectedItem="{editingSurface.selectedItem}"
-
+										 
 										  subformsProEditor="{editingSurface.subFormList}"
 										  visible="{bbPropertyPanel.selectedIndex==0}"/>
 			<view:ComponentsOrganizer id="componentsOrganizer"
@@ -73,14 +73,16 @@
 
 			<dominoaction:DominoActionOrganizer id="dominoActionOrganizer"
 									  width="100%" top="0" bottom="20"
-									  editingSurface="{editingSurface}"
+									 
+									 
 									  visible="{(visualEditorType == 'domino')  &amp;&amp; bbPropertyPanel.selectedIndex==2 }"
 									  includeInLayout="{( visualEditorType == 'domino')  &amp;&amp; bbPropertyPanel.selectedIndex==2}"/>						  
 			<s:ButtonBar id="bbPropertyPanel" 
 						 bottom="0" right="0" selectedIndex="0"
 						 skinClass="skins.VisualEditorButtonBarSkin" requireSelection="true"
 						 includeInLayout="{visualEditorType == 'primeFaces'|| visualEditorType == 'domino'}"
-						 visible="{visualEditorType == 'primeFaces'|| visualEditorType == 'domino'}">
+						 visible="{visualEditorType == 'primeFaces'|| visualEditorType == 'domino'}"
+						 change="initalDominoElemets(event)">
 				<s:ArrayList>
 					<fx:Object icon="@Embed('/assets/list.png')" label="" toolTip="Properties"/>
 					<fx:Object icon="@Embed('/assets/organize.png')" label="" toolTip="Organize"/>
@@ -100,6 +102,10 @@
 		
 		import view.interfaces.IVisualEditorLibraryBridge;
 		import view.suportClasses.events.VisualEditorEvent;
+
+		import spark.events.IndexChangeEvent;
+
+
 
 		private var copyPasteManager:CopyPasteVisualEditorManager;
 
@@ -294,11 +300,23 @@
 		private function onVisualEditorCreationComplete(event:FlexEvent):void
 		{
 			this.copyPasteManager = new CopyPasteVisualEditorManager(this);
-
+			
 			CONFIG::MOONSHINE
 			{
 				toolbar.visible = toolbar.includeInLayout = false;
 				toolbar.height = 1;
+			}
+		}
+
+		private function initalDominoElemets(event: IndexChangeEvent):void
+		{
+			if(event.newIndex==2){
+				if(MoonshineBridgeUtils.moonshineBridge){
+					dominoActionOrganizer.dominoActionsProEditor=MoonshineBridgeUtils.moonshineBridge.getDominoActionList();
+				
+				}else{
+					Alert.show("MoonshineBridgeUtils.moonshineBridge is null")
+				}
 			}
 		}
 		]]></fx:Script>

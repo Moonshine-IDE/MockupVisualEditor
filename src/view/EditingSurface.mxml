@@ -117,9 +117,20 @@
         private var _visualEditorFileType:String;
         private var _visualEditorFileName:String;
         private var _subFormList:ArrayList = new ArrayList();
-
+        private var _dominoActionsList:ArrayList = new ArrayList();
         private var _isDominoProject:Boolean = false;
         private var _isRoyaleProject:Boolean = false;
+
+
+        public function set dominoActionsList(actions:ArrayList):void{
+           
+            _dominoActionsList=actions;
+        }
+        [Bindable("change")]
+        public function get dominoActionsList():ArrayList{
+            
+            return _dominoActionsList;
+        }
 
        
         public function set subFormList(subforms:ArrayList):void{

@@ -36,7 +36,9 @@
 	xmlns:s="library://ns.adobe.com/flex/spark"
     xmlns:suportClasses="view.suportClasses.*" 
 	xmlns:mx="library://ns.adobe.com/flex/mx"
-    skinClass="skins.PropertyEditorContainerSkin">
+    skinClass="skins.PropertyEditorContainerSkin"
+    top="10" left="10" right="01"
+    creationComplete="onCreationComplete(event)">
 
 	<fx:Metadata>
 		[Event(name="change",type="flash.events.Event")]
@@ -61,16 +63,16 @@
 
    
     <s:Label text="Other Actions"  left="0" right="0"/>
-    <mx:ComboBox 
-            id="cb" 
-            dataProvider="{cards}" 
-            width="150" 
-            
-            selectedIndex="0" 
-            rowCount="5"
-            labelField="ingredient"/>  
     
     
+     <s:List  allowMultipleSelection="true" dragEnabled="true"
+    dragMoveEnabled="true"
+    dropEnabled="true"
+    useVirtualLayout="true"
+    id="actionLists"
+    doubleClickEnabled="true"
+    doubleClick="actionHandler(event);"
+    dataProvider="{this._dominoActionsProEditor}" />
 
 	<s:Group id="editorHolder" percentWidth="100" />
   
@@ -115,10 +117,7 @@
 
 
         [Bindable]
-            public var cards:ArrayCollection = new ArrayCollection(
-                [ {label:"Visa", data:1}, 
-                  {label:"MasterCard", data:2}, 
-                  {label:"American Express", data:3} ]);
+        public var actions:ArrayList = new ArrayList();
 
 
 
@@ -132,6 +131,46 @@
                 {ingredient:"ACTION6", category:"Spice"}
             ]                
         );
+
+        [Bindable]
+        private var _dominoActionsProEditor:ArrayList = new ArrayList();
+
+        [Bindable("change")]
+        public function get dominoActionsProEditor():ArrayList
+        {
+		
+
+            return this._dominoActionsProEditor;
+        }
+
+        public function set dominoActionsProEditor(value:ArrayList):void
+        {	
+			this._dominoActionsProEditor = value;
+		}
+
+        public function refreshActionList():void
+        {
+            
+        }
+
+     
+
+
+        private function onCreationComplete(event:Event):void
+        {
+
+           
+            //Alert.show("this._dominoActionsProEditor :"+this._dominoActionsProEditor.length );
+             
+            
+        }
+
+
+        private function actionHandler(event:MouseEvent):void{
+            Alert.show("My Var: " + event.currentTarget.selectedItem.value);
+        }
+
+
 
          private function myLabelToItemFunction(input:String):*
             {
@@ -154,7 +193,10 @@
 
 
 		public function newAction(event:MouseEvent){
-            MoonshineBridgeUtils.moonshineBridge.openCreateDominoActionPanel(event);
+            if(MoonshineBridgeUtils.moonshineBridge){
+                  MoonshineBridgeUtils.moonshineBridge.openCreateDominoActionPanel(event);
+            }
+             
         }
 
         public function newGroup(){
@@ -185,9 +227,7 @@
             }
             if (this._selectedItem !== null)
             {
-				if((this._selectedItem as Object).hasOwnProperty("subformsList")){
-					//	this._selectedItem["subformsList"] = this.subformsProEditor;
-				}
+				
                 this.currentState = "selection";
                 var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;
                 if (PropertyEditorType === null)

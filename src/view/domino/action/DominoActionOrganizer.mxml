@@ -167,7 +167,7 @@
 
 
         private function actionHandler(event:MouseEvent):void{
-            Alert.show("My Var: " + event.currentTarget.selectedItem.value);
+            MoonshineBridgeUtils.moonshineBridge.openDominoActionFile(event.currentTarget.selectedItem.description);
         }
 
 

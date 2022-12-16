@@ -47,5 +47,6 @@ package view.interfaces
 		function getRelativeFilePath():String;
 		function openCreateDominoActionPanel(event:MouseEvent):void;
 		function getDominoActionList():ArrayList;
+		function openDominoActionFile(path:String):void;
 	}
 }

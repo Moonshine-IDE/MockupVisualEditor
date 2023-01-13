@@ -38,6 +38,7 @@ package utils
     import view.primeFaces.surfaceComponents.components.MainApplication;
 	import mx.controls.Alert;
 	import global.domino.DominoGlobals;
+	import flash.filesystem.File;
     public class MainApplicationCodeUtils
 	{
 
@@ -657,7 +658,11 @@ package utils
 				// xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
 				// xml_str=xml_str+"</noteinfo>"
 				if(windowsTitle!=null  && windowsTitle!=""){
-					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
+					var separatorIndex:int=windowsTitle.lastIndexOf(File.separator);
+					if(separatorIndex>0){
+						windowsTitle = windowsTitle.substring(separatorIndex + 1);
+					}
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>@Text('"+windowsTitle+"')</formula></item>"
 				}
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"

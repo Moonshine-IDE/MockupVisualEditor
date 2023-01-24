@@ -62,6 +62,7 @@ package view.domino.surfaceComponents.components
     import view.domino.surfaceComponents.components.DominoLabel;
     import interfaces.dominoComponents.IDominoLabel;
     import mx.collections.ArrayList;
+    import mx.controls.Alert;
     
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
@@ -145,7 +146,8 @@ package view.domino.surfaceComponents.components
                 "gapChanged",
                 "verticalAlignChanged",
                 "horizontalAlignChanged", 
-                "subFormNameChanged"
+                "subFormNameChanged",
+                "subFormFormulaChanged"
             ];
 
             //add new label
@@ -582,6 +584,32 @@ package view.domino.surfaceComponents.components
             }
         }
 
+
+
+        private var _subFormFormula:String = "none";
+        [Bindable(event="subFormFormulaChanged")]
+        public function get subFormFormula():String
+        {
+            return _subFormFormula;
+        }
+        public function set subFormFormula(value:String):void
+        {
+            if (_subFormFormula != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "subFormFormula", _subFormFormula, value);
+				
+                _subFormFormula = value;
+
+                dispatchEvent(new Event("subFormFormulaChanged"));
+
+               
+            }
+        }
+
+
+
+
+
         public function toXML():XML
         {
             mainXML = new XML("<" + ELEMENT_NAME + "/>");
@@ -620,6 +648,23 @@ package view.domino.surfaceComponents.components
                 this.subFormName=xml.@subFormName;
             }
 
+            //some times , the subfrom name defined in the formual , so we need handle it in here
+           
+             var children:XMLList = xml.children();
+            if ( children.length() > 0 ) {
+               
+                if(children[0]){
+                     if(children[0].name()=="code"){
+                     var childrenFormula:XMLList = children[0].children();
+                        if(childrenFormula[0]){
+                            if(childrenFormula[0].name()=="formula"){
+                                this.subFormFormula=childrenFormula[0].text();
+                            }
+                        }
+                    }
+                } 
+            }
+
            
 			
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
@@ -635,7 +680,7 @@ package view.domino.surfaceComponents.components
         {
 			component.isSelected = this.isSelected;
 			(component as components.domino.DominoSubForm).subFormName = this.subFormName;
-			
+			(component as components.domino.DominoSubForm).subFormFormula = this.subFormFormula;
            
             var xml:XML = component.toCode();
 	

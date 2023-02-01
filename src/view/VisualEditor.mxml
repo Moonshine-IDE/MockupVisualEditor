@@ -212,6 +212,7 @@
 
 				if (!tempFileMoonshine.exists)
 				{
+					this.editingSurface.visualEditorFileName=tempFileMoonshine.name.split(".")[0];
 					var xml:XML = this.editingSurface.toXML();
 					var tempFileStreamMoonshine:FileStream = new FileStream();
 					tempFileStreamMoonshine.open(tempFileMoonshine, FileMode.WRITE);

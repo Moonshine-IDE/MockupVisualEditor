@@ -38,6 +38,7 @@ package utils
     import view.primeFaces.surfaceComponents.components.MainApplication;
 	import mx.controls.Alert;
 	import global.domino.DominoGlobals;
+	import utils.StringHelper;
     public class MainApplicationCodeUtils
 	{
 
@@ -70,8 +71,16 @@ package utils
 		
             if (element === null && !isDominoMainApp)
 			{
+				//StringHelper
+				var fileName:String =surface.visualEditorFileName;
+				if(fileName){
+					fileName=StringHelper.base64Encode(fileName);
+				}else{
+					fileName=StringHelper.base64Encode("Default Form");
+				}
 				
-				var container:XML = new XML("<MainApplication id='mainApplicationWindow' x='0' y='0' width='700' height='450'  />");
+				
+				var container:XML = new XML("<MainApplication id='mainApplicationWindow' x='0' y='0' width='700' height='450'  windowsTitle='"+fileName+"' />");
 
 				return container;
 			}

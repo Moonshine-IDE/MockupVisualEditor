@@ -105,6 +105,8 @@ package view.domino.surfaceComponents.components
             Globals.MainApplicationWidth=super.width;
 
             this.direction = ContainerDirection.VERTICAL_LAYOUT;
+            //default set to form name
+
 		}
 
         override public function get propertyEditorClass():Class
@@ -414,6 +416,8 @@ package view.domino.surfaceComponents.components
             if(this.windowsTitle){
            
                  mainXML.@windowsTitle=StringHelper.base64Encode(this.windowsTitle);
+            }else{
+                mainXML.@windowsTitle=this.title;
             }
 
             if(this.webqueryopen){

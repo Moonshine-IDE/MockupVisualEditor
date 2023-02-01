@@ -55,7 +55,7 @@ package utils
 
             if (visualEditorType == VisualEditorType.DOMINO)
             {
-                container = surface.numElements == 0 ? MainApplicationCodeUtils.appendDominoXMLMainTag(surface) : null;
+                 container = surface.numElements == 0 ? MainApplicationCodeUtils.appendDominoXMLMainTag(surface) : null;
             }
 
 			var elementCount:int = surface.numElements;

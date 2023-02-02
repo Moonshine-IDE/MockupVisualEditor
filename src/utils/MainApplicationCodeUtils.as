@@ -39,6 +39,7 @@ package utils
 	import mx.controls.Alert;
 	import global.domino.DominoGlobals;
 	import utils.StringHelper;
+	import utils.StringHelperUtils;
     public class MainApplicationCodeUtils
 	{
 
@@ -665,8 +666,9 @@ package utils
 				// xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
 				// xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
 				// xml_str=xml_str+"</noteinfo>"
+				//StringHelperUtils.fixXmlSpecailCharacter(decodeBase64)
 				if(windowsTitle!=null  && windowsTitle!=""){
-					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"</formula></item>"
 				}
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"

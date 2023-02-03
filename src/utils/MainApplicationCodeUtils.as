@@ -75,7 +75,7 @@ package utils
 				//StringHelper
 				var fileName:String =surface.visualEditorFileName;
 				if(fileName){
-					fileName=StringHelper.base64Encode(fileName);
+					fileName=StringHelper.base64Encode("\""+fileName+"\"");
 				}else{
 					fileName=StringHelper.base64Encode("Default Form");
 				}

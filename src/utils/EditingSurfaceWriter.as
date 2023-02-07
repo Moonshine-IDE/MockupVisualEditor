@@ -155,16 +155,19 @@ package utils
 
                 var xml:XML;
                 var mainContainer:XML;
+               
                 if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
                     xml= MainApplicationCodeUtils.getDominoPageMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
-                } if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){
+                }else if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){
                     xml= MainApplicationCodeUtils.getDominoSubformMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
                 }else{
-                     xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 }
+
+
 
 
                 var container:IVisualElementContainer = surface;
@@ -232,6 +235,8 @@ package utils
                 MainApplicationCodeUtils.fixDominField(xml);
                 MainApplicationCodeUtils.fixPardefTableError(xml);
                 MainApplicationCodeUtils.fixPardefAlign(xml);
+
+               
 				return xml;
             }
 

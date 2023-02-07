@@ -236,7 +236,6 @@
              */
             public function toDominoCode(projectName:String):XML
             {
-                //Alert.show("EditingSurface:"+_visualEditorFileType);
                 if (projectName == "$ProjectName" && visualEditorFileName)
                 {
                     projectName = visualEditorFileName;

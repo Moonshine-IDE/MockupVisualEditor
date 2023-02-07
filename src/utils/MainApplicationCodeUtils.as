@@ -656,7 +656,7 @@ package utils
 		{
 				var dat:Date = new Date();
 				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-				xml_str=xml_str+"<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4' replicaid='4825808B00336E81'>";
+				xml_str=xml_str+"<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4' replicaid='4825808B00336E82'>";
 				xml_str=xml_str+"<!DOCTYPE note>";
 				// xml_str=xml_str+"<noteinfo noteid='2116' unid='27C118EDE31483CB86256C6900644875' sequence='8'>";
 				// xml_str=xml_str+"<created><datetime>"+dat+"</datetime></created> ";

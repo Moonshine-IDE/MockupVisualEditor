@@ -60,6 +60,8 @@ package view.domino.surfaceComponents.components
 
     import view.global.Globals;
 
+    import mx.controls.Alert;
+
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
     [Exclude(name="propertyEditorClass", kind="property")]
@@ -128,6 +130,7 @@ package view.domino.surfaceComponents.components
 			this.percentWidth = 100;
             this.minWidth = Globals.MainApplicationWidth;
             this.minHeight = 40;
+
 
             _propertiesChangedEvents = [
                 "widthChanged",

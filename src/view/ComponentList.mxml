@@ -174,7 +174,7 @@
 						new ComponentListItem("Table", DominoTable),
 						new ComponentListItem("Div", Div),
 						new ComponentListItem("ComputedText", DominoComputedText),
-						new ComponentListItem("Paragraph", DominoParagraph),
+						new ComponentListItem("Paragraph", DominoParagraph, {maxWidth: 120}),
 						new ComponentListItem("Section", DominoSection),
 						new ComponentListItem("TabView", DominoTabView)
 							

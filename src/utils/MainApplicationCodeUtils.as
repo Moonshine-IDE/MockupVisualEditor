@@ -528,7 +528,7 @@ package utils
 		{	   
 			return getDominoMainContainer(title,windowsTitle);	
 		}
-		public static function getDominoPageMainContainer(pageName:String):XML
+		public static function getDominoPageMainContainer(pageName:String,windowsTitle:String):XML
 		{
 			var dat:Date = new Date();
 			var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
@@ -539,6 +539,9 @@ package utils
 			xml_str=xml_str+"replicaid='85257C8A00383F9C' publicaccess='false' renderpassthrough='true'>";
 			xml_str=xml_str+"<body>" ;
 			xml_str=xml_str+"</body>";
+			if(windowsTitle!=null  && windowsTitle!=""){
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"</formula></item>"
+			}
 			xml_str=xml_str+"<item name='$$ScriptName' summary='false' sign='true'><text>"+pageName+"</text></item>";
 			xml_str=xml_str+"</page>";
 			var xml:XML = new XML(xml_str)

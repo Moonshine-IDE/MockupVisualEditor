@@ -49,7 +49,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IGetChildrenSurfaceComponent;
-    import view.domino.propertyEditors.SubFormPropertyEditor;
+    import view.domino.propertyEditors.DominoActionPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
@@ -453,7 +453,7 @@ package view.domino.surfaceComponents.components
 
         public function get propertyEditorClass():Class
         {
-            return SubFormPropertyEditor;
+            return DominoActionPropertyEditor;
         }
 		
 		private var _isUpdating:Boolean;

@@ -215,6 +215,11 @@
 					var loadFile:File = new File(filePath);
 					this.editingSurface.visualEditorFileName=loadFile.name.split(".")[0];
 				}
+				if(filePath.indexOf("field")>0&& filePath.indexOf("main")>0&& filePath.indexOf("webapp")>0){
+				
+					this.componentList.shareFieldList();
+					this.editingSurface.visualEditorFileType="shareField";
+				}
 
 				if(filePath.indexOf("subforms")>0){
 					this.editingSurface.visualEditorFileType="subform";

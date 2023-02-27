@@ -183,6 +183,15 @@
 				collection.refresh()
 			}
 
+			public function shareFieldList():void
+			{
+				collection = new ArrayCollection([
+							new ComponentListItem("Input", DominoInputText)
+							
+						]);
+				collection.refresh()
+			}
+
 			private function filterSearch():void
 			{
 				// probable termination

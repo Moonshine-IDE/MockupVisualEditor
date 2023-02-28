@@ -158,14 +158,16 @@ package utils
                 if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
                     xml= MainApplicationCodeUtils.getDominoPageMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
-                } if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){
+                   
+                }else if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){
                     xml= MainApplicationCodeUtils.getDominoSubformMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
                 }else{
-                     xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 }
 
+               
 
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)
@@ -177,6 +179,8 @@ package utils
     
                 elementCount = surface.numElements;
                 container = surface;
+
+              
 
               //------------get all field ---------------
             
@@ -232,7 +236,29 @@ package utils
                 MainApplicationCodeUtils.fixDominField(xml);
                 MainApplicationCodeUtils.fixPardefTableError(xml);
                 MainApplicationCodeUtils.fixPardefAlign(xml);
-				return xml;
+				
+
+                  // if this is empty page , we need add some default element , then it can work fine with Notes client 
+                if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
+                  if(elementCount<2){
+                    var firstChildList:XMLList= xml..richtext;
+                     if(firstChildList!=null){
+                            var firstChild:XML=firstChildList[0];
+                            if(firstChild!=null){
+                                var firstChildChildList:XMLList=firstChild.children();
+
+                                if(firstChildChildList.length()==0){
+                                    firstChild.appendChild(new XML("<pardef id='1'/>"));
+                                    firstChild.appendChild(new XML("<par def='1'/>"));
+                                    firstChild.appendChild(new XML("<par def='1'>NOTE: This is a template for domino page.  DO NOT MODIFY THIS BY HAND.</par>"));
+                                }
+                            }
+                    }
+                   
+                  }
+                }
+                
+                 return xml;
             }
 
              public static function aottoDominoCodeCovert(surfaceContainer:IVisualElementContainer):XML

@@ -98,6 +98,7 @@
         import view.suportClasses.events.SurfaceComponentEvent;
 
         import view.domino.surfaceComponents.components.DominoTable;
+        import view.domino.surfaceComponents.components.DominoInputText;
 
         import mx.controls.Alert;
         import mx.collections.ArrayList;
@@ -120,6 +121,8 @@
         private var _dominoActionsList:ArrayList = new ArrayList();
         private var _isDominoProject:Boolean = false;
         private var _isRoyaleProject:Boolean = false;
+
+        private var _isContainField:Boolean = false;
 
 
         public function set dominoActionsList(actions:ArrayList):void{
@@ -303,6 +306,14 @@
         public function fromXML(xml:XML):void
         {
             this.deleteAll();
+            var fieldList:XMLList=xml.MainApplication.Field;
+            
+            if(fieldList.length()>0){
+                _isContainField=true;
+            }else{
+                _isContainField=false;
+            }
+            
             EditingSurfaceReader.fromXML(this, xml, _visualEditorType);
             _wasLoaded = true;
             if (!isVisualEditorFlex) this.callLater(organizer.loadFirstData, [this]);
@@ -393,6 +404,15 @@
             // once an item deletes stage loose focus to
             // listen any keypress event, i.e. Ctrl+Z/Y
             this.setFocus();
+
+            //if it is share field , let the share field editor can edit enable.
+            if(_visualEditorFileType=="shareField"){
+                if(item is DominoInputText){
+                    if(_isContainField==true){
+                        _isContainField=false;
+                    }
+                }
+            }
         }
 
         private function prepareContainer(container:UIComponent):void
@@ -631,22 +651,40 @@
 
         private function editingSurface_dragEnterOrOverHandler(event:DragEvent):void
         {
-            if (event.isDefaultPrevented())
+             if (event.isDefaultPrevented())
             {
                 return;
             }
             var dragSource:DragSource = event.dragSource;
-            if (!dragSource.hasFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT))
-            {
-                return;
+            var execute:Boolean = false;
+            if(_visualEditorFileType=="shareField"){
+                
+                if(_isContainField==false){
+                   execute=true
+                  
+                }else{
+                    Alert.show("Share Field only edit one field in one time!");
+                }
+
+            }else{
+                execute=true;
             }
-            this.showDropOverlay(this);
-            DragManager.acceptDragDrop(this);
-            DragManager.showFeedback(DragManager.MOVE);
-            if (event.dragInitiator !== this)
-            {
-                this.selectedItem = null;
+
+            if(execute==true){
+                if (!dragSource.hasFormat(ComponentListItemRenderer.COMPONENT_DRAG_FORMAT))
+                {
+                    return;
+                }
+                this.showDropOverlay(this);
+                DragManager.acceptDragDrop(this);
+                DragManager.showFeedback(DragManager.MOVE);
+                if (event.dragInitiator !== this)
+                {
+                    this.selectedItem = null;
+                }
+                
             }
+           
         }
 
         private function editingSurface_dragCompleteHandler(event:DragEvent):void
@@ -657,6 +695,7 @@
             {
                 PopUpManager.removePopUp(this._dropOverlay);
             }
+
         }
 
         private function dragDropHandler(event:DragEvent):void
@@ -704,16 +743,31 @@
                 (dropTarget as UIComponent).invalidateDisplayList();
             }
             hasChanged = true;
+
+
+                //if it is share field , let the share field editor can edit enable.
+            if(_visualEditorFileType=="shareField"){
+                if(object is DominoInputText){
+                    if(_isContainField==false){
+                        _isContainField=true;
+                    }
+                }
+                
+            
+            }
         }
 
         private function editingSurface_dragDropHandler(event:DragEvent):void
         {
-            if (event.isDefaultPrevented())
+             if (event.isDefaultPrevented())
             {
                 return;
             }
+            
             event.preventDefault();
             this.dragDropHandler(event);
+            
+            
         }
 
         private function skinnableContainer_dragEnterOrOverHandler(event:DragEvent):void

@@ -80,7 +80,21 @@
             <s:Button id="newActionBtn" label="New Action"  height="25" width="130"  click="newAction(event)"/>
             <s:Button id="newGroupBtn" label="New Group"  height="25" width="130"  click="newGroup()"/>
         </s:HGroup>
-  
+
+
+   <s:Label text="Share Field on Form" left="0" right="0"/> 
+
+   <s:List  allowMultipleSelection="true" dragEnabled="true"
+    dragMoveEnabled="true"
+    dropEnabled="true"
+    useVirtualLayout="true"
+    id="shareFieldLists"
+    doubleClickEnabled="true"
+    doubleClick="actionShareFieldHandler(event);"
+    dataProvider="{this._dominoSharedFieldList}" /> 
+        <s:HGroup>
+            <s:Button id="insterShareFieldBtn" label="Inster Share Field"  height="25" width="130"  click="insertShareField(event)"/>
+        </s:HGroup>
     </s:VGroup>
 
     <fx:Declarations>
@@ -153,6 +167,24 @@
             
         }
 
+
+
+        [Bindable]
+        private var _dominoSharedFieldList:ArrayList = new ArrayList();
+
+        [Bindable("change")]
+        public function get dominoSharedFieldList():ArrayList
+        {
+		
+
+            return this._dominoSharedFieldList;
+        }
+
+        public function set dominoSharedFieldList(value:ArrayList):void
+        {	
+			this._dominoSharedFieldList = value;
+		}
+
      
 
 
@@ -168,6 +200,13 @@
 
         private function actionHandler(event:MouseEvent):void{
             MoonshineBridgeUtils.moonshineBridge.openDominoActionFile(event.currentTarget.selectedItem.description);
+        }
+
+        private function actionShareFieldHandler(event:MouseEvent):void{
+        }
+
+        private function insertShareField(event:MouseEvent):void{
+
         }
 
 

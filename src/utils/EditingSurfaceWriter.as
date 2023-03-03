@@ -156,7 +156,7 @@ package utils
                 var xml:XML;
                 var mainContainer:XML;
                 if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
-                    xml= MainApplicationCodeUtils.getDominoPageMainContainer(title);
+                    xml= MainApplicationCodeUtils.getDominoPageMainContainer(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
                    
                 }else if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){

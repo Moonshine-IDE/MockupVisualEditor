@@ -55,7 +55,7 @@ package utils
 
             if (visualEditorType == VisualEditorType.DOMINO)
             {
-                container = surface.numElements == 0 ? MainApplicationCodeUtils.appendDominoXMLMainTag(surface) : null;
+                 container = surface.numElements == 0 ? MainApplicationCodeUtils.appendDominoXMLMainTag(surface) : null;
             }
 
 			var elementCount:int = surface.numElements;
@@ -155,6 +155,7 @@ package utils
 
                 var xml:XML;
                 var mainContainer:XML;
+               
                 if(surface.visualEditorFileType&& surface.visualEditorFileType=="page"){
                     xml= MainApplicationCodeUtils.getDominoPageMainContainer(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
@@ -168,6 +169,8 @@ package utils
                 }
 
                
+
+
 
                 var container:IVisualElementContainer = surface;
                 if (element is ISurfaceComponent)

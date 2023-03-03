@@ -38,6 +38,8 @@ package utils
     import view.primeFaces.surfaceComponents.components.MainApplication;
 	import mx.controls.Alert;
 	import global.domino.DominoGlobals;
+	import utils.StringHelper;
+	import utils.StringHelperUtils;
     public class MainApplicationCodeUtils
 	{
 
@@ -70,8 +72,16 @@ package utils
 		
             if (element === null && !isDominoMainApp)
 			{
+				//StringHelper
+				var fileName:String =surface.visualEditorFileName;
+				if(fileName){
+					fileName=StringHelper.base64Encode("\""+fileName+"\"");
+				}else{
+					fileName=StringHelper.base64Encode("Default Form");
+				}
 				
-				var container:XML = new XML("<MainApplication id='mainApplicationWindow' x='0' y='0' width='700' height='450'  />");
+				
+				var container:XML = new XML("<MainApplication id='mainApplicationWindow' x='0' y='0' width='700' height='450'  windowsTitle='"+fileName+"' />");
 
 				return container;
 			}
@@ -530,8 +540,8 @@ package utils
 			xml_str=xml_str+"<body>" ;
 			xml_str=xml_str+"</body>";
 			if(windowsTitle!=null  && windowsTitle!=""){
-					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
-				}
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"</formula></item>"
+			}
 			xml_str=xml_str+"<item name='$$ScriptName' summary='false' sign='true'><text>"+pageName+"</text></item>";
 			xml_str=xml_str+"</page>";
 			var xml:XML = new XML(xml_str)
@@ -649,7 +659,7 @@ package utils
 		{
 				var dat:Date = new Date();
 				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-				xml_str=xml_str+"<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4' replicaid='4825808B00336E81'>";
+				xml_str=xml_str+"<note class='form' xmlns='http://www.lotus.com/dxl' version='9.0' maintenanceversion='1.4' replicaid='4825808B00336E82'>";
 				xml_str=xml_str+"<!DOCTYPE note>";
 				// xml_str=xml_str+"<noteinfo noteid='2116' unid='27C118EDE31483CB86256C6900644875' sequence='8'>";
 				// xml_str=xml_str+"<created><datetime>"+dat+"</datetime></created> ";
@@ -659,8 +669,9 @@ package utils
 				// xml_str=xml_str+"<lastaccessed><datetime>"+dat+"</datetime></lastaccessed>";
 				// xml_str=xml_str+"<addedtofile><datetime>"+dat+"</datetime></addedtofile>";
 				// xml_str=xml_str+"</noteinfo>"
+				//StringHelperUtils.fixXmlSpecailCharacter(decodeBase64)
 				if(windowsTitle!=null  && windowsTitle!=""){
-					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+windowsTitle+"</formula></item>"
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"</formula></item>"
 				}
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
 				xml_str=xml_str+"<item name='$Flags'><text/></item>"

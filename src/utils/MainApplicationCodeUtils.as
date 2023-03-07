@@ -540,7 +540,7 @@ package utils
 			xml_str=xml_str+"<body>" ;
 			xml_str=xml_str+"</body>";
 			if(windowsTitle!=null  && windowsTitle!=""){
-					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"</formula></item>"
+					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>@Text('"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"')</formula></item>"
 			}
 			xml_str=xml_str+"<item name='$$ScriptName' summary='false' sign='true'><text>"+pageName+"</text></item>";
 			xml_str=xml_str+"</page>";

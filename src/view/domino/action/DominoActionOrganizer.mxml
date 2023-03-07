@@ -84,7 +84,7 @@
 
    <s:Label text="Share Field on Form" left="0" right="0"/> 
 
-   <s:List  allowMultipleSelection="true" dragEnabled="true"
+   <s:List  allowMultipleSelection="false" dragEnabled="true"
     dragMoveEnabled="true"
     dropEnabled="true"
     useVirtualLayout="true"

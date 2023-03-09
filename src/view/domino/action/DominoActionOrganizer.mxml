@@ -82,19 +82,7 @@
         </s:HGroup>
 
 
-   <s:Label text="Share Field on Form" left="0" right="0"/> 
-
-   <s:List  allowMultipleSelection="false" dragEnabled="true"
-    dragMoveEnabled="true"
-    dropEnabled="true"
-    useVirtualLayout="true"
-    id="shareFieldLists"
-    doubleClickEnabled="true"
-    doubleClick="actionShareFieldHandler(event);"
-    dataProvider="{this._dominoSharedFieldList}" /> 
-        <s:HGroup>
-            <s:Button id="insterShareFieldBtn" label="Inster Share Field"  height="25" width="130"  click="insertShareField(event)"/>
-        </s:HGroup>
+   
     </s:VGroup>
 
     <fx:Declarations>

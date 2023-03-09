@@ -89,6 +89,7 @@
 			import view.domino.surfaceComponents.components.DominoCalendar;
 			import view.domino.surfaceComponents.components.DominoSubForm;
 			import view.domino.surfaceComponents.components.DominoShareAction;
+			import view.domino.surfaceComponents.components.DominoShareField;
 			
 			public var visualEditorType:String;
 			public var visualEditorFileType:String;
@@ -116,7 +117,8 @@
 						new ComponentListItem("TabView", DominoTabView),
 						new ComponentListItem("Calendar", DominoCalendar),
 						new ComponentListItem("SubForm", DominoSubForm),
-						new ComponentListItem("ShareAction", DominoShareAction)
+						new ComponentListItem("ShareAction", DominoShareAction),
+						new ComponentListItem("ShareField", DominoShareField)
 							
 						]);
 					

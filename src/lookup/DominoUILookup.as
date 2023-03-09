@@ -77,6 +77,7 @@ package lookup
 					view.domino.surfaceComponents.components.MainApplication;
 			this.lookup[DominoSubForm.ELEMENT_NAME] = DominoSubForm;
 			this.lookup[DominoShareAction.ELEMENT_NAME] = DominoShareAction;
+			this.lookup[DominoShareField.ELEMENT_NAME] = DominoShareField;
 		}
 	}
 }

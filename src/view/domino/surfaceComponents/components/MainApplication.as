@@ -48,6 +48,7 @@ package view.domino.surfaceComponents.components
     import mx.collections.ArrayList;
     import utils.StringHelper;
 
+
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
     [Exclude(name="commitProperties", kind="method")]
@@ -424,7 +425,6 @@ package view.domino.surfaceComponents.components
              
                  mainXML.@webqueryopen=StringHelper.base64Encode(this.webqueryopen)
             }
-
             mainXML = super.internalToXML();
 
             Globals.MainApplicationWidth=super.width;
@@ -441,6 +441,7 @@ package view.domino.surfaceComponents.components
                 mainXML.@percentHeight = this.heightPercent;
             }
 
+        
             return mainXML;
         }
 

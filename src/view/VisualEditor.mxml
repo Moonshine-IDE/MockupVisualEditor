@@ -61,7 +61,7 @@
 			<view:PropertyEditorContainer id="propertyEditor"
 										  percentWidth="100" top="0" bottom="20"
 										  selectedItem="{editingSurface.selectedItem}"
-										 
+										  sharedFieldsProEditor="{editingSurface.sharedFieldList}"
 										  subformsProEditor="{editingSurface.subFormList}"
 										  visible="{bbPropertyPanel.selectedIndex==0}"/>
 			<view:ComponentsOrganizer id="componentsOrganizer"
@@ -208,6 +208,7 @@
 						dispatchEvent(new VisualEditorEvent(VisualEditorEvent.SAVE_CODE));
 					}
 				}
+				//if(visualEditorType=="domino")
 				
 				if(filePath.indexOf("pages")>0){
 					this.componentList.pageContrlList();
@@ -220,6 +221,8 @@
 					this.editingSurface.visualEditorFileType="shareField";
 				}else if(filePath.indexOf("subforms")>0){
 					this.editingSurface.visualEditorFileType="subform";
+				}else{
+					this.editingSurface.visualEditorFileType="form";
 				}
 
 				

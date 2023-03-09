@@ -59,21 +59,27 @@ package utils
             }
 
 			var elementCount:int = surface.numElements;
-			for(var i:int = 0; i < elementCount; i++)
+         	for(var i:int = 0; i < elementCount; i++)
 			{
 				var element:ISurfaceComponent = surface.getElementAt(i) as ISurfaceComponent;
 				if(element === null)
 				{
 					continue;
 				}
+                
 				var elementXML:XML = element.toXML();
                     xml.appendChild(elementXML);
 			}
+           
+           
 
             if (container)
             {
+               
                 xml.appendChild(container);
             }
+
+         
 			return xml;
 		}
 

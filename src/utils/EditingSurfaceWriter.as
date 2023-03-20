@@ -166,6 +166,8 @@ package utils
                     xml= MainApplicationCodeUtils.getDominoPageMainContainer(title,windowsTitle);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
                    
+                }else if(surface.visualEditorFileType&& surface.visualEditorFileType=="shareField"){
+                   
                 }else if(surface.visualEditorFileType&& surface.visualEditorFileType=="subform"){
                     xml= MainApplicationCodeUtils.getDominoSubformMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);

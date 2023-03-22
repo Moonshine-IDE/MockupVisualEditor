@@ -134,11 +134,11 @@ package utils
         {
 
             var name:String = itemXML.name();
-            if(!(name in EditingSurfaceReader.classLookup))
+            if(!(name in EditingSurfaceReader.classLookup.lookup))
             {
                 throw new Error("Unknown item " + name);
             }
-            var type:Class = EditingSurfaceReader.classLookup[name];
+            var type:Class = EditingSurfaceReader.classLookup.lookup[name];
             var item:ISurfaceComponent = new type() as ISurfaceComponent;
             if(item === null)
             {

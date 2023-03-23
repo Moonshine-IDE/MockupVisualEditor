@@ -49,5 +49,6 @@ package view.interfaces
 		function getDominoActionList():ArrayList;
 		function openDominoActionFile(path:String):void;
 		function getDominoShareFieldList():ArrayList;
+		function updateCurrentVisualEditorStatus():void;
 	}
 }

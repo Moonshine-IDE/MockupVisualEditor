@@ -47,6 +47,8 @@ package utils
     import view.interfaces.ISurfaceComponent;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.events.PropertyEditorChangeEvent;
+    
+    import global.domino.DominoGlobals;
 
     public class CopyPasteVisualEditorManager
     {
@@ -113,6 +115,8 @@ package utils
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
 				targetDuplicateRoot = container;
                 itemFromXML(container, pasteCode);
+                 //update status of Editor
+                MoonshineBridgeUtils.moonshineBridge.updateCurrentVisualEditorStatus();
             }
         }
 
@@ -127,6 +131,7 @@ package utils
                 var code:XML = selectedElement.toXML();
 				targetDuplicateRoot = container;
                 itemFromXML(container, code);
+
             }
         }
 
@@ -144,10 +149,19 @@ package utils
             {
                 throw new Error("Failed to create surface component: " + name);
             }
+
+            //auto update the field name when it past
+            if(name=="Field" || name=="field"){
+                itemXML.@name=itemXML.@name+DominoGlobals.FieldPastNameCount.toString();
+                DominoGlobals.FieldPastNameCount++;
+            }
+
+
             item.fromXML(itemXML, itemFromXML, null, null);
             parent.addElement(IVisualElement(item));
             this.visualEditor.editingSurface.addItem(item);
 			
+          
 			// supplying the change to undo manager
 			// should execute once against target where paste/duplicate happened
 			if (item is IHistorySurfaceComponent && parent === targetDuplicateRoot)

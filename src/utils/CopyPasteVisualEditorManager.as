@@ -49,6 +49,12 @@ package utils
     import view.suportClasses.events.PropertyEditorChangeEvent;
     
     import global.domino.DominoGlobals;
+    import view.primeFaces.supportClasses.Container;
+
+    import interfaces.ILookup;
+
+	import interfaces.ISurface;
+    import converter.DominoConverter;
 
     public class CopyPasteVisualEditorManager
     {
@@ -110,6 +116,11 @@ package utils
             if (!this.visualEditor.editingSurface.selectedItem) return;
 
             var container:IVisualElementContainer = this.visualEditor.editingSurface.selectedItem as IVisualElementContainer;
+            
+            //check if it is itself, otherwise the past element should be as slibing for the source element.
+            if(!(container is view.primeFaces.supportClasses.Container)){
+             container= (this.visualEditor.editingSurface.selectedItem as UIComponent).parent as IVisualElementContainer;
+            }
             if (container)
             {
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
@@ -126,6 +137,8 @@ package utils
             if (!this.visualEditor.editingSurface.selectedItem) return;
 
             var container:IVisualElementContainer = (selectedElement as UIComponent).parent as IVisualElementContainer;
+           
+            
             if (container)
             {
                 var code:XML = selectedElement.toXML();
@@ -135,7 +148,9 @@ package utils
             }
         }
 
-        private function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
+//public function fromXML(xml:XML, childFromXMLCallback:Function, surface:ISurface,  lookup:ILookup):void
+		
+        private function itemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
         {
 
             var name:String = itemXML.name();
@@ -152,12 +167,16 @@ package utils
 
             //auto update the field name when it past
             if(name=="Field" || name=="field"){
-                itemXML.@name=itemXML.@name+DominoGlobals.FieldPastNameCount.toString();
+                itemXML.@name=itemXML.@name+"_"+DominoGlobals.FieldPastNameCount.toString();
                 DominoGlobals.FieldPastNameCount++;
             }
 
-
-            item.fromXML(itemXML, itemFromXML, null, null);
+            if(item is view.primeFaces.supportClasses.Container){
+              item=(DominoConverter.pastFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
+            }else{
+              item.fromXML(itemXML, itemFromXML, null, null);
+            }
+           
             parent.addElement(IVisualElement(item));
             this.visualEditor.editingSurface.addItem(item);
 			

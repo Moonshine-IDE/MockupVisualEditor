@@ -55,6 +55,8 @@ package utils
 
 	import interfaces.ISurface;
     import converter.DominoConverter;
+    import view.domino.surfaceComponents.components.DominoTable;
+    import view.domino.surfaceComponents.components.DominoTabView;
 
     public class CopyPasteVisualEditorManager
     {
@@ -125,7 +127,7 @@ package utils
             {
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
 				targetDuplicateRoot = container;
-                itemFromXML(container, pasteCode);
+                pastItemFromXML(container, pasteCode);
                  //update status of Editor
                 MoonshineBridgeUtils.moonshineBridge.updateCurrentVisualEditorStatus();
             }
@@ -143,14 +145,14 @@ package utils
             {
                 var code:XML = selectedElement.toXML();
 				targetDuplicateRoot = container;
-                itemFromXML(container, code);
+                pastItemFromXML(container, code);
 
             }
         }
 
 //public function fromXML(xml:XML, childFromXMLCallback:Function, surface:ISurface,  lookup:ILookup):void
 		
-        private function itemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
+        private function pastItemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
         {
 
             var name:String = itemXML.name();
@@ -172,13 +174,20 @@ package utils
             }
 
             if(item is view.primeFaces.supportClasses.Container){
-              item=(DominoConverter.pastFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
-            }else{
-              item.fromXML(itemXML, itemFromXML, null, null);
+                item=(DominoConverter.pastFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
+                parent.addElement(IVisualElement(item));
+            } if((item is DominoTable) || (item is DominoTabView)){
+                item=(DominoConverter.itemFromXML(parent, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
+            } 
+            else{
+              item.fromXML(itemXML, pastItemFromXML, this.visualEditor.editingSurface, EditingSurfaceReader.classLookup);
+              parent.addElement(IVisualElement(item));
+          
             }
+
+              this.visualEditor.editingSurface.addItem(item);
            
-            parent.addElement(IVisualElement(item));
-            this.visualEditor.editingSurface.addItem(item);
+            
 			
           
 			// supplying the change to undo manager

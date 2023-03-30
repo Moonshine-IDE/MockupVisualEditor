@@ -57,6 +57,7 @@ package utils
     import converter.DominoConverter;
     import view.domino.surfaceComponents.components.DominoTable;
     import view.domino.surfaceComponents.components.DominoTabView;
+    import view.domino.surfaceComponents.components.DominoSection;
 
     public class CopyPasteVisualEditorManager
     {
@@ -118,11 +119,22 @@ package utils
             if (!this.visualEditor.editingSurface.selectedItem) return;
 
             var container:IVisualElementContainer = this.visualEditor.editingSurface.selectedItem as IVisualElementContainer;
-            
-            //check if it is itself, otherwise the past element should be as slibing for the source element.
-            if(!(container is view.primeFaces.supportClasses.Container)){
-             container= (this.visualEditor.editingSurface.selectedItem as UIComponent).parent as IVisualElementContainer;
+            //if the select is table or tabView , we need more logic handle the traget container.
+            if(container is DominoTable){
+                var dominoTable:DominoTable= container as DominoTable;
+                container=(dominoTable.getCurrentSelectCell()) as IVisualElementContainer;
+            }else if(container is DominoTabView){
+                var dominoTabView:DominoTabView=container as DominoTabView;
+                container=(dominoTabView.div) as IVisualElementContainer;
+            }else if(container is DominoSection){
+
+            }else if(!(container is view.primeFaces.supportClasses.Container)){
+                //check if it is itself, otherwise the past element should be as slibing for the source element.
+                container= (this.visualEditor.editingSurface.selectedItem as UIComponent).parent as IVisualElementContainer;
             }
+
+         
+
             if (container)
             {
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
@@ -176,7 +188,7 @@ package utils
             if(item is view.primeFaces.supportClasses.Container){
                 item=(DominoConverter.pastFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
                 parent.addElement(IVisualElement(item));
-            } if((item is DominoTable) || (item is DominoTabView)){
+            } if((item is DominoTable) || (item is DominoTabView) || (item is DominoSection)){
                 item=(DominoConverter.itemFromXML(parent, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
             } 
             else{

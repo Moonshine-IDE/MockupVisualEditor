@@ -139,7 +139,7 @@ package utils
             {
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
 				targetDuplicateRoot = container;
-                pastItemFromXML(container, pasteCode);
+                pasteItemFromXML(container, pasteCode);
                  //update status of Editor
                 MoonshineBridgeUtils.moonshineBridge.updateCurrentVisualEditorStatus();
             }
@@ -157,14 +157,14 @@ package utils
             {
                 var code:XML = selectedElement.toXML();
 				targetDuplicateRoot = container;
-                pastItemFromXML(container, code);
+                pasteItemFromXML(container, code);
 
             }
         }
 
 //public function fromXML(xml:XML, childFromXMLCallback:Function, surface:ISurface,  lookup:ILookup):void
 		
-        private function pastItemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
+        private function pasteItemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
         {
 
             var name:String = itemXML.name();
@@ -192,7 +192,7 @@ package utils
                 item=(DominoConverter.itemFromXML(parent, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
             } 
             else{
-              item.fromXML(itemXML, pastItemFromXML, this.visualEditor.editingSurface, EditingSurfaceReader.classLookup);
+              item.fromXML(itemXML, pasteItemFromXML, this.visualEditor.editingSurface, EditingSurfaceReader.classLookup);
               parent.addElement(IVisualElement(item));
           
             }

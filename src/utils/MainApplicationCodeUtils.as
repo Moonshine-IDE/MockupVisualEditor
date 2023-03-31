@@ -370,6 +370,25 @@ package utils
 				
 		}
 
+		public static function fixDivInDxl(dominoCode:XML):XML 
+		{
+			for each(var div:XML in dominoCode..div) //no matter of depth Note here
+				{
+					
+					var divChilren:XMLList = div.children();
+					for each (var divChilrenNode:XML in divChilren)
+					{
+						div.parent().appendChild(divChilrenNode)
+					}
+					delete div.parent().children()[div.childIndex()];
+					
+					
+				}
+
+				return dominoCode
+
+		}
+
 		public static function fixRoyaleDataProvider(xml:XML):XML
 		{
 			var royaleNamespace:Namespace = new Namespace("j", "library://ns.apache.org/royale/jewel");

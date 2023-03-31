@@ -247,6 +247,7 @@ package utils
                 MainApplicationCodeUtils.fixDominField(xml);
                 MainApplicationCodeUtils.fixPardefTableError(xml);
                 MainApplicationCodeUtils.fixPardefAlign(xml);
+                MainApplicationCodeUtils.fixDivInDxl(xml);
 				
 
                   // if this is empty page , we need add some default element , then it can work fine with Notes client 

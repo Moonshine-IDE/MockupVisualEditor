@@ -74,7 +74,7 @@ package lookup
 			this.lookup["Body"] = Body;
 			this.lookup["RootDiv"] = Body;
 
-			//this.lookup[Div.ELEMENT_NAME] = Div;
+			this.lookup[Div.ELEMENT_NAME] = Div;
 			this.lookup[GridItem.GRIDITEM_NAME] = GridItem;
 			this.lookup[GridRow.GRIDROW_NAME] = GridRow;
 			this.lookup[NavigatorContent.NAVIGATORCONTENT_NAME] = NavigatorContent;

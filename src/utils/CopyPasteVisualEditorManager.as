@@ -58,6 +58,7 @@ package utils
     import view.domino.surfaceComponents.components.DominoTable;
     import view.domino.surfaceComponents.components.DominoTabView;
     import view.domino.surfaceComponents.components.DominoSection;
+    import view.domino.surfaceComponents.components.DominoParagraph;
 
     public class CopyPasteVisualEditorManager
     {
@@ -162,7 +163,6 @@ package utils
             }
         }
 
-//public function fromXML(xml:XML, childFromXMLCallback:Function, surface:ISurface,  lookup:ILookup):void
 		
         private function pasteItemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
         {
@@ -185,8 +185,8 @@ package utils
                 DominoGlobals.FieldPastNameCount++;
             }
 
-            if(item is view.primeFaces.supportClasses.Container){
-                item=(DominoConverter.pastFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
+            if(item is DominoParagraph){
+                item=(DominoConverter.pasteFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
                 parent.addElement(IVisualElement(item));
             } if((item is DominoTable) || (item is DominoTabView) || (item is DominoSection)){
                 item=(DominoConverter.itemFromXML(parent, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;

@@ -71,7 +71,7 @@ package lookup
 			this.lookup[NavigatorContent.ELEMENT_NAME] = NavigatorContent;
 			this.lookup[DominoSection.ELEMENT_NAME] = DominoSection;
 			this.lookup[view.primeFaces.supportClasses.Container.ELEMENT_NAME] = view.primeFaces.supportClasses.Container;
-			this.lookup[DominoCalendar.ELEMENT_NAME] =DominoCalendar;
+			//this.lookup[DominoCalendar.ELEMENT_NAME] =DominoCalendar;
 			this.lookup[DominoParagraph.ELEMENT_NAME] =DominoParagraph;
 			this.lookup[view.domino.surfaceComponents.components.MainApplication.ELEMENT_NAME] =
 					view.domino.surfaceComponents.components.MainApplication;

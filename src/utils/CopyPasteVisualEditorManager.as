@@ -124,9 +124,7 @@ package utils
         {
             var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
             if (!selectedElement) return;
-           if(selectedElement is IMainApplication){
-                Alert.show("Can't copy&past MainApplicatoin element");
-           }else{
+         
             var container:IVisualElementContainer = selectedElement as IVisualElementContainer;
             //if the select is table or tabView , we need more logic handle the traget container.
             if(container is DominoTable){
@@ -156,7 +154,7 @@ package utils
                  //update status of Editor
                 MoonshineBridgeUtils.moonshineBridge.updateCurrentVisualEditorStatus();
             }
-           }
+           
         }
 
         public function duplicate():void

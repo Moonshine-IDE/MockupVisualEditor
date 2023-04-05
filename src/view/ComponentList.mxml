@@ -117,7 +117,7 @@
 						new ComponentListItem("TabView", DominoTabView),
 						//new ComponentListItem("Calendar", DominoCalendar),
 						new ComponentListItem("SubForm", DominoSubForm),
-						new ComponentListItem("ShareAction", DominoShareAction),
+						//new ComponentListItem("ShareAction", DominoShareAction),
 						//new ComponentListItem("ShareField", DominoShareField)
 							
 						]);

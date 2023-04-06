@@ -116,7 +116,7 @@ package utils
                 var code:XML = selectedElement.toXML();
                 Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, code.toXMLString());
             }else{
-                Alert.show("Can't copy&past MainApplicatoin element");
+                Alert.show("The main application frame may not be duplicated.");
             }
         }
 

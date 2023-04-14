@@ -48,6 +48,7 @@ package view.dominoFormBuilder.vo
 		public var fields:ArrayCollection = new ArrayCollection();
 		public var dxlGeneratedOn:Date;
 		public var pageContent:XML;
+		public var isSubForm:Boolean;
 		
 		/**
 		 * CONSTRUCTOR

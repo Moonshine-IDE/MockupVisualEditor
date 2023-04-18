@@ -155,7 +155,7 @@ package view.dominoFormBuilder.vo
 			return tmpColumns;
 		}
 
-		public function toSubformVOInterfacesExtends():String
+		public function toSubformVOExtends():String
 		{
 			var subformVOInterfaces:String = "";
 			if (subFormsNames && subFormsNames.length > 0)
@@ -167,8 +167,6 @@ package view.dominoFormBuilder.vo
 					var nextInterfaceColon:String = i == subFormsNamesCount - 1 ? "" : ",";
 					subformVOInterfaces += "I" + subformName + "VO" + nextInterfaceColon;
 				}
-
-				subformVOInterfaces = "extends " + subformVOInterfaces;
 			}
 
 			return subformVOInterfaces;

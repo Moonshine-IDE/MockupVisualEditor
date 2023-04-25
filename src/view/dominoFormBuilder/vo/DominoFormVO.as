@@ -48,6 +48,8 @@ package view.dominoFormBuilder.vo
 		public var fields:ArrayCollection = new ArrayCollection();
 		public var dxlGeneratedOn:Date;
 		public var pageContent:XML;
+		public var isSubForm:Boolean;
+		public var subFormsNames:Array;
 		
 		/**
 		 * CONSTRUCTOR
@@ -151,6 +153,23 @@ package view.dominoFormBuilder.vo
 			}
 			
 			return tmpColumns;
+		}
+
+		public function toSubformVOExtends():String
+		{
+			var subformVOInterfaces:String = "";
+			if (subFormsNames && subFormsNames.length > 0)
+			{
+				var subFormsNamesCount:int = subFormsNames.length;
+				for (var i:int = 0; i < subFormsNamesCount; i++)
+				{
+					var subformName:String = subFormsNames[i];
+					var nextInterfaceColon:String = i == subFormsNamesCount - 1 ? "" : ",";
+					subformVOInterfaces += "I" + subformName + "VO" + nextInterfaceColon;
+				}
+			}
+
+			return subformVOInterfaces;
 		}
 	}
 }

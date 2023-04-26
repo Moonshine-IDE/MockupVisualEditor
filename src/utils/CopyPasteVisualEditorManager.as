@@ -134,7 +134,7 @@ package utils
                 var dominoTabView:DominoTabView=container as DominoTabView;
                 container=(dominoTabView.div) as IVisualElementContainer;
             }else if(container is DominoParagraph){
-                container= (selectedElement as UIComponent).parent as IVisualElementContainer;
+                //container= (selectedElement as UIComponent).parent as IVisualElementContainer;
             }else if(container is DominoSection){
 
             }else if(container is DominoSubForm){

@@ -1,22 +1,35 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Copyright 2022 Prominic.NET, Inc.
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-// http://www.apache.org/licenses/LICENSE-2.0 
-// 
-// Unless required by applicable law or agreed to in writing, software 
-// distributed under the License is distributed on an "AS IS" BASIS, 
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and 
-// limitations under the License
-// 
-// Author: Prominic.NET, Inc.
-// No warranty of merchantability or fitness of any kind. 
-// Use this software at your own risk.
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
 ////////////////////////////////////////////////////////////////////////////////
+
 package view.domino.surfaceComponents.components
 {
     import flash.events.Event;
@@ -234,7 +247,17 @@ package view.domino.surfaceComponents.components
                 "outdentChanged",
                 "spacingInterlineChange",
                 "spacingAboveChange",
-                "spacingBelowChange"
+                "spacingBelowChange",
+                "fontnameAttributeChanged",
+                "fontsizeAttributeChanged",
+                "fontcolorAttributeChanged",
+                "fontstyleAttributeChanged",
+                "hideAttributeChanged",
+                "htmlidAttributeChanged",
+                "htmlclassAttributeChanged",
+                "htmlstyleAttributeChanged",
+                "htmltitleAttributeChanged",
+                "htmlotherAttributeChanged",
             ];
 			
 			this.prompt = "Input Text";
@@ -1482,7 +1505,7 @@ package view.domino.surfaceComponents.components
             }
 		}
 
-		private var _hidewhen:String;
+		private var _hidewhen:String="";
         /**
          * <p>Domino:Contains formula ,Represents  hide or show the element.</p>
          * <table border="1"><tr><td>notes Client</td><td>Supported</td></tr>
@@ -2093,13 +2116,20 @@ package view.domino.surfaceComponents.components
 
 
         private var _hide:String;
+        [Bindable(event="hideAttributeChanged")]
 		public function get hide():String
 		{
 			return _hide;
 		}
 		public function set hide(value:String):void
 		{
-			_hide = value;
+            if (_hide != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "hide", _hide, value);
+				
+                _hide = value;
+                dispatchEvent(new Event("hideAttributeChanged"))
+            }
 		}
 
         private var _helpDescription:String = "";
@@ -2129,7 +2159,7 @@ package view.domino.surfaceComponents.components
 
         	//---------font /size  /color--------------------------------------------------------
 		private var _size:String = "10";
-
+        [Bindable(event="fontsizeAttributeChanged")]
 		public function get size():String
 		{
 			return _size;
@@ -2137,10 +2167,17 @@ package view.domino.surfaceComponents.components
 
 		public function set size(value:String):void
 		{
-			_size = value;
+			 if (_size != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "size", _size, value);
+				
+                _size = value;
+                dispatchEvent(new Event("fontsizeAttributeChanged"))
+            }
 		}
 
 		private var _color:String ="black";
+        [Bindable(event="fontcolorAttributeChanged")]
 
 		public function get color():String
 		{
@@ -2149,10 +2186,19 @@ package view.domino.surfaceComponents.components
 
 		public function set color(value:String):void
 		{
-			_color = value;
+             if (_color != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "color", _color, value);
+				
+                _color = value;
+                dispatchEvent(new Event("fontcolorAttributeChanged"))
+            }
+			
 		}
 
 		private var _fontStyle:String = "normal";
+        [Bindable(event="fontstyleAttributeChanged")]
+        
 
 		public function get fontStyle():String
 		{
@@ -2161,11 +2207,19 @@ package view.domino.surfaceComponents.components
 
 		public function set fontStyle(value:String):void
 		{
-			_fontStyle = value;
+            if (_fontStyle != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "fontStyle", _fontStyle, value);
+				
+                _fontStyle = value;
+                dispatchEvent(new Event("fontstyleAttributeChanged"))
+            }
 		}
 
-		private var _fontName:String = "sans-serif";
 
+       
+		private var _fontName:String = "sans-serif";
+        [Bindable(event="fontnameAttributeChanged")]
 		public function get fontName():String
 		{
 			return _fontName;
@@ -2173,7 +2227,15 @@ package view.domino.surfaceComponents.components
 
 		public function set fontName(value:String):void
 		{
-			_fontName = value;
+			
+            if (_fontName != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "fontName", _fontName, value);
+				
+                _fontName = value;
+                dispatchEvent(new Event("fontnameAttributeChanged"))
+            }
+           
 		}
 
 
@@ -2233,53 +2295,94 @@ package view.domino.surfaceComponents.components
 
         //-----Html core attrs-------
         private var _htmlId:String;
+        [Bindable(event="htmlidAttributeChanged")]
+     
 		public function get htmlId():String
 		{
 			return _htmlId;
 		}
         public function set htmlId(value:String):void
 		{
-				_htmlId = value;
+				
+            if (_htmlId != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "htmlId", _htmlId, value);
+				
+               _htmlId = value;
+                dispatchEvent(new Event("htmlidAttributeChanged"))
+            }
 		}
 
 		private var _htmlClass:String;
+        [Bindable(event="htmlclassAttributeChanged")]
+    
 		public function get htmlClass():String
 		{
 			return _htmlClass;
 		}
         public function set htmlClass(value:String):void
 		{
-			_htmlClass = value;
+             if (_htmlClass != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "htmlClass", _htmlClass, value);
+				
+               _htmlClass = value;
+                dispatchEvent(new Event("htmlclassAttributeChanged"))
+            }
 		}
 
 		private var _htmlStyle:String;
+        [Bindable(event="htmlstyleAttributeChanged")]
+        
 		public function get htmlStyle():String
 		{
 			return _htmlStyle;
 		}
         public function set htmlStyle(value:String):void
 		{
-			_htmlStyle=value;
+			
+            if (_htmlStyle != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "htmlStyle", _htmlStyle, value);
+				
+                _htmlStyle = value;
+                dispatchEvent(new Event("htmlstyleAttributeChanged"))
+            }
 		}
 
 		private var _htmlTitle:String;
+         [Bindable(event="htmltitleAttributeChanged")]
 		public function get htmlTitle():String
 		{
 			return _htmlTitle;
 		}
         public function set htmlTitle(value:String):void
 		{
-			_htmlTitle=value;
+            if (_htmlTitle != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "htmlTitle", _htmlTitle, value);
+				
+                _htmlTitle = value;
+                dispatchEvent(new Event("htmltitleAttributeChanged"))
+            }
 		}
 
 		private var _htmlOther:String;
+         [Bindable(event="htmlotherAttributeChanged")]
 		public function get htmlOther():String
 		{
 			return _htmlOther;
 		}
         public function set htmlOther(value:String):void
 		{
-			_htmlOther=value;
+			
+             if (_htmlOther != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "htmlOther", _htmlOther, value);
+				
+                _htmlOther = value;
+                dispatchEvent(new Event("htmlotherAttributeChanged"))
+            }
 		}
 
 

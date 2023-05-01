@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<suportclasses:BasePropertyEditor xmlns:fx="http://ns.adobe.com/mxml/2009"
+                                  xmlns:s="library://ns.adobe.com/flex/spark"
+                                  xmlns:suportclasses="view.suportClasses.*"
+							      xmlns:forms="view.forms.*"
+                                  xmlns:domino="view.domino.forms.*" 
+                                  creationComplete="onInputCreationComplete(event)"
+                                  >
+
+    <fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			import spark.events.IndexChangeEvent;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.collections.IList;
+
+
+			private var showinmenu:Boolean ;
+			private var showinbar:Boolean ;
+			private var actionTitle:String="";
+
+
+            private function onInputCreationComplete(event:FlexEvent):void
+        	{
+
+					
+				
+			}
+
+            // private function changeHideOption(event:Event):void
+			// {
+			// 	if(this.hideOption.selected){
+			// 		hidePanel.visible = hidePanel.includeInLayout = true;
+			// 	}else{
+			// 		hidePanel.visible = hidePanel.includeInLayout = false;
+			// 	}
+			
+			// }
+
+			private function getDominoFieldName(item:Object):String
+			{
+				return item.label;
+			}
+			private function getDominoFieldTooltip(item:Object):String
+			{
+				return item.description;
+			}
+
+
+		
+			
+
+			private function updateSelection(e:IndexChangeEvent):void
+            {
+			}
+
+			private function check_changeHandler(event:Event):void
+			{
+
+				
+				if(event.target){
+					
+				}
+				
+			
+			}
+			private function textInput_changeHandler(event:Event):void
+			{
+
+					if(event.target){
+						if(event.target.hasOwnProperty("text")){
+							//editor.updateTitle(event.target.text);
+						}
+					}
+				
+			}
+
+			 
+
+
+		]]>
+	</fx:Script>
+    <suportclasses:layout>
+        <s:VerticalLayout gap="10" padding="10" horizontalAlign="contentJustify"/>
+    </suportclasses:layout>
+
+	 <s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" percentWidth="100"
+		   paddingLeft="0" paddingRight="0">
+            
+                <s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+                    <s:HGroup width="100%" verticalAlign="middle">
+                
+                    <s:Label text="Title" width="50" direction="rtl"/>
+                    <s:Label text="" width="50" id="textInput" direction="rtl"/>
+                   
+                    <!-- <s:TextInput id="textInput"
+                                text=""  width="100" maxChars="100" 
+                                enter="textInput_changeHandler(event)" focusOut="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
+                         -->
+                    
+                    </s:HGroup>
+                </s:FormItem>
+
+                <!-- <s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+                    <s:HGroup width="100%" verticalAlign="middle">
+                
+                    <s:Label text="ID" width="50" direction="rtl"/>
+                    <s:TextInput id="idInput"
+                                text="0"  width="20" maxChars="100" 
+                                enter="textInput_changeHandler(event)" focusOut="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
+                        
+                    
+                    </s:HGroup>
+                </s:FormItem>     -->
+
+
+            <s:FormItem label="Show in menu" skinClass="skins.FormItemSkin">
+            <s:CheckBox id="showinmenuBox"
+                    selected="{showinmenu}"
+                    change="check_changeHandler(event)"/>
+            </s:FormItem>
+
+             <s:FormItem label="Show in bar" skinClass="skins.FormItemSkin">
+            <s:CheckBox id="showinbarBox"
+                    selected="{showinbar}"
+                    change="check_changeHandler(event)"/>
+            </s:FormItem>
+
+        </s:VGroup>  
+</suportclasses:BasePropertyEditor>

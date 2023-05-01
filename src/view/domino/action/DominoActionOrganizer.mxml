@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2016-present Prominic.NET, Inc.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:suportClasses="view.suportClasses.*" 
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+    skinClass="skins.PropertyEditorContainerSkin"
+    top="10" left="10" right="01"
+    creationComplete="onCreationComplete(event)">
+
+	<fx:Metadata>
+		[Event(name="change",type="flash.events.Event")]
+		[Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+		[Event(name="propertyEditorItemDeleting",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+	</fx:Metadata>
+    
+    <s:VGroup width="100%" verticalAlign="middle">
+	<s:Label text="Actions on Form" left="0" right="0"/>
+	 <suportClasses:TreeOrganizer id="tree" 
+								 dataProvider="{treeData}"
+								 width="100%" height="100%"
+								 iconFunction="{getIconForFile}"
+								 rollOverColor="0xe1e1e1"
+								 selectionColor="0xf2a9ba"
+								 verticalScrollBarStyleName="black"
+								 alternatingItemColors="[0xeeeeee, 0xffffff]"
+								 rowHeight="18"
+								 
+								
+								 keyUp="onTreeItemKeyUp(event)"/>
+
+   
+    <s:Label text="Other Actions"  left="0" right="0"/>
+    
+    
+     <s:List  allowMultipleSelection="true" dragEnabled="true"
+    dragMoveEnabled="true"
+    dropEnabled="true"
+    useVirtualLayout="true"
+    id="actionLists"
+    doubleClickEnabled="true"
+    doubleClick="actionHandler(event);"
+    dataProvider="{this._dominoActionsProEditor}" />
+
+	<s:Group id="editorHolder" percentWidth="100" />
+  
+        <s:HGroup>
+            <s:Button id="newActionBtn" label="New Action"  height="25" width="130"  click="newAction(event)"/>
+            <s:Button id="newGroupBtn" label="New Group"  height="25" width="130"  click="newGroup()"/>
+        </s:HGroup>
+
+
+   
+    </s:VGroup>
+
+    <fx:Declarations>
+        <fx:XMLList id="treeData">
+            <node label="Mail Box">
+                <node label="Inbox">
+                    <node label="Marketing"/>
+                    <node label="Product Management"/>
+                    <node label="Personal"/>
+                </node>
+                <node label="Outbox">
+                    <node label="Professional"/>
+                    <node label="Personal"/>
+                </node>
+                <node label="Spam"/>
+                <node label="Sent"/>
+            </node>
+        </fx:XMLList>
+    </fx:Declarations>
+
+
+	<fx:Script><![CDATA[
+		import view.flex.propertyEditors.GenericPropertyEditor;
+		import view.interfaces.IPropertyEditor;
+		import view.interfaces.ISurfaceComponent;
+		import view.interfaces.IVisualEditorLibraryBridge;
+		import mx.collections.ArrayList;
+		import mx.controls.Alert;
+        import mx.collections.ArrayCollection;
+        import view.EditingSurface;
+        import utils.MoonshineBridgeUtils;
+        import flash.events.MouseEvent;
+
+
+
+        [Bindable]
+        public var actions:ArrayList = new ArrayList();
+
+
+
+        [Bindable]
+        public var complexDP:ArrayCollection = new ArrayCollection(
+            [    {ingredient:"ACTION1", category:"Meat"}, 
+                {ingredient:"ACTION2", category:"Starch"}, 
+                {ingredient:"ACTION3", category:"Vegetable"}, 
+                {ingredient:"ACTION4", category:"Meat"}, 
+                {ingredient:"ACTION5", category:"Starch"}, 
+                {ingredient:"ACTION6", category:"Spice"}
+            ]                
+        );
+
+        [Bindable]
+        private var _dominoActionsProEditor:ArrayList = new ArrayList();
+
+        [Bindable("change")]
+        public function get dominoActionsProEditor():ArrayList
+        {
+		
+
+            return this._dominoActionsProEditor;
+        }
+
+        public function set dominoActionsProEditor(value:ArrayList):void
+        {	
+			this._dominoActionsProEditor = value;
+		}
+
+        public function refreshActionList():void
+        {
+            
+        }
+
+
+
+        [Bindable]
+        private var _dominoSharedFieldList:ArrayList = new ArrayList();
+
+        [Bindable("change")]
+        public function get dominoSharedFieldList():ArrayList
+        {
+		
+
+            return this._dominoSharedFieldList;
+        }
+
+        public function set dominoSharedFieldList(value:ArrayList):void
+        {	
+			this._dominoSharedFieldList = value;
+		}
+
+     
+
+
+        private function onCreationComplete(event:Event):void
+        {
+
+           
+            //Alert.show("this._dominoActionsProEditor :"+this._dominoActionsProEditor.length );
+             
+            
+        }
+
+
+        private function actionHandler(event:MouseEvent):void{
+            MoonshineBridgeUtils.moonshineBridge.openDominoActionFile(event.currentTarget.selectedItem.description);
+        }
+
+        private function actionShareFieldHandler(event:MouseEvent):void{
+        }
+
+        private function insertShareField(event:MouseEvent):void{
+
+        }
+
+
+
+         private function myLabelToItemFunction(input:String):*
+            {
+                <!-- Returns object that matches items in dataProvider -->
+                return {ingredient:input, category:"mystery"};
+            }      
+
+        public var editingSurface:EditingSurface;
+		
+        private var _editor:IPropertyEditor;
+
+        [Bindable]
+        private var _formActions:ArrayCollection;
+
+
+        private function getIconForFile(object:Object):Class
+        {
+            return null;
+        }
+
+
+		public function newAction(event:MouseEvent){
+            if(MoonshineBridgeUtils.moonshineBridge){
+                  MoonshineBridgeUtils.moonshineBridge.openCreateDominoActionPanel(event);
+            }
+             
+        }
+
+        public function newGroup(){
+
+        }
+       
+
+
+        private var _selectedItem:ISurfaceComponent = null;
+
+        [Bindable("change")]
+        public function get selectedItem():ISurfaceComponent
+        {
+            return this._selectedItem;
+        }
+
+        public function set selectedItem(value:ISurfaceComponent):void
+        {
+            if (this._selectedItem === value)
+            {
+                return;
+            }
+            this._selectedItem = value;
+            if (this._editor)
+            {
+				editorHolder.removeElement(this._editor);
+                this._editor = null;
+            }
+            if (this._selectedItem !== null)
+            {
+				
+                this.currentState = "selection";
+                var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;
+                if (PropertyEditorType === null)
+                {
+                    PropertyEditorType = GenericPropertyEditor;
+                }
+                this._editor = new PropertyEditorType();
+                this._editor.top = 0;
+                this._editor.right = 0;
+                this._editor.bottom = 0;
+                this._editor.left = 0;
+                this._editor.selectedItem = value;
+
+				
+				if(this._editor.selectedItem){
+					
+				}
+
+				editorHolder.addElement(this._editor);
+
+				
+
+				//propertyEditorHeader.componentName = selectedItem["className"];
+            }
+            else
+            {
+                //this.currentState = "empty";
+				//propertyEditorHeader.componentName = "";
+            }
+            this.dispatchEvent(new Event(Event.CHANGE));
+        }
+		
+		private var _visualEditorFilePath:String;
+		public function set visualEditorFilePath(value:String):void
+		{
+			_visualEditorFilePath = value;
+		}
+		public function get visualEditorFilePath():String
+		{
+			return _visualEditorFilePath;
+		}
+		
+		private var _moonshineBridge:IVisualEditorLibraryBridge;
+		public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
+		{
+			_moonshineBridge = value;
+		}
+		public function get moonshineBridge():IVisualEditorLibraryBridge
+		{
+			return _moonshineBridge;
+		}
+
+        private function onTreeItemKeyUp(event:KeyboardEvent):void
+        {
+            // Delete key-press
+            if (event.keyCode == 46 && tree.selectedItem)
+            {
+                // if (tree.selectedItem.name.indexOf(":") != -1 ||
+                //         tree.selectedItem.type == OrganizerItem.TYPE_CELL ||
+                //         tree.selectedItem.type == OrganizerItem.TYPE_TAB) return;
+                //editingSurface.deleteItem(tree.selectedItem.item);
+            }
+        }
+        ]]></fx:Script>
+</s:BorderContainer>

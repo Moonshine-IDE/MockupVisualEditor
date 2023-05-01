@@ -427,7 +427,7 @@ package view.suportClasses
             }
         }
 
-        protected function resetSelectionColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):void
+        protected function resetSelectionColorForSelectedItem(selectedRowIndex:int, selectedColumnIndex:int):Div
         {
             var div:Div = getDiv(selectedRowIndex, selectedColumnIndex);
             if (div)
@@ -435,6 +435,8 @@ package view.suportClasses
                 div.setStyle("backgroundColor", "#FFFFFF");
                 div.setStyle("backgroundAlpha", 1);
             }
+
+            return div;
         }
     }
 }

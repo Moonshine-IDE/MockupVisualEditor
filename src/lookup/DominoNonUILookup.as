@@ -47,6 +47,8 @@ package lookup
 	import components.domino.DominoTable;
 	import components.domino.MainApplication;
 	import components.domino.DominoSubForm;
+	import components.domino.DominoShareActions;
+	import components.domino.DominoShareField;
 
 	import interfaces.ILookup;
 
@@ -88,6 +90,8 @@ package lookup
 			this.lookup[DominoCalendar.ELEMENT_NAME] = DominoCalendar;
 			this.lookup[DominoParagraph.ELEMENT_NAME] = DominoParagraph;
 			this.lookup[DominoSubForm.ELEMENT_NAME] = DominoSubForm;
+			this.lookup[DominoShareActions.ELEMENT_NAME] = DominoShareActions;
+			this.lookup[DominoShareField.ELEMENT_NAME] = DominoShareField;
 		}
 	}
 }

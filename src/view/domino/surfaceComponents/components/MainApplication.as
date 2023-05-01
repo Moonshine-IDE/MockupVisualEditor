@@ -48,6 +48,7 @@ package view.domino.surfaceComponents.components
     import mx.collections.ArrayList;
     import utils.StringHelper;
 
+
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="propertyEditorClass", kind="property")]
     [Exclude(name="commitProperties", kind="method")]
@@ -105,6 +106,8 @@ package view.domino.surfaceComponents.components
             Globals.MainApplicationWidth=super.width;
 
             this.direction = ContainerDirection.VERTICAL_LAYOUT;
+            //default set to form name
+
 		}
 
         override public function get propertyEditorClass():Class
@@ -414,13 +417,14 @@ package view.domino.surfaceComponents.components
             if(this.windowsTitle){
            
                  mainXML.@windowsTitle=StringHelper.base64Encode(this.windowsTitle);
+            }else{
+                mainXML.@windowsTitle=this.title;
             }
 
             if(this.webqueryopen){
              
                  mainXML.@webqueryopen=StringHelper.base64Encode(this.webqueryopen)
             }
-
             mainXML = super.internalToXML();
 
             Globals.MainApplicationWidth=super.width;
@@ -437,6 +441,7 @@ package view.domino.surfaceComponents.components
                 mainXML.@percentHeight = this.heightPercent;
             }
 
+        
             return mainXML;
         }
 

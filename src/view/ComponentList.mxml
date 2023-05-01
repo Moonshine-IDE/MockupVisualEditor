@@ -88,7 +88,8 @@
 			import view.domino.surfaceComponents.components.DominoTabView;
 			import view.domino.surfaceComponents.components.DominoCalendar;
 			import view.domino.surfaceComponents.components.DominoSubForm;
-
+			import view.domino.surfaceComponents.components.DominoShareAction;
+			import view.domino.surfaceComponents.components.DominoShareField;
 			
 			public var visualEditorType:String;
 			public var visualEditorFileType:String;
@@ -109,13 +110,15 @@
 						new ComponentListItem("Input", DominoInputText),
 						new ComponentListItem("Label", DominoLabel),
 						new ComponentListItem("Table", DominoTable),
-						new ComponentListItem("Div", Div),
+						//new ComponentListItem("Div", Div),
 						new ComponentListItem("ComputedText", DominoComputedText),
 						new ComponentListItem("Paragraph", DominoParagraph, {maxWidth: 120}),
 						new ComponentListItem("Section", DominoSection),
 						new ComponentListItem("TabView", DominoTabView),
-						new ComponentListItem("Calendar", DominoCalendar),
-						new ComponentListItem("SubForm", DominoSubForm)
+						//new ComponentListItem("Calendar", DominoCalendar),
+						new ComponentListItem("SubForm", DominoSubForm),
+						//new ComponentListItem("ShareAction", DominoShareAction),
+						//new ComponentListItem("ShareField", DominoShareField)
 							
 						]);
 					
@@ -172,11 +175,20 @@
 						new ComponentListItem("Button", DominoButton),
 						new ComponentListItem("Label", DominoLabel),
 						new ComponentListItem("Table", DominoTable),
-						new ComponentListItem("Div", Div),
+						//new ComponentListItem("Div", Div),
 						new ComponentListItem("ComputedText", DominoComputedText),
-						new ComponentListItem("Paragraph", DominoParagraph),
+						new ComponentListItem("Paragraph", DominoParagraph,{maxWidth: 120}),
 						new ComponentListItem("Section", DominoSection),
 						new ComponentListItem("TabView", DominoTabView)
+							
+						]);
+				collection.refresh()
+			}
+
+			public function shareFieldList():void
+			{
+				collection = new ArrayCollection([
+							new ComponentListItem("Input", DominoInputText)
 							
 						]);
 				collection.refresh()

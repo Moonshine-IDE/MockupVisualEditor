@@ -80,6 +80,22 @@
 		}
 
 
+		private var _sharedFieldsProEditor:ArrayList = new ArrayList();
+
+        [Bindable("change")]
+        public function get sharedFieldsProEditor():ArrayList
+        {
+		
+
+            return this._sharedFieldsProEditor;
+        }
+
+        public function set sharedFieldsProEditor(value:ArrayList):void
+        {	
+			this._sharedFieldsProEditor = value;
+		}
+
+
         private var _selectedItem:ISurfaceComponent = null;
 
         [Bindable("change")]
@@ -104,6 +120,10 @@
             {
 				if((this._selectedItem as Object).hasOwnProperty("subformsList")){
 						this._selectedItem["subformsList"] = this.subformsProEditor;
+				}
+
+				if((this._selectedItem as Object).hasOwnProperty("shareFieldList")){
+						this._selectedItem["shareFieldList"] = this.sharedFieldsProEditor;
 				}
                 this.currentState = "selection";
                 var PropertyEditorType:Class = this._selectedItem.propertyEditorClass;

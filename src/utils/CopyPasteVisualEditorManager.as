@@ -47,7 +47,22 @@ package utils
     import view.interfaces.ISurfaceComponent;
     import view.suportClasses.PropertyChangeReference;
     import view.suportClasses.events.PropertyEditorChangeEvent;
+    
+    import global.domino.DominoGlobals;
+    import view.primeFaces.supportClasses.Container;
 
+    import interfaces.ILookup;
+
+	import interfaces.ISurface;
+    import converter.DominoConverter;
+    import view.domino.surfaceComponents.components.DominoTable;
+    import view.domino.surfaceComponents.components.DominoTabView;
+    import view.domino.surfaceComponents.components.DominoSection;
+    import view.domino.surfaceComponents.components.DominoParagraph;
+    import view.domino.surfaceComponents.components.DominoSubForm;
+    import view.domino.surfaceComponents.components.MainApplication;
+    import mx.controls.Alert;
+    
     public class CopyPasteVisualEditorManager
     {
         private var visualEditor:VisualEditor;
@@ -100,20 +115,46 @@ package utils
                 Clipboard.generalClipboard.clear();
                 var code:XML = selectedElement.toXML();
                 Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, code.toXMLString());
+            }else{
+                Alert.show("The main application frame may not be duplicated.");
             }
         }
 
         private function paste():void
         {
-            if (!this.visualEditor.editingSurface.selectedItem) return;
+            var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
+            if (!selectedElement) return;
+         
+            var container:IVisualElementContainer = selectedElement as IVisualElementContainer;
+            //if the select is table or tabView , we need more logic handle the traget container.
+            if(container is DominoTable){
+                var dominoTable:DominoTable= container as DominoTable;
+                container=(dominoTable.getCurrentSelectCell()) as IVisualElementContainer;
+            }else if(container is DominoTabView){
+                var dominoTabView:DominoTabView=container as DominoTabView;
+                container=(dominoTabView.div) as IVisualElementContainer;
+            }else if(container is DominoParagraph){
+                //container= (selectedElement as UIComponent).parent as IVisualElementContainer;
+            }else if(container is DominoSection){
 
-            var container:IVisualElementContainer = this.visualEditor.editingSurface.selectedItem as IVisualElementContainer;
+            }else if(container is DominoSubForm){
+                container= (selectedElement as UIComponent).parent as IVisualElementContainer;
+            }else if(!(container is view.primeFaces.supportClasses.Container)){
+                //check if it is itself, otherwise the past element should be as slibing for the source element.
+                container= (selectedElement as UIComponent).parent as IVisualElementContainer;
+            }
+
+         
+
             if (container)
             {
                 var pasteCode:XML = new XML(Clipboard.generalClipboard.getData(ClipboardFormats.HTML_FORMAT));
 				targetDuplicateRoot = container;
-                itemFromXML(container, pasteCode);
+                pasteItemFromXML(container, pasteCode);
+                 //update status of Editor
+                MoonshineBridgeUtils.moonshineBridge.updateCurrentVisualEditorStatus();
             }
+           
         }
 
         public function duplicate():void
@@ -122,32 +163,56 @@ package utils
             if (!this.visualEditor.editingSurface.selectedItem) return;
 
             var container:IVisualElementContainer = (selectedElement as UIComponent).parent as IVisualElementContainer;
+           
+            
             if (container)
             {
                 var code:XML = selectedElement.toXML();
 				targetDuplicateRoot = container;
-                itemFromXML(container, code);
+                pasteItemFromXML(container, code);
+
             }
         }
 
-        private function itemFromXML(parent:IVisualElementContainer, itemXML:XML):ISurfaceComponent
+		
+        private function pasteItemFromXML(parent:IVisualElementContainer, itemXML:XML,surface:ISurface=null, lookup:ILookup=null):ISurfaceComponent
         {
 
             var name:String = itemXML.name();
-            if(!(name in EditingSurfaceReader.classLookup))
+            if(!(name in EditingSurfaceReader.classLookup.lookup))
             {
                 throw new Error("Unknown item " + name);
             }
-            var type:Class = EditingSurfaceReader.classLookup[name];
+            var type:Class = EditingSurfaceReader.classLookup.lookup[name];
             var item:ISurfaceComponent = new type() as ISurfaceComponent;
             if(item === null)
             {
                 throw new Error("Failed to create surface component: " + name);
             }
-            item.fromXML(itemXML, itemFromXML, null, null);
-            parent.addElement(IVisualElement(item));
-            this.visualEditor.editingSurface.addItem(item);
+
+            //auto update the field name when it past
+            if(name=="Field" || name=="field"){
+                itemXML.@name=itemXML.@name+"_"+DominoGlobals.FieldPastNameCount.toString();
+                DominoGlobals.FieldPastNameCount++;
+            }
+
+            if(item is DominoParagraph){
+                item=(DominoConverter.pasteFromXML(item, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
+                parent.addElement(IVisualElement(item));
+            }else if((item is DominoTable) || (item is DominoTabView) || (item is DominoSection)){
+                item=(DominoConverter.itemFromXML(parent, EditingSurfaceReader.classLookup,itemXML,this.visualEditor.editingSurface)) as ISurfaceComponent;
+            } 
+            else{
+              item.fromXML(itemXML, pasteItemFromXML, this.visualEditor.editingSurface, EditingSurfaceReader.classLookup);
+              parent.addElement(IVisualElement(item));
+          
+            }
+
+              this.visualEditor.editingSurface.addItem(item);
+           
+            
 			
+          
 			// supplying the change to undo manager
 			// should execute once against target where paste/duplicate happened
 			if (item is IHistorySurfaceComponent && parent === targetDuplicateRoot)

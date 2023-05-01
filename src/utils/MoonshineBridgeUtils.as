@@ -36,12 +36,14 @@ package utils
     import view.VisualEditor;
     import view.interfaces.IDominoFormBuilderLibraryBridge;
     import view.interfaces.IVisualEditorLibraryBridge;
-
+	import view.interfaces.IDominoVisualEditorLibraryBridge;
 	public class MoonshineBridgeUtils
 	{
 		public static var currentFilePath:String;
 		public static var moonshineBridge:IVisualEditorLibraryBridge;
 		public static var moonshineBridgeFormBuilderInterface:IDominoFormBuilderLibraryBridge;
+		public static var moonshineBridgeDominoVisualEditorInterface:IDominoVisualEditorLibraryBridge;
+		
 
         private static var _filesList:ArrayCollection;
 

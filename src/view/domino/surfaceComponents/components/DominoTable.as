@@ -355,6 +355,11 @@ package view.domino.surfaceComponents.components
             }
         }
 
+        public function getCurrentSelectCell():Div
+        {
+            return  resetSelectionColorForSelectedItem(selectedRow, selectedColumn);
+        }
+
         override public function set selectedColumn(value:int):void
         {
             if (selectedColumn != value && value != -1)

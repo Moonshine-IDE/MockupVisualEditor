@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//  Copyright (C) 2016-present Prominic.NET, Inc.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the Server Side Public License, version 1,
@@ -49,18 +49,20 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IGetChildrenSurfaceComponent;
-    import view.domino.propertyEditors.PargraphPropertyEditor;
+    import view.domino.propertyEditors.DominoActionPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IDominoParagraph
-    import components.domino.DominoParagraph;
+    import interfaces.dominoComponents.IDominoSubForm
+    import components.domino.DominoSubForm;
 
     import view.interfaces.IDominoSurfaceComponent;
 
     import view.global.Globals;
-
-    import mx.controls.Alert;
+    import view.domino.surfaceComponents.components.DominoLabel;
+    import interfaces.dominoComponents.IDominoLabel;
+    import mx.collections.ArrayList;
+    
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -85,6 +87,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="_cdataXML", kind="property")]
     [Exclude(name="_cdataInformation", kind="property")]
     [Exclude(name="contentChanged", kind="property")]
+    [Exclude(name="name", kind="property")]
 
     /**
 	 *  <p>Representation and converter from paragraph element  </p>
@@ -106,31 +109,28 @@ package view.domino.surfaceComponents.components
 	 * TODO
      * </pre>
 	 *
-	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_PARAGRAPH_ELEMENT_XML.html
+	 * @see https://help.hcltechsw.com/dom_designer/9.0.1/appdev/H_SHAREDACTIONS_ELEMENT_XML.html
 	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoParagraph.as
 	 */
-    public class DominoParagraph extends Container implements IDominoSurfaceComponent, view.interfaces.IDominoParagraph,
+    public class DominoShareAction extends Container implements IDominoSurfaceComponent,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter, IComponentPercentSizeOutput
     {
-        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "paragraph";
-        public static var ELEMENT_NAME:String = "Paragraph";
+        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "sharedactions";
+        public static var ELEMENT_NAME:String = "sharedactions";
 
-		private var component:interfaces.components.IDominoParagraph;
-		
-        protected var mainXML:XML;
+		private var component:interfaces.dominoComponents.IDominoShareActions;
+		  protected var mainXML:XML;
 
-        public function DominoParagraph()
+        public function DominoShareAction()
         {
 			this._wrap = true;
 
             super();
 
-			component = new components.domino.DominoParagraph(this);
-
-			this.percentWidth = 100;
-            this.minWidth = Globals.MainApplicationWidth;
+			component = new components.domino.DominoShareActions(this);
+         	this.percentWidth = 50;
+            this.minWidth =100;
             this.minHeight = 40;
-
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -142,11 +142,47 @@ package view.domino.surfaceComponents.components
                 "wrapChanged",
                 "gapChanged",
                 "verticalAlignChanged",
-                "horizontalAlignChanged"
+                "horizontalAlignChanged", 
+                "nameChanged"
             ];
+
+           
+            
+
         }
 
-        		private var _leftmargin:String;
+
+        // [Bindable]
+        // private var _sbuforms:ArrayList = new ArrayList();
+
+        // public function get sbuforms():ArrayList
+        // {
+        //     return _sbuforms;
+        // }
+        //  [Bindable]
+        // private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        // public function get lists():ArrayList
+        // {
+        //     return _lists;
+        // }
+        
+        [Bindable]
+        private var _subformsList:ArrayList = new ArrayList();
+
+        
+        public function get subformsList():ArrayList
+        {
+		
+
+            return this._subformsList;
+        }
+
+        public function set subformsList(value:ArrayList):void
+        {	
+			this._subformsList = value;
+		}
+
+        private var _leftmargin:String;
 		public function get leftmargin():String{
 			return _leftmargin;
 		}
@@ -226,10 +262,14 @@ package view.domino.surfaceComponents.components
         }
 
 
-        public function get dominoParagraph():DominoParagraph
+        public function get dominoShareAction():DominoShareAction
         {
             return this;
         }
+        // public function get dominoParagraph():DominoParagraph
+        // {
+        //     return this;
+        // }
 
         protected var _cdataXML:XML;
 
@@ -406,14 +446,14 @@ package view.domino.surfaceComponents.components
             super.height = value;
         }
 
-        public function get div():DominoParagraph
+        public function get div():DominoShareAction
         {
             return this;
         }
 
         public function get propertyEditorClass():Class
         {
-            return PargraphPropertyEditor;
+            return DominoActionPropertyEditor;
         }
 		
 		private var _isUpdating:Boolean;
@@ -515,23 +555,35 @@ package view.domino.surfaceComponents.components
 			this.addElementAt(element, index);
 		}
 
+
+        private var _name:String = "none";
+        [Bindable(event="nameChanged")]
+        override public function get name():String
+        {
+            return _name;
+        }
+        override public function set name(value:String):void
+        {
+            if (_name != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "name", _name, value);
+				
+                _name = value;
+
+                dispatchEvent(new Event("nameChanged"));
+
+             
+            }
+        }
+
         public function toXML():XML
         {
             mainXML = new XML("<" + ELEMENT_NAME + "/>");
-            if(this.isNewLine){
-                mainXML.@isNewLine= this.isNewLine;
-            }else{
+           
 
-            }
+            mainXML.@name= this.name;
 
-            if(this.leftmargin){
-                mainXML.@leftmargin= this.leftmargin;
-            }
-
-            if(this.firstlineleftmargin)
-            {
-                mainXML.@firstlineleftmargin= this.firstlineleftmargin;
-            }
+        
 
             return this.internalToXML();
         }
@@ -541,20 +593,24 @@ package view.domino.surfaceComponents.components
 			var localSurface:ISurface = surface;
 
             component.fromXML(xml, callback, localSurface, lookup);
-            this.isNewLine = component.isNewLine;
-			_cssClass = component.cssClass;
-			wrap = component.wrap;
-
-            if(xml.@leftmargin){
-                this.leftmargin=xml.@leftmargin;
+           
+			
+		
+    
+            if(xml.@name){
+                this.name=xml.@name;
             }
+            // if(xml.@alias){
+            //     this.alias=xml.@alias;
+            // }
+            //  if(xml.@comment){
+            //     this.comment=xml.@comment;
+            // }
 
-            if(xml.@firstlineleftmargin){
-                this.firstlineleftmargin=xml.@firstlineleftmargin;
-            }
+           
 			
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-            XMLCodeUtils.applyChildrenPositionFromXMLParagraph(xml, this);
+            //XMLCodeUtils.applyChildrenPositionFromXMLParagraph(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
@@ -565,14 +621,9 @@ package view.domino.surfaceComponents.components
         public function toCode():XML
         {
 			component.isSelected = this.isSelected;
-			(component as components.domino.DominoParagraph).width = this.width;
-			(component as components.domino.DominoParagraph).height = this.width;
-			(component as components.domino.DominoParagraph).percentWidth = this.percentWidth;
-			(component as components.domino.DominoParagraph).percentHeight = this.percentHeight;
-            (component as components.domino.DominoParagraph).hide = this.hide;
-            (component as components.domino.DominoParagraph).isNewLine = this.isNewLine;
-            (component as components.domino.DominoParagraph).leftmargin = this.leftmargin;
-            (component as components.domino.DominoParagraph).firstlineleftmargin = this.firstlineleftmargin;
+			(component as components.domino.DominoShareActions).name = this.name;
+			
+           
             var xml:XML = component.toCode();
 	
             xml["@class"] = XMLCodeUtils.getChildrenPositionForXML(this);

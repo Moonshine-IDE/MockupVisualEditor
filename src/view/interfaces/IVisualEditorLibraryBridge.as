@@ -32,6 +32,9 @@
 package view.interfaces
 {
 	import view.VisualEditor;
+	import flash.events.MouseEvent;
+
+	import mx.collections.ArrayList;
 
 	// place all methods to communicate with Moonshine
 	public interface IVisualEditorLibraryBridge
@@ -42,5 +45,10 @@ package view.interfaces
 		function getCustomTooltipFunction():Function;
 		function getPositionTooltipFunction():Function;
 		function getRelativeFilePath():String;
+		function openCreateDominoActionPanel(event:MouseEvent):void;
+		function getDominoActionList():ArrayList;
+		function openDominoActionFile(path:String):void;
+		function getDominoShareFieldList():ArrayList;
+		function updateCurrentVisualEditorStatus():void;
 	}
 }

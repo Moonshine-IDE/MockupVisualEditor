@@ -49,18 +49,20 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IDropAcceptableComponent;
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IGetChildrenSurfaceComponent;
-    import view.domino.propertyEditors.PargraphPropertyEditor;
+    import view.domino.propertyEditors.ShareFieldPropertyEditor;
     import view.primeFaces.supportClasses.Container;
     import view.primeFaces.supportClasses.ContainerDirection;
     import view.suportClasses.PropertyChangeReference;
-    import interfaces.components.IDominoParagraph
-    import components.domino.DominoParagraph;
+    import interfaces.dominoComponents.IDominoShareField
+    import components.domino.DominoShareField;
 
     import view.interfaces.IDominoSurfaceComponent;
 
     import view.global.Globals;
-
-    import mx.controls.Alert;
+    import view.domino.surfaceComponents.components.DominoLabel;
+    import interfaces.dominoComponents.IDominoLabel;
+    import mx.collections.ArrayList;
+    
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]
@@ -85,6 +87,7 @@ package view.domino.surfaceComponents.components
     [Exclude(name="_cdataXML", kind="property")]
     [Exclude(name="_cdataInformation", kind="property")]
     [Exclude(name="contentChanged", kind="property")]
+    [Exclude(name="shareFieldName", kind="property")]
 
     /**
 	 *  <p>Representation and converter from paragraph element  </p>
@@ -109,28 +112,27 @@ package view.domino.surfaceComponents.components
 	 * @see https://help.hcltechsw.com/dom_designer/10.0.1/basic/H_PARAGRAPH_ELEMENT_XML.html
 	 * @see https://github.com/Moonshine-IDE/VisualEditorConverterLib/blob/master/src/components/domino/DominoParagraph.as
 	 */
-    public class DominoParagraph extends Container implements IDominoSurfaceComponent, view.interfaces.IDominoParagraph,
+    public class DominoShareField extends Container implements IDominoSurfaceComponent,
             IHistorySurfaceComponent, IComponentSizeOutput, IDropAcceptableComponent, ICDATAInformation, IRoyaleComponentConverter, IComponentPercentSizeOutput
     {
-        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "paragraph";
-        public static var ELEMENT_NAME:String = "Paragraph";
+        public static const PRIME_FACES_XML_ELEMENT_NAME:String = "Sharedfieldref";
+        public static var ELEMENT_NAME:String = "Sharedfieldref";
 
-		private var component:interfaces.components.IDominoParagraph;
-		
+		private var component:interfaces.dominoComponents.IDominoShareField;
+		private var labelComponent:view.domino.surfaceComponents.components.DominoLabel;
         protected var mainXML:XML;
 
-        public function DominoParagraph()
+        public function DominoShareField()
         {
 			this._wrap = true;
 
             super();
 
-			component = new components.domino.DominoParagraph(this);
-
-			this.percentWidth = 100;
-            this.minWidth = Globals.MainApplicationWidth;
+			component = new components.domino.DominoShareField(this);
+            labelComponent = new view.domino.surfaceComponents.components.DominoLabel();
+			this.percentWidth = 50;
+            this.minWidth =100;
             this.minHeight = 40;
-
 
             _propertiesChangedEvents = [
                 "widthChanged",
@@ -142,11 +144,39 @@ package view.domino.surfaceComponents.components
                 "wrapChanged",
                 "gapChanged",
                 "verticalAlignChanged",
-                "horizontalAlignChanged"
+                "horizontalAlignChanged", 
+                "shareFieldNameChanged"
             ];
+
+            //add new label
+            labelComponent.text= "None";
+            this.addElement(labelComponent);
+
+            //loading the subfrom ;
+            
+
         }
 
-        		private var _leftmargin:String;
+
+       
+        
+        [Bindable]
+        private var _shareFieldList:ArrayList = new ArrayList();
+
+        
+        public function get shareFieldList():ArrayList
+        {
+		
+
+            return this._shareFieldList;
+        }
+
+        public function set shareFieldList(value:ArrayList):void
+        {	
+			this._shareFieldList = value;
+		}
+
+        private var _leftmargin:String;
 		public function get leftmargin():String{
 			return _leftmargin;
 		}
@@ -226,10 +256,14 @@ package view.domino.surfaceComponents.components
         }
 
 
-        public function get dominoParagraph():DominoParagraph
+        public function get dominoShareField():DominoShareField
         {
             return this;
         }
+        // public function get dominoParagraph():DominoParagraph
+        // {
+        //     return this;
+        // }
 
         protected var _cdataXML:XML;
 
@@ -406,14 +440,14 @@ package view.domino.surfaceComponents.components
             super.height = value;
         }
 
-        public function get div():DominoParagraph
+        public function get div():DominoShareField
         {
             return this;
         }
 
         public function get propertyEditorClass():Class
         {
-            return PargraphPropertyEditor;
+            return ShareFieldPropertyEditor;
         }
 		
 		private var _isUpdating:Boolean;
@@ -515,23 +549,35 @@ package view.domino.surfaceComponents.components
 			this.addElementAt(element, index);
 		}
 
+
+        private var _shareFieldName:String = "none";
+        [Bindable(event="shareFieldNameChanged")]
+        public function get shareFieldName():String
+        {
+            return _shareFieldName;
+        }
+        public function set shareFieldName(value:String):void
+        {
+            if (_shareFieldName != value)
+            {
+				_propertyChangeFieldReference = new PropertyChangeReference(this, "shareFieldName", _shareFieldName, value);
+				
+                _shareFieldName = value;
+
+                dispatchEvent(new Event("shareFieldNameChanged"));
+
+                labelComponent.text = value;
+            }
+        }
+
         public function toXML():XML
         {
             mainXML = new XML("<" + ELEMENT_NAME + "/>");
-            if(this.isNewLine){
-                mainXML.@isNewLine= this.isNewLine;
-            }else{
+            
 
-            }
+            mainXML.@shareFieldName= this.shareFieldName;
 
-            if(this.leftmargin){
-                mainXML.@leftmargin= this.leftmargin;
-            }
-
-            if(this.firstlineleftmargin)
-            {
-                mainXML.@firstlineleftmargin= this.firstlineleftmargin;
-            }
+        
 
             return this.internalToXML();
         }
@@ -541,20 +587,18 @@ package view.domino.surfaceComponents.components
 			var localSurface:ISurface = surface;
 
             component.fromXML(xml, callback, localSurface, lookup);
-            this.isNewLine = component.isNewLine;
-			_cssClass = component.cssClass;
-			wrap = component.wrap;
-
-            if(xml.@leftmargin){
-                this.leftmargin=xml.@leftmargin;
+           
+			
+		
+    
+            if(xml.@shareFieldName){
+                this.shareFieldName=xml.@shareFieldName;
             }
 
-            if(xml.@firstlineleftmargin){
-                this.firstlineleftmargin=xml.@firstlineleftmargin;
-            }
+           
 			
             XMLCodeUtils.setSizeFromXMLToComponent(xml, this);
-            XMLCodeUtils.applyChildrenPositionFromXMLParagraph(xml, this);
+            //XMLCodeUtils.applyChildrenPositionFromXMLParagraph(xml, this);
 
             _cdataXML = XMLCodeUtils.getCdataXML(xml);
             _cdataInformation = XMLCodeUtils.getCdataInformationFromXML(xml);
@@ -565,14 +609,9 @@ package view.domino.surfaceComponents.components
         public function toCode():XML
         {
 			component.isSelected = this.isSelected;
-			(component as components.domino.DominoParagraph).width = this.width;
-			(component as components.domino.DominoParagraph).height = this.width;
-			(component as components.domino.DominoParagraph).percentWidth = this.percentWidth;
-			(component as components.domino.DominoParagraph).percentHeight = this.percentHeight;
-            (component as components.domino.DominoParagraph).hide = this.hide;
-            (component as components.domino.DominoParagraph).isNewLine = this.isNewLine;
-            (component as components.domino.DominoParagraph).leftmargin = this.leftmargin;
-            (component as components.domino.DominoParagraph).firstlineleftmargin = this.firstlineleftmargin;
+			(component as components.domino.DominoShareField).shareFieldName = this.shareFieldName;
+			
+           
             var xml:XML = component.toCode();
 	
             xml["@class"] = XMLCodeUtils.getChildrenPositionForXML(this);

@@ -98,7 +98,7 @@
 										text="" width="100%" minWidth="156" editable="true" selectable="true"
 										prompt="Formula for column value"
 										/>
-										<s:Button id="newColumnBtn" label="Add Column" skinClass="skins.DominoAlignButtonSkin"   height="25" width="100"  click="addColumn()"/>			
+										<s:Button id="newColumnBtn" label="Add Column"   height="25" width="100"  click="addColumn()"/>			
 								</s:VGroup>
 							</s:BorderContainer>
 					</s:VGroup>		   
@@ -118,6 +118,25 @@
 
 	import view.interfaces.IVisualEditorLibraryBridge;
 	import spark.components.Alert;
+
+	private var viewFileName:String =  "" ;
+
+	private var _hasChanged:Boolean = false;
+
+
+	  public function get hasChanged():Boolean
+        {
+            return _hasChanged;
+        }
+
+	public function set hasChanged(value:Boolean):void
+	{
+		if (_hasChanged != value)
+		{
+			_hasChanged = value;
+			dispatchEvent(new Event(Event.CHANGE));
+		}
+	}
 
   	[Bindable]
 	private var rowsDataProvider:ArrayList = new ArrayList();
@@ -155,16 +174,50 @@
 
 	private function addColumn():void 
 	{
+		var columnXML:XML=new XML("<column width='30'/> ");
+		var codeXML:XML=null;
+		columnXML.@sort="ascending";
 		var preFix:String="";
 		if (columnValueType.selectedValue=="Field"){
 			preFix="FormFile:";
+			columnXML.@itemname=titleInput.text;
 		}else  if(columnValueType.selectedValue=="Formula"){
 			preFix="Formula:";
+			codeXML=new XML("<code/>");
+			codeXML.@event="value";
+			var codeFormulaXML:XML=new XML("<formula>"+columnValueFormula.text+"</formula>");
+			codeXML.appendChild(codeFormulaXML);
 		}
 		var tmpColumn:GridColumn=new GridColumn();
 		tmpColumn.headerText=titleInput.text;
 		tmpColumn.dataField=encodeBase64ForColumnDataField(preFix,columnValueFormula.text);
 		dgColumns.columns.addItem(tmpColumn);
+		hasChanged=true;
+
+		var xml:XML=loadLocalFileToXML(MoonshineBridgeUtils.currentFilePath);
+		if(xml!=null){
+			xml=xml.replace("$ViewName","NewView");
+			var columnHeaderXML:XML=new XML("<columnheader/> ");
+			columnHeaderXML.@title=titleInput.text;
+			var columnHeaderFontXML:XML = new XML("<font/>");
+			columnHeaderFontXML.@size="9pt";
+			columnHeaderFontXML.@style="bold";
+			columnHeaderXML.appendChild(columnHeaderFontXML);
+
+			columnXML.appendChild(columnHeaderXML);
+			if(codeXML!=null){
+				columnXML.appendChild(codeXML);
+			}
+
+			xml.appendChild(columnXML);
+
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+			_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+			_fileStreamMoonshine.close();
+			
+
+		}
+
 	}
 
 	CONFIG::MOONSHINE
@@ -196,50 +249,53 @@
 		{
 			if (!_fileStreamMoonshine) return;
 
-			var xml:XML =new XML ("<root/>");
-			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
-			_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
-			_fileStreamMoonshine.close();
+		
 		}
 
-		public function loadFile(filePath:String):void
+		private function loadLocalFileToXML(filePath:String):XML
 		{
-			
-
-			
-			
 			_fileMoonshine = createNewFileIfNotExists(filePath);
 			_fileStreamMoonshine = new FileStream();
 			_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
 
 			var data:String = _fileStreamMoonshine.readUTFBytes(_fileMoonshine.size);
 			var xml:XML = new XML(data);
+			_fileStreamMoonshine.close();
 
-			for each(var col:XML in xml..column) //no matter of depth Note here
-			{
-			
-				var colChilren:XMLList = col.children();
-				var itemname:String= col.@itemname;
-				//Alert.show("colChilren:"+colChilren.length());
-				if(colChilren.length() > 0)
+			return xml;
+		}
+
+		public function loadFile(filePath:String):void
+		{
+			var xml:XML = loadLocalFileToXML(filePath)
+			if(xml!=null){
+				for each(var col:XML in xml..column) //no matter of depth Note here
 				{
-					var tmpColumn:GridColumn=new GridColumn();
-					tmpColumn.headerText=col.columnheader.@title;
-					if(itemname!=null&& itemname.indexOf("$")<0){
-						tmpColumn.dataField=encodeBase64ForColumnDataField("formField",itemname);
-					}else{
-						var formula:String=getColumnFormula(col);
-						if(formula!=null&& formula.length>0){
-							tmpColumn.dataField=encodeBase64ForColumnDataField("formula",formula);
+				
+					var colChilren:XMLList = col.children();
+					var itemname:String= col.@itemname;
+					//Alert.show("colChilren:"+colChilren.length());
+					if(colChilren.length() > 0)
+					{
+						var tmpColumn:GridColumn=new GridColumn();
+						tmpColumn.headerText=col.columnheader.@title;
+						if(itemname!=null&& itemname.indexOf("$")<0){
+							tmpColumn.dataField=encodeBase64ForColumnDataField("formField",itemname);
+						}else{
+							var formula:String=getColumnFormula(col);
+							if(formula!=null&& formula.length>0){
+								tmpColumn.dataField=encodeBase64ForColumnDataField("formula",formula);
+							}
+							
 						}
 						
+						dgColumns.columns.addItem(tmpColumn);
 					}
-					
-					dgColumns.columns.addItem(tmpColumn);
 				}
+
 			}
 		
-			_fileStreamMoonshine.close();
+		
 
 			
 

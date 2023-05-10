@@ -57,9 +57,8 @@
 								 verticalScrollBarStyleName="black"
 								 alternatingItemColors="[0xeeeeee, 0xffffff]"
 								 rowHeight="18"
-								 
 								
-								 keyUp="onTreeItemKeyUp(event)"/>
+								/>
 
    
     <s:Label text="Other Actions"  left="0" right="0"/>
@@ -71,14 +70,14 @@
     useVirtualLayout="true"
     id="actionLists"
     doubleClickEnabled="true"
-    doubleClick="actionHandler(event);"
+    doubleClick="newActionMouseClickHandler(event);"
     dataProvider="{this._dominoActionsProEditor}" />
 
 	<s:Group id="editorHolder" percentWidth="100" />
   
         <s:HGroup>
-            <s:Button id="newActionBtn" label="New Action"  height="25" width="130"  click="newAction(event)"/>
-            <s:Button id="newGroupBtn" label="New Group"  height="25" width="130"  click="newGroup()"/>
+            <s:Button id="newActionBtn" label="New Action"  height="25" width="130"  click="newDominoActionMouseClickHandler(event)"/>
+            <s:Button id="newGroupBtn" label="New Group"  height="25" width="130" />
         </s:HGroup>
 
 
@@ -178,15 +177,12 @@
 
         private function onCreationComplete(event:Event):void
         {
-
-           
-            //Alert.show("this._dominoActionsProEditor :"+this._dominoActionsProEditor.length );
-             
+          //TODO inital the action in later
             
         }
 
 
-        private function actionHandler(event:MouseEvent):void{
+        private function newActionMouseClickHandler(event:MouseEvent):void{
             MoonshineBridgeUtils.moonshineBridge.openDominoActionFile(event.currentTarget.selectedItem.description);
         }
 
@@ -219,16 +215,14 @@
         }
 
 
-		public function newAction(event:MouseEvent){
+		public function newDominoActionMouseClickHandler(event:MouseEvent){
             if(MoonshineBridgeUtils.moonshineBridge){
                   MoonshineBridgeUtils.moonshineBridge.openCreateDominoActionPanel(event);
             }
              
         }
 
-        public function newGroup(){
-
-        }
+      
        
 
 
@@ -275,15 +269,7 @@
 
 				editorHolder.addElement(this._editor);
 
-				
-
-				//propertyEditorHeader.componentName = selectedItem["className"];
-            }
-            else
-            {
-                //this.currentState = "empty";
-				//propertyEditorHeader.componentName = "";
-            }
+			  }
             this.dispatchEvent(new Event(Event.CHANGE));
         }
 		
@@ -307,16 +293,6 @@
 			return _moonshineBridge;
 		}
 
-        private function onTreeItemKeyUp(event:KeyboardEvent):void
-        {
-            // Delete key-press
-            if (event.keyCode == 46 && tree.selectedItem)
-            {
-                // if (tree.selectedItem.name.indexOf(":") != -1 ||
-                //         tree.selectedItem.type == OrganizerItem.TYPE_CELL ||
-                //         tree.selectedItem.type == OrganizerItem.TYPE_TAB) return;
-                //editingSurface.deleteItem(tree.selectedItem.item);
-            }
-        }
+      
         ]]></fx:Script>
 </s:BorderContainer>

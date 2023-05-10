@@ -320,8 +320,6 @@
 				if(MoonshineBridgeUtils.moonshineBridge){
 					dominoActionOrganizer.dominoActionsProEditor=MoonshineBridgeUtils.moonshineBridge.getDominoActionList();
 				
-				}else{
-					Alert.show("MoonshineBridgeUtils.moonshineBridge is null")
 				}
 			}
 		}

@@ -54,7 +54,7 @@
                 <s:Group  width="10%"  minWidth="250" minHeight="600" height="100%">
                         <s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" percentWidth="100"
                                     paddingLeft="0" paddingRight="0">
-                        <view:PropertyEditorHeader id="propertyEditorHeader" width="100%" />
+                        	<view:PropertyEditorHeader id="propertyEditorHeader" width="100%" />
                     
                             <s:FormItem  skinClass="skins.FormItemSkin" width="100%">
                             
@@ -71,7 +71,37 @@
                                 
                             
                             </s:FormItem> 
-                        </s:VGroup>   
+
+							<s:BorderContainer cornerRadius="0"  borderStyle="solid" borderWeight="1" left="10" right="10" top="10" bottom="10" id="columnPanel">
+								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" >
+									<s:Label id="columnHeaderText"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5" right="0" top="5" verticalCenter="0" 
+											text="Column Header Text"/>
+									<s:TextInput id="titleInput"
+                     						text=""  width="100" skinClass="skins.TextInputSkin" prompt="Column title"/>	
+									<s:Label id="columnValue"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5" right="0" verticalCenter="0" 
+											text="Column"/>
+										<s:HGroup>
+											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType"/>
+											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"/>	
+										</s:HGroup>	
+									 <s:TextArea id="columnValueFormula"
+										text="" width="100%" minWidth="156" editable="true" selectable="true"
+										prompt="Formula for column value"
+										/>
+										<s:Button id="newColumnBtn" label="Add Column" skinClass="skins.DominoAlignButtonSkin"   height="25" width="100"  click="addColumn()"/>			
+								</s:VGroup>
+							</s:BorderContainer>
+					</s:VGroup>		   
                 </s:Group>
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 
@@ -86,8 +116,6 @@
 	import mx.collections.ArrayList;
 	import utils.MoonshineBridgeUtils;
 
-	import flash.filesystem.File;
-	import flash.filesystem.FileStream;
 	import view.interfaces.IVisualEditorLibraryBridge;
 	import spark.components.Alert;
 
@@ -125,90 +153,151 @@
     
     }
 
+	private function addColumn():void 
+	{
+		var preFix:String="";
+		if (columnValueType.selectedValue=="Field"){
+			preFix="FormFile:";
+		}else  if(columnValueType.selectedValue=="Formula"){
+			preFix="Formula:";
+		}
+		var tmpColumn:GridColumn=new GridColumn();
+		tmpColumn.headerText=titleInput.text;
+		tmpColumn.dataField=encodeBase64ForColumnDataField(preFix,columnValueFormula.text);
+		dgColumns.columns.addItem(tmpColumn);
+	}
+
+	CONFIG::MOONSHINE
+	{		
+		
+		import flash.filesystem.File;
+		import flash.filesystem.FileStream;	
+		import utils.StringHelper;
+
+		private var _fileMoonshine:File;
+		private var _fileStreamMoonshine:FileStream;
+
+		public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
+		{
+			MoonshineBridgeUtils.moonshineBridge = value;
+		}
+		
+		public function set visualEditorFilePath(value:String):void
+		{
+			MoonshineBridgeUtils.currentFilePath = value;
+		}
+
+		public function get visualEditorFilePath():String
+		{
+			return _fileMoonshine.nativePath;
+		}
+
+		public function saveEditedFile():void
+		{
+			if (!_fileStreamMoonshine) return;
+
+			var xml:XML =new XML ("<root/>");
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+			_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+			_fileStreamMoonshine.close();
+		}
+
+		public function loadFile(filePath:String):void
+		{
 			
 
-	private var _fileMoonshine:File;
-	private var _fileStreamMoonshine:FileStream;
+			
+			
+			_fileMoonshine = createNewFileIfNotExists(filePath);
+			_fileStreamMoonshine = new FileStream();
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
 
-	public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
-	{
-		MoonshineBridgeUtils.moonshineBridge = value;
-	}
-	
-	public function set visualEditorFilePath(value:String):void
-	{
-		MoonshineBridgeUtils.currentFilePath = value;
-	}
+			var data:String = _fileStreamMoonshine.readUTFBytes(_fileMoonshine.size);
+			var xml:XML = new XML(data);
 
-	public function get visualEditorFilePath():String
-	{
-		return _fileMoonshine.nativePath;
-	}
-
-	public function saveEditedFile():void
-	{
-		if (!_fileStreamMoonshine) return;
-
-		var xml:XML =new XML ("<root/>");
-		_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
-		_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
-		_fileStreamMoonshine.close();
-	}
-
-	public function loadFile(filePath:String):void
-	{
-		
-
-		Alert.show("loadFile:"+filePath);
-		
-		_fileMoonshine = createNewFileIfNotExists(filePath);
-		_fileStreamMoonshine = new FileStream();
-		_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
-
-		var data:String = _fileStreamMoonshine.readUTFBytes(_fileMoonshine.size);
-		var xml:XML = new XML(data);
-
-		for each(var col:XML in xml..column) //no matter of depth Note here
-		{
-		
-			var colChilren:XMLList = col.children();
-			Alert.show("colChilren:"+colChilren.length());
-			if(colChilren.length() > 0)
+			for each(var col:XML in xml..column) //no matter of depth Note here
 			{
-				var tmpColumn:GridColumn=new GridColumn();
-				tmpColumn.headerText=col.columnheader.@title;
-				tmpColumn.dataField=col.columnheader.@title;
-				dgColumns.columns.addItem(tmpColumn);
-			}
-		}
-		//this.editingSurface.fromXML(xml);
-
-		_fileStreamMoonshine.close();
-
-		
-
-		
-	}
-
-	private function createNewFileIfNotExists(filePath:String):File
-	{
-		var tempFileMoonshine:File = new File(filePath);
-
-		if (!tempFileMoonshine.exists)
-		{
 			
-			var xml:XML = new XML("<root/>");
-			var tempFileStreamMoonshine:FileStream = new FileStream();
-			tempFileStreamMoonshine.open(tempFileMoonshine, FileMode.WRITE);
-			tempFileStreamMoonshine.writeUTFBytes(xml.toXMLString());
-			tempFileStreamMoonshine.close();
+				var colChilren:XMLList = col.children();
+				var itemname:String= col.@itemname;
+				//Alert.show("colChilren:"+colChilren.length());
+				if(colChilren.length() > 0)
+				{
+					var tmpColumn:GridColumn=new GridColumn();
+					tmpColumn.headerText=col.columnheader.@title;
+					if(itemname!=null&& itemname.indexOf("$")<0){
+						tmpColumn.dataField=encodeBase64ForColumnDataField("formField",itemname);
+					}else{
+						var formula:String=getColumnFormula(col);
+						if(formula!=null&& formula.length>0){
+							tmpColumn.dataField=encodeBase64ForColumnDataField("formula",formula);
+						}
+						
+					}
+					
+					dgColumns.columns.addItem(tmpColumn);
+				}
+			}
+		
+			_fileStreamMoonshine.close();
+
+			
+
+			
 		}
 
-		return tempFileMoonshine;
+		//This method will get the formula and base64 for column
+		private function getColumnFormula(column:XML):String 
+		{
+			var formula:String="";
+			if(column.code!=null){
+				if(column.code.formula!=null){
+					formula=StringHelper.base64Encode(column.code.formula.text());
+				}
+			}
+
+			return formula;
+
+		}
+
+		private function encodeBase64ForColumnDataField(dataFieldType:String,dataFieldValue:String):String 
+		{
+			var encodeDataField:String="";
+			if(dataFieldType=="formField"){
+				encodeDataField="FormFile:"
+			}
+			if(dataFieldType=="formula"){
+				encodeDataField="Formula:"
+			}
+			encodeDataField=encodeDataField+dataFieldValue;
+			encodeDataField=StringHelper.base64Encode(encodeDataField);
+			return encodeDataField;
+
+		}
+
+		private function createNewFileIfNotExists(filePath:String):File
+		{
+			var tempFileMoonshine:File = new File(filePath);
+
+			if (!tempFileMoonshine.exists)
+			{
+				
+				var xml:XML = new XML("<root/>");
+				var tempFileStreamMoonshine:FileStream = new FileStream();
+				tempFileStreamMoonshine.open(tempFileMoonshine, FileMode.WRITE);
+				tempFileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+				tempFileStreamMoonshine.close();
+			}
+
+			return tempFileMoonshine;
+		}
 	}
 
 			
 		
 
 ]]></fx:Script> 
+<fx:Declarations>
+		<s:RadioButtonGroup id="columnValueType"/>
+</fx:Declarations>		
 </s:Group>         

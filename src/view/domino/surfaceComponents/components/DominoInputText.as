@@ -623,7 +623,7 @@ package view.domino.surfaceComponents.components
         
 
         [Bindable]
-        private var _spaces:ArrayList = DominoGlobalTokens.Spaceing;
+        private var _spaces:ArrayList = DominoGlobalTokens.Spacing;
         public function get spaces():ArrayList
         {
             return _spaces;

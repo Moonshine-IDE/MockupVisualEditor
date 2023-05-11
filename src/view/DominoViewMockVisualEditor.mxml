@@ -55,7 +55,13 @@
                         <s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" percentWidth="100"
                                     paddingLeft="0" paddingRight="0">
                         	<view:PropertyEditorHeader id="propertyEditorHeader" width="100%" />
-                    
+							<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+									<s:Label text="Viwe Name:" width="100%" direction="rtl"/>
+									 <s:TextInput id="viewNameInput"
+                                            text=""  width="100" maxChars="100" 
+                                            enter="viewNameInput_changeHandler(event)" focusOut="viewNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
+                                   
+							 </s:FormItem> 
                             <s:FormItem  skinClass="skins.FormItemSkin" width="100%">
                             
                             
@@ -64,14 +70,11 @@
                                 text="" width="100%" minWidth="156" editable="true" selectable="true"
                                 prompt="View Selection"
                                 />
-                                <!-- <s:TextInput id="textInput"
-                                            text=""  width="100" maxChars="100" 
-                                            enter="textInput_changeHandler(event)" focusOut="textInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
-                                    -->
+                               
                                 
                             
                             </s:FormItem> 
-
+							<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 							<s:BorderContainer cornerRadius="0"  borderStyle="solid" borderWeight="1" left="10" right="10" top="10" bottom="10" id="columnPanel">
 								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" >
 									<s:Label id="columnHeaderText"
@@ -101,6 +104,7 @@
 										<s:Button id="newColumnBtn" label="Add Column"   height="25" width="100"  click="addColumn()"/>			
 								</s:VGroup>
 							</s:BorderContainer>
+							 </s:FormItem> 
 					</s:VGroup>		   
                 </s:Group>
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
@@ -218,6 +222,10 @@
 
 		}
 
+	}
+
+	private function viewNameInput_changeHandler(event:Event):void
+	{
 	}
 
 	CONFIG::MOONSHINE

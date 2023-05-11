@@ -275,7 +275,9 @@
 
 		public function loadFile(filePath:String):void
 		{
-			var xml:XML = loadLocalFileToXML(filePath)
+			var xml:XML = loadLocalFileToXML(filePath);
+			var name:String = getFileNameWithoutExtension(filePath,"view");
+			viewNameInput.text=name;
 			if(xml!=null){
 				for each(var col:XML in xml..column) //no matter of depth Note here
 				{
@@ -355,6 +357,16 @@
 
 			return tempFileMoonshine;
 		}
+
+		
+
+		private function getFileNameWithoutExtension(filePath:String,extension:String):String
+        {
+			var file:File = new File(filePath);
+			
+            var indexOfFileExtension:int = file.name.lastIndexOf(extension);
+            return file.name.substr(0, indexOfFileExtension - 1);
+        }
 	}
 
 			

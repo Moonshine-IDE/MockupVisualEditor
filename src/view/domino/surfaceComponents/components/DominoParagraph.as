@@ -60,7 +60,6 @@ package view.domino.surfaceComponents.components
 
     import view.global.Globals;
 
-    import mx.controls.Alert;
 
     [Exclude(name="propertiesChangedEvents", kind="property")]
     [Exclude(name="propertyChangeFieldReference", kind="property")]

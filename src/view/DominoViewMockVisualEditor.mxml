@@ -53,12 +53,13 @@
 		        </s:DataGrid>
                 <s:Group  width="10%"  minWidth="250" minHeight="600" height="100%">
                         <s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" percentWidth="100"
-                                    paddingLeft="0" paddingRight="0">
+                                    paddingLeft="0" paddingRight="0" id="dominoViewPropertyEditor">
                         	<view:PropertyEditorHeader id="propertyEditorHeader" width="100%" />
 							<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
-									<s:Label text="Viwe Name:" width="100%" direction="rtl"/>
+									<s:Label text="Viwe Name:" width="100%" />
 									 <s:TextInput id="viewNameInput"
                                             text=""  width="100" maxChars="100" 
+											editable="false"
                                             enter="viewNameInput_changeHandler(event)" focusOut="viewNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
                                    
 							 </s:FormItem> 
@@ -69,6 +70,7 @@
                                 <s:TextArea id="viewSelection"
                                 text="" width="100%" minWidth="156" editable="true" selectable="true"
                                 prompt="View Selection"
+								change="viewFormula_changeHandler(event)"
                                 />
                                
                                 
@@ -76,7 +78,7 @@
                             </s:FormItem> 
 							<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 							<s:BorderContainer cornerRadius="0"  borderStyle="solid" borderWeight="1" left="10" right="10" top="10" bottom="10" id="columnPanel">
-								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" >
+								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" paddingTop="10" paddingBottom="10">
 									<s:Label id="columnHeaderText"
 											textAlign="start"
 											verticalAlign="middle"
@@ -98,7 +100,7 @@
 											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"/>	
 										</s:HGroup>	
 									 <s:TextArea id="columnValueFormula"
-										text="" width="100%" minWidth="156" editable="true" selectable="true"
+										text="SELECT $FormName = Form" width="100%" minWidth="156" editable="true" selectable="true"
 										prompt="Formula for column value"
 										/>
 										<s:Button id="newColumnBtn" label="Add Column"   height="25" width="100"  click="addColumn()"/>			
@@ -109,7 +111,11 @@
                 </s:Group>
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 
-
+	<fx:Metadata>
+		[Event(name="change",type="flash.events.Event")]
+		[Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+	
+	</fx:Metadata>
 
 <fx:Script><![CDATA[
 
@@ -119,6 +125,7 @@
     import spark.events.IndexChangeEvent;
 	import mx.collections.ArrayList;
 	import utils.MoonshineBridgeUtils;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
 
 	import view.interfaces.IVisualEditorLibraryBridge;
 	import spark.components.Alert;
@@ -172,9 +179,18 @@
 		tmpColumn.width=30;
 		initalCol.addItem(tmpColumn);
 		dgColumns.columns=initalCol;
-		
+
+		//add property change listener
+		//dominoViewPropertyEditor.addEventListener("viewFormulaChanged", onDominoViewPropertyChanged);
     
     }
+
+	private function onDominoViewPropertyChanged(event:Event):void
+	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		Alert.show("onDominoViewPropertyChanged:");
+		//dispatchEvent(new Event("propertyEditorChanged", true));
+	}
 
 	private function addColumn():void 
 	{
@@ -224,9 +240,22 @@
 
 	}
 
+	
 	private function viewNameInput_changeHandler(event:Event):void
 	{
 	}
+
+	 private var viewFormula:String = "";
+
+	[Bindable("viewFormulaChanged")]
+	private function viewFormula_changeHandler(event:Event):void
+	{
+		viewFormula=columnValueFormula.text;
+		Alert.show("viewFormula:"+viewFormula);
+		dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+	}
+
+	
 
 	CONFIG::MOONSHINE
 	{		

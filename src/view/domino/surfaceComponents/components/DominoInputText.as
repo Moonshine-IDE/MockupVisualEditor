@@ -2403,7 +2403,7 @@ package view.domino.surfaceComponents.components
 		}
 
         [Bindable]
-        private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        private var _lists:ArrayList = DominoGlobalTokens.ListStyles;
         public function get lists():ArrayList
         {
             return _lists;

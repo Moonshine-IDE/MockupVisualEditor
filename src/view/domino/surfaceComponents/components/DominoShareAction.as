@@ -160,7 +160,7 @@ package view.domino.surfaceComponents.components
         //     return _sbuforms;
         // }
         //  [Bindable]
-        // private var _lists:ArrayList = DominoGlobalTokens.Lists;
+        // private var _lists:ArrayList = DominoGlobalTokens.ListStyles;
         // public function get lists():ArrayList
         // {
         //     return _lists;

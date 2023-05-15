@@ -170,6 +170,8 @@
 
 	public function onComplete():void {
 
+		//inital the view columns
+
         propertyEditorHeader.componentName = "Domino View";
 
 		var initalCol:ArrayList = new ArrayList();
@@ -179,6 +181,9 @@
 		tmpColumn.width=30;
 		initalCol.addItem(tmpColumn);
 		dgColumns.columns=initalCol;
+
+		
+		
 
 		//add property change listener
 		//dominoViewPropertyEditor.addEventListener("viewFormulaChanged", onDominoViewPropertyChanged);
@@ -240,19 +245,19 @@
 
 	}
 
-	
+	[Bindable("Changed")]
 	private function viewNameInput_changeHandler(event:Event):void
 	{
 	}
 
 	 private var viewFormula:String = "";
 
-	[Bindable("viewFormulaChanged")]
+	[Bindable("Changed")]
 	private function viewFormula_changeHandler(event:Event):void
 	{
 		viewFormula=columnValueFormula.text;
-		Alert.show("viewFormula:"+viewFormula);
-		dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		this.dispatchEvent(new Event(Event.CHANGE));
+		hasChanged=true;
 	}
 
 	
@@ -284,7 +289,29 @@
 
 		public function saveEditedFile():void
 		{
+			
 			if (!_fileStreamMoonshine) return;
+			if (!_fileMoonshine) return;
+
+			hasChanged=false;
+
+			var xml:XML = loadLocalFileToXML(MoonshineBridgeUtils.currentFilePath);
+			var codeNode:XML=xml.code.(@event=="selection")[0];
+			if(codeNode){
+				if(codeNode.formula){
+					if(viewSelection.text){
+						codeNode.formula=viewSelection.text;
+					}
+					
+				}
+			}
+
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+			_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+			_fileStreamMoonshine.close();
+
+		
+			
 
 		
 		}
@@ -313,7 +340,6 @@
 				
 					var colChilren:XMLList = col.children();
 					var itemname:String= col.@itemname;
-					//Alert.show("colChilren:"+colChilren.length());
 					if(colChilren.length() > 0)
 					{
 						var tmpColumn:GridColumn=new GridColumn();
@@ -331,6 +357,15 @@
 						dgColumns.columns.addItem(tmpColumn);
 					}
 				}
+			//inital the view select formla
+			var selectFormula:XML= xml.code.(@event=="selection")[0];
+			if(selectFormula){
+				var formulaXml:XML=selectFormula.formula[0];
+				if(formulaXml){
+					if(formulaXml.text())
+					viewSelection.text=formulaXml.text();
+				}
+			}
 
 			}
 		

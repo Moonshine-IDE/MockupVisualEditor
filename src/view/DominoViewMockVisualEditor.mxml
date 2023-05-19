@@ -96,7 +96,8 @@
 											left="5" right="0" top="5" verticalCenter="0" 
 											text="Column Header Text"/>
 									<s:TextInput id="titleInput"
-                     						text=""  width="100" skinClass="skins.TextInputSkin" prompt="Column title"/>	
+                     						text=""  width="100" skinClass="skins.TextInputSkin" prompt="Column title" 
+											change="columnTitle_changeHandler(event)"/>	
 										
 										<s:Label id="columnValue"
 												textAlign="start"
@@ -106,15 +107,16 @@
 												left="5" right="10" verticalCenter="0" 
 												text="Width:"/>
 										<s:TextInput id="columWidth"
-										text="70"  width="100" skinClass="skins.TextInputSkin" prompt="Column width"/>	
+										text="70"  change="columnWidth_changeHandler(event)" width="100" skinClass="skins.TextInputSkin" prompt="Column width"/>	
 										
 										<s:HGroup>
-											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType"/>
-											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType" selected="true"/>	
+											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType" click="columnType_changeHandler(event)"/>
+											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType" selected="true" click="columnType_changeHandler(event)"/>	
 										</s:HGroup>	
 									 <s:TextArea id="columnValueFormula"
 										text="SELECT $FormName = Form" width="100%" minWidth="156" editable="true" selectable="true"
 										prompt="Formula for column value"
+										change="columnValueFormula_changeHandler(event)"
 										/>
 
 									 <s:FormItem label="Show twistie when row is expandable" skinClass="skins.FormItemSkin">
@@ -172,7 +174,10 @@
 
 	private var _hasChanged:Boolean = false;
 
-	private var columnCount:int = 1;
+	private var columnIndex:int = -1;
+
+	private var selectedColumnName:String = "";
+	private var selectedColumn:GridColumn = null;
 
 	private var showColumns:Boolean = false;
 
@@ -249,14 +254,24 @@
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
 		//loading the column setting to property
 		if(event.value){
+			selectedColumnName=event.value;
+			
+			selectedColumn= getCurrentColumnByTitle(selectedColumnName);
+			
 			var xml:XML=loadLocalFileToXML(MoonshineBridgeUtils.currentFilePath);
 			if(xml!=null){
+				
 				var columnHeaderxml:XML=xml.column.columnheader.(@title==event.value)[0];
 				if(columnHeaderxml!=null){
 					titleInput.text=columnHeaderxml.@title;
 					var column:XML=columnHeaderxml.parent();
 
 					if(column!=null){
+
+						if(column.width!=null){
+							columWidth.text=column.width;
+						}
+						
 						
 						if(column.code==null || column.code.toString()=="" ){
 							columnValueType.selectedValue="Field"
@@ -312,7 +327,7 @@
 			var preFix:String="";
 			if (columnValueType.selectedValue=="Field"){
 				preFix="FormFile:";
-				columnXML.@itemname=titleInput.text;
+				columnXML.@itemname=columnValueFormula.text;
 			}else  if(columnValueType.selectedValue=="Formula"){
 				preFix="Formula:";
 				codeXML=new XML("<code/>");
@@ -323,31 +338,46 @@
 			var tmpColumn:GridColumn=new GridColumn();
 			tmpColumn.headerText=titleInput.text;
 			tmpColumn.dataField=encodeBase64ForColumnDataField(preFix,columnValueFormula.text);
-						
+			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
+											
 			dgColumns.columns.addItem(tmpColumn);
-			
+
 			hasChanged=true;
 
 			var xml:XML=loadLocalFileToXML(MoonshineBridgeUtils.currentFilePath);
 			if(xml!=null){
-				xml=xml.replace("$ViewName","NewView");
-				var columnHeaderXML:XML=new XML("<columnheader/> ");
-				columnHeaderXML.@title=titleInput.text;
-				var columnHeaderFontXML:XML = new XML("<font/>");
-				columnHeaderFontXML.@size="9pt";
-				columnHeaderFontXML.@style="bold";
-				columnHeaderXML.appendChild(columnHeaderFontXML);
+				var repeatColumnTitle:Boolean=false;
+				//not allow repeat column title
+				for each(var columnHeader:XML in xml..columnheader) //no matter of depth Note here
+				{
+					if(columnHeader.@title==titleInput.text){
+						repeatColumnTitle=true;
+					}
 
-				columnXML.appendChild(columnHeaderXML);
-				if(codeXML!=null){
-					columnXML.appendChild(codeXML);
 				}
+				if(repeatColumnTitle){
+					Alert.show(titleInput.text+" already exist in the column, please change to other title for this column!");
+				}else{
 
-				xml.appendChild(columnXML);
+					xml=xml.replace("$ViewName","NewView");
+					var columnHeaderXML:XML=new XML("<columnheader/> ");
+					columnHeaderXML.@title=titleInput.text;
+					var columnHeaderFontXML:XML = new XML("<font/>");
+					columnHeaderFontXML.@size="9pt";
+					columnHeaderFontXML.@style="bold";
+					columnHeaderXML.appendChild(columnHeaderFontXML);
 
-				_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
-				_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
-				_fileStreamMoonshine.close();
+					columnXML.appendChild(columnHeaderXML);
+					if(codeXML!=null){
+						columnXML.appendChild(codeXML);
+					}
+
+					xml.appendChild(columnXML);
+
+					_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+					_fileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+					_fileStreamMoonshine.close();
+				}
 				
 
 			}
@@ -365,12 +395,91 @@
 	 private var viewFormula:String = "";
 
 	[Bindable("Changed")]
-	private function viewFormula_changeHandler(event:Event):void
+	private function viewFormula_changeHandler(event):void
 	{
-		viewFormula=columnValueFormula.text;
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
+		if(viewFormula!=viewSelection.text){
+			viewFormula=viewSelection.text;
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			hasChanged=true;
+		}
+		
 	}
+
+	private function getCurrentColumnByTitle(title:String):GridColumn
+	{
+		var currentCol:GridColumn = null;
+		
+		 for(var indexNum:Number = 0; indexNum < dgColumns.columns.length; indexNum++)
+		{
+			var item:GridColumn = dgColumns.columns.getItemAt(indexNum) as GridColumn;
+		
+			if(item.headerText==title){
+				currentCol=item;
+			}
+		}
+		
+		return currentCol;
+
+	}
+
+	private var columnTitle:String = "";
+	private function columnTitle_changeHandler(event):void
+	{
+		if(columnTitle!=titleInput.text){
+			if(selectedColumn!=null){
+				selectedColumn.headerText=titleInput.text;
+				columnTitle=titleInput.text;
+				dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+				hasChanged=true;
+			}
+			
+		}
+	}
+
+	private var columnWidth:String = "";
+	private function columnWidth_changeHandler(event):void
+	{
+		if(columWidth.text!=null&& columWidth.text.length>0&&columnWidth!=columWidth.text){
+			if(selectedColumn!=null){
+				selectedColumn.width=parseInt(columWidth.text);
+				columnWidth=columWidth.text;
+				dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+				hasChanged=true;
+			}
+		}
+	}
+
+	private var columnType:String = "";
+
+	private function columnType_changeHandler(event):void
+	{
+		if(columnType!=columnValueType.selectedValue){
+			columnType=columnValueType.selectedValue.toString();
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			hasChanged=true;
+		}
+		
+	}
+
+	private var columnFormula:String = "";
+	private function columnValueFormula_changeHandler(event):void
+	{
+		if(columnFormula!=columnValueFormula.text){
+			columnFormula=columnValueFormula.text;
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			hasChanged=true;
+		}
+		
+	}
+
+
+
+	
+
+	
+
+
+	
 
 	
 
@@ -416,6 +525,40 @@
 					}
 					
 				}
+			}
+
+			//update the column property
+			if(selectedColumnName.length>0){
+				var columnHeaderxml:XML=xml.column.columnheader.(@title==selectedColumnName)[0];
+				if(columnHeaderxml!=null){
+					columnHeaderxml.@title=titleInput.text;
+					var column:XML=columnHeaderxml.parent();
+					if(column!=null){
+
+						if(columWidth.text!=null){
+							column.width=columWidth.text;
+						}
+
+						if (columnValueType.selectedValue=="Field"){
+							
+							column.@itemname=titleInput.text;
+						}else  if(columnValueType.selectedValue=="Formula"){
+							
+							if(column.code){
+								column.code.formula=columnValueFormula.text;
+							}else{
+								var codeXML:XML=new XML("<code/>");
+								codeXML.@event="value";
+								var codeFormulaXML:XML=new XML("<formula>"+columnValueFormula.text+"</formula>");
+								codeXML.appendChild(codeFormulaXML);
+								column.appendChild(codeXML);
+							}
+							
+							
+						}
+					}
+				}
+
 			}
 
 			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);

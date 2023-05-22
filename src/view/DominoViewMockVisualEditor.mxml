@@ -125,7 +125,7 @@
 													change="check_changeHandler(event)"/>
 									</s:FormItem>		
 
-										<s:Button id="newColumnBtn" label="Add Column"   height="25" width="100"  click="addColumn()"/>			
+										<s:Button id="newColumnBtn" label="Remove Column"   height="25" width="100"  click="removeColumn()"/>			
 								</s:VGroup>
 							
 							 </s:FormItem> 
@@ -170,6 +170,10 @@
 
 	import view.suportClasses.events.DominoViewColumnClickEvent;
 
+	import flash.ui.ContextMenu;
+    import flash.ui.ContextMenuItem;
+
+
 	private var viewFileName:String =  "" ;
 
 	private var _hasChanged:Boolean = false;
@@ -178,6 +182,7 @@
 
 	private var selectedColumnName:String = "";
 	private var selectedColumn:GridColumn = null;
+	private var selectedColumnType:String = "";
 
 	private var showColumns:Boolean = false;
 
@@ -195,6 +200,57 @@
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 	}
+
+	public function createContextMenuForGrid():void
+	{
+			
+	}
+
+	private function createContextMenu():ContextMenu
+	{
+		var viewContextMenu:ContextMenu = new ContextMenu();
+		var cutItem:ContextMenuItem = new ContextMenuItem("Add Column");
+		cutItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onMenuItemAddColumn);
+		viewContextMenu.customItems.push(cutItem);
+		
+		return viewContextMenu;
+	}
+	private function onMenuItemAddColumn(event:ContextMenuEvent):void
+	{
+		if(selectedColumnName!="New Column"){
+		var tmpColumn:GridColumn=new GridColumn();
+			tmpColumn.headerText="New Column";
+			tmpColumn.dataField="";
+			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
+											
+			dgColumns.columns.addItem(tmpColumn);
+
+			hasChanged=true;
+
+			
+		
+			viewSetPanel.visible =viewSetPanel.includeInLayout = false;
+			columnAccordion.visible =columnAccordion.includeInLayout = true;
+
+			selectedColumnName="New Column";
+			
+			selectedColumn= getCurrentColumnByTitle(selectedColumnName);
+			titleInput.text=selectedColumnName;
+			columWidth.text="70";
+			columnValueType.selectedValue="Field"
+			columnValueFieldRadioBtn.selected=true;
+			columnValueFormulaRadioBtn.selected=false;
+			columnValueFormula.text="";
+
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			
+		}else{
+			Alert.show("You already create a new column,please seting it's column name to other name ,then try to add other new again.");
+		}
+
+		
+	}
+	
 
   	[Bindable]
 	private var rowsDataProvider:ArrayList = new ArrayList();
@@ -243,12 +299,14 @@
 		//add property change listener
 		//dominoViewPropertyEditor.addEventListener("viewFormulaChanged", onDominoViewPropertyChanged);
     
-		
+		this.contextMenu = createContextMenu();
     }
 
 	
 	public function viewColumnClick(event:DominoViewColumnClickEvent):void{
 		showColumns=true;
+
+		selectedColumnType="";
 		
 		viewSetPanel.visible =viewSetPanel.includeInLayout = false;
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
@@ -268,7 +326,7 @@
 
 					if(column!=null){
 
-						if(column.width!=null){
+						if(column.@width!=null){
 							columWidth.text=column.width;
 						}
 						
@@ -313,6 +371,20 @@
 		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
 		Alert.show("onDominoViewPropertyChanged:");
 		//dispatchEvent(new Event("propertyEditorChanged", true));
+	}
+
+	private function removeColumn():void 
+	{
+		if(selectedColumn!=null){
+			(dgColumns.columns as ArrayList).removeItemAt((dgColumns.columns as ArrayList).getItemIndex(selectedColumn));
+
+			hasChanged=true;
+
+			selectedColumnType="remove";
+
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+
+		}
 	}
 
 	private function addColumn():void 
@@ -530,34 +602,106 @@
 			//update the column property
 			if(selectedColumnName.length>0){
 				var columnHeaderxml:XML=xml.column.columnheader.(@title==selectedColumnName)[0];
-				if(columnHeaderxml!=null){
-					columnHeaderxml.@title=titleInput.text;
-					var column:XML=columnHeaderxml.parent();
-					if(column!=null){
-
-						if(columWidth.text!=null){
-							column.width=columWidth.text;
-						}
-
-						if (columnValueType.selectedValue=="Field"){
-							
-							column.@itemname=titleInput.text;
-						}else  if(columnValueType.selectedValue=="Formula"){
-							
-							if(column.code){
-								column.code.formula=columnValueFormula.text;
-							}else{
-								var codeXML:XML=new XML("<code/>");
-								codeXML.@event="value";
-								var codeFormulaXML:XML=new XML("<formula>"+columnValueFormula.text+"</formula>");
-								codeXML.appendChild(codeFormulaXML);
-								column.appendChild(codeXML);
-							}
-							
-							
+					
+				if(selectedColumnType=="remove"){
+					if(columnHeaderxml!=null){
+						var column:XML=columnHeaderxml.parent();
+						if(column!=null){
+							delete column.parent().children()[column.childIndex()]; 
+							selectedColumnName="";
+							selectedColumnType="";
+							columWidth.text="";
+							titleInput.text="";
 						}
 					}
+					
+				}else{
+					if(columnHeaderxml!=null){
+						columnHeaderxml.@title=titleInput.text;
+						var column:XML=columnHeaderxml.parent();
+						if(column!=null){
+
+							if(columWidth.text!=null){
+								column.width=columWidth.text;
+							}
+
+							if (columnValueType.selectedValue=="Field"){
+								
+								column.@itemname=titleInput.text;
+							}else  if(columnValueType.selectedValue=="Formula"){
+								
+								if(column.code){
+									column.code.formula=columnValueFormula.text;
+								}else{
+									var codeXML:XML=new XML("<code/>");
+									codeXML.@event="value";
+									var codeFormulaXML:XML=new XML("<formula>"+columnValueFormula.text+"</formula>");
+									codeXML.appendChild(codeFormulaXML);
+									column.appendChild(codeXML);
+								}
+								
+								
+							}
+						}
+					}else{
+						//add  a new column
+						var columnXML:XML=new XML("<column width='30'/> ");
+						var codeXML:XML=null;
+						columnXML.@sort="ascending";
+						if(columWidth.text!=null && columWidth.text.length>0){
+							columnXML.@width=columWidth.text;
+						}
+						var preFix:String="";
+						if (columnValueType.selectedValue=="Field"){
+							preFix="FormFile:";
+							columnXML.@itemname=columnValueFormula.text;
+						}else  if(columnValueType.selectedValue=="Formula"){
+							preFix="Formula:";
+							codeXML=new XML("<code/>");
+							codeXML.@event="value";
+							var codeFormulaXML:XML=new XML("<formula>"+columnValueFormula.text+"</formula>");
+							codeXML.appendChild(codeFormulaXML);
+						}
+						
+					
+						if(xml!=null){
+							var repeatColumnTitle:Boolean=false;
+							//not allow repeat column title
+							for each(var columnHeader:XML in xml..columnheader) //no matter of depth Note here
+							{
+								if(columnHeader.@title==titleInput.text){
+									repeatColumnTitle=true;
+								}
+
+							}
+							if(repeatColumnTitle){
+								Alert.show(titleInput.text+" already exist in the column, please change to other title for this column!");
+							}else{
+
+								xml=xml.replace("$ViewName","NewView");
+								var columnHeaderXML:XML=new XML("<columnheader/> ");
+								columnHeaderXML.@title=titleInput.text;
+								var columnHeaderFontXML:XML = new XML("<font/>");
+								columnHeaderFontXML.@size="9pt";
+								columnHeaderFontXML.@style="bold";
+								columnHeaderXML.appendChild(columnHeaderFontXML);
+
+								columnXML.appendChild(columnHeaderXML);
+								if(codeXML!=null){
+									columnXML.appendChild(codeXML);
+								}
+
+								xml.appendChild(columnXML);
+
+								
+							}
+							
+
+						}
+
+					}
 				}
+				
 
 			}
 
@@ -588,8 +732,13 @@
 		{
 			var xml:XML = loadLocalFileToXML(filePath);
 			var name:String = getFileNameWithoutExtension(filePath,"view");
-			viewNameInput.text=name;
+			if(viewNameInput!=null){
+				viewNameInput.text=name;
+			}
+		
+			
 			if(xml!=null){
+			
 				for each(var col:XML in xml..column) //no matter of depth Note here
 				{
 				
@@ -615,15 +764,22 @@
 						
 					}
 				}
-			//inital the view select formla
-			var selectFormula:XML= xml.code.(@event=="selection")[0];
-			if(selectFormula){
-				var formulaXml:XML=selectFormula.formula[0];
-				if(formulaXml){
-					if(formulaXml.text())
-					viewSelection.text=formulaXml.text();
+				
+				//inital the view select formla
+				var selectFormula:XML= xml.code.(@event=="selection")[0];
+				if(selectFormula){
+					var formulaXml:XML=selectFormula.formula[0];
+					if(formulaXml){
+					
+						if(formulaXml.text()){
+							if(viewSelection!=null){
+								viewSelection.text=formulaXml.text();
+							}
+
+						}
+						
+					}
 				}
-			}
 
 			}
 		

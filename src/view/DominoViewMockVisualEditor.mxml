@@ -120,7 +120,7 @@
 										/>
 
 									 <s:FormItem label="Show twistie when row is expandable" skinClass="skins.FormItemSkin">
-										<s:CheckBox id="check"
+										<s:CheckBox id="columnExpandable"
 													selected="true"
 													change="check_changeHandler(event)"/>
 									</s:FormItem>		
@@ -133,6 +133,22 @@
 
 							<mx:VBox  horizontalAlign="left" id="columnSortSetPanel"  label="Column Setting-Sort Type" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
+									<s:FormItem label="Sort:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnSortNoneRadioBtn" label="None" groupName="columnSortOrder" selected="true"  click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortAscendingRadioBtn" label="Ascending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortDescendingRadioBtn" label="Descending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>	
+											
+										</s:HGroup>	
+									</s:FormItem> 
+									<s:FormItem label="Type:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnSortStandardRadioBtn" label="Standard" groupName="columnSortType" selected="true"  click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortCategorizedRadioBtn" label="Categorized" groupName="columnSortType" click="columnSort_changeHandler(event)"/>
+										
+											
+										</s:HGroup>	
+									</s:FormItem> 
 							</mx:VBox>
 							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
@@ -217,9 +233,24 @@
 	}
 	private function onMenuItemAddColumn(event:ContextMenuEvent):void
 	{
-		if(selectedColumnName!="New Column"){
-		var tmpColumn:GridColumn=new GridColumn();
+		var repeatColumnTitle:Boolean=false;
+		var xml:XML=loadLocalFileToXML(MoonshineBridgeUtils.currentFilePath);
+		if(xml!=null){
+			
+			//not allow repeat column title
+			for each(var columnHeader:XML in xml..columnheader) //no matter of depth Note here
+			{
+				if(columnHeader.@title==titleInput.text){
+					repeatColumnTitle=true;
+				}
+
+			}
+		}
+
+		if(selectedColumnName!="New Column" && repeatColumnTitle==false){
+			var tmpColumn:GridColumn=new GridColumn();
 			tmpColumn.headerText="New Column";
+			tmpColumn.width=70;
 			tmpColumn.dataField="";
 			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
 											
@@ -273,6 +304,8 @@
 
 	private function check_changeHandler(event:Event):void
 	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
 	}
 
 	public function onComplete():void {
@@ -327,7 +360,9 @@
 					if(column!=null){
 
 						if(column.@width!=null){
-							columWidth.text=column.width;
+							columWidth.text=(parseInt(column.@width) * 8).toString();
+						}else{
+							columWidth.text="70";
 						}
 						
 						
@@ -533,6 +568,10 @@
 		
 	}
 
+	private function columnSort_changeHandler(event):void
+	{
+	}
+
 	private var columnFormula:String = "";
 	private function columnValueFormula_changeHandler(event):void
 	{
@@ -616,14 +655,24 @@
 					}
 					
 				}else{
+					//convert columWidth.text to numbers of characters that can fit across a column.
+					var columnWidthInt:int =30;
+					if(columWidth.text!=null && columWidth.text.length>0){
+						columnWidthInt= Math.round(parseInt(columWidth.text)/8);
+
+					}
+					
 					if(columnHeaderxml!=null){
 						columnHeaderxml.@title=titleInput.text;
 						var column:XML=columnHeaderxml.parent();
 						if(column!=null){
-
-							if(columWidth.text!=null){
-								column.width=columWidth.text;
+							if(columnExpandable.selected==true){
+								column.@twisties="true"
+							}else{
+								column.@twisties="false"
 							}
+							column.@width=columnWidthInt.toString();
+							
 
 							if (columnValueType.selectedValue=="Field"){
 								
@@ -648,9 +697,14 @@
 						var columnXML:XML=new XML("<column width='30'/> ");
 						var codeXML:XML=null;
 						columnXML.@sort="ascending";
-						if(columWidth.text!=null && columWidth.text.length>0){
-							columnXML.@width=columWidth.text;
+						columnXML.@width=columnWidthInt.toString();
+
+						if(columnExpandable.selected==true){
+								columnXML.@twisties="true"
+						}else{
+							columnXML.@twisties="false"
 						}
+						
 						var preFix:String="";
 						if (columnValueType.selectedValue=="Field"){
 							preFix="FormFile:";
@@ -853,5 +907,8 @@
 ]]></fx:Script> 
 <fx:Declarations>
 		<s:RadioButtonGroup id="columnValueType"/>
+		<s:RadioButtonGroup id="columnSortOrder"/>
+		<s:RadioButtonGroup id="columnSortType"/>
+		
 </fx:Declarations>		
 </s:Group>         

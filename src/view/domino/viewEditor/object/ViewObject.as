@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
 ////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
@@ -31,50 +29,15 @@
 //  it in the license file.
 //
 ////////////////////////////////////////////////////////////////////////////////
--->
-<s:DefaultGridHeaderRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
-							 xmlns:s="library://ns.adobe.com/flex/spark" 
-							 xmlns:mx="library://ns.adobe.com/flex/mx" height="30">
-	
-	<fx:Declarations>
-		<s:Label id="labelDisplay" name="label_Display"
-                verticalCenter="1" left="0" right="0" top="0" bottom="0"
-                verticalAlign="middle"
-                maxDisplayedLines="1"
-                textAlign="left"
-                fontWeight="bold"
-                showTruncationTip="true"
-                click="dispatchClickEvent(event)"/>
-	</fx:Declarations>
 
-    <fx:Script>
-		<![CDATA[
-            import flash.events.Event;
-            import flash.events.MouseEvent;
-            import spark.components.Alert;
-            import view.suportClasses.events.DominoViewColumnClickEvent;
-
-            
-            private function dispatchClickEvent(event:MouseEvent):void
-            {
-                 this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,labelDisplay.text,true, true) );
-            }
-
-            	
-			/**
-			 * Set DATA
-			 */
-			override public function set data(value:Object):void {
-				
-				if ( value ) {
-					super.data = value;
-					
-					if (this.column)
-					{
-						
-					}
-				}
-			}
-		]]>
-	</fx:Script>
-</s:DefaultGridHeaderRenderer>
+package view.domino.viewEditor.object
+{
+    public class ViewObject {
+        public var viewName:String;
+        public var viewCodeEvent:String;
+        public var viewCodeFormula:String;
+        public function ViewObject()
+		{
+        }
+    }
+}

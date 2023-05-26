@@ -57,24 +57,23 @@
             
             private function dispatchClickEvent(event:MouseEvent):void
             {
-                 this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,labelDisplay.text,true, true) );
+			
+                 this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,this.column.columnIndex,true, true) );
+            }
+
+			/**
+             *  @private
+             *  Create and add the sortIndicator to the sortIndicatorGroup and the 
+             *  labelDisplay into the labelDisplayGroup.
+             */
+            override public function prepare(hasBeenRecycled:Boolean):void
+            {
+                super.prepare(hasBeenRecycled);
+                
             }
 
             	
-			/**
-			 * Set DATA
-			 */
-			override public function set data(value:Object):void {
-				
-				if ( value ) {
-					super.data = value;
-					
-					if (this.column)
-					{
-						
-					}
-				}
-			}
+			
 		]]>
 	</fx:Script>
 </s:DefaultGridHeaderRenderer>

@@ -48,7 +48,7 @@
 					dataProvider="{rowsDataProvider}" click="onDataGridClick(event)">
                         <s:columns>
                            <s:ArrayList>
-								<s:GridColumn headerRenderer="components.renderers.DominoViewEditorHeaderRenderer" dataField="label"  headerText="Row number" id="column_0" />
+							
 							</s:ArrayList>
                         </s:columns>
 		        </s:DataGrid>
@@ -111,7 +111,7 @@
 										
 										<s:HGroup>
 											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType" click="columnType_changeHandler(event)"/>
-											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType" selected="true" click="columnType_changeHandler(event)"/>	
+											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"  click="columnType_changeHandler(event)"/>	
 										</s:HGroup>	
 									 <s:TextArea id="columnValueFormula"
 										text="SELECT $FormName = Form" width="100%" minWidth="156" editable="true" selectable="true"
@@ -193,7 +193,7 @@
 
 	import view.domino.viewEditor.object.ColumnObject;
 	import view.domino.viewEditor.object.ViewObject;
-
+	import spark.components.gridClasses.GridColumn;
 
 	
 
@@ -282,6 +282,7 @@
 			var columnsObj:ColumnObject=new ColumnObject();
 			columnsObj.columnHeaderTitle=selectedColumnName;
 			columnsObj.columnWidth="70";
+			columnsObj.columnTypeValue="Field";
 			columnObjectList.addItem(columnsObj);
 
 
@@ -316,19 +317,12 @@
 
 	public function onComplete():void {
 
+		
 		//inital the view columns
 
         propertyEditorHeader.componentName = "Domino View";
 
-		var initalCol:ArrayList = new ArrayList();
-		var tmpColumn:GridColumn=new GridColumn();
-		tmpColumn.headerText="#"
-		tmpColumn.dataField="id"
-		tmpColumn.width=30;
-		tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
-		//add column click listener
-		initalCol.addItem(tmpColumn);
-		dgColumns.columns=initalCol;
+		
 
 		viewSetPanel.visible =viewSetPanel.includeInLayout = true;
 		columnAccordion.visible =columnAccordion.includeInLayout = false;
@@ -350,20 +344,10 @@
 		viewSetPanel.visible =viewSetPanel.includeInLayout = false;
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
 		//loading the column setting to property
-		if(event.value){
-			for(var i:int=0; i<columnObjectList.length; i++)
-			{
-				
-				var c:ColumnObject = columnObjectList.getItemAt(i) as  ColumnObject;
-				if(event.value==c.columnHeaderTitle){
-					selectedColumnObject=c;
-				}
-				
-			}
-
-			selectedColumnName=event.value;
-			
-			selectedColumn= getCurrentColumnByTitle(selectedColumnName);
+		//Alert.show("event.columnInex:"+event.columnInex);
+		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
+			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
 			if(selectedColumnObject!=null){
 				titleInput.text=selectedColumnObject.columnHeaderTitle;
 				if(selectedColumnObject.columnWidth!=null && selectedColumnObject.columnWidth.toString().length>0){
@@ -377,7 +361,8 @@
 					columnValueFieldRadioBtn.selected=true;
 					columnValueFormulaRadioBtn.selected=false;
 						
-				}else if(selectedColumnObject.columnTypeValue=="Formula"){
+				}
+				if(selectedColumnObject.columnTypeValue=="Formula"){
 					columnValueType.selectedValue="Formula"
 					columnValueFormulaRadioBtn.selected=true;
 					columnValueFieldRadioBtn.selected=false;
@@ -418,24 +403,17 @@
 
 	private function removeColumn():void 
 	{
-		if(selectedColumn!=null){
-			(dgColumns.columns as ArrayList).removeItemAt((dgColumns.columns as ArrayList).getItemIndex(selectedColumn));
-
-			hasChanged=true;
+		if(selectedColumnObject!=null){
+		
+			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
+			(dgColumns.columns as ArrayList).removeItemAt(index);
+			columnObjectList.removeItemAt(index);
+			
 
 			selectedColumnType="remove";
 
 			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			//remove from column list:
-			for(var i:int=0; i<columnObjectList.length; i++)
-			{
-				
-				var c:ColumnObject = columnObjectList.getItemAt(i) as  ColumnObject;
-				if(selectedColumn.headerText==c.columnHeaderTitle){
-					columnObjectList.removeItem(c)
-				}
-				
-			}
+			
 
 		}
 	}
@@ -519,14 +497,12 @@
 
 	private function columnType_changeHandler(event):void
 	{
-		if(columnType!=columnValueType.selectedValue){
-			columnType=columnValueType.selectedValue.toString();
-			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			hasChanged=true;
-			if(selectedColumnObject!=null){
-				selectedColumnObject.columnTypeValue=columnValueType.selectedValue.toString();
-			}
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+		if(selectedColumnObject!=null){
+			selectedColumnObject.columnTypeValue=columnValueType.selectedValue.toString();
 		}
+		
 		
 	}
 
@@ -537,13 +513,11 @@
 	private var columnFormula:String = "";
 	private function columnValueFormula_changeHandler(event):void
 	{
-		if(columnFormula!=columnValueFormula.text){
-			columnFormula=columnValueFormula.text;
-			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			hasChanged=true;
-			if(selectedColumnObject!=null){
-				selectedColumnObject.columnCodeFormula=columnValueFormula.text;
-			}
+		
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+		if(selectedColumnObject!=null){
+			selectedColumnObject.columnCodeFormula=columnValueFormula.text;
 		}
 		
 	}
@@ -620,6 +594,8 @@
 			viewCode.appendChild(viewCodeFormula);
 			xmlView.appendChild(viewCode);
 
+			
+
 			for(var i:int=0; i<columnObjectList.length; i++)
 			{
 				// 
@@ -660,7 +636,7 @@
 			}
 
 			xmlStr=xmlStr+xmlView.toXMLString();
-
+			
 			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
 			_fileStreamMoonshine.writeUTFBytes(xmlStr);
 			_fileStreamMoonshine.close();
@@ -704,7 +680,7 @@
 					{
 						var tmpColumn:GridColumn=new GridColumn();
 						tmpColumn.headerText=col.columnheader.@title;
-						if(itemname!=null&& itemname.indexOf("$")<0){
+						if(col.code==null){
 							tmpColumn.dataField=encodeBase64ForColumnDataField("formField",itemname);
 						}else{
 							var formula:String=getColumnFormula(col);
@@ -729,6 +705,13 @@
 							columnsObj.columnWidth="70";
 						}
 
+						if(col.code.toString().length==0){
+							columnsObj.columnTypeValue="Field";
+							columnsObj.columnCodeFormula=col.@itemname
+						}else{
+							columnsObj.columnTypeValue="Formula";
+							columnsObj.columnCodeFormula=col.code.formula;
+						}
 						columnObjectList.addItem(columnsObj);
 						
 						

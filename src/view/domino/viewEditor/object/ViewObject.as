@@ -36,6 +36,12 @@ package view.domino.viewEditor.object
         public var viewName:String;
         public var viewCodeEvent:String;
         public var viewCodeFormula:String;
+        public var showinmenu:String;
+        public var noreplace:String;
+        public var publicaccess:String;
+        public var onopengoto:String;
+        public var onrefresh:String;
+        public var opencollapsed:String;
         public function ViewObject()
 		{
         }

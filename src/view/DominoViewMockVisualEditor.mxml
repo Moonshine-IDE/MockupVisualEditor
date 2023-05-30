@@ -79,6 +79,22 @@
 											
 										
 										</s:FormItem> 
+									<s:FormItem label="Show in menu" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="viewShowinmenu"
+													selected="true"
+													change="showinmenu_changeHandler(event)"/>
+									</s:FormItem>	
+									<s:FormItem label="Public access" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="viewPublicaccess"
+													selected="true"
+													change="publicaccess_changeHandler(event)"/>
+									</s:FormItem>
+									<s:FormItem label="Open collapsed" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="viewOpencollapsed"
+													selected="true"
+													change="opencollapsed_changeHandler(event)"/>
+									</s:FormItem>
+								
 							</s:VGroup>
 							
 							
@@ -314,6 +330,9 @@
 		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
 		hasChanged=true;
 	}
+	private function viewNameInput_changeHandler(event:Event):void
+	{
+	}
 
 	public function onComplete():void {
 
@@ -420,10 +439,49 @@
 
 
 
-	[Bindable("Changed")]
-	private function viewNameInput_changeHandler(event:Event):void
+
+	private function showinmenu_changeHandler(event:Event):void
 	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+		if(viewObject!=null){
+			if(viewShowinmenu.selected==true){
+				viewObject.showinmenu="true";
+			}else{
+				viewObject.showinmenu="false";
+			}
+			
+		}
 	}
+	//viewPublicaccess
+	private function publicaccess_changeHandler(event:Event):void
+	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+		if(viewObject!=null){
+			if(viewPublicaccess.selected==true){
+				viewObject.publicaccess="true";
+			}else{
+				viewObject.publicaccess="false";
+			}
+		}
+	}
+	
+	//opencollapsed_changeHandler
+	private function opencollapsed_changeHandler(event:Event):void
+	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+		if(viewObject!=null){
+			if(viewOpencollapsed.selected==true){
+				viewObject.opencollapsed="true";
+			}else{
+				viewObject.opencollapsed="false";
+			}
+		}
+	}
+
+	
 
 	 private var viewFormula:String = "";
 
@@ -440,6 +498,8 @@
 		}
 		
 	}
+
+	
 
 	private function getCurrentColumnByTitle(title:String):GridColumn
 	{
@@ -568,15 +628,32 @@
 			hasChanged=false;
 			var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
 			var xmlView:XML=new XML("<view />");
-			xmlView.@showinmenu="false";
+			if(viewObject.showinmenu=="true"){
+				xmlView.@showinmenu="true";
+			}else{
+				xmlView.@showinmenu="false";
+			}
+			
 			xmlView.@noreplace="true";
 			xmlView.@unreadmarks="none";
 			// boldunreadrows="false" evaluateactions="false" 
 			//allownewdocuments="false" allowcustomizations="true" hidemarginborder="false" marginwidth="0px" marginbgcolor="white" uniquekeys="false"
-			xmlView.@publicaccess="false";
+			if(viewObject.publicaccess=="true"){
+				xmlView.@publicaccess="true";
+			}else{
+				xmlView.@publicaccess="false";
+			}
+			
 			xmlView.@onopengoto="lastopened";
+			
 			xmlView.@onrefresh="displayindicator";
-			xmlView.@opencollapsed="false";
+			if(viewObject.opencollapsed=="true"){
+				xmlView.@opencollapsed="true";
+			}else{
+				xmlView.@opencollapsed="false";
+			}
+			
+		
 			xmlView.@showresponsehierarchy="true";
 			xmlView.@showmargin="true";
 			xmlView.@shrinkrows="false";

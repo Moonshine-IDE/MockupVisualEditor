@@ -38,6 +38,7 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:dataTable="view.primeFaces.surfaceComponents.components.DataTable"
 		 creationComplete="onComplete()"
+		 xmlns:viewProperty="view.domino.propertyEditors.*"
 		 xmlns:collapsiblehdivider="components.collapsibleHDivider.*">
     <collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
 		 		<s:DataGrid id="dgColumns"
@@ -57,122 +58,10 @@
                                     paddingLeft="0" paddingRight="0" id="dominoViewPropertyEditor">
                         	<view:PropertyEditorHeader id="propertyEditorHeader" width="100%" />
 							
-							<s:VGroup id="viewSetPanel" top="10" includeInLayout="false" visible="false">
-								<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
-									<s:Label text="Viwe Name:" width="100%" />
-									 <s:TextInput id="viewNameInput"
-                                            text=""  width="100" maxChars="100" 
-											editable="false"
-                                            enter="viewNameInput_changeHandler(event)" focusOut="viewNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
-                                   
-									 </s:FormItem> 
-										<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
-										
-										
-											<s:Label text="Configuration(View):View Selection" width="100%" direction="rtl"/>
-											<s:TextArea id="viewSelection"
-											text="" width="100%" minWidth="156" editable="true" selectable="true"
-											prompt="View Selection"
-											change="viewFormula_changeHandler(event)"
-											/>
-										
-											
-										
-										</s:FormItem> 
-									<s:FormItem label="Show in menu" skinClass="skins.FormItemSkin">
-										<s:CheckBox id="viewShowinmenu"
-													selected="true"
-													change="showinmenu_changeHandler(event)"/>
-									</s:FormItem>	
-									<s:FormItem label="Public access" skinClass="skins.FormItemSkin">
-										<s:CheckBox id="viewPublicaccess"
-													selected="true"
-													change="publicaccess_changeHandler(event)"/>
-									</s:FormItem>
-									<s:FormItem label="Open collapsed" skinClass="skins.FormItemSkin">
-										<s:CheckBox id="viewOpencollapsed"
-													selected="true"
-													change="opencollapsed_changeHandler(event)"/>
-									</s:FormItem>
-								
-							</s:VGroup>
 							
+							<viewProperty:DominoViewPropertyEditor id="viewSetPanel" viewObject="{viewObject}"/>
+							<viewProperty:DominoViewColumnPropertyEditor id="columnAccordion" columnObject="{selectedColumnObject}" />
 							
-							<mx:Accordion id="columnAccordion" width="100%" height="100%" includeInLayout="false" visible="false">
-							
-								<mx:VBox  horizontalAlign="left" label="Column Setting-Basic" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10" id="columnBasicSetPanel"  >	
-		   								<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
-								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" paddingTop="10" paddingBottom="10">
-									<s:Label id="columnHeaderText"
-											textAlign="start"
-											verticalAlign="middle"
-											fontWeight="bold"
-											maxDisplayedLines="1" fontSize="13"
-											left="5" right="0" top="5" verticalCenter="0" 
-											text="Column Header Text"/>
-									<s:TextInput id="titleInput"
-                     						text=""  width="100" skinClass="skins.TextInputSkin" prompt="Column title" 
-											change="columnTitle_changeHandler(event)"/>	
-										
-										<s:Label id="columnValue"
-												textAlign="start"
-												verticalAlign="middle"
-												fontWeight="bold"
-												maxDisplayedLines="1" fontSize="13"
-												left="5" right="10" verticalCenter="0" 
-												text="Width:"/>
-										<s:TextInput id="columWidth"
-										text="70"  change="columnWidth_changeHandler(event)" width="100" skinClass="skins.TextInputSkin" prompt="Column width"/>	
-										
-										<s:HGroup>
-											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType" click="columnType_changeHandler(event)"/>
-											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"  click="columnType_changeHandler(event)"/>	
-										</s:HGroup>	
-									 <s:TextArea id="columnValueFormula"
-										text="SELECT $FormName = Form" width="100%" minWidth="156" editable="true" selectable="true"
-										prompt="Formula for column value"
-										change="columnValueFormula_changeHandler(event)"
-										/>
-
-									 <s:FormItem label="Show twistie when row is expandable" skinClass="skins.FormItemSkin">
-										<s:CheckBox id="columnExpandable"
-													selected="true"
-													change="check_changeHandler(event)"/>
-									</s:FormItem>		
-
-										<s:Button id="newColumnBtn" label="Remove Column"   height="25" width="100"  click="removeColumn()"/>			
-								</s:VGroup>
-							
-							 </s:FormItem> 
-		   						</mx:VBox>
-
-							<mx:VBox  horizontalAlign="left" id="columnSortSetPanel"  label="Column Setting-Sort Type" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
-									<s:FormItem label="Sort:" skinClass="skins.FormItemSkin">
-										<s:HGroup>
-											<s:RadioButton id="columnSortNoneRadioBtn" label="None" groupName="columnSortOrder" selected="true"  click="columnSort_changeHandler(event)"/>
-											<s:RadioButton id="columnSortAscendingRadioBtn" label="Ascending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>
-											<s:RadioButton id="columnSortDescendingRadioBtn" label="Descending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>	
-											
-										</s:HGroup>	
-									</s:FormItem> 
-									<s:FormItem label="Type:" skinClass="skins.FormItemSkin">
-										<s:HGroup>
-											<s:RadioButton id="columnSortStandardRadioBtn" label="Standard" groupName="columnSortType" selected="true"  click="columnSort_changeHandler(event)"/>
-											<s:RadioButton id="columnSortCategorizedRadioBtn" label="Categorized" groupName="columnSortType" click="columnSort_changeHandler(event)"/>
-										
-											
-										</s:HGroup>	
-									</s:FormItem> 
-							</mx:VBox>
-							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
-							</mx:VBox>
-							<mx:VBox  horizontalAlign="left" id="columnFontSetPanel" label="Column Setting-Font" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
-							</mx:VBox>
-							</mx:Accordion>
 							
 							
 							
@@ -210,6 +99,8 @@
 	import view.domino.viewEditor.object.ColumnObject;
 	import view.domino.viewEditor.object.ViewObject;
 	import spark.components.gridClasses.GridColumn;
+
+	import view.suportClasses.events.DominoViewColumnUpdateEvent;
 
 	
 
@@ -283,12 +174,12 @@
 			selectedColumnName="New Column"+DominoGlobals.DominoViewColumnCount.toString();
 			
 			selectedColumn= getCurrentColumnByTitle(selectedColumnName);
-			titleInput.text=selectedColumnName;
-			columWidth.text="70";
-			columnValueType.selectedValue="Field"
-			columnValueFieldRadioBtn.selected=true;
-			columnValueFormulaRadioBtn.selected=false;
-			columnValueFormula.text="";
+			// titleInput.text=selectedColumnName;
+			// columWidth.text="70";
+			// columnValueType.selectedValue="Field"
+			// columnValueFieldRadioBtn.selected=true;
+			// columnValueFormulaRadioBtn.selected=false;
+			// columnValueFormula.text="";
 
 			DominoGlobals.DominoViewColumnCount++;
 
@@ -300,7 +191,7 @@
 			columnsObj.columnWidth="70";
 			columnsObj.columnTypeValue="Field";
 			columnObjectList.addItem(columnsObj);
-
+			columnAccordion.initializeColumnProperty(columnsObj);
 
 		
 	}
@@ -325,15 +216,8 @@
        
     }
 
-	private function check_changeHandler(event:Event):void
-	{
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
-	}
-	private function viewNameInput_changeHandler(event:Event):void
-	{
-	}
-
+	
+	
 	public function onComplete():void {
 
 		
@@ -349,9 +233,13 @@
 		
 
 		//add property change listener
-		//dominoViewPropertyEditor.addEventListener("viewFormulaChanged", onDominoViewPropertyChanged);
-    
+		
 		this.contextMenu = createContextMenu();
+
+		dominoViewPropertyEditor.addEventListener("viewPropertyChanged", onDominoViewPropertyChanged);
+		dominoViewPropertyEditor.addEventListener(DominoViewColumnUpdateEvent.COLUMN_UPDATE, onDominoViewColumnPropertyChanged);
+		dominoViewPropertyEditor.addEventListener("removeColumn", removeColumn);
+    
     }
 
 	
@@ -367,35 +255,10 @@
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
 			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
-			if(selectedColumnObject!=null){
-				titleInput.text=selectedColumnObject.columnHeaderTitle;
-				if(selectedColumnObject.columnWidth!=null && selectedColumnObject.columnWidth.toString().length>0){
-					columWidth.text=selectedColumnObject.columnWidth;
-				}else{
-					columWidth.text= "70";
-				}
-
-				if(selectedColumnObject.columnTypeValue=="Field"){
-					columnValueType.selectedValue="Field"
-					columnValueFieldRadioBtn.selected=true;
-					columnValueFormulaRadioBtn.selected=false;
-						
-				}
-				if(selectedColumnObject.columnTypeValue=="Formula"){
-					columnValueType.selectedValue="Formula"
-					columnValueFormulaRadioBtn.selected=true;
-					columnValueFieldRadioBtn.selected=false;
-					
-				}
-				columnValueFormula.text=selectedColumnObject.columnCodeFormula;
-				
-
+			if(selectedColumnObject!=null && selectedColumn!=null ){
+				columnAccordion.initializeColumnProperty(selectedColumnObject);
 			}
 			
-
-
-			
-
 		}
 		
 		
@@ -416,12 +279,36 @@
 	private function onDominoViewPropertyChanged(event:Event):void
 	{
 		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		Alert.show("onDominoViewPropertyChanged:");
-		//dispatchEvent(new Event("propertyEditorChanged", true));
+		hasChanged=true;
+	}
+	private function onDominoViewColumnPropertyChanged(event:DominoViewColumnUpdateEvent):void
+	{
+		if(event.col!=null){
+			var col:ColumnObject=event.col as ColumnObject;
+			
+			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
+			columnObjectList.setItemAt(col,index);
+
+			var gridColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(index) as GridColumn;
+			gridColumn.headerText=col.columnHeaderTitle;
+
+			if(col.columnWidth!=null&& col.columnWidth.length>0){
+				gridColumn.width=parseInt(col.columnWidth);
+			}else{
+				gridColumn.width=70;
+			}
+			
+			(dgColumns.columns as ArrayList).setItemAt(gridColumn,index);
+			
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			hasChanged=true;
+		}
+		
 	}
 
 	private function removeColumn():void 
 	{
+		
 		if(selectedColumnObject!=null){
 		
 			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
@@ -437,69 +324,6 @@
 		}
 	}
 
-
-
-
-	private function showinmenu_changeHandler(event:Event):void
-	{
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
-		if(viewObject!=null){
-			if(viewShowinmenu.selected==true){
-				viewObject.showinmenu="true";
-			}else{
-				viewObject.showinmenu="false";
-			}
-			
-		}
-	}
-	//viewPublicaccess
-	private function publicaccess_changeHandler(event:Event):void
-	{
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
-		if(viewObject!=null){
-			if(viewPublicaccess.selected==true){
-				viewObject.publicaccess="true";
-			}else{
-				viewObject.publicaccess="false";
-			}
-		}
-	}
-	
-	//opencollapsed_changeHandler
-	private function opencollapsed_changeHandler(event:Event):void
-	{
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
-		if(viewObject!=null){
-			if(viewOpencollapsed.selected==true){
-				viewObject.opencollapsed="true";
-			}else{
-				viewObject.opencollapsed="false";
-			}
-		}
-	}
-
-	
-
-	 private var viewFormula:String = "";
-
-	[Bindable("Changed")]
-	private function viewFormula_changeHandler(event):void
-	{
-		if(viewFormula!=viewSelection.text){
-			viewFormula=viewSelection.text;
-			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			hasChanged=true;
-			if(viewObject!=null){
-				viewObject.viewCodeFormula=viewFormula;
-			}
-		}
-		
-	}
-
-	
 
 	private function getCurrentColumnByTitle(title:String):GridColumn
 	{
@@ -518,81 +342,7 @@
 
 	}
 
-	private var columnTitle:String = "";
-	private function columnTitle_changeHandler(event):void
-	{
-		if(columnTitle!=titleInput.text){
-			if(selectedColumn!=null){
-				selectedColumn.headerText=titleInput.text;
-				}
-			if(selectedColumnObject!=null){
-				selectedColumnObject.columnHeaderTitle=titleInput.text;
-			}
-			columnTitle=titleInput.text;
-			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			hasChanged=true;
-
-			
-		}
-	}
-
-	private var columnWidth:String = "";
-	private function columnWidth_changeHandler(event):void
-	{
-		if(columWidth.text!=null&& columWidth.text.length>0&&columnWidth!=columWidth.text){
-			if(selectedColumn!=null){
-				selectedColumn.width=parseInt(columWidth.text);
-			}
-			if(selectedColumnObject!=null){
-				selectedColumnObject.columnWidth=columWidth.text;
-			}
-
-			columnWidth=columWidth.text;
-			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			hasChanged=true;
-		}
-	}
-
-	private var columnType:String = "";
-
-	private function columnType_changeHandler(event):void
-	{
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
-		if(selectedColumnObject!=null){
-			selectedColumnObject.columnTypeValue=columnValueType.selectedValue.toString();
-		}
-		
-		
-	}
-
-	private function columnSort_changeHandler(event):void
-	{
-	}
-
-	private var columnFormula:String = "";
-	private function columnValueFormula_changeHandler(event):void
-	{
-		
-		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-		hasChanged=true;
-		if(selectedColumnObject!=null){
-			selectedColumnObject.columnCodeFormula=columnValueFormula.text;
-		}
-		
-	}
-
-
-
 	
-
-	
-
-
-	
-
-	
-
 	CONFIG::MOONSHINE
 	{		
 		
@@ -620,6 +370,7 @@
 
 		public function saveEditedFile():void
 		{
+			viewObject=viewSetPanel.viewObject;
 			
 			if (!_fileStreamMoonshine) return;
 			if (!_fileMoonshine) return;
@@ -628,6 +379,9 @@
 			hasChanged=false;
 			var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
 			var xmlView:XML=new XML("<view />");
+
+			xmlView.@name=viewObject.viewName;
+
 			if(viewObject.showinmenu=="true"){
 				xmlView.@showinmenu="true";
 			}else{
@@ -741,9 +495,9 @@
 		{
 			var xml:XML = loadLocalFileToXML(filePath);
 			var name:String = getFileNameWithoutExtension(filePath,"view");
-			if(viewNameInput!=null){
-				viewNameInput.text=name;
-			}
+			// if(viewNameInput!=null){
+			// 	viewNameInput.text=name;
+			// }
 		
 			
 			if(xml!=null){
@@ -802,17 +556,34 @@
 					if(formulaXml){
 					
 						if(formulaXml.text()){
-							if(viewSelection!=null){
-								viewSelection.text=formulaXml.text();
-								//inital the viewObject;
-								viewObject=new ViewObject();
+							viewObject=new ViewObject();
 								if(xml.@name!=null && xml.@name.toString().length>0){
 									viewObject.viewName=xml.@name;
+								}else{
+									viewObject.viewName=name;
 								}
 								viewObject.viewCodeEvent="selection";
-								viewObject.viewCodeFormula=viewSelection.text;
+								viewObject.viewCodeFormula=formulaXml.text();
 								
-							}
+								if(xml.@showinmenu!=null && xml.@showinmenu!=""){
+									viewObject.showinmenu=xml.@showinmenu
+								}else{
+									viewObject.showinmenu="false";
+								}
+								if(xml.@publicaccess!=null && xml.@publicaccess!=""){
+									viewObject.publicaccess=xml.@publicaccess
+								}else{
+									viewObject.publicaccess="false";
+								}
+								if(xml.@opencollapsed!=null && xml.@opencollapsed!=""){
+									viewObject.opencollapsed=xml.@opencollapsed
+								}else{
+									viewObject.opencollapsed="false";
+								}
+
+
+							
+								viewSetPanel.initializeViewProperty(viewObject);
 
 						}
 						

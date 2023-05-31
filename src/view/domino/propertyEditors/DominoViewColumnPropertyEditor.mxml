@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:mx="library://ns.adobe.com/flex/mx">
+<mx:Accordion width="100%" height="100%" >
+							
+								<mx:VBox  horizontalAlign="left" label="Column Setting-Basic" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" id="columnBasicSetPanel"  >	
+		   								<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" paddingTop="10" paddingBottom="10">
+									<s:Label id="columnHeaderText"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5" right="0" top="5" verticalCenter="0" 
+											text="Column Header Text"/>
+									<s:TextInput id="titleInput"
+                     						text=""  width="100" skinClass="skins.TextInputSkin" prompt="Column title" 
+											change="columnTitle_changeHandler(event)"/>	
+										
+										<s:Label id="columnValue"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="1" fontSize="13"
+												left="5" right="10" verticalCenter="0" 
+												text="Width:"/>
+										<s:TextInput id="columWidth"
+										text="70"  change="columnWidth_changeHandler(event)" width="100" skinClass="skins.TextInputSkin" prompt="Column width"/>	
+										
+										<s:HGroup>
+											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType" click="columnType_changeHandler(event)"/>
+											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"  click="columnType_changeHandler(event)"/>	
+										</s:HGroup>	
+									 <s:TextArea id="columnValueFormula"
+										text="SELECT $FormName = Form" width="100%" minWidth="156" editable="true" selectable="true"
+										prompt="Formula for column value"
+										change="columnValueFormula_changeHandler(event)"
+										/>
+
+									 <s:FormItem label="Show twistie when row is expandable" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="columnExpandable"
+													selected="true"
+													change="check_changeHandler(event)"/>
+									</s:FormItem>		
+
+										<s:Button id="newColumnBtn" label="Remove Column"   height="25" width="100"  click="startRemoveColumn()"/>			
+								</s:VGroup>
+							
+							 </s:FormItem> 
+		   						</mx:VBox>
+
+							<mx:VBox  horizontalAlign="left" id="columnSortSetPanel"  label="Column Setting-Sort Type" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
+									<s:FormItem label="Sort:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnSortNoneRadioBtn" label="None" groupName="columnSortOrder" selected="true"  click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortAscendingRadioBtn" label="Ascending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortDescendingRadioBtn" label="Descending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>	
+											
+										</s:HGroup>	
+									</s:FormItem> 
+									<s:FormItem label="Type:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnSortStandardRadioBtn" label="Standard" groupName="columnSortType" selected="true"  click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortCategorizedRadioBtn" label="Categorized" groupName="columnSortType" click="columnSort_changeHandler(event)"/>
+										
+											
+										</s:HGroup>	
+									</s:FormItem> 
+							</mx:VBox>
+							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+							</mx:VBox>
+							<mx:VBox  horizontalAlign="left" id="columnFontSetPanel" label="Column Setting-Font" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
+							</mx:VBox>
+							</mx:Accordion>
+    <fx:Script><![CDATA[
+    import view.domino.viewEditor.object.ColumnObject;
+	import view.domino.viewEditor.object.ViewObject;
+    import view.suportClasses.events.PropertyEditorChangeEvent;
+    import mx.events.FlexEvent;
+
+    import spark.components.gridClasses.GridColumn;
+    import view.suportClasses.events.DominoViewColumnUpdateEvent;
+
+    private var _columnObject:ColumnObject;
+    [Bindable]
+    public function set columnObject(value:ColumnObject):void
+    {
+        _columnObject = value;
+    } 
+
+    [Bindable]
+    public function get columnObject():ColumnObject
+    {
+        return this._columnObject;
+    }
+
+   
+
+    public function initializeColumnProperty(cobj:ColumnObject):void
+    {
+        if(cobj!=null){
+            titleInput.text=cobj.columnHeaderTitle;
+            if(cobj.columnWidth!=null && cobj.columnWidth.toString().length>0){
+                columWidth.text=cobj.columnWidth;
+            }else{
+                columWidth.text= "70";
+            }
+            
+            columWidth.text=cobj.columnWidth;
+            if(cobj.columnTypeValue=="Field"){
+                columnValueType.selectedValue="Field"
+                columnValueFieldRadioBtn.selected=true;
+                columnValueFormulaRadioBtn.selected=false;
+						
+            }
+            if(cobj.columnTypeValue=="Formula"){
+                columnValueType.selectedValue="Formula"
+                columnValueFormulaRadioBtn.selected=true;
+                columnValueFieldRadioBtn.selected=false;
+                
+            }
+            columnValueFormula.text=cobj.columnCodeFormula;
+            this.columnObject=cobj;
+           
+        }
+
+        
+        
+    }
+
+   private function columnTitle_changeHandler(event):void
+	{
+        
+		if(this.columnObject!=null){
+			this.columnObject.columnHeaderTitle=titleInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+    }
+
+    private function columnWidth_changeHandler(event):void
+	{
+		if(columWidth.text!=null&& columWidth.text.length>0){
+		
+			if(this.columnObject!=null){
+				this.columnObject.columnWidth=columWidth.text;
+                this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+			
+		}
+	}
+
+
+    private var columnFormula:String = "";
+	private function columnValueFormula_changeHandler(event):void
+	{	
+        if(this.columnObject!=null){
+			this.columnObject.columnCodeFormula=columnValueFormula.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+       
+		
+	}
+
+    private function check_changeHandler(event:Event):void
+	{
+		
+	}
+
+    private function columnSort_changeHandler(event):void
+	{
+	}
+
+    private function startRemoveColumn():void
+    {
+         this.dispatchEvent(new Event("removeColumn",true, true));
+    }
+
+
+   	private function columnType_changeHandler(event):void
+	{
+		
+		if(this.columnObject!=null){
+			this.columnObject.columnTypeValue=columnValueType.selectedValue.toString();
+             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+		
+		
+	}
+
+
+    ]]></fx:Script> 	
+    <fx:Declarations>
+		<s:RadioButtonGroup id="columnValueType"/>
+		<s:RadioButtonGroup id="columnSortOrder"/>
+		<s:RadioButtonGroup id="columnSortType"/>
+	</fx:Declarations>	
+</s:Group>

@@ -39,10 +39,12 @@ package view.domino.viewEditor.object
         public var columnHeaderStyle:String ;
         public var columnWidth:String ;
         public var columnSort:String ;
+        public var columnSortType:String ;
         public var columnTypeValue:String ;
         public var columnItem:String ;
         public var columnCodeEvent:String ;
         public var columnCodeFormula:String ;
+        public var twisties:String ;
 
         
         public function ColumnObject()

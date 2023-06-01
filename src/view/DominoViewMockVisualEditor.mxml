@@ -290,7 +290,10 @@
 			columnObjectList.setItemAt(col,index);
 
 			var gridColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(index) as GridColumn;
-			gridColumn.headerText=col.columnHeaderTitle;
+			if(gridColumn.headerText!=col.columnHeaderTitle){
+				gridColumn.headerText=col.columnHeaderTitle;
+			}
+			
 
 			if(col.columnWidth!=null&& col.columnWidth.length>0){
 				gridColumn.width=parseInt(col.columnWidth);
@@ -306,7 +309,7 @@
 		
 	}
 
-	private function removeColumn():void 
+	private function removeColumn(event:Event):void 
 	{
 		
 		if(selectedColumnObject!=null){
@@ -429,10 +432,23 @@
 
 			for(var i:int=0; i<columnObjectList.length; i++)
 			{
-				// 
+				
 				var c:ColumnObject = columnObjectList.getItemAt(i) as  ColumnObject;
 				var colXML:XML = new XML("<column />");
-				colXML.@sort="ascending";
+				if(c.columnSort!=null && c.columnSort!=""){
+					colXML.@sort=c.columnSort;
+				}else{
+					colXML.@sort="none";
+				}
+				if(c.columnSortType!=null && c.columnSortType!=""){
+					colXML.@categorized=c.columnSortType;
+				}else{
+					colXML.@categorized="false";
+				}
+				if(c.twisties!=null && c.twisties!=""){
+					colXML.@twisties=c.twisties
+				}
+				
 				colXML.@hidedetailrows="false";
 				colXML.@width=(Math.round(parseInt(c.columnWidth)/8)).toString();
 				colXML.@resizable="true";
@@ -440,6 +456,7 @@
 				colXML.@sortnoaccent="true" 
 				colXML.@sortnocase="true" 
 				colXML.@showaslinks="false"
+				
 
 
 
@@ -511,15 +528,7 @@
 					{
 						var tmpColumn:GridColumn=new GridColumn();
 						tmpColumn.headerText=col.columnheader.@title;
-						if(col.code==null){
-							tmpColumn.dataField=encodeBase64ForColumnDataField("formField",itemname);
-						}else{
-							var formula:String=getColumnFormula(col);
-							if(formula!=null&& formula.length>0){
-								tmpColumn.dataField=encodeBase64ForColumnDataField("formula",formula);
-							}
-							
-						}
+						
 
 						tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
 						
@@ -534,6 +543,23 @@
 							
 						}else{
 							columnsObj.columnWidth="70";
+						}
+						if(col.@categorized.toString().length==0){
+							columnsObj.columnSortType="false";
+						}else{
+							columnsObj.columnSortType=col.@categorized;
+						}
+
+						if(col.@sort.toString().length==0){
+							columnsObj.columnSort="none";
+						}else{
+							columnsObj.columnSort=col.@sort;
+						}
+
+						if(col.@twisties.toString().length==0){
+							
+						}else{
+							columnsObj.twisties=col.@twisties;
 						}
 
 						if(col.code.toString().length==0){
@@ -613,20 +639,6 @@
 
 		}
 
-		private function encodeBase64ForColumnDataField(dataFieldType:String,dataFieldValue:String):String 
-		{
-			var encodeDataField:String="";
-			if(dataFieldType=="formField"){
-				encodeDataField="FormFile:"
-			}
-			if(dataFieldType=="formula"){
-				encodeDataField="Formula:"
-			}
-			encodeDataField=encodeDataField+dataFieldValue;
-			encodeDataField=StringHelper.base64Encode(encodeDataField);
-			return encodeDataField;
-
-		}
 
 		private function createNewFileIfNotExists(filePath:String):File
 		{

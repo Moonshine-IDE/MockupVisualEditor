@@ -191,6 +191,10 @@
 			columnsObj.columnWidth="70";
 			columnsObj.columnTypeValue="Field";
 			columnObjectList.addItem(columnsObj);
+			
+			selectedColumnObject=columnsObj;
+			//selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
+			
 			columnAccordion.initializeColumnProperty(columnsObj);
 
 		

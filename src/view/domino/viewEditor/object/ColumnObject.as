@@ -45,6 +45,8 @@ package view.domino.viewEditor.object
         public var columnCodeEvent:String ;
         public var columnCodeFormula:String ;
         public var twisties:String ;
+        public var separatemultiplevalues:String;
+        public var totals:String;
 
         
         public function ColumnObject()

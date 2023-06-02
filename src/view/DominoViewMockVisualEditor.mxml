@@ -60,7 +60,7 @@
 							
 							
 							<viewProperty:DominoViewPropertyEditor id="viewSetPanel" viewObject="{viewObject}"/>
-							<viewProperty:DominoViewColumnPropertyEditor id="columnAccordion" columnObject="{selectedColumnObject}" />
+							<viewProperty:DominoViewColumnPropertyEditor id="columnAccordion" columnObject="{selectedColumnObject}" width="100%"/>
 							
 							
 							
@@ -448,11 +448,18 @@
 				if(c.twisties!=null && c.twisties!=""){
 					colXML.@twisties=c.twisties
 				}
+				if(c.separatemultiplevalues!=null && c.separatemultiplevalues!=""){
+					colXML.@separatemultiplevalues=c.separatemultiplevalues
+				}
+
+				if(c.totals!=null && c.totals!=""){
+					colXML.@totals=c.totals
+				}
 				
 				colXML.@hidedetailrows="false";
 				colXML.@width=(Math.round(parseInt(c.columnWidth)/8)).toString();
 				colXML.@resizable="true";
-				colXML.@separatemultiplevalues="true";
+				
 				colXML.@sortnoaccent="true" 
 				colXML.@sortnocase="true" 
 				colXML.@showaslinks="false"
@@ -549,11 +556,21 @@
 						}else{
 							columnsObj.columnSortType=col.@categorized;
 						}
+						if(col.@separatemultiplevalues.toString().length==0){
+							columnsObj.separatemultiplevalues="false";
+						}else{
+							columnsObj.separatemultiplevalues=col.@separatemultiplevalues;
+						}
 
 						if(col.@sort.toString().length==0){
 							columnsObj.columnSort="none";
 						}else{
 							columnsObj.columnSort=col.@sort;
+						}
+						if(col.@totals.toString().length==0){
+							columnsObj.totals="none";
+						}else{
+							columnsObj.totals=col.@totals.toString();
 						}
 
 						if(col.@twisties.toString().length==0){

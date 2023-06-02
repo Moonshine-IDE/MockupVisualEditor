@@ -34,7 +34,8 @@
 -->
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
     xmlns:s="library://ns.adobe.com/flex/spark"
-    xmlns:mx="library://ns.adobe.com/flex/mx">
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:domino="view.domino.forms.*">
 <mx:Accordion width="100%" height="100%" >
 							
 								<mx:VBox  horizontalAlign="left" label="Column Setting-Basic" verticalAlign="top" percentHeight="100" 
@@ -74,6 +75,19 @@
 
 										<s:Button id="newColumnBtn" label="Remove Column"   height="25" width="100"  click="startRemoveColumn()"/>			
 								</s:VGroup>
+
+                               		<s:VGroup>
+                                        	<s:Label id="columnTwistieLabelText"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5"  top="5" verticalCenter="0" 
+											text="Show twistie when row is expandable"/>
+                                        <s:CheckBox id="columnExpandable"
+													selected="false"
+													change="check_changeHandler(event)"/>
+                                    </s:VGroup>	
 							
 							 </s:FormItem> 
 		   						</mx:VBox>
@@ -97,18 +111,33 @@
 										</s:HGroup>	
 									</s:FormItem> 
 
+
                                		<s:VGroup>
-                                        	<s:Label id="columnTwistieLabelText"
+                                        	<s:Label id="showMultipleValueLabelText"
 											textAlign="start"
 											verticalAlign="middle"
 											fontWeight="bold"
 											maxDisplayedLines="1" fontSize="13"
 											left="5"  top="5" verticalCenter="0" 
-											text="Show twistie when row is expandable"/>
-                                        <s:CheckBox id="columnExpandable"
+											text="Show mulitiple values as separate entries"/>
+                                        <s:CheckBox id="mulitipleValuesCheckBox"
 													selected="false"
-													change="check_changeHandler(event)"/>
-                                    </s:VGroup>	
+													change="multipleValue_changeHandler(event)"/>
+                                    </s:VGroup>
+
+									<s:FormItem label="Totals:" skinClass="skins.FormItemSkin">
+										<domino:CustomDropDownList id="totalsDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.ColumnTotalsOptions}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onTotalSelectionChange(event)"
+                        enabled="true"
+                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+
+									</s:FormItem> 	
+
+
+
+									
                                     
 							</mx:VBox>
 							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
@@ -124,9 +153,14 @@
     import view.suportClasses.events.PropertyEditorChangeEvent;
     import mx.events.FlexEvent;
 
+	import spark.components.Alert;
+	import spark.events.IndexChangeEvent;
+
     import spark.components.gridClasses.GridColumn;
     import view.suportClasses.events.DominoViewColumnUpdateEvent;
 
+
+	import global.domino.DominoGlobalTokens;
     
     private var _columnObject:ColumnObject;
     [Bindable]
@@ -140,6 +174,17 @@
     {
         return this._columnObject;
     }
+
+
+	private function getDominoDropDownListLabel(item:Object):String
+	{
+		return item.label;
+	}
+
+	private function getDominoDropDownListTooltip(item:Object):String
+	{
+		return item.description;
+	}
 
    
 
@@ -170,10 +215,12 @@
                 columnSortOrder.selectedValue=cobj.columnSort;
             }
             if(cobj.columnSortType!=null && cobj.columnSortType!=""){
-                columnSortType.selectedValue=cobj.columnSortType;
-                if(columnSortType.selectedValue=="true"){
+              
+				if(cobj.columnSortType=="true"){
                     columnSortCategorizedRadioBtn.selected=true;
+					columnSortStandardRadioBtn.selected=false;
                 }else{
+					columnSortCategorizedRadioBtn.selected=false;
                     columnSortStandardRadioBtn.selected=true;
                 }
             }
@@ -184,14 +231,37 @@
             }else{
                 columnExpandable.selected=false;
             }
+
+			if(cobj.separatemultiplevalues=="true"){
+                mulitipleValuesCheckBox.selected=true;
+            }else{
+                mulitipleValuesCheckBox.selected=false;
+            }
             columnValueFormula.text=cobj.columnCodeFormula;
             this.columnObject=cobj;
-           
+
+			totalsDropDownList.callLater(selectCurrentItem);
         }
 
         
         
     }
+
+	private function selectCurrentItem():void
+	{
+		if(this.columnObject.totals){
+			var dpCount:int = totalsDropDownList.dataProvider.length;
+			for (var i:int = 0; i < dpCount; i++)
+			{
+				var item:Object = totalsDropDownList.dataProvider.getItemAt(i);
+				if (item["value"] == this.columnObject.totals)
+				{
+					totalsDropDownList.selectedItem = item;
+					break;
+				}
+			}
+		}
+	}
 
    private function columnTitle_changeHandler(event):void
 	{
@@ -224,6 +294,18 @@
 		}
        
 		
+	}
+
+	private function multipleValue_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(mulitipleValuesCheckBox.selected){
+                this.columnObject.separatemultiplevalues="true"
+            }else{
+                this.columnObject.separatemultiplevalues="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 
     private function check_changeHandler(event:Event):void
@@ -266,10 +348,21 @@
 		
 		if(this.columnObject!=null){
 			this.columnObject.columnTypeValue=columnValueType.selectedValue.toString();
-             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 		}
 		
 		
+	}
+
+	protected function onTotalSelectionChange(event:IndexChangeEvent):void
+	{
+		if(totalsDropDownList.selectedItem){
+			if(this.columnObject!=null){
+				this.columnObject.totals=totalsDropDownList.selectedItem["value"].toString();
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+		}
+
 	}
 
 

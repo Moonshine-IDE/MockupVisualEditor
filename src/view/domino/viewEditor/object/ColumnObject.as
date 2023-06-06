@@ -44,6 +44,10 @@ package view.domino.viewEditor.object
         public var columnItem:String ;
         public var columnCodeEvent:String ;
         public var columnCodeFormula:String ;
+        public var columnTitleFont:String ;
+        public var columnTitleSize:String ;
+        public var columnTitleStyle:String ;
+        public var columnTitleColor:String ;
         public var twisties:String ;
         public var separatemultiplevalues:String;
         public var totals:String;

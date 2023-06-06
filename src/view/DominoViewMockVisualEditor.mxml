@@ -449,6 +449,10 @@
 				}else{
 					colXML.@categorized="false";
 				}
+
+				
+
+
 				if(c.twisties!=null && c.twisties!=""){
 					colXML.@twisties=c.twisties
 				}
@@ -473,10 +477,29 @@
 
 				var colHeader:XML=new XML("<columnheader />");
 				colHeader.@title=c.columnHeaderTitle;
-				var colHeaderFont:XML=new XML("<font/>");
-				colHeaderFont.@size="9";
-				colHeaderFont.@style="blod";
-				colHeader.appendChild(colHeaderFont);
+
+				if(c.columnTitleFont!=null && c.columnTitleFont!=""){
+					var colHeaderFont:XML=new XML("<font/>");
+				
+					colHeaderFont.@name=c.columnTitleFont;
+					if(c.columnTitleStyle!=null && c.columnTitleStyle!=""){
+						colHeaderFont.@style=c.columnTitleStyle;
+					}
+					if(c.columnTitleSize!=null && c.columnTitleSize!=""){
+						colHeaderFont.@size=c.columnTitleSize;
+					}else{
+						colHeaderFont.@size="9";
+					}
+
+					if(c.columnTitleColor!=null && c.columnTitleColor!=""){
+						colHeaderFont.@color=c.columnTitleColor;
+					}
+
+					colHeader.appendChild(colHeaderFont);
+				}
+
+				
+				
 				colXML.appendChild(colHeader);
 
 				if(c.columnTypeValue=="Field"){
@@ -581,6 +604,38 @@
 							
 						}else{
 							columnsObj.twisties=col.@twisties;
+						}
+						if(col.columnheader[0]&&col.columnheader[0].font[0]){
+							
+								if(col.columnheader[0].font[0].@name.toString().length>0){
+									columnsObj.columnTitleFont=col.columnheader[0].font[0].@name.toString();
+								
+								}else{
+									columnsObj.columnTitleFont="monospace"
+								}
+
+								if(col.columnheader[0].font[0].@style.toString().length>0){
+								
+									columnsObj.columnTitleStyle=col.columnheader[0].font[0].@style;
+								
+								}else{
+									columnsObj.columnTitleStyle="normal";
+								}
+								var sizeLength:int=col.columnheader[0].font[0].@size.toString().length;
+								if(sizeLength>0){
+									columnsObj.columnTitleSize=col.columnheader[0].font[0].@size;
+								}else{
+									columnsObj.columnTitleSize="9"
+								}
+
+								if(col.columnheader[0].font[0].@color.toString().length>0){
+									columnsObj.columnTitleColor=col.columnheader[0].font[0].@color.toString();
+								
+								}else{
+									columnsObj.columnTitleColor="000000";
+								}
+								
+							
 						}
 
 						if(col.code.toString().length==0){

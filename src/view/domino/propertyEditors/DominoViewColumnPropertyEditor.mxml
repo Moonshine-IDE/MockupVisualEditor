@@ -144,7 +144,47 @@
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
 							</mx:VBox>
 							<mx:VBox  horizontalAlign="left" id="columnFontSetPanel" label="Column Setting-Font" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
+		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >
+		   							<s:HGroup>
+									<s:Label id="columnTitleSize"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="1" fontSize="13"
+												left="5" right="10" 
+												text="Size:"/>
+										<s:TextInput id="columTitleSize"
+										text="9"  change="columTitleSize_changeHandler(event)" width="100" skinClass="skins.TextInputSkin" prompt="Column title size"/>	
+									</s:HGroup>	
+		   							<s:FormItem label="Title Font:" skinClass="skins.FormItemSkin">
+										<domino:CustomDropDownList id="titleFontDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.FontNames}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onTitleFontSelectionChange(event)"
+                        enabled="true"
+                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+
+									</s:FormItem> 
+									<s:FormItem label="Title Style:" skinClass="skins.FormItemSkin">
+										<domino:CustomDropDownList id="titleStyleDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.FontStyles}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onTitleStyleSelectionChange(event)"
+                        enabled="true"
+                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+
+									</s:FormItem> 
+									<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+		<s:HGroup width="100%" verticalAlign="middle">
+        <s:Label text="Title color" width="40"/>
+		<mx:ColorPicker id = "titleColorPicker" 
+               showTextField = "true" change="titleColor_changeHandler(event)" selectedColor = "0xFFFFFF" />
+         <s:Label text="Selected: #{colorstr}" id="colorLabel"/> 
+        
+      
+			
+		</s:HGroup>
+	</s:FormItem>	
 							</mx:VBox>
 							</mx:Accordion>
     <fx:Script><![CDATA[
@@ -152,6 +192,7 @@
 	import view.domino.viewEditor.object.ViewObject;
     import view.suportClasses.events.PropertyEditorChangeEvent;
     import mx.events.FlexEvent;
+	import mx.utils.ObjectUtil;
 
 	import spark.components.Alert;
 	import spark.events.IndexChangeEvent;
@@ -161,6 +202,27 @@
 
 
 	import global.domino.DominoGlobalTokens;
+
+	private var  colorstr:String ="000000";
+
+
+	private function titleColor_changeHandler(event:Event):void
+	{
+		if (!this.columnObject) return;
+
+			colorstr=titleColorPicker.selectedColor.toString(16);
+		
+		if(colorstr.length <6){
+			for(var i:int=colorstr.length;i<6;i++){
+				colorstr="0"+colorstr;
+			}
+		}
+		this.columnObject.columnTitleColor= "#"+colorstr;
+		this.dispatchEvent(new Event(Event.CHANGE));
+		colorLabel.text= "Selected:"+colorstr;
+		this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		
+	}
     
     private var _columnObject:ColumnObject;
     [Bindable]
@@ -196,6 +258,10 @@
                 columWidth.text=cobj.columnWidth;
             }else{
                 columWidth.text= "70";
+            }
+
+			 if(cobj.columnTitleSize!=null && cobj.columnTitleSize.toString().length>0){
+                columTitleSize.text=cobj.columnTitleSize;
             }
             
             columWidth.text=cobj.columnWidth;
@@ -241,11 +307,67 @@
             this.columnObject=cobj;
 
 			totalsDropDownList.callLater(selectCurrentItem);
+			titleFontDropDownList.callLater(selectCurrentItemTitleFont);
+			titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
+
+			//initail color
+			 var uint_color:uint=0;
+			if(cobj.columnTitleColor!=null && cobj.columnTitleColor!=""){
+				var pre_color:String = cobj.columnTitleColor;
+				if(pre_color.indexOf("#")<0){
+            		var dpCount:int =DominoGlobalTokens.Colors.length;
+					for (var i:int = 0; i < dpCount; i++)
+					{
+						var item:Object = DominoGlobalTokens.Colors.getItemAt(i);
+						if(item["label"]==pre_color){
+							uint_color = uint("0x" + item["htmlcolor"].substr(1));
+						}
+					}
+				}else{
+					//this is a hex value
+					uint_color = uint("0x" + pre_color.substr(1)); 
+				}
+
+				titleColorPicker.selectedColor=uint_color;
+               	colorLabel.text=cobj.columnTitleColor;
+			}
+			 
         }
 
         
         
     }
+	private function selectCurrentItemTitleFont():void
+	{
+		if(this.columnObject.columnTitleFont){
+			var dpCount:int = titleFontDropDownList.dataProvider.length;
+			
+			for (var i:int = 0; i < dpCount; i++)
+			{
+				var item:Object = titleFontDropDownList.dataProvider.getItemAt(i);
+				if(ObjectUtil.compare(item["value"],this.columnObject.columnTitleFont)==0)
+				{
+					titleFontDropDownList.selectedItem = item;
+					break;
+				}
+			}
+		}
+	}
+	private function selectCurrentItemTitleStyle():void
+	{
+		if(this.columnObject.columnTitleStyle){
+			var dpCount:int = titleStyleDropDownList.dataProvider.length;
+			for (var i:int = 0; i < dpCount; i++)
+			{
+				var item:Object = titleStyleDropDownList.dataProvider.getItemAt(i);
+				if (ObjectUtil.compare(item["value"],this.columnObject.columnTitleStyle)==0)
+				{
+					titleStyleDropDownList.selectedItem = item;
+					break;
+				}
+			}
+		}
+	}
 
 	private function selectCurrentItem():void
 	{
@@ -254,16 +376,19 @@
 			for (var i:int = 0; i < dpCount; i++)
 			{
 				var item:Object = totalsDropDownList.dataProvider.getItemAt(i);
-				if (item["value"] == this.columnObject.totals)
+				if (ObjectUtil.compare(item["value"],this.columnObject.totals)==0)
 				{
 					totalsDropDownList.selectedItem = item;
 					break;
 				}
 			}
 		}
+
+		
+	
 	}
 
-   private function columnTitle_changeHandler(event):void
+   	private function columnTitle_changeHandler(event):void
 	{
         
 		if(this.columnObject!=null){
@@ -271,6 +396,14 @@
             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
         }
     }
+
+	private function columTitleSize_changeHandler(event):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnTitleSize=columTitleSize.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
 
     private function columnWidth_changeHandler(event):void
 	{
@@ -359,6 +492,29 @@
 		if(totalsDropDownList.selectedItem){
 			if(this.columnObject!=null){
 				this.columnObject.totals=totalsDropDownList.selectedItem["value"].toString();
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+		}
+
+	}
+
+
+	protected function onTitleFontSelectionChange(event:IndexChangeEvent):void
+	{
+		if(titleFontDropDownList.selectedItem){
+			if(this.columnObject!=null){
+				this.columnObject.columnTitleFont=titleFontDropDownList.selectedItem["value"].toString();
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+		}
+
+	}
+
+	protected function onTitleStyleSelectionChange(event:IndexChangeEvent):void
+	{
+		if(titleStyleDropDownList.selectedItem){
+			if(this.columnObject!=null){
+				this.columnObject.columnTitleStyle=titleStyleDropDownList.selectedItem["value"].toString();
 				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 			}
 		}

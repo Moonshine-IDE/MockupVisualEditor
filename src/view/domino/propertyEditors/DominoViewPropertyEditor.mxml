@@ -139,7 +139,7 @@
 	{
 		
         if(viewObject!=null){
-            viewObject.viewCodeFormula=viewFormula;
+            viewObject.viewCodeFormula=viewSelection.text;
         }
 	    this.dispatchEvent(new Event("viewPropertyChanged",true, true));
 		

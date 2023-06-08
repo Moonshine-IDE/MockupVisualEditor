@@ -32,7 +32,9 @@
 
 package view.domino.viewEditor.object
 {
-    public class ColumnObject{
+   
+
+    public class ColumnObject {
         
         public var columnHeaderTitle:String ;
         public var columnHeaderSize:String ;
@@ -56,5 +58,8 @@ package view.domino.viewEditor.object
         public function ColumnObject()
 		{
         }
+
+        
+      
     }
 }

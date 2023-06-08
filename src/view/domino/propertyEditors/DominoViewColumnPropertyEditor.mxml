@@ -162,23 +162,20 @@
 						dataProvider="{DominoGlobalTokens.FontNames}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 						change="onTitleFontSelectionChange(event)"
                         enabled="true"
-                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 
 									</s:FormItem> 
 									<s:FormItem label="Title Style:" skinClass="skins.FormItemSkin">
-										<domino:CustomDropDownList id="titleStyleDropDownList"
-						requireSelection="true" width="100%"
-						dataProvider="{DominoGlobalTokens.FontStyles}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
-						change="onTitleStyleSelectionChange(event)"
-                        enabled="true"
-                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
-
+									<domino:MultipleCheckboxView id="titleStyleDropDownList" label=""  dynamicLabel="true" singleSelectOption="normal"
+		includeCollection="{DominoGlobalTokens.FontStyles}" textProperty="columnTitleStyle"/>
+									
+										
 									</s:FormItem> 
 									<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
 		<s:HGroup width="100%" verticalAlign="middle">
         <s:Label text="Title color" width="40"/>
 		<mx:ColorPicker id = "titleColorPicker" 
-               showTextField = "true" change="titleColor_changeHandler(event)" selectedColor = "0xFFFFFF" />
+               showTextField = "true" change="titleColor_changeHandler(event)" selectedColor = "0x000000" />
          <s:Label text="Selected: #{colorstr}" id="colorLabel"/> 
         
       
@@ -229,9 +226,10 @@
     public function set columnObject(value:ColumnObject):void
     {
         _columnObject = value;
+		
     } 
 
-    [Bindable]
+  
     public function get columnObject():ColumnObject
     {
         return this._columnObject;
@@ -262,7 +260,9 @@
 
 			 if(cobj.columnTitleSize!=null && cobj.columnTitleSize.toString().length>0){
                 columTitleSize.text=cobj.columnTitleSize;
-            }
+            }else{
+				columTitleSize.text="9";
+			}
             
             columWidth.text=cobj.columnWidth;
             if(cobj.columnTypeValue=="Field"){
@@ -306,9 +306,17 @@
             columnValueFormula.text=cobj.columnCodeFormula;
             this.columnObject=cobj;
 
+			if(cobj.columnTitleFont==null || cobj.columnTitleFont==""){
+				cobj.columnTitleFont="sans-serif";
+			}	
+			if(cobj.columnTitleStyle==null || cobj.columnTitleStyle==""){
+				cobj.columnTitleStyle="normal";
+			}
+
 			totalsDropDownList.callLater(selectCurrentItem);
 			titleFontDropDownList.callLater(selectCurrentItemTitleFont);
-			titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
+			titleStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
+			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
 
 			//initail color
 			 var uint_color:uint=0;
@@ -330,6 +338,9 @@
 
 				titleColorPicker.selectedColor=uint_color;
                	colorLabel.text=cobj.columnTitleColor;
+			}else{
+				titleColorPicker.selectedColor=uint("0x000000");
+				colorLabel.text="#000000";
 			}
 			 
         }
@@ -339,7 +350,7 @@
     }
 	private function selectCurrentItemTitleFont():void
 	{
-		if(this.columnObject.columnTitleFont){
+			if(this.columnObject.columnTitleFont){
 			var dpCount:int = titleFontDropDownList.dataProvider.length;
 			
 			for (var i:int = 0; i < dpCount; i++)
@@ -353,21 +364,21 @@
 			}
 		}
 	}
-	private function selectCurrentItemTitleStyle():void
-	{
-		if(this.columnObject.columnTitleStyle){
-			var dpCount:int = titleStyleDropDownList.dataProvider.length;
-			for (var i:int = 0; i < dpCount; i++)
-			{
-				var item:Object = titleStyleDropDownList.dataProvider.getItemAt(i);
-				if (ObjectUtil.compare(item["value"],this.columnObject.columnTitleStyle)==0)
-				{
-					titleStyleDropDownList.selectedItem = item;
-					break;
-				}
-			}
-		}
-	}
+	// private function selectCurrentItemTitleStyle():void
+	// {
+	// 	if(this.columnObject.columnTitleStyle){
+	// 		var dpCount:int = titleStyleDropDownList.dataProvider.length;
+	// 		for (var i:int = 0; i < dpCount; i++)
+	// 		{
+	// 			var item:Object = titleStyleDropDownList.dataProvider.getItemAt(i);
+	// 			if (ObjectUtil.compare(item["value"],this.columnObject.columnTitleStyle)==0)
+	// 			{
+	// 				titleStyleDropDownList.selectedItem = item;
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	private function selectCurrentItem():void
 	{

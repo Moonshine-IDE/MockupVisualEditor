@@ -190,6 +190,10 @@
 			columnsObj.columnHeaderTitle=selectedColumnName;
 			columnsObj.columnWidth="70";
 			columnsObj.columnTypeValue="Field";
+			columnsObj.columnTitleFont="sans-serif";
+			columnsObj.columnTitleStyle="normal";
+			columnsObj.columnTitleSize="9";
+			columnsObj.columnTitleColor="#000000";
 			columnObjectList.addItem(columnsObj);
 			
 			selectedColumnObject=columnsObj;
@@ -493,6 +497,8 @@
 
 					if(c.columnTitleColor!=null && c.columnTitleColor!=""){
 						colHeaderFont.@color=c.columnTitleColor;
+					}else{
+						colHeaderFont.@color="#000000";
 					}
 
 					colHeader.appendChild(colHeaderFont);
@@ -606,12 +612,11 @@
 							columnsObj.twisties=col.@twisties;
 						}
 						if(col.columnheader[0]&&col.columnheader[0].font[0]){
-							
 								if(col.columnheader[0].font[0].@name.toString().length>0){
 									columnsObj.columnTitleFont=col.columnheader[0].font[0].@name.toString();
 								
 								}else{
-									columnsObj.columnTitleFont="monospace"
+									columnsObj.columnTitleFont="sans-serif"
 								}
 
 								if(col.columnheader[0].font[0].@style.toString().length>0){
@@ -632,7 +637,7 @@
 									columnsObj.columnTitleColor=col.columnheader[0].font[0].@color.toString();
 								
 								}else{
-									columnsObj.columnTitleColor="000000";
+									columnsObj.columnTitleColor="#000000";
 								}
 								
 							

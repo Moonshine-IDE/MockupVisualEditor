@@ -204,7 +204,7 @@
         private function initializeMultiSelect():void {
             
             var rex:RegExp = /[\s\r\n]+/gim;
-            if (includeCollection && selectedColumnObject[_textProperty]){
+            if (includeCollection&& selectedColumnObject && selectedColumnObject[_textProperty]){
                  var str:String = selectedColumnObject[_textProperty];
                  if(str.length>0){
                     var _iniList:Array=str.split(" ");

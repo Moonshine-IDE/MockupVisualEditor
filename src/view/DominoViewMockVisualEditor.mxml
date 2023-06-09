@@ -262,6 +262,7 @@
 		//Alert.show("event.columnInex:"+event.columnInex);
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
 			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumnObject.columnFontType="title";
 			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
 			if(selectedColumnObject!=null && selectedColumn!=null ){
 				columnAccordion.initializeColumnProperty(selectedColumnObject);
@@ -475,34 +476,53 @@
 				colXML.@sortnoaccent="true" 
 				colXML.@sortnocase="true" 
 				colXML.@showaslinks="false"
-				
+				var colFont:XML=new XML("<font/>");
+				if(c.columnFont!=null && c.columnTitleFont!=""){
+					colFont.@name=c.columnFont;
+				}
 
+				if(c.columnStyle!=null && c.columnStyle!=""){
+					colFont.@style=c.columnStyle;
+				}
+
+				if(c.columnSize!=null && c.columnSize!=""){
+					colFont.@size=c.columnSize;
+				}
+
+				if(c.columnColor!=null && c.columnColor!=""){
+					colFont.@color=c.columnColor;
+				}else{
+					colFont.@color="#000000";
+				}
+
+				colXML.appendChild(colFont);
 
 
 				var colHeader:XML=new XML("<columnheader />");
 				colHeader.@title=c.columnHeaderTitle;
 
+				var colHeaderFont:XML=new XML("<font/>");
 				if(c.columnTitleFont!=null && c.columnTitleFont!=""){
-					var colHeaderFont:XML=new XML("<font/>");
-				
 					colHeaderFont.@name=c.columnTitleFont;
-					if(c.columnTitleStyle!=null && c.columnTitleStyle!=""){
-						colHeaderFont.@style=c.columnTitleStyle;
-					}
-					if(c.columnTitleSize!=null && c.columnTitleSize!=""){
-						colHeaderFont.@size=c.columnTitleSize;
-					}else{
-						colHeaderFont.@size="9";
-					}
-
-					if(c.columnTitleColor!=null && c.columnTitleColor!=""){
-						colHeaderFont.@color=c.columnTitleColor;
-					}else{
-						colHeaderFont.@color="#000000";
-					}
-
-					colHeader.appendChild(colHeaderFont);
 				}
+				
+				if(c.columnTitleStyle!=null && c.columnTitleStyle!=""){
+					colHeaderFont.@style=c.columnTitleStyle;
+				}
+				if(c.columnTitleSize!=null && c.columnTitleSize!=""){
+					colHeaderFont.@size=c.columnTitleSize;
+				}else{
+					colHeaderFont.@size="9";
+				}
+
+				if(c.columnTitleColor!=null && c.columnTitleColor!=""){
+					colHeaderFont.@color=c.columnTitleColor;
+				}else{
+					colHeaderFont.@color="#000000";
+				}
+
+				colHeader.appendChild(colHeaderFont);
+				
 
 				
 				
@@ -610,6 +630,34 @@
 							
 						}else{
 							columnsObj.twisties=col.@twisties;
+						}
+						if(col.font[0]){
+							if(col.font[0].@name.toString().length>0){
+								columnsObj.columnFont=col.font[0].@name.toString();
+							}else{
+								columnsObj.columnFont="sans-serif"
+							}
+							if(col.font[0].@style.toString().length>0){
+								
+								columnsObj.columnStyle=col.font[0].@style;
+								
+							}else{
+								columnsObj.columnStyle="normal";
+							}
+							var colSizeLength:int=col.font[0].@size.toString().length;
+							if(colSizeLength>0){
+								columnsObj.columnSize=col.font[0].@size;
+							}else{
+								columnsObj.columnSize="9"
+							}
+
+							if(col.font[0].@color.toString().length>0){
+								columnsObj.columnColor=col.font[0].@color.toString();
+							
+							}else{
+								columnsObj.columnColor="#000000";
+							}
+
 						}
 						if(col.columnheader[0]&&col.columnheader[0].font[0]){
 								if(col.columnheader[0].font[0].@name.toString().length>0){

@@ -50,9 +50,15 @@ package view.domino.viewEditor.object
         public var columnTitleSize:String ;
         public var columnTitleStyle:String ;
         public var columnTitleColor:String ;
+        public var columnFont:String ;
+        public var columnSize:String ;
+        public var columnStyle:String ;
+        public var columnColor:String ;
         public var twisties:String ;
         public var separatemultiplevalues:String;
         public var totals:String;
+
+        public var columnFontType:String;
 
         
         public function ColumnObject()

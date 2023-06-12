@@ -102,7 +102,7 @@
 
 	import view.suportClasses.events.DominoViewColumnUpdateEvent;
 
-	
+	import mx.utils.StringUtil;
 
 	private var viewFileName:String =  "" ;
 
@@ -258,8 +258,7 @@
 		
 		viewSetPanel.visible =viewSetPanel.includeInLayout = false;
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
-		//loading the column setting to property
-		//Alert.show("event.columnInex:"+event.columnInex);
+		
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
 			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumnObject.columnFontType="title";
@@ -482,7 +481,7 @@
 				}
 
 				if(c.columnStyle!=null && c.columnStyle!=""){
-					colFont.@style=c.columnStyle;
+					colFont.@style=StringUtil.trim(c.columnStyle);
 				}
 
 				if(c.columnSize!=null && c.columnSize!=""){
@@ -507,7 +506,7 @@
 				}
 				
 				if(c.columnTitleStyle!=null && c.columnTitleStyle!=""){
-					colHeaderFont.@style=c.columnTitleStyle;
+					colHeaderFont.@style=StringUtil.trim(c.columnTitleStyle);
 				}
 				if(c.columnTitleSize!=null && c.columnTitleSize!=""){
 					colHeaderFont.@size=c.columnTitleSize;

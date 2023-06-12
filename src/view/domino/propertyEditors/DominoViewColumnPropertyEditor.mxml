@@ -335,9 +335,18 @@
 				cobj.columnTitleStyle="normal";
 			}
 
+
 			if(cobj.columnFontType==null || cobj.columnFontType==""){
 				cobj.columnFontType="title";
 			}
+
+			if(cobj.columnFontType=="title"){
+				columnFontType.selectedValue="title"
+			}
+			if(cobj.columnFontType=="column"){
+				columnFontType.selectedValue="column"
+			}
+				
 			totalsDropDownList.callLater(selectCurrentItem);
 			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
 			initalizeColumnFont(cobj);
@@ -355,17 +364,23 @@
 		
 		if(cobj.columnFontType=="title"){
 			titleStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
-		}else {
-			columnStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
-		}	
-
-			
-		if(cobj!=null){
 			if(cobj.columnTitleSize!=null && cobj.columnTitleSize.toString().length>0){
                 columTitleSize.text=cobj.columnTitleSize;
             }else{
 				columTitleSize.text="9";
 			}
+		}else {
+			columnStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
+			if(cobj.columnSize!=null && cobj.columnSize.toString().length>0){
+                columTitleSize.text=cobj.columnSize;
+            }else{
+				columTitleSize.text="9";
+			}
+		}	
+
+			
+		if(cobj!=null){
+			
 			
 			titleFontDropDownList.callLater(selectCurrentItemTitleFont);
 
@@ -479,6 +494,7 @@
 				this.columnObject.columnTitleSize=columTitleSize.text;
           
 			}else if(this.columnObject.columnFontType=="column"){
+								  
 				this.columnObject.columnSize=columTitleSize.text;
           
 			}
@@ -613,8 +629,10 @@
 			if(this.columnObject!=null){
 				if(this.columnObject.columnFontType=="title"){
 					this.columnObject.columnTitleFont=titleFontDropDownList.selectedItem["value"].toString();
+					
 				}else{
 					this.columnObject.columnFont=titleFontDropDownList.selectedItem["value"].toString();
+					
 				
 				}
 

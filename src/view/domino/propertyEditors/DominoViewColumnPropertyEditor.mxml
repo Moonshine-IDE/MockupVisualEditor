@@ -147,8 +147,8 @@
 		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >
 		   						<s:FormItem label="Font:" skinClass="skins.FormItemSkin">
 										<s:HGroup>
-											<s:RadioButton id="columnFontForTitleRadioBtn" label="Title"  value="title" groupName="columnFontType" selected="true"  click="columnFontType_changeHandler(event)"/>
-											<s:RadioButton id="columnFontForSelfRadioBtn" label="Column" value="column" groupName="columnFontType" click="columnFontType_changeHandler(event)"/>
+											<s:RadioButton id="columnFontForTitleRadioBtn" label="Title"  value="title" groupName="columnFontType" selected="true"  click="columnFontType_changeHandler()"/>
+											<s:RadioButton id="columnFontForSelfRadioBtn" label="Column" value="column" groupName="columnFontType" click="columnFontType_changeHandler()"/>
 											
 										</s:HGroup>	
 									</s:FormItem>
@@ -328,6 +328,8 @@
             columnValueFormula.text=cobj.columnCodeFormula;
             this.columnObject=cobj;
 
+
+
 			if(cobj.columnTitleFont==null || cobj.columnTitleFont==""){
 				cobj.columnTitleFont="sans-serif";
 			}	
@@ -335,6 +337,10 @@
 				cobj.columnTitleStyle="normal";
 			}
 
+			if(cobj.columnStyle==null || cobj.columnStyle==""){
+				cobj.columnStyle="normal";
+			}
+			columnFontType.selectedValue="title";
 
 			// if(cobj.columnFontType==null || cobj.columnFontType==""){
 			// 	columnFontType.selectedValue="title"
@@ -349,7 +355,7 @@
 				
 			totalsDropDownList.callLater(selectCurrentItem);
 			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
-			initalizeColumnFont(cobj);
+			columnFontType_changeHandler();
 			
 			 
         }
@@ -359,8 +365,7 @@
     }
 
 	private function initalizeColumnFont(cobj:ColumnObject):void
-	{
-		
+	{ 
 		
 		if(columnFontType.selection.value.toString()=="title"){
 			titleStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
@@ -551,7 +556,7 @@
 	}
 
 	
-	private function columnFontType_changeHandler(event:Event):void
+	private function columnFontType_changeHandler():void
 	{
         if(this.columnObject!=null){
             

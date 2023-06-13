@@ -103,6 +103,7 @@
 	import view.suportClasses.events.DominoViewColumnUpdateEvent;
 
 	import mx.utils.StringUtil;
+	import mx.utils.ObjectUtil;
 
 	private var viewFileName:String =  "" ;
 
@@ -122,7 +123,7 @@
 
 	private var columnObjectList:ArrayList = new ArrayList();
 	private var selectedColumnObject:ColumnObject = null;
-
+	private var selectedColumnIndex:int = -1;
 	public function get hasChanged():Boolean
 	{
 		return _hasChanged;
@@ -195,10 +196,9 @@
 			columnsObj.columnTitleSize="9";
 			columnsObj.columnTitleColor="#000000";
 			columnObjectList.addItem(columnsObj);
-			
-			selectedColumnObject=columnsObj;
-			//selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
-			
+			var objIndex:int=columnObjectList.getItemIndex(columnsObj);
+			selectedColumnObject=columnObjectList.getItemAt(objIndex) as ColumnObject; 
+
 			columnAccordion.initializeColumnProperty(columnsObj);
 
 		
@@ -260,12 +260,18 @@
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
 		
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
-			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
-			selectedColumnObject.columnFontType="title";
-			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
-			if(selectedColumnObject!=null && selectedColumn!=null ){
-				columnAccordion.initializeColumnProperty(selectedColumnObject);
+			var getCurrentClickTarget:ColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumnIndex=event.columnInex;
+			if (ObjectUtil.compare(getCurrentClickTarget,selectedColumnObject)!=0)
+			{
+				selectedColumnObject=getCurrentClickTarget;
+				selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
+				if(selectedColumnObject!=null && selectedColumn!=null ){
+					columnAccordion.initializeColumnProperty(selectedColumnObject);
+				}
 			}
+			
+			
 			
 		}
 		
@@ -295,6 +301,12 @@
 			var col:ColumnObject=event.col as ColumnObject;
 			
 			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
+			//some time the new column not add into columnObjectList
+
+			if(index==-1){
+				index=selectedColumnIndex;
+			}
+			
 			columnObjectList.setItemAt(col,index);
 
 			var gridColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(index) as GridColumn;

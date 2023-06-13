@@ -336,16 +336,16 @@
 			}
 
 
-			if(cobj.columnFontType==null || cobj.columnFontType==""){
-				cobj.columnFontType="title";
-			}
+			// if(cobj.columnFontType==null || cobj.columnFontType==""){
+			// 	columnFontType.selectedValue="title"
+			// }
 
-			if(cobj.columnFontType=="title"){
-				columnFontType.selectedValue="title"
-			}
-			if(cobj.columnFontType=="column"){
-				columnFontType.selectedValue="column"
-			}
+			// if(cobj.columnFontType=="title"){
+			// 	columnFontType.selectedValue="title"
+			// }
+			// if(cobj.columnFontType=="column"){
+			// 	columnFontType.selectedValue="column"
+			// }
 				
 			totalsDropDownList.callLater(selectCurrentItem);
 			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
@@ -362,7 +362,7 @@
 	{
 		
 		
-		if(cobj.columnFontType=="title"){
+		if(columnFontType.selection.value.toString()=="title"){
 			titleStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
 			if(cobj.columnTitleSize!=null && cobj.columnTitleSize.toString().length>0){
                 columTitleSize.text=cobj.columnTitleSize;
@@ -422,7 +422,7 @@
 	private function selectCurrentItemTitleFont():void
 	{
 			var fontValue:String;
-			if(this.columnObject.columnFontType=="title"){
+			if(columnFontType.selection.value.toString()=="title"){
 				fontValue=this.columnObject.columnTitleFont;
 			}else{
 				fontValue=this.columnObject.columnTitleFont;
@@ -554,8 +554,8 @@
 	private function columnFontType_changeHandler(event:Event):void
 	{
         if(this.columnObject!=null){
-            this.columnObject.columnFontType=columnFontType.selection.value.toString();
-			if( this.columnObject.columnFontType=="title"){
+            
+			if( columnFontType.selection.value.toString()=="title"){
 				columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = false;
 				titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = true;
 				fontName = "Title Font";
@@ -604,7 +604,7 @@
 	{
 		
 		if(this.columnObject!=null){
-			this.columnObject.columnTypeValue=columnFontType.selectedValue.toString();
+			this.columnObject.columnTypeValue=columnValueType.selectedValue.toString();
             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 		}
 		

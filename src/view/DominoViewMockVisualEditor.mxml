@@ -466,6 +466,26 @@
 					colXML.@categorized="false";
 				}
 
+				if(c.columnFormatStyle!=null && c.columnFormatStyle!=""){
+					if(c.columnFormatStyle=="number"){
+						var numberXML:XML = new XML("<numberformat />");
+						if(c.columnNumberFormat!=null && c.columnNumberFormat!=""){
+							numberXML.@format=c.columnNumberFormat;
+						}else{
+							numberXML.@format="decimal";
+						}
+
+						if(numberXML.@format=="decimal"){
+							if(c.columnNumberFormatDigits!=null && c.columnNumberFormatDigits!=""){
+								numberXML.@digits=c.columnNumberFormatDigits;
+							}else{
+								numberXML.@digits="0"
+							}
+						}
+						colXML.appendChild(numberXML);
+					}
+				}
+
 				
 
 
@@ -641,6 +661,21 @@
 							
 						}else{
 							columnsObj.twisties=col.@twisties;
+						}
+						if(col.numberformat[0]){
+							columnsObj.columnFormatStyle="number";
+							if(col.numberformat[0].@format.toString().length>0){
+								columnsObj.columnNumberFormat=col.numberformat[0].@format
+							}else{
+								columnsObj.columnNumberFormat="decimal"
+							}
+
+							if(col.numberformat[0].@digits.toString().length>0){
+								columnsObj.columnNumberFormatDigits=col.numberformat[0].@digits;
+							}else{
+								columnsObj.columnNumberFormatDigits="0";
+							}
+
 						}
 						if(col.font[0]){
 							if(col.font[0].@name.toString().length>0){

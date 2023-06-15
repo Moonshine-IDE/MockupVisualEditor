@@ -60,7 +60,14 @@ package view.domino.viewEditor.object
 
         public var columnFontType:String;
 
-        
+
+        public var columnFormatStyle:String;
+
+        public var columnNumberFormatDigits:String;
+        public var columnNumberFormat:String;
+        public var columnNumberFormatPunctuated:String;
+        public var columnNumberFormatParens:String;
+        public var columnNumberFormatPercent:String;
         public function ColumnObject()
 		{
         }

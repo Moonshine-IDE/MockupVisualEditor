@@ -142,6 +142,91 @@
 							</mx:VBox>
 							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+		
+
+								<s:FormItem label="Style:" skinClass="skins.FormItemSkin">
+									<domino:CustomDropDownList id="columnFormatStyleDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.ColumnStylesOptions}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onColumnStyleSelectionChange(event)"
+                        enabled="true"
+						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:FormItem> 
+
+								<s:Group id="generalStyleGroup">
+								    <s:Label id="generalStyleGroupText"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5" 
+												 width="320"
+												text="There are no advanced formats for the general style. 
+												You may assign formats for multiple styles in the same column.
+												Style is not a property of the column; 
+												it just lets you select which set of options to work with. "/>
+								</s:Group>
+
+								<s:VGroup id="numberStyleGroup">
+								
+									<s:Label left="5"  text="Number Format"/>
+									<s:HGroup>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn1" label="Decimal"  value="decimal" groupName="columnStyleNumberFormat" selected="true"  click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn2" label="Percent" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn3" label="Scientific" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+									</s:HGroup>	
+									<s:HGroup>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn4" label="Currency" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn5" label="Bytes(K/M/G)" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+									</s:HGroup>
+									<s:Label left="5"  text="Decimal places"/>
+										<s:HGroup>
+										<s:TextInput id="decimalPlacesInput"
+										text="0"  change="decimalPlaces_changeHandler(event)" enabled="true" width="100" skinClass="skins.TextInputSkin" prompt="Decimal place"/>	
+										 <s:Label left="5"  text="Fixed"/>
+										</s:HGroup>
+
+										<s:HGroup>
+
+										 <s:CheckBox id="decaimalVaring"
+													selected="false"
+													change="decaimalVaring_changeHandler(event)"/>
+													 <s:Label left="5"  text="Varying"/>
+										</s:HGroup>
+										
+										<s:Label left="5"  text="Decimal symbol"/>
+										<s:TextInput id="decimalSymbolInput"
+										text="." width="50" change="decimalSymbol_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="Decimal Symbol"/>	
+										
+										<s:Label left="5"  text="Thousands separator"/>
+										<s:TextInput id="thousandsSeparatorInput"
+										text=","  width="50" change="thousandsSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="Thousands Separator"/>	
+										
+								
+											<s:Label left="5"  text="Preferences for display formating"/>
+										<s:Label left="5"  text="Use preferences from"/>
+									
+									<domino:CustomDropDownList id="columnPreferencesList"
+						requireSelection="true" width="150"
+						dataProvider="{DominoGlobalTokens.ColumnStylesPreferencesForDisplay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onColumnPreferencesSelectionChange(event)"
+                        enabled="true"
+						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								
+										
+								</s:VGroup>
+
+								<s:HGroup id="datetimeStyleGroup">
+								    <s:Label left="5"  text="datetimeStyleGroup symbol"/>
+								</s:HGroup>
+
+
+								<s:HGroup id="namesStyleGroup">
+								  <s:Label left="5"  text="namesStyleGroup symbol"/>
+								</s:HGroup>
+
+
+
 							</mx:VBox>
 							<mx:VBox  horizontalAlign="left" id="columnFontSetPanel" label="Column Setting-Font" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >
@@ -222,6 +307,12 @@
 	{
 		columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = false;
 		titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = true;
+		//for generate style format ,generalStyleGroup,numberStyleGroup
+		generalStyleGroup.visible =generalStyleGroup.includeInLayout = true;
+		numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+		datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+		namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+
 	}
 
 	private function titleColor_changeHandler(event:Event):void
@@ -340,6 +431,38 @@
 			if(cobj.columnStyle==null || cobj.columnStyle==""){
 				cobj.columnStyle="normal";
 			}
+
+			if(cobj.columnFormatStyle==null || cobj.columnFormatStyle==""){
+				cobj.columnFormatStyle="general";
+			}
+			//inilta number 
+			var styleFormat:int=-1;
+			if(cobj.columnFormatStyle=="general"){
+				styleFormat=0
+			} else if(cobj.columnFormatStyle=="number"){
+				styleFormat=1
+			}else if(cobj.columnFormatStyle=="datetime"){
+				styleFormat=2
+			}else if(cobj.columnFormatStyle=="names"){
+				styleFormat=3
+			}
+			selectCurrentItem(columnFormatStyleDropDownList,cobj.columnFormatStyle);
+			initalNumberPanel(styleFormat);
+
+
+			if(cobj.columnNumberFormatDigits==null || cobj.columnNumberFormatDigits==""){
+				cobj.columnNumberFormatDigits="0";
+			}
+			decimalPlacesInput.text=cobj.columnNumberFormatDigits;
+			
+			
+			
+			if(cobj.columnNumberFormat==null || cobj.columnNumberFormat==""){
+				cobj.columnNumberFormat="decimal";
+				columnStyleNumberFormat.selectedValue=cobj.columnNumberFormat;
+			}else{
+				columnStyleNumberFormat.selectedValue="decimal";
+			}
 			columnFontType.selectedValue="title";
 
 			// if(cobj.columnFontType==null || cobj.columnFontType==""){
@@ -352,8 +475,8 @@
 			// if(cobj.columnFontType=="column"){
 			// 	columnFontType.selectedValue="column"
 			// }
-				
-			totalsDropDownList.callLater(selectCurrentItem);
+			selectCurrentItem(totalsDropDownList,cobj.totals);	
+			//totalsDropDownList.callLater();
 			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
 			columnFontType_changeHandler();
 			
@@ -464,16 +587,16 @@
 	// 	}
 	// }
 
-	private function selectCurrentItem():void
+	private function selectCurrentItem(obj:CustomDropDownList,val:String):void
 	{
-		if(this.columnObject.totals){
-			var dpCount:int = totalsDropDownList.dataProvider.length;
+		if(val){
+			var dpCount:int = obj.dataProvider.length;
 			for (var i:int = 0; i < dpCount; i++)
 			{
-				var item:Object = totalsDropDownList.dataProvider.getItemAt(i);
-				if (ObjectUtil.compare(item["value"],this.columnObject.totals)==0)
+				var item:Object = obj.dataProvider.getItemAt(i);
+				if (ObjectUtil.compare(item["value"],val)==0)
 				{
-					totalsDropDownList.selectedItem = item;
+					obj.selectedItem = item;
 					break;
 				}
 			}
@@ -483,7 +606,26 @@
 	
 	}
 
-   	private function columnTitle_changeHandler(event):void
+
+	private function decimalPlaces_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNumberFormatDigits=decimalPlacesInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+	private function decimalSymbol_changeHandler(event:Event):void
+	{
+
+
+
+	}
+
+	private function  thousandsSeparator_changeHandler (event:Event):void
+	{
+	}
+
+   	private function columnTitle_changeHandler(event:Event):void
 	{
         
 		if(this.columnObject!=null){
@@ -492,7 +634,7 @@
         }
     }
 
-	private function columTitleSize_changeHandler(event):void 
+	private function columTitleSize_changeHandler(event:Event):void 
 	{
 		if(this.columnObject!=null){
 			if(this.columnObject.columnFontType=="title"){
@@ -507,7 +649,7 @@
         }
 	}
 
-    private function columnWidth_changeHandler(event):void
+    private function columnWidth_changeHandler(event:Event):void
 	{
 		if(columWidth.text!=null&& columWidth.text.length>0){
 		
@@ -521,7 +663,7 @@
 
 
     private var columnFormula:String = "";
-	private function columnValueFormula_changeHandler(event):void
+	private function columnValueFormula_changeHandler(event:Event):void
 	{	
         if(this.columnObject!=null){
 			this.columnObject.columnCodeFormula=columnValueFormula.text;
@@ -543,6 +685,22 @@
 		}
 	}
 
+	private function decaimalVaring_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(decaimalVaring.selected){
+				this.columnObject.columnNumberFormatDigits="varying";
+				decimalPlacesInput.enabled="false";
+			}else{
+				decimalPlacesInput.enabled="true";
+				this.columnObject.columnNumberFormatDigits="0";
+				decimalPlacesInput.text="0";
+			}
+			 this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+
+	}
+
     private function check_changeHandler(event:Event):void
 	{
 		if(this.columnObject!=null){
@@ -555,7 +713,26 @@
         }
 	}
 
-	
+	private function columnFormatNumber_changeHandler():void 
+	{
+		if( columnStyleNumberFormat.selection.value.toString()=="decimal")
+		{
+			decimalPlacesInput.enabled="true"
+		}else{
+			decimalPlacesInput.enabled="false"
+		}
+
+		if(this.columnObject!=null){
+			//columnNumberFormatDigits
+            this.columnObject.columnNumberFormat=columnStyleNumberFormat.selection.value.toString();
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+           
+        }
+
+
+	}
+
+
 	private function columnFontType_changeHandler():void
 	{
         if(this.columnObject!=null){
@@ -615,6 +792,43 @@
 		
 		
 	}
+	private function initalNumberPanel(index:int):void{
+		if(index==0){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = true;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+			}else if(index==1){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = false;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = true;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+			}else if(index==2){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = false;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = true;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+			}else if(index==3){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = false;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = true;
+			}
+	}
+
+	private function onColumnStyleSelectionChange(event:IndexChangeEvent):void
+	{
+		initalNumberPanel(event.newIndex);
+		if(this.columnObject!=null){
+			this.columnObject.columnFormatStyle=columnFormatStyleDropDownList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function onColumnPreferencesSelectionChange(event:IndexChangeEvent):void
+	{
+
+	}
 
 	protected function onTotalSelectionChange(event:IndexChangeEvent):void
 	{
@@ -656,5 +870,6 @@
 		<s:RadioButtonGroup id="columnSortOrder"/>
 		<s:RadioButtonGroup id="columnSortType"/>
 		<s:RadioButtonGroup id="columnFontType"/>
+		<s:RadioButtonGroup id="columnStyleNumberFormat"/>
 	</fx:Declarations>	
 </s:Group>

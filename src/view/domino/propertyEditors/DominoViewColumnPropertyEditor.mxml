@@ -171,13 +171,13 @@
 								
 									<s:Label left="5"  text="Number Format"/>
 									<s:HGroup>
-										<s:RadioButton id="columnStyleFormatNumberRadioBtn1" label="Decimal"  value="decimal" groupName="columnStyleNumberFormat" selected="true"  click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn1" label="Decimal"  value="fixed" groupName="columnStyleNumberFormat" selected="true"  click="columnFormatNumber_changeHandler()"/>
 										<s:RadioButton id="columnStyleFormatNumberRadioBtn2" label="Percent" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
-										<s:RadioButton id="columnStyleFormatNumberRadioBtn3" label="Scientific" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn3" label="Scientific" value="scientific" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
 									</s:HGroup>	
 									<s:HGroup>
-										<s:RadioButton id="columnStyleFormatNumberRadioBtn4" label="Currency" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
-										<s:RadioButton id="columnStyleFormatNumberRadioBtn5" label="Bytes(K/M/G)" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn4" label="Currency" value="currency" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn5" label="Bytes(K/M/G)" value="general" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
 									</s:HGroup>
 									<s:Label left="5"  text="Decimal places"/>
 										<s:HGroup>
@@ -194,16 +194,9 @@
 													 <s:Label left="5"  text="Varying"/>
 										</s:HGroup>
 										
-										<s:Label left="5"  text="Decimal symbol"/>
-										<s:TextInput id="decimalSymbolInput"
-										text="." width="50" change="decimalSymbol_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="Decimal Symbol"/>	
-										
-										<s:Label left="5"  text="Thousands separator"/>
-										<s:TextInput id="thousandsSeparatorInput"
-										text=","  width="50" change="thousandsSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="Thousands Separator"/>	
 										
 								
-											<s:Label left="5"  text="Preferences for display formating"/>
+										<s:Label left="5"  text="Preferences for display formating"/>
 										<s:Label left="5"  text="Use preferences from"/>
 									
 									<domino:CustomDropDownList id="columnPreferencesList"
@@ -212,8 +205,30 @@
 						change="onColumnPreferencesSelectionChange(event)"
                         enabled="true"
 						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-								
+										<s:Label left="5"  text="Decimal symbol"/>
+										<s:TextInput id="decimalSymbolInput"
+										text="." width="50" change="decimalSymbol_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="Decimal Symbol"/>	
 										
+										<s:Label left="5"  text="Thousands separator"/>
+										<s:TextInput id="thousandsSeparatorInput"
+										text=","  width="50" change="thousandsSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="Thousands Separator"/>	
+										
+										
+										<s:Label left="5"  text="Additional display formatting"/>
+										<s:HGroup>
+										<s:CheckBox id="parenthsisCheckbox"
+													selected="false"
+													change="parenthesis_changeHandler(event)"/>
+													 <s:Label left="5"  text="Parenthesis when negative"/>
+										</s:HGroup>
+
+										<s:HGroup>
+										<s:CheckBox id="punctuatedCheckbox"
+													selected="false"
+													change="punctuated_changeHandler(event)"/>
+													 <s:Label left="5"  text="Parenthesis when negative"/>
+										</s:HGroup>
+
 								</s:VGroup>
 
 								<s:HGroup id="datetimeStyleGroup">
@@ -453,16 +468,34 @@
 			if(cobj.columnNumberFormatDigits==null || cobj.columnNumberFormatDigits==""){
 				cobj.columnNumberFormatDigits="0";
 			}
+
+			if(cobj.columnNumberFormatParens=="true"){
+				parenthsisCheckbox.selected=true
+			}else{
+				parenthsisCheckbox.selected=false
+			}
+			if(cobj.columnNumberFormatPunctuated=="true"){
+				punctuatedCheckbox.selected=true
+			}else{
+				punctuatedCheckbox.selected=false
+			}
+			
+			
+			if(cobj.columnNumberFormatPercent==null || cobj.columnNumberFormatPercent==""){
+				cobj.columnNumberFormatPercent="false";
+			}
+
+
+
 			decimalPlacesInput.text=cobj.columnNumberFormatDigits;
 			
 			
 			
 			if(cobj.columnNumberFormat==null || cobj.columnNumberFormat==""){
-				cobj.columnNumberFormat="decimal";
-				columnStyleNumberFormat.selectedValue=cobj.columnNumberFormat;
-			}else{
-				columnStyleNumberFormat.selectedValue="decimal";
+				cobj.columnNumberFormat="fixed";
+				
 			}
+			columnStyleNumberFormat.selectedValue=cobj.columnNumberFormat;
 			columnFontType.selectedValue="title";
 
 			// if(cobj.columnFontType==null || cobj.columnFontType==""){
@@ -701,6 +734,31 @@
 
 	}
 
+	private function parenthesis_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(parenthsisCheckbox.selected){
+				this.columnObject.columnNumberFormatParens="true";
+			}else{
+				this.columnObject.columnNumberFormatParens="false";
+			}
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+
+	private function punctuated_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(punctuatedCheckbox.selected){
+				this.columnObject.columnNumberFormatPunctuated="true";
+			}else{
+				this.columnObject.columnNumberFormatPunctuated="false";
+			}
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
     private function check_changeHandler(event:Event):void
 	{
 		if(this.columnObject!=null){
@@ -715,17 +773,26 @@
 
 	private function columnFormatNumber_changeHandler():void 
 	{
-		if( columnStyleNumberFormat.selection.value.toString()=="decimal")
+		if( columnStyleNumberFormat.selection.value.toString()=="fixed")
 		{
 			decimalPlacesInput.enabled="true"
 		}else{
 			decimalPlacesInput.enabled="false"
 		}
 
+		
+
 		if(this.columnObject!=null){
+			if( columnStyleNumberFormat.selection.value.toString()=="percent")
+			{
+ 				this.columnObject.columnNumberFormatParens="true";
+			}else{
+				this.columnObject.columnNumberFormat=columnStyleNumberFormat.selection.value.toString();
+				this.columnObject.columnNumberFormatParens="false";
+           	}
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 			//columnNumberFormatDigits
-            this.columnObject.columnNumberFormat=columnStyleNumberFormat.selection.value.toString();
-            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+           
            
         }
 

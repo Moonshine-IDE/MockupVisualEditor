@@ -472,16 +472,36 @@
 						if(c.columnNumberFormat!=null && c.columnNumberFormat!=""){
 							numberXML.@format=c.columnNumberFormat;
 						}else{
-							numberXML.@format="decimal";
+							numberXML.@format="fixed";
 						}
 
-						if(numberXML.@format=="decimal"){
+						if(numberXML.@format=="fixed"){
 							if(c.columnNumberFormatDigits!=null && c.columnNumberFormatDigits!=""){
 								numberXML.@digits=c.columnNumberFormatDigits;
 							}else{
 								numberXML.@digits="0"
 							}
 						}
+
+						if(c.columnNumberFormatPunctuated!=null && c.columnNumberFormatPunctuated!=""){
+							numberXML.@punctuated=c.columnNumberFormatPunctuated
+						}else{
+							numberXML.@punctuated="false"
+						}
+
+						if(c.columnNumberFormatParens!=null && c.columnNumberFormatParens!=""){
+							numberXML.@parens=c.columnNumberFormatParens
+						}else{
+							numberXML.@parens="false"
+						}
+
+						if(c.columnNumberFormatPercent!=null && c.columnNumberFormatPercent!=""){
+							numberXML.@percent=c.columnNumberFormatPercent
+						}else{
+							numberXML.@percent="false"
+						}
+
+
 						colXML.appendChild(numberXML);
 					}
 				}
@@ -668,6 +688,24 @@
 								columnsObj.columnNumberFormat=col.numberformat[0].@format
 							}else{
 								columnsObj.columnNumberFormat="decimal"
+							}
+
+							if(col.numberformat[0].@punctuated.toString().length>0){
+								columnsObj.columnNumberFormatPunctuated=col.numberformat[0].@punctuated;
+							}else{
+								columnsObj.columnNumberFormatPunctuated="false";
+							}
+
+							if(col.numberformat[0].@parens.toString().length>0){
+								columnsObj.columnNumberFormatParens=col.numberformat[0].@parens;
+							}else{
+								columnsObj.columnNumberFormatParens="false";
+							}
+
+							if(col.numberformat[0].@percent.toString().length>0){
+								columnsObj.columnNumberFormatPercent=col.numberformat[0].@percent;
+							}else{
+								columnsObj.columnNumberFormatPercent="false";
 							}
 
 							if(col.numberformat[0].@digits.toString().length>0){

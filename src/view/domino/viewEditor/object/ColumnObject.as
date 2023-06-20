@@ -68,6 +68,14 @@ package view.domino.viewEditor.object
         public var columnNumberFormatPunctuated:String;
         public var columnNumberFormatParens:String;
         public var columnNumberFormatPercent:String;
+        public var columnNumberFormatBytes:String;
+        public var columnNumberFormatDecimalsym:String;
+        public var columnNumberFormatThousandssep:String;
+        public var columnNumberFormatCurrencysymtype:String;
+        public var columnNumberFormatCurrencysym:String;
+        public var columnNumberFormatUsecustomsym:String;
+        public var columnNumberFormatPreference:String;
+        
         public function ColumnObject()
 		{
         }

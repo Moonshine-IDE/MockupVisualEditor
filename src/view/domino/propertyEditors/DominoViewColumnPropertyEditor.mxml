@@ -135,11 +135,9 @@
 
 									</s:FormItem> 	
 
-
-
-									
                                     
 							</mx:VBox>
+							
 							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
 		
@@ -167,7 +165,7 @@
 												it just lets you select which set of options to work with. "/>
 								</s:Group>
 
-								<s:VGroup id="numberStyleGroup">
+								<s:VGroup id="numberStyleGroup" width="250" height="450">
 								
 									<s:Label left="5"  text="Number Format"/>
 									<s:HGroup>
@@ -183,7 +181,7 @@
 										<s:HGroup>
 										<s:TextInput id="decimalPlacesInput"
 										text="0"  change="decimalPlaces_changeHandler(event)" enabled="true" width="100" skinClass="skins.TextInputSkin" prompt="Decimal place"/>	
-										 <s:Label left="5"  text="Fixed"/>
+										 <s:Label left="5" id="fixedLabel"  text="Fixed"/>
 										</s:HGroup>
 
 										<s:HGroup>
@@ -205,11 +203,11 @@
 						change="onColumnPreferencesSelectionChange(event)"
                         enabled="true"
 						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-										<s:Label left="5"  text="Decimal symbol"/>
+										<s:Label left="5"  text="Decimal symbol"  id="decailsymLabel"/>
 										<s:TextInput id="decimalSymbolInput"
 										text="." width="50" change="decimalSymbol_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="Decimal Symbol"/>	
 										
-										<s:Label left="5"  text="Thousands separator"/>
+										<s:Label left="5"  text="Thousands separator" id="thousandssepLabel"/>
 										<s:TextInput id="thousandsSeparatorInput"
 										text=","  width="50" change="thousandsSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="Thousands Separator"/>	
 										
@@ -485,6 +483,10 @@
 				cobj.columnNumberFormatPercent="false";
 			}
 
+			if(cobj.columnCodeFormula==null){
+				cobj.columnCodeFormula="";
+			}
+
 
 
 			decimalPlacesInput.text=cobj.columnNumberFormatDigits;
@@ -494,6 +496,9 @@
 			if(cobj.columnNumberFormat==null || cobj.columnNumberFormat==""){
 				cobj.columnNumberFormat="fixed";
 				
+			}
+			if(cobj.columnNumberFormatPreference==null || cobj.columnNumberFormatPreference==""){
+				cobj.columnNumberFormatPreference="usersetting";
 			}
 			columnStyleNumberFormat.selectedValue=cobj.columnNumberFormat;
 			columnFontType.selectedValue="title";
@@ -512,7 +517,14 @@
 			//totalsDropDownList.callLater();
 			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
 			columnFontType_changeHandler();
-			
+
+			selectCurrentItem(columnPreferencesList,cobj.columnNumberFormatPreference);
+
+			initalPreferencesSection(cobj.columnNumberFormatPreference);
+
+			decimalSymbolInput.text=cobj.columnNumberFormatDecimalsym;
+			thousandsSeparatorInput.text=cobj.columnNumberFormatThousandssep;
+
 			 
         }
 
@@ -650,12 +662,21 @@
 	private function decimalSymbol_changeHandler(event:Event):void
 	{
 
-
+		if(this.columnObject!=null){
+			this.columnObject.columnNumberFormatDecimalsym=decimalSymbolInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			
+        }
 
 	}
 
 	private function  thousandsSeparator_changeHandler (event:Event):void
 	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNumberFormatThousandssep=thousandsSeparatorInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			
+        }
 	}
 
    	private function columnTitle_changeHandler(event:Event):void
@@ -785,11 +806,21 @@
 		if(this.columnObject!=null){
 			if( columnStyleNumberFormat.selection.value.toString()=="percent")
 			{
- 				this.columnObject.columnNumberFormatParens="true";
+ 				this.columnObject.columnNumberFormatPercent="true";
 			}else{
-				this.columnObject.columnNumberFormat=columnStyleNumberFormat.selection.value.toString();
-				this.columnObject.columnNumberFormatParens="false";
+				this.columnObject.columnNumberFormatPercent="false";
            	}
+
+			if( columnStyleNumberFormat.selection.value.toString()=="bytes")
+			{
+ 				this.columnObject.columnNumberFormatBytes="true";
+			}else{
+				this.columnObject.columnNumberFormatBytes="false";
+           	}
+
+			
+			this.columnObject.columnNumberFormat=columnStyleNumberFormat.selection.value.toString();
+			
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 			//columnNumberFormatDigits
            
@@ -892,9 +923,36 @@
 		}
 	}
 
+	private function initalPreferencesSection(val:String):void 
+	{
+		if(val=="usersetting"){
+			decailsymLabel.setStyle("color","#A9A9A9");
+			thousandssepLabel.setStyle("color","#A9A9A9");
+			fixedLabel.setStyle("color","#A9A9A9");
+			decimalSymbolInput.editable=false;
+			decimalPlacesInput.editable=false;
+			thousandsSeparatorInput.editable=false;
+			this.columnObject.columnNumberFormatPreference="usersetting"
+		} else if(val=="custom"){
+			decailsymLabel.setStyle("color","#000000");
+			thousandssepLabel.setStyle("color","#000000");
+			fixedLabel.setStyle("color","#000000");
+			decimalSymbolInput.editable=true;
+			thousandsSeparatorInput.editable=true;
+			decimalPlacesInput.editable=true;
+			this.columnObject.columnNumberFormatPreference="custom"
+		}
+			
+	}
+
 	private function onColumnPreferencesSelectionChange(event:IndexChangeEvent):void
 	{
+			if(event.newIndex==0){
+				initalPreferencesSection("usersetting")
 
+			}else if(event.newIndex==1){
+				initalPreferencesSection("custom")
+			}
 	}
 
 	protected function onTotalSelectionChange(event:IndexChangeEvent):void

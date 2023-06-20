@@ -466,45 +466,7 @@
 					colXML.@categorized="false";
 				}
 
-				if(c.columnFormatStyle!=null && c.columnFormatStyle!=""){
-					if(c.columnFormatStyle=="number"){
-						var numberXML:XML = new XML("<numberformat />");
-						if(c.columnNumberFormat!=null && c.columnNumberFormat!=""){
-							numberXML.@format=c.columnNumberFormat;
-						}else{
-							numberXML.@format="fixed";
-						}
-
-						if(numberXML.@format=="fixed"){
-							if(c.columnNumberFormatDigits!=null && c.columnNumberFormatDigits!=""){
-								numberXML.@digits=c.columnNumberFormatDigits;
-							}else{
-								numberXML.@digits="0"
-							}
-						}
-
-						if(c.columnNumberFormatPunctuated!=null && c.columnNumberFormatPunctuated!=""){
-							numberXML.@punctuated=c.columnNumberFormatPunctuated
-						}else{
-							numberXML.@punctuated="false"
-						}
-
-						if(c.columnNumberFormatParens!=null && c.columnNumberFormatParens!=""){
-							numberXML.@parens=c.columnNumberFormatParens
-						}else{
-							numberXML.@parens="false"
-						}
-
-						if(c.columnNumberFormatPercent!=null && c.columnNumberFormatPercent!=""){
-							numberXML.@percent=c.columnNumberFormatPercent
-						}else{
-							numberXML.@percent="false"
-						}
-
-
-						colXML.appendChild(numberXML);
-					}
-				}
+				
 
 				
 
@@ -578,6 +540,99 @@
 				
 				
 				colXML.appendChild(colHeader);
+
+
+				if(c.columnFormatStyle!=null && c.columnFormatStyle!=""){
+					if(c.columnFormatStyle=="number"){
+						var numberXML:XML = new XML("<numberformat />");
+						if(c.columnNumberFormat!=null && c.columnNumberFormat!=""){
+							numberXML.@format=c.columnNumberFormat;
+						}else{
+							numberXML.@format="fixed";
+						}
+
+						if(numberXML.@format=="fixed"){
+							if(c.columnNumberFormatDigits!=null && c.columnNumberFormatDigits!=""){
+								numberXML.@digits=c.columnNumberFormatDigits;
+							}else{
+								numberXML.@digits="0"
+							}
+						}
+
+						if(c.columnNumberFormatPunctuated!=null && c.columnNumberFormatPunctuated!=""){
+							numberXML.@punctuated=c.columnNumberFormatPunctuated
+						}else{
+							numberXML.@punctuated="false"
+						}
+
+						if(c.columnNumberFormatParens!=null && c.columnNumberFormatParens!=""){
+							numberXML.@parens=c.columnNumberFormatParens
+						}else{
+							numberXML.@parens="false"
+						}
+
+						if(c.columnNumberFormatPercent!=null && c.columnNumberFormatPercent!=""){
+							if(c.columnNumberFormatPercent=="true"){
+								numberXML.@format="fixed";
+							}
+							numberXML.@percent=c.columnNumberFormatPercent;
+							
+						}else{
+							numberXML.@percent="false"
+						}
+
+
+						if(c.columnNumberFormatBytes!=null && c.columnNumberFormatBytes!=""){
+							if(c.columnNumberFormatBytes=="true"){
+								numberXML.@format="fixed";
+							}
+							numberXML.@bytes=c.columnNumberFormatPercent;
+							
+						}else{
+							numberXML.@bytes="false"
+						}
+
+
+						if(c.columnNumberFormatDecimalsym!=null && c.columnNumberFormatDecimalsym!=""){
+							numberXML.@decimalsym=c.columnNumberFormatDecimalsym;
+						}else{
+							numberXML.@decimalsym=".";
+						}
+						if(c.columnNumberFormatThousandssep!=null && c.columnNumberFormatThousandssep!=""){
+							numberXML.@thousandssep=c.columnNumberFormatThousandssep;
+						}else{
+							numberXML.@thousandssep=",";
+						}
+
+						if(c.columnNumberFormatPreference!=null && c.columnNumberFormatPreference!=""){
+							
+							numberXML.@preference=c.columnNumberFormatPreference;
+						}else{
+							numberXML.@preference="usersetting"
+						}
+						
+						if(c.columnNumberFormatCurrencysymtype!=null && c.columnNumberFormatCurrencysymtype!=""){
+							numberXML.@currencysymtype=c.columnNumberFormatCurrencysymtype;
+						}else{
+							numberXML.@currencysymtype="custom"
+							
+						}
+
+						if(c.columnNumberFormatCurrencysym!=null && c.columnNumberFormatCurrencysym!=""){
+							numberXML.@currencysym=c.columnNumberFormatCurrencysym;
+						}else{
+							numberXML.@currencysym="$";
+						}
+						if(c.columnNumberFormatUsecustomsym!=null && c.columnNumberFormatUsecustomsym!=""){
+							numberXML.@usecustomsym=c.columnNumberFormatUsecustomsym;
+						}else{
+							numberXML.@usecustomsym="false"
+						}
+
+
+						colXML.appendChild(numberXML);
+					}
+				}
 
 				if(c.columnTypeValue=="Field"){
 					colXML.@itemname=c.columnCodeFormula;
@@ -712,6 +767,42 @@
 								columnsObj.columnNumberFormatDigits=col.numberformat[0].@digits;
 							}else{
 								columnsObj.columnNumberFormatDigits="0";
+							}
+
+							if(col.numberformat[0].@preference.toString().length>0){
+								columnsObj.columnNumberFormatPreference=col.numberformat[0].@preference;
+							}else{
+								columnsObj.columnNumberFormatPreference="usersetting";
+							}
+
+							if(col.numberformat[0].@currencysymtype.toString().length>0){
+								columnsObj.columnNumberFormatCurrencysymtype=col.numberformat[0].@currencysymtype;
+							}else{
+								columnsObj.columnNumberFormatCurrencysymtype="usersetting";
+							}
+
+							if(col.numberformat[0].@currencysym.toString().length>0){
+								columnsObj.columnNumberFormatCurrencysym=col.numberformat[0].@currencysym;
+							}else{
+								columnsObj.columnNumberFormatCurrencysym="$";
+							}
+
+							if(col.numberformat[0].@usecustomsym.toString().length>0){
+								columnsObj.columnNumberFormatUsecustomsym=col.numberformat[0].@usecustomsym;
+							}else{
+								columnsObj.columnNumberFormatUsecustomsym="false";
+							}
+							if(col.numberformat[0].@decimalsym.toString().length>0){
+								columnsObj.columnNumberFormatDecimalsym=col.numberformat[0].@decimalsym;
+							}else{
+								columnsObj.columnNumberFormatDecimalsym=".";
+							}
+
+
+							if(col.numberformat[0].@thousandssep.toString().length>0){
+								columnsObj.columnNumberFormatThousandssep=col.numberformat[0].@thousandssep;
+							}else{
+								columnsObj.columnNumberFormatThousandssep=",";
 							}
 
 						}

@@ -551,13 +551,13 @@
 							numberXML.@format="fixed";
 						}
 
-						if(numberXML.@format=="fixed"){
+						//if(numberXML.@format=="fixed"){
 							if(c.columnNumberFormatDigits!=null && c.columnNumberFormatDigits!=""){
 								numberXML.@digits=c.columnNumberFormatDigits;
 							}else{
 								numberXML.@digits="0"
 							}
-						}
+						//}
 
 						if(c.columnNumberFormatPunctuated!=null && c.columnNumberFormatPunctuated!=""){
 							numberXML.@punctuated=c.columnNumberFormatPunctuated
@@ -586,7 +586,7 @@
 							if(c.columnNumberFormatBytes=="true"){
 								numberXML.@format="fixed";
 							}
-							numberXML.@bytes=c.columnNumberFormatPercent;
+							numberXML.@bytes=c.columnNumberFormatBytes;
 							
 						}else{
 							numberXML.@bytes="false"
@@ -743,6 +743,14 @@
 								columnsObj.columnNumberFormat=col.numberformat[0].@format
 							}else{
 								columnsObj.columnNumberFormat="decimal"
+							}
+
+							if(col.numberformat[0].@bytes.toString().length>0){
+								if(col.numberformat[0].@bytes=="true"){
+									columnsObj.columnNumberFormatBytes="true";
+								}else{
+									columnsObj.columnNumberFormatBytes="false";
+								}
 							}
 
 							if(col.numberformat[0].@punctuated.toString().length>0){

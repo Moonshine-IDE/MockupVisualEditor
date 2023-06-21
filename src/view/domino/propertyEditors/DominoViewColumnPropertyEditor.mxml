@@ -175,12 +175,12 @@
 									</s:HGroup>	
 									<s:HGroup>
 										<s:RadioButton id="columnStyleFormatNumberRadioBtn4" label="Currency" value="currency" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
-										<s:RadioButton id="columnStyleFormatNumberRadioBtn5" label="Bytes(K/M/G)" value="general" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn5" label="Bytes(K/M/G)" value="bytes" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
 									</s:HGroup>
 									<s:Label left="5"  text="Decimal places"/>
 										<s:HGroup>
 										<s:TextInput id="decimalPlacesInput"
-										text="0"  change="decimalPlaces_changeHandler(event)" enabled="true" width="100" skinClass="skins.TextInputSkin" prompt="Decimal place"/>	
+										text="0"  change="decimalPlaces_changeHandler(event)"  width="100" skinClass="skins.TextInputSkin" prompt="Decimal place"/>	
 										 <s:Label left="5" id="fixedLabel"  text="Fixed"/>
 										</s:HGroup>
 
@@ -224,16 +224,59 @@
 										<s:CheckBox id="punctuatedCheckbox"
 													selected="false"
 													change="punctuated_changeHandler(event)"/>
-													 <s:Label left="5"  text="Parenthesis when negative"/>
+													 <s:Label left="5"  text="Punctuated at thousands"/>
 										</s:HGroup>
 
 								</s:VGroup>
 
-								<s:HGroup id="datetimeStyleGroup">
-								    <s:Label left="5"  text="datetimeStyleGroup symbol"/>
-								</s:HGroup>
+								<s:VGroup id="datetimeStyleGroup">
+								   
+									<s:Label left="5"  text="Use preferences from"/>
+					
+									<domino:CustomDropDownList id="columnDateTimeFormatDefinedList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ColumnStylesPreferencesForDisplay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeSelectionChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									<s:Label left="5"  text="Sample"/>
+									<s:TextInput id="dateTimeSampleInput"
+										text="{nowDateTimeStringInFormat}"  width="50" change="dateTimeSample_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="DateTime Sample"/>	
+									
+									<s:HGroup>
+										<s:CheckBox id="dateTimeDisplayAbbreviatedCheckbox"
+													selected="false"
+													change="displayAbbreviatedDate_changeHandler(event)"/>
+													 <s:Label left="5"  text="Display abbreviated date"/>
+									</s:HGroup>
 
+									<s:Label left="5"  text="Display Date" top="10" bottom="10"/>
+									<s:Label left="5"  text="Show"/>
+									
+									<domino:CustomDropDownList id="columnDateTimeDisplayDateShowList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnShowChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									<s:Label left="5"  text="Special"/>
+									<domino:CustomDropDownList id="columnDateTimeDisplayDateSpecialList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnSpecialChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									
+									<s:Label left="5"  text="Calendar"/>
+									<domino:CustomDropDownList id="columnDateTimeDisplayDateCalendarList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplayCalendar}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnCalendarChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:VGroup>
 
+							
 								<s:HGroup id="namesStyleGroup">
 								  <s:Label left="5"  text="namesStyleGroup symbol"/>
 								</s:HGroup>
@@ -306,6 +349,8 @@
 
 	import global.domino.DominoGlobalTokens;
 
+	import 	mx.formatters.DateFormatter;
+
 	private var  colorstr:String ="000000";
 	[Bindable]
 	private var fontName:String="Title Font";
@@ -313,6 +358,8 @@
 	private var fontStyle:String="Title Style";
 	[Bindable]
 	private var fontColor:String="Title Color";
+
+	private var nowDateTimeStringInFormat:String="";
 
 	
 
@@ -325,6 +372,12 @@
 		numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
 		datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
 		namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+
+		var formatter : DateFormatter;
+		formatter = new DateFormatter();
+		var currentDateTime:Date = new Date();
+		formatter.formatString = "MM/DD/YYYY HHNNSS A";
+		nowDateTimeStringInFormat=formatter.format(currentDateTime)
 
 	}
 
@@ -501,6 +554,17 @@
 				cobj.columnNumberFormatPreference="usersetting";
 			}
 			columnStyleNumberFormat.selectedValue=cobj.columnNumberFormat;
+
+			if(cobj.columnNumberFormatBytes){
+				if(cobj.columnNumberFormatBytes=="true"){
+					columnStyleNumberFormat.selectedValue="bytes";
+				}
+			}
+			if(cobj.columnNumberFormatPercent){
+				if(cobj.columnNumberFormatPercent=="true"){
+					columnStyleNumberFormat.selectedValue="percent";
+				}
+			}
 			columnFontType.selectedValue="title";
 
 			// if(cobj.columnFontType==null || cobj.columnFontType==""){
@@ -669,6 +733,9 @@
         }
 
 	}
+	private function  dateTimeSample_changeHandler (event:Event):void
+	{
+	}
 
 	private function  thousandsSeparator_changeHandler (event:Event):void
 	{
@@ -744,11 +811,17 @@
 		if(this.columnObject!=null){
 			if(decaimalVaring.selected){
 				this.columnObject.columnNumberFormatDigits="varying";
-				decimalPlacesInput.enabled="false";
-			}else{
-				decimalPlacesInput.enabled="true";
-				this.columnObject.columnNumberFormatDigits="0";
 				decimalPlacesInput.text="0";
+				fixedLabel.setStyle("color","#A9A9A9");
+				decimalPlacesInput.editable=false;
+				decimalPlacesInput.enabled=false;
+			}else{
+				
+				this.columnObject.columnNumberFormatDigits="0";
+				decimalPlacesInput.enabled=true;
+				decimalPlacesInput.editable=true;
+				fixedLabel.setStyle("color","#000000");
+				
 			}
 			 this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 		}
@@ -765,6 +838,10 @@
 			}
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 		}
+	}
+
+	private function displayAbbreviatedDate_changeHandler(event:Event):void
+	{
 	}
 
 
@@ -794,15 +871,7 @@
 
 	private function columnFormatNumber_changeHandler():void 
 	{
-		if( columnStyleNumberFormat.selection.value.toString()=="fixed")
-		{
-			decimalPlacesInput.enabled="true"
-		}else{
-			decimalPlacesInput.enabled="false"
-		}
-
 		
-
 		if(this.columnObject!=null){
 			if( columnStyleNumberFormat.selection.value.toString()=="percent")
 			{
@@ -930,7 +999,7 @@
 			thousandssepLabel.setStyle("color","#A9A9A9");
 			fixedLabel.setStyle("color","#A9A9A9");
 			decimalSymbolInput.editable=false;
-			decimalPlacesInput.editable=false;
+			
 			thousandsSeparatorInput.editable=false;
 			this.columnObject.columnNumberFormatPreference="usersetting"
 		} else if(val=="custom"){
@@ -939,13 +1008,38 @@
 			fixedLabel.setStyle("color","#000000");
 			decimalSymbolInput.editable=true;
 			thousandsSeparatorInput.editable=true;
-			decimalPlacesInput.editable=true;
+			
 			this.columnObject.columnNumberFormatPreference="custom"
 		}
 			
 	}
 
 	private function onColumnPreferencesSelectionChange(event:IndexChangeEvent):void
+	{
+			if(event.newIndex==0){
+				initalPreferencesSection("usersetting")
+
+			}else if(event.newIndex==1){
+				initalPreferencesSection("custom")
+			}
+	}
+
+	private function onColumnDateTimeColumnShowChange(event:IndexChangeEvent):void
+	{
+	}
+
+	private function onColumnDateTimeColumnSpecialChange(event:IndexChangeEvent):void
+	{
+	}
+
+	private function onColumnDateTimeColumnCalendarChange(event:IndexChangeEvent):void 
+	{
+
+	}
+
+
+
+	private function onColumnDateTimeSelectionChange(event:IndexChangeEvent):void
 	{
 			if(event.newIndex==0){
 				initalPreferencesSection("usersetting")

@@ -241,7 +241,7 @@
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 									<s:Label left="5"  text="Sample"/>
 									<s:TextInput id="dateTimeSampleInput"
-										text="{nowDateTimeStringInFormat}"  width="50" change="dateTimeSample_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="DateTime Sample"/>	
+										text="{nowDateTimeStringInFormat}"  width="150" change="dateTimeSample_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="DateTime Sample"/>	
 									
 									<s:HGroup>
 										<s:CheckBox id="dateTimeDisplayAbbreviatedCheckbox"
@@ -358,7 +358,7 @@
 	private var fontStyle:String="Title Style";
 	[Bindable]
 	private var fontColor:String="Title Color";
-
+	[Bindable]
 	private var nowDateTimeStringInFormat:String="";
 
 	

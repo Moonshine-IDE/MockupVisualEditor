@@ -631,6 +631,9 @@
 
 
 						colXML.appendChild(numberXML);
+					}else if(c.columnFormatStyle=="datetime"){
+						var datetimeXML:XML = new XML("<datetimeformat />");
+						
 					}
 				}
 

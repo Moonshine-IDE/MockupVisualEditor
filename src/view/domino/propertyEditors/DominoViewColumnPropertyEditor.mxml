@@ -139,7 +139,7 @@
 							</mx:VBox>
 							
 							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" paddingBottom="10" >	
+		   paddingLeft="5" paddingTop="10" width="250" height="650" paddingBottom="10" >	
 		
 
 								<s:FormItem label="Style:" skinClass="skins.FormItemSkin">
@@ -229,7 +229,7 @@
 
 								</s:VGroup>
 
-								<s:VGroup id="datetimeStyleGroup">
+								<s:VGroup id="datetimeStyleGroup"  width="220" height="450">
 								   
 									<s:Label left="5"  text="Use preferences from"/>
 					
@@ -260,13 +260,8 @@
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 									<s:Label left="5"  text="Special"/>
-									<domino:CustomDropDownList id="columnDateTimeDisplayDateSpecialList"
-										requireSelection="true" width="150"
-										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
-										change="onColumnDateTimeColumnSpecialChange(event)"
-										enabled="true"
-										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-									
+									<domino:MultipleCheckboxView id="columnDateTimeDisplayDateSpecialList" label=""  dynamicLabel="true" singleSelectOption="fourdigityearfor21stcentury"
+		includeCollection="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" textProperty="columnDateFormatSpecial"/>
 									<s:Label left="5"  text="Calendar"/>
 									<domino:CustomDropDownList id="columnDateTimeDisplayDateCalendarList"
 										requireSelection="true" width="150"
@@ -274,6 +269,113 @@
 										change="onColumnDateTimeColumnCalendarChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+									<s:CheckBox id="dateTimeDisplayDateCheckbox"
+													selected="false"
+													change="dateTimeDisplayDate_changeHandler(event)"/>
+									<s:Label left="5"  text="Display Date"/>	
+
+									<s:HGroup id="dateFormatGroup">	
+									    <s:Label left="5"  text="Format"/>
+										<domino:CustomDropDownList id="columnDateTimeDisplayFormatList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplayFormat}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnFormatChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										
+									</s:HGroup>	
+									<s:HGroup id="dateSeparatorsGroup">	
+										<s:Label left="5"  text="Separators"/>
+
+									</s:HGroup>	
+									<s:HGroup id="dateSeparatorGroup">		
+										 <s:Label left="5"  text="Separators"/>
+										 <s:TextInput id="dateSeparatorInput1"
+										text="/"  width="30" change="dateSeparator_changeHandler(1)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+										<s:TextInput id="dateSeparatorInput2"
+										text="/"  width="30" change="dateSeparator_changeHandler(2)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+										<s:TextInput id="dateSeparatorInput3"
+										text="/"  width="30" change="dateSeparator_changeHandler(3)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+
+
+									</s:HGroup>	
+									<s:HGroup id="dateDayGroup">	
+										<s:Label left="5"  text="Day"/>
+										<domino:CustomDropDownList id="columnDateDayList"
+										requireSelection="true" width="50" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateDay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateDayChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									
+										<s:Label left="5"  text="Month"/>
+										<domino:CustomDropDownList id="columnDateMonthList"
+										requireSelection="true" width="50" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateMonth}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateMonthChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									</s:HGroup>	
+
+
+									<s:HGroup id="dateYearWeekGroup">	
+										<s:Label left="5"  text="Year"/>
+										<domino:CustomDropDownList id="columnDateYearList"
+										requireSelection="true" width="50" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateYear}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateYearChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									
+										<s:Label left="5"  text="Weekday"/>
+										<domino:CustomDropDownList id="columnDateWeekdayList"
+										requireSelection="true" width="50" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateWeekday}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateWeekdayChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									</s:HGroup>	
+									<s:HGroup>
+									<s:CheckBox id="dateTimeDisplayTimeCheckbox"
+													selected="false"
+													change="dateTimeDisplayTime_changeHandler(event)"/>
+								<s:Label left="5"  text="Display Time"/>
+								</s:HGroup>	
+								
+								<s:HGroup>
+								<s:Label left="5"  text="Show"/>
+								<domino:CustomDropDownList id="columnTimeShowList"
+										requireSelection="true" width="150" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnTimeShow}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnTimeShowChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:HGroup>
+								<s:HGroup>
+								<s:Label left="5"  text="Time Zone"/>		
+								<domino:CustomDropDownList id="columnTimeZoneList"
+										requireSelection="true" width="150" left="5"
+										dataProvider="{DominoGlobalTokens.Zones}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnTimeZoneChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:HGroup>
+								<s:HGroup>
+								<s:Label left="5"  text="Format"/>
+								<domino:CustomDropDownList id="columnTimeFormatList"
+										requireSelection="true" width="100" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnTimeFormat}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnTimeFormatChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:HGroup>
+								<s:HGroup>
+								<s:Label left="5"  text="Separator"/>
+								<s:TextInput id="timeSeparatorInput"
+										text="/"  width="30" change="timeSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="time separator"/>
+								</s:HGroup>
+
 								</s:VGroup>
 
 							
@@ -281,9 +383,15 @@
 								  <s:Label left="5"  text="namesStyleGroup symbol"/>
 								</s:HGroup>
 
+								
 
 
+
+							
 							</mx:VBox>
+
+
+
 							<mx:VBox  horizontalAlign="left" id="columnFontSetPanel" label="Column Setting-Font" verticalAlign="top" percentHeight="100" 
 		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >
 		   						<s:FormItem label="Font:" skinClass="skins.FormItemSkin">
@@ -541,8 +649,14 @@
 			}
 
 
-
-			decimalPlacesInput.text=cobj.columnNumberFormatDigits;
+			if(cobj.columnNumberFormatDigits!="varying"){
+				decimalPlacesInput.text=cobj.columnNumberFormatDigits;
+				decaimalVaring.selected=false;
+			}else{
+				decaimalVaring.selected=true;
+				decimalPlacesInput.text="0";
+			}
+			
 			
 			
 			
@@ -737,6 +851,11 @@
 	{
 	}
 
+	private function dateSeparator_changeHandler(index:int):void 
+	{
+
+	}
+
 	private function  thousandsSeparator_changeHandler (event:Event):void
 	{
 		if(this.columnObject!=null){
@@ -744,6 +863,41 @@
             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 			
         }
+	}
+
+	private function onColumnDateDayChange(event:IndexChangeEvent):void 
+	{
+
+	}
+	private function onColumnTimeShowChange(event:IndexChangeEvent):void 
+	{
+
+	}
+	private function onColumnTimeZoneChange(event:IndexChangeEvent):void 
+	{
+
+	}
+	private function onColumnTimeFormatChange(event:IndexChangeEvent):void 
+	{
+
+	}
+	private function  onColumnDateMonthChange(event:IndexChangeEvent):void 
+	{
+
+	}
+
+	private function  onColumnDateYearChange(event:IndexChangeEvent):void 
+	{
+
+	}
+
+	private function  onColumnDateWeekdayChange(event:IndexChangeEvent):void 
+	{
+
+	}
+	private function timeSeparator_changeHandler(event:Event):void
+	{
+
 	}
 
    	private function columnTitle_changeHandler(event:Event):void
@@ -841,6 +995,12 @@
 	}
 
 	private function displayAbbreviatedDate_changeHandler(event:Event):void
+	{
+	}
+	private function dateTimeDisplayDate_changeHandler(event:Event):void
+	{
+	}
+	private function dateTimeDisplayTime_changeHandler(event:Event):void
 	{
 	}
 
@@ -1026,6 +1186,11 @@
 
 	private function onColumnDateTimeColumnShowChange(event:IndexChangeEvent):void
 	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatShow=columnDateTimeDisplayDateShowList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+
 	}
 
 	private function onColumnDateTimeColumnSpecialChange(event:IndexChangeEvent):void
@@ -1033,6 +1198,15 @@
 	}
 
 	private function onColumnDateTimeColumnCalendarChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatCalendar=columnDateTimeDisplayDateCalendarList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+
+	}
+
+	private function onColumnDateTimeColumnFormatChange(event:IndexChangeEvent):void 
 	{
 
 	}

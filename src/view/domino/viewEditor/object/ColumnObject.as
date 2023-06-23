@@ -75,6 +75,29 @@ package view.domino.viewEditor.object
         public var columnNumberFormatCurrencysym:String;
         public var columnNumberFormatUsecustomsym:String;
         public var columnNumberFormatPreference:String;
+
+        public var columnDateDisplayFormatPreferences:String;
+        public var columnDateDisplayFormatSample:String;
+        public var columnDateDisplayFormatAbbreviatedDate:String;
+        
+        public var columnDateFormatShow:String;
+        public var columnDateFormatDateShow:String;
+        public var columnDateFormatSpecial:String;
+        public var columnDateFormatCalendar:String;
+        public var columnDateFormatDateFormat:String;
+        public var columnDateFormatDateseparator1:String;
+        public var columnDateFormatDateseparator2:String;
+        public var columnDateFormatDateseparator3:String;
+        public var columnDateFormatDay:String;
+        public var columnDateFormatMonth:String;
+        public var columnDateFormatYear:String;
+        public var columnDateFormatWeekday:String;
+
+        public var columnDateFormatTimeShow:String;
+        public var columnDateFormatTimeZone:String;
+        public var columnDateFormatTimeFormat:String;
+        public var columnDateFormatTimeSeparator:String;
+
         
         public function ColumnObject()
 		{

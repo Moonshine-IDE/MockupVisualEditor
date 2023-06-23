@@ -229,7 +229,7 @@
 
 								</s:VGroup>
 
-								<s:VGroup id="datetimeStyleGroup"  width="220" height="450">
+								<s:VGroup id="datetimeStyleGroup"  width="220" height="550">
 								   
 									<s:Label left="5"  text="Use preferences from"/>
 					

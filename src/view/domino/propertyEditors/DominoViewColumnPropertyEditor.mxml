@@ -165,7 +165,7 @@
 												it just lets you select which set of options to work with. "/>
 								</s:Group>
 
-								<s:VGroup id="numberStyleGroup" width="250" height="450">
+								<s:VGroup id="numberStyleGroup"  width="220" height="600">
 								
 									<s:Label left="5"  text="Number Format"/>
 									<s:HGroup>
@@ -229,7 +229,7 @@
 
 								</s:VGroup>
 
-								<s:VGroup id="datetimeStyleGroup"  width="220" height="550">
+								<s:VGroup id="datetimeStyleGroup"  width="220" height="600">
 								   
 									<s:Label left="5"  text="Use preferences from"/>
 					
@@ -250,8 +250,13 @@
 													 <s:Label left="5"  text="Display abbreviated date"/>
 									</s:HGroup>
 
-									<s:Label left="5"  text="Display Date" top="10" bottom="10"/>
-									<s:Label left="5"  text="Show"/>
+									<s:FormItem label="Display Date:" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="dateTimeDisplayDateCheckbox"
+													selected="false"
+													change="dateTimeDisplayDate_changeHandler(event)"/>
+								
+									</s:FormItem>
+									<s:Label left="5" id="displayDateShowLabel"  text="Show"/>
 									
 									<domino:CustomDropDownList id="columnDateTimeDisplayDateShowList"
 										requireSelection="true" width="150"
@@ -259,10 +264,10 @@
 										change="onColumnDateTimeColumnShowChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-									<s:Label left="5"  text="Special"/>
+									<s:Label left="5" id="displayDateSpecialLabel" text="Special"/>
 									<domino:MultipleCheckboxView id="columnDateTimeDisplayDateSpecialList" label=""  dynamicLabel="true" singleSelectOption="fourdigityearfor21stcentury"
 		includeCollection="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" textProperty="columnDateFormatSpecial"/>
-									<s:Label left="5"  text="Calendar"/>
+									<s:Label left="5" id="columnDateTimeDisplayCalendarLabel" text="Calendar"/>
 									<domino:CustomDropDownList id="columnDateTimeDisplayDateCalendarList"
 										requireSelection="true" width="150"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplayCalendar}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
@@ -270,13 +275,16 @@
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 
-									<s:CheckBox id="dateTimeDisplayDateCheckbox"
+									<!-- <s:FormItem label="Display Date:" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="dateTimeDisplayDateCheckbox"
 													selected="false"
 													change="dateTimeDisplayDate_changeHandler(event)"/>
-									<s:Label left="5"  text="Display Date"/>	
+									</s:FormItem> -->
+									
+										
 
 									<s:HGroup id="dateFormatGroup">	
-									    <s:Label left="5"  text="Format"/>
+									    <s:Label left="5" id="displayDateFormatLabel" text="Format"/>
 										<domino:CustomDropDownList id="columnDateTimeDisplayFormatList"
 										requireSelection="true" width="150"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplayFormat}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
@@ -285,96 +293,105 @@
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 										
 									</s:HGroup>	
-									<s:HGroup id="dateSeparatorsGroup">	
-										<s:Label left="5"  text="Separators"/>
-
-									</s:HGroup>	
-									<s:HGroup id="dateSeparatorGroup">		
-										 <s:Label left="5"  text="Separators"/>
+				
+									<s:FormItem  id="dateSeparatorGroup" label="Separators:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
 										 <s:TextInput id="dateSeparatorInput1"
-										text="/"  width="30" change="dateSeparator_changeHandler(1)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+										text=" "  width="30" change="dateSeparator_changeHandler(1)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
 										<s:TextInput id="dateSeparatorInput2"
 										text="/"  width="30" change="dateSeparator_changeHandler(2)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
 										<s:TextInput id="dateSeparatorInput3"
 										text="/"  width="30" change="dateSeparator_changeHandler(3)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
-
-
-									</s:HGroup>	
+										</s:HGroup>	
+									</s:FormItem>
+									
 									<s:HGroup id="dateDayGroup">	
-										<s:Label left="5"  text="Day"/>
+										
+										<s:FormItem  id="dayList" label="Day:" skinClass="skins.FormItemSkin">
 										<domino:CustomDropDownList id="columnDateDayList"
 										requireSelection="true" width="50" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateDay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateDayChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-									
-										<s:Label left="5"  text="Month"/>
-										<domino:CustomDropDownList id="columnDateMonthList"
+										</s:FormItem>
+										<s:FormItem  id="dateMonth" label="Month:" skinClass="skins.FormItemSkin">
+												<domino:CustomDropDownList id="columnDateMonthList"
 										requireSelection="true" width="50" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateMonth}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateMonthChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										</s:FormItem>
 									</s:HGroup>	
 
 
 									<s:HGroup id="dateYearWeekGroup">	
-										<s:Label left="5"  text="Year"/>
-										<domino:CustomDropDownList id="columnDateYearList"
+										<s:FormItem  id="yearList" label="Year:" skinClass="skins.FormItemSkin">
+											<domino:CustomDropDownList id="columnDateYearList"
 										requireSelection="true" width="50" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateYear}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateYearChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 									
-										<s:Label left="5"  text="Weekday"/>
-										<domino:CustomDropDownList id="columnDateWeekdayList"
+										</s:FormItem>
+										<s:FormItem  id="weekdayList" label="Weekday:" skinClass="skins.FormItemSkin">
+												<domino:CustomDropDownList id="columnDateWeekdayList"
 										requireSelection="true" width="50" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateWeekday}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateWeekdayChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										</s:FormItem>
+
+										
+										
+									
+										
 									</s:HGroup>	
 									<s:HGroup>
-									<s:CheckBox id="dateTimeDisplayTimeCheckbox"
+									<s:FormItem label="Display Time:" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="dateTimeDisplayTimeCheckbox"
 													selected="false"
 													change="dateTimeDisplayTime_changeHandler(event)"/>
-								<s:Label left="5"  text="Display Time"/>
-								</s:HGroup>	
 								
-								<s:HGroup>
-								<s:Label left="5"  text="Show"/>
+									</s:FormItem>
+									
+								</s:HGroup>	
+
+								<s:FormItem label="Show:" id="displayTimeShowLabel" skinClass="skins.FormItemSkin">
 								<domino:CustomDropDownList id="columnTimeShowList"
 										requireSelection="true" width="150" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnTimeShow}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnTimeShowChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-								</s:HGroup>
-								<s:HGroup>
-								<s:Label left="5"  text="Time Zone"/>		
-								<domino:CustomDropDownList id="columnTimeZoneList"
+								</s:FormItem>	
+								
+								<s:FormItem label="Time Zone:"  skinClass="skins.FormItemSkin">
+									<domino:CustomDropDownList id="columnTimeZoneList"
 										requireSelection="true" width="150" left="5"
 										dataProvider="{DominoGlobalTokens.Zones}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnTimeZoneChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-								</s:HGroup>
-								<s:HGroup>
-								<s:Label left="5"  text="Format"/>
+								
+								</s:FormItem>
+								<s:FormItem label="Format:" skinClass="skins.FormItemSkin" id="displayTimeFormatGroup">
 								<domino:CustomDropDownList id="columnTimeFormatList"
 										requireSelection="true" width="100" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnTimeFormat}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnTimeFormatChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
-								</s:HGroup>
-								<s:HGroup>
-								<s:Label left="5"  text="Separator"/>
+								</s:FormItem>
+
+								<s:FormItem label="Separator:" id="displayTimeSeparatorLabel" skinClass="skins.FormItemSkin">
 								<s:TextInput id="timeSeparatorInput"
 										text="/"  width="30" change="timeSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="time separator"/>
-								</s:HGroup>
+								</s:FormItem>
+								
 
 								</s:VGroup>
 
@@ -481,10 +498,14 @@
 		datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
 		namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
 
+
+		dateTimeCustomChange("usersetting")
+		
+		
 		var formatter : DateFormatter;
 		formatter = new DateFormatter();
 		var currentDateTime:Date = new Date();
-		formatter.formatString = "MM/DD/YYYY HHNNSS A";
+		formatter.formatString = "MM/DD/YYYY HHNNss A";
 		nowDateTimeStringInFormat=formatter.format(currentDateTime)
 
 	}
@@ -702,13 +723,89 @@
 
 			decimalSymbolInput.text=cobj.columnNumberFormatDecimalsym;
 			thousandsSeparatorInput.text=cobj.columnNumberFormatThousandssep;
+			//date inital 
+			
+			if(cobj.columnDateDisplayFormatPreferences==null || cobj.columnDateDisplayFormatPreferences==""){
+				cobj.columnDateDisplayFormatPreferences="usersetting";
+			}
 
+			if(cobj.columnDateDisplayFormatAbbreviatedDate==null || cobj.columnDateDisplayFormatAbbreviatedDate==""){
+				cobj.columnDateDisplayFormatAbbreviatedDate="false";
+			}
+
+			if(cobj.columnDateFormatDisplayDate==null || cobj.columnDateFormatDisplayDate==""){
+				cobj.columnDateFormatDisplayDate="true";
+			}
+
+			if(cobj.columnDateFormatTimeShow==null || cobj.columnDateFormatTimeShow==""){
+				cobj.columnDateFormatTimeShow="hourminutesecond";
+			}
+			if(cobj.columnDateFormatTimeZone==null || cobj.columnDateFormatTimeZone==""){
+				cobj.columnDateFormatTimeZone="never";
+			}
+
+			
+			if(cobj.columnDateFormatDisplayTime==null || cobj.columnDateFormatDisplayTime==""){
+				cobj.columnDateFormatDisplayTime="true";
+			}
+			if(cobj.columnDateFormatDateShow==null || cobj.columnDateFormatDateShow==""){
+				cobj.columnDateFormatDateShow="monthdayyear";
+			}
+			if(cobj.columnDateFormatSpecial==null || cobj.columnDateFormatSpecial==""){
+				cobj.columnDateFormatSpecial="fourdigityearfor21stcentury";
+			}
+			columnDateTimeDisplayDateSpecialList.initializeMultiSelectOnCreateCompleted(cobj);
+			if(cobj.columnDateFormatCalendar==null || cobj.columnDateFormatCalendar==""){
+				cobj.columnDateFormatCalendar="gregorian";
+			}
+
+			selectCurrentItem(columnDateTimeDisplayDateShowList,cobj.columnDateFormatDateShow);
+			if(cobj.columnDateFormatDisplayDate=="true"){
+				dateTimeDisplayDateCheckbox.selected=true;
+				controlDisplayDate("enable",this.columnObject.columnDateDisplayFormatPreferences);
+			}else{
+				dateTimeDisplayDateCheckbox.selected=false;
+				controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+			}
+			if(cobj.columnDateFormatDisplayTime=="true"){
+				dateTimeDisplayTimeCheckbox.selected=true;
+			}else{
+				dateTimeDisplayTimeCheckbox.selected=false;
+			}
+
+			dateTimeCustomChange(cobj.columnDateDisplayFormatPreferences);
+
+			
+			
 			 
         }
 
         
         
     }
+
+	private function dateTimeCustomChange(val:String):void 
+	{
+		if(val=="custom"){
+			dateFormatGroup.visible =dateFormatGroup.includeInLayout = true;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = true;
+			dateDayGroup.visible =dateDayGroup.includeInLayout = true;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = true;
+			dateYearWeekGroup.visible =dateYearWeekGroup.includeInLayout = true;
+			displayTimeFormatGroup.visible =displayTimeFormatGroup.includeInLayout = true;
+			displayTimeSeparatorLabel.visible =displayTimeSeparatorLabel.includeInLayout = true;
+			timeSeparatorInput.visible =timeSeparatorInput.includeInLayout = true;
+		}else{
+			dateFormatGroup.visible =dateFormatGroup.includeInLayout = false;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = false;
+			dateDayGroup.visible =dateDayGroup.includeInLayout = false;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = false;
+			dateYearWeekGroup.visible =dateYearWeekGroup.includeInLayout = false;
+			displayTimeFormatGroup.visible =displayTimeFormatGroup.includeInLayout = false;
+			displayTimeSeparatorLabel.visible =displayTimeSeparatorLabel.includeInLayout = false;
+			timeSeparatorInput.visible =timeSeparatorInput.includeInLayout = false;
+		}
+	}
 
 	private function initalizeColumnFont(cobj:ColumnObject):void
 	{ 
@@ -769,6 +866,20 @@
 		
 		
 			
+	}
+
+	private function dateTimeDisplayTime_changeHandler(event:Event):void
+	{
+		if(dateTimeDisplayTimeCheckbox.selected==false){
+			if(dateTimeDisplayDateCheckbox.selected==false){
+				dateTimeDisplayTimeCheckbox.selected=true
+			}
+		}
+		if(dateTimeDisplayTimeCheckbox.selected){
+			controlDisplayTime("enable",this.columnObject.columnDateDisplayFormatPreferences);
+		}else{
+			controlDisplayTime("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+		}
 	}
 	private function selectCurrentItemTitleFont():void
 	{
@@ -999,10 +1110,83 @@
 	}
 	private function dateTimeDisplayDate_changeHandler(event:Event):void
 	{
+		if(dateTimeDisplayDateCheckbox.selected==false){
+			if(dateTimeDisplayTimeCheckbox.selected==false){
+				dateTimeDisplayDateCheckbox.selected=true
+			}
+		}
+		if(dateTimeDisplayDateCheckbox.selected){
+			controlDisplayDate("enable",this.columnObject.columnDateDisplayFormatPreferences);
+		}else{
+			controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+		}
 	}
-	private function dateTimeDisplayTime_changeHandler(event:Event):void
+
+	private function controlDisplayDate(val:String,preferences:String)
 	{
+		if(val=="disenable"){
+			//displayDateShowLabel.setStyle("color","#A9A9A9");
+			columnDateTimeDisplayDateShowList.enabled=false;
+			//displayDateSpecialLabel.setStyle("color","#A9A9A9");
+			columnDateTimeDisplayDateSpecialList.enabled=false;
+			//columnDateTimeDisplayCalendarLabel.setStyle("color","#A9A9A9");
+			columnDateTimeDisplayDateCalendarList.enabled=false;
+
+			if(preferences=="custom"){
+			//displayDateFormatLabel.setStyle("color","#A9A9A9");
+				columnDateTimeDisplayFormatList.enabled=false;
+				dateSeparatorInput1.editable=false;
+				dateSeparatorInput2.editable=false;
+				dateSeparatorInput3.editable=false;
+				columnDateDayList.enabled=false;
+				columnDateMonthList.enabled=false;
+				columnDateYearList.enabled=false;
+				columnDateWeekdayList.enabled=false;
+			}
+
+		}else{
+			//displayDateShowLabel.setStyle("color","#000000");
+			columnDateTimeDisplayDateShowList.enabled=true;
+			//displayDateSpecialLabel.setStyle("color","#000000");
+			columnDateTimeDisplayDateSpecialList.enabled=true;
+			//columnDateTimeDisplayCalendarLabel.setStyle("color","#000000");
+			columnDateTimeDisplayDateCalendarList.enabled=true;
+			
+			if(preferences=="custom"){
+				//displayDateFormatLabel.setStyle("color","#000000");
+				columnDateTimeDisplayFormatList.enabled=true;
+				dateSeparatorInput1.editable=true;
+				dateSeparatorInput2.editable=true;
+				dateSeparatorInput3.editable=true;
+				columnDateDayList.enabled=true;
+				columnDateMonthList.enabled=true;
+				columnDateYearList.enabled=true;
+				columnDateWeekdayList.enabled=true;
+			}
+		}
+
 	}
+
+
+	private function controlDisplayTime(val:String,preferences:String)
+	{
+		if(val=="disenable"){
+			columnTimeShowList.enabled=false;
+			columnTimeZoneList.enabled=false;
+			if(preferences=="custom"){
+				columnTimeFormatList.enabled=false;
+				timeSeparatorInput.editable=false;
+			}
+		}else{
+			columnTimeShowList.enabled=true;
+			columnTimeZoneList.enabled=true;
+			if(preferences=="custom"){
+				columnTimeFormatList.enabled=true;
+				timeSeparatorInput.editable=true;
+			}
+		}
+	}
+	
 
 
 	private function punctuated_changeHandler(event:Event):void
@@ -1176,6 +1360,7 @@
 
 	private function onColumnPreferencesSelectionChange(event:IndexChangeEvent):void
 	{
+	
 			if(event.newIndex==0){
 				initalPreferencesSection("usersetting")
 
@@ -1187,7 +1372,7 @@
 	private function onColumnDateTimeColumnShowChange(event:IndexChangeEvent):void
 	{
 		if(this.columnObject!=null){
-			this.columnObject.columnDateFormatShow=columnDateTimeDisplayDateShowList.selectedItem["value"].toString();
+			this.columnObject.columnDateFormatDateShow=columnDateTimeDisplayDateShowList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 		}
 
@@ -1216,10 +1401,16 @@
 	private function onColumnDateTimeSelectionChange(event:IndexChangeEvent):void
 	{
 			if(event.newIndex==0){
-				initalPreferencesSection("usersetting")
+				dateTimeCustomChange("usersetting");
+				if(this.columnObject!=null){
+					this.columnObject.columnDateDisplayFormatPreferences="usersetting";
+				}
 
 			}else if(event.newIndex==1){
-				initalPreferencesSection("custom")
+				dateTimeCustomChange("custom");
+				if(this.columnObject!=null){
+					this.columnObject.columnDateDisplayFormatPreferences="custom";
+				}
 			}
 	}
 

@@ -633,6 +633,13 @@
 						colXML.appendChild(numberXML);
 					}else if(c.columnFormatStyle=="datetime"){
 						var datetimeXML:XML = new XML("<datetimeformat />");
+						if(c.columnDateDisplayFormatPreferences!=null && c.columnDateDisplayFormatPreferences!=""){
+							datetimeXML.@preference=c.columnNumberFormatUsecustomsym;
+						}else{
+							datetimeXML.@preference="usersetting"
+						}
+						
+						
 						
 					}
 				}

@@ -80,7 +80,7 @@ package view.domino.viewEditor.object
         public var columnDateDisplayFormatSample:String;
         public var columnDateDisplayFormatAbbreviatedDate:String;
         
-        public var columnDateFormatShow:String;
+        public var columnDateFormatDisplayDate:String;
         public var columnDateFormatDateShow:String;
         public var columnDateFormatSpecial:String;
         public var columnDateFormatCalendar:String;
@@ -93,6 +93,7 @@ package view.domino.viewEditor.object
         public var columnDateFormatYear:String;
         public var columnDateFormatWeekday:String;
 
+        public var columnDateFormatDisplayTime:String;
         public var columnDateFormatTimeShow:String;
         public var columnDateFormatTimeZone:String;
         public var columnDateFormatTimeFormat:String;

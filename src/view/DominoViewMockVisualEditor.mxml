@@ -634,10 +634,151 @@
 					}else if(c.columnFormatStyle=="datetime"){
 						var datetimeXML:XML = new XML("<datetimeformat />");
 						if(c.columnDateDisplayFormatPreferences!=null && c.columnDateDisplayFormatPreferences!=""){
-							datetimeXML.@preference=c.columnNumberFormatUsecustomsym;
+							datetimeXML.@preference=c.columnDateDisplayFormatPreferences;
 						}else{
 							datetimeXML.@preference="usersetting"
 						}
+
+						var showVal:String="datetime";
+						if(c.columnDateFormatDisplayDate=="true"&& c.columnDateFormatDisplayTime=="true")
+						{
+							showVal="datetime";
+						}else  if(c.columnDateFormatDisplayDate=="true"){
+							showVal="date";
+						} else  if(c.columnDateFormatDisplayTime=="true"){
+							showVal="time";
+						}
+						datetimeXML.@show=showVal;
+
+						if(c.columnDateFormatDisplayDate&& c.columnDateFormatDisplayDate=="true"){
+							if(c.columnDateFormatDateShow!=null && c.columnDateFormatDateShow!=""){
+								datetimeXML.@date=c.columnDateFormatDateShow;
+							}else{
+								datetimeXML.@date="monthdayyear"
+							}
+
+							if(c.columnDateFormatSpecial!=null && c.columnDateFormatSpecial!=""){
+								var _iniList:Array=c.columnDateFormatSpecial.split(" ");
+								for (var j:int = 0; j < _iniList.length; j++){
+									if(_iniList[j]){
+										var elementStr:String = _iniList[j].toString();
+										if(elementStr=="fourdigityearfor21stcentury"){
+											datetimeXML.@fourdigityearfor21stcentury="true"
+										}
+										if(elementStr=="showtodaywhenappropriate"){
+											datetimeXML.@showtodaywhenappropriate="true"
+										}
+										if(elementStr=="fourdigityear"){
+											datetimeXML.@fourdigityear="true"
+										}
+										if(elementStr=="omitthisyear"){
+											datetimeXML.@omitthisyear="true"
+										}
+
+									}
+								}
+							}else{
+								datetimeXML.@fourdigityearfor21stcentury="true"
+							}
+
+
+							if(c.columnDateFormatCalendar!=null && c.columnDateFormatCalendar!=""){
+								datetimeXML.@calendar=c.columnDateFormatCalendar;
+							}else{
+								datetimeXML.@calendar="gregorian";
+							}
+
+
+							if(c.columnDateFormatDateFormat!=null && c.columnDateFormatDateFormat!=""){
+								datetimeXML.@dateformat=c.columnDateFormatDateFormat;
+							}else{
+								datetimeXML.@dateformat="weekdaymonthdayyear";
+							}
+
+
+							if(c.columnDateFormatDay!=null && c.columnDateFormatDay!=""){
+								datetimeXML.@dayformat=c.columnDateFormatDay;
+							}else{
+								datetimeXML.@dayformat="twodigitday";
+							}
+
+							if(c.columnDateFormatMonth!=null && c.columnDateFormatMonth!=""){
+								datetimeXML.@monthformat=c.columnDateFormatMonth;
+							}else{
+								datetimeXML.@monthformat="twodigitmonth";
+							}
+
+							if(c.columnDateFormatYear!=null && c.columnDateFormatYear!=""){
+								datetimeXML.@yearformat=c.columnDateFormatYear;
+							}else{
+								datetimeXML.@yearformat="fourdigityear";
+							}
+
+							if(c.columnDateFormatWeekday!=null && c.columnDateFormatWeekday!=""){
+								datetimeXML.@weekdayformat=c.columnDateFormatWeekday;
+							}else{
+								datetimeXML.@weekdayformat="shortname";
+							}
+
+							if(c.columnDateFormatDateseparator1!=null && c.columnDateFormatDateseparator1!=""){
+								datetimeXML.@dateseparator1=c.columnDateFormatDateseparator1;
+							}else{
+								datetimeXML.@dateseparator1=" ";
+							}
+							if(c.columnDateFormatDateseparator2!=null && c.columnDateFormatDateseparator2!=""){
+								datetimeXML.@dateseparator2=c.columnDateFormatDateseparator2;
+							}else{
+								datetimeXML.@dateseparator2="/";
+							}
+
+							if(c.columnDateFormatDateseparator3!=null && c.columnDateFormatDateseparator3!=""){
+								datetimeXML.@dateseparator3=c.columnDateFormatDateseparator3;
+							}else{
+								datetimeXML.@dateseparator3="/";
+							}
+
+							//columnDateFormatDateseparator1
+						}
+
+						if(c.columnDateFormatDisplayTime&& c.columnDateFormatDisplayTime=="true"){
+							if(c.columnDateFormatTimeShow!=null && c.columnDateFormatTimeShow!=""){
+								datetimeXML.@time=c.columnDateFormatTimeShow;
+							}else{
+								datetimeXML.@time="hourminutesecond";
+							}
+
+
+							if(c.columnDateFormatTimeZone!=null && c.columnDateFormatTimeZone!=""){
+								datetimeXML.@zone=c.columnDateFormatTimeZone;
+							}else{
+								datetimeXML.@zone="never";
+							}
+
+							if(c.columnDateFormatTimeFormat!=null && c.columnDateFormatTimeFormat!=""){
+								if(c.columnDateFormatTimeFormat=="24"){
+									datetimeXML.@timeformat24="true";
+								}else{
+									datetimeXML.@timeformat12="true"
+								}
+								
+							}else{
+								datetimeXML.@timeformat24="true";
+							}
+
+							if(c.columnDateFormatTimeSeparator!=null && c.columnDateFormatTimeSeparator!=""){
+								datetimeXML.@timeseparator=c.columnDateFormatTimeSeparator;
+							}else{
+								datetimeXML.@timeseparator=":";
+							}
+
+							//timeseparator
+
+
+						}
+
+					
+						
+						colXML.appendChild(datetimeXML);
 						
 						
 						
@@ -824,6 +965,157 @@
 							}
 
 						}
+
+						if(col.datetimeformat[0]){
+							columnsObj.columnFormatStyle="datetime";
+							if(col.datetimeformat[0].@show.toString().length>0){
+								if(col.datetimeformat[0].@show=="datetime"){
+									columnsObj.columnDateFormatDisplayDate="true";
+									columnsObj.columnDateFormatDisplayTime="true";
+								}else if(col.datetimeformat[0].@show=="date"){
+									columnsObj.columnDateFormatDisplayDate="true";
+								}else if(col.datetimeformat[0].@show=="time"){
+									columnsObj.columnDateFormatDisplayTime="true";
+								}
+								
+							}else{
+								columnsObj.columnDateFormatDisplayDate="true";
+								columnsObj.columnDateFormatDisplayTime="true";
+							}
+
+							if(col.datetimeformat[0].@date.toString().length>0){
+								columnsObj.columnDateFormatDateShow=col.datetimeformat[0].@date;
+							}else{
+								columnsObj.columnDateFormatDateShow="monthdayyear";
+							}
+
+							var specialVal:String="";
+
+							if(col.datetimeformat[0].@showtodaywhenappropriate=="true"){
+								specialVal="showtodaywhenappropriate";
+							}
+							if(col.datetimeformat[0].@fourdigityear=="true"){
+								specialVal=specialVal+" "+"fourdigityear";
+							}
+							if(col.datetimeformat[0].@fourdigityearfor21stcentury=="true"){
+								specialVal=specialVal+" "+"fourdigityearfor21stcentury";
+							}
+							if(col.datetimeformat[0].@omitthisyear=="true"){
+								specialVal=specialVal+" "+"omitthisyear";
+							}
+
+							if(specialVal.length>0){
+								columnsObj.columnDateFormatSpecial=specialVal;
+							}else{
+								columnsObj.columnDateFormatSpecial="fourdigityearfor21stcentury";
+							}
+
+							if(col.datetimeformat[0].@calendar.toString().length>0){
+								columnsObj.columnDateFormatCalendar=col.datetimeformat[0].@calendar;
+							}else{
+								columnsObj.columnDateFormatCalendar="monthdayyear";
+							}
+
+							if(col.datetimeformat[0].@dateformat.toString().length>0){
+								columnsObj.columnDateFormatDateFormat=col.datetimeformat[0].@dateformat;
+							}else{
+								columnsObj.columnDateFormatDateFormat="weekdaymonthdayyear";
+							}
+
+							if(col.datetimeformat[0].@dateseparator1.toString().length>0){
+								columnsObj.columnDateFormatDateseparator1=col.datetimeformat[0].@dateseparator1;
+							}else{
+								columnsObj.columnDateFormatDateseparator1=" ";
+							}
+
+							if(col.datetimeformat[0].@dateseparator2.toString().length>0){
+								columnsObj.columnDateFormatDateseparator2=col.datetimeformat[0].@dateseparator2;
+							}else{
+								columnsObj.columnDateFormatDateseparator2="/";
+							}
+
+							if(col.datetimeformat[0].@preference.toString().length>0){
+								columnsObj.columnDateDisplayFormatPreferences=col.datetimeformat[0].@preference;
+							}else{
+								columnsObj.columnDateDisplayFormatPreferences="usersetting";
+							}
+
+
+							if(col.datetimeformat[0].@dateseparator3.toString().length>0){
+								columnsObj.columnDateFormatDateseparator3=col.datetimeformat[0].@dateseparator3;
+							}else{
+								columnsObj.columnDateFormatDateseparator3="/";
+							}
+
+
+							if(col.datetimeformat[0].@dayformat.toString().length>0){
+								columnsObj.columnDateFormatDay=col.datetimeformat[0].@dayformat;
+							}else{
+								columnsObj.columnDateFormatDay="twodigitday";
+							}
+
+							if(col.datetimeformat[0].@monthformat.toString().length>0){
+								columnsObj.columnDateFormatMonth=col.datetimeformat[0].@monthformat;
+							}else{
+								columnsObj.columnDateFormatMonth="twodigitmonth";
+							}
+
+
+							if(col.datetimeformat[0].@yearformat.toString().length>0){
+								columnsObj.columnDateFormatYear=col.datetimeformat[0].@yearformat;
+							}else{
+								columnsObj.columnDateFormatYear="fourdigityear";
+							}
+
+							if(col.datetimeformat[0].@weekdayformat.toString().length>0){
+								columnsObj.columnDateFormatWeekday=col.datetimeformat[0].@weekdayformat;
+							}else{
+								columnsObj.columnDateFormatWeekday="shortname";
+							}
+
+
+
+							if(col.datetimeformat[0].@time.toString().length>0){
+								columnsObj.columnDateFormatTimeShow=col.datetimeformat[0].@time;
+							}else{
+								columnsObj.columnDateFormatTimeShow="hourminutesecond";
+							}
+
+
+							if(col.datetimeformat[0].@zone.toString().length>0){
+								columnsObj.columnDateFormatTimeZone=col.datetimeformat[0].@zone;
+							}else{
+								columnsObj.columnDateFormatTimeZone="never";
+							}
+
+
+							if(col.datetimeformat[0].@timeformat24.toString().length>0){
+								if(col.datetimeformat[0].@timeformat24=="true"){
+									columnsObj.columnDateFormatTimeFormat="24";
+								}
+								
+							}else{
+								columnsObj.columnDateFormatTimeFormat="24";
+							}
+
+							if(col.datetimeformat[0].@timeformat12.toString().length>0){
+								if(col.datetimeformat[0].@timeformat12=="true"){
+									columnsObj.columnDateFormatTimeFormat="12";
+								}
+								
+							}
+
+							if(col.datetimeformat[0].@timeseparator.toString().length>0){
+								columnsObj.columnDateFormatTimeSeparator=col.datetimeformat[0].@timeseparator;
+							}else{
+								columnsObj.columnDateFormatTimeSeparator=":";
+							}
+
+						
+
+
+						}
+
 						if(col.font[0]){
 							if(col.font[0].@name.toString().length>0){
 								columnsObj.columnFont=col.font[0].@name.toString();

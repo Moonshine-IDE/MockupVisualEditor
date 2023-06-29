@@ -264,6 +264,8 @@
 										change="onColumnDateTimeColumnShowChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									
+
 									<s:Label left="5" id="displayDateSpecialLabel" text="Special"/>
 									<domino:MultipleCheckboxView id="columnDateTimeDisplayDateSpecialList" label=""  dynamicLabel="true" singleSelectOption="fourdigityearfor21stcentury"
 		includeCollection="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" textProperty="columnDateFormatSpecial"/>
@@ -727,6 +729,8 @@
 			
 			if(cobj.columnDateDisplayFormatPreferences==null || cobj.columnDateDisplayFormatPreferences==""){
 				cobj.columnDateDisplayFormatPreferences="usersetting";
+			}else{
+
 			}
 
 			if(cobj.columnDateDisplayFormatAbbreviatedDate==null || cobj.columnDateDisplayFormatAbbreviatedDate==""){
@@ -774,6 +778,7 @@
 			}
 
 			dateTimeCustomChange(cobj.columnDateDisplayFormatPreferences);
+			selectCurrentItem(columnDateTimeFormatDefinedList,cobj.columnDateDisplayFormatPreferences);
 
 			
 			
@@ -964,7 +969,17 @@
 
 	private function dateSeparator_changeHandler(index:int):void 
 	{
+		if(this.columnObject!=null){
+			if(index==1){
+				this.columnObject.columnDateFormatDateseparator1=dateSeparatorInput1.text;
+			}else if(index==2){
+				this.columnObject.columnDateFormatDateseparator2=dateSeparatorInput2.text
+			}else if(index==3){
+				this.columnObject.columnDateFormatDateseparator3=dateSeparatorInput3.text
+			}
 
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 
 	private function  thousandsSeparator_changeHandler (event:Event):void
@@ -978,37 +993,62 @@
 
 	private function onColumnDateDayChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatDay=columnDateDayList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 	private function onColumnTimeShowChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeShow=columnTimeShowList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 	private function onColumnTimeZoneChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeZone=columnTimeZoneList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 	private function onColumnTimeFormatChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeFormat=columnTimeFormatList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 	private function  onColumnDateMonthChange(event:IndexChangeEvent):void 
 	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatMonth=columnDateMonthList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 
 	}
 
 	private function  onColumnDateYearChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatYear=columnDateYearList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 
 	private function  onColumnDateWeekdayChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatWeekday=columnDateWeekdayList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 	private function timeSeparator_changeHandler(event:Event):void
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeSeparator=timeSeparatorInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
 	}
 
    	private function columnTitle_changeHandler(event:Event):void
@@ -1107,6 +1147,17 @@
 
 	private function displayAbbreviatedDate_changeHandler(event:Event):void
 	{
+		if(dateTimeDisplayAbbreviatedCheckbox.selected==true){
+			dateTimeDisplayDateCheckbox.selected=false;
+			dateTimeDisplayTimeCheckbox.selected=false;
+			controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+			controlDisplayTime("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+		}else{
+			dateTimeDisplayDateCheckbox.selected=true;
+			dateTimeDisplayTimeCheckbox.selected=true;
+			controlDisplayDate("enable",this.columnObject.columnDateDisplayFormatPreferences);
+			controlDisplayTime("enable",this.columnObject.columnDateDisplayFormatPreferences);
+		}
 	}
 	private function dateTimeDisplayDate_changeHandler(event:Event):void
 	{
@@ -1393,25 +1444,23 @@
 
 	private function onColumnDateTimeColumnFormatChange(event:IndexChangeEvent):void 
 	{
-
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatDateFormat=columnDateTimeDisplayFormatList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 
 
 
 	private function onColumnDateTimeSelectionChange(event:IndexChangeEvent):void
-	{
-			if(event.newIndex==0){
-				dateTimeCustomChange("usersetting");
-				if(this.columnObject!=null){
-					this.columnObject.columnDateDisplayFormatPreferences="usersetting";
-				}
-
-			}else if(event.newIndex==1){
-				dateTimeCustomChange("custom");
-				if(this.columnObject!=null){
-					this.columnObject.columnDateDisplayFormatPreferences="custom";
-				}
+	{		
+		var val:String=columnDateTimeFormatDefinedList.selectedItem["value"].toString();
+			dateTimeCustomChange(val);
+			if(this.columnObject!=null){
+				this.columnObject.columnDateDisplayFormatPreferences=val;
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 			}
+			
 	}
 
 	protected function onTotalSelectionChange(event:IndexChangeEvent):void

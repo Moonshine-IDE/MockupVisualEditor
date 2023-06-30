@@ -759,7 +759,7 @@
 				cobj.columnDateFormatDisplayTime="true";
 			}
 			if(cobj.columnDateFormatDateShow==null || cobj.columnDateFormatDateShow==""){
-				cobj.columnDateFormatDateShow="monthdayyear";
+				cobj.columnDateFormatDateShow="yearmonthday";
 			}
 			if(cobj.columnDateFormatSpecial==null || cobj.columnDateFormatSpecial==""){
 				cobj.columnDateFormatSpecial="fourdigityearfor21stcentury";

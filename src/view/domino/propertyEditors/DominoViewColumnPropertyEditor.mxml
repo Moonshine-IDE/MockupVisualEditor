@@ -311,7 +311,7 @@
 										
 										<s:FormItem  id="dayList" label="Day:" skinClass="skins.FormItemSkin">
 										<domino:CustomDropDownList id="columnDateDayList"
-										requireSelection="true" width="50" left="5"
+										requireSelection="true" width="60" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateDay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateDayChange(event)"
 										enabled="true"
@@ -319,7 +319,7 @@
 										</s:FormItem>
 										<s:FormItem  id="dateMonth" label="Month:" skinClass="skins.FormItemSkin">
 												<domino:CustomDropDownList id="columnDateMonthList"
-										requireSelection="true" width="50" left="5"
+										requireSelection="true" width="60" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateMonth}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateMonthChange(event)"
 										enabled="true"
@@ -331,8 +331,8 @@
 									<s:HGroup id="dateYearWeekGroup">	
 										<s:FormItem  id="yearList" label="Year:" skinClass="skins.FormItemSkin">
 											<domino:CustomDropDownList id="columnDateYearList"
-										requireSelection="true" width="50" left="5"
-										dataProvider="{DominoGlobalTokens.ViewColumnDateYear}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										requireSelection="true" width="60" left="5"
+										dataProvider="{dateYearList}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateYearChange(event)"
 										enabled="true"
 										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
@@ -340,7 +340,7 @@
 										</s:FormItem>
 										<s:FormItem  id="weekdayList" label="Weekday:" skinClass="skins.FormItemSkin">
 												<domino:CustomDropDownList id="columnDateWeekdayList"
-										requireSelection="true" width="50" left="5"
+										requireSelection="true" width="60" left="5"
 										dataProvider="{DominoGlobalTokens.ViewColumnDateWeekday}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
 										change="onColumnDateWeekdayChange(event)"
 										enabled="true"
@@ -477,6 +477,8 @@
 	import global.domino.DominoGlobalTokens;
 
 	import 	mx.formatters.DateFormatter;
+	import mx.collections.ArrayList;
+	import mx.collections.IList;
 
 	private var  colorstr:String ="000000";
 	[Bindable]
@@ -487,6 +489,9 @@
 	private var fontColor:String="Title Color";
 	[Bindable]
 	private var nowDateTimeStringInFormat:String="";
+
+	[Bindable]
+	private var dateYearList:ArrayList;
 
 	
 
@@ -499,8 +504,7 @@
 		numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
 		datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
 		namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
-
-
+		
 		dateTimeCustomChange("usersetting")
 		
 		
@@ -744,9 +748,11 @@
 			if(cobj.columnDateFormatTimeShow==null || cobj.columnDateFormatTimeShow==""){
 				cobj.columnDateFormatTimeShow="hourminutesecond";
 			}
+			selectCurrentItem(columnTimeShowList,cobj.columnDateFormatTimeShow);
 			if(cobj.columnDateFormatTimeZone==null || cobj.columnDateFormatTimeZone==""){
 				cobj.columnDateFormatTimeZone="never";
 			}
+			selectCurrentItem(columnTimeZoneList,cobj.columnDateFormatTimeZone);
 
 			
 			if(cobj.columnDateFormatDisplayTime==null || cobj.columnDateFormatDisplayTime==""){
@@ -762,7 +768,7 @@
 			if(cobj.columnDateFormatCalendar==null || cobj.columnDateFormatCalendar==""){
 				cobj.columnDateFormatCalendar="gregorian";
 			}
-
+			selectCurrentItem(columnDateTimeDisplayDateCalendarList,cobj.columnDateFormatCalendar);
 			selectCurrentItem(columnDateTimeDisplayDateShowList,cobj.columnDateFormatDateShow);
 			if(cobj.columnDateFormatDisplayDate=="true"){
 				dateTimeDisplayDateCheckbox.selected=true;
@@ -773,15 +779,52 @@
 			}
 			if(cobj.columnDateFormatDisplayTime=="true"){
 				dateTimeDisplayTimeCheckbox.selected=true;
+				controlDisplayTime("enable",this.columnObject.columnDateDisplayFormatPreferences);
 			}else{
 				dateTimeDisplayTimeCheckbox.selected=false;
+				controlDisplayTime("disenable",this.columnObject.columnDateDisplayFormatPreferences);
 			}
 
 			dateTimeCustomChange(cobj.columnDateDisplayFormatPreferences);
 			selectCurrentItem(columnDateTimeFormatDefinedList,cobj.columnDateDisplayFormatPreferences);
+			dateYearList=new ArrayList();
+			dateYearList.removeAll();
+			dateYearList.addAll(DominoGlobalTokens.ViewColumnDateYear);
+			if(cobj.columnDateFormatDateFormat==null || cobj.columnDateFormatDateFormat==""){
+				cobj.columnDateFormatDateFormat="yearmonthdayweekday";
+			}
+			selectCurrentItem(columnDateTimeDisplayFormatList,cobj.columnDateFormatDateFormat);
+		
+			if(cobj.columnDateFormatDateFormat=="yearmonthdayweekday"){
+				dateYearList.addAll((DominoGlobalTokens.ViewColumnDateYearYMDW))
+			}
 
-			
-			
+			if(cobj.columnDateFormatDay==null || cobj.columnDateFormatDay==""){
+				cobj.columnDateFormatDay="twodigitday";
+			}
+			selectCurrentItem(columnDateDayList,cobj.columnDateFormatDay);
+
+			if(cobj.columnDateFormatMonth==null || cobj.columnDateFormatMonth==""){
+				cobj.columnDateFormatMonth="twodigitmonth";
+			}
+			selectCurrentItem(columnDateMonthList,cobj.columnDateFormatMonth);
+		
+			//columnDateFormatYear,columnDateYearList
+			if(cobj.columnDateFormatYear==null || cobj.columnDateFormatYear==""){
+				cobj.columnDateFormatYear="fourdigityear";
+			}
+			selectCurrentItem(columnDateYearList,cobj.columnDateFormatYear);
+			//columnDateWeekdayList,columnDateFormatWeekday
+			if(cobj.columnDateFormatWeekday==null || cobj.columnDateFormatWeekday==""){
+				cobj.columnDateFormatWeekday="shortname";
+			}
+			selectCurrentItem(columnDateWeekdayList,cobj.columnDateFormatWeekday);
+			//columnDateFormatTimeFormat,columnTimeFormatList
+			if(cobj.columnDateFormatTimeFormat==null || cobj.columnDateFormatTimeFormat==""){
+				cobj.columnDateFormatTimeFormat="24";
+			}
+			selectCurrentItem(columnTimeFormatList,cobj.columnDateFormatTimeFormat);
+
 			 
         }
 
@@ -1447,6 +1490,11 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatDateFormat=columnDateTimeDisplayFormatList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			dateYearList.removeAll();
+			dateYearList.addAll(DominoGlobalTokens.ViewColumnDateYear);
+			if(this.columnObject.columnDateFormatDateFormat=="yearmonthdayweekday"){
+				dateYearList.addAll((DominoGlobalTokens.ViewColumnDateYearYMDW))
+			}
 		}
 	}
 

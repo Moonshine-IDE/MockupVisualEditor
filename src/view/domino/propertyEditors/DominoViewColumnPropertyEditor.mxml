@@ -761,6 +761,7 @@
 			if(cobj.columnDateFormatDateShow==null || cobj.columnDateFormatDateShow==""){
 				cobj.columnDateFormatDateShow="yearmonthday";
 			}
+			selectCurrentItem(columnDateTimeDisplayDateShowList,cobj.columnDateFormatDateShow);
 			if(cobj.columnDateFormatSpecial==null || cobj.columnDateFormatSpecial==""){
 				cobj.columnDateFormatSpecial="fourdigityearfor21stcentury";
 			}

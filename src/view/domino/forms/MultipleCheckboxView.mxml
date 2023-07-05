@@ -274,6 +274,7 @@
                 
                 
             }
+            
             for(checkNum = 0; checkNum < multCheckList.numChildren; checkNum++)
             {
                  item = multCheckList.getChildAt(checkNum);

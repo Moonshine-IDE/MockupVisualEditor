@@ -267,7 +267,7 @@
 									
 
 									<s:Label left="5" id="displayDateSpecialLabel" text="Special"/>
-									<domino:MultipleCheckboxView id="columnDateTimeDisplayDateSpecialList" label=""  dynamicLabel="true" singleSelectOption="fourdigityearfor21stcentury"
+									<domino:MultipleCheckboxView id="columnDateTimeDisplayDateSpecialList" label=""  dynamicLabel="true" 
 		includeCollection="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" textProperty="columnDateFormatSpecial"/>
 									<s:Label left="5" id="columnDateTimeDisplayCalendarLabel" text="Calendar"/>
 									<domino:CustomDropDownList id="columnDateTimeDisplayDateCalendarList"
@@ -476,7 +476,7 @@
 
 	import global.domino.DominoGlobalTokens;
 
-	import 	mx.formatters.DateFormatter;
+	import flash.globalization.DateTimeFormatter;
 	import mx.collections.ArrayList;
 	import mx.collections.IList;
 
@@ -508,13 +508,93 @@
 		dateTimeCustomChange("usersetting")
 		
 		
-		var formatter : DateFormatter;
-		formatter = new DateFormatter();
-		var currentDateTime:Date = new Date();
-		formatter.formatString = "MM/DD/YYYY HHNNss A";
-		nowDateTimeStringInFormat=formatter.format(currentDateTime)
+		
+		nowDateTimeStringInFormat=getCurrentDateByFormatter("MM/dd/yyyy HH:mm:ss")
 
 	}
+
+	private function getCurrentDateTimeInrealTime():void
+	{
+		if(this.columnObject){
+			if(this.columnObject.columnDateFormatYear=="twodigityear"||this.columnObject.columnDateFormatYear=="fourdigityear"){
+				var dateStr:String=this.columnObject.columnDateFormatDateFormat;
+				
+				if(this.columnObject.columnDateFormatDateShow){
+					var dateFormatStr:String=this.columnObject.columnDateFormatDateShow;
+					if(dateFormatStr=="yearmonthday"){
+						dateStr=dateStr.replace("weekday","");
+					}
+					if(dateFormatStr=="weekdaymonthday"){
+						dateStr=dateStr.replace("year","");
+					}
+					if(dateFormatStr=="yearmonth"){
+						dateStr=dateStr.replace("weekday","");
+						dateStr=dateStr.replace("day","");
+					}
+					if(dateFormatStr=="year"){
+						dateStr=dateStr.replace("weekday","");
+						dateStr=dateStr.replace("day","");
+						dateStr=dateStr.replace("month","");
+					}
+				}
+				
+				dateStr=dateStr.replace("year","year"+this.columnObject.columnDateFormatDateseparator1) ;
+				
+				dateStr=dateStr.replace("year",this.columnObject.columnDateFormatYear);
+				
+				dateStr=dateStr.replace("twodigityear","yy");
+				dateStr=dateStr.replace("fourdigityear","yyyy");
+				dateStr=dateStr.replace("weekday",this.columnObject.columnDateFormatWeekday);
+				
+				dateStr=dateStr.replace("shortname","EE");
+				dateStr=dateStr.replace("fullname","EEEE");
+				dateStr=dateStr.replace("shortnameparens","(EE)");
+				dateStr=dateStr.replace("fullnameparens","(EEEE)");
+
+				dateStr=dateStr.replace("month","month"+this.columnObject.columnDateFormatDateseparator2) ;
+				dateStr=dateStr.replace("month",this.columnObject.columnDateFormatMonth);
+				dateStr=dateStr.replace("onedigitmonth","M");
+				dateStr=dateStr.replace("twodigitmonth","MM");
+				dateStr=dateStr.replace("shortname","MMM");
+				dateStr=dateStr.replace("fullname","MMMM");
+
+
+				dateStr=dateStr.replace("day","day"+this.columnObject.columnDateFormatDateseparator3) ;
+				dateStr=dateStr.replace("day",this.columnObject.columnDateFormatDay);
+				dateStr=dateStr.replace("onedigitday","d");
+				dateStr=dateStr.replace("twodigitday","dd");
+				//this.columnObject.columnDateFormatYear
+				//yearmonthdayweekday,weekdaymonthdayyear,weekdaydaymonthyear
+				var timeStr:String=this.columnObject.columnDateFormatTimeShow;
+				var timespearator:String=this.columnObject.columnDateFormatTimeSeparator
+				if(timeStr=="all"){
+					timeStr="HH"+timespearator+"mm"+timespearator+"ss A"
+				}else{
+					timeStr=timeStr.replace("hour","HH"+timespearator);
+					timeStr=timeStr.replace("minute","mm"+timespearator);
+					timeStr=timeStr.replace("second","ss" );
+				}
+
+				
+
+				
+				nowDateTimeStringInFormat=getCurrentDateByFormatter(dateStr+" "+timeStr);
+			}
+
+		}
+		
+
+	}
+
+	private function getCurrentDateByFormatter(formater:String):String{
+		
+		var formatter : DateTimeFormatter = new DateTimeFormatter("en-US"); 
+		var currentDateTime:Date = new Date();
+		formatter.setDateTimePattern(formater);
+		//formatter.formatString = formater;
+		return formatter.format(currentDateTime);
+	}
+
 
 	private function titleColor_changeHandler(event:Event):void
 	{
@@ -683,9 +763,22 @@
 				decaimalVaring.selected=true;
 				decimalPlacesInput.text="0";
 			}
+
+			//columnDateFormatDateseparator1
 			
-			
-			
+			if(cobj.columnDateFormatDateseparator1==null || cobj.columnDateFormatDateseparator1==""){
+				cobj.columnDateFormatDateseparator1=" ";
+			}
+			if(cobj.columnDateFormatDateseparator2==null || cobj.columnDateFormatDateseparator2==""){
+				cobj.columnDateFormatDateseparator2="/";
+			}
+			if(cobj.columnDateFormatDateseparator3==null || cobj.columnDateFormatDateseparator3==""){
+				cobj.columnDateFormatDateseparator3="/";
+			}
+			//columnDateFormatTimeSeparator
+			if(cobj.columnDateFormatTimeSeparator==null || cobj.columnDateFormatTimeSeparator==""){
+				cobj.columnDateFormatTimeSeparator=":";
+			}
 			
 			if(cobj.columnNumberFormat==null || cobj.columnNumberFormat==""){
 				cobj.columnNumberFormat="fixed";
@@ -856,6 +949,17 @@
 		}
 	}
 
+
+	//for sample date string, when user change the format of domino , this try to convert to actionscript format and show same style for user
+	private function actoinDateTimeConvertToDominoFormat():void{
+		if(this.columnObject!=null){
+			if(this.columnObject.columnDateFormatSpecial){
+
+				nowDateTimeStringInFormat=getCurrentDateByFormatter("MM/dd/yyyy HH:mm:ss");
+			}
+		}
+	}
+
 	private function initalizeColumnFont(cobj:ColumnObject):void
 	{ 
 		
@@ -1023,6 +1127,7 @@
 			}
 
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 
@@ -1040,6 +1145,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatDay=columnDateDayList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 	private function onColumnTimeShowChange(event:IndexChangeEvent):void 
@@ -1047,6 +1153,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatTimeShow=columnTimeShowList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 	private function onColumnTimeZoneChange(event:IndexChangeEvent):void 
@@ -1054,6 +1161,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatTimeZone=columnTimeZoneList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 	private function onColumnTimeFormatChange(event:IndexChangeEvent):void 
@@ -1061,6 +1169,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatTimeFormat=columnTimeFormatList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 	private function  onColumnDateMonthChange(event:IndexChangeEvent):void 
@@ -1068,6 +1177,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatMonth=columnDateMonthList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 
 	}
@@ -1077,6 +1187,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatYear=columnDateYearList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 
@@ -1085,6 +1196,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatWeekday=columnDateWeekdayList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 	}
 	private function timeSeparator_changeHandler(event:Event):void
@@ -1092,6 +1204,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatTimeSeparator=timeSeparatorInput.text;
             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
         }
 	}
 
@@ -1215,6 +1328,7 @@
 		}else{
 			controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
 		}
+		getCurrentDateTimeInrealTime();
 	}
 
 	private function controlDisplayDate(val:String,preferences:String)
@@ -1469,6 +1583,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatDateShow=columnDateTimeDisplayDateShowList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 
 	}
@@ -1482,6 +1597,7 @@
 		if(this.columnObject!=null){
 			this.columnObject.columnDateFormatCalendar=columnDateTimeDisplayDateCalendarList.selectedItem["value"].toString();
 			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
 		}
 
 	}
@@ -1496,6 +1612,7 @@
 			if(this.columnObject.columnDateFormatDateFormat=="yearmonthdayweekday"){
 				dateYearList.addAll((DominoGlobalTokens.ViewColumnDateYearYMDW))
 			}
+			getCurrentDateTimeInrealTime();
 		}
 	}
 

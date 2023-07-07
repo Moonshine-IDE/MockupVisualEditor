@@ -99,6 +99,10 @@ package view.domino.viewEditor.object
         public var columnDateFormatTimeFormat:String;
         public var columnDateFormatTimeSeparator:String;
 
+        public var columnNameContain:String;
+        public var columnNameStatus:String;
+        public var columnNameProgramName:String;
+        public var columnNameVertival:String;
         
         public function ColumnObject()
 		{

@@ -782,6 +782,31 @@
 						
 						
 						
+					}else if(c.columnFormatStyle=="names"){
+						var namesXML:XML = new XML("<columnnamesformat />");
+						if(c.columnNameContain!=null && c.columnNameContain!=""){
+							namesXML.@columncontainsname=c.columnNameContain;
+						}else{
+							namesXML.@columncontainsname="false"
+						}
+						if(c.columnNameStatus!=null && c.columnNameStatus!=""){
+							namesXML.@showonline=c.columnNameStatus;
+						}else{
+							namesXML.@showonline="false"
+						}
+
+						if(c.columnNameProgramName!=null && c.columnNameProgramName!=""){
+							namesXML.@columnname=c.columnNameProgramName;
+						}else{
+							namesXML.@columnname=""
+						}
+
+
+						if(c.columnNameVertival!=null && c.columnNameVertival!=""){
+							namesXML.@verticalorientation=c.columnNameVertival;
+						}
+						colXML.appendChild(namesXML);
+
 					}
 				}
 
@@ -1112,6 +1137,34 @@
 							}
 
 						
+
+
+						}
+
+						if(col.columnnamesformat[0]){
+							columnsObj.columnFormatStyle="names";
+							if(col.columnnamesformat[0].@columncontainsname.toString().length>0){
+								col.columnNameContain=col.columnnamesformat[0].@columncontainsname;
+							}else{
+								col.columnNameContain="false";
+							}
+
+							if(col.columnnamesformat[0].@showonline.toString().length>0){
+								col.columnNameStatus=col.columnnamesformat[0].@showonline;
+							}else{
+								col.columnNameStatus="false";
+							}
+							//@columnname
+
+							if(col.columnnamesformat[0].@columnname.toString().length>0){
+								col.columnNameProgramName=col.columnnamesformat[0].@columnname;
+							}else{
+								col.columnNameProgramName="false";
+							}
+							//
+							if(col.columnnamesformat[0].@verticalorientation.toString().length>0){
+								col.columnNameVertival=col.columnnamesformat[0].@verticalorientation;
+							}
 
 
 						}

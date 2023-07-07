@@ -398,9 +398,38 @@
 								</s:VGroup>
 
 							
-								<s:HGroup id="namesStyleGroup">
-								  <s:Label left="5"  text="namesStyleGroup symbol"/>
-								</s:HGroup>
+								<s:VGroup id="namesStyleGroup">
+
+										<s:HGroup>
+											<s:CheckBox id="nameContainCheckbox"
+													selected="false"
+													change="nameContain_changeHandler(event)"/>
+													 <s:Label left="5"  text="Column contains a name"/>
+										</s:HGroup>
+
+										<s:HGroup>
+											<s:CheckBox id="showOnlineStatusCheckbox"
+													selected="false"
+													change="showOnlineStatus_changeHandler(event)"/>
+													 <s:Label left="5"  text="Show online status"/>
+										</s:HGroup>
+
+										<s:Label left="5"  text="Programmatic name of column that "/>
+										<s:Label left="5"  text="contains online name. Note if "/>
+										 <s:Label left="5"  text="current column"/>
+										 <s:TextInput id="programNameColumnInput"
+										text="/"  width="30" change="programColumn_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="time separator"/>
+
+										<s:Label left="5"  text="Verical orientation"/>
+										<domino:CustomDropDownList id="vericalOrientationList"
+										requireSelection="true" width="100" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnNamesVertival}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnNameVerticalOrientaion(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+
+								</s:VGroup>
 
 								
 
@@ -764,7 +793,43 @@
 				decimalPlacesInput.text="0";
 			}
 
+			
+
 			//columnDateFormatDateseparator1
+			//columnNameContain
+			if(cobj.columnNameContain==null || cobj.columnNameContain==""){
+				nameContainCheckbox.selected=false;
+			}else{
+				if(cobj.columnNameContain=="true"){
+					nameContainCheckbox.selected=true;
+				}else{
+					nameContainCheckbox.selected=false;
+				}
+			}
+			if(cobj.columnNameStatus==null || cobj.columnNameStatus==""){
+				showOnlineStatusCheckbox.selected=false;
+			}else{
+				if(cobj.columnNameStatus=="true"){
+					showOnlineStatusCheckbox.selected=true;
+				}else{
+					showOnlineStatusCheckbox.selected=false;
+				}
+			}
+
+			if(cobj.columnNameProgramName==null || cobj.columnNameProgramName==""){
+				programNameColumnInput.text="";
+			}else{
+				programNameColumnInput.text=cobj.columnNameProgramName;
+				
+			}
+
+			//columnNameVertival
+			if(cobj.columnNameVertival==null || cobj.columnNameVertival==""){
+				cobj.columnNameVertival="top";
+			}
+			selectCurrentItem(vericalOrientationList,cobj.columnNameVertival);	
+
+			//columnNameProgramName
 			
 			if(cobj.columnDateFormatDateseparator1==null || cobj.columnDateFormatDateseparator1==""){
 				cobj.columnDateFormatDateseparator1=" ";
@@ -1021,6 +1086,41 @@
 			
 	}
 
+	private function nameContain_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(nameContainCheckbox.selected){
+                this.columnObject.columnNameContain="true"
+            }else{
+                this.columnObject.columnNameContain="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+	//showOnlineStatus_changeHandler
+
+	private function showOnlineStatus_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(showOnlineStatusCheckbox.selected){
+                this.columnObject.columnNameStatus="true"
+            }else{
+                this.columnObject.columnNameStatus="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function programColumn_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNameProgramName=programNameColumnInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+
+
+
 	private function dateTimeDisplayTime_changeHandler(event:Event):void
 	{
 		if(dateTimeDisplayTimeCheckbox.selected==false){
@@ -1138,6 +1238,14 @@
             this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
 			
         }
+	}
+
+	private function onColumnNameVerticalOrientaion(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNameVertival=vericalOrientationList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
 	}
 
 	private function onColumnDateDayChange(event:IndexChangeEvent):void 

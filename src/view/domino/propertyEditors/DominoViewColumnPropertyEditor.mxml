@@ -778,6 +778,8 @@
 			
 			if(cobj.columnNumberFormatPercent==null || cobj.columnNumberFormatPercent==""){
 				cobj.columnNumberFormatPercent="false";
+			}else{
+
 			}
 
 			if(cobj.columnCodeFormula==null){
@@ -815,7 +817,7 @@
 					showOnlineStatusCheckbox.selected=false;
 				}
 			}
-
+			//Alert.show("columnNameProgramName:"+cobj.columnNameProgramName);
 			if(cobj.columnNameProgramName==null || cobj.columnNameProgramName==""){
 				programNameColumnInput.text="";
 			}else{

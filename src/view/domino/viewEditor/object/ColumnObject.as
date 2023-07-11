@@ -63,6 +63,8 @@ package view.domino.viewEditor.object
 
         public var columnFormatStyle:String;
 
+        public var columnUnid:String;
+
         public var columnNumberFormatDigits:String;
         public var columnNumberFormat:String;
         public var columnNumberFormatPunctuated:String;

@@ -37,22 +37,26 @@
 		 xmlns:view="view.*" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:dataTable="view.primeFaces.surfaceComponents.components.DataTable"
+		 xmlns:dropGrid="view.domino.viewEditor.grid.*"
 		 creationComplete="onComplete()"
 		 xmlns:viewProperty="view.domino.propertyEditors.*"
 		 xmlns:collapsiblehdivider="components.collapsibleHDivider.*">
     <collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
-		 		<s:DataGrid id="dgColumns"
-					width="90%" height="100%" requestedMinRowCount="4"
-					editable="true" sortableColumns="false" draggableColumns="true"
+		 			
+				<dropGrid:DragAndDropGrid id="dgColumns"
+					width="90%" height="100%" 
+					editable="true" sortableColumns="false" 
+					
+					draggableColumns="true"
 					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
 					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"
 					dataProvider="{rowsDataProvider}" click="onDataGridClick(event)">
-                        <s:columns>
+                        <dropGrid:columns>
                            <s:ArrayList>
 							
 							</s:ArrayList>
-                        </s:columns>
-		        </s:DataGrid>
+                        </dropGrid:columns>
+		        </dropGrid:DragAndDropGrid>
                 <s:Group  width="10%"  minWidth="250" minHeight="600" height="100%">
                         <s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" percentWidth="100"
                                     paddingLeft="0" paddingRight="0" id="dominoViewPropertyEditor">
@@ -101,9 +105,10 @@
 	import spark.components.gridClasses.GridColumn;
 
 	import view.suportClasses.events.DominoViewColumnUpdateEvent;
-
+	import view.suportClasses.events.DominoViewColumnDragDropCompleteEvent;
 	import mx.utils.StringUtil;
 	import mx.utils.ObjectUtil;
+	import mx.utils.UIDUtil;
 
 	private var viewFileName:String =  "" ;
 
@@ -164,6 +169,7 @@
 			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
 											
 			dgColumns.columns.addItem(tmpColumn);
+			var unid:String=UIDUtil.getUID(tmpColumn);
 
 			hasChanged=true;
 
@@ -195,10 +201,12 @@
 			columnsObj.columnTitleStyle="normal";
 			columnsObj.columnTitleSize="9";
 			columnsObj.columnTitleColor="#000000";
+			columnsObj.columnUnid=unid;
 			columnObjectList.addItem(columnsObj);
 			var objIndex:int=columnObjectList.getItemIndex(columnsObj);
 			selectedColumnObject=columnObjectList.getItemAt(objIndex) as ColumnObject; 
 
+			
 			columnAccordion.initializeColumnProperty(columnsObj);
 
 		
@@ -211,12 +219,15 @@
 
 	protected function onRowDragStarts(event:DragEvent):void
     {
-        dgColumns.endItemEditorSession();
+		
+        //dgColumns.endItemEditorSession();
     }
 
     protected function onRowDragAndDropped(event:DragEvent):void
     {
+		Alert.show("onRowDragAndDropped");
         dgColumns.callLater(updateToOwner, [true]);
+		
     }
 
     private function updateToOwner(isAll:Boolean = false, updateType:String = null, itemIndex:int = -1):void
@@ -246,6 +257,8 @@
 
 		dominoViewPropertyEditor.addEventListener("viewPropertyChanged", onDominoViewPropertyChanged);
 		dominoViewPropertyEditor.addEventListener(DominoViewColumnUpdateEvent.COLUMN_UPDATE, onDominoViewColumnPropertyChanged);
+		dgColumns.addEventListener(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE, onDominoViewColumnDragDropCompleteed);
+		
 		dominoViewPropertyEditor.addEventListener("removeColumn", removeColumn);
     
     }
@@ -292,6 +305,33 @@
 
 	private function onDominoViewPropertyChanged(event:Event):void
 	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+	}
+	private function onDominoViewColumnDragDropCompleteed(event:DominoViewColumnDragDropCompleteEvent):void 
+	{
+		
+		//reoder the domino column list
+	
+		var cacheColumnObjectList:ArrayList = new ArrayList();
+		//var gridColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(index) as GridColumn;
+		for(var i:int=0; i<(dgColumns.columns as ArrayList).length; i++)
+		{
+			var col:GridColumn = GridColumn ((dgColumns.columns as ArrayList).getItemAt(i));
+			var uuid:String=UIDUtil.getUID(col);
+			for(var j:int=0; j<columnObjectList.length; j++)
+			{
+				var getCurrentTarget:ColumnObject=columnObjectList.getItemAt(j) as ColumnObject;
+				if(getCurrentTarget.columnUnid==uuid){
+					cacheColumnObjectList.addItem(getCurrentTarget);
+				}
+			}
+		}
+		//remoce all
+		if(cacheColumnObjectList.length>0){
+			columnObjectList.removeAll();
+			columnObjectList.addAll(cacheColumnObjectList);
+		}
 		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
 		hasChanged=true;
 	}
@@ -1144,26 +1184,26 @@
 						if(col.columnnamesformat[0]){
 							columnsObj.columnFormatStyle="names";
 							if(col.columnnamesformat[0].@columncontainsname.toString().length>0){
-								col.columnNameContain=col.columnnamesformat[0].@columncontainsname;
+								columnsObj.columnNameContain=col.columnnamesformat[0].@columncontainsname;
 							}else{
-								col.columnNameContain="false";
+								columnsObj.columnNameContain="false";
 							}
 
 							if(col.columnnamesformat[0].@showonline.toString().length>0){
-								col.columnNameStatus=col.columnnamesformat[0].@showonline;
+								columnsObj.columnNameStatus=col.columnnamesformat[0].@showonline;
 							}else{
-								col.columnNameStatus="false";
+								columnsObj.columnNameStatus="false";
 							}
 							//@columnname
 
 							if(col.columnnamesformat[0].@columnname.toString().length>0){
-								col.columnNameProgramName=col.columnnamesformat[0].@columnname;
+								columnsObj.columnNameProgramName=col.columnnamesformat[0].@columnname;
 							}else{
-								col.columnNameProgramName="false";
+								columnsObj.columnNameProgramName="";
 							}
 							//
 							if(col.columnnamesformat[0].@verticalorientation.toString().length>0){
-								col.columnNameVertival=col.columnnamesformat[0].@verticalorientation;
+								columnsObj.columnNameVertival=col.columnnamesformat[0].@verticalorientation;
 							}
 
 
@@ -1236,6 +1276,8 @@
 							columnsObj.columnTypeValue="Formula";
 							columnsObj.columnCodeFormula=col.code.formula;
 						}
+						//unid2
+						columnsObj.columnUnid=UIDUtil.getUID(tmpColumn);
 						columnObjectList.addItem(columnsObj);
 						
 						

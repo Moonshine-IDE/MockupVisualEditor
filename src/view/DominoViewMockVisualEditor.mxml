@@ -41,7 +41,7 @@
 		 creationComplete="onComplete()"
 		 xmlns:viewProperty="view.domino.propertyEditors.*"
 		 xmlns:collapsiblehdivider="components.collapsibleHDivider.*">
-    <collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250">
+    <collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250" id="dominoViewGroup">
 		 			
 				<dropGrid:DragAndDropGrid id="dgColumns"
 					width="90%" height="100%" 
@@ -146,6 +146,11 @@
 	public function createContextMenuForGrid():void
 	{
 			
+	}
+
+	public function setDominoViewGroupVisible(value:Boolean):void
+	{
+		if (this.dominoViewGroup) this.dominoViewGroup.visible = value;
 	}
 
 	private function createContextMenu():ContextMenu
@@ -875,6 +880,13 @@
 			
 
 		
+		}
+
+
+		public function loadDxlFile():XML
+		{
+			var filePathStr:String=_fileMoonshine.nativePath;
+			return loadLocalFileToXML(filePathStr)
 		}
 
 		private function loadLocalFileToXML(filePath:String):XML

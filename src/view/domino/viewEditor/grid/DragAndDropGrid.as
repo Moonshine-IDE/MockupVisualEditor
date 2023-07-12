@@ -1,5 +1,5 @@
 /**
- * https://github.com/rbrn/apache-flex-drag-drop-columndatagrid/tree/master
+ * * https://github.com/rbrn/apache-flex-drag-drop-columndatagrid/tree/master
  */
 
 package view.domino.viewEditor.grid

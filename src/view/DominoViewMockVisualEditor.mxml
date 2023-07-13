@@ -169,7 +169,7 @@
 		//if(selectedColumnName!="New Column" && repeatColumnTitle==false){
 			var tmpColumn:GridColumn=new GridColumn();
 			tmpColumn.headerText="New Column"+DominoGlobals.DominoViewColumnCount.toString();
-			tmpColumn.width=70;
+			
 			tmpColumn.dataField="";
 			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
 											

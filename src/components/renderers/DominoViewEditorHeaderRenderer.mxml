@@ -39,7 +39,7 @@
 	
 	<fx:Declarations>
 		<s:Label id="labelDisplay" name="label_Display"
-                verticalCenter="1" left="0" right="0" top="0" bottom="0"
+                verticalCenter="1" left="0"  top="0" bottom="0"
                 verticalAlign="middle"
                 maxDisplayedLines="1"
                 textAlign="left"

@@ -46,7 +46,6 @@
 				<dropGrid:DragAndDropGrid id="dgColumns"
 					width="90%" height="100%" 
 					editable="true" sortableColumns="false" 
-					
 					draggableColumns="true"
 					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
 					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"
@@ -82,6 +81,7 @@
 <fx:Script><![CDATA[
 
 	import mx.events.FlexEvent;
+	import mx.events.DataGridEvent;
     import flash.events.Event;
 	import mx.events.DragEvent;
     import spark.events.IndexChangeEvent;
@@ -97,6 +97,7 @@
 
 	import flash.ui.ContextMenu;
     import flash.ui.ContextMenuItem;
+	import flashx.textLayout.container.ScrollPolicy;
 
 	import global.domino.DominoGlobals;
 
@@ -109,6 +110,7 @@
 	import mx.utils.StringUtil;
 	import mx.utils.ObjectUtil;
 	import mx.utils.UIDUtil;
+	import utils.DominoConvertUtils;
 
 	private var viewFileName:String =  "" ;
 
@@ -172,8 +174,10 @@
 			
 			tmpColumn.dataField="";
 			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
-											
-			dgColumns.columns.addItem(tmpColumn);
+			tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(9,"sans-serif","normal",15);
+			dominoViewGridAddColumn(tmpColumn);
+			dominoViewGridAddEmptyColumn();
+			
 			var unid:String=UIDUtil.getUID(tmpColumn);
 
 			hasChanged=true;
@@ -200,7 +204,7 @@
 			
 			var columnsObj:ColumnObject=new ColumnObject();
 			columnsObj.columnHeaderTitle=selectedColumnName;
-			columnsObj.columnWidth="70";
+			columnsObj.columnWidth="15";
 			columnsObj.columnTypeValue="Field";
 			columnsObj.columnTitleFont="sans-serif";
 			columnsObj.columnTitleStyle="normal";
@@ -215,6 +219,27 @@
 			columnAccordion.initializeColumnProperty(columnsObj);
 
 		
+	}
+
+
+	private function dominoViewGridAddColumn(tmpColumn:GridColumn):void
+	{
+		var emptyColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt( dgColumns.columns.length-1) as GridColumn;
+		if(emptyColumn.headerText="         "){
+			(dgColumns.columns as ArrayList).removeItem(emptyColumn);
+		}
+		
+		dgColumns.columns.addItem(tmpColumn);
+	}
+
+	private function dominoViewGridAddEmptyColumn():void
+	{
+		var tmpColumn:GridColumn=new GridColumn();
+			tmpColumn.headerText="         ";
+			tmpColumn.dataField="";
+			
+			dgColumns.columns.addItem(tmpColumn);
+
 	}
 	
 
@@ -265,8 +290,22 @@
 		dgColumns.addEventListener(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE, onDominoViewColumnDragDropCompleteed);
 		
 		dominoViewPropertyEditor.addEventListener("removeColumn", removeColumn);
+
+		//onComplete
+		dgColumns.addEventListener(DataGridEvent.COLUMN_STRETCH, columnResizeHandler);
     
     }
+
+	private function columnResizeHandler(event:DataGridEvent):void {
+		if(event.target is GridColumn){
+			var gridColumn:GridColumn=event.target  as GridColumn;
+			//convertPixelWidthToDominoCharacterWidth
+			var colTextWidth:Number=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(selectedColumnObject.columnTitleSize),selectedColumnObject.columnTitleFont,selectedColumnObject.columnTitleStyle,gridColumn.width);
+			selectedColumnObject.columnWidth=colTextWidth.toString();
+			Alert.show("selectedColumnObject.columnWidth:"+selectedColumnObject.columnWidth);
+			
+		}
+	}
 
 	
 	public function viewColumnClick(event:DominoViewColumnClickEvent):void{
@@ -361,9 +400,9 @@
 			
 
 			if(col.columnWidth!=null&& col.columnWidth.length>0){
-				gridColumn.width=parseInt(col.columnWidth);
+				gridColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(col.columnTitleSize),col.columnTitleFont,col.columnTitleStyle,Number(col.columnWidth));
 			}else{
-				gridColumn.width=70;
+				gridColumn.width=15;
 			}
 			
 			(dgColumns.columns as ArrayList).setItemAt(gridColumn,index);
@@ -417,6 +456,7 @@
 		import flash.filesystem.File;
 		import flash.filesystem.FileStream;	
 		import utils.StringHelper;
+		import utils.DominoConvertUtils;
 
 		private var _fileMoonshine:File;
 		private var _fileStreamMoonshine:FileStream;
@@ -528,7 +568,7 @@
 				}
 				
 				colXML.@hidedetailrows="false";
-				colXML.@width=(Math.round(parseInt(c.columnWidth)/8)).toString();
+				colXML.@width=c.columnWidth.toString();
 				colXML.@resizable="true";
 				
 				colXML.@sortnoaccent="true" 
@@ -926,17 +966,17 @@
 
 						tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
 						
-						dgColumns.columns.addItem(tmpColumn);
+						
 
 						//inital the memory column object
 						var columnsObj:ColumnObject=new ColumnObject();
 						columnsObj.columnHeaderTitle=col.columnheader.@title;
 						
 						if(col.@width!=null && col.@width.toString().length>0){
-							columnsObj.columnWidth=(parseInt(col.@width) * 8).toString();
+							columnsObj.columnWidth=col.@width;
 							
 						}else{
-							columnsObj.columnWidth="70";
+							columnsObj.columnWidth="15";
 						}
 						if(col.@categorized.toString().length==0){
 							columnsObj.columnSortType="false";
@@ -1277,9 +1317,20 @@
 								}else{
 									columnsObj.columnTitleColor="#000000";
 								}
+
+								//convert width
+								var columnWidth:Number=8;
+								if(col.@width!=null && col.@width!=""){
+									columnWidth=Number(col.@width);
+								}
+						
+								tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(columnsObj.columnTitleSize),columnsObj.columnTitleFont,columnsObj.columnTitleStyle,columnWidth);
+								
 								
 							
 						}
+						//after the column header font & size get, then we can add the column width to Mooshine-IDE grid
+						dgColumns.columns.addItem(tmpColumn);
 
 						if(col.code.toString().length==0){
 							columnsObj.columnTypeValue="Field";
@@ -1295,6 +1346,7 @@
 						
 					}
 				}
+				dominoViewGridAddEmptyColumn();
 				
 				//inital the view select formla
 				var selectFormula:XML= xml.code.(@event=="selection")[0];

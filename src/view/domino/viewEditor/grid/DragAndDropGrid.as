@@ -22,6 +22,7 @@ package view.domino.viewEditor.grid
     import spark.components.gridClasses.GridColumn;
     import spark.components.gridClasses.IGridItemRenderer;
     import spark.events.GridEvent;
+    import spark.components.Alert;
     import view.suportClasses.events.DominoViewColumnDragDropCompleteEvent;
 
     public class DragAndDropGrid extends DataGrid
@@ -252,23 +253,25 @@ package view.domino.viewEditor.grid
 
         private function dropColumn(event:DragEvent):void
         {
-            if (dropIndex != dragColumn.columnIndex)
-            {
-                var oldIndex:int = dragColumn.columnIndex;
-                this.columns.removeItemAt(dragColumn.columnIndex);
-                if (dropIndex > oldIndex)
-                    dropIndex--;
-                this.columns.addItemAt(dragColumn, dropIndex);
+           
+            if(dragColumn && dropIndex){
+                if (dropIndex != dragColumn.columnIndex)
+                {
+                    var oldIndex:int = dragColumn.columnIndex;
+                    this.columns.removeItemAt(dragColumn.columnIndex);
+                    
+                    if (dropIndex > oldIndex)
+                        dropIndex--;
+                    this.columns.addItemAt(dragColumn, dropIndex);
+                    saveScrollPositionForCallLater(event);
+                    callLater(setScrollBackWhereItWas);
+                }
+                cleanUpDropIndicator();
+                stopDragTimer("dropColumn");
 
-                saveScrollPositionForCallLater(event);
-                callLater(setScrollBackWhereItWas);
+                //action 
+                this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
             }
-            cleanUpDropIndicator();
-            stopDragTimer("dropColumn");
-
-            //action 
-            this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
-
         }
 
         /**

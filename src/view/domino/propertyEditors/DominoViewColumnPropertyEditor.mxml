@@ -733,7 +733,12 @@
 
 			if(cobj.columnTitleFont==null || cobj.columnTitleFont==""){
 				cobj.columnTitleFont="sans-serif";
+			}
+			if(cobj.columnFont==null || cobj.columnFont==""){
+				cobj.columnFont="sans-serif";
 			}	
+
+			selectCurrentItemTitleFont();
 			if(cobj.columnTitleStyle==null || cobj.columnTitleStyle==""){
 				cobj.columnTitleStyle="normal";
 			}
@@ -744,6 +749,9 @@
 
 			if(cobj.columnFormatStyle==null || cobj.columnFormatStyle==""){
 				cobj.columnFormatStyle="general";
+			}
+			if(cobj.columnStyle==null || cobj.columnStyle==""){
+				cobj.columnStyle="general";
 			}
 			//inilta number 
 			var styleFormat:int=-1;
@@ -1050,7 +1058,7 @@
 		if(cobj!=null){
 			
 			
-			titleFontDropDownList.callLater(selectCurrentItemTitleFont);
+			
 
 			//initail color
 			var uint_color:uint=0;
@@ -1142,7 +1150,7 @@
 			if(columnFontType.selection.value.toString()=="title"){
 				fontValue=this.columnObject.columnTitleFont;
 			}else{
-				fontValue=this.columnObject.columnTitleFont;
+				fontValue=this.columnObject.columnFont;
 			}
 			
 			var dpCount:int = titleFontDropDownList.dataProvider.length;

@@ -35,6 +35,7 @@ package utils
 	{
         import flash.text.TextField;
         import flash.text.StyleSheet;
+        import spark.components.gridClasses.GridColumn;
 
         public static function convertDominoCharacterWidthToPixelWidth(sizeNum:Number,fontName:String,fontWeight:String,charNum:Number):Number
         {
@@ -75,6 +76,17 @@ package utils
                 newStyle.setStyle(".defStyle", styleObj);
                 return   newStyle ;
         }
+
+        // public static function resizeColumn(col:GridColumn, size:int):GridColumn
+        // {
+        //     var owner:* = col.mx_internal::owner
+        //     col.mx_internal::owner = null;
+
+        //     col.width = size;
+
+        //     col.mx_internal::owner = owner;
+        //     return col
+        // }
         
     }
 }

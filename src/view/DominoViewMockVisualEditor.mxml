@@ -47,8 +47,9 @@
 					width="90%" height="100%" 
 					editable="true" sortableColumns="false" 
 					draggableColumns="true"
+					horizontalScrollPolicy="auto"
 					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
-					dragStart="onRowDragStarts(event)" dragDrop="onRowDragAndDropped(event)"
+					dragStart="onRowDragStarts(event)" 
 					dataProvider="{rowsDataProvider}" click="onDataGridClick(event)">
                         <dropGrid:columns>
                            <s:ArrayList>
@@ -160,8 +161,13 @@
 		var viewContextMenu:ContextMenu = new ContextMenu();
 		var cutItem:ContextMenuItem = new ContextMenuItem("Add Column");
 		cutItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onMenuItemAddColumn);
-		viewContextMenu.customItems.push(cutItem);
+
+		var removeItem:ContextMenuItem = new ContextMenuItem("Remove Column");
+		removeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, removeColumn);
+
 		
+		viewContextMenu.customItems.push(cutItem);
+		viewContextMenu.customItems.push(removeItem);
 		return viewContextMenu;
 	}
 	private function onMenuItemAddColumn(event:ContextMenuEvent):void
@@ -174,6 +180,7 @@
 			
 			tmpColumn.dataField="";
 			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
+			
 			tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(9,"sans-serif","normal",15);
 			dominoViewGridAddColumn(tmpColumn);
 			dominoViewGridAddEmptyColumn();
@@ -255,8 +262,8 @@
 
     protected function onRowDragAndDropped(event:DragEvent):void
     {
-		Alert.show("onRowDragAndDropped");
-        dgColumns.callLater(updateToOwner, [true]);
+		//Alert.show("onRowDragAndDropped");
+        //dgColumns.callLater(updateToOwner, [true]);
 		
     }
 
@@ -946,10 +953,6 @@
 		{
 			var xml:XML = loadLocalFileToXML(filePath);
 			var name:String = getFileNameWithoutExtension(filePath,"view");
-			// if(viewNameInput!=null){
-			// 	viewNameInput.text=name;
-			// }
-		
 			
 			if(xml!=null){
 			
@@ -1390,11 +1393,6 @@
 				}
 
 			}
-		
-		
-
-			
-
 			
 		}
 

@@ -45,6 +45,7 @@
                 textAlign="left"
                 fontWeight="bold"
                 showTruncationTip="true"
+                backgroundAlpha="100"
                 />
 	</fx:Declarations>
 

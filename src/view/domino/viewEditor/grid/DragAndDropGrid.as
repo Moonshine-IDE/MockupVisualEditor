@@ -169,6 +169,15 @@ package view.domino.viewEditor.grid
             DragManager.acceptDragDrop(this.columnHeaderGroup);
         }
 
+        override protected function dragDropHandler(event:DragEvent):void
+        {
+            this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_OVER, columnDragOverHandler);
+            this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_EXIT, columnDragExitHandler);
+            this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_DROP, columnDragDropHandler);
+            dropColumn(event);
+            
+        }
+
         private function columnDragExitHandler(event:DragEvent):void
         {
             this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_OVER, columnDragOverHandler);
@@ -182,6 +191,7 @@ package view.domino.viewEditor.grid
             this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_OVER, columnDragOverHandler);
             this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_EXIT, columnDragExitHandler);
             this.columnHeaderGroup.removeEventListener(DragEvent.DRAG_DROP, columnDragDropHandler);
+            
             dropColumn(event);
         }
 

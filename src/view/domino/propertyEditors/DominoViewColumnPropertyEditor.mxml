@@ -677,6 +677,7 @@
 
     public function initializeColumnProperty(cobj:ColumnObject):void
     {
+		columnFontType.selection.value="title";
         if(cobj!=null){
             titleInput.text=cobj.columnHeaderTitle;
             if(cobj.columnWidth!=null && cobj.columnWidth.toString().length>0){
@@ -996,6 +997,7 @@
 
 			 
         }
+		
 
         
         
@@ -1059,7 +1061,7 @@
 			
 			
 			
-
+			selectCurrentItemTitleFont();
 			//initail color
 			var uint_color:uint=0;
 			var pre_color:String;
@@ -1753,7 +1755,7 @@
 	{
 		if(titleFontDropDownList.selectedItem){
 			if(this.columnObject!=null){
-				if(this.columnObject.columnFontType=="title"){
+				if(columnFontType.selection.value.toString()=="title"){
 					this.columnObject.columnTitleFont=titleFontDropDownList.selectedItem["value"].toString();
 					
 				}else{

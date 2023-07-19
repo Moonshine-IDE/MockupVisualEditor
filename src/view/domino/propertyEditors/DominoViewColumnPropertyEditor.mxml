@@ -119,7 +119,7 @@
 											fontWeight="bold"
 											maxDisplayedLines="1" fontSize="13"
 											left="5"  top="5" verticalCenter="0" 
-											text="Show mulitiple values as separate entries"/>
+											text="Show multiple values as separate entries"/>
                                         <s:CheckBox id="mulitipleValuesCheckBox"
 													selected="false"
 													change="multipleValue_changeHandler(event)"/>
@@ -1153,19 +1153,9 @@
 				fontValue=this.columnObject.columnFont;
 			}
 			
-			var dpCount:int = titleFontDropDownList.dataProvider.length;
 			
-			for (var i:int = 0; i < dpCount; i++)
-			{
-				var item:Object = titleFontDropDownList.dataProvider.getItemAt(i);
-				if(ObjectUtil.compare(item["value"],fontValue)==0)
-				{
-					if(this.columnObject.columnFontType=="title"){
-						titleFontDropDownList.selectedItem = item;
-					}
-					break;
-				}
-			}
+			selectCurrentItem(titleFontDropDownList,fontValue);
+			
 		
 	}
 	// private function selectCurrentItemTitleStyle():void

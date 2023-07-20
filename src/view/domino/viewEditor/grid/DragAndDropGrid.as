@@ -23,6 +23,7 @@ package view.domino.viewEditor.grid
     import spark.components.gridClasses.IGridItemRenderer;
     import spark.events.GridEvent;
     import spark.components.Alert;
+    import mx.collections.ArrayList;
     import view.suportClasses.events.DominoViewColumnDragDropCompleteEvent;
 
     public class DragAndDropGrid extends DataGrid
@@ -233,7 +234,11 @@ package view.domino.viewEditor.grid
                     columnMoveDropIndicator.x = renderer.x + renderer.width - columnMoveDropIndicator.width / 2;
                     newDropIndex++;
                 }
+
                 dropIndex = newDropIndex;
+              
+
+              
             }
             else
             {
@@ -265,22 +270,28 @@ package view.domino.viewEditor.grid
         {
            
             if(dragColumn && dropIndex){
-                if (dropIndex != dragColumn.columnIndex)
-                {
-                    var oldIndex:int = dragColumn.columnIndex;
-                    this.columns.removeItemAt(dragColumn.columnIndex);
-                    
-                    if (dropIndex > oldIndex)
-                        dropIndex--;
-                    this.columns.addItemAt(dragColumn, dropIndex);
-                    saveScrollPositionForCallLater(event);
-                    callLater(setScrollBackWhereItWas);
-                }
-                cleanUpDropIndicator();
-                stopDragTimer("dropColumn");
+                if(dragColumn.headerText!="         " && dropIndex!=(this.columns.length)){
+                    if (dropIndex != dragColumn.columnIndex)
+                    {
+                        var oldIndex:int = dragColumn.columnIndex;
+                        this.columns.removeItemAt(dragColumn.columnIndex);
+                        
+                        if (dropIndex > oldIndex)
+                            dropIndex--;
 
-                //action 
-                this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
+                        if(dropIndex<0){
+                            dropIndex=0
+                        }   
+                        this.columns.addItemAt(dragColumn, dropIndex);
+                        saveScrollPositionForCallLater(event);
+                        callLater(setScrollBackWhereItWas);
+                    }
+                    cleanUpDropIndicator();
+                    stopDragTimer("dropColumn");
+
+                    //action 
+                    this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
+                }
             }
         }
 

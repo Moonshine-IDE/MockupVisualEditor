@@ -636,7 +636,7 @@
 				colorstr="0"+colorstr;
 			}
 		}
-		if(this.columnObject.columnFontType=="title"){
+		if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 			this.columnObject.columnTitleColor= "#"+colorstr;
 		}else{
 			this.columnObject.columnColor= "#"+colorstr;
@@ -677,7 +677,7 @@
 
     public function initializeColumnProperty(cobj:ColumnObject):void
     {
-		columnFontType.selection.value="title";
+	
         if(cobj!=null){
             titleInput.text=cobj.columnHeaderTitle;
             if(cobj.columnWidth!=null && cobj.columnWidth.toString().length>0){
@@ -751,9 +751,7 @@
 			if(cobj.columnFormatStyle==null || cobj.columnFormatStyle==""){
 				cobj.columnFormatStyle="general";
 			}
-			if(cobj.columnStyle==null || cobj.columnStyle==""){
-				cobj.columnStyle="general";
-			}
+		
 			//inilta number 
 			var styleFormat:int=-1;
 			if(cobj.columnFormatStyle=="general"){
@@ -1040,7 +1038,7 @@
 	private function initalizeColumnFont(cobj:ColumnObject):void
 	{ 
 		
-		if(columnFontType.selection.value.toString()=="title"){
+		if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 			titleStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
 			if(cobj.columnTitleSize!=null && cobj.columnTitleSize.toString().length>0){
                 columTitleSize.text=cobj.columnTitleSize;
@@ -1065,9 +1063,9 @@
 			//initail color
 			var uint_color:uint=0;
 			var pre_color:String;
-			if(cobj.columnFontType=="title"){
+			if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 				pre_color = cobj.columnTitleColor;
-			}else if(cobj.columnFontType=="column"){
+			}else{
 				pre_color = cobj.columnColor;
 			}
 
@@ -1149,7 +1147,7 @@
 	private function selectCurrentItemTitleFont():void
 	{
 			var fontValue:String;
-			if(columnFontType.selection.value.toString()=="title"){
+			if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 				fontValue=this.columnObject.columnTitleFont;
 			}else{
 				fontValue=this.columnObject.columnFont;
@@ -1330,15 +1328,13 @@
 	private function columTitleSize_changeHandler(event:Event):void 
 	{
 		if(this.columnObject!=null){
-			if(this.columnObject.columnFontType=="title"){
+			if (ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 				this.columnObject.columnTitleSize=columTitleSize.text;
-          
-			}else if(this.columnObject.columnFontType=="column"){
-								  
+			}else{
 				this.columnObject.columnSize=columTitleSize.text;
-          
 			}
-			  this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
         }
 	}
 
@@ -1566,8 +1562,8 @@
 	private function columnFontType_changeHandler():void
 	{
         if(this.columnObject!=null){
-            
-			if( columnFontType.selection.value.toString()=="title"){
+            Alert.show("columnFontType.selection:"+columnFontType.selection.value.toString());
+			if( ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 				columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = false;
 				titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = true;
 				fontName = "Title Font";
@@ -1755,7 +1751,7 @@
 	{
 		if(titleFontDropDownList.selectedItem){
 			if(this.columnObject!=null){
-				if(columnFontType.selection.value.toString()=="title"){
+				if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 					this.columnObject.columnTitleFont=titleFontDropDownList.selectedItem["value"].toString();
 					
 				}else{

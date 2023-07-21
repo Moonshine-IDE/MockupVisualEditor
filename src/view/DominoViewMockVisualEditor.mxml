@@ -262,7 +262,7 @@
 
     protected function onRowDragAndDropped(event:DragEvent):void
     {
-		//Alert.show("onRowDragAndDropped");
+		
         //dgColumns.callLater(updateToOwner, [true]);
 		
     }
@@ -309,7 +309,7 @@
 			//convertPixelWidthToDominoCharacterWidth
 			var colTextWidth:Number=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(selectedColumnObject.columnTitleSize),selectedColumnObject.columnTitleFont,selectedColumnObject.columnTitleStyle,gridColumn.width);
 			selectedColumnObject.columnWidth=colTextWidth.toString();
-			Alert.show("selectedColumnObject.columnWidth:"+selectedColumnObject.columnWidth);
+		
 			
 		}
 	}
@@ -390,6 +390,8 @@
 	{
 		if(event.col!=null){
 			var col:ColumnObject=event.col as ColumnObject;
+
+		
 			
 			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
 			//some time the new column not add into columnObjectList

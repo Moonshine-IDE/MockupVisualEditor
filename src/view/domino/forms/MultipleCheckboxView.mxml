@@ -174,7 +174,8 @@
                     testPopUp.label=selectedColumnObject[_textProperty];
                }
            }
-             
+
+           //clean all options from   
            
             //auto calculate for width 
            var listLen: Number= 0;
@@ -200,11 +201,32 @@
 
         }
 
+        private function cleanAlreadySelectedOptions():void{
+            if(multCheckList){
+                for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
+                {
+                    var item:Object = multCheckList.getChildAt(checkNum);
+                    if(item is ListBaseContentHolder){
+                        for (var i:int = 0; i < item.numChildren; i++){
+                            var checkitem:Object = item.getChildAt(i);
+                            if(checkitem.hasOwnProperty("selected") ){
+                                 checkitem.selected=false;
+                            }
+                        }
+                    }
+                }
+            
+            }
+        }
+
         
         private function initializeMultiSelect():void {
             
             var rex:RegExp = /[\s\r\n]+/gim;
             if (includeCollection&&multCheckList&& selectedColumnObject && selectedColumnObject[_textProperty]){
+                
+                cleanAlreadySelectedOptions();
+                
                  var str:String = selectedColumnObject[_textProperty];
                  if(str.length>0){
                     var _iniList:Array=str.split(" ");
@@ -213,6 +235,7 @@
                             var elementStr:String = _iniList[j].toString();
                             if(elementStr){
                                 elementStr = elementStr.replace(rex,'');
+                                
                                 if(elementStr.length>0){
                                     for(var checkNum:Number = 0; checkNum < multCheckList.numChildren; checkNum++)
                                     {
@@ -352,6 +375,8 @@
                     testPopUp.label=str;
                 }
             }
+
+           
 
              this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.selectedColumnObject,true, true) );
         }

@@ -1562,7 +1562,7 @@
 	private function columnFontType_changeHandler():void
 	{
         if(this.columnObject!=null){
-            Alert.show("columnFontType.selection:"+columnFontType.selection.value.toString());
+            //Alert.show("columnFontType.selection:"+columnFontType.selection.value.toString());
 			if( ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
 				columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = false;
 				titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = true;

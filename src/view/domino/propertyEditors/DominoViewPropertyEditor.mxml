@@ -87,6 +87,7 @@
     public function initializeViewProperty(vobj:ViewObject):void
     {
          if(vobj!=null){
+			
             viewNameInput.text=vobj.viewName;
             viewSelection.text=vobj.viewCodeFormula;
             if(vobj.showinmenu=="true"){

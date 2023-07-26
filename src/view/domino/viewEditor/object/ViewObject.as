@@ -42,6 +42,7 @@ package view.domino.viewEditor.object
         public var onopengoto:String;
         public var onrefresh:String;
         public var opencollapsed:String;
+        public var hideProperty:String;
         public function ViewObject()
 		{
         }

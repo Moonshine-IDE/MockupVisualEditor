@@ -74,12 +74,28 @@
 													selected="true"
 													change="opencollapsed_changeHandler(event)"/>
 									</s:FormItem>
+								  <s:Label text="Hide design element from:" width="100%" />
+
+								  	<s:FormItem label="Web browsers" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="hideForWebCheckbox"
+													selected="false"
+													change="hide_changeHandler(event)"/>
+									</s:FormItem>
+
+									<s:FormItem label="Notes R4.6 or later clients" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="hideForNotesCheckbox"
+													selected="false"
+													change="hide_changeHandler(event)"/>
+									</s:FormItem>
+
+
 
 <fx:Script><![CDATA[
     import view.domino.viewEditor.object.ColumnObject;
 	import view.domino.viewEditor.object.ViewObject;
     import view.suportClasses.events.PropertyEditorChangeEvent;
     import mx.events.FlexEvent;
+	import com.adobe.utils.StringUtil;
 
 
     private var _viewObject:ViewObject;
@@ -108,6 +124,20 @@
                 viewOpencollapsed.selected=false
 
             }
+
+			if(vobj.hideProperty!=null && vobj.hideProperty.length>0){
+				if(vobj.hideProperty.indexOf("web")>=0){
+					hideForWebCheckbox.selected=true
+				}else{
+					hideForWebCheckbox.selected=false
+				}
+
+				if(vobj.hideProperty.indexOf("notes")>=0){
+					hideForNotesCheckbox.selected=true
+				}else{
+					hideForNotesCheckbox.selected=false
+				}
+			}
 
             this.viewObject=vobj;
         }
@@ -186,6 +216,41 @@
 			}
             this.dispatchEvent(new Event("viewPropertyChanged",true, true));
 		}
+	}
+
+
+	private function hide_changeHandler(event:Event):void
+	{
+		if(viewObject!=null){
+			var hideWeb:String=null;
+			var hideNotes:String=null;
+			//hideForWebCheckbox
+			//hideForNotesCheckbox
+			if(hideForWebCheckbox.selected==true){
+				hideWeb="web"
+			}else{
+				hideWeb=null
+			}
+			if(hideForNotesCheckbox.selected==true){
+				hideNotes="notes"
+			}else{
+				hideNotes=null
+			}
+
+			if(hideWeb){
+				viewObject.hideProperty=hideWeb
+			}
+
+			if(hideNotes){
+				viewObject.hideProperty=viewObject.hideProperty+" "+hideNotes;
+			}
+
+			if(viewObject.hideProperty){
+				viewObject.hideProperty=StringUtil.trim(viewObject.hideProperty);
+			}
+			
+		}
+
 	}
 
 

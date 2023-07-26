@@ -499,6 +499,10 @@
 
 			xmlView.@name=viewObject.viewName;
 
+			if(viewObject.hideProperty){
+				xmlView.@hide=viewObject.hideProperty;
+			}
+
 			if(viewObject.showinmenu=="true"){
 				xmlView.@showinmenu="true";
 			}else{
@@ -1365,6 +1369,9 @@
 									viewObject.viewName=xml.@name;
 								}else{
 									viewObject.viewName=name;
+								}
+								if(xml.@hide!=null && xml.@hide.toString().length>0){
+									viewObject.hideProperty=xml.@hide;
 								}
 								viewObject.viewCodeEvent="selection";
 								viewObject.viewCodeFormula=formulaXml.text();

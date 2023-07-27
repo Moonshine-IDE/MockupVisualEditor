@@ -237,17 +237,25 @@
 				hideNotes=null
 			}
 
+			viewObject.hideProperty=null;
 			if(hideWeb){
 				viewObject.hideProperty=hideWeb
 			}
 
 			if(hideNotes){
-				viewObject.hideProperty=viewObject.hideProperty+" "+hideNotes;
+				if(viewObject.hideProperty){
+					viewObject.hideProperty=viewObject.hideProperty+" "+hideNotes;
+				}else{
+					viewObject.hideProperty=hideNotes
+				}
+				
 			}
 
 			if(viewObject.hideProperty){
 				viewObject.hideProperty=StringUtil.trim(viewObject.hideProperty);
 			}
+
+			 this.dispatchEvent(new Event("viewPropertyChanged",true, true));
 			
 		}
 

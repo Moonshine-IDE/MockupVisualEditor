@@ -59,34 +59,91 @@
 											
 										
 										</s:FormItem> 
-									<s:FormItem label="Show in menu" skinClass="skins.FormItemSkin">
+									<!-- <s:FormItem label="Show in menu" visible="false" skinClass="skins.FormItemSkin">
 										<s:CheckBox id="viewShowinmenu"
 													selected="true"
 													change="showinmenu_changeHandler(event)"/>
 									</s:FormItem>	
-									<s:FormItem label="Public access" skinClass="skins.FormItemSkin">
+									<s:FormItem label="Public access" visible="false" skinClass="skins.FormItemSkin">
 										<s:CheckBox id="viewPublicaccess"
 													selected="true"
 													change="publicaccess_changeHandler(event)"/>
 									</s:FormItem>
-									<s:FormItem label="Open collapsed" skinClass="skins.FormItemSkin">
+									<s:FormItem label="Open collapsed" visible="false" skinClass="skins.FormItemSkin">
 										<s:CheckBox id="viewOpencollapsed"
 													selected="true"
 													change="opencollapsed_changeHandler(event)"/>
-									</s:FormItem>
-								  <s:Label text="Hide design element from:" width="100%" />
+									</s:FormItem> -->
 
-								  	<s:FormItem label="Web browsers" skinClass="skins.FormItemSkin">
+
+
+								<s:Label textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5" 
+												 width="100%"
+												 text=" Prohibit design refresh or replace"
+												 >
+									</s:Label>	
+									<s:HGroup left="5" >
+									<s:Label textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												
+												 width="100%"
+												 text=" to modify" />
+									
+
+									
+									<s:CheckBox id="noreplaceCheckbox"
+													selected="false"
+													change="noreplace_changeHandler(event)"/>
+									</s:HGroup>	
+
+									<s:Label text=" Propogate this prohibition of design" left="5"/>			
+									
+									<s:HGroup left="5" >
+									<s:Label text=" change" left="5"/>
+									<s:CheckBox id="propagatenoreplaceCheckBox"
+													selected="false"
+													change="propagatenoreplace_changeHandler(event)"/>	
+									</s:HGroup >	
+
+									<s:Label text=" Do not show this design element " width="100%" />
+									<s:HGroup left="5" >
+										<s:Label text=" in menus of Notes R4 or later clients: " width="100%" />
+										<s:CheckBox id="hideForNotesR4Checkbox"
+													selected="false"
+													change="hide_changeHandler(event)"/>
+									</s:HGroup >
+									
+																	
+
+									
+
+									<s:Label text=" " width="100%"  />
+								  	<s:Label text="Hide design element from:" width="100%"  />
+
+									
+									
+								  	<s:FormItem left="5" label="Web browsers" skinClass="skins.FormItemSkin">
 										<s:CheckBox id="hideForWebCheckbox"
 													selected="false"
 													change="hide_changeHandler(event)"/>
 									</s:FormItem>
 
-									<s:FormItem label="Notes R4.6 or later clients" skinClass="skins.FormItemSkin">
+											 
+
+									<s:FormItem left="5" label="Notes R4.6 or later clients" skinClass="skins.FormItemSkin">
 										<s:CheckBox id="hideForNotesCheckbox"
 													selected="false"
 													change="hide_changeHandler(event)"/>
 									</s:FormItem>
+
+									
+
 
 
 
@@ -106,24 +163,24 @@
 			
             viewNameInput.text=vobj.viewName;
             viewSelection.text=vobj.viewCodeFormula;
-            if(vobj.showinmenu=="true"){
-                viewShowinmenu.selected=true
-            }else{
-                viewShowinmenu.selected=false
-            }
+            // if(vobj.showinmenu=="true"){
+            //     viewShowinmenu.selected=true
+            // }else{
+            //     viewShowinmenu.selected=false
+            // }
 
-            if(vobj.publicaccess=="true"){
-                viewPublicaccess.selected=true
-            }else{
-                viewPublicaccess.selected=false
+            // if(vobj.publicaccess=="true"){
+            //     viewPublicaccess.selected=true
+            // }else{
+            //     viewPublicaccess.selected=false
 
-            }
-             if(vobj.opencollapsed=="true"){
-                viewOpencollapsed.selected=true
-            }else{
-                viewOpencollapsed.selected=false
+            // }
+            //  if(vobj.opencollapsed=="true"){
+            //     viewOpencollapsed.selected=true
+            // }else{
+            //     viewOpencollapsed.selected=false
 
-            }
+            // }
 
 			if(vobj.hideProperty!=null && vobj.hideProperty.length>0){
 				if(vobj.hideProperty.indexOf("web")>=0){
@@ -137,6 +194,24 @@
 				}else{
 					hideForNotesCheckbox.selected=false
 				}
+
+				if(vobj.hideProperty.indexOf("v4")>=0){
+					hideForNotesR4Checkbox.selected=true
+				}else{
+					hideForNotesR4Checkbox.selected=false
+				}
+			}
+
+			if(vobj.noreplace=="true"){
+                noreplaceCheckbox.selected=true;
+            }else{
+                noreplaceCheckbox.selected=false;
+            }
+
+			if(vobj.propagatenoreplace=="true"){
+				propagatenoreplaceCheckBox.selected=true;
+			}else{
+				propagatenoreplaceCheckBox.selected=false;
 			}
 
             this.viewObject=vobj;
@@ -176,54 +251,79 @@
 		
 	}
 
-    private function showinmenu_changeHandler(event:Event):void
-	{
+    // private function showinmenu_changeHandler(event:Event):void
+	// {
 		
-		if(viewObject!=null){
-			if(viewShowinmenu.selected==true){
-				viewObject.showinmenu="true";
-			}else{
-				viewObject.showinmenu="false";
-			}
-            this.dispatchEvent(new Event("viewPropertyChanged",true, true));
+	// 	if(viewObject!=null){
+	// 		if(viewShowinmenu.selected==true){
+	// 			viewObject.showinmenu="true";
+	// 		}else{
+	// 			viewObject.showinmenu="false";
+	// 		}
+    //         this.dispatchEvent(new Event("viewPropertyChanged",true, true));
 			
-		}
-	}
+	// 	}
+	// }
 
 
-	//viewPublicaccess
-	private function publicaccess_changeHandler(event:Event):void
-	{
+	// //viewPublicaccess
+	// private function publicaccess_changeHandler(event:Event):void
+	// {
 		
-		if(viewObject!=null){
-			if(viewPublicaccess.selected==true){
-				viewObject.publicaccess="true";
-			}else{
-				viewObject.publicaccess="false";
-			}
-            this.dispatchEvent(new Event("viewPropertyChanged",true, true));
-		}
-	}
+	// 	if(viewObject!=null){
+	// 		if(viewPublicaccess.selected==true){
+	// 			viewObject.publicaccess="true";
+	// 		}else{
+	// 			viewObject.publicaccess="false";
+	// 		}
+    //         this.dispatchEvent(new Event("viewPropertyChanged",true, true));
+	// 	}
+	// }
 
     //opencollapsed_changeHandler
-	private function opencollapsed_changeHandler(event:Event):void
+	// private function opencollapsed_changeHandler(event:Event):void
+	// {
+	// 	if(viewObject!=null){
+	// 		if(viewOpencollapsed.selected==true){
+	// 			viewObject.opencollapsed="true";
+	// 		}else{
+	// 			viewObject.opencollapsed="false";
+	// 		}
+    //         this.dispatchEvent(new Event("viewPropertyChanged",true, true));
+	// 	}
+	// }
+
+
+	//propagatenoreplace_changeHandler
+	private function propagatenoreplace_changeHandler(event:Event):void
 	{
 		if(viewObject!=null){
-			if(viewOpencollapsed.selected==true){
-				viewObject.opencollapsed="true";
+			if(propagatenoreplaceCheckBox.selected==true){
+				viewObject.propagatenoreplace="true";
 			}else{
-				viewObject.opencollapsed="false";
+				viewObject.propagatenoreplace="false";
 			}
-            this.dispatchEvent(new Event("viewPropertyChanged",true, true));
 		}
+		this.dispatchEvent(new Event("viewPropertyChanged",true, true));
 	}
-
-
+	private function noreplace_changeHandler(event:Event):void
+	{
+		if(viewObject!=null){
+			if(noreplaceCheckbox.selected==true){
+				viewObject.noreplace="true";
+			}else{
+				viewObject.noreplace="false";
+			}
+		}
+		
+		this.dispatchEvent(new Event("viewPropertyChanged",true, true));
+	}
 	private function hide_changeHandler(event:Event):void
 	{
 		if(viewObject!=null){
 			var hideWeb:String=null;
 			var hideNotes:String=null;
+			var hideNotesR4:String=null;
 			//hideForWebCheckbox
 			//hideForNotesCheckbox
 			if(hideForWebCheckbox.selected==true){
@@ -236,6 +336,12 @@
 			}else{
 				hideNotes=null
 			}
+			if(hideForNotesR4Checkbox.selected==true){
+				hideNotesR4="v4"
+			}else{
+				hideNotesR4=null
+			}
+			//hideForNotesR4Checkbox
 
 			viewObject.hideProperty=null;
 			if(hideWeb){
@@ -249,6 +355,15 @@
 					viewObject.hideProperty=hideNotes
 				}
 				
+			}
+
+
+			if(hideNotesR4){
+				if(viewObject.hideProperty){
+					viewObject.hideProperty=viewObject.hideProperty+" "+hideNotesR4;
+				}else{
+					viewObject.hideProperty=hideNotesR4
+				}
 			}
 
 			if(viewObject.hideProperty){

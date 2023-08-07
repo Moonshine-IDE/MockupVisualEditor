@@ -139,7 +139,7 @@
 							</mx:VBox>
 							
 							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
-		   paddingLeft="5" paddingTop="10" width="250" height="650" paddingBottom="10" >	
+		   paddingLeft="5" paddingTop="10" width="100%" height="650" paddingBottom="10" >	
 		
 
 								<s:FormItem label="Style:" skinClass="skins.FormItemSkin">
@@ -151,19 +151,30 @@
 						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
 								</s:FormItem> 
 
-								<s:Group id="generalStyleGroup">
-								    <s:Label id="generalStyleGroupText"
+								<s:VGroup id="generalStyleGroup" width="100%">
+   <s:Label id="generalStyleGroupText1"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5"
+												bottom="5" 
+												width="100%"
+												text="There are no advanced formats for the general style		"/>
+
+										 
+								    <s:Label id="generalStyleGroupText2"
 												textAlign="start"
 												verticalAlign="middle"
 												fontWeight="bold"
 												maxDisplayedLines="8" fontSize="13"
 												left="5" 
-												 width="320"
-												text="There are no advanced formats for the general style. 
-												You may assign formats for multiple styles in the same column.
-												Style is not a property of the column; 
-												it just lets you select which set of options to work with. "/>
-								</s:Group>
+												width="100%"
+												
+												text="You may assign formats for multiple styles in the same column.
+Style is not a property of the column; 
+it just lets you select which set of options to work with."/>
+								</s:VGroup>
 
 								<s:VGroup id="numberStyleGroup"  width="220" height="600">
 								
@@ -415,8 +426,8 @@
 										</s:HGroup>
 
 										<s:Label left="5"  text="Programmatic name of column that "/>
-										<s:Label left="5"  text="contains online name. Note if "/>
-										 <s:Label left="5"  text="current column"/>
+										<s:Label left="5"  text="contains online name. None if "/>
+										 <s:Label left="5"  text="current column."/>
 										 <s:TextInput id="programNameColumnInput"
 										text="/"  width="30" change="programColumn_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="time separator"/>
 
@@ -522,7 +533,13 @@
 	[Bindable]
 	private var dateYearList:ArrayList;
 
-	
+// 	private var generalString:String = ([
+// "There are no advanced formats for the general style.
+
+// You may assign formats for multiple styles in the same column.
+// Style is not a property of the column; 
+// it just lets you select which set of options to work with."
+// ]> ).join("\n");
 
 	protected function onCreationCompletes(event:FlexEvent):void
 	{

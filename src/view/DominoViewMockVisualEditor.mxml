@@ -502,6 +502,18 @@
 			if(viewObject.hideProperty){
 				xmlView.@hide=viewObject.hideProperty;
 			}
+			if (viewObject.noreplace=="true"){
+				xmlView.@noreplace="true";
+			}else{
+				xmlView.@noreplace="false";
+			}
+			
+
+			if(viewObject.propagatenoreplace=="true"){
+				xmlView.@propagatenoreplace="true";
+			}else{
+				xmlView.@propagatenoreplace="false";
+			}
 
 			if(viewObject.showinmenu=="true"){
 				xmlView.@showinmenu="true";
@@ -509,7 +521,7 @@
 				xmlView.@showinmenu="false";
 			}
 			
-			xmlView.@noreplace="true";
+			//xmlView.@noreplace="true";
 			xmlView.@unreadmarks="none";
 			// boldunreadrows="false" evaluateactions="false" 
 			//allownewdocuments="false" allowcustomizations="true" hidemarginborder="false" marginwidth="0px" marginbgcolor="white" uniquekeys="false"
@@ -1372,6 +1384,13 @@
 								}
 								if(xml.@hide!=null && xml.@hide.toString().length>0){
 									viewObject.hideProperty=xml.@hide;
+								}
+								if(xml.@noreplace!=null && xml.@noreplace.toString().length>0){
+									viewObject.noreplace=xml.@noreplace;
+								}
+
+								if(xml.@propagatenoreplace!=null && xml.@propagatenoreplace.toString().length>0){
+									viewObject.propagatenoreplace=xml.@propagatenoreplace;
 								}
 								viewObject.viewCodeEvent="selection";
 								viewObject.viewCodeFormula=formulaXml.text();

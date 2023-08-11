@@ -40,6 +40,7 @@ package utils
 	import global.domino.DominoGlobals;
 	import utils.StringHelper;
 	import utils.StringHelperUtils;
+	import view.domino.formEditor.object.FormObject;
     public class MainApplicationCodeUtils
 	{
 
@@ -543,9 +544,9 @@ package utils
 		 * Overloaded this function, so that the domino project can call it
 		 */
 
-		public static function getDominoParentContent(title:String,windowsTitle:String):XML
+		public static function getDominoParentContent(title:String,windowsTitle:String,formObject:FormObject):XML
 		{	   
-			return getDominoMainContainer(title,windowsTitle);	
+			return getDominoMainContainer(title,windowsTitle,formObject);	
 		}
 		public static function getDominoPageMainContainer(pageName:String,windowsTitle:String):XML
 		{
@@ -674,7 +675,7 @@ package utils
 		}
 
 
-		private static function getDominoMainContainer(title:String,windowsTitle:String):XML
+		private static function getDominoMainContainer(title:String,windowsTitle:String,formObject:FormObject):XML
 		{
 				var dat:Date = new Date();
 				var xml_str:String = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
@@ -693,7 +694,30 @@ package utils
 					xml_str=xml_str+"<item name='$WindowTitle' sign='true'><formula>"+StringHelperUtils.fixXmlSpecailCharacter(windowsTitle)+"</formula></item>"
 				}
 				xml_str=xml_str+"<item name='$Info' sign='true'><rawitemdata type='1'>hhgBAIAAAAAAgAAAAQABAP///wAQAAAA</rawitemdata></item>"
-				xml_str=xml_str+"<item name='$Flags'><text/></item>"
+				
+				var formFlag:String="";
+				if(formObject){
+					if(formObject.noreplace){
+						formFlag="P"
+					}
+					if(formObject.propagatenoreplace){
+						formFlag=formFlag+"r"
+					}
+
+					if(formObject.hide){
+						if(formObject.hide.indexOf("v4")>=0){
+							formFlag=formFlag+"456789"
+						}
+						if(formObject.hide.indexOf("web")>=0){
+							formFlag=formFlag+"w"
+						}
+						if(formObject.hide.indexOf("notes")>=0){
+							formFlag=formFlag+"n"
+						}
+					}
+				}
+				
+				xml_str=xml_str+"<item name='$Flags'><text>"+formFlag+"</text></item>"
 				xml_str=xml_str+"<item name='$TITLE'><text>"+title+"</text></item>"
 				xml_str=xml_str+"<item name='$Fields'><textlist></textlist></item>"
 				xml_str=xml_str+"<item name='$Body' sign='true'></item>"

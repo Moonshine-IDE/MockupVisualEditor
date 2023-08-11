@@ -40,6 +40,7 @@ package utils
     import interfaces.IRoyaleComponentConverter;
 
 	import mx.controls.Alert;
+    import view.domino.formEditor.object.FormObject;
 
     public class EditingSurfaceWriter
 	{
@@ -148,10 +149,14 @@ package utils
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 var windowsTitle:String = "";
+                var formObject:FormObject = new FormObject();
                 if(surface.numChildren>0){
                     element = surface.getElementAt(0) as ISurfaceComponent;
                     title = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
                     windowsTitle= (element as UIComponent).hasOwnProperty("windowsTitle") ? element["windowsTitle"] : "";
+                    formObject.noreplace= (element as UIComponent).hasOwnProperty("noreplace")? element["noreplace"] : false;
+                    formObject.propagatenoreplace= (element as UIComponent).hasOwnProperty("propagatenoreplace")? element["propagatenoreplace"] : false;
+                    formObject.hide= (element as UIComponent).hasOwnProperty("hide")? element["hide"] : "";
                 }
 
                 if(!title)
@@ -172,7 +177,7 @@ package utils
                     xml= MainApplicationCodeUtils.getDominoSubformMainContainer(title);
                     mainContainer = MainApplicationCodeUtils.getDominPageMainContainerTag(xml);
                 }else{
-                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                    xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle,formObject);
                     mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
                 }
 
@@ -278,6 +283,7 @@ package utils
                 var element:ISurfaceComponent ;
                 var title:String ="";
                 var windowsTitle:String = "";
+                var formObject:FormObject = new FormObject();
                 if(surfaceContainer==null){
                     Alert.show("surfaceContainer is null");
                 }
@@ -285,6 +291,10 @@ package utils
                     element = surfaceContainer.getElementAt(0) as ISurfaceComponent;
                     title = (element as UIComponent).hasOwnProperty("title") ? element["title"] : "";
                     windowsTitle= (element as UIComponent).hasOwnProperty("windowsTitle") ? element["windowsTitle"] : "";
+                    formObject.noreplace= (element as UIComponent).hasOwnProperty("noreplace")? element["noreplace"] : false;
+                    formObject.propagatenoreplace= (element as UIComponent).hasOwnProperty("propagatenoreplace")? element["propagatenoreplace"] : false;
+                    formObject.hide= (element as UIComponent).hasOwnProperty("hide")? element["hide"] : "";
+                    
                 }else{
                       Alert.show("surfaceContainer child is 0");
                 }
@@ -301,7 +311,7 @@ package utils
                 var xml:XML;
                 var mainContainer:XML;
                
-                xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle);
+                xml  = MainApplicationCodeUtils.getDominoParentContent(title,windowsTitle,formObject);
                 mainContainer = MainApplicationCodeUtils.getDominMainContainerTag(xml);
               
                

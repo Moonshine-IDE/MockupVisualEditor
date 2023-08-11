@@ -36,11 +36,14 @@
                                   xmlns:s="library://ns.adobe.com/flex/spark"
                                   xmlns:suportclasses="view.suportClasses.*" 
 							      xmlns:primeFaces="view.primeFaces.forms.*" 
-							      xmlns:forms="view.forms.*">
+							      xmlns:forms="view.forms.*"
+								  creationComplete="onInputCreationComplete(event)">
 	<fx:Script>
 		<![CDATA[
 			import mx.collections.ArrayList;
 			import spark.events.IndexChangeEvent;
+			import mx.utils.StringUtil;
+			import mx.events.FlexEvent;
 			//Domino form property list
 			/**
 			 *Notes client formula: htmlbody,htmlhead,targetframe
@@ -50,6 +53,8 @@
 			 *Notes: QueryOpen,PostOpen,queryModeChange,PostmodeChange,Queryrecalc,Postrecalc,Querysave,Postsave
 			         QuerySend,Postsend,Queryclose,Initialize,Terminate  
 			 */
+
+			
 
             private function getDominoFieldObject(item:Object):String
 			{
@@ -75,6 +80,110 @@
             private function getDominoFieldTooltip(item:Object):String
 			{
 				return item.description;
+			}
+
+
+
+			private function noreplace_changeHandler(event:Event):void
+			{
+				this.selectedItem["noreplace"] = this.noreplaceCheckbox.selected;
+			}
+
+			
+
+			private function propagatenoreplace_changeHandler(event:Event):void
+			{
+				this.selectedItem["propagatenoreplace"] = this.propagatenoreplaceCheckBox.selected;
+			}
+
+
+			private function onInputCreationComplete(event:FlexEvent):void
+			{
+				if(this.selectedItem["hide"]!=null && this.selectedItem["hide"].length>0 ){
+					if(this.selectedItem["hide"].indexOf("web")>=0){
+						hideForWebCheckbox.selected=true
+					}else{
+						hideForWebCheckbox.selected=false
+					}
+
+					if(this.selectedItem["hide"].indexOf("notes")>=0){
+						hideForNotesCheckbox.selected=true
+					}else{
+						hideForNotesCheckbox.selected=false
+					}
+
+					if(this.selectedItem["hide"].indexOf("v4")>=0){
+						hideForNotesR4Checkbox.selected=true
+					}else{
+						hideForNotesR4Checkbox.selected=false
+					}
+				}
+
+				if(this.selectedItem["noreplace"]){
+					noreplaceCheckbox.selected=true;
+				}else{
+					noreplaceCheckbox.selected=false;
+				}
+
+				if(this.selectedItem["propagatenoreplace"]){
+					propagatenoreplaceCheckBox.selected=true;
+				}else{
+					propagatenoreplaceCheckBox.selected=false;
+				}
+			}
+
+			
+
+			private function hide_changeHandler(event:Event):void
+			{
+				var hideWeb:String=null;
+				var hideNotes:String=null;
+				var hideNotesR4:String=null;
+				
+				
+				if(hideForWebCheckbox.selected==true){
+					hideWeb="web"
+				}else{
+					hideWeb=null
+				}
+				if(hideForNotesCheckbox.selected==true){
+					hideNotes="notes"
+				}else{
+					hideNotes=null
+				}
+				if(hideForNotesR4Checkbox.selected==true){
+					hideNotesR4="v4"
+				}else{
+					hideNotesR4=null
+				}
+				
+
+				this.selectedItem["hide"]=null;
+				if(hideWeb){
+					this.selectedItem["hide"]=hideWeb
+				}
+
+				if(hideNotes){
+					if(this.selectedItem["hide"]){
+						this.selectedItem["hide"]=this.selectedItem["hide"]+" "+hideNotes;
+					}else{
+						this.selectedItem["hide"]=hideNotes
+					}
+					
+				}
+
+
+				if(hideNotesR4){
+					if(this.selectedItem["hide"]){
+						this.selectedItem["hide"]=this.selectedItem["hide"]+" "+hideNotesR4;
+					}else{
+						this.selectedItem["hide"]=hideNotesR4
+					}
+				}
+
+				if(this.selectedItem["hide"]){
+					this.selectedItem["hide"]=StringUtil.trim(this.selectedItem["hide"]);
+				}
 			}
      ]]>
 	</fx:Script>
@@ -108,6 +217,74 @@
                             listItemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>		
 		<forms:DominoFormulaForm label="Formula:" textProperty="webqueryopen" prompt="" id="webqueryopen"  includeInLayout="true" visible="true" />
 		<forms:DominoFormulaForm label="Formula:" textProperty="webquerysave" prompt="" id="webquerysave"  includeInLayout="false" visible="false" />
+		<s:Label textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5" 
+												 width="100%"
+												 text=" Prohibit design refresh or replace"
+												 >
+									</s:Label>	
+									<s:HGroup left="5" >
+									<s:Label textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												
+												 width="100%"
+												 text=" to modify" />
+									
+
+									
+									<s:CheckBox id="noreplaceCheckbox"
+													selected="false"
+													change="noreplace_changeHandler(event)"/>
+									</s:HGroup>	
+
+		<s:Label text=" Propogate this prohibition of design" left="5"/>			
+									
+			<s:HGroup left="5" >
+			<s:Label text=" change" left="5"/>
+			<s:CheckBox id="propagatenoreplaceCheckBox"
+							selected="false"
+							change="propagatenoreplace_changeHandler(event)"/>	
+			</s:HGroup >	
+
+			<s:Label text=" Do not show this design element " width="100%" />
+			<s:Label text=" in menus of Notes R4 or later  " width="100%" />
+			<s:HGroup left="5" >
+				<s:Label text=" clients: " width="100%" />
+				<s:CheckBox id="hideForNotesR4Checkbox"
+							selected="false"
+							change="hide_changeHandler(event)"/>
+			</s:HGroup >
+			
+											
+
+			
+
+			<s:Label text=" " width="100%"  />
+			<s:Label text="Hide design element from:" width="100%"  />
+
+			
+			
+			<s:FormItem left="5" label="Web browsers" skinClass="skins.FormItemSkin">
+				<s:CheckBox id="hideForWebCheckbox"
+							selected="false"
+							change="hide_changeHandler(event)"/>
+			</s:FormItem>
+
+						
+
+			<s:FormItem left="5" label="Notes R4.6 or later clients" skinClass="skins.FormItemSkin">
+				<s:CheckBox id="hideForNotesCheckbox"
+							selected="false"
+							change="hide_changeHandler(event)"/>
+			</s:FormItem>
+
+	 
+	 
 	  </s:VGroup>
 		
 	</s:BorderContainer>

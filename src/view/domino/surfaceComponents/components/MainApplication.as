@@ -47,6 +47,8 @@ package view.domino.surfaceComponents.components
     import view.global.Globals;
     import mx.collections.ArrayList;
     import utils.StringHelper;
+    import view.suportClasses.PropertyChangeReference;
+    
 
 
     [Exclude(name="toXML", kind="method")]
@@ -62,6 +64,9 @@ package view.domino.surfaceComponents.components
     [Exclude(name="titleChanged", kind="property")]
     [Exclude(name="initializeChanged", kind="property")]
     [Exclude(name="terminateChanged", kind="property")]
+    [Exclude(name="hideChanged", kind="property")]
+    [Exclude(name="propagatenoreplaceChanged", kind="property")]
+    [Exclude(name="noreplaceChanged", kind="property")]
 
    /**
 	 *  <p>Representation and converter from Visuale main container components </p>
@@ -107,6 +112,13 @@ package view.domino.surfaceComponents.components
 
             this.direction = ContainerDirection.VERTICAL_LAYOUT;
             //default set to form name
+            super.propertiesChangedEvents.push("hideChanged");
+            super.propertiesChangedEvents.push("propagatenoreplaceChanged");
+            super.propertiesChangedEvents.push("noreplaceChanged");
+            
+
+            
+           
 
 		}
 
@@ -266,6 +278,65 @@ package view.domino.surfaceComponents.components
             }
         }
 
+         //noreplace
+        //propagatenoreplace
+        //hide
+
+        private var _noreplace:Boolean=false;
+        
+
+        [Bindable(event="noreplaceChanged")]
+        public function get noreplace():Boolean
+        {
+            return _noreplace;
+        }
+
+        public function set noreplace(value:Boolean):void
+        {
+            if (_noreplace != value)
+            {
+              
+                _noreplace = value;
+             
+                super.propertyChangeFieldReference = new PropertyChangeReference(this, "noreplace", _noreplace, value);
+                dispatchEvent(new Event("noreplaceChanged"));
+            }
+        }
+
+
+
+
+
+        
+
+
+        private var _propagatenoreplace:Boolean=false;
+      
+
+        [Bindable(event="propagatenoreplaceChanged")]
+        public function get propagatenoreplace():Boolean
+        {
+            return _propagatenoreplace;
+        }
+
+        public function set propagatenoreplace(value:Boolean):void
+        {
+            if (_propagatenoreplace != value)
+            {
+                super.propertyChangeFieldReference = new PropertyChangeReference(this, "propagatenoreplace", _propagatenoreplace, value);
+
+                _propagatenoreplace = value;
+                dispatchEvent(new Event("propagatenoreplaceChanged"));
+            }
+        }
+
+
+
+
+        
+
+        
+
         
         // [Bindable("initializeChanged")]
         // private var _initialize:String = "";
@@ -400,9 +471,15 @@ package view.domino.surfaceComponents.components
 			return _hide;
 		}
 		public function set hide(value:String):void
-		{
-			_hide = value;
-		}
+        {
+            if (_hide != value)
+            {
+                super.propertyChangeFieldReference = new PropertyChangeReference(this, "hide", _hide, value);
+
+                _hide = value;
+                dispatchEvent(new Event("hideChanged"));
+            }
+        }
 
         override public function toXML():XML
         {
@@ -413,6 +490,14 @@ package view.domino.surfaceComponents.components
                
                  mainXML.@webquerysave=StringHelper.base64Encode(this.webquerysave);
             }
+
+            if(this.hide){
+                mainXML.@hide=this.hide;
+            }
+            mainXML.@propagatenoreplace=this.propagatenoreplace.toString();
+            mainXML.@noreplace=this.noreplace.toString();
+
+            
 
             if(this.windowsTitle){
            
@@ -451,6 +536,23 @@ package view.domino.surfaceComponents.components
 
             if(xml.@title){
                 this.title = xml.@title
+            }
+
+            if(xml.@hide){
+                this.hide=xml.@hide
+            }
+
+            if(xml.@noreplace=="true"){
+
+                this.noreplace=true
+            }else{
+                this.noreplace=false
+            }
+
+            if(xml.@propagatenoreplace=="true"){
+                this.propagatenoreplace=true;
+            }else{
+                this.propagatenoreplace=false;
             }
 
             if(xml.@webqueryopen){

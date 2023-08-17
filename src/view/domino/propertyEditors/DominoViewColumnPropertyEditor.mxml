@@ -68,7 +68,7 @@
 											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"  click="columnType_changeHandler(event)"/>	
 										</s:HGroup>	
 									 <s:TextArea id="columnValueFormula"
-										text="SELECT $FormName = Form" width="100%" minWidth="156" editable="true" selectable="true"
+										text="" width="100%" minWidth="156" editable="true" selectable="true"
 										prompt="Formula for column value"
 										change="columnValueFormula_changeHandler(event)"
 										/>

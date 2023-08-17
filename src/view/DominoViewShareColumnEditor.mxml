@@ -46,17 +46,17 @@
 				<s:DataGrid id="dgColumns"
 					width="90%" height="100%" 
 					editable="true" sortableColumns="false" 
-					
+					selectionMode="singleRow"
 					horizontalScrollPolicy="auto"
 					dragEnabled="false" dragMoveEnabled="false" dropEnabled="false"
 					
 					dataProvider="{rowsDataProvider}" click="onDataGridClick(event)">
                         <s:columns>
                            <s:ArrayList>
-							   	<s:GridColumn dataField="columnName" headerText="Column Name"/>
+							   	<s:GridColumn dataField="shareColumnName" headerText="Column Name"/>
                                 <s:GridColumn dataField="columnFormatStyle" headerText="Type"/>
-                                <s:GridColumn dataField="columnHeader" headerText="Header Title"/>
-                                <s:GridColumn dataField="columnItemName" headerText="Field"/>
+                                <s:GridColumn dataField="columnHeaderTitle" headerText="Header Title"/>
+                                <s:GridColumn dataField="columnCodeFormula" headerText="Formula"/>
 							</s:ArrayList>
                         </s:columns>
 		       </s:DataGrid>
@@ -208,14 +208,13 @@
 		
 		//inital the view columns
 
-        propertyEditorHeader.componentName = "Domino View Share Column";
-
-	
-		
+        propertyEditorHeader.componentName = "Domino View Shared Column";
 		this.contextMenu = createContextMenu();
 
 		dominoViewPropertyEditor.addEventListener("viewPropertyChanged", onDominoViewPropertyChanged);
 		dominoViewPropertyEditor.addEventListener(DominoViewColumnUpdateEvent.COLUMN_UPDATE, onDominoViewColumnPropertyChanged);
+
+		
 		
     
     }
@@ -236,11 +235,12 @@
 
 	private function onDataGridClick(event:MouseEvent):void
 	{
-		if(showColumns==false){
-			//viewSetPanel.visible =viewSetPanel.includeInLayout = true;
-			//columnAccordion.visible =columnAccordion.includeInLayout = false;
+		var columnObj:ColumnObject=dgColumns.selectedItem as ColumnObject ;
+		if(columnObj){
+			
+			columnAccordion.initializeColumnProperty(columnObj);
 		}
-		showColumns=false;
+		
 		
 		
 	}
@@ -284,12 +284,10 @@
 
 		
 			
-			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
+			var index:int=columnObjectList.getItemIndex(col);
 			//some time the new column not add into columnObjectList
 
-			if(index==-1){
-				index=selectedColumnIndex;
-			}
+			
 			
 			columnObjectList.setItemAt(col,index);
 
@@ -408,11 +406,50 @@
 		
 		}
 
+		public function loadAllShareColumn(filePath:String):void
+		{
+			var file:File = new File(filePath);
+			rowsDataProvider = new ArrayList();
+		
+			if(_fileMoonshine){
+				var parentFolder:File=file.parent;
+				if(parentFolder){
+					var getfiles:Array = parentFolder.getDirectoryListing();
+					//ColumnObject
+						for (var i:int = 0; i < getfiles.length; i++) 
+						{ 		
+							var columnObj:ColumnObject=new ColumnObject();
+							var xmlFilePath:String= getfiles[i].nativePath;
+							var xml:XML=loadLocalFileToXML(xmlFilePath)
+							if(xml.column[0]){
+								columnObj=inistalColumnObject(xml.column[0],columnObj,null);
+								columnObj.shareColumnName=xml.@name;
+								rowsDataProvider.addItem(columnObj);
+								columnObjectList.addItem(columnObj);
+								//selectedItem
+
+								if(xmlFilePath==filePath){
+									dgColumns.selectedItem=columnObj;
+									columnAccordion.initializeColumnProperty(columnObj);
+								} 	
+							}
+
+							
+						}
+					}
+				}
+			
+			
+		}
+
 
 		public function loadDxlFile():XML
 		{
 			var filePathStr:String=_fileMoonshine.nativePath;
-			return loadLocalFileToXML(filePathStr)
+			var xml:XML=loadLocalFileToXML(filePathStr)
+			//loading the share column from folder:
+			
+			return xml;
 		}
 
 		private function loadLocalFileToXML(filePath:String):XML
@@ -432,7 +469,7 @@
 		{
 			var xml:XML = loadLocalFileToXML(filePath);
 			var name:String = getFileNameWithoutExtension(filePath,"view");
-			
+			loadAllShareColumn(filePath);
 			if(xml!=null){
 			
 				for each(var col:XML in xml..column) //no matter of depth Note here
@@ -452,378 +489,8 @@
 
 						//inital the memory column object
 						var columnsObj:ColumnObject=new ColumnObject();
-						columnsObj.columnHeaderTitle=col.columnheader.@title;
+						//columnsObj=inistalColumnObject(col,columnsObj,tmpColumn);
 						
-						if(col.@width!=null && col.@width.toString().length>0){
-							columnsObj.columnWidth=col.@width;
-							
-						}else{
-							columnsObj.columnWidth="15";
-						}
-						if(col.@categorized.toString().length==0){
-							columnsObj.columnSortType="false";
-						}else{
-							columnsObj.columnSortType=col.@categorized;
-						}
-						if(col.@separatemultiplevalues.toString().length==0){
-							columnsObj.separatemultiplevalues="false";
-						}else{
-							columnsObj.separatemultiplevalues=col.@separatemultiplevalues;
-						}
-
-						if(col.@sort.toString().length==0){
-							columnsObj.columnSort="none";
-						}else{
-							columnsObj.columnSort=col.@sort;
-						}
-						if(col.@totals.toString().length==0){
-							columnsObj.totals="none";
-						}else{
-							columnsObj.totals=col.@totals.toString();
-						}
-
-						if(col.@twisties.toString().length==0){
-							
-						}else{
-							columnsObj.twisties=col.@twisties;
-						}
-						if(col.numberformat[0]){
-							columnsObj.columnFormatStyle="number";
-							if(col.numberformat[0].@format.toString().length>0){
-								columnsObj.columnNumberFormat=col.numberformat[0].@format
-							}else{
-								columnsObj.columnNumberFormat="decimal"
-							}
-
-							if(col.numberformat[0].@bytes.toString().length>0){
-								if(col.numberformat[0].@bytes=="true"){
-									columnsObj.columnNumberFormatBytes="true";
-								}else{
-									columnsObj.columnNumberFormatBytes="false";
-								}
-							}
-
-							if(col.numberformat[0].@punctuated.toString().length>0){
-								columnsObj.columnNumberFormatPunctuated=col.numberformat[0].@punctuated;
-							}else{
-								columnsObj.columnNumberFormatPunctuated="false";
-							}
-
-							if(col.numberformat[0].@parens.toString().length>0){
-								columnsObj.columnNumberFormatParens=col.numberformat[0].@parens;
-							}else{
-								columnsObj.columnNumberFormatParens="false";
-							}
-
-							if(col.numberformat[0].@percent.toString().length>0){
-								columnsObj.columnNumberFormatPercent=col.numberformat[0].@percent;
-							}else{
-								columnsObj.columnNumberFormatPercent="false";
-							}
-
-							if(col.numberformat[0].@digits.toString().length>0){
-								columnsObj.columnNumberFormatDigits=col.numberformat[0].@digits;
-							}else{
-								columnsObj.columnNumberFormatDigits="0";
-							}
-
-							if(col.numberformat[0].@preference.toString().length>0){
-								columnsObj.columnNumberFormatPreference=col.numberformat[0].@preference;
-							}else{
-								columnsObj.columnNumberFormatPreference="usersetting";
-							}
-
-							if(col.numberformat[0].@currencysymtype.toString().length>0){
-								columnsObj.columnNumberFormatCurrencysymtype=col.numberformat[0].@currencysymtype;
-							}else{
-								columnsObj.columnNumberFormatCurrencysymtype="usersetting";
-							}
-
-							if(col.numberformat[0].@currencysym.toString().length>0){
-								columnsObj.columnNumberFormatCurrencysym=col.numberformat[0].@currencysym;
-							}else{
-								columnsObj.columnNumberFormatCurrencysym="$";
-							}
-
-							if(col.numberformat[0].@usecustomsym.toString().length>0){
-								columnsObj.columnNumberFormatUsecustomsym=col.numberformat[0].@usecustomsym;
-							}else{
-								columnsObj.columnNumberFormatUsecustomsym="false";
-							}
-							if(col.numberformat[0].@decimalsym.toString().length>0){
-								columnsObj.columnNumberFormatDecimalsym=col.numberformat[0].@decimalsym;
-							}else{
-								columnsObj.columnNumberFormatDecimalsym=".";
-							}
-
-
-							if(col.numberformat[0].@thousandssep.toString().length>0){
-								columnsObj.columnNumberFormatThousandssep=col.numberformat[0].@thousandssep;
-							}else{
-								columnsObj.columnNumberFormatThousandssep=",";
-							}
-
-						}
-
-						if(col.datetimeformat[0]){
-							columnsObj.columnFormatStyle="datetime";
-							if(col.datetimeformat[0].@show.toString().length>0){
-								if(col.datetimeformat[0].@show=="datetime"){
-									columnsObj.columnDateFormatDisplayDate="true";
-									columnsObj.columnDateFormatDisplayTime="true";
-								}else if(col.datetimeformat[0].@show=="date"){
-									columnsObj.columnDateFormatDisplayDate="true";
-								}else if(col.datetimeformat[0].@show=="time"){
-									columnsObj.columnDateFormatDisplayTime="true";
-								}
-								
-							}else{
-								columnsObj.columnDateFormatDisplayDate="true";
-								columnsObj.columnDateFormatDisplayTime="true";
-							}
-
-							if(col.datetimeformat[0].@date.toString().length>0){
-								columnsObj.columnDateFormatDateShow=col.datetimeformat[0].@date;
-							}else{
-								columnsObj.columnDateFormatDateShow="monthdayyear";
-							}
-
-							var specialVal:String="";
-
-							if(col.datetimeformat[0].@showtodaywhenappropriate=="true"){
-								specialVal="showtodaywhenappropriate";
-							}
-							if(col.datetimeformat[0].@fourdigityear=="true"){
-								specialVal=specialVal+" "+"fourdigityear";
-							}
-							if(col.datetimeformat[0].@fourdigityearfor21stcentury=="true"){
-								specialVal=specialVal+" "+"fourdigityearfor21stcentury";
-							}
-							if(col.datetimeformat[0].@omitthisyear=="true"){
-								specialVal=specialVal+" "+"omitthisyear";
-							}
-
-							if(specialVal.length>0){
-								columnsObj.columnDateFormatSpecial=specialVal;
-							}else{
-								columnsObj.columnDateFormatSpecial="fourdigityearfor21stcentury";
-							}
-
-							if(col.datetimeformat[0].@calendar.toString().length>0){
-								columnsObj.columnDateFormatCalendar=col.datetimeformat[0].@calendar;
-							}else{
-								columnsObj.columnDateFormatCalendar="monthdayyear";
-							}
-
-							if(col.datetimeformat[0].@dateformat.toString().length>0){
-								columnsObj.columnDateFormatDateFormat=col.datetimeformat[0].@dateformat;
-							}else{
-								columnsObj.columnDateFormatDateFormat="weekdaymonthdayyear";
-							}
-
-							if(col.datetimeformat[0].@dateseparator1.toString().length>0){
-								columnsObj.columnDateFormatDateseparator1=col.datetimeformat[0].@dateseparator1;
-							}else{
-								columnsObj.columnDateFormatDateseparator1=" ";
-							}
-
-							if(col.datetimeformat[0].@dateseparator2.toString().length>0){
-								columnsObj.columnDateFormatDateseparator2=col.datetimeformat[0].@dateseparator2;
-							}else{
-								columnsObj.columnDateFormatDateseparator2="/";
-							}
-
-							if(col.datetimeformat[0].@preference.toString().length>0){
-								columnsObj.columnDateDisplayFormatPreferences=col.datetimeformat[0].@preference;
-							}else{
-								columnsObj.columnDateDisplayFormatPreferences="usersetting";
-							}
-
-
-							if(col.datetimeformat[0].@dateseparator3.toString().length>0){
-								columnsObj.columnDateFormatDateseparator3=col.datetimeformat[0].@dateseparator3;
-							}else{
-								columnsObj.columnDateFormatDateseparator3="/";
-							}
-
-
-							if(col.datetimeformat[0].@dayformat.toString().length>0){
-								columnsObj.columnDateFormatDay=col.datetimeformat[0].@dayformat;
-							}else{
-								columnsObj.columnDateFormatDay="twodigitday";
-							}
-
-							if(col.datetimeformat[0].@monthformat.toString().length>0){
-								columnsObj.columnDateFormatMonth=col.datetimeformat[0].@monthformat;
-							}else{
-								columnsObj.columnDateFormatMonth="twodigitmonth";
-							}
-
-
-							if(col.datetimeformat[0].@yearformat.toString().length>0){
-								columnsObj.columnDateFormatYear=col.datetimeformat[0].@yearformat;
-							}else{
-								columnsObj.columnDateFormatYear="fourdigityear";
-							}
-
-							if(col.datetimeformat[0].@weekdayformat.toString().length>0){
-								columnsObj.columnDateFormatWeekday=col.datetimeformat[0].@weekdayformat;
-							}else{
-								columnsObj.columnDateFormatWeekday="shortname";
-							}
-
-
-
-							if(col.datetimeformat[0].@time.toString().length>0){
-								columnsObj.columnDateFormatTimeShow=col.datetimeformat[0].@time;
-							}else{
-								columnsObj.columnDateFormatTimeShow="hourminutesecond";
-							}
-
-
-							if(col.datetimeformat[0].@zone.toString().length>0){
-								columnsObj.columnDateFormatTimeZone=col.datetimeformat[0].@zone;
-							}else{
-								columnsObj.columnDateFormatTimeZone="never";
-							}
-
-
-							if(col.datetimeformat[0].@timeformat24.toString().length>0){
-								if(col.datetimeformat[0].@timeformat24=="true"){
-									columnsObj.columnDateFormatTimeFormat="24";
-								}
-								
-							}else{
-								columnsObj.columnDateFormatTimeFormat="24";
-							}
-
-							if(col.datetimeformat[0].@timeformat12.toString().length>0){
-								if(col.datetimeformat[0].@timeformat12=="true"){
-									columnsObj.columnDateFormatTimeFormat="12";
-								}
-								
-							}
-
-							if(col.datetimeformat[0].@timeseparator.toString().length>0){
-								columnsObj.columnDateFormatTimeSeparator=col.datetimeformat[0].@timeseparator;
-							}else{
-								columnsObj.columnDateFormatTimeSeparator=":";
-							}
-
-						
-
-
-						}
-
-						if(col.columnnamesformat[0]){
-							columnsObj.columnFormatStyle="names";
-							if(col.columnnamesformat[0].@columncontainsname.toString().length>0){
-								columnsObj.columnNameContain=col.columnnamesformat[0].@columncontainsname;
-							}else{
-								columnsObj.columnNameContain="false";
-							}
-
-							if(col.columnnamesformat[0].@showonline.toString().length>0){
-								columnsObj.columnNameStatus=col.columnnamesformat[0].@showonline;
-							}else{
-								columnsObj.columnNameStatus="false";
-							}
-							//@columnname
-
-							if(col.columnnamesformat[0].@columnname.toString().length>0){
-								columnsObj.columnNameProgramName=col.columnnamesformat[0].@columnname;
-							}else{
-								columnsObj.columnNameProgramName="";
-							}
-							//
-							if(col.columnnamesformat[0].@verticalorientation.toString().length>0){
-								columnsObj.columnNameVertival=col.columnnamesformat[0].@verticalorientation;
-							}
-
-
-						}
-
-						if(col.font[0]){
-							if(col.font[0].@name.toString().length>0){
-								columnsObj.columnFont=col.font[0].@name.toString();
-							}else{
-								columnsObj.columnFont="sans-serif"
-							}
-							if(col.font[0].@style.toString().length>0){
-								
-								columnsObj.columnStyle=col.font[0].@style;
-								
-							}else{
-								columnsObj.columnStyle="normal";
-							}
-							var colSizeLength:int=col.font[0].@size.toString().length;
-							if(colSizeLength>0){
-								columnsObj.columnSize=col.font[0].@size;
-							}else{
-								columnsObj.columnSize="9"
-							}
-
-							if(col.font[0].@color.toString().length>0){
-								columnsObj.columnColor=col.font[0].@color.toString();
-							
-							}else{
-								columnsObj.columnColor="#000000";
-							}
-
-						}
-						if(col.columnheader[0]&&col.columnheader[0].font[0]){
-								if(col.columnheader[0].font[0].@name.toString().length>0){
-									columnsObj.columnTitleFont=col.columnheader[0].font[0].@name.toString();
-								
-								}else{
-									columnsObj.columnTitleFont="sans-serif"
-								}
-
-								if(col.columnheader[0].font[0].@style.toString().length>0){
-								
-									columnsObj.columnTitleStyle=col.columnheader[0].font[0].@style;
-								
-								}else{
-									columnsObj.columnTitleStyle="normal";
-								}
-								var sizeLength:int=col.columnheader[0].font[0].@size.toString().length;
-								if(sizeLength>0){
-									columnsObj.columnTitleSize=col.columnheader[0].font[0].@size;
-								}else{
-									columnsObj.columnTitleSize="9"
-								}
-
-								if(col.columnheader[0].font[0].@color.toString().length>0){
-									columnsObj.columnTitleColor=col.columnheader[0].font[0].@color.toString();
-								
-								}else{
-									columnsObj.columnTitleColor="#000000";
-								}
-
-								//convert width
-								var columnWidth:Number=8;
-								if(col.@width!=null && col.@width!=""){
-									columnWidth=Number(col.@width);
-								}
-						
-								tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(columnsObj.columnTitleSize),columnsObj.columnTitleFont,columnsObj.columnTitleStyle,columnWidth);
-								
-								
-							
-						}
-						//after the column header font & size get, then we can add the column width to Mooshine-IDE grid
-						dgColumns.columns.addItem(tmpColumn);
-
-						if(col.code.toString().length==0){
-							columnsObj.columnTypeValue="Field";
-							columnsObj.columnCodeFormula=col.@itemname
-						}else{
-							columnsObj.columnTypeValue="Formula";
-							columnsObj.columnCodeFormula=col.code.formula;
-						}
-						//unid2
-						columnsObj.columnUnid=UIDUtil.getUID(tmpColumn);
-						columnObjectList.addItem(columnsObj);
 						
 						
 					}
@@ -834,6 +501,390 @@
 
 			}
 			
+		}
+
+		private function inistalColumnObject(col:XML,columnsObj:ColumnObject,tmpColumn:GridColumn):ColumnObject
+		{
+			columnsObj.columnHeaderTitle=col.columnheader.@title;
+			if(col.@width!=null && col.@width.toString().length>0){
+				columnsObj.columnWidth=col.@width;
+				
+			}else{
+				columnsObj.columnWidth="15";
+			}
+			if(col.@categorized.toString().length==0){
+				columnsObj.columnSortType="false";
+			}else{
+				columnsObj.columnSortType=col.@categorized;
+			}
+			if(col.@separatemultiplevalues.toString().length==0){
+				columnsObj.separatemultiplevalues="false";
+			}else{
+				columnsObj.separatemultiplevalues=col.@separatemultiplevalues;
+			}
+
+			if(col.@sort.toString().length==0){
+				columnsObj.columnSort="none";
+			}else{
+				columnsObj.columnSort=col.@sort;
+			}
+			if(col.@totals.toString().length==0){
+				columnsObj.totals="none";
+			}else{
+				columnsObj.totals=col.@totals.toString();
+			}
+
+			if(col.@twisties.toString().length==0){
+				
+			}else{
+				columnsObj.twisties=col.@twisties;
+			}
+			if(col.numberformat[0]){
+				columnsObj.columnFormatStyle="number";
+				if(col.numberformat[0].@format.toString().length>0){
+					columnsObj.columnNumberFormat=col.numberformat[0].@format
+				}else{
+					columnsObj.columnNumberFormat="decimal"
+				}
+
+				if(col.numberformat[0].@bytes.toString().length>0){
+					if(col.numberformat[0].@bytes=="true"){
+						columnsObj.columnNumberFormatBytes="true";
+					}else{
+						columnsObj.columnNumberFormatBytes="false";
+					}
+				}
+
+				if(col.numberformat[0].@punctuated.toString().length>0){
+					columnsObj.columnNumberFormatPunctuated=col.numberformat[0].@punctuated;
+				}else{
+					columnsObj.columnNumberFormatPunctuated="false";
+				}
+
+				if(col.numberformat[0].@parens.toString().length>0){
+					columnsObj.columnNumberFormatParens=col.numberformat[0].@parens;
+				}else{
+					columnsObj.columnNumberFormatParens="false";
+				}
+
+				if(col.numberformat[0].@percent.toString().length>0){
+					columnsObj.columnNumberFormatPercent=col.numberformat[0].@percent;
+				}else{
+					columnsObj.columnNumberFormatPercent="false";
+				}
+
+				if(col.numberformat[0].@digits.toString().length>0){
+					columnsObj.columnNumberFormatDigits=col.numberformat[0].@digits;
+				}else{
+					columnsObj.columnNumberFormatDigits="0";
+				}
+
+				if(col.numberformat[0].@preference.toString().length>0){
+					columnsObj.columnNumberFormatPreference=col.numberformat[0].@preference;
+				}else{
+					columnsObj.columnNumberFormatPreference="usersetting";
+				}
+
+				if(col.numberformat[0].@currencysymtype.toString().length>0){
+					columnsObj.columnNumberFormatCurrencysymtype=col.numberformat[0].@currencysymtype;
+				}else{
+					columnsObj.columnNumberFormatCurrencysymtype="usersetting";
+				}
+
+				if(col.numberformat[0].@currencysym.toString().length>0){
+					columnsObj.columnNumberFormatCurrencysym=col.numberformat[0].@currencysym;
+				}else{
+					columnsObj.columnNumberFormatCurrencysym="$";
+				}
+
+				if(col.numberformat[0].@usecustomsym.toString().length>0){
+					columnsObj.columnNumberFormatUsecustomsym=col.numberformat[0].@usecustomsym;
+				}else{
+					columnsObj.columnNumberFormatUsecustomsym="false";
+				}
+				if(col.numberformat[0].@decimalsym.toString().length>0){
+					columnsObj.columnNumberFormatDecimalsym=col.numberformat[0].@decimalsym;
+				}else{
+					columnsObj.columnNumberFormatDecimalsym=".";
+				}
+
+
+				if(col.numberformat[0].@thousandssep.toString().length>0){
+					columnsObj.columnNumberFormatThousandssep=col.numberformat[0].@thousandssep;
+				}else{
+					columnsObj.columnNumberFormatThousandssep=",";
+				}
+
+			}
+
+			if(col.datetimeformat[0]){
+				columnsObj.shareColumnFormat="datetime"
+				columnsObj.columnFormatStyle="datetime";
+				if(col.datetimeformat[0].@show.toString().length>0){
+					if(col.datetimeformat[0].@show=="datetime"){
+						columnsObj.columnDateFormatDisplayDate="true";
+						columnsObj.columnDateFormatDisplayTime="true";
+					}else if(col.datetimeformat[0].@show=="date"){
+						columnsObj.columnDateFormatDisplayDate="true";
+					}else if(col.datetimeformat[0].@show=="time"){
+						columnsObj.columnDateFormatDisplayTime="true";
+					}
+					
+				}else{
+					columnsObj.columnDateFormatDisplayDate="true";
+					columnsObj.columnDateFormatDisplayTime="true";
+				}
+
+				if(col.datetimeformat[0].@date.toString().length>0){
+					columnsObj.columnDateFormatDateShow=col.datetimeformat[0].@date;
+				}else{
+					columnsObj.columnDateFormatDateShow="monthdayyear";
+				}
+
+				var specialVal:String="";
+
+				if(col.datetimeformat[0].@showtodaywhenappropriate=="true"){
+					specialVal="showtodaywhenappropriate";
+				}
+				if(col.datetimeformat[0].@fourdigityear=="true"){
+					specialVal=specialVal+" "+"fourdigityear";
+				}
+				if(col.datetimeformat[0].@fourdigityearfor21stcentury=="true"){
+					specialVal=specialVal+" "+"fourdigityearfor21stcentury";
+				}
+				if(col.datetimeformat[0].@omitthisyear=="true"){
+					specialVal=specialVal+" "+"omitthisyear";
+				}
+
+				if(specialVal.length>0){
+					columnsObj.columnDateFormatSpecial=specialVal;
+				}else{
+					columnsObj.columnDateFormatSpecial="fourdigityearfor21stcentury";
+				}
+
+				if(col.datetimeformat[0].@calendar.toString().length>0){
+					columnsObj.columnDateFormatCalendar=col.datetimeformat[0].@calendar;
+				}else{
+					columnsObj.columnDateFormatCalendar="monthdayyear";
+				}
+
+				if(col.datetimeformat[0].@dateformat.toString().length>0){
+					columnsObj.columnDateFormatDateFormat=col.datetimeformat[0].@dateformat;
+				}else{
+					columnsObj.columnDateFormatDateFormat="weekdaymonthdayyear";
+				}
+
+				if(col.datetimeformat[0].@dateseparator1.toString().length>0){
+					columnsObj.columnDateFormatDateseparator1=col.datetimeformat[0].@dateseparator1;
+				}else{
+					columnsObj.columnDateFormatDateseparator1=" ";
+				}
+
+				if(col.datetimeformat[0].@dateseparator2.toString().length>0){
+					columnsObj.columnDateFormatDateseparator2=col.datetimeformat[0].@dateseparator2;
+				}else{
+					columnsObj.columnDateFormatDateseparator2="/";
+				}
+
+				if(col.datetimeformat[0].@preference.toString().length>0){
+					columnsObj.columnDateDisplayFormatPreferences=col.datetimeformat[0].@preference;
+				}else{
+					columnsObj.columnDateDisplayFormatPreferences="usersetting";
+				}
+
+
+				if(col.datetimeformat[0].@dateseparator3.toString().length>0){
+					columnsObj.columnDateFormatDateseparator3=col.datetimeformat[0].@dateseparator3;
+				}else{
+					columnsObj.columnDateFormatDateseparator3="/";
+				}
+
+
+				if(col.datetimeformat[0].@dayformat.toString().length>0){
+					columnsObj.columnDateFormatDay=col.datetimeformat[0].@dayformat;
+				}else{
+					columnsObj.columnDateFormatDay="twodigitday";
+				}
+
+				if(col.datetimeformat[0].@monthformat.toString().length>0){
+					columnsObj.columnDateFormatMonth=col.datetimeformat[0].@monthformat;
+				}else{
+					columnsObj.columnDateFormatMonth="twodigitmonth";
+				}
+
+
+				if(col.datetimeformat[0].@yearformat.toString().length>0){
+					columnsObj.columnDateFormatYear=col.datetimeformat[0].@yearformat;
+				}else{
+					columnsObj.columnDateFormatYear="fourdigityear";
+				}
+
+				if(col.datetimeformat[0].@weekdayformat.toString().length>0){
+					columnsObj.columnDateFormatWeekday=col.datetimeformat[0].@weekdayformat;
+				}else{
+					columnsObj.columnDateFormatWeekday="shortname";
+				}
+
+
+
+				if(col.datetimeformat[0].@time.toString().length>0){
+					columnsObj.columnDateFormatTimeShow=col.datetimeformat[0].@time;
+				}else{
+					columnsObj.columnDateFormatTimeShow="hourminutesecond";
+				}
+
+
+				if(col.datetimeformat[0].@zone.toString().length>0){
+					columnsObj.columnDateFormatTimeZone=col.datetimeformat[0].@zone;
+				}else{
+					columnsObj.columnDateFormatTimeZone="never";
+				}
+
+
+				if(col.datetimeformat[0].@timeformat24.toString().length>0){
+					if(col.datetimeformat[0].@timeformat24=="true"){
+						columnsObj.columnDateFormatTimeFormat="24";
+					}
+					
+				}else{
+					columnsObj.columnDateFormatTimeFormat="24";
+				}
+
+				if(col.datetimeformat[0].@timeformat12.toString().length>0){
+					if(col.datetimeformat[0].@timeformat12=="true"){
+						columnsObj.columnDateFormatTimeFormat="12";
+					}
+					
+				}
+
+				if(col.datetimeformat[0].@timeseparator.toString().length>0){
+					columnsObj.columnDateFormatTimeSeparator=col.datetimeformat[0].@timeseparator;
+				}else{
+					columnsObj.columnDateFormatTimeSeparator=":";
+				}
+
+			
+
+
+			}
+
+			if(col.columnnamesformat[0]){
+				columnsObj.columnFormatStyle="names";
+				if(col.columnnamesformat[0].@columncontainsname.toString().length>0){
+					columnsObj.columnNameContain=col.columnnamesformat[0].@columncontainsname;
+				}else{
+					columnsObj.columnNameContain="false";
+				}
+
+				if(col.columnnamesformat[0].@showonline.toString().length>0){
+					columnsObj.columnNameStatus=col.columnnamesformat[0].@showonline;
+				}else{
+					columnsObj.columnNameStatus="false";
+				}
+				//@columnname
+
+				if(col.columnnamesformat[0].@columnname.toString().length>0){
+					columnsObj.columnNameProgramName=col.columnnamesformat[0].@columnname;
+				}else{
+					columnsObj.columnNameProgramName="";
+				}
+				//
+				if(col.columnnamesformat[0].@verticalorientation.toString().length>0){
+					columnsObj.columnNameVertival=col.columnnamesformat[0].@verticalorientation;
+				}
+
+
+			}
+
+			if(col.font[0]){
+				if(col.font[0].@name.toString().length>0){
+					columnsObj.columnFont=col.font[0].@name.toString();
+				}else{
+					columnsObj.columnFont="sans-serif"
+				}
+				if(col.font[0].@style.toString().length>0){
+					
+					columnsObj.columnStyle=col.font[0].@style;
+					
+				}else{
+					columnsObj.columnStyle="normal";
+				}
+				var colSizeLength:int=col.font[0].@size.toString().length;
+				if(colSizeLength>0){
+					columnsObj.columnSize=col.font[0].@size;
+				}else{
+					columnsObj.columnSize="9"
+				}
+
+				if(col.font[0].@color.toString().length>0){
+					columnsObj.columnColor=col.font[0].@color.toString();
+				
+				}else{
+					columnsObj.columnColor="#000000";
+				}
+
+			}
+			if(col.columnheader[0]&&col.columnheader[0].font[0]){
+					if(col.columnheader[0].font[0].@name.toString().length>0){
+						columnsObj.columnTitleFont=col.columnheader[0].font[0].@name.toString();
+					
+					}else{
+						columnsObj.columnTitleFont="sans-serif"
+					}
+
+					if(col.columnheader[0].font[0].@style.toString().length>0){
+					
+						columnsObj.columnTitleStyle=col.columnheader[0].font[0].@style;
+					
+					}else{
+						columnsObj.columnTitleStyle="normal";
+					}
+					var sizeLength:int=col.columnheader[0].font[0].@size.toString().length;
+					if(sizeLength>0){
+						columnsObj.columnTitleSize=col.columnheader[0].font[0].@size;
+					}else{
+						columnsObj.columnTitleSize="9"
+					}
+
+					if(col.columnheader[0].font[0].@color.toString().length>0){
+						columnsObj.columnTitleColor=col.columnheader[0].font[0].@color.toString();
+					
+					}else{
+						columnsObj.columnTitleColor="#000000";
+					}
+
+					//convert width
+					var columnWidth:Number=8;
+					if(col.@width!=null && col.@width!=""){
+						columnWidth=Number(col.@width);
+					}
+					if(tmpColumn){
+							tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(columnsObj.columnTitleSize),columnsObj.columnTitleFont,columnsObj.columnTitleStyle,columnWidth);
+					}
+			
+					
+					
+				
+			}
+			if(tmpColumn){
+				//after the column header font & size get, then we can add the column width to Mooshine-IDE grid
+				dgColumns.columns.addItem(tmpColumn);
+			}
+
+			if(col.code.toString().length==0){
+				columnsObj.columnTypeValue="Field";
+				columnsObj.columnCodeFormula=col.@itemname
+			}else{
+				columnsObj.columnTypeValue="Formula";
+				columnsObj.columnCodeFormula=col.code.formula;
+			}			
+			
+			//unid2
+			if(tmpColumn){
+				columnsObj.columnUnid=UIDUtil.getUID(tmpColumn);
+			}
+			
+			return columnsObj
 		}
 
 		//This method will get the formula and base64 for column

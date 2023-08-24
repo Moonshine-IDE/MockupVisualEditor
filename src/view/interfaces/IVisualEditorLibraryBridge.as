@@ -35,6 +35,8 @@ package view.interfaces
 	import flash.events.MouseEvent;
 
 	import mx.collections.ArrayList;
+	import spark.components.TitleWindow;
+	import flash.filesystem.File;
 
 	// place all methods to communicate with Moonshine
 	public interface IVisualEditorLibraryBridge
@@ -50,5 +52,6 @@ package view.interfaces
 		function openDominoActionFile(path:String):void;
 		function getDominoShareFieldList():ArrayList;
 		function updateCurrentVisualEditorStatus():void;
+		function getDominoSharedColumnListPopup(file:File):TitleWindow;
 	}
 }

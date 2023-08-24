@@ -106,6 +106,9 @@ package view.domino.viewEditor.object
         public var columnNameStatus:String;
         public var columnNameProgramName:String;
         public var columnNameVertival:String;
+
+        public var isSharedColumn:Boolean=false;
+        public var sharedColumnPath:String="";
         
         public function ColumnObject()
 		{

@@ -109,6 +109,7 @@ package view.domino.viewEditor.object
 
         public var isSharedColumn:Boolean=false;
         public var sharedColumnPath:String="";
+        public var sharedColumnName:String="";
         
         public function ColumnObject()
 		{

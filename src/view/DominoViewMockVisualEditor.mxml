@@ -65,11 +65,15 @@
 							
 							<viewProperty:DominoViewPropertyEditor id="viewSetPanel" viewObject="{viewObject}"/>
 							<viewProperty:DominoViewColumnPropertyEditor id="columnAccordion" columnObject="{selectedColumnObject}" width="100%"/>
-							<s:Label text="This is a shared column ,you can't edit it in here." width="100%" id="sharedColumnLabel" />
+							<s:VGroup paddingLeft="5" width="100%" height="100%" id="sharedColumnLabel">
+							<s:Label  text="This is a shared column: " width="100%" id="sharedColumnLabelText" />
+							
+							<s:Button id="editSharedColumnBtn" label="Edit" 
+								click="editSharedColumn()"/>
+							</s:VGroup>
 							
 							
-							
-					</s:VGroup>		   
+						</s:VGroup>		   
                 </s:Group>
 	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
 
@@ -153,6 +157,11 @@
 		}
 	}
 
+	private function editSharedColumn():void
+	{
+
+	}
+
 	public function createContextMenuForGrid():void
 	{
 			
@@ -174,7 +183,7 @@
 
 
 		//Append Shared Action
-		var appendItem:ContextMenuItem = new ContextMenuItem("Append Shared Action");
+		var appendItem:ContextMenuItem = new ContextMenuItem("Append Shared Column");
 		appendItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, appendSharedColumn);
 		
 		viewContextMenu.customItems.push(cutItem);
@@ -213,6 +222,7 @@
 				columnsObj=initializeSignleColumn(xml.column[0],columnsObj);
 				columnsObj.isSharedColumn=true;
 				columnsObj.sharedColumnPath=event.sharedFilePath;
+				columnsObj.sharedColumnName=xml.@name;
 				dominoViewGridAddEmptyColumn();
 			
 				
@@ -382,27 +392,30 @@
 
 		selectedColumnType="";
 		
-		viewSetPanel.visible =viewSetPanel.includeInLayout = false;
-		columnAccordion.visible =columnAccordion.includeInLayout = true;
-		sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+		
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
 			var getCurrentClickTarget:ColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumnIndex=event.columnInex;
-			if (ObjectUtil.compare(getCurrentClickTarget,selectedColumnObject)!=0)
-			{
-				selectedColumnObject=getCurrentClickTarget;
-				if(getCurrentClickTarget.isSharedColumn==true){
-					viewSetPanel.visible =viewSetPanel.includeInLayout = false;
-					columnAccordion.visible =columnAccordion.includeInLayout = false;
-					sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = true;
-				}else{
+			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
 					
-					selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
-					if(selectedColumnObject!=null && selectedColumn!=null ){
-						columnAccordion.initializeColumnProperty(selectedColumnObject);
-					}
+			//Alert.show("selectedColumnIndex:"+selectedColumnIndex);
+			if(getCurrentClickTarget.isSharedColumn==true){
+				viewSetPanel.visible =viewSetPanel.includeInLayout = false;
+				columnAccordion.visible =columnAccordion.includeInLayout = false;
+				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = true;
+				sharedColumnLabelText.text="This is a shared column:"+getCurrentClickTarget.columnHeaderTitle+" [Edit in New Tab]"
+			}else{
+				
+				viewSetPanel.visible =viewSetPanel.includeInLayout = false;
+				columnAccordion.visible =columnAccordion.includeInLayout = true;
+				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+				if(selectedColumnObject!=null && selectedColumn!=null ){
+					columnAccordion.initializeColumnProperty(selectedColumnObject);
 				}
+				
 			}
+			
 			
 			
 			
@@ -505,6 +518,10 @@
 
 			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
 			
+
+			viewSetPanel.visible =viewSetPanel.includeInLayout = true;
+			columnAccordion.visible =columnAccordion.includeInLayout = false;
+			sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
 
 		}
 	}
@@ -633,6 +650,8 @@
 			{
 				
 				var c:ColumnObject = columnObjectList.getItemAt(i) as  ColumnObject;
+				
+				
 				var colXML:XML = new XML("<column />");
 				if(c.columnSort!=null && c.columnSort!=""){
 					colXML.@sort=c.columnSort;
@@ -999,7 +1018,18 @@
 					colXML.appendChild(colCode)
 				}
 
-				xmlView.appendChild(colXML);
+				if(c.isSharedColumn==true){
+					var sharedRefXML:XML = new XML("<sharedcolumnref />");
+					sharedRefXML.@name=c.sharedColumnName;
+					sharedRefXML.@sourcePath=c.sharedColumnPath;
+					sharedRefXML.appendChild(colXML);
+					xmlView.appendChild(sharedRefXML);
+
+				}else{
+					xmlView.appendChild(colXML);
+				}
+
+				
 				
 				
 			}
@@ -1063,8 +1093,14 @@
 						//inital the memory column object
 						var columnsObj:ColumnObject=new ColumnObject();
 						columnsObj=initializeSignleColumn(col,columnsObj);
+						var parentXML:XML=col.parent();
+
+						if(col.parent().name()=="sharedcolumnref"){
+							columnsObj.isSharedColumn=true;
+							columnsObj.sharedColumnPath=col.parent().@sourcePath;
+							columnsObj.sharedColumnName=col.parent().@name
+						}
 						
-						//unid2
 						
 						columnObjectList.addItem(columnsObj);
 						

@@ -159,7 +159,10 @@
 
 	private function editSharedColumn():void
 	{
-
+		if(selectedColumnObject&& selectedColumnObject.sharedColumnPath){
+			MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.sharedColumnPath);
+		}
+		 
 	}
 
 	public function createContextMenuForGrid():void
@@ -404,7 +407,7 @@
 				viewSetPanel.visible =viewSetPanel.includeInLayout = false;
 				columnAccordion.visible =columnAccordion.includeInLayout = false;
 				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = true;
-				sharedColumnLabelText.text="This is a shared column:"+getCurrentClickTarget.columnHeaderTitle+" [Edit in New Tab]"
+				sharedColumnLabelText.text="This is a shared column:"+getCurrentClickTarget.columnHeaderTitle+""
 			}else{
 				
 				viewSetPanel.visible =viewSetPanel.includeInLayout = false;

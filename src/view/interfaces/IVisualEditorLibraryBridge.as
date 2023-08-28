@@ -50,6 +50,7 @@ package view.interfaces
 		function openCreateDominoActionPanel(event:MouseEvent):void;
 		function getDominoActionList():ArrayList;
 		function openDominoActionFile(path:String):void;
+		function openDominoSharedColumnFile(path:String):void;
 		function getDominoShareFieldList():ArrayList;
 		function updateCurrentVisualEditorStatus():void;
 		function getDominoSharedColumnListPopup(file:File):TitleWindow;

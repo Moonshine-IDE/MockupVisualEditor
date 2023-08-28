@@ -696,6 +696,12 @@ it just lets you select which set of options to work with."/>
     {
 	
         if(cobj!=null){
+			if(cobj.isSharedColumn){
+				newColumnBtn.visible =newColumnBtn.includeInLayout = false;
+			}else{
+				newColumnBtn.visible =newColumnBtn.includeInLayout = true;
+			}
+
             titleInput.text=cobj.columnHeaderTitle;
             if(cobj.columnWidth!=null && cobj.columnWidth.toString().length>0){
                 columWidth.text=cobj.columnWidth;

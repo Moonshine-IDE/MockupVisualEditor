@@ -246,16 +246,14 @@
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
 		
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
-			var getCurrentClickTarget:ColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumnIndex=event.columnInex;
-			if (ObjectUtil.compare(getCurrentClickTarget,selectedColumnObject)!=0)
-			{
-				selectedColumnObject=getCurrentClickTarget;
-				selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
-				if(selectedColumnObject!=null && selectedColumn!=null ){
-					columnAccordion.initializeColumnProperty(selectedColumnObject);
-				}
+			
+			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
+			if(selectedColumnObject!=null && selectedColumn!=null ){
+				columnAccordion.initializeColumnProperty(selectedColumnObject);
 			}
+			
 			
 			
 			
@@ -812,6 +810,7 @@
 			var name:String = getFileNameWithoutExtension(filePath,"view");
 			
 			if(xml!=null){
+				
 			
 				for each(var col:XML in xml..column) //no matter of depth Note here
 				{
@@ -832,6 +831,12 @@
 						var columnsObj:ColumnObject=new ColumnObject();
 						columnsObj.columnHeaderTitle=col.columnheader.@title;
 						
+						if(col.parent().name()=="sharedcolumn"){
+							columnsObj.isSharedColumn=true;
+							columnsObj.sharedColumnPath=col.parent().@sourcePath;
+							columnsObj.sharedColumnName=col.parent().@name
+						}
+
 						if(col.@width!=null && col.@width.toString().length>0){
 							columnsObj.columnWidth=col.@width;
 							

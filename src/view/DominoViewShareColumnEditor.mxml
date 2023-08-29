@@ -115,6 +115,9 @@
 	import mx.utils.UIDUtil;
 	import utils.DominoConvertUtils;
 
+
+	
+
 	private var viewFileName:String =  "" ;
 
 	private var _hasChanged:Boolean = false;
@@ -329,6 +332,7 @@
 		import flash.filesystem.FileStream;	
 		import utils.StringHelper;
 		import utils.DominoConvertUtils;
+		import view.suportClasses.events.DominoViewUpdateEvent;
 
 		private var _fileMoonshine:File;
 		private var _fileStreamMoonshine:FileStream;
@@ -778,10 +782,38 @@
 			_fileStreamMoonshine.writeUTFBytes(xmlStr);
 			_fileStreamMoonshine.close();
 
-		
-			
+		   //after we modify the shared column we should update all view that  refence this 
+			var filePathStr:String=_fileMoonshine.nativePath;
 
-		
+			var shareColumnFolderPath:String="SharedElements"+File.separator+"Columns"+File.separator+_fileMoonshine.name
+			var parentPath:String=filePathStr.replace(shareColumnFolderPath,"");
+			var viewPath:String=parentPath+"Views";
+			var viewFolder:File = new File(viewPath);
+
+			var viewFiles:Array = viewFolder.getDirectoryListing();
+			for (var i:int; i < viewFiles.length; i++)
+			{
+				var viewXML:XML=loadLocalSingleFileToXML(viewFiles[i].nativePath);
+
+				for each(var shareColumn:XML in viewXML..sharedcolumnref)
+				{
+					
+					if(shareColumn.@sourcePath==filePathStr){
+						if(shareColumn.column[0]){
+							delete shareColumn.column[0].parent().children()[shareColumn.column[0].childIndex()];
+							shareColumn.appendChild(colXML);
+							//save the last update xml string to view file.
+							_fileStreamMoonshine.open(viewFiles[i], FileMode.WRITE);
+							_fileStreamMoonshine.writeUTFBytes(viewXML.toXMLString());
+							_fileStreamMoonshine.close();
+							//Alert.show("filePathStr:"+filePathStr);
+
+							dispatchEvent(new DominoViewUpdateEvent(DominoViewUpdateEvent.VIEW_UPDATE_AND_RELOAD, viewFiles[i].nativePath, true,true));
+						}
+						
+					}
+				}
+			}
 		}
 
 
@@ -791,17 +823,23 @@
 			return loadLocalFileToXML(filePathStr)
 		}
 
+		private function loadLocalSingleFileToXML(filePath:String):XML
+		{
+			var file:File=new File(filePath);
+			_fileStreamMoonshine = new FileStream();
+			_fileStreamMoonshine.open(file, FileMode.READ);
+
+			var data:String = _fileStreamMoonshine.readUTFBytes(file.size);
+			var xml:XML = new XML(data);
+			_fileStreamMoonshine.close();
+			file=null;
+			return xml
+		}
+
 		private function loadLocalFileToXML(filePath:String):XML
 		{
 			_fileMoonshine = createNewFileIfNotExists(filePath);
-			_fileStreamMoonshine = new FileStream();
-			_fileStreamMoonshine.open(_fileMoonshine, FileMode.READ);
-
-			var data:String = _fileStreamMoonshine.readUTFBytes(_fileMoonshine.size);
-			var xml:XML = new XML(data);
-			_fileStreamMoonshine.close();
-
-			return xml;
+			return loadLocalSingleFileToXML(filePath);
 		}
 
 		public function loadFile(filePath:String):void

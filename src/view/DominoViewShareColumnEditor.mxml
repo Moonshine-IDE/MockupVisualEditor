@@ -791,7 +791,7 @@
 			var viewFolder:File = new File(viewPath);
 
 			var viewFiles:Array = viewFolder.getDirectoryListing();
-			for (var i:int; i < viewFiles.length; i++)
+			for (var i:int=0; i < viewFiles.length; i++)
 			{
 				var viewXML:XML=loadLocalSingleFileToXML(viewFiles[i].nativePath);
 

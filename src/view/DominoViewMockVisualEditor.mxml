@@ -160,7 +160,7 @@
 	private function editSharedColumn():void
 	{
 		if(selectedColumnObject&& selectedColumnObject.sharedColumnPath){
-			MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.sharedColumnPath);
+			MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.sharedColumnName);
 		}
 		 
 	}
@@ -1024,7 +1024,7 @@
 				if(c.isSharedColumn==true){
 					var sharedRefXML:XML = new XML("<sharedcolumnref />");
 					sharedRefXML.@name=c.sharedColumnName;
-					sharedRefXML.@sourcePath=c.sharedColumnPath;
+					//sharedRefXML.@sourcePath=c.sharedColumnPath;
 					sharedRefXML.appendChild(colXML);
 					xmlView.appendChild(sharedRefXML);
 

@@ -115,6 +115,8 @@
 	import mx.utils.UIDUtil;
 	import utils.DominoConvertUtils;
 
+	import utils.DominoUtils;
+
 
 	
 
@@ -783,8 +785,13 @@
 			_fileStreamMoonshine.close();
 
 		   //after we modify the shared column we should update all view that  refence this 
+			
 			var filePathStr:String=_fileMoonshine.nativePath;
-
+			var fileNameStr:String=_fileMoonshine.name;
+			if(fileNameStr.indexOf(".column")>0){
+				fileNameStr=fileNameStr.substring(0,fileNameStr.length-7)
+			}
+			fileNameStr=DominoUtils.toDominoViewNormalName(fileNameStr)
 			var shareColumnFolderPath:String="SharedElements"+File.separator+"Columns"+File.separator+_fileMoonshine.name
 			var parentPath:String=filePathStr.replace(shareColumnFolderPath,"");
 			var viewPath:String=parentPath+"Views";
@@ -798,7 +805,7 @@
 				for each(var shareColumn:XML in viewXML..sharedcolumnref)
 				{
 					
-					if(shareColumn.@sourcePath==filePathStr){
+					if(shareColumn.@name==fileNameStr){
 						if(shareColumn.column[0]){
 							delete shareColumn.column[0].parent().children()[shareColumn.column[0].childIndex()];
 							shareColumn.appendChild(colXML);

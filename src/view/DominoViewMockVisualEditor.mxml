@@ -159,7 +159,7 @@
 
 	private function editSharedColumn():void
 	{
-		if(selectedColumnObject&& selectedColumnObject.sharedColumnPath){
+		if(selectedColumnObject&& selectedColumnObject.sharedColumnName){
 			MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.sharedColumnName);
 		}
 		 
@@ -213,7 +213,7 @@
 	private function onShareColumnAppendRequest(event:DominoViewSharedColumnAppendEvent):void 
 	{
 		if(event.sharedFilePath!=null){
-			var xml:XML=loadLocalSingleFileToXML(event.sharedFilePath);
+				var xml:XML=loadLocalSingleFileToXML(event.sharedFilePath);
 			if(xml.column[0]){
 				//remove empty column from grid
 				var emptyColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt( dgColumns.columns.length-1) as GridColumn;
@@ -224,7 +224,7 @@
 				var columnsObj:ColumnObject=new ColumnObject();
 				columnsObj=initializeSignleColumn(xml.column[0],columnsObj);
 				columnsObj.isSharedColumn=true;
-				columnsObj.sharedColumnPath=event.sharedFilePath;
+				//columnsObj.sharedColumnName=event.sharedColumnName;
 				columnsObj.sharedColumnName=xml.@name;
 				dominoViewGridAddEmptyColumn();
 			
@@ -1024,7 +1024,6 @@
 				if(c.isSharedColumn==true){
 					var sharedRefXML:XML = new XML("<sharedcolumnref />");
 					sharedRefXML.@name=c.sharedColumnName;
-					//sharedRefXML.@sourcePath=c.sharedColumnPath;
 					sharedRefXML.appendChild(colXML);
 					xmlView.appendChild(sharedRefXML);
 
@@ -1100,7 +1099,6 @@
 
 						if(col.parent().name()=="sharedcolumnref"){
 							columnsObj.isSharedColumn=true;
-							columnsObj.sharedColumnPath=col.parent().@sourcePath;
 							columnsObj.sharedColumnName=col.parent().@name
 						}
 						

@@ -1076,6 +1076,8 @@
 
 		public function loadFile(filePath:String):void
 		{
+			columnObjectList= new ArrayList();
+			dgColumns.columns= new ArrayList();
 			var xml:XML = loadLocalFileToXML(filePath);
 			var name:String = getFileNameWithoutExtension(filePath,"view");
 			

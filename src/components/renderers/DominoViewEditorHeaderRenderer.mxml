@@ -37,7 +37,19 @@
 							 xmlns:mx="library://ns.adobe.com/flex/mx" height="30"
                              click="dispatchClickEvent(event)">
 	
-	<fx:Declarations>
+    <s:states>
+        <s:State name="up" />
+        <s:State name="normal" />
+        <s:State name="selected" />
+        <s:State name="over" stateGroups="overStates" />
+        <s:State name="down" stateGroups="downStates" />
+        <s:State name="disabled" stateGroups="disabledStates" />
+        <s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+        <s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+        <s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+        <s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
+    </s:states>
+    <fx:Declarations>
 		<s:Label id="labelDisplay" name="label_Display"
                 verticalCenter="1" left="0"  top="0" bottom="0"
                 verticalAlign="middle"
@@ -60,6 +72,7 @@
             private function dispatchClickEvent(event:MouseEvent):void
             {
 			
+   
                  this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,this.column.columnIndex,true, true) );
             }
 

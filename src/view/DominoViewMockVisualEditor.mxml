@@ -407,7 +407,7 @@
 				viewSetPanel.visible =viewSetPanel.includeInLayout = false;
 				columnAccordion.visible =columnAccordion.includeInLayout = false;
 				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = true;
-				sharedColumnLabelText.text="This is a shared column: "+getCurrentClickTarget.columnHeaderTitle+""
+				sharedColumnLabelText.text="This is a shared column: "+getCurrentClickTarget.sharedColumnName+""
 			}else{
 				
 				viewSetPanel.visible =viewSetPanel.includeInLayout = false;

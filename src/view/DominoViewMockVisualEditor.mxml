@@ -122,6 +122,11 @@
 	import mx.events.CloseEvent;
 	import spark.components.TitleWindow;
 	import mx.events.CloseEvent;
+	import components.renderers.DominoViewEditorHeaderRenderer;
+	import flash.events.MouseEvent;
+
+	import spark.components.DataGrid;
+	import spark.components.GridColumnHeaderGroup
 
 	private var viewFileName:String =  "" ;
 
@@ -132,7 +137,7 @@
 	private var selectedColumnName:String = "";
 	private var selectedColumn:GridColumn = null;
 	private var selectedColumnType:String = "";
-
+	private var selectedColumnRender:DominoViewEditorHeaderRenderer = null;
 
 
 	private var showColumns:Boolean = false;
@@ -395,13 +400,30 @@
 
 		selectedColumnType="";
 		
-		
+		var render:DominoViewEditorHeaderRenderer=event.render;
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
+			
+			if(selectedColumnRender){
+				selectedColumnRender.setCurrentState("normal",true)
+			}
+			
+
+			//selectedColumnRender=render;
+			
 			var getCurrentClickTarget:ColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumnIndex=event.columnInex;
 			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
 					
+			if(render){
+				const column:GridColumn = render.column;
+                const dataGrid:DataGrid = (column && column.grid) ? column.grid.dataGrid : null;
+                const columnHeaderGroup:GridColumnHeaderGroup = (dataGrid) ? dataGrid.columnHeaderGroup : null;
+				columnHeaderGroup.downColumnIndex=event.columnInex;
+				columnHeaderGroup.highlightSelectedColumn=column;
+				
+				
+			}
 			//Alert.show("selectedColumnIndex:"+selectedColumnIndex);
 			if(getCurrentClickTarget.isSharedColumn==true){
 				viewSetPanel.visible =viewSetPanel.includeInLayout = false;

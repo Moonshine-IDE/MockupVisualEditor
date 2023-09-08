@@ -116,8 +116,9 @@
 	import utils.DominoConvertUtils;
 
 	import utils.DominoUtils;
-	//import actionScripts.events.GlobalEventDispatcher;
-
+	import spark.skins.spark.DefaultGridHeaderRenderer;
+	import components.renderers.DominoViewEditorHeaderRenderer;
+	
 
 	
 
@@ -140,6 +141,7 @@
 	private var columnObjectList:ArrayList = new ArrayList();
 	private var selectedColumnObject:ColumnObject = null;
 	private var selectedColumnIndex:int = -1;
+	private var selectedColumnRender:DominoViewEditorHeaderRenderer = null;
 	public function get hasChanged():Boolean
 	{
 		return _hasChanged;
@@ -250,8 +252,17 @@
 		
 		viewsharedColumnSetPanel.visible =viewsharedColumnSetPanel.includeInLayout = false;
 		columnAccordion.visible =columnAccordion.includeInLayout = true;
-		
+		var render:DominoViewEditorHeaderRenderer=event.render;
 		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
+			if(selectedColumnRender){
+				selectedColumnRender.selectedColumnUp();
+			}
+			if(render){
+				render.selectedColumnDown();
+			}
+
+			selectedColumnRender=render;
+			
 			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
 			selectedColumnIndex=event.columnInex;
 			

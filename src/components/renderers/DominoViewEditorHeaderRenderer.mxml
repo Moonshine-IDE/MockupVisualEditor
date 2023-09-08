@@ -36,11 +36,8 @@
 							 xmlns:s="library://ns.adobe.com/flex/spark" 
 							 xmlns:mx="library://ns.adobe.com/flex/mx" height="30"
                              click="dispatchClickEvent(event)">
-	
-    <s:states>
+	<!-- <s:states>
         <s:State name="up" />
-        <s:State name="normal" />
-        <s:State name="selected" />
         <s:State name="over" stateGroups="overStates" />
         <s:State name="down" stateGroups="downStates" />
         <s:State name="disabled" stateGroups="disabledStates" />
@@ -48,7 +45,8 @@
         <s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
         <s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
         <s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
-    </s:states>
+    </s:states> -->
+  
     <fx:Declarations>
 		<s:Label id="labelDisplay" name="label_Display"
                 verticalCenter="1" left="0"  top="0" bottom="0"
@@ -60,6 +58,7 @@
                 backgroundAlpha="100"
                 />
 	</fx:Declarations>
+    
 
     <fx:Script>
 		<![CDATA[
@@ -67,13 +66,38 @@
             import flash.events.MouseEvent;
             import spark.components.Alert;
             import view.suportClasses.events.DominoViewColumnClickEvent;
-
+            
             
             private function dispatchClickEvent(event:MouseEvent):void
             {
 			
+               
+                //hovered
+                //normal
+                //down
+                setCurrentState("down",true);
    
-                 this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,this.column.columnIndex,true, true) );
+                 this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,this.column.columnIndex,this,true, true) );
+            }
+            override public function setCurrentState(stateName:String, playTransition:Boolean=true):void
+            {
+                    super.setCurrentState(stateName, playTransition);
+
+                    invalidateDisplayList();
+                    
+            }
+
+            public function selectedColumnDown():void 
+            {   
+                
+                super.setCurrentState("down",true);
+                this.setCurrentState("down",true);
+                Alert.show("down");
+            }
+
+            public function selectedColumnUp():void 
+            {
+                super.setCurrentState("normal",true);
             }
 
 			/**

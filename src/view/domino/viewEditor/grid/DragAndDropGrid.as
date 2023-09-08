@@ -271,9 +271,10 @@ package view.domino.viewEditor.grid
            
             if(dragColumn && dropIndex){
                 if(dragColumn.headerText!="         " && dropIndex!=(this.columns.length)){
+                    var oldIndex:int 
                     if (dropIndex != dragColumn.columnIndex)
                     {
-                        var oldIndex:int = dragColumn.columnIndex;
+                        oldIndex = dragColumn.columnIndex;
                         this.columns.removeItemAt(dragColumn.columnIndex);
                         
                         if (dropIndex > oldIndex)
@@ -290,7 +291,11 @@ package view.domino.viewEditor.grid
                     stopDragTimer("dropColumn");
 
                     //action 
-                    this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
+                    if(dropIndex!=oldIndex&&oldIndex!=0){
+                       // Alert.show("dropIndex:"+dropIndex+"-oldIndex:"+oldIndex)
+                        this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
+                    }
+                  
                 }
             }
         }

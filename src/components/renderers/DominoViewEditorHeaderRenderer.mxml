@@ -35,7 +35,8 @@
 <s:DefaultGridHeaderRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 							 xmlns:s="library://ns.adobe.com/flex/spark" 
 							 xmlns:mx="library://ns.adobe.com/flex/mx" height="30"
-                             click="dispatchClickEvent(event)">
+                             click="dispatchClickEvent(event)"
+                             >
 	<!-- <s:states>
         <s:State name="up" />
         <s:State name="over" stateGroups="overStates" />
@@ -66,18 +67,18 @@
             import flash.events.MouseEvent;
             import spark.components.Alert;
             import view.suportClasses.events.DominoViewColumnClickEvent;
-            
-            
+            import view.suportClasses.events.DominoViewColumnRightClickEvent;
+            // private function dispatchRightClickEvent(event:MouseEvent):void
+            // {
+            //     Alert.show("render right click");
+            //     this.dispatchEvent(new DominoViewColumnRightClickEvent(DominoViewColumnRightClickEvent.COLUMN_CLICK,this.column.columnIndex,true, true) );
+            // }
             private function dispatchClickEvent(event:MouseEvent):void
             {
 			
-               
-                //hovered
-                //normal
-                //down
                 setCurrentState("down",true);
    
-                 this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,this.column.columnIndex,this,true, true) );
+                this.dispatchEvent(new DominoViewColumnClickEvent(DominoViewColumnClickEvent.COLUMN_CLICK,this.column.columnIndex,this,true, true) );
             }
             override public function setCurrentState(stateName:String, playTransition:Boolean=true):void
             {

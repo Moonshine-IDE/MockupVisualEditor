@@ -54,5 +54,6 @@ package view.interfaces
 		function getDominoShareFieldList():ArrayList;
 		function updateCurrentVisualEditorStatus():void;
 		function getDominoSharedColumnListPopup(file:File):TitleWindow;
+		function getDominoNewSharedColumnFromViewColumn(defaultName:String):TitleWindow;
 	}
 }

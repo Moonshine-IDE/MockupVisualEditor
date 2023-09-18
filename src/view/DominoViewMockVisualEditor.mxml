@@ -149,7 +149,8 @@
 	private var columnObjectList:ArrayList = new ArrayList();
 	private var selectedColumnObject:ColumnObject = null;
 	private var selectedColumnIndex:int = -1;
-	private var appendSharedColumnPopup:TitleWindow 
+	private var appendSharedColumnPopup:TitleWindow;
+	private var newSharedColumnFromViewPopup:TitleWindow  
 	public function get hasChanged():Boolean
 	{
 		return _hasChanged;
@@ -197,7 +198,7 @@
 		appendItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, appendSharedColumn);
 		
 
-		var sharedColumnItem:ContextMenuItem = new ContextMenuItem("Create a new shared column from selected column",false,true,false);
+		var sharedColumnItem:ContextMenuItem = new ContextMenuItem("Convert to Shared Column",false,true,false);
 		sharedColumnItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, createNewSharedColumnFromCurrentColumn);
 
 		viewContextMenu.customItems.push(cutItem);
@@ -256,8 +257,8 @@
 		appendSharedColumnPopup.removeEventListener(DominoViewSharedColumnAppendEvent.SHARED_COLUMN_APPEND, onShareColumnAppendRequest);
 		appendSharedColumnPopup = null;
 	}
-	private function createNewSharedColumnFromCurrentColumn(event:ContextMenuEvent):void
-	{
+
+	private function createNewSharedColumnDetails(n:String):void{
 		if(selectedColumnObject&&selectedColumnObject.isSharedColumn!=true){
 				
 				
@@ -265,18 +266,28 @@
 				
 				//Alert.show("viewFileParentPath :"+_fileMoonshine.parent.parent.nativePath);
 				var shareColumnFolderPath:String="SharedElements"+File.separator+"Columns"+File.separator;
-				var fileNameStr:String=selectedColumnObject.columnHeaderTitle;
+				var sourcefileNameStr:String
+				if(n){
+					sourcefileNameStr=n;
+				}else{
+					sourcefileNameStr=selectedColumnObject.columnHeaderTitle;
+				}
 				
-				fileNameStr=DominoUtils.toDominoViewNormalName(fileNameStr)
+				
+				
+				var fileNameStr:String=DominoUtils.fixDominoViewName(sourcefileNameStr);
+				sourcefileNameStr=DominoUtils.toDominoViewNormalName(fileNameStr)
+
 				fileNameStr=fileNameStr+".column";
 
+			
 				var newShareColumnFile:File=new File(viewFileParentPath+shareColumnFolderPath+fileNameStr);
 				
 			if(!newShareColumnFile.exists){
 				var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
 				var xmlView:XML=new XML("<sharedcolumn />");
 				
-				xmlView.@name=selectedColumnObject.columnHeaderTitle;
+				xmlView.@name=sourcefileNameStr;
 				xmlView.@noreplace="false";
 				xmlView.@opencollapsed="false";
 				
@@ -289,14 +300,40 @@
 				_fileStreamMoonshine.writeUTFBytes(xmlStr);
 				_fileStreamMoonshine.close();
 				
-
-				MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.columnHeaderTitle);
+				selectedColumnObject.isSharedColumn=true;
+				selectedColumnObject.sharedColumnName=sourcefileNameStr;
+				selectedColumnObject.shareColumnName=sourcefileNameStr;
+				dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+				hasChanged=true;
+				//MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.columnHeaderTitle);
 			}else{
 				Alert.show("This column already exist a shared column with same name!");
 			}
 		}
 
+	}
+	private function createNewSharedColumnFromCurrentColumn(event:ContextMenuEvent):void
+	{
+		//createNewSharedColumnDetails();
+		if(selectedColumnObject){
+			newSharedColumnFromViewPopup=MoonshineBridgeUtils.moonshineBridge.getDominoNewSharedColumnFromViewColumn(selectedColumnObject.columnHeaderTitle);
+			//newSharedColumnFromViewPopup.defaultFileName=selectedColumnObject.columnHeaderTitle;
+			newSharedColumnFromViewPopup.addEventListener(CloseEvent.CLOSE, handleShareColumnCreateFromViewPopupClose);
 		
+			
+		}
+
+		    	
+		PopUpManager.addPopUp(newSharedColumnFromViewPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
+		PopUpManager.centerPopUp(newSharedColumnFromViewPopup);
+		
+	}
+
+
+	protected function handleShareColumnCreateFromViewPopupClose(event:CloseEvent):void
+	{
+		newSharedColumnFromViewPopup.removeEventListener(CloseEvent.CLOSE, handleShareColumnCreateFromViewPopupClose);
+		newSharedColumnFromViewPopup = null;
 	}
 
 	private function onMenuItemAddColumn(event:ContextMenuEvent):void
@@ -416,7 +453,7 @@
 		columnAccordion.visible =columnAccordion.includeInLayout = false;
 		sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
 		dgColumns.addEventListener(DominoViewColumnClickEvent.COLUMN_CLICK, viewColumnClick);
-		//dgColumns.addEventListener(DominoViewColumnRightClickEvent.COLUMN_CLICK,viewColumnRightClick);
+		dgColumns.addEventListener(DominoViewColumnRightClickEvent.COLUMN_CLICK,viewColumnRightClick);
 
 		//add property change listener
 		
@@ -445,18 +482,16 @@
 	}
 
 
-	// public function viewColumnRightClick(event:DominoViewColumnRightClickEvent):void{
+	public function viewColumnRightClick(event:DominoViewColumnRightClickEvent):void{
 		
-	// 	if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){			
-	// 		var getCurrentRightClickTarget:ColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
-	// 		var rightClickColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
-	// 		var  viewContextMenu:ContextMenu=this.contextMenu as ContextMenu; 
+		if(event.columnName){			
+			createNewSharedColumnDetails(event.columnName);
 
-	// 	}
+		}
 		
 		
 	
-	// }
+	}
 	
 	public function viewColumnClick(event:DominoViewColumnClickEvent):void{
 		showColumns=true;
@@ -509,7 +544,7 @@
 				{
 					var  menuItem:ContextMenuItem=viewContextMenu.customItems[i] as ContextMenuItem;
 					if(menuItem){
-						if(menuItem.caption=="Create a new shared column from selected column"){
+						if(menuItem.caption=="Convert to Shared Column"){
 							if(getCurrentClickTarget.isSharedColumn==true){
 								menuItem.visible=false
 							}else{

@@ -38,17 +38,19 @@ package view.suportClasses.events
 		public static const COLUMN_CLICK:String = "dominoViewGridColumnRightClick";
 		
 		public var columnInex:int;
+		public var columnName:String
 		
-		public function DominoViewColumnRightClickEvent(type:String, value:int=-1, _bubble:Boolean=true, _cancelable:Boolean=true)
+		public function DominoViewColumnRightClickEvent(type:String,n:String, _bubble:Boolean=true, _cancelable:Boolean=true)
 		{
-			this.columnInex = value;
+			//this.columnInex = value;
+			this.columnName = n;
 			
 			super(type, _bubble, _cancelable);
 		}
 		
 		override public function clone():Event
 		{
-			return new DominoViewColumnRightClickEvent(type, columnInex, bubbles, cancelable);
+			return new DominoViewColumnRightClickEvent(type,columnName, bubbles, cancelable);
 		}
 	}
 }

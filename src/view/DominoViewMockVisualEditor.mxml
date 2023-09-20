@@ -711,14 +711,31 @@
 
 		public function saveEditedFile():void
 		{
-			viewObject=viewSetPanel.viewObject;
+			
 			
 			if (!_fileStreamMoonshine) return;
 			if (!_fileMoonshine) return;
-			if (!viewObject) return;
-
-			hasChanged=false;
+			
 			var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
+			
+			
+			var xmlView:XML=getSavedXMLFromMemoryObject();
+			xmlStr=xmlStr+xmlView.toXMLString();
+			
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+			_fileStreamMoonshine.writeUTFBytes(xmlStr);
+			_fileStreamMoonshine.close();
+
+		
+			
+
+		
+		}
+
+		public function getSavedXMLFromMemoryObject():XML
+		{
+			viewObject=viewSetPanel.viewObject;
+			hasChanged=false;
 			var xmlView:XML=new XML("<view />");
 
 			xmlView.@name=viewObject.viewName;
@@ -811,16 +828,8 @@
 				
 			}
 
-			xmlStr=xmlStr+xmlView.toXMLString();
-			
-			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
-			_fileStreamMoonshine.writeUTFBytes(xmlStr);
-			_fileStreamMoonshine.close();
 
-		
-			
-
-		
+			return xmlView;
 		}
 
 

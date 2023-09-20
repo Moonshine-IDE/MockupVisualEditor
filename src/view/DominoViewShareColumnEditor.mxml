@@ -368,14 +368,64 @@
 
 		public function saveEditedFile():void
 		{
-			shareColumnObject=viewsharedColumnSetPanel.shareColumnObject;
 			
 			if (!_fileStreamMoonshine) return;
 			if (!_fileMoonshine) return;
-			if (!shareColumnObject) return;
+		
 
 			hasChanged=false;
 			var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
+			var xmlView:XML=getSavedXMLFromMemoryObject();
+			var colXML:XML=xmlView.column;
+			xmlStr=xmlStr+xmlView.toXMLString();
+			
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+			_fileStreamMoonshine.writeUTFBytes(xmlStr);
+			_fileStreamMoonshine.close();
+
+		   //after we modify the shared column we should update all view that  refence this 
+			
+			var filePathStr:String=_fileMoonshine.nativePath;
+			var fileNameStr:String=_fileMoonshine.name;
+			if(fileNameStr.indexOf(".column")>0){
+				fileNameStr=fileNameStr.substring(0,fileNameStr.length-7)
+			}
+			fileNameStr=DominoUtils.toDominoViewNormalName(fileNameStr)
+			var shareColumnFolderPath:String="SharedElements"+File.separator+"Columns"+File.separator+_fileMoonshine.name
+			var parentPath:String=filePathStr.replace(shareColumnFolderPath,"");
+			var viewPath:String=parentPath+"Views";
+			var viewFolder:File = new File(viewPath);
+
+			var viewFiles:Array = viewFolder.getDirectoryListing();
+			for (var i:int=0; i < viewFiles.length; i++)
+			{
+				var viewXML:XML=loadLocalSingleFileToXML(viewFiles[i].nativePath);
+
+				for each(var shareColumn:XML in viewXML..sharedcolumnref)
+				{
+					
+					if(shareColumn.@name==fileNameStr){
+						if(shareColumn.column[0]){
+							delete shareColumn.column[0].parent().children()[shareColumn.column[0].childIndex()];
+							shareColumn.appendChild(colXML);
+							//save the last update xml string to view file.
+							_fileStreamMoonshine.open(viewFiles[i], FileMode.WRITE);
+							_fileStreamMoonshine.writeUTFBytes(viewXML.toXMLString());
+							_fileStreamMoonshine.close();
+							//Alert.show("filePathStr:"+filePathStr);
+
+							dispatchEvent(new DominoViewUpdateEvent(DominoViewUpdateEvent.VIEW_UPDATE_AND_RELOAD, viewFiles[i].nativePath, true,true));
+						}
+						
+					}
+				}
+			}
+		}
+
+
+		public function getSavedXMLFromMemoryObject():XML
+		{
+			shareColumnObject=viewsharedColumnSetPanel.shareColumnObject;
 			var xmlView:XML=new XML("<sharedcolumn />");
 
 			xmlView.@name=shareColumnObject.shareColumnName;
@@ -425,49 +475,8 @@
 				
 			}
 
-			xmlStr=xmlStr+xmlView.toXMLString();
+			return xmlView;
 			
-			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
-			_fileStreamMoonshine.writeUTFBytes(xmlStr);
-			_fileStreamMoonshine.close();
-
-		   //after we modify the shared column we should update all view that  refence this 
-			
-			var filePathStr:String=_fileMoonshine.nativePath;
-			var fileNameStr:String=_fileMoonshine.name;
-			if(fileNameStr.indexOf(".column")>0){
-				fileNameStr=fileNameStr.substring(0,fileNameStr.length-7)
-			}
-			fileNameStr=DominoUtils.toDominoViewNormalName(fileNameStr)
-			var shareColumnFolderPath:String="SharedElements"+File.separator+"Columns"+File.separator+_fileMoonshine.name
-			var parentPath:String=filePathStr.replace(shareColumnFolderPath,"");
-			var viewPath:String=parentPath+"Views";
-			var viewFolder:File = new File(viewPath);
-
-			var viewFiles:Array = viewFolder.getDirectoryListing();
-			for (var i:int=0; i < viewFiles.length; i++)
-			{
-				var viewXML:XML=loadLocalSingleFileToXML(viewFiles[i].nativePath);
-
-				for each(var shareColumn:XML in viewXML..sharedcolumnref)
-				{
-					
-					if(shareColumn.@name==fileNameStr){
-						if(shareColumn.column[0]){
-							delete shareColumn.column[0].parent().children()[shareColumn.column[0].childIndex()];
-							shareColumn.appendChild(colXML);
-							//save the last update xml string to view file.
-							_fileStreamMoonshine.open(viewFiles[i], FileMode.WRITE);
-							_fileStreamMoonshine.writeUTFBytes(viewXML.toXMLString());
-							_fileStreamMoonshine.close();
-							//Alert.show("filePathStr:"+filePathStr);
-
-							dispatchEvent(new DominoViewUpdateEvent(DominoViewUpdateEvent.VIEW_UPDATE_AND_RELOAD, viewFiles[i].nativePath, true,true));
-						}
-						
-					}
-				}
-			}
 		}
 
 

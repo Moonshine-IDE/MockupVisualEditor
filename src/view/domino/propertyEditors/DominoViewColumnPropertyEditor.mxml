@@ -1,0 +1,1803 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:domino="view.domino.forms.*">
+<mx:Accordion width="100%" height="100%" creationComplete="onCreationCompletes(event)" >
+							
+								<mx:VBox  horizontalAlign="left" label="Column Setting-Basic" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10" id="columnBasicSetPanel"  >	
+		   								<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+								<s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" paddingLeft="5" paddingTop="10" paddingBottom="10">
+									<s:Label id="columnHeaderText"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5" right="0" top="5" verticalCenter="0" 
+											text="Column Header Text"/>
+									<s:TextInput id="titleInput"
+                     						text=""  width="100" skinClass="skins.TextInputSkin" prompt="Column title" 
+											change="columnTitle_changeHandler(event)"/>	
+										
+										<s:Label id="columnValue"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="1" fontSize="13"
+												left="5" right="10" verticalCenter="0" 
+												text="Width:"/>
+										<s:TextInput id="columWidth"
+										text="70"  change="columnWidth_changeHandler(event)" width="100" skinClass="skins.TextInputSkin" prompt="Column width"/>	
+										
+										<s:HGroup>
+											<s:RadioButton id="columnValueFieldRadioBtn" label="Field" groupName="columnValueType" click="columnType_changeHandler(event)"/>
+											<s:RadioButton id="columnValueFormulaRadioBtn" label="Formula" groupName="columnValueType"  click="columnType_changeHandler(event)"/>	
+										</s:HGroup>	
+									 <s:TextArea id="columnValueFormula"
+										text="" width="100%" minWidth="156" editable="true" selectable="true"
+										prompt="Formula for column value"
+										change="columnValueFormula_changeHandler(event)"
+										/>
+
+										<s:Button id="newColumnBtn" label="Remove Column"   height="25" width="100"  click="startRemoveColumn()"/>			
+								</s:VGroup>
+
+                               		<s:VGroup>
+                                        	<s:Label id="columnTwistieLabelText"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5"  top="5" verticalCenter="0" 
+											text="Show twistie when row is expandable"/>
+                                        <s:CheckBox id="columnExpandable"
+													selected="false"
+													change="check_changeHandler(event)"/>
+                                    </s:VGroup>	
+							
+							 </s:FormItem> 
+		   						</mx:VBox>
+
+							<mx:VBox  horizontalAlign="left" id="columnSortSetPanel"  label="Column Setting-Sort Type" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >	
+									<s:FormItem label="Sort:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnSortNoneRadioBtn" label="None"  value="none" groupName="columnSortOrder" selected="true"  click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortAscendingRadioBtn" label="Ascending" value="ascending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>
+											<s:RadioButton id="columnSortDescendingRadioBtn" label="Descending" value="descending" groupName="columnSortOrder" click="columnSort_changeHandler(event)"/>	
+											
+										</s:HGroup>	
+									</s:FormItem> 
+									<s:FormItem label="Type:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnSortStandardRadioBtn" label="Standard" value="false" groupName="columnSortType"   click="columnSortType_changeHandler(event)"/>
+											<s:RadioButton id="columnSortCategorizedRadioBtn" label="Categorized" value="true" groupName="columnSortType" click="columnSortType_changeHandler(event)"/>
+										
+											
+										</s:HGroup>	
+									</s:FormItem> 
+
+
+                               		<s:VGroup>
+                                        	<s:Label id="showMultipleValueLabelText"
+											textAlign="start"
+											verticalAlign="middle"
+											fontWeight="bold"
+											maxDisplayedLines="1" fontSize="13"
+											left="5"  top="5" verticalCenter="0" 
+											text="Show multiple values as separate entries"/>
+                                        <s:CheckBox id="mulitipleValuesCheckBox"
+													selected="false"
+													change="multipleValue_changeHandler(event)"/>
+                                    </s:VGroup>
+
+									<s:FormItem label="Totals:" skinClass="skins.FormItemSkin">
+										<domino:CustomDropDownList id="totalsDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.ColumnTotalsOptions}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onTotalSelectionChange(event)"
+                        enabled="true"
+                        itemRenderer="view.domino.forms.renderer.IncludeDropdownListRenderer"/>
+
+									</s:FormItem> 	
+
+                                    
+							</mx:VBox>
+							
+							<mx:VBox  horizontalAlign="left" id="columnFormatSetPanel" label="Column Setting-Format" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" width="100%" height="650" paddingBottom="10" >	
+		
+
+								<s:FormItem label="Style:" skinClass="skins.FormItemSkin">
+									<domino:CustomDropDownList id="columnFormatStyleDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.ColumnStylesOptions}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onColumnStyleSelectionChange(event)"
+                        enabled="true"
+						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:FormItem> 
+
+								<s:VGroup id="generalStyleGroup" width="100%">
+   <s:Label id="generalStyleGroupText1"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5"
+												bottom="5" 
+												width="100%"
+												text="There are no advanced formats for the general style		"/>
+
+										 
+								    <s:Label id="generalStyleGroupText2"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5" 
+												width="100%"
+												
+												text="You may assign formats for multiple styles in the same column.
+Style is not a property of the column; 
+it just lets you select which set of options to work with."/>
+								</s:VGroup>
+
+								<s:VGroup id="numberStyleGroup"  width="220" height="600">
+								
+									<s:Label left="5"  text="Number Format"/>
+									<s:HGroup>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn1" label="Decimal"  value="fixed" groupName="columnStyleNumberFormat" selected="true"  click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn2" label="Percent" value="percent" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn3" label="Scientific" value="scientific" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+									</s:HGroup>	
+									<s:HGroup>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn4" label="Currency" value="currency" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+										<s:RadioButton id="columnStyleFormatNumberRadioBtn5" label="Bytes(K/M/G)" value="bytes" groupName="columnStyleNumberFormat" click="columnFormatNumber_changeHandler()"/>
+									</s:HGroup>
+									<s:Label left="5"  text="Decimal places"/>
+										<s:HGroup>
+										<s:TextInput id="decimalPlacesInput"
+										text="0"  change="decimalPlaces_changeHandler(event)"  width="100" skinClass="skins.TextInputSkin" prompt="Decimal place"/>	
+										 <s:Label left="5" id="fixedLabel"  text="Fixed"/>
+										</s:HGroup>
+
+										<s:HGroup>
+
+										 <s:CheckBox id="decaimalVaring"
+													selected="false"
+													change="decaimalVaring_changeHandler(event)"/>
+													 <s:Label left="5"  text="Varying"/>
+										</s:HGroup>
+										
+										
+								
+										<s:Label left="5"  text="Preferences for display formating"/>
+										<s:Label left="5"  text="Use preferences from"/>
+									
+									<domino:CustomDropDownList id="columnPreferencesList"
+						requireSelection="true" width="150"
+						dataProvider="{DominoGlobalTokens.ColumnStylesPreferencesForDisplay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onColumnPreferencesSelectionChange(event)"
+                        enabled="true"
+						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										<s:Label left="5"  text="Decimal symbol"  id="decailsymLabel"/>
+										<s:TextInput id="decimalSymbolInput"
+										text="." width="50" change="decimalSymbol_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="Decimal Symbol"/>	
+										
+										<s:Label left="5"  text="Thousands separator" id="thousandssepLabel"/>
+										<s:TextInput id="thousandsSeparatorInput"
+										text=","  width="50" change="thousandsSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="Thousands Separator"/>	
+										
+										
+										<s:Label left="5"  text="Additional display formatting"/>
+										<s:HGroup>
+										<s:CheckBox id="parenthsisCheckbox"
+													selected="false"
+													change="parenthesis_changeHandler(event)"/>
+													 <s:Label left="5"  text="Parenthesis when negative"/>
+										</s:HGroup>
+
+										<s:HGroup>
+										<s:CheckBox id="punctuatedCheckbox"
+													selected="false"
+													change="punctuated_changeHandler(event)"/>
+													 <s:Label left="5"  text="Punctuated at thousands"/>
+										</s:HGroup>
+
+								</s:VGroup>
+
+								<s:VGroup id="datetimeStyleGroup"  width="220" height="600">
+								   
+									<s:Label left="5"  text="Use preferences from"/>
+					
+									<domino:CustomDropDownList id="columnDateTimeFormatDefinedList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ColumnStylesPreferencesForDisplay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeSelectionChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									<s:Label left="5"  text="Sample"/>
+									<s:TextInput id="dateTimeSampleInput"
+										text="{nowDateTimeStringInFormat}"  width="150" change="dateTimeSample_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="DateTime Sample"/>	
+									
+									<s:HGroup>
+										<s:CheckBox id="dateTimeDisplayAbbreviatedCheckbox"
+													selected="false"
+													change="displayAbbreviatedDate_changeHandler(event)"/>
+													 <s:Label left="5"  text="Display abbreviated date"/>
+									</s:HGroup>
+
+									<s:FormItem label="Display Date:" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="dateTimeDisplayDateCheckbox"
+													selected="false"
+													change="dateTimeDisplayDate_changeHandler(event)"/>
+								
+									</s:FormItem>
+									<s:Label left="5" id="displayDateShowLabel"  text="Show"/>
+									
+									<domino:CustomDropDownList id="columnDateTimeDisplayDateShowList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnShowChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									
+
+									<s:Label left="5" id="displayDateSpecialLabel" text="Special"/>
+									<domino:MultipleCheckboxView id="columnDateTimeDisplayDateSpecialList" label=""  dynamicLabel="true" 
+		includeCollection="{DominoGlobalTokens.ViewColumnDateTimeDisplaySpecial}" textProperty="columnDateFormatSpecial"/>
+									<s:Label left="5" id="columnDateTimeDisplayCalendarLabel" text="Calendar"/>
+									<domino:CustomDropDownList id="columnDateTimeDisplayDateCalendarList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplayCalendar}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnCalendarChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+									<!-- <s:FormItem label="Display Date:" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="dateTimeDisplayDateCheckbox"
+													selected="false"
+													change="dateTimeDisplayDate_changeHandler(event)"/>
+									</s:FormItem> -->
+									
+										
+
+									<s:HGroup id="dateFormatGroup">	
+									    <s:Label left="5" id="displayDateFormatLabel" text="Format"/>
+										<domino:CustomDropDownList id="columnDateTimeDisplayFormatList"
+										requireSelection="true" width="150"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateTimeDisplayFormat}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateTimeColumnFormatChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										
+									</s:HGroup>	
+				
+									<s:FormItem  id="dateSeparatorGroup" label="Separators:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+										 <s:TextInput id="dateSeparatorInput1"
+										text=" "  width="30" change="dateSeparator_changeHandler(1)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+										<s:TextInput id="dateSeparatorInput2"
+										text="/"  width="30" change="dateSeparator_changeHandler(2)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+										<s:TextInput id="dateSeparatorInput3"
+										text="/"  width="30" change="dateSeparator_changeHandler(3)"  skinClass="skins.TextInputSkin" prompt="year separator"/>
+										</s:HGroup>	
+									</s:FormItem>
+									
+									<s:HGroup id="dateDayGroup">	
+										
+										<s:FormItem  id="dayList" label="Day:" skinClass="skins.FormItemSkin">
+										<domino:CustomDropDownList id="columnDateDayList"
+										requireSelection="true" width="60" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateDay}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateDayChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										</s:FormItem>
+										<s:FormItem  id="dateMonth" label="Month:" skinClass="skins.FormItemSkin">
+												<domino:CustomDropDownList id="columnDateMonthList"
+										requireSelection="true" width="60" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateMonth}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateMonthChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										</s:FormItem>
+									</s:HGroup>	
+
+
+									<s:HGroup id="dateYearWeekGroup">	
+										<s:FormItem  id="yearList" label="Year:" skinClass="skins.FormItemSkin">
+											<domino:CustomDropDownList id="columnDateYearList"
+										requireSelection="true" width="60" left="5"
+										dataProvider="{dateYearList}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateYearChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+									
+										</s:FormItem>
+										<s:FormItem  id="weekdayList" label="Weekday:" skinClass="skins.FormItemSkin">
+												<domino:CustomDropDownList id="columnDateWeekdayList"
+										requireSelection="true" width="60" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnDateWeekday}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnDateWeekdayChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+										</s:FormItem>
+
+										
+										
+									
+										
+									</s:HGroup>	
+									<s:HGroup>
+									<s:FormItem label="Display Time:" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="dateTimeDisplayTimeCheckbox"
+													selected="false"
+													change="dateTimeDisplayTime_changeHandler(event)"/>
+								
+									</s:FormItem>
+									
+								</s:HGroup>	
+
+								<s:FormItem label="Show:" id="displayTimeShowLabel" skinClass="skins.FormItemSkin">
+								<domino:CustomDropDownList id="columnTimeShowList"
+										requireSelection="true" width="150" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnTimeShow}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnTimeShowChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:FormItem>	
+								
+								<s:FormItem label="Time Zone:"  skinClass="skins.FormItemSkin">
+									<domino:CustomDropDownList id="columnTimeZoneList"
+										requireSelection="true" width="150" left="5"
+										dataProvider="{DominoGlobalTokens.Zones}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnTimeZoneChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								
+								</s:FormItem>
+								<s:FormItem label="Format:" skinClass="skins.FormItemSkin" id="displayTimeFormatGroup">
+								<domino:CustomDropDownList id="columnTimeFormatList"
+										requireSelection="true" width="100" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnTimeFormat}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnTimeFormatChange(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+								</s:FormItem>
+
+								<s:FormItem label="Separator:" id="displayTimeSeparatorLabel" skinClass="skins.FormItemSkin">
+								<s:TextInput id="timeSeparatorInput"
+										text="/"  width="30" change="timeSeparator_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="time separator"/>
+								</s:FormItem>
+								
+
+								</s:VGroup>
+
+							
+								<s:VGroup id="namesStyleGroup">
+
+										<s:HGroup>
+											<s:CheckBox id="nameContainCheckbox"
+													selected="false"
+													change="nameContain_changeHandler(event)"/>
+													 <s:Label left="5"  text="Column contains a name"/>
+										</s:HGroup>
+
+										<s:HGroup>
+											<s:CheckBox id="showOnlineStatusCheckbox"
+													selected="false"
+													change="showOnlineStatus_changeHandler(event)"/>
+													 <s:Label left="5"  text="Show online status"/>
+										</s:HGroup>
+
+										<s:Label left="5"  text="Programmatic name of column that "/>
+										<s:Label left="5"  text="contains online name. None if "/>
+										 <s:Label left="5"  text="current column."/>
+										 <s:TextInput id="programNameColumnInput"
+										text="/"  width="30" change="programColumn_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="time separator"/>
+
+										<s:Label left="5"  text="Verical orientation"/>
+										<domino:CustomDropDownList id="vericalOrientationList"
+										requireSelection="true" width="100" left="5"
+										dataProvider="{DominoGlobalTokens.ViewColumnNamesVertival}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+										change="onColumnNameVerticalOrientaion(event)"
+										enabled="true"
+										itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+
+								</s:VGroup>
+
+								
+
+
+
+							
+							</mx:VBox>
+
+
+
+							<mx:VBox  horizontalAlign="left" id="columnFontSetPanel" label="Column Setting-Font" verticalAlign="top" percentHeight="100" 
+		   paddingLeft="5" paddingTop="10" paddingBottom="10"  >
+		   						<s:FormItem label="Font:" skinClass="skins.FormItemSkin">
+										<s:HGroup>
+											<s:RadioButton id="columnFontForTitleRadioBtn" label="Title"  value="title" groupName="columnFontType" selected="true"  click="columnFontType_changeHandler()"/>
+											<s:RadioButton id="columnFontForSelfRadioBtn" label="Column" value="column" groupName="columnFontType" click="columnFontType_changeHandler()"/>
+											
+										</s:HGroup>	
+									</s:FormItem>
+		   							<s:HGroup>
+									<s:Label id="columnTitleSize"
+												textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="1" fontSize="13"
+												left="5" right="10" 
+												text="Size:"/>
+										<s:TextInput id="columTitleSize"
+										text="9"  change="columTitleSize_changeHandler(event)" width="100" skinClass="skins.TextInputSkin" prompt="Column title size"/>	
+									</s:HGroup>	
+		   							<s:FormItem label="{fontName}:" skinClass="skins.FormItemSkin">
+										<domino:CustomDropDownList id="titleFontDropDownList"
+						requireSelection="true" width="100%"
+						dataProvider="{DominoGlobalTokens.FontNames}" labelDisplayFunction="{getDominoDropDownListLabel}" showTooltipFunction="{getDominoDropDownListTooltip}"
+						change="onTitleFontSelectionChange(event)"
+                        enabled="true"
+						itemRenderer="view.primeFaces.forms.renderer.IncludeDropdownListRenderer"/>
+
+									</s:FormItem> 
+									<s:FormItem label="{fontStyle}:" skinClass="skins.FormItemSkin">
+									<domino:MultipleCheckboxView id="titleStyleDropDownList" label=""  dynamicLabel="true" singleSelectOption="normal"
+		includeCollection="{DominoGlobalTokens.FontStyles}" textProperty="columnTitleStyle"/>
+									<domino:MultipleCheckboxView id="columnStyleDropDownList" label=""  dynamicLabel="true" singleSelectOption="normal"
+		includeCollection="{DominoGlobalTokens.FontStyles}" textProperty="columnStyle"/>
+										
+									</s:FormItem> 
+									<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+		<s:HGroup width="100%" verticalAlign="middle">
+        <s:Label text="{fontColor}:" />
+		<mx:ColorPicker id = "titleColorPicker" 
+               showTextField = "true" change="titleColor_changeHandler(event)" selectedColor = "0x000000" />
+         <s:Label text="Selected: #{colorstr}" id="colorLabel"/> 
+        
+      
+			
+		</s:HGroup>
+	</s:FormItem>	
+							</mx:VBox>
+							</mx:Accordion>
+    <fx:Script><![CDATA[
+    import view.domino.viewEditor.object.ColumnObject;
+	import view.domino.viewEditor.object.ViewObject;
+    import view.suportClasses.events.PropertyEditorChangeEvent;
+    import mx.events.FlexEvent;
+	import mx.utils.ObjectUtil;
+
+	import spark.components.Alert;
+	import spark.events.IndexChangeEvent;
+
+    import spark.components.gridClasses.GridColumn;
+    import view.suportClasses.events.DominoViewColumnUpdateEvent;
+
+
+	import global.domino.DominoGlobalTokens;
+
+	import flash.globalization.DateTimeFormatter;
+	import mx.collections.ArrayList;
+	import mx.collections.IList;
+
+	private var  colorstr:String ="000000";
+	[Bindable]
+	private var fontName:String="Title Font";
+	[Bindable]
+	private var fontStyle:String="Title Style";
+	[Bindable]
+	private var fontColor:String="Title Color";
+	[Bindable]
+	private var nowDateTimeStringInFormat:String="";
+
+	[Bindable]
+	private var dateYearList:ArrayList;
+
+// 	private var generalString:String = ([
+// "There are no advanced formats for the general style.
+
+// You may assign formats for multiple styles in the same column.
+// Style is not a property of the column; 
+// it just lets you select which set of options to work with."
+// ]> ).join("\n");
+
+	protected function onCreationCompletes(event:FlexEvent):void
+	{
+		columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = false;
+		titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = true;
+		//for generate style format ,generalStyleGroup,numberStyleGroup
+		generalStyleGroup.visible =generalStyleGroup.includeInLayout = true;
+		numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+		datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+		namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+		
+		dateTimeCustomChange("usersetting")
+		
+		
+		
+		nowDateTimeStringInFormat=getCurrentDateByFormatter("MM/dd/yyyy HH:mm:ss")
+
+	}
+
+	private function getCurrentDateTimeInrealTime():void
+	{
+		if(this.columnObject){
+			if(this.columnObject.columnDateFormatYear=="twodigityear"||this.columnObject.columnDateFormatYear=="fourdigityear"){
+				var dateStr:String=this.columnObject.columnDateFormatDateFormat;
+				
+				if(this.columnObject.columnDateFormatDateShow){
+					var dateFormatStr:String=this.columnObject.columnDateFormatDateShow;
+					if(dateFormatStr=="yearmonthday"){
+						dateStr=dateStr.replace("weekday","");
+					}
+					if(dateFormatStr=="weekdaymonthday"){
+						dateStr=dateStr.replace("year","");
+					}
+					if(dateFormatStr=="yearmonth"){
+						dateStr=dateStr.replace("weekday","");
+						dateStr=dateStr.replace("day","");
+					}
+					if(dateFormatStr=="year"){
+						dateStr=dateStr.replace("weekday","");
+						dateStr=dateStr.replace("day","");
+						dateStr=dateStr.replace("month","");
+					}
+				}
+				
+				dateStr=dateStr.replace("year","year"+this.columnObject.columnDateFormatDateseparator1) ;
+				
+				dateStr=dateStr.replace("year",this.columnObject.columnDateFormatYear);
+				
+				dateStr=dateStr.replace("twodigityear","yy");
+				dateStr=dateStr.replace("fourdigityear","yyyy");
+				dateStr=dateStr.replace("weekday",this.columnObject.columnDateFormatWeekday);
+				
+				dateStr=dateStr.replace("shortname","EE");
+				dateStr=dateStr.replace("fullname","EEEE");
+				dateStr=dateStr.replace("shortnameparens","(EE)");
+				dateStr=dateStr.replace("fullnameparens","(EEEE)");
+
+				dateStr=dateStr.replace("month","month"+this.columnObject.columnDateFormatDateseparator2) ;
+				dateStr=dateStr.replace("month",this.columnObject.columnDateFormatMonth);
+				dateStr=dateStr.replace("onedigitmonth","M");
+				dateStr=dateStr.replace("twodigitmonth","MM");
+				dateStr=dateStr.replace("shortname","MMM");
+				dateStr=dateStr.replace("fullname","MMMM");
+
+
+				dateStr=dateStr.replace("day","day"+this.columnObject.columnDateFormatDateseparator3) ;
+				dateStr=dateStr.replace("day",this.columnObject.columnDateFormatDay);
+				dateStr=dateStr.replace("onedigitday","d");
+				dateStr=dateStr.replace("twodigitday","dd");
+				//this.columnObject.columnDateFormatYear
+				//yearmonthdayweekday,weekdaymonthdayyear,weekdaydaymonthyear
+				var timeStr:String=this.columnObject.columnDateFormatTimeShow;
+				var timespearator:String=this.columnObject.columnDateFormatTimeSeparator
+				if(timeStr=="all"){
+					timeStr="HH"+timespearator+"mm"+timespearator+"ss A"
+				}else{
+					timeStr=timeStr.replace("hour","HH"+timespearator);
+					timeStr=timeStr.replace("minute","mm"+timespearator);
+					timeStr=timeStr.replace("second","ss" );
+				}
+
+				
+
+				
+				nowDateTimeStringInFormat=getCurrentDateByFormatter(dateStr+" "+timeStr);
+			}
+
+		}
+		
+
+	}
+
+	private function getCurrentDateByFormatter(formater:String):String{
+		
+		var formatter : DateTimeFormatter = new DateTimeFormatter("en-US"); 
+		var currentDateTime:Date = new Date();
+		formatter.setDateTimePattern(formater);
+		//formatter.formatString = formater;
+		return formatter.format(currentDateTime);
+	}
+
+
+	private function titleColor_changeHandler(event:Event):void
+	{
+		if (!this.columnObject) return;
+
+			colorstr=titleColorPicker.selectedColor.toString(16);
+		
+		if(colorstr.length <6){
+			for(var i:int=colorstr.length;i<6;i++){
+				colorstr="0"+colorstr;
+			}
+		}
+		if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+			this.columnObject.columnTitleColor= "#"+colorstr;
+		}else{
+			this.columnObject.columnColor= "#"+colorstr;
+		}
+		
+		this.dispatchEvent(new Event(Event.CHANGE));
+		colorLabel.text= "Selected:"+colorstr;
+		this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		
+	}
+    
+    private var _columnObject:ColumnObject;
+    [Bindable]
+    public function set columnObject(value:ColumnObject):void
+    {
+        _columnObject = value;
+		
+    } 
+
+  
+    public function get columnObject():ColumnObject
+    {
+        return this._columnObject;
+    }
+
+
+	private function getDominoDropDownListLabel(item:Object):String
+	{
+		return item.label;
+	}
+
+	private function getDominoDropDownListTooltip(item:Object):String
+	{
+		return item.description;
+	}
+
+   
+
+    public function initializeColumnProperty(cobj:ColumnObject):void
+    {
+	
+        if(cobj!=null){
+			if(cobj.isSharedColumn){
+				newColumnBtn.visible =newColumnBtn.includeInLayout = false;
+			}else{
+				newColumnBtn.visible =newColumnBtn.includeInLayout = true;
+			}
+
+            titleInput.text=cobj.columnHeaderTitle;
+            if(cobj.columnWidth!=null && cobj.columnWidth.toString().length>0){
+                columWidth.text=cobj.columnWidth;
+            }else{
+                columWidth.text= "70";
+            }
+
+			
+            
+            columWidth.text=cobj.columnWidth;
+            if(cobj.columnTypeValue=="Field"){
+                columnValueType.selectedValue="Field"
+                columnValueFieldRadioBtn.selected=true;
+                columnValueFormulaRadioBtn.selected=false;
+						
+            }
+            if(cobj.columnTypeValue=="Formula"){
+                columnValueType.selectedValue="Formula"
+                columnValueFormulaRadioBtn.selected=true;
+                columnValueFieldRadioBtn.selected=false;
+                
+            }
+            if(cobj.columnSort!=null && cobj.columnSort!=""){
+                columnSortOrder.selectedValue=cobj.columnSort;
+            }
+            if(cobj.columnSortType!=null && cobj.columnSortType!=""){
+              
+				if(cobj.columnSortType=="true"){
+                    columnSortCategorizedRadioBtn.selected=true;
+					columnSortStandardRadioBtn.selected=false;
+                }else{
+					columnSortCategorizedRadioBtn.selected=false;
+                    columnSortStandardRadioBtn.selected=true;
+                }
+            }
+         
+
+            if(cobj.twisties=="true"){
+                columnExpandable.selected=true;
+            }else{
+                columnExpandable.selected=false;
+            }
+
+			if(cobj.separatemultiplevalues=="true"){
+                mulitipleValuesCheckBox.selected=true;
+            }else{
+                mulitipleValuesCheckBox.selected=false;
+            }
+            columnValueFormula.text=cobj.columnCodeFormula;
+            this.columnObject=cobj;
+
+
+
+			if(cobj.columnTitleFont==null || cobj.columnTitleFont==""){
+				cobj.columnTitleFont="sans-serif";
+			}
+			if(cobj.columnFont==null || cobj.columnFont==""){
+				cobj.columnFont="sans-serif";
+			}	
+
+			selectCurrentItemTitleFont();
+			if(cobj.columnTitleStyle==null || cobj.columnTitleStyle==""){
+				cobj.columnTitleStyle="normal";
+			}
+
+			if(cobj.columnStyle==null || cobj.columnStyle==""){
+				cobj.columnStyle="normal";
+			}
+
+			if(cobj.columnFormatStyle==null || cobj.columnFormatStyle==""){
+				cobj.columnFormatStyle="general";
+			}
+		
+			//inilta number 
+			var styleFormat:int=-1;
+			if(cobj.columnFormatStyle=="general"){
+				styleFormat=0
+			} else if(cobj.columnFormatStyle=="number"){
+				styleFormat=1
+			}else if(cobj.columnFormatStyle=="datetime"){
+				styleFormat=2
+			}else if(cobj.columnFormatStyle=="names"){
+				styleFormat=3
+			}
+			selectCurrentItem(columnFormatStyleDropDownList,cobj.columnFormatStyle);
+			initalNumberPanel(styleFormat);
+
+
+			if(cobj.columnNumberFormatDigits==null || cobj.columnNumberFormatDigits==""){
+				cobj.columnNumberFormatDigits="0";
+			}
+
+			if(cobj.columnNumberFormatParens=="true"){
+				parenthsisCheckbox.selected=true
+			}else{
+				parenthsisCheckbox.selected=false
+			}
+			if(cobj.columnNumberFormatPunctuated=="true"){
+				punctuatedCheckbox.selected=true
+			}else{
+				punctuatedCheckbox.selected=false
+			}
+			
+			
+			if(cobj.columnNumberFormatPercent==null || cobj.columnNumberFormatPercent==""){
+				cobj.columnNumberFormatPercent="false";
+			}else{
+
+			}
+
+			if(cobj.columnCodeFormula==null){
+				cobj.columnCodeFormula="";
+			}
+
+
+			if(cobj.columnNumberFormatDigits!="varying"){
+				decimalPlacesInput.text=cobj.columnNumberFormatDigits;
+				decaimalVaring.selected=false;
+			}else{
+				decaimalVaring.selected=true;
+				decimalPlacesInput.text="0";
+			}
+
+			
+
+			//columnDateFormatDateseparator1
+			//columnNameContain
+			if(cobj.columnNameContain==null || cobj.columnNameContain==""){
+				nameContainCheckbox.selected=false;
+			}else{
+				if(cobj.columnNameContain=="true"){
+					nameContainCheckbox.selected=true;
+				}else{
+					nameContainCheckbox.selected=false;
+				}
+			}
+			if(cobj.columnNameStatus==null || cobj.columnNameStatus==""){
+				showOnlineStatusCheckbox.selected=false;
+			}else{
+				if(cobj.columnNameStatus=="true"){
+					showOnlineStatusCheckbox.selected=true;
+				}else{
+					showOnlineStatusCheckbox.selected=false;
+				}
+			}
+			//Alert.show("columnNameProgramName:"+cobj.columnNameProgramName);
+			if(cobj.columnNameProgramName==null || cobj.columnNameProgramName==""){
+				programNameColumnInput.text="";
+			}else{
+				programNameColumnInput.text=cobj.columnNameProgramName;
+				
+			}
+
+			//columnNameVertival
+			if(cobj.columnNameVertival==null || cobj.columnNameVertival==""){
+				cobj.columnNameVertival="top";
+			}
+			selectCurrentItem(vericalOrientationList,cobj.columnNameVertival);	
+
+			//columnNameProgramName
+			
+			if(cobj.columnDateFormatDateseparator1==null || cobj.columnDateFormatDateseparator1==""){
+				cobj.columnDateFormatDateseparator1=" ";
+			}
+			if(cobj.columnDateFormatDateseparator2==null || cobj.columnDateFormatDateseparator2==""){
+				cobj.columnDateFormatDateseparator2="/";
+			}
+			if(cobj.columnDateFormatDateseparator3==null || cobj.columnDateFormatDateseparator3==""){
+				cobj.columnDateFormatDateseparator3="/";
+			}
+			//columnDateFormatTimeSeparator
+			if(cobj.columnDateFormatTimeSeparator==null || cobj.columnDateFormatTimeSeparator==""){
+				cobj.columnDateFormatTimeSeparator=":";
+			}
+			
+			if(cobj.columnNumberFormat==null || cobj.columnNumberFormat==""){
+				cobj.columnNumberFormat="fixed";
+				
+			}
+			if(cobj.columnNumberFormatPreference==null || cobj.columnNumberFormatPreference==""){
+				cobj.columnNumberFormatPreference="usersetting";
+			}
+			columnStyleNumberFormat.selectedValue=cobj.columnNumberFormat;
+
+			if(cobj.columnNumberFormatBytes){
+				if(cobj.columnNumberFormatBytes=="true"){
+					columnStyleNumberFormat.selectedValue="bytes";
+				}
+			}
+			if(cobj.columnNumberFormatPercent){
+				if(cobj.columnNumberFormatPercent=="true"){
+					columnStyleNumberFormat.selectedValue="percent";
+				}
+			}
+			columnFontType.selectedValue="title";
+
+			// if(cobj.columnFontType==null || cobj.columnFontType==""){
+			// 	columnFontType.selectedValue="title"
+			// }
+
+			// if(cobj.columnFontType=="title"){
+			// 	columnFontType.selectedValue="title"
+			// }
+			// if(cobj.columnFontType=="column"){
+			// 	columnFontType.selectedValue="column"
+			// }
+			selectCurrentItem(totalsDropDownList,cobj.totals);	
+			//totalsDropDownList.callLater();
+			//titleStyleDropDownList.callLater(selectCurrentItemTitleStyle);
+			columnFontType_changeHandler();
+
+			selectCurrentItem(columnPreferencesList,cobj.columnNumberFormatPreference);
+
+			initalPreferencesSection(cobj.columnNumberFormatPreference);
+
+			decimalSymbolInput.text=cobj.columnNumberFormatDecimalsym;
+			thousandsSeparatorInput.text=cobj.columnNumberFormatThousandssep;
+			//date inital 
+			
+			if(cobj.columnDateDisplayFormatPreferences==null || cobj.columnDateDisplayFormatPreferences==""){
+				cobj.columnDateDisplayFormatPreferences="usersetting";
+			}else{
+
+			}
+
+			if(cobj.columnDateDisplayFormatAbbreviatedDate==null || cobj.columnDateDisplayFormatAbbreviatedDate==""){
+				cobj.columnDateDisplayFormatAbbreviatedDate="false";
+			}
+
+			if(cobj.columnDateFormatDisplayDate==null || cobj.columnDateFormatDisplayDate==""){
+				cobj.columnDateFormatDisplayDate="true";
+			}
+
+			if(cobj.columnDateFormatTimeShow==null || cobj.columnDateFormatTimeShow==""){
+				cobj.columnDateFormatTimeShow="hourminutesecond";
+			}
+			selectCurrentItem(columnTimeShowList,cobj.columnDateFormatTimeShow);
+			if(cobj.columnDateFormatTimeZone==null || cobj.columnDateFormatTimeZone==""){
+				cobj.columnDateFormatTimeZone="never";
+			}
+			selectCurrentItem(columnTimeZoneList,cobj.columnDateFormatTimeZone);
+
+			
+			if(cobj.columnDateFormatDisplayTime==null || cobj.columnDateFormatDisplayTime==""){
+				cobj.columnDateFormatDisplayTime="true";
+			}
+			if(cobj.columnDateFormatDateShow==null || cobj.columnDateFormatDateShow==""){
+				cobj.columnDateFormatDateShow="yearmonthday";
+			}
+			selectCurrentItem(columnDateTimeDisplayDateShowList,cobj.columnDateFormatDateShow);
+			if(cobj.columnDateFormatSpecial==null || cobj.columnDateFormatSpecial==""){
+				cobj.columnDateFormatSpecial="fourdigityearfor21stcentury";
+			}
+			columnDateTimeDisplayDateSpecialList.initializeMultiSelectOnCreateCompleted(cobj);
+			if(cobj.columnDateFormatCalendar==null || cobj.columnDateFormatCalendar==""){
+				cobj.columnDateFormatCalendar="gregorian";
+			}
+			selectCurrentItem(columnDateTimeDisplayDateCalendarList,cobj.columnDateFormatCalendar);
+			selectCurrentItem(columnDateTimeDisplayDateShowList,cobj.columnDateFormatDateShow);
+			if(cobj.columnDateFormatDisplayDate=="true"){
+				dateTimeDisplayDateCheckbox.selected=true;
+				controlDisplayDate("enable",this.columnObject.columnDateDisplayFormatPreferences);
+			}else{
+				dateTimeDisplayDateCheckbox.selected=false;
+				controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+			}
+			if(cobj.columnDateFormatDisplayTime=="true"){
+				dateTimeDisplayTimeCheckbox.selected=true;
+				controlDisplayTime("enable",this.columnObject.columnDateDisplayFormatPreferences);
+			}else{
+				dateTimeDisplayTimeCheckbox.selected=false;
+				controlDisplayTime("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+			}
+
+			dateTimeCustomChange(cobj.columnDateDisplayFormatPreferences);
+			selectCurrentItem(columnDateTimeFormatDefinedList,cobj.columnDateDisplayFormatPreferences);
+			dateYearList=new ArrayList();
+			dateYearList.removeAll();
+			dateYearList.addAll(DominoGlobalTokens.ViewColumnDateYear);
+			if(cobj.columnDateFormatDateFormat==null || cobj.columnDateFormatDateFormat==""){
+				cobj.columnDateFormatDateFormat="yearmonthdayweekday";
+			}
+			selectCurrentItem(columnDateTimeDisplayFormatList,cobj.columnDateFormatDateFormat);
+		
+			if(cobj.columnDateFormatDateFormat=="yearmonthdayweekday"){
+				dateYearList.addAll((DominoGlobalTokens.ViewColumnDateYearYMDW))
+			}
+
+			if(cobj.columnDateFormatDay==null || cobj.columnDateFormatDay==""){
+				cobj.columnDateFormatDay="twodigitday";
+			}
+			selectCurrentItem(columnDateDayList,cobj.columnDateFormatDay);
+
+			if(cobj.columnDateFormatMonth==null || cobj.columnDateFormatMonth==""){
+				cobj.columnDateFormatMonth="twodigitmonth";
+			}
+			selectCurrentItem(columnDateMonthList,cobj.columnDateFormatMonth);
+		
+			//columnDateFormatYear,columnDateYearList
+			if(cobj.columnDateFormatYear==null || cobj.columnDateFormatYear==""){
+				cobj.columnDateFormatYear="fourdigityear";
+			}
+			selectCurrentItem(columnDateYearList,cobj.columnDateFormatYear);
+			//columnDateWeekdayList,columnDateFormatWeekday
+			if(cobj.columnDateFormatWeekday==null || cobj.columnDateFormatWeekday==""){
+				cobj.columnDateFormatWeekday="shortname";
+			}
+			selectCurrentItem(columnDateWeekdayList,cobj.columnDateFormatWeekday);
+			//columnDateFormatTimeFormat,columnTimeFormatList
+			if(cobj.columnDateFormatTimeFormat==null || cobj.columnDateFormatTimeFormat==""){
+				cobj.columnDateFormatTimeFormat="24";
+			}
+			selectCurrentItem(columnTimeFormatList,cobj.columnDateFormatTimeFormat);
+
+			 
+        }
+		
+
+        
+        
+    }
+
+	private function dateTimeCustomChange(val:String):void 
+	{
+		if(val=="custom"){
+			dateFormatGroup.visible =dateFormatGroup.includeInLayout = true;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = true;
+			dateDayGroup.visible =dateDayGroup.includeInLayout = true;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = true;
+			dateYearWeekGroup.visible =dateYearWeekGroup.includeInLayout = true;
+			displayTimeFormatGroup.visible =displayTimeFormatGroup.includeInLayout = true;
+			displayTimeSeparatorLabel.visible =displayTimeSeparatorLabel.includeInLayout = true;
+			timeSeparatorInput.visible =timeSeparatorInput.includeInLayout = true;
+		}else{
+			dateFormatGroup.visible =dateFormatGroup.includeInLayout = false;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = false;
+			dateDayGroup.visible =dateDayGroup.includeInLayout = false;
+			dateSeparatorGroup.visible =dateSeparatorGroup.includeInLayout = false;
+			dateYearWeekGroup.visible =dateYearWeekGroup.includeInLayout = false;
+			displayTimeFormatGroup.visible =displayTimeFormatGroup.includeInLayout = false;
+			displayTimeSeparatorLabel.visible =displayTimeSeparatorLabel.includeInLayout = false;
+			timeSeparatorInput.visible =timeSeparatorInput.includeInLayout = false;
+		}
+	}
+
+
+	//for sample date string, when user change the format of domino , this try to convert to actionscript format and show same style for user
+	private function actoinDateTimeConvertToDominoFormat():void{
+		if(this.columnObject!=null){
+			if(this.columnObject.columnDateFormatSpecial){
+
+				nowDateTimeStringInFormat=getCurrentDateByFormatter("MM/dd/yyyy HH:mm:ss");
+			}
+		}
+	}
+
+	private function initalizeColumnFont(cobj:ColumnObject):void
+	{ 
+		
+		if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+			titleStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
+			if(cobj.columnTitleSize!=null && cobj.columnTitleSize.toString().length>0){
+                columTitleSize.text=cobj.columnTitleSize;
+            }else{
+				columTitleSize.text="9";
+			}
+		}else {
+			columnStyleDropDownList.initializeMultiSelectOnCreateCompleted(cobj);
+			if(cobj.columnSize!=null && cobj.columnSize.toString().length>0){
+                columTitleSize.text=cobj.columnSize;
+            }else{
+				columTitleSize.text="9";
+			}
+		}	
+
+			
+		if(cobj!=null){
+			
+			
+			
+			selectCurrentItemTitleFont();
+			//initail color
+			var uint_color:uint=0;
+			var pre_color:String;
+			if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+				pre_color = cobj.columnTitleColor;
+			}else{
+				pre_color = cobj.columnColor;
+			}
+
+			if(pre_color!=null && pre_color!=""){
+				if(pre_color.indexOf("#")<0){
+            		var dpCount:int =DominoGlobalTokens.Colors.length;
+					for (var i:int = 0; i < dpCount; i++)
+					{
+						var item:Object = DominoGlobalTokens.Colors.getItemAt(i);
+						if(item["label"]==pre_color){
+							uint_color = uint("0x" + item["htmlcolor"].substr(1));
+						}
+					}
+				}else{
+					//this is a hex value
+					uint_color = uint("0x" + pre_color.substr(1)); 
+				}
+				titleColorPicker.selectedColor=uint_color;
+				colorLabel.text=cobj.columnTitleColor;
+			}else{
+				titleColorPicker.selectedColor=uint("0x000000");
+				colorLabel.text="#000000";
+			}
+		}
+
+		
+		
+			
+	}
+
+	private function nameContain_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(nameContainCheckbox.selected){
+                this.columnObject.columnNameContain="true"
+            }else{
+                this.columnObject.columnNameContain="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+	//showOnlineStatus_changeHandler
+
+	private function showOnlineStatus_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(showOnlineStatusCheckbox.selected){
+                this.columnObject.columnNameStatus="true"
+            }else{
+                this.columnObject.columnNameStatus="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function programColumn_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNameProgramName=programNameColumnInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+
+
+
+	private function dateTimeDisplayTime_changeHandler(event:Event):void
+	{
+		if(dateTimeDisplayTimeCheckbox.selected==false){
+			if(dateTimeDisplayDateCheckbox.selected==false){
+				dateTimeDisplayTimeCheckbox.selected=true
+			}
+		}
+		if(dateTimeDisplayTimeCheckbox.selected){
+			controlDisplayTime("enable",this.columnObject.columnDateDisplayFormatPreferences);
+		}else{
+			controlDisplayTime("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+		}
+	}
+	private function selectCurrentItemTitleFont():void
+	{
+			var fontValue:String;
+			if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+				fontValue=this.columnObject.columnTitleFont;
+			}else{
+				fontValue=this.columnObject.columnFont;
+			}
+			
+			
+			selectCurrentItem(titleFontDropDownList,fontValue);
+			
+		
+	}
+	// private function selectCurrentItemTitleStyle():void
+	// {
+	// 	if(this.columnObject.columnTitleStyle){
+	// 		var dpCount:int = titleStyleDropDownList.dataProvider.length;
+	// 		for (var i:int = 0; i < dpCount; i++)
+	// 		{
+	// 			var item:Object = titleStyleDropDownList.dataProvider.getItemAt(i);
+	// 			if (ObjectUtil.compare(item["value"],this.columnObject.columnTitleStyle)==0)
+	// 			{
+	// 				titleStyleDropDownList.selectedItem = item;
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	private function selectCurrentItem(obj:CustomDropDownList,val:String):void
+	{
+		if(val){
+			var dpCount:int = obj.dataProvider.length;
+			for (var i:int = 0; i < dpCount; i++)
+			{
+				var item:Object = obj.dataProvider.getItemAt(i);
+				if (ObjectUtil.compare(item["value"],val)==0)
+				{
+					obj.selectedItem = item;
+					break;
+				}
+			}
+		}
+
+		
+	
+	}
+
+
+	private function decimalPlaces_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNumberFormatDigits=decimalPlacesInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+	private function decimalSymbol_changeHandler(event:Event):void
+	{
+
+		if(this.columnObject!=null){
+			this.columnObject.columnNumberFormatDecimalsym=decimalSymbolInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			
+        }
+
+	}
+	private function  dateTimeSample_changeHandler (event:Event):void
+	{
+	}
+
+	private function dateSeparator_changeHandler(index:int):void 
+	{
+		if(this.columnObject!=null){
+			if(index==1){
+				this.columnObject.columnDateFormatDateseparator1=dateSeparatorInput1.text;
+			}else if(index==2){
+				this.columnObject.columnDateFormatDateseparator2=dateSeparatorInput2.text
+			}else if(index==3){
+				this.columnObject.columnDateFormatDateseparator3=dateSeparatorInput3.text
+			}
+
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+
+	private function  thousandsSeparator_changeHandler (event:Event):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNumberFormatThousandssep=thousandsSeparatorInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			
+        }
+	}
+
+	private function onColumnNameVerticalOrientaion(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnNameVertival=vericalOrientationList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function onColumnDateDayChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatDay=columnDateDayList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+	private function onColumnTimeShowChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeShow=columnTimeShowList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+	private function onColumnTimeZoneChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeZone=columnTimeZoneList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+	private function onColumnTimeFormatChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeFormat=columnTimeFormatList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+	private function  onColumnDateMonthChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatMonth=columnDateMonthList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+
+	}
+
+	private function  onColumnDateYearChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatYear=columnDateYearList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+
+	private function  onColumnDateWeekdayChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatWeekday=columnDateWeekdayList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+	}
+	private function timeSeparator_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatTimeSeparator=timeSeparatorInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+        }
+	}
+
+   	private function columnTitle_changeHandler(event:Event):void
+	{
+        
+		if(this.columnObject!=null){
+			this.columnObject.columnHeaderTitle=titleInput.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+    }
+
+	private function columTitleSize_changeHandler(event:Event):void 
+	{
+		if(this.columnObject!=null){
+			if (ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+				this.columnObject.columnTitleSize=columTitleSize.text;
+			}else{
+				this.columnObject.columnSize=columTitleSize.text;
+			}
+			
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+
+    private function columnWidth_changeHandler(event:Event):void
+	{
+		if(columWidth.text!=null&& columWidth.text.length>0){
+		
+			if(this.columnObject!=null){
+				this.columnObject.columnWidth=columWidth.text;
+                this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+			
+		}
+	}
+
+
+    private var columnFormula:String = "";
+	private function columnValueFormula_changeHandler(event:Event):void
+	{	
+        if(this.columnObject!=null){
+			this.columnObject.columnCodeFormula=columnValueFormula.text;
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+       
+		
+	}
+
+	private function multipleValue_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(mulitipleValuesCheckBox.selected){
+                this.columnObject.separatemultiplevalues="true"
+            }else{
+                this.columnObject.separatemultiplevalues="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function decaimalVaring_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(decaimalVaring.selected){
+				this.columnObject.columnNumberFormatDigits="varying";
+				decimalPlacesInput.text="0";
+				fixedLabel.setStyle("color","#A9A9A9");
+				decimalPlacesInput.editable=false;
+				decimalPlacesInput.enabled=false;
+			}else{
+				
+				this.columnObject.columnNumberFormatDigits="0";
+				decimalPlacesInput.enabled=true;
+				decimalPlacesInput.editable=true;
+				fixedLabel.setStyle("color","#000000");
+				
+			}
+			 this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+
+	}
+
+	private function parenthesis_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(parenthsisCheckbox.selected){
+				this.columnObject.columnNumberFormatParens="true";
+			}else{
+				this.columnObject.columnNumberFormatParens="false";
+			}
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function displayAbbreviatedDate_changeHandler(event:Event):void
+	{
+		if(dateTimeDisplayAbbreviatedCheckbox.selected==true){
+			dateTimeDisplayDateCheckbox.selected=false;
+			dateTimeDisplayTimeCheckbox.selected=false;
+			controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+			controlDisplayTime("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+		}else{
+			dateTimeDisplayDateCheckbox.selected=true;
+			dateTimeDisplayTimeCheckbox.selected=true;
+			controlDisplayDate("enable",this.columnObject.columnDateDisplayFormatPreferences);
+			controlDisplayTime("enable",this.columnObject.columnDateDisplayFormatPreferences);
+		}
+	}
+	private function dateTimeDisplayDate_changeHandler(event:Event):void
+	{
+		if(dateTimeDisplayDateCheckbox.selected==false){
+			if(dateTimeDisplayTimeCheckbox.selected==false){
+				dateTimeDisplayDateCheckbox.selected=true
+			}
+		}
+		if(dateTimeDisplayDateCheckbox.selected){
+			controlDisplayDate("enable",this.columnObject.columnDateDisplayFormatPreferences);
+		}else{
+			controlDisplayDate("disenable",this.columnObject.columnDateDisplayFormatPreferences);
+		}
+		getCurrentDateTimeInrealTime();
+	}
+
+	private function controlDisplayDate(val:String,preferences:String)
+	{
+		if(val=="disenable"){
+			//displayDateShowLabel.setStyle("color","#A9A9A9");
+			columnDateTimeDisplayDateShowList.enabled=false;
+			//displayDateSpecialLabel.setStyle("color","#A9A9A9");
+			columnDateTimeDisplayDateSpecialList.enabled=false;
+			//columnDateTimeDisplayCalendarLabel.setStyle("color","#A9A9A9");
+			columnDateTimeDisplayDateCalendarList.enabled=false;
+
+			if(preferences=="custom"){
+			//displayDateFormatLabel.setStyle("color","#A9A9A9");
+				columnDateTimeDisplayFormatList.enabled=false;
+				dateSeparatorInput1.editable=false;
+				dateSeparatorInput2.editable=false;
+				dateSeparatorInput3.editable=false;
+				columnDateDayList.enabled=false;
+				columnDateMonthList.enabled=false;
+				columnDateYearList.enabled=false;
+				columnDateWeekdayList.enabled=false;
+			}
+
+		}else{
+			//displayDateShowLabel.setStyle("color","#000000");
+			columnDateTimeDisplayDateShowList.enabled=true;
+			//displayDateSpecialLabel.setStyle("color","#000000");
+			columnDateTimeDisplayDateSpecialList.enabled=true;
+			//columnDateTimeDisplayCalendarLabel.setStyle("color","#000000");
+			columnDateTimeDisplayDateCalendarList.enabled=true;
+			
+			if(preferences=="custom"){
+				//displayDateFormatLabel.setStyle("color","#000000");
+				columnDateTimeDisplayFormatList.enabled=true;
+				dateSeparatorInput1.editable=true;
+				dateSeparatorInput2.editable=true;
+				dateSeparatorInput3.editable=true;
+				columnDateDayList.enabled=true;
+				columnDateMonthList.enabled=true;
+				columnDateYearList.enabled=true;
+				columnDateWeekdayList.enabled=true;
+			}
+		}
+
+	}
+
+
+	private function controlDisplayTime(val:String,preferences:String)
+	{
+		if(val=="disenable"){
+			columnTimeShowList.enabled=false;
+			columnTimeZoneList.enabled=false;
+			if(preferences=="custom"){
+				columnTimeFormatList.enabled=false;
+				timeSeparatorInput.editable=false;
+			}
+		}else{
+			columnTimeShowList.enabled=true;
+			columnTimeZoneList.enabled=true;
+			if(preferences=="custom"){
+				columnTimeFormatList.enabled=true;
+				timeSeparatorInput.editable=true;
+			}
+		}
+	}
+	
+
+
+	private function punctuated_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+			if(punctuatedCheckbox.selected){
+				this.columnObject.columnNumberFormatPunctuated="true";
+			}else{
+				this.columnObject.columnNumberFormatPunctuated="false";
+			}
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+    private function check_changeHandler(event:Event):void
+	{
+		if(this.columnObject!=null){
+            if(columnExpandable.selected){
+                this.columnObject.twisties="true"
+            }else{
+                this.columnObject.twisties="false"
+            }
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+
+	private function columnFormatNumber_changeHandler():void 
+	{
+		
+		if(this.columnObject!=null){
+			if( columnStyleNumberFormat.selection.value.toString()=="percent")
+			{
+ 				this.columnObject.columnNumberFormatPercent="true";
+			}else{
+				this.columnObject.columnNumberFormatPercent="false";
+           	}
+
+			if( columnStyleNumberFormat.selection.value.toString()=="bytes")
+			{
+ 				this.columnObject.columnNumberFormatBytes="true";
+			}else{
+				this.columnObject.columnNumberFormatBytes="false";
+           	}
+
+			
+			this.columnObject.columnNumberFormat=columnStyleNumberFormat.selection.value.toString();
+			
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			//columnNumberFormatDigits
+           
+           
+        }
+
+
+	}
+
+
+	private function columnFontType_changeHandler():void
+	{
+        if(this.columnObject!=null){
+            //Alert.show("columnFontType.selection:"+columnFontType.selection.value.toString());
+			if( ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+				columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = false;
+				titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = true;
+				fontName = "Title Font";
+				fontStyle = "TItle Style";
+				fontColor = "Title Color";
+			}else{
+				columnStyleDropDownList.visible =columnStyleDropDownList.includeInLayout = true;
+				titleStyleDropDownList.visible =titleStyleDropDownList.includeInLayout = false;
+				fontName = "Column Font";
+				fontStyle = "Column Style";
+				fontColor = "Column Color";
+			}
+		
+			initalizeColumnFont(this.columnObject);
+
+
+		
+            //this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+
+    private function columnSort_changeHandler(event:Event):void
+	{
+        if(this.columnObject!=null){
+            this.columnObject.columnSort=columnSortOrder.selection.value.toString();
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+        }
+	}
+    private function columnSortType_changeHandler(event:Event):void
+	{
+        if(this.columnObject!=null){
+            this.columnObject.columnSortType=columnSortType.selection.value.toString();
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+           
+        }
+	}
+
+    private function startRemoveColumn():void
+    {
+         this.dispatchEvent(new Event("removeColumn",true, true));
+            
+    }
+
+
+   	private function columnType_changeHandler(event:Event):void
+	{
+		
+		if(this.columnObject!=null){
+			this.columnObject.columnTypeValue=columnValueType.selectedValue.toString();
+            this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+		
+		
+	}
+	private function initalNumberPanel(index:int):void{
+		if(index==0){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = true;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+			}else if(index==1){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = false;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = true;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+			}else if(index==2){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = false;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = true;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = false;
+			}else if(index==3){
+				generalStyleGroup.visible =generalStyleGroup.includeInLayout = false;
+				numberStyleGroup.visible =numberStyleGroup.includeInLayout = false;
+				datetimeStyleGroup.visible =datetimeStyleGroup.includeInLayout = false;
+				namesStyleGroup.visible =namesStyleGroup.includeInLayout = true;
+			}
+	}
+
+	private function onColumnStyleSelectionChange(event:IndexChangeEvent):void
+	{
+		initalNumberPanel(event.newIndex);
+		if(this.columnObject!=null){
+			this.columnObject.columnFormatStyle=columnFormatStyleDropDownList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+		}
+	}
+
+	private function initalPreferencesSection(val:String):void 
+	{
+		if(val=="usersetting"){
+			decailsymLabel.setStyle("color","#A9A9A9");
+			thousandssepLabel.setStyle("color","#A9A9A9");
+			fixedLabel.setStyle("color","#A9A9A9");
+			decimalSymbolInput.editable=false;
+			
+			thousandsSeparatorInput.editable=false;
+			this.columnObject.columnNumberFormatPreference="usersetting"
+		} else if(val=="custom"){
+			decailsymLabel.setStyle("color","#000000");
+			thousandssepLabel.setStyle("color","#000000");
+			fixedLabel.setStyle("color","#000000");
+			decimalSymbolInput.editable=true;
+			thousandsSeparatorInput.editable=true;
+			
+			this.columnObject.columnNumberFormatPreference="custom"
+		}
+			
+	}
+
+	private function onColumnPreferencesSelectionChange(event:IndexChangeEvent):void
+	{
+	
+			if(event.newIndex==0){
+				initalPreferencesSection("usersetting")
+
+			}else if(event.newIndex==1){
+				initalPreferencesSection("custom")
+			}
+	}
+
+	private function onColumnDateTimeColumnShowChange(event:IndexChangeEvent):void
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatDateShow=columnDateTimeDisplayDateShowList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+
+	}
+
+	private function onColumnDateTimeColumnSpecialChange(event:IndexChangeEvent):void
+	{
+	}
+
+	private function onColumnDateTimeColumnCalendarChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatCalendar=columnDateTimeDisplayDateCalendarList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			getCurrentDateTimeInrealTime();
+		}
+
+	}
+
+	private function onColumnDateTimeColumnFormatChange(event:IndexChangeEvent):void 
+	{
+		if(this.columnObject!=null){
+			this.columnObject.columnDateFormatDateFormat=columnDateTimeDisplayFormatList.selectedItem["value"].toString();
+			this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			dateYearList.removeAll();
+			dateYearList.addAll(DominoGlobalTokens.ViewColumnDateYear);
+			if(this.columnObject.columnDateFormatDateFormat=="yearmonthdayweekday"){
+				dateYearList.addAll((DominoGlobalTokens.ViewColumnDateYearYMDW))
+			}
+			getCurrentDateTimeInrealTime();
+		}
+	}
+
+
+
+	private function onColumnDateTimeSelectionChange(event:IndexChangeEvent):void
+	{		
+		var val:String=columnDateTimeFormatDefinedList.selectedItem["value"].toString();
+			dateTimeCustomChange(val);
+			if(this.columnObject!=null){
+				this.columnObject.columnDateDisplayFormatPreferences=val;
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+			
+	}
+
+	protected function onTotalSelectionChange(event:IndexChangeEvent):void
+	{
+		if(totalsDropDownList.selectedItem){
+			if(this.columnObject!=null){
+				this.columnObject.totals=totalsDropDownList.selectedItem["value"].toString();
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+		}
+
+	}
+
+
+	protected function onTitleFontSelectionChange(event:IndexChangeEvent):void
+	{
+		if(titleFontDropDownList.selectedItem){
+			if(this.columnObject!=null){
+				if(ObjectUtil.compare(columnFontType.selection.value.toString(),"title")==0){
+					this.columnObject.columnTitleFont=titleFontDropDownList.selectedItem["value"].toString();
+					
+				}else{
+					this.columnObject.columnFont=titleFontDropDownList.selectedItem["value"].toString();
+					
+				
+				}
+
+				this.dispatchEvent(new DominoViewColumnUpdateEvent(DominoViewColumnUpdateEvent.COLUMN_UPDATE,this.columnObject,true, true) );
+			}
+		}
+
+	}
+
+	
+
+
+    ]]></fx:Script> 	
+    <fx:Declarations>
+		<s:RadioButtonGroup id="columnValueType"/>
+		<s:RadioButtonGroup id="columnSortOrder"/>
+		<s:RadioButtonGroup id="columnSortType"/>
+		<s:RadioButtonGroup id="columnFontType"/>
+		<s:RadioButtonGroup id="columnStyleNumberFormat"/>
+	</fx:Declarations>	
+</s:Group>

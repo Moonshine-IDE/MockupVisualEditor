@@ -201,7 +201,7 @@ package view.domino.surfaceComponents.components
                 _fontStyle = value;
                 
                
-                dispatchEvent(new Event("colorAttributeChanged"))
+                dispatchEvent(new Event("fontStyleAttributeChanged"))
             }
         }
 

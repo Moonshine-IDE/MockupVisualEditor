@@ -1,0 +1,1388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:view="view.*" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:dataTable="view.primeFaces.surfaceComponents.components.DataTable"
+		 xmlns:dropGrid="view.domino.viewEditor.grid.*"
+		 creationComplete="onComplete()"
+		 xmlns:viewProperty="view.domino.propertyEditors.*"
+		 xmlns:collapsiblehdivider="components.collapsibleHDivider.*">
+    <collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup percentWidth="100" bottom="0" top="0" gap="0" minWidth="250" id="dominoViewGroup">
+		 			
+				<dropGrid:DragAndDropGrid id="dgColumns"
+					width="90%" height="100%" 
+					editable="true" sortableColumns="false" 
+					draggableColumns="true"
+					horizontalScrollPolicy="auto"
+					dragEnabled="true" dragMoveEnabled="true" dropEnabled="true"
+					dragStart="onRowDragStarts(event)" 
+					dataProvider="{rowsDataProvider}" click="onDataGridClick(event)">
+                        <dropGrid:columns>
+                           <s:ArrayList>
+							
+							</s:ArrayList>
+                        </dropGrid:columns>
+		        </dropGrid:DragAndDropGrid>
+                <s:Group  width="10%"  minWidth="250" minHeight="600" height="100%">
+                        <s:VGroup horizontalAlign="left" verticalAlign="top" percentHeight="100" percentWidth="100"
+                                    paddingLeft="0" paddingRight="0" id="dominoViewPropertyEditor">
+                        	<view:PropertyEditorHeader id="propertyEditorHeader" width="100%" />
+							
+							
+							<viewProperty:DominoViewPropertyEditor id="viewSetPanel" viewObject="{viewObject}"/>
+							<viewProperty:DominoViewColumnPropertyEditor id="columnAccordion" columnObject="{selectedColumnObject}" width="100%"/>
+							<s:VGroup paddingLeft="5" width="100%" height="100%" id="sharedColumnLabel">
+							<s:Label  text="This is a shared column: " width="100%" id="sharedColumnLabelText" />
+							
+							<s:Button id="editSharedColumnBtn" label="Edit" 
+								click="editSharedColumn()"/>
+							</s:VGroup>
+							
+							
+						</s:VGroup>		   
+                </s:Group>
+	</collapsiblehdivider:CollapsibleEdgeContainersHDividerGroup>
+
+	<fx:Metadata>
+		[Event(name="change",type="flash.events.Event")]
+		[Event(name="propertyEditorChanged",type="view.suportClasses.events.PropertyEditorChangeEvent")]
+	
+	</fx:Metadata>
+
+<fx:Script><![CDATA[
+
+	import mx.events.FlexEvent;
+	import mx.events.DataGridEvent;
+    import flash.events.Event;
+	import mx.events.DragEvent;
+    import spark.events.IndexChangeEvent;
+	import mx.collections.ArrayList;
+	import utils.MoonshineBridgeUtils;
+	import view.suportClasses.events.PropertyEditorChangeEvent;
+
+	import view.interfaces.IVisualEditorLibraryBridge;
+	import spark.components.Alert;
+	import components.renderers.DominoViewEditorHeaderRenderer;
+
+	import view.suportClasses.events.DominoViewColumnClickEvent;
+	import view.suportClasses.events.DominoViewColumnRightClickEvent;
+
+	import flash.ui.ContextMenu;
+    import flash.ui.ContextMenuItem;
+	import flashx.textLayout.container.ScrollPolicy;
+
+	import global.domino.DominoGlobals;
+
+	import view.domino.viewEditor.object.ColumnObject;
+	import view.domino.viewEditor.object.ViewObject;
+	import spark.components.gridClasses.GridColumn;
+
+	import view.suportClasses.events.DominoViewColumnUpdateEvent;
+	import view.suportClasses.events.DominoViewColumnDragDropCompleteEvent;
+	import view.suportClasses.events.DominoViewSharedColumnAppendEvent;
+	import mx.utils.StringUtil;
+	import mx.utils.ObjectUtil;
+	import mx.utils.UIDUtil;
+	import utils.DominoConvertUtils;
+	import mx.managers.PopUpManager;
+	import mx.core.FlexGlobals;
+	import mx.events.CloseEvent;
+	import spark.components.TitleWindow;
+	import mx.events.CloseEvent;
+	import components.renderers.DominoViewEditorHeaderRenderer;
+	import flash.events.MouseEvent;
+
+	import spark.components.DataGrid;
+	import spark.components.GridColumnHeaderGroup;
+	import utils.DominoUtils;
+
+	private var viewFileName:String =  "" ;
+
+	private var _hasChanged:Boolean = false;
+
+	private var columnIndex:int = -1;
+
+	private var selectedColumnName:String = "";
+	private var selectedColumn:GridColumn = null;
+	private var selectedColumnType:String = "";
+	private var selectedColumnRender:DominoViewEditorHeaderRenderer = null;
+
+
+	private var showColumns:Boolean = false;
+
+	private var viewObject:ViewObject=null;
+
+	private var columnObjectList:ArrayList = new ArrayList();
+	private var selectedColumnObject:ColumnObject = null;
+	private var selectedColumnIndex:int = -1;
+	private var appendSharedColumnPopup:TitleWindow;
+	private var newSharedColumnFromViewPopup:TitleWindow  
+	public function get hasChanged():Boolean
+	{
+		return _hasChanged;
+	}
+
+	public function set hasChanged(value:Boolean):void
+	{
+		if (_hasChanged != value)
+		{
+			_hasChanged = value;
+			dispatchEvent(new Event(Event.CHANGE));
+		}
+	}
+
+	private function editSharedColumn():void
+	{
+		if(selectedColumnObject&& selectedColumnObject.sharedColumnName){
+			MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.sharedColumnName);
+		}
+		 
+	}
+
+	public function createContextMenuForGrid():void
+	{
+			
+	}
+
+	public function setDominoViewGroupVisible(value:Boolean):void
+	{
+		if (this.dominoViewGroup) this.dominoViewGroup.visible = value;
+	}
+
+	private function createContextMenu():ContextMenu
+	{
+		var viewContextMenu:ContextMenu = new ContextMenu();
+		var cutItem:ContextMenuItem = new ContextMenuItem("Add Column");
+		cutItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onMenuItemAddColumn);
+
+		var removeItem:ContextMenuItem = new ContextMenuItem("Remove Column");
+		removeItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, removeColumn);
+
+
+		//Append Shared Action
+		var appendItem:ContextMenuItem = new ContextMenuItem("Append Shared Column");
+		appendItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, appendSharedColumn);
+		
+
+		var sharedColumnItem:ContextMenuItem = new ContextMenuItem("Convert to Shared Column",false,true,false);
+		sharedColumnItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, createNewSharedColumnFromCurrentColumn);
+
+		viewContextMenu.customItems.push(cutItem);
+		viewContextMenu.customItems.push(removeItem);
+		viewContextMenu.customItems.push(appendItem);
+		viewContextMenu.customItems.push(sharedColumnItem);
+		return viewContextMenu;
+	}
+	private function appendSharedColumn(event:ContextMenuEvent):void
+	{
+		if( MoonshineBridgeUtils.moonshineBridge==null){
+			Alert.show("MoonshineBridgeUtils.moonshineBridge is null")
+		}else{
+			appendSharedColumnPopup= MoonshineBridgeUtils.moonshineBridge.getDominoSharedColumnListPopup(_fileMoonshine);
+			//appendSharedColumnPopup.addEventListener(CloseEvent.CLOSE, onFieldEditWindowClosed, false, 0, true);
+			appendSharedColumnPopup.addEventListener(CloseEvent.CLOSE, handleAppendShareColumnPopupClose);
+			appendSharedColumnPopup.addEventListener(DominoViewSharedColumnAppendEvent.SHARED_COLUMN_APPEND, onShareColumnAppendRequest);
+            	
+			PopUpManager.addPopUp(appendSharedColumnPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
+			PopUpManager.centerPopUp(appendSharedColumnPopup);
+		}
+		
+	}
+
+	private function onShareColumnAppendRequest(event:DominoViewSharedColumnAppendEvent):void 
+	{
+		if(event.sharedFilePath!=null){
+				var xml:XML=loadLocalSingleFileToXML(event.sharedFilePath);
+			if(xml.column[0]){
+				//remove empty column from grid
+				var emptyColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt( dgColumns.columns.length-1) as GridColumn;
+				if(emptyColumn.headerText="         "){
+					(dgColumns.columns as ArrayList).removeItem(emptyColumn);
+				}
+
+				var columnsObj:ColumnObject=new ColumnObject();
+				columnsObj=initializeSignleColumn(xml.column[0],columnsObj);
+				columnsObj.isSharedColumn=true;
+				//columnsObj.sharedColumnName=event.sharedColumnName;
+				columnsObj.sharedColumnName=xml.@name;
+				dominoViewGridAddEmptyColumn();
+			
+				
+				columnObjectList.addItem(columnsObj);
+
+				dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+				hasChanged=true;
+			}
+			
+		}
+	}
+
+	protected function handleAppendShareColumnPopupClose(event:CloseEvent):void
+	{
+		appendSharedColumnPopup.removeEventListener(CloseEvent.CLOSE, handleAppendShareColumnPopupClose);
+		appendSharedColumnPopup.removeEventListener(DominoViewSharedColumnAppendEvent.SHARED_COLUMN_APPEND, onShareColumnAppendRequest);
+		appendSharedColumnPopup = null;
+	}
+
+	private function createNewSharedColumnDetails(n:String):void{
+		if(selectedColumnObject&&selectedColumnObject.isSharedColumn!=true){
+				
+				
+				var viewFileParentPath:String=_fileMoonshine.parent.parent.nativePath+File.separator;
+				
+				//Alert.show("viewFileParentPath :"+_fileMoonshine.parent.parent.nativePath);
+				var shareColumnFolderPath:String="SharedElements"+File.separator+"Columns"+File.separator;
+				var sourcefileNameStr:String
+				if(n){
+					sourcefileNameStr=n;
+				}else{
+					sourcefileNameStr=selectedColumnObject.columnHeaderTitle;
+				}
+				
+				
+				
+				var fileNameStr:String=DominoUtils.fixDominoViewName(sourcefileNameStr);
+				sourcefileNameStr=DominoUtils.toDominoViewNormalName(fileNameStr)
+
+				fileNameStr=fileNameStr+".column";
+
+			
+				var newShareColumnFile:File=new File(viewFileParentPath+shareColumnFolderPath+fileNameStr);
+				
+			if(!newShareColumnFile.exists){
+				var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
+				var xmlView:XML=new XML("<sharedcolumn />");
+				
+				xmlView.@name=sourcefileNameStr;
+				xmlView.@noreplace="false";
+				xmlView.@opencollapsed="false";
+				
+				var colXML:XML =DominoConvertUtils.convertColumnObjectToXML(selectedColumnObject);
+				
+				xmlView.appendChild(colXML);
+				xmlStr=xmlStr+xmlView.toXMLString();
+				
+				_fileStreamMoonshine.open(newShareColumnFile, FileMode.WRITE);
+				_fileStreamMoonshine.writeUTFBytes(xmlStr);
+				_fileStreamMoonshine.close();
+				
+				selectedColumnObject.isSharedColumn=true;
+				selectedColumnObject.sharedColumnName=sourcefileNameStr;
+				selectedColumnObject.shareColumnName=sourcefileNameStr;
+				dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+				hasChanged=true;
+				//MoonshineBridgeUtils.moonshineBridge.openDominoSharedColumnFile(selectedColumnObject.columnHeaderTitle);
+			}else{
+				Alert.show("This column already exist a shared column with same name!");
+			}
+		}
+
+	}
+	private function createNewSharedColumnFromCurrentColumn(event:ContextMenuEvent):void
+	{
+		//createNewSharedColumnDetails();
+		if(selectedColumnObject){
+			newSharedColumnFromViewPopup=MoonshineBridgeUtils.moonshineBridge.getDominoNewSharedColumnFromViewColumn(selectedColumnObject.columnHeaderTitle);
+			//newSharedColumnFromViewPopup.defaultFileName=selectedColumnObject.columnHeaderTitle;
+			newSharedColumnFromViewPopup.addEventListener(CloseEvent.CLOSE, handleShareColumnCreateFromViewPopupClose);
+		
+			
+		}
+
+		    	
+		PopUpManager.addPopUp(newSharedColumnFromViewPopup, FlexGlobals.topLevelApplication as DisplayObject, true);
+		PopUpManager.centerPopUp(newSharedColumnFromViewPopup);
+		
+	}
+
+
+	protected function handleShareColumnCreateFromViewPopupClose(event:CloseEvent):void
+	{
+		newSharedColumnFromViewPopup.removeEventListener(CloseEvent.CLOSE, handleShareColumnCreateFromViewPopupClose);
+		newSharedColumnFromViewPopup = null;
+	}
+
+	private function onMenuItemAddColumn(event:ContextMenuEvent):void
+	{
+		
+
+		//if(selectedColumnName!="New Column" && repeatColumnTitle==false){
+			var tmpColumn:GridColumn=new GridColumn();
+			tmpColumn.headerText="New Column"+DominoGlobals.DominoViewColumnCount.toString();
+			
+			tmpColumn.dataField="";
+			tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
+			
+			tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(9,"sans-serif","normal",15);
+			dominoViewGridAddColumn(tmpColumn);
+			dominoViewGridAddEmptyColumn();
+			
+			var unid:String=UIDUtil.getUID(tmpColumn);
+
+			hasChanged=true;
+
+			
+		
+			viewSetPanel.visible =viewSetPanel.includeInLayout = false;
+			columnAccordion.visible =columnAccordion.includeInLayout = true;
+			sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+			selectedColumnName="New Column"+DominoGlobals.DominoViewColumnCount.toString();
+			
+			selectedColumn= getCurrentColumnByTitle(selectedColumnName);
+			// titleInput.text=selectedColumnName;
+			// columWidth.text="70";
+			// columnValueType.selectedValue="Field"
+			// columnValueFieldRadioBtn.selected=true;
+			// columnValueFormulaRadioBtn.selected=false;
+			// columnValueFormula.text="";
+
+			DominoGlobals.DominoViewColumnCount++;
+
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			//add new column into columnList
+			
+			var columnsObj:ColumnObject=new ColumnObject();
+			columnsObj.columnHeaderTitle=selectedColumnName;
+			columnsObj.columnWidth="15";
+			columnsObj.columnTypeValue="Field";
+			columnsObj.columnTitleFont="sans-serif";
+			columnsObj.columnTitleStyle="normal";
+			columnsObj.columnTitleSize="9";
+			columnsObj.columnTitleColor="#000000";
+			columnsObj.columnUnid=unid;
+			columnObjectList.addItem(columnsObj);
+			var objIndex:int=columnObjectList.getItemIndex(columnsObj);
+			selectedColumnObject=columnObjectList.getItemAt(objIndex) as ColumnObject; 
+
+			
+			columnAccordion.initializeColumnProperty(columnsObj);
+
+		
+	}
+
+
+	private function dominoViewGridAddColumn(tmpColumn:GridColumn):void
+	{
+		var emptyColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt( dgColumns.columns.length-1) as GridColumn;
+		if(emptyColumn.headerText="         "){
+			(dgColumns.columns as ArrayList).removeItem(emptyColumn);
+		}
+		
+		dgColumns.columns.addItem(tmpColumn);
+	}
+
+	private function dominoViewGridAddEmptyColumn():void
+	{
+		var tmpColumn:GridColumn=new GridColumn();
+			tmpColumn.headerText="         ";
+			tmpColumn.dataField="";
+			
+			dgColumns.columns.addItem(tmpColumn);
+
+	}
+	
+
+  	[Bindable]
+	private var rowsDataProvider:ArrayList = new ArrayList();
+
+
+	protected function onRowDragStarts(event:DragEvent):void
+    {
+		
+        //dgColumns.endItemEditorSession();
+    }
+
+    protected function onRowDragAndDropped(event:DragEvent):void
+    {
+		
+        //dgColumns.callLater(updateToOwner, [true]);
+		
+    }
+
+    private function updateToOwner(isAll:Boolean = false, updateType:String = null, itemIndex:int = -1):void
+    {
+       
+    }
+
+	
+	
+	public function onComplete():void {
+
+		
+		//inital the view columns
+
+        propertyEditorHeader.componentName = "Domino View";
+
+		
+
+		viewSetPanel.visible =viewSetPanel.includeInLayout = true;
+		columnAccordion.visible =columnAccordion.includeInLayout = false;
+		sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+		dgColumns.addEventListener(DominoViewColumnClickEvent.COLUMN_CLICK, viewColumnClick);
+		dgColumns.addEventListener(DominoViewColumnRightClickEvent.COLUMN_CLICK,viewColumnRightClick);
+
+		//add property change listener
+		
+		this.contextMenu = createContextMenu();
+
+		dominoViewPropertyEditor.addEventListener("viewPropertyChanged", onDominoViewPropertyChanged);
+		dominoViewPropertyEditor.addEventListener(DominoViewColumnUpdateEvent.COLUMN_UPDATE, onDominoViewColumnPropertyChanged);
+		dgColumns.addEventListener(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE, onDominoViewColumnDragDropCompleteed);
+		
+		dominoViewPropertyEditor.addEventListener("removeColumn", removeColumn);
+
+		//onComplete
+		dgColumns.addEventListener(DataGridEvent.COLUMN_STRETCH, columnResizeHandler);
+    
+    }
+
+	private function columnResizeHandler(event:DataGridEvent):void {
+		if(event.target is GridColumn){
+			var gridColumn:GridColumn=event.target  as GridColumn;
+			//convertPixelWidthToDominoCharacterWidth
+			var colTextWidth:Number=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(selectedColumnObject.columnTitleSize),selectedColumnObject.columnTitleFont,selectedColumnObject.columnTitleStyle,gridColumn.width);
+			selectedColumnObject.columnWidth=colTextWidth.toString();
+		
+			
+		}
+	}
+
+
+	public function viewColumnRightClick(event:DominoViewColumnRightClickEvent):void{
+		
+		if(event.columnName){			
+			createNewSharedColumnDetails(event.columnName);
+
+		}
+		
+		
+	
+	}
+	
+	public function viewColumnClick(event:DominoViewColumnClickEvent):void{
+		showColumns=true;
+
+		selectedColumnType="";
+		
+		var render:DominoViewEditorHeaderRenderer=event.render;
+		if(event.columnInex>-1 && event.columnInex<=columnObjectList.length){
+			
+			if(selectedColumnRender){
+				selectedColumnRender.setCurrentState("normal",true)
+			}
+			
+
+			//selectedColumnRender=render;
+			
+			var getCurrentClickTarget:ColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumnIndex=event.columnInex;
+			selectedColumnObject=columnObjectList.getItemAt(event.columnInex) as ColumnObject;
+			selectedColumn=(dgColumns.columns as ArrayList).getItemAt(event.columnInex) as GridColumn;
+					
+			if(render){
+				const column:GridColumn = render.column;
+                const dataGrid:DataGrid = (column && column.grid) ? column.grid.dataGrid : null;
+                const columnHeaderGroup:GridColumnHeaderGroup = (dataGrid) ? dataGrid.columnHeaderGroup : null;
+				columnHeaderGroup.downColumnIndex=event.columnInex;
+				columnHeaderGroup.highlightSelectedColumn=column;
+				
+				
+			}
+			//Alert.show("selectedColumnIndex:"+selectedColumnIndex);
+			if(getCurrentClickTarget.isSharedColumn==true){
+				viewSetPanel.visible =viewSetPanel.includeInLayout = false;
+				columnAccordion.visible =columnAccordion.includeInLayout = false;
+				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = true;
+				sharedColumnLabelText.text="This is a shared column: "+getCurrentClickTarget.sharedColumnName+""
+			}else{
+				
+				viewSetPanel.visible =viewSetPanel.includeInLayout = false;
+				columnAccordion.visible =columnAccordion.includeInLayout = true;
+				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+				if(selectedColumnObject!=null && selectedColumn!=null ){
+					columnAccordion.initializeColumnProperty(selectedColumnObject);
+				}
+				
+			}
+
+			var  viewContextMenu:ContextMenu=this.contextMenu as ContextMenu; 
+			for(var i:int=0; i<viewContextMenu.customItems.length; i++)
+				{
+					var  menuItem:ContextMenuItem=viewContextMenu.customItems[i] as ContextMenuItem;
+					if(menuItem){
+						if(menuItem.caption=="Convert to Shared Column"){
+							if(getCurrentClickTarget.isSharedColumn==true){
+								menuItem.visible=false
+							}else{
+								menuItem.visible=true
+							}
+						}
+					}
+				}
+			
+			
+			
+			
+		}
+		
+		
+	
+	}
+
+	private function onDataGridClick(event:MouseEvent):void
+	{
+		if(showColumns==false){
+			viewSetPanel.visible =viewSetPanel.includeInLayout = true;
+			columnAccordion.visible =columnAccordion.includeInLayout = false;
+		}
+		showColumns=false;
+		
+		
+	}
+
+	private function onDominoViewPropertyChanged(event:Event):void
+	{
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+	}
+	private function onDominoViewColumnDragDropCompleteed(event:DominoViewColumnDragDropCompleteEvent):void 
+	{
+		
+		//reoder the domino column list
+	
+		var cacheColumnObjectList:ArrayList = new ArrayList();
+		//var gridColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(index) as GridColumn;
+		for(var i:int=0; i<(dgColumns.columns as ArrayList).length; i++)
+		{
+			var col:GridColumn = GridColumn ((dgColumns.columns as ArrayList).getItemAt(i));
+			var uuid:String=UIDUtil.getUID(col);
+			for(var j:int=0; j<columnObjectList.length; j++)
+			{
+				var getCurrentTarget:ColumnObject=columnObjectList.getItemAt(j) as ColumnObject;
+				if(getCurrentTarget.columnUnid==uuid){
+					cacheColumnObjectList.addItem(getCurrentTarget);
+				}
+			}
+		}
+		//remoce all
+		if(cacheColumnObjectList.length>0){
+			columnObjectList.removeAll();
+			columnObjectList.addAll(cacheColumnObjectList);
+		}
+		dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+		hasChanged=true;
+	}
+	private function onDominoViewColumnPropertyChanged(event:DominoViewColumnUpdateEvent):void
+	{
+		if(event.col!=null){
+			var col:ColumnObject=event.col as ColumnObject;
+
+		
+			
+			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
+			//some time the new column not add into columnObjectList
+
+			if(index==-1){
+				index=selectedColumnIndex;
+			}
+			
+			columnObjectList.setItemAt(col,index);
+
+			var gridColumn:GridColumn=(dgColumns.columns as ArrayList).getItemAt(index) as GridColumn;
+			if(gridColumn.headerText!=col.columnHeaderTitle){
+				gridColumn.headerText=col.columnHeaderTitle;
+			}
+			
+
+			if(col.columnWidth!=null&& col.columnWidth.length>0){
+				gridColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(col.columnTitleSize),col.columnTitleFont,col.columnTitleStyle,Number(col.columnWidth));
+			}else{
+				gridColumn.width=15;
+			}
+			
+			(dgColumns.columns as ArrayList).setItemAt(gridColumn,index);
+			
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			hasChanged=true;
+		}
+		
+	}
+
+	private function removeColumn(event:Event):void 
+	{
+		
+		if(selectedColumnObject!=null){
+		
+			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
+			(dgColumns.columns as ArrayList).removeItemAt(index);
+			columnObjectList.removeItemAt(index);
+			
+
+			selectedColumnType="remove";
+
+			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+			
+
+			viewSetPanel.visible =viewSetPanel.includeInLayout = true;
+			columnAccordion.visible =columnAccordion.includeInLayout = false;
+			sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+
+		}
+	}
+
+
+	private function getCurrentColumnByTitle(title:String):GridColumn
+	{
+		var currentCol:GridColumn = null;
+		
+		 for(var indexNum:Number = 0; indexNum < dgColumns.columns.length; indexNum++)
+		{
+			var item:GridColumn = dgColumns.columns.getItemAt(indexNum) as GridColumn;
+		
+			if(item.headerText==title){
+				currentCol=item;
+			}
+		}
+		
+		return currentCol;
+
+	}
+
+	
+	CONFIG::MOONSHINE
+	{		
+		
+		import flash.filesystem.File;
+		import flash.filesystem.FileStream;	
+		import utils.StringHelper;
+		import utils.DominoConvertUtils;
+
+		private var _fileMoonshine:File;
+		private var _fileStreamMoonshine:FileStream;
+
+		public function set moonshineBridge(value:IVisualEditorLibraryBridge):void
+		{
+			MoonshineBridgeUtils.moonshineBridge = value;
+		}
+		
+		public function set visualEditorFilePath(value:String):void
+		{
+			MoonshineBridgeUtils.currentFilePath = value;
+		}
+
+		public function get visualEditorFilePath():String
+		{
+			return _fileMoonshine.nativePath;
+		}
+
+		public function saveEditedFile():void
+		{
+			
+			
+			if (!_fileStreamMoonshine) return;
+			if (!_fileMoonshine) return;
+			
+			var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
+			
+			
+			var xmlView:XML=getSavedXMLFromMemoryObject();
+			xmlStr=xmlStr+xmlView.toXMLString();
+			
+			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);
+			_fileStreamMoonshine.writeUTFBytes(xmlStr);
+			_fileStreamMoonshine.close();
+
+		
+			
+
+		
+		}
+
+		public function getSavedXMLFromMemoryObject():XML
+		{
+			viewObject=viewSetPanel.viewObject;
+			hasChanged=false;
+			var xmlView:XML=new XML("<view />");
+
+			xmlView.@name=viewObject.viewName;
+
+			if(viewObject.hideProperty){
+				xmlView.@hide=viewObject.hideProperty;
+			}
+			if (viewObject.noreplace=="true"){
+				xmlView.@noreplace="true";
+			}else{
+				xmlView.@noreplace="false";
+			}
+			
+
+			if(viewObject.propagatenoreplace=="true"){
+				xmlView.@propagatenoreplace="true";
+			}else{
+				xmlView.@propagatenoreplace="false";
+			}
+
+			if(viewObject.showinmenu=="true"){
+				xmlView.@showinmenu="true";
+			}else{
+				xmlView.@showinmenu="false";
+			}
+			
+			//xmlView.@noreplace="true";
+			xmlView.@unreadmarks="none";
+			// boldunreadrows="false" evaluateactions="false" 
+			//allownewdocuments="false" allowcustomizations="true" hidemarginborder="false" marginwidth="0px" marginbgcolor="white" uniquekeys="false"
+			if(viewObject.publicaccess=="true"){
+				xmlView.@publicaccess="true";
+			}else{
+				xmlView.@publicaccess="false";
+			}
+			
+			xmlView.@onopengoto="lastopened";
+			
+			xmlView.@onrefresh="displayindicator";
+			if(viewObject.opencollapsed=="true"){
+				xmlView.@opencollapsed="true";
+			}else{
+				xmlView.@opencollapsed="false";
+			}
+			
+		
+			xmlView.@showresponsehierarchy="true";
+			xmlView.@showmargin="true";
+			xmlView.@shrinkrows="false";
+			xmlView.@extendlastcolumn="false";
+			xmlView.@showhierarchies="false";
+			xmlView.@unreadcolor="black";
+			xmlView.@rowlinecount="1";
+			xmlView.@rowspacing="1";
+			xmlView.@bgcolor="white";
+			xmlView.@totalscolor="black";
+			xmlView.@headerbgcolor="white";
+
+			var viewCode:XML=new XML("<code event=\"selection\" />");
+			var viewCodeFormula:XML=new XML("<formula>" + viewObject.viewCodeFormula+"</formula>");
+			viewCode.appendChild(viewCodeFormula);
+			xmlView.appendChild(viewCode);
+
+			
+
+			for(var i:int=0; i<columnObjectList.length; i++)
+			{
+				
+				var c:ColumnObject = columnObjectList.getItemAt(i) as  ColumnObject;
+				
+				
+				var colXML:XML =DominoConvertUtils.convertColumnObjectToXML(c);
+				
+				
+
+				//--------------
+
+				if(c.isSharedColumn==true){
+					var sharedRefXML:XML = new XML("<sharedcolumnref />");
+					sharedRefXML.@name=c.sharedColumnName;
+					sharedRefXML.appendChild(colXML);
+					xmlView.appendChild(sharedRefXML);
+
+				}else{
+					xmlView.appendChild(colXML);
+				}
+
+				
+				
+				
+			}
+
+
+			return xmlView;
+		}
+
+
+		public function loadDxlFile():XML
+		{
+			var filePathStr:String=_fileMoonshine.nativePath;
+			return loadLocalFileToXML(filePathStr)
+		}
+
+		private function loadLocalSingleFileToXML(filePath:String):XML
+		{
+			var file:File=new File(filePath);
+			_fileStreamMoonshine = new FileStream();
+			_fileStreamMoonshine.open(file, FileMode.READ);
+
+			var data:String = _fileStreamMoonshine.readUTFBytes(file.size);
+			var xml:XML = new XML(data);
+			_fileStreamMoonshine.close();
+			file=null;
+			return xml
+		}
+
+		private function loadLocalFileToXML(filePath:String):XML
+		{
+			_fileMoonshine = createNewFileIfNotExists(filePath);
+			return loadLocalSingleFileToXML(filePath);
+		}
+
+		public function loadFile(filePath:String):void
+		{
+			columnObjectList= new ArrayList();
+			dgColumns.columns= new ArrayList();
+			var xml:XML = loadLocalFileToXML(filePath);
+			var name:String = getFileNameWithoutExtension(filePath,"view");
+			
+			if(xml!=null){
+			
+				for each(var col:XML in xml..column) //no matter of depth Note here
+				{
+				
+					var colChilren:XMLList = col.children();
+					var itemname:String= col.@itemname;
+					if(colChilren.length() > 0)
+					{
+						
+						
+						
+
+						//inital the memory column object
+						var columnsObj:ColumnObject=new ColumnObject();
+						columnsObj=initializeSignleColumn(col,columnsObj);
+						var parentXML:XML=col.parent();
+
+						if(col.parent().name()=="sharedcolumnref"){
+							columnsObj.isSharedColumn=true;
+							columnsObj.sharedColumnName=col.parent().@name
+						}
+						
+						
+						columnObjectList.addItem(columnsObj);
+						
+						
+					}
+				}
+				dominoViewGridAddEmptyColumn();
+				
+				//inital the view select formla
+				var selectFormula:XML= xml.code.(@event=="selection")[0];
+				if(selectFormula){
+					var formulaXml:XML=selectFormula.formula[0];
+					if(formulaXml){
+					
+						if(formulaXml.text()){
+							viewObject=new ViewObject();
+								if(xml.@name!=null && xml.@name.toString().length>0){
+									viewObject.viewName=xml.@name;
+								}else{
+									viewObject.viewName=name;
+								}
+								if(xml.@hide!=null && xml.@hide.toString().length>0){
+									viewObject.hideProperty=xml.@hide;
+								}
+								if(xml.@noreplace!=null && xml.@noreplace.toString().length>0){
+									viewObject.noreplace=xml.@noreplace;
+								}
+
+								if(xml.@propagatenoreplace!=null && xml.@propagatenoreplace.toString().length>0){
+									viewObject.propagatenoreplace=xml.@propagatenoreplace;
+								}
+								viewObject.viewCodeEvent="selection";
+								viewObject.viewCodeFormula=formulaXml.text();
+								
+								if(xml.@showinmenu!=null && xml.@showinmenu!=""){
+									viewObject.showinmenu=xml.@showinmenu
+								}else{
+									viewObject.showinmenu="false";
+								}
+								if(xml.@publicaccess!=null && xml.@publicaccess!=""){
+									viewObject.publicaccess=xml.@publicaccess
+								}else{
+									viewObject.publicaccess="false";
+								}
+								if(xml.@opencollapsed!=null && xml.@opencollapsed!=""){
+									viewObject.opencollapsed=xml.@opencollapsed
+								}else{
+									viewObject.opencollapsed="false";
+								}
+
+
+							
+								viewSetPanel.initializeViewProperty(viewObject);
+
+						}
+						
+					}
+				}
+
+			}
+			
+		}
+
+		private function initializeSignleColumn(col:XML,columnsObj:ColumnObject):ColumnObject 
+		{
+			var tmpColumn:GridColumn=new GridColumn();
+				tmpColumn.headerText=col.columnheader.@title;
+				
+
+				tmpColumn.headerRenderer= new ClassFactory(DominoViewEditorHeaderRenderer);
+				columnsObj.columnHeaderTitle=col.columnheader.@title;
+						
+				if(col.@width!=null && col.@width.toString().length>0){
+					columnsObj.columnWidth=col.@width;
+					
+				}else{
+					columnsObj.columnWidth="15";
+				}
+				if(col.@categorized.toString().length==0){
+					columnsObj.columnSortType="false";
+				}else{
+					columnsObj.columnSortType=col.@categorized;
+				}
+				if(col.@separatemultiplevalues.toString().length==0){
+					columnsObj.separatemultiplevalues="false";
+				}else{
+					columnsObj.separatemultiplevalues=col.@separatemultiplevalues;
+				}
+
+				if(col.@sort.toString().length==0){
+					columnsObj.columnSort="none";
+				}else{
+					columnsObj.columnSort=col.@sort;
+				}
+				if(col.@totals.toString().length==0){
+					columnsObj.totals="none";
+				}else{
+					columnsObj.totals=col.@totals.toString();
+				}
+
+				if(col.@twisties.toString().length==0){
+					
+				}else{
+					columnsObj.twisties=col.@twisties;
+				}
+				if(col.numberformat[0]){
+					columnsObj.columnFormatStyle="number";
+					if(col.numberformat[0].@format.toString().length>0){
+						columnsObj.columnNumberFormat=col.numberformat[0].@format
+					}else{
+						columnsObj.columnNumberFormat="decimal"
+					}
+
+					if(col.numberformat[0].@bytes.toString().length>0){
+						if(col.numberformat[0].@bytes=="true"){
+							columnsObj.columnNumberFormatBytes="true";
+						}else{
+							columnsObj.columnNumberFormatBytes="false";
+						}
+					}
+
+					if(col.numberformat[0].@punctuated.toString().length>0){
+						columnsObj.columnNumberFormatPunctuated=col.numberformat[0].@punctuated;
+					}else{
+						columnsObj.columnNumberFormatPunctuated="false";
+					}
+
+					if(col.numberformat[0].@parens.toString().length>0){
+						columnsObj.columnNumberFormatParens=col.numberformat[0].@parens;
+					}else{
+						columnsObj.columnNumberFormatParens="false";
+					}
+
+					if(col.numberformat[0].@percent.toString().length>0){
+						columnsObj.columnNumberFormatPercent=col.numberformat[0].@percent;
+					}else{
+						columnsObj.columnNumberFormatPercent="false";
+					}
+
+					if(col.numberformat[0].@digits.toString().length>0){
+						columnsObj.columnNumberFormatDigits=col.numberformat[0].@digits;
+					}else{
+						columnsObj.columnNumberFormatDigits="0";
+					}
+
+					if(col.numberformat[0].@preference.toString().length>0){
+						columnsObj.columnNumberFormatPreference=col.numberformat[0].@preference;
+					}else{
+						columnsObj.columnNumberFormatPreference="usersetting";
+					}
+
+					if(col.numberformat[0].@currencysymtype.toString().length>0){
+						columnsObj.columnNumberFormatCurrencysymtype=col.numberformat[0].@currencysymtype;
+					}else{
+						columnsObj.columnNumberFormatCurrencysymtype="usersetting";
+					}
+
+					if(col.numberformat[0].@currencysym.toString().length>0){
+						columnsObj.columnNumberFormatCurrencysym=col.numberformat[0].@currencysym;
+					}else{
+						columnsObj.columnNumberFormatCurrencysym="$";
+					}
+
+					if(col.numberformat[0].@usecustomsym.toString().length>0){
+						columnsObj.columnNumberFormatUsecustomsym=col.numberformat[0].@usecustomsym;
+					}else{
+						columnsObj.columnNumberFormatUsecustomsym="false";
+					}
+					if(col.numberformat[0].@decimalsym.toString().length>0){
+						columnsObj.columnNumberFormatDecimalsym=col.numberformat[0].@decimalsym;
+					}else{
+						columnsObj.columnNumberFormatDecimalsym=".";
+					}
+
+
+					if(col.numberformat[0].@thousandssep.toString().length>0){
+						columnsObj.columnNumberFormatThousandssep=col.numberformat[0].@thousandssep;
+					}else{
+						columnsObj.columnNumberFormatThousandssep=",";
+					}
+
+				}
+
+				if(col.datetimeformat[0]){
+					columnsObj.columnFormatStyle="datetime";
+					if(col.datetimeformat[0].@show.toString().length>0){
+						if(col.datetimeformat[0].@show=="datetime"){
+							columnsObj.columnDateFormatDisplayDate="true";
+							columnsObj.columnDateFormatDisplayTime="true";
+						}else if(col.datetimeformat[0].@show=="date"){
+							columnsObj.columnDateFormatDisplayDate="true";
+						}else if(col.datetimeformat[0].@show=="time"){
+							columnsObj.columnDateFormatDisplayTime="true";
+						}
+						
+					}else{
+						columnsObj.columnDateFormatDisplayDate="true";
+						columnsObj.columnDateFormatDisplayTime="true";
+					}
+
+					if(col.datetimeformat[0].@date.toString().length>0){
+						columnsObj.columnDateFormatDateShow=col.datetimeformat[0].@date;
+					}else{
+						columnsObj.columnDateFormatDateShow="monthdayyear";
+					}
+
+					var specialVal:String="";
+
+					if(col.datetimeformat[0].@showtodaywhenappropriate=="true"){
+						specialVal="showtodaywhenappropriate";
+					}
+					if(col.datetimeformat[0].@fourdigityear=="true"){
+						specialVal=specialVal+" "+"fourdigityear";
+					}
+					if(col.datetimeformat[0].@fourdigityearfor21stcentury=="true"){
+						specialVal=specialVal+" "+"fourdigityearfor21stcentury";
+					}
+					if(col.datetimeformat[0].@omitthisyear=="true"){
+						specialVal=specialVal+" "+"omitthisyear";
+					}
+
+					if(specialVal.length>0){
+						columnsObj.columnDateFormatSpecial=specialVal;
+					}else{
+						columnsObj.columnDateFormatSpecial="fourdigityearfor21stcentury";
+					}
+
+					if(col.datetimeformat[0].@calendar.toString().length>0){
+						columnsObj.columnDateFormatCalendar=col.datetimeformat[0].@calendar;
+					}else{
+						columnsObj.columnDateFormatCalendar="monthdayyear";
+					}
+
+					if(col.datetimeformat[0].@dateformat.toString().length>0){
+						columnsObj.columnDateFormatDateFormat=col.datetimeformat[0].@dateformat;
+					}else{
+						columnsObj.columnDateFormatDateFormat="weekdaymonthdayyear";
+					}
+
+					if(col.datetimeformat[0].@dateseparator1.toString().length>0){
+						columnsObj.columnDateFormatDateseparator1=col.datetimeformat[0].@dateseparator1;
+					}else{
+						columnsObj.columnDateFormatDateseparator1=" ";
+					}
+
+					if(col.datetimeformat[0].@dateseparator2.toString().length>0){
+						columnsObj.columnDateFormatDateseparator2=col.datetimeformat[0].@dateseparator2;
+					}else{
+						columnsObj.columnDateFormatDateseparator2="/";
+					}
+
+					if(col.datetimeformat[0].@preference.toString().length>0){
+						columnsObj.columnDateDisplayFormatPreferences=col.datetimeformat[0].@preference;
+					}else{
+						columnsObj.columnDateDisplayFormatPreferences="usersetting";
+					}
+
+
+					if(col.datetimeformat[0].@dateseparator3.toString().length>0){
+						columnsObj.columnDateFormatDateseparator3=col.datetimeformat[0].@dateseparator3;
+					}else{
+						columnsObj.columnDateFormatDateseparator3="/";
+					}
+
+
+					if(col.datetimeformat[0].@dayformat.toString().length>0){
+						columnsObj.columnDateFormatDay=col.datetimeformat[0].@dayformat;
+					}else{
+						columnsObj.columnDateFormatDay="twodigitday";
+					}
+
+					if(col.datetimeformat[0].@monthformat.toString().length>0){
+						columnsObj.columnDateFormatMonth=col.datetimeformat[0].@monthformat;
+					}else{
+						columnsObj.columnDateFormatMonth="twodigitmonth";
+					}
+
+
+					if(col.datetimeformat[0].@yearformat.toString().length>0){
+						columnsObj.columnDateFormatYear=col.datetimeformat[0].@yearformat;
+					}else{
+						columnsObj.columnDateFormatYear="fourdigityear";
+					}
+
+					if(col.datetimeformat[0].@weekdayformat.toString().length>0){
+						columnsObj.columnDateFormatWeekday=col.datetimeformat[0].@weekdayformat;
+					}else{
+						columnsObj.columnDateFormatWeekday="shortname";
+					}
+
+
+
+					if(col.datetimeformat[0].@time.toString().length>0){
+						columnsObj.columnDateFormatTimeShow=col.datetimeformat[0].@time;
+					}else{
+						columnsObj.columnDateFormatTimeShow="hourminutesecond";
+					}
+
+
+					if(col.datetimeformat[0].@zone.toString().length>0){
+						columnsObj.columnDateFormatTimeZone=col.datetimeformat[0].@zone;
+					}else{
+						columnsObj.columnDateFormatTimeZone="never";
+					}
+
+
+					if(col.datetimeformat[0].@timeformat24.toString().length>0){
+						if(col.datetimeformat[0].@timeformat24=="true"){
+							columnsObj.columnDateFormatTimeFormat="24";
+						}
+						
+					}else{
+						columnsObj.columnDateFormatTimeFormat="24";
+					}
+
+					if(col.datetimeformat[0].@timeformat12.toString().length>0){
+						if(col.datetimeformat[0].@timeformat12=="true"){
+							columnsObj.columnDateFormatTimeFormat="12";
+						}
+						
+					}
+
+					if(col.datetimeformat[0].@timeseparator.toString().length>0){
+						columnsObj.columnDateFormatTimeSeparator=col.datetimeformat[0].@timeseparator;
+					}else{
+						columnsObj.columnDateFormatTimeSeparator=":";
+					}
+
+				
+
+
+				}
+
+				if(col.columnnamesformat[0]){
+					columnsObj.columnFormatStyle="names";
+					if(col.columnnamesformat[0].@columncontainsname.toString().length>0){
+						columnsObj.columnNameContain=col.columnnamesformat[0].@columncontainsname;
+					}else{
+						columnsObj.columnNameContain="false";
+					}
+
+					if(col.columnnamesformat[0].@showonline.toString().length>0){
+						columnsObj.columnNameStatus=col.columnnamesformat[0].@showonline;
+					}else{
+						columnsObj.columnNameStatus="false";
+					}
+					//@columnname
+
+					if(col.columnnamesformat[0].@columnname.toString().length>0){
+						columnsObj.columnNameProgramName=col.columnnamesformat[0].@columnname;
+					}else{
+						columnsObj.columnNameProgramName="";
+					}
+					//
+					if(col.columnnamesformat[0].@verticalorientation.toString().length>0){
+						columnsObj.columnNameVertival=col.columnnamesformat[0].@verticalorientation;
+					}
+
+
+				}
+
+				if(col.font[0]){
+					if(col.font[0].@name.toString().length>0){
+						columnsObj.columnFont=col.font[0].@name.toString();
+					}else{
+						columnsObj.columnFont="sans-serif"
+					}
+					if(col.font[0].@style.toString().length>0){
+						
+						columnsObj.columnStyle=col.font[0].@style;
+						
+					}else{
+						columnsObj.columnStyle="normal";
+					}
+					var colSizeLength:int=col.font[0].@size.toString().length;
+					if(colSizeLength>0){
+						columnsObj.columnSize=col.font[0].@size;
+					}else{
+						columnsObj.columnSize="9"
+					}
+
+					if(col.font[0].@color.toString().length>0){
+						columnsObj.columnColor=col.font[0].@color.toString();
+					
+					}else{
+						columnsObj.columnColor="#000000";
+					}
+
+				}
+				if(col.columnheader[0]&&col.columnheader[0].font[0]){
+						if(col.columnheader[0].font[0].@name.toString().length>0){
+							columnsObj.columnTitleFont=col.columnheader[0].font[0].@name.toString();
+						
+						}else{
+							columnsObj.columnTitleFont="sans-serif"
+						}
+
+						if(col.columnheader[0].font[0].@style.toString().length>0){
+						
+							columnsObj.columnTitleStyle=col.columnheader[0].font[0].@style;
+						
+						}else{
+							columnsObj.columnTitleStyle="normal";
+						}
+						var sizeLength:int=col.columnheader[0].font[0].@size.toString().length;
+						if(sizeLength>0){
+							columnsObj.columnTitleSize=col.columnheader[0].font[0].@size;
+						}else{
+							columnsObj.columnTitleSize="9"
+						}
+
+						if(col.columnheader[0].font[0].@color.toString().length>0){
+							columnsObj.columnTitleColor=col.columnheader[0].font[0].@color.toString();
+						
+						}else{
+							columnsObj.columnTitleColor="#000000";
+						}
+
+						//convert width
+						var columnWidth:Number=8;
+						if(col.@width!=null && col.@width!=""){
+							columnWidth=Number(col.@width);
+						}
+				
+						tmpColumn.width=DominoConvertUtils.convertDominoCharacterWidthToPixelWidth(Number(columnsObj.columnTitleSize),columnsObj.columnTitleFont,columnsObj.columnTitleStyle,columnWidth);
+						
+						
+					
+				}
+				//after the column header font & size get, then we can add the column width to Mooshine-IDE grid
+				dgColumns.columns.addItem(tmpColumn);
+
+				if(col.code.toString().length==0){
+					columnsObj.columnTypeValue="Field";
+					columnsObj.columnCodeFormula=col.@itemname
+				}else{
+					columnsObj.columnTypeValue="Formula";
+					columnsObj.columnCodeFormula=col.code.formula;
+				}
+				columnsObj.columnUnid=UIDUtil.getUID(tmpColumn);
+
+			return columnsObj;
+		}
+
+		//This method will get the formula and base64 for column
+		private function getColumnFormula(column:XML):String 
+		{
+			var formula:String="";
+			if(column.code!=null){
+				if(column.code.formula!=null){
+					formula=StringHelper.base64Encode(column.code.formula.text());
+				}
+			}
+
+			return formula;
+
+		}
+
+
+		private function createNewFileIfNotExists(filePath:String):File
+		{
+			var tempFileMoonshine:File = new File(filePath);
+
+			if (!tempFileMoonshine.exists)
+			{
+				
+				var xml:XML = new XML("<root/>");
+				var tempFileStreamMoonshine:FileStream = new FileStream();
+				tempFileStreamMoonshine.open(tempFileMoonshine, FileMode.WRITE);
+				tempFileStreamMoonshine.writeUTFBytes(xml.toXMLString());
+				tempFileStreamMoonshine.close();
+			}
+
+			return tempFileMoonshine;
+		}
+
+		
+
+		private function getFileNameWithoutExtension(filePath:String,extension:String):String
+        {
+			var file:File = new File(filePath);
+			
+            var indexOfFileExtension:int = file.name.lastIndexOf(extension);
+            return file.name.substr(0, indexOfFileExtension - 1);
+        }
+	}
+
+			
+		
+
+]]></fx:Script> 
+<fx:Declarations>
+		<s:RadioButtonGroup id="columnValueType"/>
+		<s:RadioButtonGroup id="columnSortOrder"/>
+		<s:RadioButtonGroup id="columnSortType"/>
+		
+</fx:Declarations>		
+</s:Group>         

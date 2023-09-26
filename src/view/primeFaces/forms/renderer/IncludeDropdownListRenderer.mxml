@@ -57,11 +57,15 @@
 			protected function onCreationCompletes(event:FlexEvent):void
 			{
 				// lets not add tooltip when list has no horizontal scroll
-				if (this.width > this.owner.width)
-				{
-					labelDisplay.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
-					labelDisplay.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
-					isTooltip = true;
+				if (this && this.owner){
+					if (this.width > this.owner.width)
+					{
+						if(MoonshineBridgeUtils.moonshineBridge){
+							labelDisplay.addEventListener(ToolTipEvent.TOOL_TIP_CREATE, MoonshineBridgeUtils.moonshineBridge.getCustomTooltipFunction(), false, 0, true);
+							labelDisplay.addEventListener(ToolTipEvent.TOOL_TIP_SHOW, MoonshineBridgeUtils.moonshineBridge.getPositionTooltipFunction(), false, 0, true);
+							isTooltip = true;
+						}
+					}
 				}
 			}
 			

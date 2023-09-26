@@ -115,8 +115,6 @@ package utils
                 Clipboard.generalClipboard.clear();
                 var code:XML = selectedElement.toXML();
                 Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, code.toXMLString());
-            }else{
-                Alert.show("The main application frame may not be duplicated.");
             }
         }
 
@@ -134,7 +132,7 @@ package utils
                 var dominoTabView:DominoTabView=container as DominoTabView;
                 container=(dominoTabView.div) as IVisualElementContainer;
             }else if(container is DominoParagraph){
-                container= (selectedElement as UIComponent).parent as IVisualElementContainer;
+                //container= (selectedElement as UIComponent).parent as IVisualElementContainer;
             }else if(container is DominoSection){
 
             }else if(container is DominoSubForm){

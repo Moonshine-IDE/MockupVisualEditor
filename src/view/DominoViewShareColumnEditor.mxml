@@ -376,7 +376,7 @@
 			hasChanged=false;
 			var xmlStr:String="<?xml version=\"1.0\" encoding=\"utf-8\"?>"+"\r\n";
 			var xmlView:XML=getSavedXMLFromMemoryObject();
-			var colXML:XML=xmlView.column;
+			var colXML:XML=xmlView.column[0];
 			xmlStr=xmlStr+xmlView.toXMLString();
 			
 			_fileStreamMoonshine.open(_fileMoonshine, FileMode.WRITE);

@@ -93,7 +93,7 @@
                 
                 super.setCurrentState("down",true);
                 this.setCurrentState("down",true);
-                Alert.show("down");
+                
             }
 
             public function selectedColumnUp():void 

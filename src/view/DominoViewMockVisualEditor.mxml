@@ -646,21 +646,41 @@
 	{
 		
 		if(selectedColumnObject!=null){
+			var pt:Point = new Point(stage.mouseX, stage.mouseY);
+            pt = dgColumns.columnHeaderGroup.globalToLocal(pt);
+            var index:int = dgColumns.columnHeaderGroup.getHeaderIndexAt(pt.x, pt.y);
+            
 		
-			var index:int=columnObjectList.getItemIndex(selectedColumnObject);
-			(dgColumns.columns as ArrayList).removeItemAt(index);
-			columnObjectList.removeItemAt(index);
-			
+			//var selectindex:int=columnObjectList.getItemIndex(selectedColumnObject);
+			if(index!=-1){
+				var column:GridColumn = dgColumns.columns.getItemAt(index) as GridColumn; 
+				
+				var dataGrid:DataGrid = (column && column.grid) ? column.grid.dataGrid : null;
+				var columnHeaderGroup:GridColumnHeaderGroup = (dataGrid) ? dataGrid.columnHeaderGroup : null;
+				if(index==columnHeaderGroup.downColumnIndex){
+					columnHeaderGroup.downColumnIndex=-1;
+					columnHeaderGroup.highlightSelectedColumn=null;
+				}else{
+					if(columnHeaderGroup.downColumnIndex>index){
+						
+						columnHeaderGroup.downColumnIndex=columnHeaderGroup.downColumnIndex-1;
+						
+					}
+				}
+				
+				(dgColumns.columns as ArrayList).removeItemAt(index);
+				columnObjectList.removeItemAt(index);
+				
 
-			selectedColumnType="remove";
+				selectedColumnType="remove";
 
-			dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
-			
+				dominoViewPropertyEditor.dispatchEvent(new PropertyEditorChangeEvent(PropertyEditorChangeEvent.PROPERTY_EDITOR_CHANGED, null));
+				
 
-			viewSetPanel.visible =viewSetPanel.includeInLayout = true;
-			columnAccordion.visible =columnAccordion.includeInLayout = false;
-			sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
-
+				viewSetPanel.visible =viewSetPanel.includeInLayout = true;
+				columnAccordion.visible =columnAccordion.includeInLayout = false;
+				sharedColumnLabel.visible =sharedColumnLabel.includeInLayout = false;
+			}
 		}
 	}
 

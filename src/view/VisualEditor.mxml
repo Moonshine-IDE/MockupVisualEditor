@@ -86,7 +86,7 @@
 				<s:ArrayList>
 					<fx:Object icon="@Embed('/assets/list.png')" label="" toolTip="Properties"/>
 					<fx:Object icon="@Embed('/assets/organize.png')" label="" toolTip="Organize"/>
-					<fx:Object icon="@Embed('/assets/cog-solid.png')" label="" toolTip="Actions"/>
+					<!-- <fx:Object icon="@Embed('/assets/cog-solid.png')" label="" toolTip="Actions"/> -->
 					
 				</s:ArrayList>
 			</s:ButtonBar>

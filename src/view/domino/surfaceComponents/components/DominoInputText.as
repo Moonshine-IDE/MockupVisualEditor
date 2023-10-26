@@ -59,6 +59,7 @@ package view.domino.surfaceComponents.components
 
     import utils.StringHelper;
     import global.domino.DominoGlobalTokens;
+    import mx.controls.Alert;
 
     
 
@@ -2761,8 +2762,7 @@ package view.domino.surfaceComponents.components
             //Alert.show("xml:"+xml.toXMLString());
 
 			component.fromXML(xml, callback, localSurface, lookup);
-			
-            this.text = component.text;
+			this.text = component.text;
 			this.maxLength = component.maxLength;
             this.idAttribute = component.idAttribute;
             this.required = component.required;

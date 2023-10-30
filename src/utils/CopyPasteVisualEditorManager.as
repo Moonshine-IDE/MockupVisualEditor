@@ -62,7 +62,10 @@ package utils
     import view.domino.surfaceComponents.components.DominoSubForm;
     import view.domino.surfaceComponents.components.MainApplication;
     import mx.controls.Alert;
-    
+    import mx.managers.IFocusManagerComponent;
+    import mx.managers.FocusManager;
+    import flash.display.InteractiveObject;
+	
     public class CopyPasteVisualEditorManager
     {
         private var visualEditor:VisualEditor;
@@ -72,8 +75,8 @@ package utils
         {
             this.visualEditor = visualEditor;
 
-            visualEditor.addEventListener(FocusEvent.FOCUS_IN, onUiListenerFocusIn);
-            visualEditor.addEventListener(FocusEvent.FOCUS_OUT, onUiListenerFocusOut);
+            visualEditor.editingSurface.addEventListener(FocusEvent.FOCUS_IN, onUiListenerFocusIn);
+            visualEditor.editingSurface.addEventListener(FocusEvent.FOCUS_OUT, onUiListenerFocusOut);
         }
 
         private function onUiListenerFocusOut(event:FocusEvent):void
@@ -84,6 +87,7 @@ package utils
         private function onUiListenerFocusIn(event:FocusEvent):void
         {
             this.visualEditor.addEventListener(KeyboardEvent.KEY_DOWN, onUiListenerKeyDown);
+            
         }
 
         private function onUiListenerKeyDown(event:KeyboardEvent):void
@@ -109,13 +113,14 @@ package utils
         {
             var selectedElement:ISurfaceComponent = this.visualEditor.editingSurface.selectedItem;
             if (!selectedElement) return;
-
+           
             if (!(selectedElement is IMainApplication))
             {
                 Clipboard.generalClipboard.clear();
                 var code:XML = selectedElement.toXML();
                 Clipboard.generalClipboard.setData(ClipboardFormats.HTML_FORMAT, code.toXMLString());
             }
+            
         }
 
         private function paste():void

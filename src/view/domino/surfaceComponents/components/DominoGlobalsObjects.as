@@ -44,6 +44,8 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IDominoSurfaceComponent;
     import interfaces.dominoComponents.IDominoGlobalsObjects
     import components.domino.DominoGlobalsObjects
+
+    import mx.controls.Alert;
     [Exclude(name="toXML", kind="method")]
     [Exclude(name="fromXML", kind="method")]
     [Exclude(name="toCode", kind="method")]
@@ -98,7 +100,7 @@ package view.domino.surfaceComponents.components
 
         public function toXML():XML
         {
-            var xml:XML = new XML("<" + DOMINO_ELEMENT_NAME +">")
+            var xml:XML = new XML("<" + DOMINO_ELEMENT_NAME +"/>")
             if(this.options){
                 xml.@options=StringHelper.base64Encode(this.options)
             }
@@ -118,10 +120,20 @@ package view.domino.surfaceComponents.components
         {
             var localSurface:ISurface = surface;            
             component.fromXML(xml,callback,surface,lookup);
-            this.initialize=StringHelper.base64Decode(component.initialize);
-            this.terminate=StringHelper.base64Decode(component.terminate);
-            this.options=StringHelper.base64Decode(component.options);
-            this.declarations=StringHelper.base64Decode(component.declarations);
+            this.initialize=StringHelper.base64Decode(xml.@initialize);
+            this.terminate=StringHelper.base64Decode(xml.@terminate);
+            this.options=StringHelper.base64Decode(xml.@options);
+            this.declarations=StringHelper.base64Decode(xml.@declarations);
+           
+        }
+
+        public function fromXMLDominoObject(xml:XML):void
+        {
+            component.fromXMLDominoObject(xml);
+            this.initialize=StringHelper.base64Decode(xml.@initialize);
+            this.terminate=StringHelper.base64Decode(xml.@terminate);
+            this.options=StringHelper.base64Decode(xml.@options);
+            this.declarations=StringHelper.base64Decode(xml.@declarations);
         }
        
 

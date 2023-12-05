@@ -104,7 +104,8 @@ package view.domino.surfaceComponents.components
         }
         public static function toXML(op:Dictionary):XML
         {
-            var xml:XML = new XML("<dominoFormObject/>")
+            var xml:XML = new XML("<dominoFormObject />")
+                               
             if(op!=null){
                 for (var key:Object in op) {
                     if(op[key]!=undefined&& op[key]!=null){
@@ -116,48 +117,10 @@ package view.domino.surfaceComponents.components
 								obj=new DominoFormObjects();
                                 obj.isCustomFunction=false;
 							}
-							var formOptions:XML=new XML("<"+key+" />");
-                            if(obj.formula){
-                                formOptions.@formula=StringHelper.base64Encode(obj.formula)
-                            }
-                            if(obj.lotusscript){
-                                formOptions.@lotusscript=StringHelper.base64Encode(obj.lotusscript)
-                            }
-                            if(obj.javascript){
-                                formOptions.@javascript=StringHelper.base64Encode(obj.javascript)
-                            }
-                            if(obj.commonjavascript){
-                                formOptions.@commonjavascript=StringHelper.base64Encode(obj.commonjavascript)
-                            }
-                            if(obj.isCustomFunction){
-                                formOptions.@isCustomFunction="true"
-                            }else{
-                                formOptions.@isCustomFunction="false"
-                            }
-                            
 
-                            xml.appendChild(formOptions)
-                            // Alert.show("xml 139:"+xml.toString());
-                        }   
-                    };
-                }
-            }
-            return xml;
-        }
-
-        public static function toCustomXML(op:Dictionary):XML
-        {
-            var xml:XML = new XML("<dominoCustomObject />")
-            if(op!=null){
-                for (var key:Object in op) {
-                    if(op[key]!=undefined&& op[key]!=null){
-                        if(key.indexOf("global")>=0){
-                            //this global options
-                        }else{
-                            var obj: DominoFormObjects= op[key] as DominoFormObjects;
-                            if(obj!=null&& obj.isCustomFunction){
-                                // Alert.show("key:"+key);
+                            if(obj.isCustomFunction==false){
                                 var formOptions:XML=new XML("<"+key+" />");
+                                //Alert.show("formOptions:"+formOptions.toXMLString());
                                 if(obj.formula){
                                     formOptions.@formula=StringHelper.base64Encode(obj.formula)
                                 }
@@ -175,16 +138,59 @@ package view.domino.surfaceComponents.components
                                 }else{
                                     formOptions.@isCustomFunction="false"
                                 }
+                                
+                                //Alert.show("formOptions 140:"+formOptions.toXMLString());
+                                xml.appendChild(formOptions)
+                                //Alert.show("xml 142:"+xml.toXMLString());
+                            }
+                        }   
+                    };
+                }
+            }
+            return xml;
+        }
 
-                                  xml.appendChild(formOptions)
+        public static function toCustomXML(op:Dictionary):XML
+        {
+            var xml:XML = new XML("<dominoCustomObject />")
+           Alert.show("xml:"+xml.toXMLString());
+            if(op!=null){
+                for (var key:Object in op) {
+                    var keyString:String=key.toString()
+                    if(op[keyString]!=undefined&& op[keyString]!=null){
+                         
+                        if(keyString.indexOf("global")>=0){
+                            //this global options
+                        }else{
+                            var obj: DominoFormObjects= op[keyString] as DominoFormObjects;
+                            if(obj!=null&& obj.isCustomFunction==true){
+                              
+                                var formOptions:XML=new XML("<"+keyString+" />");
+                                if(obj.formula){
+                                    formOptions.@formula=StringHelper.base64Encode(obj.formula)
+                                }
+                                if(obj.lotusscript){
+                                    formOptions.@lotusscript=StringHelper.base64Encode(obj.lotusscript)
+                                }
+                                if(obj.javascript){
+                                    formOptions.@javascript=StringHelper.base64Encode(obj.javascript)
+                                }
+                                if(obj.commonjavascript){
+                                    formOptions.@commonjavascript=StringHelper.base64Encode(obj.commonjavascript)
+                                }
+                                if(obj.isCustomFunction){
+                                    formOptions.@isCustomFunction="true"
+                                }else{
+                                    formOptions.@isCustomFunction="false"
+                                }
+                                xml.appendChild(formOptions)
 
-                                 Alert.show("formOptions:"+formOptions.toXMLString());
+                                
                             }
 
                        
                            
-                             Alert.show("xml:"+xml.toXMLString());
-
+                        
                         }   
                     };
                 }

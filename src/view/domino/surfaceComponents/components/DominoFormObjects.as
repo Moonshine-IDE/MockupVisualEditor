@@ -153,7 +153,6 @@ package view.domino.surfaceComponents.components
         public static function toCustomXML(op:Dictionary):XML
         {
             var xml:XML = new XML("<dominoCustomObject />")
-           Alert.show("xml:"+xml.toXMLString());
             if(op!=null){
                 for (var key:Object in op) {
                     var keyString:String=key.toString()
@@ -195,6 +194,7 @@ package view.domino.surfaceComponents.components
                     };
                 }
             }
+            //Alert.show("toCustomxml:"+xml.toXMLString());
             return xml;
         }
 

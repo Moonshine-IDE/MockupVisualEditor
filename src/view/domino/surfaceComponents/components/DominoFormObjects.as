@@ -52,6 +52,7 @@ package view.domino.surfaceComponents.components
         private var _lotusscript:String;
         private var _javascript:String;
         private var _commonjavascript:String;
+        private var _cachelotusscript:String;
         private var _isCustomFunction:Boolean =false
 
         public function DominoFormObjects()
@@ -73,6 +74,14 @@ package view.domino.surfaceComponents.components
 
         public function set formula(value:String):void {
             this._formula = value;
+        }
+        //_cachelotusscript
+        public function get cachelotusscript():String {
+            return _cachelotusscript;
+        }
+
+        public function set cachelotusscript(value:String):void {
+            this._cachelotusscript = value;
         }
 
         public function get lotusscript():String {
@@ -113,7 +122,7 @@ package view.domino.surfaceComponents.components
                             //this global options
                         }else{
                             var obj: DominoFormObjects= op[key] as DominoFormObjects;
-                            if(obj==null){
+                            if(obj==null || obj==undefined){
 								obj=new DominoFormObjects();
                                 obj.isCustomFunction=false;
 							}

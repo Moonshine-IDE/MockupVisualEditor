@@ -176,21 +176,32 @@ package view.domino.surfaceComponents.components
                                 var formOptions:XML=new XML("<"+keyString+" />");
                                 if(obj.formula){
                                     formOptions.@formula=StringHelper.base64Encode(obj.formula)
+                                    formOptions.@type="Formula";
+                                    formOptions.@iconType="Formula";
                                 }
                                 if(obj.lotusscript){
                                     formOptions.@lotusscript=StringHelper.base64Encode(obj.lotusscript)
+                                    formOptions.@type="LotusScript";
+                                    formOptions.@iconType="LotusScript";
+
                                 }
                                 if(obj.javascript){
                                     formOptions.@javascript=StringHelper.base64Encode(obj.javascript)
+                                    formOptions.@type="JavaScript";
+                                    formOptions.@iconType="JavaScript";
                                 }
                                 if(obj.commonjavascript){
-                                    formOptions.@commonjavascript=StringHelper.base64Encode(obj.commonjavascript)
+                                    formOptions.@commonjavascript=StringHelper.base64Encode(obj.commonjavascript);
+                                    formOptions.@type="JavaScript";
+                                    formOptions.@iconType="JavaScript";
                                 }
                                 if(obj.isCustomFunction){
                                     formOptions.@isCustomFunction="true"
                                 }else{
                                     formOptions.@isCustomFunction="false"
                                 }
+
+
                                 xml.appendChild(formOptions)
 
                                 

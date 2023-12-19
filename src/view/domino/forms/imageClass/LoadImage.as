@@ -65,17 +65,28 @@ package view.domino.forms.imageClass
         [Embed(source='/assets/dominoObjectTreeCircle_fill.png')]
 		public static const DOMINO_OBJECT_TREE_CIRCLE_FILL:Class;
 
+        [Embed(source='/assets/dominoObjectTreeCircle_fill_mul.png')]
+		public static const DOMINO_OBJECT_TREE_CIRCLE_FILL_MUL:Class;
+
         [Embed(source='/assets/dominoObjectTreeRhombus.png')]
 		public static const DOMINO_OBJECT_TREE_RHOMBUS:Class;
 
         [Embed(source='/assets/dominoObjectTreeRhombus_fill.png')]
 		public static const DOMINO_OBJECT_TREE_RHOMBUS_FILL:Class;
 
+        [Embed(source='/assets/dominoObjectTreeRhombus_fill_mul.png')]
+		public static const DOMINO_OBJECT_TREE_RHOMBUS_FILL_MUL:Class;
+
+        
+
         [Embed(source='/assets/dominoObjectTreePage.png')]
 		public static const DOMINO_OBJECT_TREE_PAGE:Class;
         
         [Embed(source='/assets/dominoObjectTreePage_fill.png')]
 		public static const DOMINO_OBJECT_TREE_PAGE_FILL:Class;
+
+        [Embed(source='/assets/dominoObjectTreePage_fill_mul.png')]
+		public static const DOMINO_OBJECT_TREE_PAGE_FILL_MUL:Class;
 
     }
 }

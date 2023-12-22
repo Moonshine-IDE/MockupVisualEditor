@@ -218,8 +218,18 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
-       
+        private static const OPTOIN_HEADER="'++LotusScript Development Environment:2:5:(Options):0:74"
+        private static const FORWARD_HEADER="'++LotusScript Development Environment:2:5:(Forward):0:1"
+        private static const DECLARATIONS_HEADER="Declare"
+        private static const DECLARATIONS_LS_HEADER="'++LotusScript Development Environment:2:5:(Declarations):0:10"
+        private static const BIND_HEADER="'++LotusScript Development Environment:2:2:BindEvents:1:129"
+        private static const BIND_FUNCTION_HEADER="Private Sub BindEvents(Byval Objectname_ As String)";
+        private static const BIND_FUNCTION_HEADER_2="         Static Source As NOTESUIDOCUMENT"
+        private static const BIND_FUNCTION_HEADER_3="         Set Source = Bind(Objectname_)"
+        private static const BIND_FUNCTION_TEMPLATE="         On Event function_name From Source Call function_name"
+        private static const FUNCTION_HEADER="'++LotusScript Development Environment:2:2:function_name:1:12"
 
+        
         public function toCode(op:Dictionary):XML
         {
 
@@ -227,12 +237,104 @@ package view.domino.surfaceComponents.components
             xml.@name="$$FormScript"
             xml.@summary="false"
             xml.@sign="true"
+            var txt:String="";
+            txt=OPTOIN_HEADER+"\n";
+            var formObject:DominoFormObjects=op["options"];
+            if(formObject!=undefined&& formObject!=null)
+            {
+                if(formObject.lotusscript&&formObject.lotusscript.toString().length>0)
+                {
+                    txt=txt+formObject.lotusscript+"\n";
+                }
+
+            } 
+            txt=txt+FORWARD_HEADER+"\n";
+            var declarString:String="";
+            var functionString:String="";
+            var sourceDeclar:String="";
+
+            for (var key:Object in op) {
+                var keyString:String=key.toString()
+                
+                if(op[keyString]!=undefined&& op[keyString]!=null){
+                        
+                    if(keyString.indexOf("global")>=0){
+                        //this global options
+                    }else{
+                       
+                        if(keyString!="options"&&keyString!="declarations"){
+                            var obj: DominoFormObjects= op[keyString] as DominoFormObjects;
+                            if(obj!=undefined&& obj.isCustomFunction==false){
+                                var lotusscript:String=obj.lotusscript
+                                if(lotusscript&& lotusscript.length>0){
+                                      var txtArray:Array=lotusscript.split("\n");
+                                      if(txtArray.length>0){
+                                        if(txtArray[0].toString().indexOf("Sub")>=0)
+                                        {
+                                            declarString=declarString+DECLARATIONS_HEADER+" "+txtArray[0].toString()+"\n";
+                                            var functionName:String=getLotusScirptFunctionName(txtArray[0].toString());
+                                            var sourceString:String="";
+                                            sourceString=  BIND_FUNCTION_TEMPLATE.replace("function_name",functionName);
+                                            sourceString=  sourceString.replace("function_name",functionName)
+                                            sourceDeclar=sourceDeclar+sourceString+"\n";
+                                        }
+                                        
+                                      }
+                                      functionString=functionString+FUNCTION_HEADER+"\n";
+                                      functionString=functionString+lotusscript+"\n";
+                                     
+
+                                }
+                              
+                                
+                            }
+                        }
+                    }
+                }    
+            }
 
 
+            txt=txt+declarString+"\n";
+            txt=txt+DECLARATIONS_LS_HEADER+"\n";
 
-            var textXml:XML = new XML("<text />");
+            if(op["declarations"]!=undefined && op["declarations"]!=null) 
+            {
+                var lotusscript:String=op["declarations"].lotusscript;
+                if(op["declarations"].lotusscript&&op["declarations"].lotusscript.toString().length>0)
+                {
+                    txt=txt+op["declarations"].lotusscript+"\n";
+                }
+
+            }
+
+            txt=txt+BIND_HEADER+"\n";
+            txt=txt+BIND_FUNCTION_HEADER+"\n";
+            txt=txt+BIND_FUNCTION_HEADER_2+"\n";
+            txt=txt+BIND_FUNCTION_HEADER_3+"\n";
+            txt=txt+sourceDeclar+"\n";
+            txt=txt+"End Sub"+"\n";
+
+
+            txt=txt+functionString+"\n";
+            var textXml:XML = new XML("<text>"+txt+"</text>");
+            var breakXml:XML = new XML("<break/>")
+            textXml.appendChild(breakXml);
+            xml.appendChild(textXml)
+           
             return xml;
 
+        }
+
+        private function getLotusScirptFunctionName(line:String):String 
+        {
+            var subName:String="";
+            if(line.indexOf("Sub")>=0 && line.indexOf("(")>=0)
+            {
+                line=line.replace("Sub ","");
+                subName=line.substring(0, line.indexOf("("));
+            }
+           
+            return subName;
         }
     }
 }

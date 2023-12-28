@@ -268,11 +268,12 @@ package view.domino.surfaceComponents.components
                                 var lotusscript:String=obj.lotusscript
                                 if(lotusscript&& lotusscript.length>0){
                                       var txtArray:Array=lotusscript.split("\n");
+                                      var functionName:String
                                       if(txtArray.length>0){
                                         if(txtArray[0].toString().indexOf("Sub")>=0)
                                         {
                                             declarString=declarString+DECLARATIONS_HEADER+" "+txtArray[0].toString()+"\n";
-                                            var functionName:String=getLotusScirptFunctionName(txtArray[0].toString());
+                                            functionName=getLotusScirptFunctionName(txtArray[0].toString());
                                             var sourceString:String="";
                                             if(functionName&&functionName.length>0){
                                                 sourceString=  BIND_FUNCTION_TEMPLATE.replace("function_name",functionName);
@@ -282,8 +283,11 @@ package view.domino.surfaceComponents.components
                                         }
                                         
                                       }
-                                      functionString=functionString+FUNCTION_HEADER+"\n";
+                                    if(functionName&&functionName.length>0){
+                                      var headerFunction:String=FUNCTION_HEADER.replace("function_name",functionName)
+                                      functionString=functionString+headerFunction+"\n";
                                       functionString=functionString+lotusscript+"\n";
+                                    }
                                      
 
                                 }

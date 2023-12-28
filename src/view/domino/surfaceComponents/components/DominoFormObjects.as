@@ -274,7 +274,9 @@ package view.domino.surfaceComponents.components
                                             declarString=declarString+DECLARATIONS_HEADER+" "+txtArray[0].toString()+"\n";
                                             var functionName:String=getLotusScirptFunctionName(txtArray[0].toString());
                                             var sourceString:String="";
-                                            sourceString=  BIND_FUNCTION_TEMPLATE.replace("function_name",functionName);
+                                            if(functionName&&functionName.length>0){
+                                                sourceString=  BIND_FUNCTION_TEMPLATE.replace("function_name",functionName);
+                                            }
                                             sourceString=  sourceString.replace("function_name",functionName)
                                             sourceDeclar=sourceDeclar+sourceString+"\n";
                                         }

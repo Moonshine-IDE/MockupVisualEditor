@@ -42,6 +42,7 @@ package view.domino.surfaceComponents.components
     import view.interfaces.IHistorySurfaceComponent;
     import view.interfaces.IDominoSurfaceComponent;
     import mx.controls.Alert;
+    import com.adobe.utils.StringUtil;
 
     public class DominoFormObjects
 
@@ -322,6 +323,7 @@ package view.domino.surfaceComponents.components
 
 
             txt=txt+functionString+"\n";
+            txt=StringUtil.trim(txt);
             var textXml:XML = new XML("<text>"+txt+"</text>");
             var breakXml:XML = new XML("<break/>")
             textXml.appendChild(breakXml);

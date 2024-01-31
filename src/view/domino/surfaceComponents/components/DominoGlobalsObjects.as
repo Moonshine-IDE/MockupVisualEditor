@@ -146,6 +146,11 @@ package view.domino.surfaceComponents.components
             return component.toCode();
         }
 
+        public function toCompileCode(key:String):XML
+        {
+			return component.toCompileCode(key);
+        }
+
         public function toRoyaleConvertCode():XML
         {
             return null;

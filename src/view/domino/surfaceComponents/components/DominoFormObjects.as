@@ -54,11 +54,20 @@ package view.domino.surfaceComponents.components
         private var _javascript:String;
         private var _commonjavascript:String;
         private var _cachelotusscript:String;
+        private var _clientType:String;
         private var _isCustomFunction:Boolean =false
 
         public function DominoFormObjects()
         {
 
+        }
+
+        public function get clientType():String {
+            return _clientType;
+        }
+
+        public function set clientType(value:String):void {
+            this._clientType = value;
         }
 
         public function get isCustomFunction():Boolean {
@@ -331,6 +340,50 @@ package view.domino.surfaceComponents.components
            
             return xml;
 
+        }
+
+        public function toJavascriptDxl(op:Dictionary):String
+        {
+            var xml:String="";
+            for (var key:Object in op) {
+                var keyString:String=key.toString()
+                
+                if(op[keyString]!=undefined&& op[keyString]!=null){
+                        
+                    if(keyString.indexOf("global")>=0){
+                        //this global options
+                    }else{
+                          if(keyString!="options"&&keyString!="declarations"){
+                            var obj: DominoFormObjects= op[keyString] as DominoFormObjects;
+                                if(obj!=undefined&& obj.isCustomFunction==false){
+                                    var javascript:String=obj.javascript
+                                    if(javascript&& javascript.length>0){
+                                        var codeXml:XML=new XML("<code />");
+                                        if(keyString!="jsHeader"){
+                                            codeXml.@event=keyString;
+                                        }else{
+                                            codeXml.@event="jsheader";
+                                        }
+                                       
+                                        if(obj.clientType){
+                                            codeXml["@for"] =obj.clientType;
+                                        }else{
+                                            codeXml["@for"] ="web";
+                                        }
+
+                                        var javascriptXml:XML=new XML("<javascript>"+javascript+"</javascript>");
+                                        codeXml.appendChild(javascriptXml);
+                                        xml=xml+codeXml.toXMLString()+"\n";
+                                        
+                                    }
+                                }
+                       
+                            }
+                    }
+                }
+            
+            }
+            return xml;
         }
 
         private function getLotusScirptFunctionName(line:String):String 

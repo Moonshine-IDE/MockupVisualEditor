@@ -269,6 +269,14 @@ package utils
                    
                   }
                 }
+                //if it is empty form, it need some default element into it
+                for each(var richtext:XML in xml..richtext){
+                    if(richtext.children().length()==0){
+                        richtext.appendChild(new XML("<pardef id='1'/>"));
+                        richtext.appendChild(new XML("<par def='1'/>"));
+                        richtext.appendChild(new XML("<par def='1'></par>"));
+                    }
+                }
                 
                  return xml;
             }

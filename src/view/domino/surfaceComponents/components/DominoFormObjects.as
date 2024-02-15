@@ -228,6 +228,72 @@ package view.domino.surfaceComponents.components
             return xml;
         }
 
+
+        public  function toFormulaXML(op:Dictionary,dxl:XML):XML
+        {
+            
+            var titleXml:XML=null;
+            var body:XMLList = dxl.children();
+            for each (var item:XML in body)
+            {
+                var itemName:String = item.name();
+                if (itemName=="http://www.lotus.com/dxl::item" && item.@name=="$TITLE")
+                {
+                    titleXml = item;
+                }
+            }
+
+            if(op!=null){
+                for (var key:Object in op) {
+                    var keyString:String=key.toString()
+                    if(op[keyString]!=undefined&& op[keyString]!=null){
+                         
+                        if(keyString.indexOf("global")>=0){
+                            //this global options
+                        }else{
+                            var obj: DominoFormObjects= op[keyString] as DominoFormObjects;
+                            if(obj!=null){
+                                var itemName:String=getFormulaItemName(keyString);
+                                itemName="$"+itemName;
+
+                                for each (var item:XML in body)
+                                {
+                                    var oldItemName:String = item.name();
+                                    if (oldItemName=="http://www.lotus.com/dxl::item" && item.@name==itemName)
+                                    {
+                                       delete item.parent().children()[item.childIndex()];
+                                    }
+                                }
+                                
+                                var newFormulaItem:XML=new XML("<item/>");
+                                newFormulaItem.@name=itemName;
+                                newFormulaItem.@sign='true';
+                                if(obj.formula!=null&&obj.formula.length>0){
+                                    var formula:XML=new XML("<formula>"+obj.formula+"</formula>");
+                                    newFormulaItem.appendChild(formula);
+                                   // Alert.show("newFormulaItem:"+newFormulaItem.toXMLString());
+                                    titleXml.parent().insertChildAfter(titleXml,newFormulaItem);
+                                }
+                              
+                               
+                                
+                            }
+                        }
+                    }
+                }
+            }
+
+            return dxl;
+        }
+
+        private  function getFormulaItemName(keyString:String):String
+        {
+            keyString = keyString.charAt(0).toUpperCase() + keyString.slice(1);
+            keyString=keyString.replace("Html","HTML");
+            keyString=keyString.replace("Web","WEB");
+            
+            return keyString;
+        }
         private static const OPTOIN_HEADER="'++LotusScript Development Environment:2:5:(Options):0:74"
         private static const FORWARD_HEADER="'++LotusScript Development Environment:2:5:(Forward):0:1"
         private static const DECLARATIONS_HEADER="Declare"

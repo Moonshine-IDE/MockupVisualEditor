@@ -44,6 +44,8 @@ package view.domino.surfaceComponents.components
     import mx.controls.Alert;
     import com.adobe.utils.StringUtil;
 
+    import utils.StringHelperUtils;
+
     public class DominoFormObjects
 
     {
@@ -242,7 +244,7 @@ package view.domino.surfaceComponents.components
                     titleXml = item;
                 }
             }
-
+           
             if(op!=null){
                 for (var key:Object in op) {
                     var keyString:String=key.toString()
@@ -269,10 +271,10 @@ package view.domino.surfaceComponents.components
                                 newFormulaItem.@name=itemName;
                                 newFormulaItem.@sign='true';
                                 if(obj.formula!=null&&obj.formula.length>0){
-                                    var formula:XML=new XML("<formula>"+obj.formula+"</formula>");
+                                    var formula:XML=new XML("<formula>"+StringHelperUtils.fixXmlSpecailCharacter(obj.formula)+"</formula>");
                                     newFormulaItem.appendChild(formula);
-                                   // Alert.show("newFormulaItem:"+newFormulaItem.toXMLString());
-                                    titleXml.parent().insertChildAfter(titleXml,newFormulaItem);
+                                   //Alert.show("newFormulaItem:"+newFormulaItem.toXMLString());
+                                   titleXml.parent().insertChildAfter(titleXml,newFormulaItem);
                                 }
                               
                                
@@ -281,6 +283,7 @@ package view.domino.surfaceComponents.components
                         }
                     }
                 }
+                
             }
 
             return dxl;

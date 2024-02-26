@@ -207,7 +207,7 @@ package view.domino.viewEditor.grid
         {
             if (columnMoveDropIndicator)
             {
-                dropIndex == -1;
+                dropIndex = -1;
                 this.columnHeaderGroup.overlay.removeDisplayObject(columnMoveDropIndicator);
                 columnMoveDropIndicator = null;
             }
@@ -219,6 +219,7 @@ package view.domino.viewEditor.grid
             var pt:Point = new Point(event.stageX, event.stageY);
             pt = this.columnHeaderGroup.globalToLocal(pt);
             var newDropIndex:int = this.columnHeaderGroup.getHeaderIndexAt(pt.x, pt.y);
+           
             if (newDropIndex != -1)
             {
                 var renderer:IGridItemRenderer = this.columnHeaderGroup.getHeaderRendererAt(newDropIndex);
@@ -236,6 +237,8 @@ package view.domino.viewEditor.grid
                 }
 
                 dropIndex = newDropIndex;
+
+                
               
 
               
@@ -268,12 +271,17 @@ package view.domino.viewEditor.grid
 
         private function dropColumn(event:DragEvent):void
         {
-           
-            if(dragColumn && dropIndex){
+        
+            if(!dropIndex){
+                dropIndex=0;
+             }
+
+            if(dragColumn){
                 if(dragColumn.headerText!="         " && dropIndex!=(this.columns.length)){
+                    var oldIndex:int 
                     if (dropIndex != dragColumn.columnIndex)
                     {
-                        var oldIndex:int = dragColumn.columnIndex;
+                        oldIndex = dragColumn.columnIndex;
                         this.columns.removeItemAt(dragColumn.columnIndex);
                         
                         if (dropIndex > oldIndex)
@@ -285,12 +293,16 @@ package view.domino.viewEditor.grid
                         this.columns.addItemAt(dragColumn, dropIndex);
                         saveScrollPositionForCallLater(event);
                         callLater(setScrollBackWhereItWas);
+                        if(dropIndex!=oldIndex){
+                            this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
+                        }
                     }
                     cleanUpDropIndicator();
                     stopDragTimer("dropColumn");
-
+                       
                     //action 
-                    this.dispatchEvent(new DominoViewColumnDragDropCompleteEvent(DominoViewColumnDragDropCompleteEvent.COLUMN_DROP_COMPLETE,true, true) );
+                    
+                  
                 }
             }
         }

@@ -32,24 +32,24 @@
 package view.suportClasses.events
 {
 	import flash.events.Event;
-    import components.renderers.DominoViewEditorHeaderRenderer;
-	public class DominoViewColumnClickEvent extends Event
+    import view.domino.viewEditor.object.ColumnObject;
+
+   
+	public class DominoViewSharedColumnAppendEvent extends Event
 	{
-		public static const COLUMN_CLICK:String = "dominoViewGridColumnClick";
+		public static const SHARED_COLUMN_APPEND:String = "dominoViewSharedColumnAppend";
 		
-		public var columnInex:int;
-		public var render:DominoViewEditorHeaderRenderer;
+		public var sharedFilePath:String;
 		
-		public function DominoViewColumnClickEvent(type:String, value:int=-1,colRender:DominoViewEditorHeaderRenderer=null, _bubble:Boolean=true, _cancelable:Boolean=true)
+		public function DominoViewSharedColumnAppendEvent(type:String, value:String=null, _bubble:Boolean=true, _cancelable:Boolean=true)
 		{
-			this.columnInex = value;
-			this.render=colRender;
+			this.sharedFilePath = value;
 			super(type, _bubble, _cancelable);
 		}
 		
 		override public function clone():Event
 		{
-			return new DominoViewColumnClickEvent(type, columnInex,render, bubbles, cancelable);
+			return new DominoViewSharedColumnAppendEvent(type, sharedFilePath, bubbles, cancelable);
 		}
 	}
 }

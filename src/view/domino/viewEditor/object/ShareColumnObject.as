@@ -29,27 +29,22 @@
 //  it in the license file.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package view.suportClasses.events
+
+package view.domino.viewEditor.object
 {
-	import flash.events.Event;
-    import components.renderers.DominoViewEditorHeaderRenderer;
-	public class DominoViewColumnClickEvent extends Event
-	{
-		public static const COLUMN_CLICK:String = "dominoViewGridColumnClick";
-		
-		public var columnInex:int;
-		public var render:DominoViewEditorHeaderRenderer;
-		
-		public function DominoViewColumnClickEvent(type:String, value:int=-1,colRender:DominoViewEditorHeaderRenderer=null, _bubble:Boolean=true, _cancelable:Boolean=true)
+    public class ShareColumnObject {
+        public var shareColumnName:String;
+     
+        public var noreplace:String;
+        public var publicaccess:String;
+        public var onopengoto:String;
+        public var onrefresh:String;
+        public var opencollapsed:String;
+        public var hideProperty:String;
+        public var propagatenoreplace:String;
+
+        public function ShareColumnObject()
 		{
-			this.columnInex = value;
-			this.render=colRender;
-			super(type, _bubble, _cancelable);
-		}
-		
-		override public function clone():Event
-		{
-			return new DominoViewColumnClickEvent(type, columnInex,render, bubbles, cancelable);
-		}
-	}
+        }
+    }
 }

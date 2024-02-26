@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:VGroup 
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    creationComplete="onCreationComplete(event)"
+    top="10" includeInLayout="false" visible="false">
+								<s:FormItem  skinClass="skins.FormItemSkin" width="100%">
+									<s:Label text="Shared Column Name:" width="100%" />
+									 <s:TextInput id="shareColumnNameInput"
+                                            text="{this.shareColumnObject.shareColumnName}"  width="100" maxChars="100" 
+											editable="false"
+                                            enter="shareColumnNameInput_changeHandler(event)" focusOut="shareColumnNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the action"/>
+                                   
+									 </s:FormItem> 
+										 
+									<!-- <s:FormItem label="Show in menu" visible="false" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="viewShowinmenu"
+													selected="true"
+													change="showinmenu_changeHandler(event)"/>
+									</s:FormItem>	
+									<s:FormItem label="Public access" visible="false" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="viewPublicaccess"
+													selected="true"
+													change="publicaccess_changeHandler(event)"/>
+									</s:FormItem>
+									<s:FormItem label="Open collapsed" visible="false" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="viewOpencollapsed"
+													selected="true"
+													change="opencollapsed_changeHandler(event)"/>
+									</s:FormItem> -->
+
+
+
+								<s:Label textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												left="5" 
+												 width="100%"
+												 text=" Prohibit design refresh or replace"
+												 >
+									</s:Label>	
+									<s:HGroup left="5" >
+									<s:Label textAlign="start"
+												verticalAlign="middle"
+												fontWeight="bold"
+												maxDisplayedLines="8" fontSize="13"
+												
+												 width="100%"
+												 text=" to modify" />
+									
+
+									
+									<s:CheckBox id="noreplaceCheckbox"
+													selected="false"
+													change="noreplace_changeHandler(event)"/>
+									</s:HGroup>	
+
+									<s:Label text=" Propogate this prohibition of design" left="5"/>			
+									
+									<s:HGroup left="5" >
+									<s:Label text=" change" left="5"/>
+									<s:CheckBox id="propagatenoreplaceCheckBox"
+													selected="false"
+													change="propagatenoreplace_changeHandler(event)"/>	
+									</s:HGroup >	
+
+									<s:Label text=" Do not show this design element " width="100%" />
+									<s:HGroup left="5" >
+										<s:Label text=" in menus of Notes R4 or later clients: " width="100%" />
+										<s:CheckBox id="hideForNotesR4Checkbox"
+													selected="false"
+													change="hide_changeHandler(event)"/>
+									</s:HGroup >
+									
+																	
+
+									
+
+									<s:Label text=" " width="100%"  />
+								  	<s:Label text="Hide design element from:" width="100%"  />
+
+									
+									
+								  	<s:FormItem left="5" label="Web browsers" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="hideForWebCheckbox"
+													selected="false"
+													change="hide_changeHandler(event)"/>
+									</s:FormItem>
+
+											 
+
+									<s:FormItem left="5" label="Notes R4.6 or later clients" skinClass="skins.FormItemSkin">
+										<s:CheckBox id="hideForNotesCheckbox"
+													selected="false"
+													change="hide_changeHandler(event)"/>
+									</s:FormItem>
+
+									
+
+
+
+
+<fx:Script><![CDATA[
+    import view.domino.viewEditor.object.ColumnObject;
+	import view.domino.viewEditor.object.ShareColumnObject;
+    import view.suportClasses.events.PropertyEditorChangeEvent;
+    import mx.events.FlexEvent;
+	import com.adobe.utils.StringUtil;
+    import view.domino.viewEditor.object.ShareColumnObject;
+
+
+    private var _shareColumnObject:ShareColumnObject;
+
+    public function initializeViewProperty(vobj:ShareColumnObject):void
+    {
+         if(vobj!=null){
+			
+            shareColumnNameInput.text=vobj.shareColumnName;
+            //viewSelection.text=vobj.viewCodeFormula;
+            // if(vobj.showinmenu=="true"){
+            //     viewShowinmenu.selected=true
+            // }else{
+            //     viewShowinmenu.selected=false
+            // }
+
+            // if(vobj.publicaccess=="true"){
+            //     viewPublicaccess.selected=true
+            // }else{
+            //     viewPublicaccess.selected=false
+
+            // }
+            //  if(vobj.opencollapsed=="true"){
+            //     viewOpencollapsed.selected=true
+            // }else{
+            //     viewOpencollapsed.selected=false
+
+            // }
+
+			if(vobj.hideProperty!=null && vobj.hideProperty.length>0){
+				if(vobj.hideProperty.indexOf("web")>=0){
+					hideForWebCheckbox.selected=true
+				}else{
+					hideForWebCheckbox.selected=false
+				}
+
+				if(vobj.hideProperty.indexOf("notes")>=0){
+					hideForNotesCheckbox.selected=true
+				}else{
+					hideForNotesCheckbox.selected=false
+				}
+
+				if(vobj.hideProperty.indexOf("v4")>=0){
+					hideForNotesR4Checkbox.selected=true
+				}else{
+					hideForNotesR4Checkbox.selected=false
+				}
+			}
+
+			if(vobj.noreplace=="true"){
+                noreplaceCheckbox.selected=true;
+            }else{
+                noreplaceCheckbox.selected=false;
+            }
+
+			if(vobj.propagatenoreplace=="true"){
+				propagatenoreplaceCheckBox.selected=true;
+			}else{
+				propagatenoreplaceCheckBox.selected=false;
+			}
+
+            this.shareColumnObject=vobj;
+        }
+    }
+
+    private function onCreationComplete(event:FlexEvent):void
+    {
+       
+    }
+    
+    public function set shareColumnObject(value:ShareColumnObject):void
+    {
+        _shareColumnObject = value;
+    } 
+
+    [Bindable]
+    public function get shareColumnObject():ShareColumnObject
+    {
+        return this._shareColumnObject;
+    }
+
+    private function shareColumnNameInput_changeHandler(event:Event):void
+	{
+	}
+
+    private var viewFormula:String = "";
+
+
+
+    // private function showinmenu_changeHandler(event:Event):void
+	// {
+		
+	// 	if(shareColumnObject!=null){
+	// 		if(viewShowinmenu.selected==true){
+	// 			shareColumnObject.showinmenu="true";
+	// 		}else{
+	// 			shareColumnObject.showinmenu="false";
+	// 		}
+    //         this.dispatchEvent(new Event("viewSharedColumnPropertyChanged",true, true));
+			
+	// 	}
+	// }
+
+
+	// //viewPublicaccess
+	// private function publicaccess_changeHandler(event:Event):void
+	// {
+		
+	// 	if(shareColumnObject!=null){
+	// 		if(viewPublicaccess.selected==true){
+	// 			shareColumnObject.publicaccess="true";
+	// 		}else{
+	// 			shareColumnObject.publicaccess="false";
+	// 		}
+    //         this.dispatchEvent(new Event("viewSharedColumnPropertyChanged",true, true));
+	// 	}
+	// }
+
+    //opencollapsed_changeHandler
+	// private function opencollapsed_changeHandler(event:Event):void
+	// {
+	// 	if(shareColumnObject!=null){
+	// 		if(viewOpencollapsed.selected==true){
+	// 			shareColumnObject.opencollapsed="true";
+	// 		}else{
+	// 			shareColumnObject.opencollapsed="false";
+	// 		}
+    //         this.dispatchEvent(new Event("viewSharedColumnPropertyChanged",true, true));
+	// 	}
+	// }
+
+
+	//propagatenoreplace_changeHandler
+	private function propagatenoreplace_changeHandler(event:Event):void
+	{
+		if(shareColumnObject!=null){
+			if(propagatenoreplaceCheckBox.selected==true){
+				shareColumnObject.propagatenoreplace="true";
+			}else{
+				shareColumnObject.propagatenoreplace="false";
+			}
+		}
+		this.dispatchEvent(new Event("viewSharedColumnPropertyChanged",true, true));
+	}
+	private function noreplace_changeHandler(event:Event):void
+	{
+		if(shareColumnObject!=null){
+			if(noreplaceCheckbox.selected==true){
+				shareColumnObject.noreplace="true";
+			}else{
+				shareColumnObject.noreplace="false";
+			}
+		}
+		
+		this.dispatchEvent(new Event("viewSharedColumnPropertyChanged",true, true));
+	}
+	private function hide_changeHandler(event:Event):void
+	{
+		if(shareColumnObject!=null){
+			var hideWeb:String=null;
+			var hideNotes:String=null;
+			var hideNotesR4:String=null;
+			//hideForWebCheckbox
+			//hideForNotesCheckbox
+			if(hideForWebCheckbox.selected==true){
+				hideWeb="web"
+			}else{
+				hideWeb=null
+			}
+			if(hideForNotesCheckbox.selected==true){
+				hideNotes="notes"
+			}else{
+				hideNotes=null
+			}
+			if(hideForNotesR4Checkbox.selected==true){
+				hideNotesR4="v4"
+			}else{
+				hideNotesR4=null
+			}
+			//hideForNotesR4Checkbox
+
+			shareColumnObject.hideProperty=null;
+			if(hideWeb){
+				shareColumnObject.hideProperty=hideWeb
+			}
+
+			if(hideNotes){
+				if(shareColumnObject.hideProperty){
+					shareColumnObject.hideProperty=shareColumnObject.hideProperty+" "+hideNotes;
+				}else{
+					shareColumnObject.hideProperty=hideNotes
+				}
+				
+			}
+
+
+			if(hideNotesR4){
+				if(shareColumnObject.hideProperty){
+					shareColumnObject.hideProperty=shareColumnObject.hideProperty+" "+hideNotesR4;
+				}else{
+					shareColumnObject.hideProperty=hideNotesR4
+				}
+			}
+
+			if(shareColumnObject.hideProperty){
+				shareColumnObject.hideProperty=StringUtil.trim(shareColumnObject.hideProperty);
+			}
+
+			 this.dispatchEvent(new Event("viewSharedColumnPropertyChanged",true, true));
+			
+		}
+
+	}
+
+
+]]></fx:Script> 								
+</s:VGroup>

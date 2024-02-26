@@ -153,8 +153,9 @@
                 var dpCount:int = ddlSelection.dataProvider.length;
                 for (var i:int = 0; i < dpCount; i++)
                 {
-                    var item:Object = ddlSelection.dataProvider.getItemAt(i);
-                    if (item[_labelField] == selectedItem[_textProperty])
+                   
+                     var item:Object = ddlSelection.dataProvider.getItemAt(i);
+                    if (item[_labelField] == selectedItem[_textProperty] ||  item[_valueField] == selectedItem[_textProperty])
                     {
                         ddlSelection.selectedItem = item;
                         break;

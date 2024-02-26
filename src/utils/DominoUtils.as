@@ -29,27 +29,53 @@
 //  it in the license file.
 //
 ////////////////////////////////////////////////////////////////////////////////
-package view.suportClasses.events
+package utils
 {
-	import flash.events.Event;
-    import components.renderers.DominoViewEditorHeaderRenderer;
-	public class DominoViewColumnClickEvent extends Event
+
+
+	public class DominoUtils
 	{
-		public static const COLUMN_CLICK:String = "dominoViewGridColumnClick";
-		
-		public var columnInex:int;
-		public var render:DominoViewEditorHeaderRenderer;
-		
-		public function DominoViewColumnClickEvent(type:String, value:int=-1,colRender:DominoViewEditorHeaderRenderer=null, _bubble:Boolean=true, _cancelable:Boolean=true)
+		public static function toDominoViewNormalName(sourceName:String):String
 		{
-			this.columnInex = value;
-			this.render=colRender;
-			super(type, _bubble, _cancelable);
+			if(sourceName==null){
+				return "";
+			}
+			sourceName=stripAlias(sourceName);
+		
+			sourceName=sourceName.replace(/_5c/g, "\\");
+			
+
+			return sourceName;
 		}
-		
-		override public function clone():Event
+
+        public static function stripAlias(fullName:String):String
 		{
-			return new DominoViewColumnClickEvent(type, columnInex,render, bubbles, cancelable);
+        	var aliasStartIndex:int = fullName.indexOf('|');
+			if (aliasStartIndex >= 0) {
+				// strip the alias
+				return  fullName.substring(0, aliasStartIndex);
+			}
+			else {
+				// no alias found
+				return fullName;
+			}
+    	}
+
+
+		public static function fixDominoViewName(sourceName:String):String
+		{
+			if(sourceName==null){
+				return "";
+			}
+			sourceName=stripAlias(sourceName);
+			sourceName=sourceName.replace(/>/g, "_3e");
+		
+			sourceName=sourceName.replace(/[\/\\]+/g, "_5c");
+			
+
+			return sourceName;
+
 		}
 	}
 }
+

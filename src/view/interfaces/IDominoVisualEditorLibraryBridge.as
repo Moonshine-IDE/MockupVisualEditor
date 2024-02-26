@@ -20,10 +20,13 @@ package view.interfaces
 {   
     import flash.events.Event;
     import flash.events.MouseEvent;
+    import spark.components.TitleWindow;
+    import flash.filesystem.File;
 	
 	public interface IDominoVisualEditorLibraryBridge
 	{
         function openCreateDominoActionPanel(event:MouseEvent):void;
+       
 		
 	}
 }

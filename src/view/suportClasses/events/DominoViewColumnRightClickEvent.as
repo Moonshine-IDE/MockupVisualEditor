@@ -33,23 +33,24 @@ package view.suportClasses.events
 {
 	import flash.events.Event;
     import components.renderers.DominoViewEditorHeaderRenderer;
-	public class DominoViewColumnClickEvent extends Event
+	public class DominoViewColumnRightClickEvent extends Event
 	{
-		public static const COLUMN_CLICK:String = "dominoViewGridColumnClick";
+		public static const COLUMN_CLICK:String = "dominoViewGridColumnRightClick";
 		
 		public var columnInex:int;
-		public var render:DominoViewEditorHeaderRenderer;
+		public var columnName:String
 		
-		public function DominoViewColumnClickEvent(type:String, value:int=-1,colRender:DominoViewEditorHeaderRenderer=null, _bubble:Boolean=true, _cancelable:Boolean=true)
+		public function DominoViewColumnRightClickEvent(type:String,n:String, _bubble:Boolean=true, _cancelable:Boolean=true)
 		{
-			this.columnInex = value;
-			this.render=colRender;
+			//this.columnInex = value;
+			this.columnName = n;
+			
 			super(type, _bubble, _cancelable);
 		}
 		
 		override public function clone():Event
 		{
-			return new DominoViewColumnClickEvent(type, columnInex,render, bubbles, cancelable);
+			return new DominoViewColumnRightClickEvent(type,columnName, bubbles, cancelable);
 		}
 	}
 }

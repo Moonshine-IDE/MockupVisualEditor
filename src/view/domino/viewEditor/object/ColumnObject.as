@@ -35,7 +35,8 @@ package view.domino.viewEditor.object
    
 
     public class ColumnObject {
-        
+        public var shareColumnName:String ;
+        public var shareColumnFormat:String ;
         public var columnHeaderTitle:String ;
         public var columnHeaderSize:String ;
         public var columnHeaderStyle:String ;
@@ -105,6 +106,10 @@ package view.domino.viewEditor.object
         public var columnNameStatus:String;
         public var columnNameProgramName:String;
         public var columnNameVertival:String;
+
+        public var isSharedColumn:Boolean=false;
+        public var sharedColumnPath:String="";
+        public var sharedColumnName:String="";
         
         public function ColumnObject()
 		{

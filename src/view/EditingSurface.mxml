@@ -945,7 +945,6 @@
                 return;
             } else if (item is IMainApplication)
             {
-                Alert.show("item is IMainApplication")
                 this.prepareContainer(item as UIComponent);
                 return;
             }

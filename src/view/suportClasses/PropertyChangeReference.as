@@ -156,21 +156,29 @@ package view.suportClasses
 		
 		protected function changeItem(value:*, editor:VisualEditor):void
 		{
+			//https://github.com/Moonshine-IDE/Moonshine-IDE/issues/1228#issuecomment-1967145131
+			//Remove the following code Because Joel don't want to support the feature of changing multiple fields at once
+			//More details in the link above
 			// against assigning multiple field changes
-			if (value is Array)
-			{
-				for each (var i:Object in value)
-				{
-					fieldClass[i.field] = i.value;
-				}
-			}
-			else if (fieldName)
-			{
-				// assigning single field change
-				fieldClass[fieldName] = value;
-			}
+			// if (value is Array)
+			// {
+			// 	for each (var i:Object in value)
+			// 	{
+			// 		if((fieldClass as Object).hasOwnProperty(i.field)){
+			// 			fieldClass[i.field] = i.value;
+			// 		}
+			// 	}
+			// }
+			// else if (fieldName)
+			// {
+			// 	// assigning single field change
+			// 	if((fieldClass as Object).hasOwnProperty(fieldName)){
+			// 		fieldClass[fieldName] = value;
+			// 	}
+				
+			// }
 			
-			editor.componentsOrganizer.updateItemWithPropertyChanges(this, true);
+			// editor.componentsOrganizer.updateItemWithPropertyChanges(this, true);
 		}
 	}
 }

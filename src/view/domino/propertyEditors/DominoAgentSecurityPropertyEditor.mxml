@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:VGroup 
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    creationComplete="onCreationComplete(event)"
+    includeInLayout="false" visible="true">
+<s:BorderContainer id="bodyContainer"
+						verticalCenter="0" horizontalCenter="0"
+						borderVisible="false" backgroundColor="#e1e1e1"
+						autoLayout="true" cornerRadius="4" >
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle" paddingTop="30" paddingLeft="5"/>
+			
+		</s:layout>
+							
+							
+								
+						<s:HGroup verticalAlign="middle">
+						<s:CheckBox id="agentRunAsWebUser"
+										selected="false"
+										/>
+						<s:Label text="Run as web user" width="100%" />
+						
+						</s:HGroup>
+						<s:Label text="Run on behalf of" width="100%" />
+	<s:TextInput id="agentBehalfOf" text="{this.agentObject.agentBehalfOf}"  width="200" maxChars="100"
+                                          	editable="true"
+                                            enter="agentNameInput_changeHandler(event)" focusOut="agentNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" />
+                               
+						<s:BorderContainer cornerRadius="4" borderStyle="solid" borderWeight="1" 
+            left="0" right="0" width="320" top="10" bottom="10" includeInLayout="true" visible="true" id="securityRuntimePanle">
+						<s:layout>
+							<s:VerticalLayout verticalAlign="bottom" paddingTop="10" paddingLeft="5" paddingBottom="10"/>
+			
+							</s:layout>
+						<s:Label text="Runtime security level" width="100%" />
+						<s:RadioButton id="agentSecurityRadioBtn1" label="1. Do not allow restricted operations" groupName="agentSecurity" click="agentSecurity_changeHandler(event)"/>
+						<s:RadioButton id="agentSecurityRadioBtn2" label="2. Allow restricted operations" groupName="agentSecurity" click="agentSecurity_changeHandler(event)"/>			
+						<s:RadioButton id="agentSecurityRadioBtn3" label="3. Allow restricted operations with full administration right" groupName="agentSecurity" click="agentSecurity_changeHandler(event)"/>
+						<s:Label text="(1 = most secure)" />
+						</s:BorderContainer>
+
+						<s:BorderContainer cornerRadius="4" borderStyle="solid" borderWeight="1" 
+            left="0" right="0" width="320" top="10" bottom="10" includeInLayout="true" visible="true" id="securityAccessPanle" >
+						
+						<s:layout>
+							<s:VerticalLayout verticalAlign="bottom" paddingTop="10" paddingLeft="5" paddingBottom="10"/>
+			
+							</s:layout>
+						<s:Label text="Default access for viewing and running this agent" width="100%" />
+							<s:HGroup>
+							<s:CheckBox id="agentAccessRunningReader"
+											selected="false"
+											/>
+							<s:Label text="All readers and above" width="100%" />	
+							</s:HGroup>	
+							<s:HGroup>
+							<s:CheckBox id="agentAccessPublic"
+											selected="false"
+											/>
+							<s:Label text="Allow Public access users to view and run this agent" width="100%" />	
+							</s:HGroup>	
+
+							<s:HGroup>
+							<s:CheckBox id="agentAccessAcive"
+											selected="false"
+											/>
+							<s:Label text="Allow editor level user activation" width="100%" />	
+							</s:HGroup>				
+
+
+						</s:BorderContainer>
+
+
+									 
+				
+
+<fx:Script><![CDATA[
+    import view.domino.viewEditor.object.ColumnObject;
+	import view.domino.viewEditor.object.AgentObject;
+    import view.suportClasses.events.PropertyEditorChangeEvent;
+    import mx.events.FlexEvent;
+	import com.adobe.utils.StringUtil;
+
+	import mx.collections.ArrayCollection;
+	import spark.events.IndexChangeEvent;
+
+
+
+
+    private var _agentObject:AgentObject;
+
+    public function initializeViewProperty(vobj:AgentObject):void
+    {
+        //  if(vobj!=null){
+			
+            
+        // }
+    }
+
+	private function agentTriggerChanged(e:IndexChangeEvent):void
+	{
+	
+	}
+
+	private function agentTargetChanged(e:IndexChangeEvent):void
+	{
+		
+	}
+
+    private function onCreationComplete(event:FlexEvent):void
+    {
+       
+    }
+
+	public function initializeAgentProperty(agentobj:AgentObject):void
+    {
+         if(agentobj!=null){
+			this.agentObject.agentName=agentobj.agentName;
+		 }
+	}
+    
+    public function set agentObject(value:AgentObject):void
+    {
+        _agentObject = value;
+    } 
+
+    [Bindable]
+    public function get agentObject():AgentObject
+    {
+        return this._agentObject;
+    }
+
+    private function agentNameInput_changeHandler(event:Event):void
+	{
+	}
+
+	private function agentCommentInput_changeHandler(event:Event):void
+	{
+	}
+
+    private var viewFormula:String = "";
+
+	[Bindable("Changed")]
+	private function viewFormula_changeHandler(event):void
+	{
+		
+        if(this.agentObject!=null){
+           // this.agentObject.viewCodeFormula=viewSelection.text;
+        }
+	    this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+		
+	}
+
+	private function agentSecurity_changeHandler(event:Event):void
+	{
+	}
+
+
+   	private function agentType_changeHandler(event:Event):void
+	{
+		
+		
+		
+		
+	}
+
+   
+
+
+	//propagatenoreplace_changeHandler
+	private function propagatenoreplace_changeHandler(event:Event):void
+	{
+		
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+	}
+	private function noreplace_changeHandler(event:Event):void
+	{
+		
+		
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+	}
+	private function hide_changeHandler(event:Event):void
+	{
+		
+
+	}
+
+
+]]></fx:Script> 	
+
+    
+	</s:BorderContainer>
+	<fx:Declarations>
+		<s:RadioButtonGroup id="agentSecurity"/>
+	</fx:Declarations>
+</s:VGroup>

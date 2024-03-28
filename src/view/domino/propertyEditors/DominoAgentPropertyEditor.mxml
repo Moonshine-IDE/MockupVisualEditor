@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) STARTcloud, Inc. 2015-2022. All rights reserved.
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the Server Side Public License, version 1,
+//  as published by MongoDB, Inc.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//  Server Side Public License for more details.
+//
+//  You should have received a copy of the Server Side Public License
+//  along with this program. If not, see
+//
+//  http://www.mongodb.com/licensing/server-side-public-license
+//
+//  As a special exception, the copyright holders give permission to link the
+//  code of portions of this program with the OpenSSL library under certain
+//  conditions as described in each individual source file and distribute
+//  linked combinations including the program with the OpenSSL library. You
+//  must comply with the Server Side Public License in all respects for
+//  all of the code used other than as permitted herein. If you modify file(s)
+//  with this exception, you may extend this exception to your version of the
+//  file(s), but you are not obligated to do so. If you do not wish to do so,
+//  delete this exception statement from your version. If you delete this
+//  exception statement from all source files in the program, then also delete
+//  it in the license file.
+//
+////////////////////////////////////////////////////////////////////////////////
+-->
+<s:VGroup 
+    xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+    xmlns:mx="library://ns.adobe.com/flex/mx"
+    creationComplete="onCreationComplete(event)"
+    includeInLayout="false" visible="true">
+<s:BorderContainer id="bodyContainer"
+						verticalCenter="0" horizontalCenter="0"
+						borderVisible="false" backgroundColor="#e1e1e1"
+						autoLayout="true" cornerRadius="4" >
+		<s:layout>
+			<s:VerticalLayout verticalAlign="middle" paddingTop="30" paddingLeft="5"/>
+			
+		</s:layout>
+							<s:Label text="Agent Name:" width="100%" />
+								<s:TextInput id="agentNameInput"
+                                            text="{this.agentObject.agentName}"  width="200" maxChars="100" 
+											editable="false"
+                                            enter="agentNameInput_changeHandler(event)" focusOut="agentNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the agent"/>
+                                   
+							
+										
+										
+								<s:Label text="Comment :" width="100%" />
+								<s:TextInput id="agentCommentInput"
+                                            text="{this.agentObject.agentComment}"  width="200" maxChars="100" 
+											editable="false"
+                                            enter="agentCommentInput_changeHandler(event)" focusOut="agentCommentInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is comment for the action"/>
+                                   
+							
+								<s:Label text="Options :" width="100%"/>
+										<s:HGroup>
+										<s:RadioButton id="agentTypeSharedRadioBtn" label="Shared" groupName="agentType" click="agentType_changeHandler(event)"/>
+										<s:RadioButton id="agentTypePrivateRadioBtn" label="Private" groupName="agentType"  click="agentType_changeHandler(event)"/>	
+										</s:HGroup>
+									<s:HGroup>
+									<s:CheckBox id="agentStoreSeachInSearchBar"
+													selected="false"
+													/>
+								
+									<s:Label text="Store search in search bar menu" width="100%" />
+									</s:HGroup>
+
+
+									<s:HGroup>
+									<s:CheckBox id="agentStoreHighlightsInDocument"
+													selected="false"
+													/>
+									<s:Label text="Store highlights in document" width="100%" />
+									</s:HGroup>
+
+
+									<s:HGroup>
+										<s:CheckBox id="agentRuninBackground"
+													selected="false" enabled="false"
+													/>
+								
+									<s:Label text="Run in background client thread" width="100%" />
+									</s:HGroup>
+							
+								
+									<s:Label text="Runtime :" width="100%" />
+										<s:Label text="Trigger" width="100%"/>
+										<s:HGroup>
+											<s:RadioButton id="agentTriggerOnEventRadioBtn" label="On event" groupName="agentTrigger" click="agentTrigger_changeHandler(event)"/>
+											<s:RadioButton id="agentTriggerOnScheduleRadioBtn" label="On schedule" groupName="agentTrigger"  click="agentTrigger_changeHandler(event)"/>	
+									   </s:HGroup>
+
+								<s:DropDownList id="agentTriggerSelection" width="100%"
+									dataProvider="{agentTriggerContinalsList}"
+									requireSelection="true"
+									change="agentTriggerChanged(event)"/>	
+									<s:Label text="Target :" width="100%"/>
+								<s:DropDownList id="agentTargetSelection" width="100%"
+									dataProvider="{agentTargetContinalsList}"
+									requireSelection="true"
+									change="agentTargetChanged(event)"/>
+
+
+								
+				
+
+<fx:Script><![CDATA[
+    import view.domino.viewEditor.object.ColumnObject;
+	import view.domino.viewEditor.object.AgentObject;
+    import view.suportClasses.events.PropertyEditorChangeEvent;
+    import mx.events.FlexEvent;
+	import com.adobe.utils.StringUtil;
+
+	import mx.collections.ArrayCollection;
+	import spark.events.IndexChangeEvent;
+
+	[Bindable]
+	public var agentTriggerContinalsList:ArrayCollection = new ArrayCollection(
+		[ {label:"Action menu selection", value:"actionMenuSelection"},
+			{label:"Agent list selection", value:"agentListSelection"},
+			{label:"Before new mail arrives", value:"beforeNewMailArrives"},
+			{label:"After new mail has arrived", value:"afterNewMailArrives"},
+			{label:"After document are created or midified", value:"afterDocumentsCreatedOrModified"}, 
+			{label:"When documents are pasted", value:"whenDocumentsArePasted"},
+			{label:"When server starts", value:"whenServerStarts"}
+			
+			
+			]);
+
+	[Bindable]
+	public var agentTargetContinalsList:ArrayCollection = new ArrayCollection(
+		[ {label:"All documents in database", value:"allDocumentsInDatabase"},
+			{label:"All new & modified documents", value:"allNewModifiedDocuments"},
+			{label:"All unread document in view", value:"allUnreadDocumentsInView"},
+			{label:"All documents in view", value:"allDocumentsInView"},
+			{label:"None", value:"none"}
+			
+			
+		]);
+
+
+    private var _agentObject:AgentObject;
+
+    public function initializeViewProperty(vobj:AgentObject):void
+    {
+        //  if(vobj!=null){
+			
+            
+        // }
+    }
+
+	private function agentTriggerChanged(e:IndexChangeEvent):void
+	{
+	
+	}
+
+	private function agentTargetChanged(e:IndexChangeEvent):void
+	{
+
+	}
+
+    private function onCreationComplete(event:FlexEvent):void
+    {
+       
+    }
+    
+    public function set agentObject(value:AgentObject):void
+    {
+        _agentObject = value;
+    } 
+
+
+	public function initializeAgentProperty(agentobj:AgentObject):void
+    {
+         if(agentobj!=null){
+			this.agentObject.agentName=agentobj.agentName;
+		 }
+	}
+
+    [Bindable]
+    public function get agentObject():AgentObject
+    {
+        return this._agentObject;
+    }
+
+    private function agentNameInput_changeHandler(event:Event):void
+	{
+
+		if(this.agentObject!=null){
+            this.agentObject.agentName=agentNameInput.text;
+        }
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+	}
+
+	private function agentCommentInput_changeHandler(event:Event):void
+	{
+	}
+
+    private var viewFormula:String = "";
+
+	[Bindable("Changed")]
+	private function viewFormula_changeHandler(event):void
+	{
+		
+        if(this.agentObject!=null){
+           // this.agentObject.viewCodeFormula=viewSelection.text;
+        }
+	    this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+		
+	}
+
+	private function agentTrigger_changeHandler(event:Event):void
+	{
+	}
+
+
+   	private function agentType_changeHandler(event:Event):void
+	{
+		
+		if(this.agentObject!=null){
+			this.agentObject.agentType=agentType.selectedValue.toString();
+            
+		}
+		
+		
+	}
+
+   
+
+
+	//propagatenoreplace_changeHandler
+	private function propagatenoreplace_changeHandler(event:Event):void
+	{
+		
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+	}
+	private function noreplace_changeHandler(event:Event):void
+	{
+		
+		
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+	}
+	private function hide_changeHandler(event:Event):void
+	{
+		
+
+	}
+
+
+]]></fx:Script> 	
+
+    
+	</s:BorderContainer>
+	<fx:Declarations>
+		<s:RadioButtonGroup id="agentType"/>
+		<s:RadioButtonGroup id="agentTrigger"/>
+	</fx:Declarations>
+</s:VGroup>

@@ -913,42 +913,45 @@
 
         public function addItem(item:IComponent):void
         {
-            if (item is IFocusManagerComponent)
-            {
-                IFocusManagerComponent(item).focusEnabled = false;
+            if(item){
+                if (item is IFocusManagerComponent)
+                {
+                    IFocusManagerComponent(item).focusEnabled = false;
+                }
+                (item as ISurfaceComponent).addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
+                (item as ISurfaceComponent).addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
+                var itemContainer:SkinnableContainer = null;
+                if (item is IMultiViewContainer)
+                {
+                    var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
+                    multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
+                    itemContainer = multiViewContainer.selectedView;
+                } else if (item is PanelGrid)
+                {
+                    this.prepareGridComponent((item as PanelGrid).body as GridBase);
+                } else if (item is SkinnableContainer)
+                {
+                    itemContainer = SkinnableContainer(item);
+                } else if (item is DominoTable)
+                {
+                    this.prepareGridComponent(item as DominoTable);
+                    return;
+                } else if (item is Grid)
+                {
+                    this.prepareGridComponent(item as Grid);
+                    return;
+                } else if (item is Navigator)
+                {
+                    this.prepareContainer(item as SkinnableContainerBase);
+                    return;
+                } else if (item is IMainApplication)
+                {
+                    Alert.show("item is IMainApplication")
+                    this.prepareContainer(item as UIComponent);
+                    return;
+                }
+                this.prepareContainer(itemContainer);
             }
-            (item as ISurfaceComponent).addEventListener(MouseEvent.MOUSE_DOWN, object_mouseDownHandler);
-            (item as ISurfaceComponent).addEventListener(FocusEvent.FOCUS_IN, object_focusInHandler);
-            var itemContainer:SkinnableContainer = null;
-            if (item is IMultiViewContainer)
-            {
-                var multiViewContainer:IMultiViewContainer = IMultiViewContainer(item);
-                multiViewContainer.addEventListener(IndexChangeEvent.CHANGE, multiViewContainer_indexChangeHandler);
-                itemContainer = multiViewContainer.selectedView;
-            } else if (item is PanelGrid)
-            {
-                this.prepareGridComponent((item as PanelGrid).body as GridBase);
-            } else if (item is SkinnableContainer)
-            {
-                itemContainer = SkinnableContainer(item);
-            } else if (item is DominoTable)
-            {
-                this.prepareGridComponent(item as DominoTable);
-                return;
-            } else if (item is Grid)
-            {
-                this.prepareGridComponent(item as Grid);
-                return;
-            } else if (item is Navigator)
-            {
-                this.prepareContainer(item as SkinnableContainerBase);
-                return;
-            } else if (item is IMainApplication)
-            {
-                this.prepareContainer(item as UIComponent);
-                return;
-            }
-            this.prepareContainer(itemContainer);
         }
         ]]></fx:Script>
 </s:Group>

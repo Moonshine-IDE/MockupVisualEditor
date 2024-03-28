@@ -161,13 +161,18 @@ package view.suportClasses
 			{
 				for each (var i:Object in value)
 				{
-					fieldClass[i.field] = i.value;
+					if((fieldClass as Object).hasOwnProperty(i.field)){
+						fieldClass[i.field] = i.value;
+					}
 				}
 			}
 			else if (fieldName)
 			{
 				// assigning single field change
-				fieldClass[fieldName] = value;
+				if((fieldClass as Object).hasOwnProperty(fieldName)){
+					fieldClass[fieldName] = value;
+				}
+				
 			}
 			
 			editor.componentsOrganizer.updateItemWithPropertyChanges(this, true);

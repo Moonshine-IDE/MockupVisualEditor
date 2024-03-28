@@ -25,6 +25,7 @@ package components.renderers
 	import mx.core.mx_internal;
 	import mx.controls.Alert;
 	import spark.components.Label;
+	import view.domino.forms.imageClass.LoadImage;
 	
 	use namespace mx_internal;
 	

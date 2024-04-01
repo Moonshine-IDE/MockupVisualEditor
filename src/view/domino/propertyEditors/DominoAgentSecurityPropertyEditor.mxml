@@ -68,7 +68,7 @@
 			
 							</s:layout>
 						<s:Label text="Runtime security level" width="100%" />
-						<s:RadioButton id="agentSecurityRadioBtn1" label="1. Do not allow restricted operations" groupName="agentSecurity" click="agentSecurity_changeHandler(event)"/>
+						<s:RadioButton id="agentSecurityRadioBtn1" label="1. Do not allow restricted operations" groupName="agentSecurity" click="agentSecurity_changeHandler(event)" selected="true"/>
 						<s:RadioButton id="agentSecurityRadioBtn2" label="2. Allow restricted operations" groupName="agentSecurity" click="agentSecurity_changeHandler(event)"/>			
 						<s:RadioButton id="agentSecurityRadioBtn3" label="3. Allow restricted operations with full administration right" groupName="agentSecurity" click="agentSecurity_changeHandler(event)"/>
 						<s:Label text="(1 = most secure)" />

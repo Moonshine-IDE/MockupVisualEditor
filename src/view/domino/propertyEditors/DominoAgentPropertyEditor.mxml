@@ -49,17 +49,22 @@
 							<s:Label text="Agent Name:" width="100%" />
 								<s:TextInput id="agentNameInput"
                                             text="{this.agentObject.agentName}"  width="200" maxChars="100" 
-											editable="false"
-                                            enter="agentNameInput_changeHandler(event)" focusOut="agentNameInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is title for the agent"/>
+											
+                                            change="agentNameInput_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="This is title for the agent"/>
                                    
-							
+							<s:Label text="Alias:" width="100%" />
+								<s:TextInput id="agentAliasInput"
+                                            text="{this.agentObject.agentAlias}"  width="200" maxChars="100" 
+											
+                                            change="agentAliasInput_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="This is title for the agent"/>
+                              
 										
 										
 								<s:Label text="Comment :" width="100%" />
 								<s:TextInput id="agentCommentInput"
                                             text="{this.agentObject.agentComment}"  width="200" maxChars="100" 
-											editable="false"
-                                            enter="agentCommentInput_changeHandler(event)" focusOut="agentCommentInput_changeHandler(event)" skinClass="skins.TextInputSkin" prompt="This is comment for the action"/>
+											
+                                            change="agentCommentInput_changeHandler(event)"  skinClass="skins.TextInputSkin" prompt="This is comment for the action"/>
                                    
 							
 								<s:Label text="Options :" width="100%"/>
@@ -104,17 +109,16 @@
 									dataProvider="{agentTriggerContinalsList}"
 									requireSelection="true"
 									change="agentTriggerChanged(event)"/>	
+
+								<s:Button id="editButtonBtn" label="Edit Settings..."   height="25" width="100"  click="openEditSetting()"/>		
 									<s:Label text="Target :" width="100%"/>
 								<s:DropDownList id="agentTargetSelection" width="100%"
 									dataProvider="{agentTargetContinalsList}"
 									requireSelection="true"
 									change="agentTargetChanged(event)"/>
 
-
-								
-				
-
-<fx:Script><![CDATA[
+	</s:BorderContainer>
+	<fx:Script><![CDATA[
     import view.domino.viewEditor.object.ColumnObject;
 	import view.domino.viewEditor.object.AgentObject;
     import view.suportClasses.events.PropertyEditorChangeEvent;
@@ -124,6 +128,16 @@
 	import mx.collections.ArrayCollection;
 	import spark.events.IndexChangeEvent;
 
+	       
+	import mx.events.CloseEvent;
+	import mx.managers.PopUpManager;
+	import mx.core.FlexGlobals;
+	import flash.display.DisplayObject;
+
+	
+
+
+	
 	[Bindable]
 	public var agentTriggerContinalsList:ArrayCollection = new ArrayCollection(
 		[ {label:"Action menu selection", value:"actionMenuSelection"},
@@ -169,10 +183,22 @@
 
 	}
 
+	private function openEditSetting():void
+	{
+		
+		dispatchEvent(new Event("openAgentScheduleUI"));
+		
+	}
+
     private function onCreationComplete(event:FlexEvent):void
     {
        
     }
+
+	private function handleAgentSchedulePopupClose(event:CloseEvent):void
+	{
+
+	}
     
     public function set agentObject(value:AgentObject):void
     {
@@ -182,9 +208,7 @@
 
 	public function initializeAgentProperty(agentobj:AgentObject):void
     {
-         if(agentobj!=null){
-			this.agentObject.agentName=agentobj.agentName;
-		 }
+		
 	}
 
     [Bindable]
@@ -199,11 +223,25 @@
 		if(this.agentObject!=null){
             this.agentObject.agentName=agentNameInput.text;
         }
-		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+		dispatchEvent(new Event("agentPropertyChanged",true, true));
 	}
+
+	private function agentAliasInput_changeHandler(event:Event):void
+	{
+
+		if(this.agentObject!=null){
+            this.agentObject.agentAlias=agentAliasInput.text;
+        }
+		dispatchEvent(new Event("agentPropertyChanged",true, true));
+	}
+	//
 
 	private function agentCommentInput_changeHandler(event:Event):void
 	{
+		if(this.agentObject!=null){
+            this.agentObject.agentComment=agentCommentInput.text;
+        }
+		dispatchEvent(new Event("agentPropertyChanged",true, true));
 	}
 
     private var viewFormula:String = "";
@@ -258,9 +296,6 @@
 
 
 ]]></fx:Script> 	
-
-    
-	</s:BorderContainer>
 	<fx:Declarations>
 		<s:RadioButtonGroup id="agentType"/>
 		<s:RadioButtonGroup id="agentTrigger"/>

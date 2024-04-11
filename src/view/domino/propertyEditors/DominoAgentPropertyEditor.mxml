@@ -69,7 +69,7 @@
 							
 								<s:Label text="Options :" width="100%"/>
 										<s:HGroup>
-										<s:RadioButton id="agentTypeSharedRadioBtn" label="Shared" groupName="agentType" click="agentType_changeHandler(event)"/>
+										<s:RadioButton id="agentTypeSharedRadioBtn" label="Shared" groupName="agentType" click="agentType_changeHandler(event)" selected="true"/>
 										<s:RadioButton id="agentTypePrivateRadioBtn" label="Private" groupName="agentType"  click="agentType_changeHandler(event)"/>	
 										</s:HGroup>
 									<s:HGroup>
@@ -101,16 +101,21 @@
 									<s:Label text="Runtime :" width="100%" />
 										<s:Label text="Trigger" width="100%"/>
 										<s:HGroup>
-											<s:RadioButton id="agentTriggerOnEventRadioBtn" label="On event" groupName="agentTrigger" click="agentTrigger_changeHandler(event)"/>
-											<s:RadioButton id="agentTriggerOnScheduleRadioBtn" label="On schedule" groupName="agentTrigger"  click="agentTrigger_changeHandler(event)"/>	
+											<s:RadioButton id="agentTriggerOnEventRadioBtn" label="On event" value="onEvent" groupName="agentTrigger" click="agentTrigger_changeHandler(event)" selected="true"/>
+											<s:RadioButton id="agentTriggerOnScheduleRadioBtn" label="On schedule" value="onSchedule" groupName="agentTrigger"  click="agentTrigger_changeHandler(event)"/>	
 									   </s:HGroup>
 
 								<s:DropDownList id="agentTriggerSelection" width="100%"
 									dataProvider="{agentTriggerContinalsList}"
 									requireSelection="true"
-									change="agentTriggerChanged(event)"/>	
+									change="agentTriggerChanged(event)" visible="true" includeInLayout="true"/>	
 
-								<s:Button id="editButtonBtn" label="Edit Settings..."   height="25" width="100"  click="openEditSetting()"/>		
+								<s:DropDownList id="agentSchduleTriggerSelection" width="100%"
+									dataProvider="{agentTriggerSchedule}"
+									requireSelection="true"
+									change="agentSchduleTriggerChanged(event)" visible="false" includeInLayout="false"/>		
+
+								<s:Button id="editButtonBtn" label="Edit Settings..."   height="25" width="100"  click="openEditSetting()" enabled="false"/>		
 									<s:Label text="Target :" width="100%"/>
 								<s:DropDownList id="agentTargetSelection" width="100%"
 									dataProvider="{agentTargetContinalsList}"
@@ -121,6 +126,7 @@
 	<fx:Script><![CDATA[
     import view.domino.viewEditor.object.ColumnObject;
 	import view.domino.viewEditor.object.AgentObject;
+	import view.domino.viewEditor.object.AgentScheduleObject;
     import view.suportClasses.events.PropertyEditorChangeEvent;
     import mx.events.FlexEvent;
 	import com.adobe.utils.StringUtil;
@@ -134,22 +140,36 @@
 	import mx.core.FlexGlobals;
 	import flash.display.DisplayObject;
 
+	import view.suportClasses.events.DominoAgentPropertiesPopEvent;
+	
+
+
 	
 
 
 	
 	[Bindable]
 	public var agentTriggerContinalsList:ArrayCollection = new ArrayCollection(
-		[ {label:"Action menu selection", value:"actionMenuSelection"},
-			{label:"Agent list selection", value:"agentListSelection"},
-			{label:"Before new mail arrives", value:"beforeNewMailArrives"},
-			{label:"After new mail has arrived", value:"afterNewMailArrives"},
-			{label:"After document are created or midified", value:"afterDocumentsCreatedOrModified"}, 
-			{label:"When documents are pasted", value:"whenDocumentsArePasted"},
-			{label:"When server starts", value:"whenServerStarts"}
+		[ {label:"Action menu selection", value:"actionsmenu"},
+			{label:"Agent list selection", value:"agentlist"},
+			{label:"Before new mail arrives", value:"beforenewmail"},
+			{label:"After new mail has arrived", value:"afternewmail"},
+			{label:"After document are created or midified", value:"docupdate"}, 
+			{label:"When documents are pasted", value:"docpaste"},
+			{label:"When server starts", value:"serverstart"}
 			
 			
 			]);
+	[Bindable]
+	public var agentTriggerSchedule:ArrayCollection = new ArrayCollection(
+		[ {label:"More than once a day", value:"byminutes"},
+			{label:"Daily", value:"daily"},
+			{label:"Weekly", value:"weekly"},
+			{label:"Monthly", value:"monthly"},
+			{label:"Never", value:"never"}
+			
+			
+			]);		
 
 	[Bindable]
 	public var agentTargetContinalsList:ArrayCollection = new ArrayCollection(
@@ -164,6 +184,7 @@
 
 
     private var _agentObject:AgentObject;
+	private var _agentScheduleObject:AgentScheduleObject;
 
     public function initializeViewProperty(vobj:AgentObject):void
     {
@@ -175,7 +196,27 @@
 
 	private function agentTriggerChanged(e:IndexChangeEvent):void
 	{
-	
+		var selectedValue:String=agentTriggerSelection.selectedItem.value; 
+		if(selectedValue){
+				this.agentObject.agentType=selectedValue;
+				if(selectedValue=="serverstart" || selectedValue=="docupdate"){
+					editButtonBtn.enabled = true;
+				}else{
+					editButtonBtn.enabled = false;
+				}
+		}
+		
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
+
+	}
+
+	private function agentSchduleTriggerChanged(e:IndexChangeEvent):void
+	{
+		var selectedValue:String=agentSchduleTriggerSelection.selectedItem.value; 
+		if(selectedValue){
+				this.agentObject.agentScheduleType=selectedValue;
+		}
+		this.dispatchEvent(new Event("agentPropertyChanged",true, true));
 	}
 
 	private function agentTargetChanged(e:IndexChangeEvent):void
@@ -185,8 +226,17 @@
 
 	private function openEditSetting():void
 	{
+		var trigger:String = agentTrigger.selectedValue.toString();
+		var propertyType:String = null;
+		if(trigger == "onSchedule")
+		{
+			propertyType=agentSchduleTriggerSelection.selectedItem.value
+		}else{
+			propertyType=agentTriggerSelection.selectedItem.value;
+		}
+
 		
-		dispatchEvent(new Event("openAgentScheduleUI"));
+		dispatchEvent(new DominoAgentPropertiesPopEvent(DominoAgentPropertiesPopEvent.DOMINO_AGENT_PROPERTIES_POP,propertyType,this.agentObject,true,true));
 		
 	}
 
@@ -204,6 +254,16 @@
     {
         _agentObject = value;
     } 
+
+	public function set agentScheduleObject(value:AgentScheduleObject):void
+	{
+		_agentScheduleObject = value;
+	}
+
+	public function get agentScheduleObject():AgentScheduleObject
+	{
+		return this._agentScheduleObject;
+	}
 
 
 	public function initializeAgentProperty(agentobj:AgentObject):void
@@ -259,6 +319,41 @@
 
 	private function agentTrigger_changeHandler(event:Event):void
 	{
+		var trigger:String = agentTrigger.selectedValue.toString();
+		
+		if(trigger == "onSchedule")
+		{
+			//agentTriggerSelection.dataProvider = agentTriggerSchedule;
+			this.agentObject.agentType="scheduled";
+			//this.agentObject.agentScheduleType=agentTriggerSelection.selectedItem.value;	
+			editButtonBtn.enabled = true;
+			agentTriggerSelection.visible = false;
+			agentSchduleTriggerSelection.visible = true;
+			agentTriggerSelection.includeInLayout = false;
+			agentSchduleTriggerSelection.includeInLayout = true;
+			
+		}
+		else
+		{
+
+			this.agentObject.agentType=agentTriggerSelection.selectedItem.value;
+			if(this.agentObject.agentType=="docupdate" || this.agentObject.agentType=="serverstart"){
+				editButtonBtn.enabled = true;
+			}	else{
+				editButtonBtn.enabled = false;
+			}
+			
+			//agentTriggerSelection.dataProvider = agentTriggerContinalsList;
+			agentTriggerSelection.visible = true;
+			agentSchduleTriggerSelection.visible = false;
+			agentTriggerSelection.includeInLayout = true;
+			agentSchduleTriggerSelection.includeInLayout = false;
+
+
+		}
+		dispatchEvent(new Event("agentPropertyChanged",true, true));
+		
+		
 	}
 
 

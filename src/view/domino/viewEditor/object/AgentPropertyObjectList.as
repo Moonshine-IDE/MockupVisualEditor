@@ -32,35 +32,12 @@
 
 package view.domino.viewEditor.object
 {
-    public class AgentObject {
-        public var agentName:String;
-        public var agentAlias:String;
-        public var agentComment:String;
-        public var agentRuntime:String;
-        public var agentStopRunStartDate:String;
-        public var agentStopRunEndDate:String;
-        public var agentRunWhere:String; //local, server, both
-        public var agentTarget:String;
-        public var agentType:String;
-        public var agentScheduleType:String;
-        public var javaAgentBaseClass:String;
-        public var agentOptions:String;
-        public var agentPrivate:String;
-        public var agentShared:String;
-        public var agentTrigger:String; 
-        public var agentTriggerType:String; 
-        public var agentBehalfOf:String;
-        public var hours:String;
-        public var minutes:String;
-        public var runlocation:String;
-        public var runserver:String;
-        public var startdate:String;
-        public var enddate:String;
-        public var onweekends:Boolean;
-        public var dayofweek:String;
-        public var dateinmonth:String;
+    public class AgentPropertyObjectList {
+        public var label:String;
+        public var value:String;
+       
 
-        public function ViewObject()
+        public function AgentPropertyObjectList()
 		{
         }
     }

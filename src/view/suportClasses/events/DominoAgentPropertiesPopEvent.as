@@ -29,39 +29,28 @@
 //  it in the license file.
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-package view.domino.viewEditor.object
+package view.suportClasses.events
 {
-    public class AgentObject {
-        public var agentName:String;
-        public var agentAlias:String;
-        public var agentComment:String;
-        public var agentRuntime:String;
-        public var agentStopRunStartDate:String;
-        public var agentStopRunEndDate:String;
-        public var agentRunWhere:String; //local, server, both
-        public var agentTarget:String;
-        public var agentType:String;
-        public var agentScheduleType:String;
-        public var javaAgentBaseClass:String;
-        public var agentOptions:String;
-        public var agentPrivate:String;
-        public var agentShared:String;
-        public var agentTrigger:String; 
-        public var agentTriggerType:String; 
-        public var agentBehalfOf:String;
-        public var hours:String;
-        public var minutes:String;
-        public var runlocation:String;
-        public var runserver:String;
-        public var startdate:String;
-        public var enddate:String;
-        public var onweekends:Boolean;
-        public var dayofweek:String;
-        public var dateinmonth:String;
-
-        public function ViewObject()
+	import flash.events.Event;
+    import view.domino.viewEditor.object.AgentObject;
+   
+	public class DominoAgentPropertiesPopEvent extends Event
+	{
+		public static const DOMINO_AGENT_PROPERTIES_POP:String = "dominoAgentPropertiesPop";
+		
+		public var agentPropertyType:String;
+		public var agentObject:AgentObject;
+       
+        public function DominoAgentPropertiesPopEvent(type:String, propertyType:String,v:AgentObject, _bubble:Boolean=true, _cancelable:Boolean=true)
 		{
-        }
+			this.agentPropertyType = propertyType;
+			this.agentObject = v;
+			super(type, _bubble, _cancelable);
+		}
+		
+		override public function clone():Event
+		{
+			return new DominoAgentPropertiesPopEvent(type, agentPropertyType,agentObject, bubbles, cancelable);
+		}
     }
 }
